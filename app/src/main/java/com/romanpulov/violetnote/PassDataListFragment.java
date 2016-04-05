@@ -68,8 +68,8 @@ public class PassDataListFragment extends Fragment {
         View view =  inflater.inflate(R.layout.fragment_passdatalist, container, false);
 
         ExpandableListView elv = (ExpandableListView)view.findViewById(R.id.pd_list_view);
-
-
+        PassDataExpListAdapter adapter = new PassDataExpListAdapter(getActivity());
+        elv.setAdapter(adapter);
 
         return view;
     }

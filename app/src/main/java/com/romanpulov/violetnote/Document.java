@@ -55,6 +55,10 @@ public class Document {
         }
     }
 
+    public void setPassData(PassData passData) {
+        mPassData = passData;
+    }
+
     private Document() {
 
     }

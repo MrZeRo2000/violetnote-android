@@ -2,16 +2,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PassDataListFragment">
+    android:padding="4dp"
+    android:background="@android:color/black"
+    tools:context=".PassDataListFragment" >
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
     <ExpandableListView
         android:id="@+id/pd_list_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:listSelector="@drawable/elv_bg_selector"
+        android:groupIndicator="@drawable/elv_indicator_selector"
+        android:dividerHeight="2dp"
+        android:divider="@drawable/white_stroke_shape"
+        />
 
 </FrameLayout>

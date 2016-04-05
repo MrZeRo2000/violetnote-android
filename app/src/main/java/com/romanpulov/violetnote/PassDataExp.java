@@ -49,7 +49,8 @@ public class PassDataExp {
 
     public static PassDataExp newInstance(PassData passData) {
         PassDataExp instance = new PassDataExp();
-        instance.readPassData(passData);
+        if (passData != null)
+            instance.readPassData(passData);
         return  instance;
     }
 }
