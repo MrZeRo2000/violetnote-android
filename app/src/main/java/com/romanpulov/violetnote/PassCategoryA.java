@@ -3,11 +3,23 @@ package com.romanpulov.violetnote;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.romanpulov.violetnotecore.Model.PassCategory;
+
 /**
  * Created by rpulov on 25.04.2016.
  */
 public class PassCategoryA implements Parcelable {
+    private PassCategory mSourcePassCategory;
+
+    public PassCategory getSourcePassCategory() {
+        return mSourcePassCategory;
+    }
+
     private String mCategoryName;
+
+    public String getCategoryName() {
+        return mCategoryName;
+    }
 
     @Override
     public int describeContents() {
@@ -35,6 +47,11 @@ public class PassCategoryA implements Parcelable {
     }
 
     public PassCategoryA(String categoryName) {
-        this.mCategoryName = categoryName;
+        mCategoryName = categoryName;
+    }
+
+    public PassCategoryA(PassCategory sourcePassCategory) {
+        mSourcePassCategory = sourcePassCategory;
+        mCategoryName = sourcePassCategory.getCategoryName();
     }
 }
