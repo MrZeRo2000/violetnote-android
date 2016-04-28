@@ -4,4 +4,5 @@
     <color name="colorPrimaryDark">#FF663366</color>
     <color name="colorAccent">#FF4081</color>
     <color name="windowBackground">#FF666666</color>
+    <color name="listSelection">#FFAAAAAA</color>
 </resources>
