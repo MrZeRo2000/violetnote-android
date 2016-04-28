@@ -18,10 +18,10 @@ import java.util.List;
  */
 public class CategoryRecyclerViewAdapter extends RecyclerView.Adapter<CategoryRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
+    private final List<PassCategoryA> mValues;
     private final OnListFragmentInteractionListener mListener;
 
-    public CategoryRecyclerViewAdapter(List<DummyItem> items, OnListFragmentInteractionListener listener) {
+    public CategoryRecyclerViewAdapter(List<PassCategoryA> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -36,8 +36,8 @@ public class CategoryRecyclerViewAdapter extends RecyclerView.Adapter<CategoryRe
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        holder.mCategoryName.setText(mValues.get(position).getCategoryName());
+        holder.mCategoryDescription.setText(mValues.get(position).getCategoryName());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,20 +58,20 @@ public class CategoryRecyclerViewAdapter extends RecyclerView.Adapter<CategoryRe
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView mIdView;
-        public final TextView mContentView;
-        public DummyItem mItem;
+        public final TextView mCategoryName;
+        public final TextView mCategoryDescription;
+        public PassCategoryA mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.category_name);
-            mContentView = (TextView) view.findViewById(R.id.category_description);
+            mCategoryName = (TextView) view.findViewById(R.id.category_name);
+            mCategoryDescription = (TextView) view.findViewById(R.id.category_description);
         }
 
         @Override
         public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
+            return super.toString() + " '" + mCategoryDescription.getText() + "'";
         }
     }
 }

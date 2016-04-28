@@ -14,11 +14,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.romanpulov.violetnote.dummy.DummyContent;
 import com.romanpulov.violetnote.dummy.DummyContent.DummyItem;
 import com.romanpulov.violetnotecore.Model.PassCategory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -150,9 +152,14 @@ public class CategoryFragment extends Fragment {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            recyclerView.setAdapter(new CategoryRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+
+            String s = this.getArguments().getString("test");
+            Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
+
+            recyclerView.setAdapter(new CategoryRecyclerViewAdapter(new ArrayList<PassCategoryA>(), mListener));
             // add decoration
             recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
+
         }
         return view;
     }
@@ -190,6 +197,6 @@ public class CategoryFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(PassCategoryA item);
     }
 }

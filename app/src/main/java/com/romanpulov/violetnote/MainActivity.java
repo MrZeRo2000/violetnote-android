@@ -146,6 +146,9 @@ public class MainActivity extends AppCompatActivity {
             fm.beginTransaction().add(R.id.fragment_container, fragment).commit();
             */
             fragment = new CategoryFragment();
+            Bundle args = new Bundle();
+            args.putString("test", "test string");
+            fragment.setArguments(args);
             fm.beginTransaction().add(R.id.fragment_container, fragment).commit();
         }
 
