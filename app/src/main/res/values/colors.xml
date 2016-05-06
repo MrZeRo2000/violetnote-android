@@ -5,4 +5,5 @@
     <color name="colorAccent">#FF4081</color>
     <color name="windowBackground">#FF333333</color>
     <color name="listSelection">#FFAAAAAA</color>
+    <color name="brightTextColor">#FFFFFFFF</color>
 </resources>

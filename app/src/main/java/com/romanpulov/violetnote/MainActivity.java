@@ -8,12 +8,16 @@ import android.os.PersistableBundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ExpandableListView;
+import android.widget.Toast;
 
 import com.romanpulov.violetnotecore.Model.*;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.ArrayList;
+
+public class MainActivity extends AppCompatActivity implements CategoryFragment.OnListFragmentInteractionListener {
 
     private Fragment fragment;
 
@@ -40,18 +44,38 @@ public class MainActivity extends AppCompatActivity {
 
     private PassDataExp mData;
     private PassData mPassData;
+    private PassDataA mPassDataA;
 
     private void loadData() {
         mPassData = Document.getInstance().getPassData();
         mData = PassDataExp.newInstance(mPassData);
+        mPassDataA = PassDataA.fromPassData(mPassData);
     }
 
     private void updateData() {
+        /*
         PassDataExpListAdapter a = getAdapter();
         if (a != null) {
             a.setData(mData);
             a.notifyDataSetChanged();
         }
+        */
+
+        FragmentManager fm = getSupportFragmentManager();
+        fragment = fm.findFragmentById(R.id.fragment_container);
+
+        if (fragment == null) {
+            fragment = new CategoryFragment();
+            Bundle args = new Bundle();
+            args.putParcelableArrayList(CategoryFragment.PASS_CATEGORY_DATA, (ArrayList<PassCategoryA>)mPassDataA.getPassCategoryData());
+            fragment.setArguments(args);
+            fm.beginTransaction().add(R.id.fragment_container, fragment).commit();
+        }
+    }
+
+    @Override
+    public void onListFragmentInteraction(PassCategoryA item) {
+        Toast.makeText(this, "Pressed item " + item.getCategoryName(), Toast.LENGTH_SHORT).show();
     }
 
     private class LoadPassDataAsyncTask extends AsyncTask<Void, Void, Boolean> {
@@ -106,6 +130,10 @@ public class MainActivity extends AppCompatActivity {
         pn = new PassNote(pc, "System 2", "User 2", "Password 2", null, null, null);
         result.getPassNoteList().add(pn);
 
+        for (int i = 3; i < 30; i ++) {
+            result.getPassCategoryList().add(new PassCategory("Category " + i));
+        }
+
         Document.getInstance().setPassData(result);
     }
 
@@ -115,11 +143,11 @@ public class MainActivity extends AppCompatActivity {
             passwordInputDialog.setOnPasswordInputListener(new PasswordInputDialog.OnPasswordInputListener() {
                 @Override
                 public void onPasswordInput(String password) {
-                    if (password == null) {
-                        finish();
-                    }
                     mPassword = password;
                     loadPassData();
+                    //loadData();
+                    //updateData();
+
                 }
             });
             passwordInputDialog.show();
@@ -137,20 +165,6 @@ public class MainActivity extends AppCompatActivity {
         actionBar.setDisplayUseLogoEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
 
-        FragmentManager fm = getSupportFragmentManager();
-        fragment = fm.findFragmentById(R.id.fragment_container);
-
-        if (fragment == null) {
-            /*
-            fragment = new PassDataListFragment();
-            fm.beginTransaction().add(R.id.fragment_container, fragment).commit();
-            */
-            fragment = new CategoryFragment();
-            Bundle args = new Bundle();
-            args.putString("test", "test string");
-            fragment.setArguments(args);
-            fm.beginTransaction().add(R.id.fragment_container, fragment).commit();
-        }
 
         /*
         try { 
@@ -180,6 +194,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        Log.d("MainActivity", "OnResume");
         //TODO: unlock reset password, lock loadSamplePassData
         //requestPassword();
         loadSamplePassData();
@@ -190,6 +205,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        Log.d("MainActivity", "OnPause");
         resetPassword();
+        Document.getInstance().resetData();
+        if (fragment != null) {
+            FragmentManager fm = getSupportFragmentManager();
+            fm.beginTransaction().remove(fragment).commit();
+            fragment = null;
+        }
     }
 }

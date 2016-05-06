@@ -52,4 +52,15 @@ public class DataModelTest {
 
         assertEquals(pd.getPassNoteList().size(), totalSize);
     }
+
+    @Test
+    public void PassDataReaderTest() {
+        PassData pd = createTestPassData();
+        PassDataReader pdr = new PassDataReader(pd);
+        pdr.readCategoryData();
+        pdr.readNoteData();
+
+        assertEquals(pd.getPassCategoryList().size(),  pdr.getPassCategoryDataA().size());
+    }
+
 }

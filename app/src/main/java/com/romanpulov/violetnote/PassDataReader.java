@@ -38,19 +38,26 @@ public class PassDataReader {
     }
 
     public void readCategoryData() {
-        mPassCategoryDataA = new ArrayList<>(mPassData.getPassCategoryList().size());
-        for (PassCategory p : mPassData.getPassCategoryList()) {
-            mPassCategoryDataA.add(new PassCategoryA(p.getCategoryName()));
-        }
+        if (mPassData != null) {
+            mPassCategoryDataA = new ArrayList<>(mPassData.getPassCategoryList().size());
+            for (PassCategory p : mPassData.getPassCategoryList()) {
+                mPassCategoryDataA.add(new PassCategoryA(p));
+            }
+        } else
+            mPassCategoryDataA = new ArrayList<>();
     }
 
     public void readNoteData() {
-        mPassNoteDataA = new ArrayList<>(mPassData.getPassNoteList().size());
-        for (PassNote p : mPassData.getPassNoteList()) {
-            PassCategoryA categoryA = findSourcePassCategory(p.getPassCategory());
-            if (categoryA != null) {
-                mPassNoteDataA.add(new PassNoteA(categoryA, p.getSystem(), p.getUser(), p.getPassword(), p.getComments(), p.getCustom(), p.getInfo()));
+        if (mPassData != null) {
+            mPassNoteDataA = new ArrayList<>(mPassData.getPassNoteList().size());
+            for (PassNote p : mPassData.getPassNoteList()) {
+                PassCategoryA categoryA = findSourcePassCategory(p.getPassCategory());
+                if (categoryA != null) {
+                    mPassNoteDataA.add(new PassNoteA(categoryA, p.getSystem(), p.getUser(), p.getPassword(), p.getComments(), p.getCustom(), p.getInfo()));
+                }
             }
+        } else {
+            mPassNoteDataA = new ArrayList<>();
         }
     }
 }

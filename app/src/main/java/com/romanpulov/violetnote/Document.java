@@ -1,7 +1,6 @@
 package com.romanpulov.violetnote;
 
 import android.os.Environment;
-import android.provider.ContactsContract;
 
 import com.romanpulov.violetnotecore.AESCrypt.AESCryptException;
 import com.romanpulov.violetnotecore.AESCrypt.AESCryptService;
@@ -11,7 +10,6 @@ import com.romanpulov.violetnotecore.Processor.XMLPassDataReader;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -40,7 +38,18 @@ public class Document {
         mMasterPass = masterPass;
     }
 
+    public void resetData() {
+        mFileName = null;
+        mMasterPass = null;
+        mPassData = null;
+    }
+
     public boolean loadPassData(String fileName, String masterPass) {
+        if (masterPass == null) {
+            resetData();
+            return false;
+        }
+
         try {
             File f = new File(Environment.getExternalStorageDirectory() + fileName);
             if (f.exists()) {
@@ -51,6 +60,7 @@ public class Document {
             } else
                 return false;
         } catch(IOException | AESCryptException | DataReadWriteException e) {
+            resetData();
             return false;
         }
     }

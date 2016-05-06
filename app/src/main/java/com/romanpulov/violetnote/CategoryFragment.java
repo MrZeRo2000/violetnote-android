@@ -3,8 +3,11 @@ package com.romanpulov.violetnote;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Rect;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.ShapeDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
@@ -31,7 +34,11 @@ import java.util.List;
  */
 public class CategoryFragment extends Fragment {
 
+    public static final String PASS_CATEGORY_DATA = "PassCategoryData";
+
     private OnListFragmentInteractionListener mListener;
+
+    private List<PassCategoryA> mPassCategoryDataA;
 
     /**
      * Taken from
@@ -57,6 +64,7 @@ public class CategoryFragment extends Fragment {
             mDivider = a.getDrawable(0);
             a.recycle();
             setOrientation(orientation);
+            mDivider = context.getResources().getDrawable(R.drawable.divider_white_black_gradient);
         }
 
         public void setOrientation(int orientation) {
@@ -153,10 +161,8 @@ public class CategoryFragment extends Fragment {
             RecyclerView recyclerView = (RecyclerView) view;
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-            String s = this.getArguments().getString("test");
-            Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
-
-            recyclerView.setAdapter(new CategoryRecyclerViewAdapter(new ArrayList<PassCategoryA>(), mListener));
+            ArrayList<PassCategoryA> passCategoryDataA = this.getArguments().getParcelableArrayList(PASS_CATEGORY_DATA);
+            recyclerView.setAdapter(new CategoryRecyclerViewAdapter(passCategoryDataA, mListener));
             // add decoration
             recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
 
@@ -171,12 +177,10 @@ public class CategoryFragment extends Fragment {
         if (context instanceof OnListFragmentInteractionListener) {
             mListener = (OnListFragmentInteractionListener) context;
         }
-        /*
         else {
             throw new RuntimeException(context.toString()
                     + " must implement OnListFragmentInteractionListener");
         }
-        */
     }
 
     @Override
