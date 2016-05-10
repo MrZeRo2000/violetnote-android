@@ -9,8 +9,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.ExpandableListView;
 import android.widget.Toast;
 
 import com.romanpulov.violetnotecore.Model.*;
@@ -21,54 +19,19 @@ public class MainActivity extends AppCompatActivity implements CategoryFragment.
 
     private Fragment fragment;
 
-    private ExpandableListView elv;
-    private PassDataExpListAdapter adapter;
-
-    private ExpandableListView getElv() {
-        if (elv == null) {
-            View v = fragment.getView();
-            if (v != null) {
-                elv = (ExpandableListView)v.findViewById(R.id.pd_list_view);
-            }
-        }
-
-        return elv;
-    }
-
-    private PassDataExpListAdapter getAdapter() {
-        if (getElv() != null) {
-            return (PassDataExpListAdapter)(elv.getExpandableListAdapter());
-        } else
-            return null;
-    }
-
-    private PassDataExp mData;
-    private PassData mPassData;
     private PassDataA mPassDataA;
 
     private void loadData() {
-        mPassData = Document.getInstance().getPassData();
-        mData = PassDataExp.newInstance(mPassData);
-        mPassDataA = PassDataA.fromPassData(mPassData);
+        PassData passData = Document.getInstance().getPassData();
+        mPassDataA = PassDataA.fromPassData(passData);
     }
 
     private void updateData() {
-        /*
-        PassDataExpListAdapter a = getAdapter();
-        if (a != null) {
-            a.setData(mData);
-            a.notifyDataSetChanged();
-        }
-        */
-
         FragmentManager fm = getSupportFragmentManager();
         fragment = fm.findFragmentById(R.id.fragment_container);
 
         if (fragment == null) {
-            fragment = new CategoryFragment();
-            Bundle args = new Bundle();
-            args.putParcelableArrayList(CategoryFragment.PASS_CATEGORY_DATA, (ArrayList<PassCategoryA>)mPassDataA.getPassCategoryData());
-            fragment.setArguments(args);
+            fragment = CategoryFragment.newInstance((ArrayList<PassCategoryA>)mPassDataA.getPassCategoryData());
             fm.beginTransaction().add(R.id.fragment_container, fragment).commit();
         }
     }

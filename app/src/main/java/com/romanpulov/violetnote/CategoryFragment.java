@@ -137,9 +137,10 @@ public class CategoryFragment extends Fragment {
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static CategoryFragment newInstance() {
+    public static CategoryFragment newInstance(ArrayList<PassCategoryA> passCategoryData) {
         CategoryFragment fragment = new CategoryFragment();
         Bundle args = new Bundle();
+        args.putParcelableArrayList(CategoryFragment.PASS_CATEGORY_DATA, passCategoryData);
         fragment.setArguments(args);
         return fragment;
     }
@@ -189,18 +190,7 @@ public class CategoryFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onListFragmentInteraction(PassCategoryA item);
     }
 }
