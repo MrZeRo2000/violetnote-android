@@ -145,13 +145,14 @@ public class MainActivity extends AppCompatActivity implements CategoryFragment.
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
         super.onSaveInstanceState(outState, outPersistentState);
+        Log.d("MainActivity", "OnSaveInstanceState");
 
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-
+        Log.d("MainActivity", "OnRestoreInstanceState");
     }
 
     @Override
