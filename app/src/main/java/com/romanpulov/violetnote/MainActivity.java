@@ -1,5 +1,7 @@
 package com.romanpulov.violetnote;
 
+import android.content.Intent;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.app.ProgressDialog;
@@ -39,6 +41,10 @@ public class MainActivity extends AppCompatActivity implements CategoryFragment.
     @Override
     public void onListFragmentInteraction(PassCategoryA item) {
         Toast.makeText(this, "Pressed item " + item.getCategoryName(), Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, NoteActivity.class);
+        intent.putExtra(NoteActivity.PASS_CATEGORY_ITEM, item);
+        intent.putParcelableArrayListExtra(NoteActivity.PASS_NOTE_DATA, (ArrayList<PassNoteA>) mPassDataA.getPassNoteData(item));
+        startActivity(intent);
     }
 
     private class LoadPassDataAsyncTask extends AsyncTask<Void, Void, Boolean> {

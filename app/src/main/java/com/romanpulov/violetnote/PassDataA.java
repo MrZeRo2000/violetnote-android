@@ -2,6 +2,7 @@ package com.romanpulov.violetnote;
 
 import com.romanpulov.violetnotecore.Model.PassData;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,6 +19,17 @@ public class PassDataA {
 
     public List<PassNoteA> getPassNoteData() {
         return mPassNoteDataA;
+    }
+
+    public List<PassNoteA> getPassNoteData(PassCategoryA category) {
+        List<PassNoteA> passNoteData = new ArrayList<>();
+        for (PassNoteA p : mPassNoteDataA) {
+            if (p.getCategory().equals(category)) {
+                passNoteData.add(p);
+            }
+        }
+
+        return passNoteData;
     }
 
     private void setData(List<PassCategoryA> passCategoryData, List<PassNoteA> passNoteData) {
