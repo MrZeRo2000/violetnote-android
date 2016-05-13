@@ -19,6 +19,7 @@
         </activity>
         <activity
             android:name=".NoteActivity"
+            android:theme="@style/MainAppTheme"
             android:parentActivityName=".MainActivity"
             >
         </activity>
