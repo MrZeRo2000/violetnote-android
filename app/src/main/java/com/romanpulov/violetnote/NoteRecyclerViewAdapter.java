@@ -65,8 +65,8 @@ public class NoteRecyclerViewAdapter extends RecyclerView.Adapter<NoteRecyclerVi
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mSystemView = (TextView) view.findViewById(R.id.id);
-            mUserView = (TextView) view.findViewById(R.id.content);
+            mSystemView = (TextView) view.findViewById(R.id.system);
+            mUserView = (TextView) view.findViewById(R.id.user);
         }
 
         @Override
