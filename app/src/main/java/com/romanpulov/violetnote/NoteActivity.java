@@ -30,10 +30,8 @@ public class NoteActivity extends AppCompatActivity implements NoteFragment.OnLi
         PassCategoryA passCategoryItem = getIntent().getParcelableExtra(PASS_CATEGORY_ITEM);
         ArrayList<PassNoteA> passNoteData = getIntent().getParcelableArrayListExtra(PASS_NOTE_DATA);
 
-        actionBar.setTitle(passCategoryItem.getCategoryName());
-
         if (fragment == null) {
-            fragment = NoteFragment.newInstance(passNoteData);
+            fragment = NoteFragment.newInstance(passCategoryItem, passNoteData);
             fm.beginTransaction().add(R.id.note_fragment_container, fragment).commit();
         }
     }

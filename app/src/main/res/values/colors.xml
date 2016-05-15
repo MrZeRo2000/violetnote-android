@@ -3,7 +3,9 @@
     <color name="colorPrimary">#FF996699</color>
     <color name="colorPrimaryDark">#FF663366</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="windowBackground">#FF333333</color>
-    <color name="listSelection">#FFAAAAAA</color>
+    <color name="windowBackground">#FF222233</color>
+    <color name="listSelection">#FF00ABF1</color>
     <color name="brightTextColor">#FFFFFFFF</color>
+    <color name="headerBackground">#FFCD7135</color>
+
 </resources>

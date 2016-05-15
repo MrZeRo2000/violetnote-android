@@ -3,18 +3,17 @@ package com.romanpulov.violetnote;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
-import com.romanpulov.violetnote.dummy.DummyContent;
-import com.romanpulov.violetnote.dummy.DummyContent.DummyItem;
+import com.romanpulov.violetnote.RecyclerViewHelper.*;
 
 import java.util.ArrayList;
-import java.util.List;
+
 
 /**
  * A fragment representing a list of Items.
@@ -24,11 +23,7 @@ import java.util.List;
  */
 public class NoteFragment extends Fragment {
 
-    // TODO: Customize parameter argument names
-    private static final String PASS_NOTE_DATA = "PassNoteData";
-    // TODO: Customize parameters
-    private int mColumnCount = 1;
-
+    private PassCategoryA mPassCategory;
     private ArrayList<PassNoteA> mPassNoteData;
 
     private OnListFragmentInteractionListener mListener;
@@ -42,10 +37,11 @@ public class NoteFragment extends Fragment {
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static NoteFragment newInstance(ArrayList<PassNoteA> passNoteData) {
+    public static NoteFragment newInstance(PassCategoryA passCategory, ArrayList<PassNoteA> passNoteData) {
         NoteFragment fragment = new NoteFragment();
         Bundle args = new Bundle();
-        args.putParcelableArrayList(PASS_NOTE_DATA, passNoteData);
+        args.putParcelable(NoteActivity.PASS_CATEGORY_ITEM, passCategory);
+        args.putParcelableArrayList(NoteActivity.PASS_NOTE_DATA, passNoteData);
         fragment.setArguments(args);
         return fragment;
     }
@@ -55,7 +51,8 @@ public class NoteFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
-            mPassNoteData = getArguments().getParcelableArrayList(PASS_NOTE_DATA);
+            mPassCategory =getArguments().getParcelable(NoteActivity.PASS_CATEGORY_ITEM);
+            mPassNoteData = getArguments().getParcelableArrayList(NoteActivity.PASS_NOTE_DATA);
         }
     }
 
@@ -64,13 +61,16 @@ public class NoteFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_note_list, container, false);
 
+        TextView headerTextView = (TextView)view.findViewById(R.id.headerTextView);
+        headerTextView.setText(mPassCategory.getCategoryName());
+        RecyclerView recyclerView = (RecyclerView)view.findViewById(R.id.list);
         // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
-            recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            recyclerView.setAdapter(new NoteRecyclerViewAdapter(mPassNoteData, mListener));
-        }
+        Context context = view.getContext();
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        recyclerView.setAdapter(new NoteRecyclerViewAdapter(mPassNoteData, mListener));
+        // add decoration
+        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_orange_black_gradient));
+
         return view;
     }
 

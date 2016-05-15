@@ -10,13 +10,24 @@
         android:id="@+id/system"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:textAppearance="?attr/textAppearanceListItem" />
+        android:layout_marginTop="@dimen/text_margin_half"
+        android:layout_marginLeft="@dimen/text_margin"
+        android:layout_marginRight="@dimen/text_margin"
+        android:textSize="20sp"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:text="@string/app_name"
+        />
 
     <TextView
         android:id="@+id/user"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:textAppearance="?attr/textAppearanceListItem" />
+        android:layout_marginLeft="@dimen/text_margin"
+        android:layout_marginRight="@dimen/text_margin"
+        android:layout_marginTop="@dimen/text_margin_half"
+        android:layout_marginBottom="@dimen/text_margin_half"
+        android:textSize="16sp"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:text="@string/app_name"
+        />
 </LinearLayout>

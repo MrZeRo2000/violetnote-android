@@ -40,7 +40,6 @@ public class MainActivity extends AppCompatActivity implements CategoryFragment.
 
     @Override
     public void onListFragmentInteraction(PassCategoryA item) {
-        Toast.makeText(this, "Pressed item " + item.getCategoryName(), Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, NoteActivity.class);
         intent.putExtra(NoteActivity.PASS_CATEGORY_ITEM, item);
         intent.putParcelableArrayListExtra(NoteActivity.PASS_NOTE_DATA, (ArrayList<PassNoteA>) mPassDataA.getPassNoteData(item));
