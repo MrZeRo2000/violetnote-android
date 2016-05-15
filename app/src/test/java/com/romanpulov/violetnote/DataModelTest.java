@@ -61,6 +61,9 @@ public class DataModelTest {
         pdr.readNoteData();
 
         assertEquals(pd.getPassCategoryList().size(),  pdr.getPassCategoryDataA().size());
+        for (PassCategoryA p : pdr.getPassCategoryDataA()) {
+            System.out.println(p);
+        }
     }
 
 }

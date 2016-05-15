@@ -21,6 +21,21 @@ public class PassCategoryA implements Parcelable {
         return mCategoryName;
     }
 
+    private int mNotesCount = 0;
+
+    public int getNotesCount() {
+        return mNotesCount;
+    }
+
+    public void setNotesCount(int notesCount) {
+        mNotesCount = notesCount;
+    }
+
+    @Override
+    public String toString() {
+        return "{[CategoryName=" + mCategoryName + "], [NotesCount=" + mNotesCount + "]}";
+    }
+
     @Override
     public int describeContents() {
         return 0;

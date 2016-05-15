@@ -5,7 +5,9 @@ import com.romanpulov.violetnotecore.Model.PassData;
 import com.romanpulov.violetnotecore.Model.PassNote;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by rpulov on 25.04.2016.
@@ -50,12 +52,25 @@ public class PassDataReader {
     public void readNoteData() {
         if (mPassData != null) {
             mPassNoteDataA = new ArrayList<>(mPassData.getPassNoteList().size());
+            Map<PassCategoryA, Integer> noteCount = new HashMap<>();
             for (PassNote p : mPassData.getPassNoteList()) {
                 PassCategoryA categoryA = findSourcePassCategory(p.getPassCategory());
                 if (categoryA != null) {
+                    Integer oldNoteCount = noteCount.get(categoryA);
+                    if (oldNoteCount == null)
+                        noteCount.put(categoryA, 1);
+                    else
+                        noteCount.put(categoryA, oldNoteCount + 1);
                     mPassNoteDataA.add(new PassNoteA(categoryA, p.getSystem(), p.getUser(), p.getPassword(), p.getComments(), p.getCustom(), p.getInfo()));
                 }
             }
+
+            for (PassCategoryA p : mPassCategoryDataA) {
+                Integer count = noteCount.get(p);
+                if (count != null)
+                    p.setNotesCount(count);
+            }
+
         } else {
             mPassNoteDataA = new ArrayList<>();
         }
