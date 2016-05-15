@@ -1,5 +1,6 @@
 package com.romanpulov.violetnote;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,10 +13,12 @@ import java.util.List;
 
 public class CategoryRecyclerViewAdapter extends RecyclerView.Adapter<CategoryRecyclerViewAdapter.ViewHolder> {
 
+    private final Context mContext;
     private final List<PassCategoryA> mValues;
     private final OnListFragmentInteractionListener mListener;
 
-    public CategoryRecyclerViewAdapter(List<PassCategoryA> items, OnListFragmentInteractionListener listener) {
+    public CategoryRecyclerViewAdapter(Context context, List<PassCategoryA> items, OnListFragmentInteractionListener listener) {
+        mContext = context;
         mValues = items;
         mListener = listener;
     }
@@ -31,7 +34,7 @@ public class CategoryRecyclerViewAdapter extends RecyclerView.Adapter<CategoryRe
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         holder.mCategoryName.setText(mValues.get(position).getCategoryName());
-        holder.mCategoryDescription.setText(mValues.get(position).getCategoryName());
+        holder.mCategoryDescription.setText(mContext.getString(R.string.layout_notes_count, mValues.get(position).getNotesCount()));
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override

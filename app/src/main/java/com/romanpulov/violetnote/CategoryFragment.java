@@ -69,7 +69,7 @@ public class CategoryFragment extends Fragment {
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
             ArrayList<PassCategoryA> passCategoryDataA = this.getArguments().getParcelableArrayList(PASS_CATEGORY_DATA);
-            recyclerView.setAdapter(new CategoryRecyclerViewAdapter(passCategoryDataA, mListener));
+            recyclerView.setAdapter(new CategoryRecyclerViewAdapter(getActivity(), passCategoryDataA, mListener));
             // add decoration
             recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_white_black_gradient));
         }
