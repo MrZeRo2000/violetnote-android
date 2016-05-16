@@ -19,10 +19,12 @@
         </activity>
         <activity
             android:name=".NoteActivity"
-            android:theme="@style/MainAppTheme"
             android:parentActivityName=".MainActivity"
-            >
-        </activity>
+            android:theme="@style/MainAppTheme" />
+        <activity
+            android:name=".NoteDetailsActivity"
+            android:parentActivityName=".NoteActivity"
+            android:theme="@style/MainAppTheme" />
     </application>
 
 </manifest>
