@@ -2,9 +2,11 @@ package com.romanpulov.violetnote;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +25,11 @@ import java.util.ArrayList;
  */
 public class NoteFragment extends Fragment {
 
+    private static void log(String message) {
+        Log.d("NoteFragment", message);
+    }
+
+
     private PassCategoryA mPassCategory;
     private ArrayList<PassNoteA> mPassNoteData;
 
@@ -38,6 +45,7 @@ public class NoteFragment extends Fragment {
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
     public static NoteFragment newInstance(PassCategoryA passCategory, ArrayList<PassNoteA> passNoteData) {
+        log("newInstance");
         NoteFragment fragment = new NoteFragment();
         Bundle args = new Bundle();
         args.putParcelable(NoteActivity.PASS_CATEGORY_ITEM, passCategory);
@@ -50,15 +58,20 @@ public class NoteFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        log("onCreate");
+
         if (getArguments() != null) {
             mPassCategory =getArguments().getParcelable(NoteActivity.PASS_CATEGORY_ITEM);
             mPassNoteData = getArguments().getParcelableArrayList(NoteActivity.PASS_NOTE_DATA);
         }
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        log("onCreateView arguments=" + getArguments());
+
         View view = inflater.inflate(R.layout.fragment_note_list, container, false);
 
         TextView headerTextView = (TextView)view.findViewById(R.id.headerTextView);
@@ -105,5 +118,12 @@ public class NoteFragment extends Fragment {
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
         void onListFragmentInteraction(PassNoteA item);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getArguments().putParcelable(NoteActivity.PASS_CATEGORY_ITEM, mPassCategory);
+        getArguments().putParcelableArrayList(NoteActivity.PASS_NOTE_DATA, mPassNoteData);
     }
 }
