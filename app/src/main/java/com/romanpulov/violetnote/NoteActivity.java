@@ -25,6 +25,12 @@ public class NoteActivity extends AppCompatActivity implements NoteFragment.OnLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        log("OnCreate saveInstanceState=" + savedInstanceState);
+        if (savedInstanceState != null) {
+            log("getInt=" + savedInstanceState.getInt("TestInt"));
+        }
+
         setContentView(R.layout.activity_fragment_note);
 
         ActionBar actionBar = getSupportActionBar();
@@ -39,11 +45,10 @@ public class NoteActivity extends AppCompatActivity implements NoteFragment.OnLi
         mPassCategoryItem = getIntent().getParcelableExtra(PASS_CATEGORY_ITEM);
         mPassNoteData = getIntent().getParcelableArrayListExtra(PASS_NOTE_DATA);
 
-        log("saveInstanceState=" + savedInstanceState);
         log("PassCategoryItem:" + mPassCategoryItem);
         log("PassNoteData:" + mPassNoteData);
 
-        if (fragment == null) {
+        if ((fragment == null) && (mPassCategoryItem != null) && (mPassNoteData != null)) {
             fragment = NoteFragment.newInstance(mPassCategoryItem, mPassNoteData);
             fm.beginTransaction().add(R.id.note_fragment_container, fragment).commit();
         }
@@ -68,13 +73,15 @@ public class NoteActivity extends AppCompatActivity implements NoteFragment.OnLi
         log("Resume");
     }
 
-    /*
+
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        log("saving instance state");
+        log("saving instance state :" + mPassCategoryItem + ", " + mPassNoteData);
         outState.putParcelable(PASS_CATEGORY_ITEM, mPassCategoryItem);
         outState.putParcelableArrayList(PASS_NOTE_DATA, mPassNoteData);
+        outState.putInt("TestInt", 1);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -85,6 +92,6 @@ public class NoteActivity extends AppCompatActivity implements NoteFragment.OnLi
 //        mPassNoteData = savedInstanceState.getParcelableArrayList(PASS_NOTE_DATA);
     }
 
-*/
+
 
 }

@@ -58,7 +58,7 @@ public class NoteFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        log("onCreate");
+        log("onCreate getArguments = " + getArguments());
 
         if (getArguments() != null) {
             mPassCategory =getArguments().getParcelable(NoteActivity.PASS_CATEGORY_ITEM);
