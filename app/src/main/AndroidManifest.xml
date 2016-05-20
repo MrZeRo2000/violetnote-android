@@ -24,7 +24,7 @@
         <activity
             android:name=".NoteDetailsActivity"
             android:parentActivityName=".NoteActivity"
-            android:theme="@style/MainAppTheme" />
+            android:theme="@style/DetailsAppTheme" />
     </application>
 
 </manifest>

@@ -36,9 +36,9 @@ public class NoteDetailsActivity extends AppCompatActivity {
     }
 
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        // Workaround for issue with back button in toolbar default behavior
         if (item.getItemId() == android.R.id.home) {
             finish();
             return true;

@@ -16,4 +16,10 @@
         <item name="android:textColor">@android:color/white</item>
     </style>
 
+    <!-- Details activity theme -->
+    <style name="DetailsAppTheme" parent="MainAppTheme">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+
 </resources>
