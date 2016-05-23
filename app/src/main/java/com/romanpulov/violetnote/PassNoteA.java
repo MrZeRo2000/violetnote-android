@@ -5,6 +5,8 @@ import android.os.Parcelable;
 
 import com.romanpulov.violetnotecore.Model.PassNote;
 
+import java.util.Map;
+
 /**
  * Created by rpulov on 26.04.2016.
  */
@@ -60,6 +62,8 @@ public class PassNoteA implements Parcelable {
         return mInfo;
     }
 
+    private Map<String, String> mNoteAttr;
+
     public PassNoteA(PassCategoryA category, String system, String user, String password, String comments, String custom, String info) {
         mCategory = category;
         mSystem = system;
@@ -105,5 +109,13 @@ public class PassNoteA implements Parcelable {
         mComments = in.readString();
         mCustom = in.readString();
         mInfo = in.readString();
+    }
+
+    public void setNoteAttr(Map<String, String> value) {
+        mNoteAttr = value;
+    }
+
+    public Map<String, String> getNoteAttr() {
+        return mNoteAttr;
     }
 }

@@ -61,7 +61,9 @@ public class PassDataReader {
                         noteCount.put(categoryA, 1);
                     else
                         noteCount.put(categoryA, oldNoteCount + 1);
-                    mPassNoteDataA.add(new PassNoteA(categoryA, p.getSystem(), p.getUser(), p.getPassword(), p.getComments(), p.getCustom(), p.getInfo()));
+                    PassNoteA noteA = new PassNoteA(categoryA, p.getSystem(), p.getUser(), p.getPassword(), p.getComments(), p.getCustom(), p.getInfo());
+                    noteA.setNoteAttr(p.getNoteAttr());
+                    mPassNoteDataA.add(noteA);
                 }
             }
 
