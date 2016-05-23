@@ -5,12 +5,16 @@ import android.os.Parcelable;
 
 import com.romanpulov.violetnotecore.Model.PassNote;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
  * Created by rpulov on 26.04.2016.
  */
 public class PassNoteA implements Parcelable {
+    private final static int ATTR_COUNT = 7;
+    private final static String ATTR_SYSTEM = "system";
+
     private PassCategoryA mCategory;
     private String mCategoryName;
 
@@ -26,52 +30,15 @@ public class PassNoteA implements Parcelable {
         return mCategory == null ? mCategoryName : mCategory.getCategoryName();
     }
 
-    private final String mSystem;
-
     public String getSystem() {
-        return mSystem;
+        return mNoteAttr.get(ATTR_SYSTEM);
     }
 
-    private final String mUser;
+    private final Map<String, String> mNoteAttr;
 
-    public String getUser() {
-        return mUser;
-    }
-
-    private final String mPassword;
-
-    public String getPassword() {
-        return mPassword;
-    }
-
-    private final String mComments;
-
-    public String getComments() {
-        return mComments;
-    }
-
-    private final String mCustom;
-
-    public String getCustom() {
-        return mCustom;
-    }
-
-    private final String mInfo;
-
-    public String getInfo() {
-        return mInfo;
-    }
-
-    private Map<String, String> mNoteAttr;
-
-    public PassNoteA(PassCategoryA category, String system, String user, String password, String comments, String custom, String info) {
+    public PassNoteA(PassCategoryA category, Map<String, String> noteAttr) {
         mCategory = category;
-        mSystem = system;
-        mUser = user;
-        mPassword = password;
-        mComments = comments;
-        mCustom = custom;
-        mInfo = info;
+        mNoteAttr = noteAttr;
     }
 
     @Override
@@ -81,13 +48,10 @@ public class PassNoteA implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(mCategoryName);
-        dest.writeString(mSystem);
-        dest.writeString(mUser);
-        dest.writeString(mPassword);
-        dest.writeString(mComments);
-        dest.writeString(mCustom);
-        dest.writeString(mInfo);
+        for (String s : mNoteAttr.keySet()) {
+            dest.writeString(s);
+            dest.writeString(mNoteAttr.get(s));
+        }
     }
 
     public static final Parcelable.Creator<PassNoteA> CREATOR
@@ -102,17 +66,10 @@ public class PassNoteA implements Parcelable {
     };
 
     private PassNoteA(Parcel in) {
-        mCategoryName = in.readString();
-        mSystem = in.readString();
-        mUser = in.readString();
-        mPassword = in.readString();
-        mComments = in.readString();
-        mCustom = in.readString();
-        mInfo = in.readString();
-    }
-
-    public void setNoteAttr(Map<String, String> value) {
-        mNoteAttr = value;
+        mNoteAttr = new LinkedHashMap<>();
+        for (int i = 0; i < ATTR_COUNT; i ++) {
+            mNoteAttr.put(in.readString(), in.readString());
+        }
     }
 
     public Map<String, String> getNoteAttr() {

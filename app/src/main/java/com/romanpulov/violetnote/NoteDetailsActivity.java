@@ -13,6 +13,8 @@ import java.util.ArrayList;
 
 public class NoteDetailsActivity extends AppCompatActivity {
 
+    private PassNoteA mPassNoteData;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,8 +31,10 @@ public class NoteDetailsActivity extends AppCompatActivity {
         //PassCategoryA passCategoryItem = getIntent().getParcelableExtra(PASS_CATEGORY_ITEM);
         //ArrayList<PassNoteA> passNoteData = getIntent().getParcelableArrayListExtra(PASS_NOTE_DATA);
 
+        mPassNoteData = getIntent().getParcelableExtra(NoteActivity.PASS_NOTE_DATA);
+
         if (fragment == null) {
-            fragment = NoteDetailsFragment.newInstance();
+            fragment = NoteDetailsFragment.newInstance(mPassNoteData);
             fm.beginTransaction().add(R.id.note_details_fragment_container, fragment).commit();
         }
     }

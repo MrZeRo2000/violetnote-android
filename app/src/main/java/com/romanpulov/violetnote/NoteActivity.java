@@ -57,7 +57,7 @@ public class NoteActivity extends AppCompatActivity implements NoteFragment.OnLi
     @Override
     public void onListFragmentInteraction(PassNoteA item) {
         Intent intent = new Intent(this, NoteDetailsActivity.class);
-        intent.putExtra(NoteActivity.PASS_CATEGORY_ITEM, item);
+        intent.putExtra(NoteActivity.PASS_NOTE_DATA, item);
         startActivity(intent);
     }
 
