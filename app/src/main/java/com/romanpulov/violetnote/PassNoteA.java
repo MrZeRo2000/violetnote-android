@@ -98,7 +98,9 @@ public class PassNoteA implements Parcelable {
     public List<AttrItem> getNoteAttrList() {
         List<AttrItem> result = new ArrayList<>(mNoteAttr.size());
         for (String s : mNoteAttr.keySet()) {
-            result.add(new AttrItem(s, mNoteAttr.get(s)));
+            String v = mNoteAttr.get(s);
+            if (v != null)
+                result.add(new AttrItem(s, v));
         }
         return result;
     }

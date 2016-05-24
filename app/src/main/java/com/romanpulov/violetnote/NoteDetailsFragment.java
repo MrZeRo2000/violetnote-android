@@ -63,6 +63,8 @@ public class NoteDetailsFragment extends Fragment {
             RecyclerView recyclerView = (RecyclerView) view;
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
             recyclerView.setAdapter(new NoteDetailsRecyclerViewAdapter(mPassNote.getNoteAttrList(), mListener));
+            // add decoration
+            recyclerView.addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(getActivity(), RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_white_black_gradient));
         }
         return view;
     }

@@ -43,10 +43,12 @@ public class MainActivity extends AppCompatActivity implements CategoryFragment.
 
     @Override
     public void onListFragmentInteraction(PassCategoryA item) {
-        Intent intent = new Intent(this, NoteActivity.class);
-        intent.putExtra(PASS_CATEGORY_ITEM, item);
-        intent.putParcelableArrayListExtra(PASS_NOTE_DATA, (ArrayList<PassNoteA>) mPassDataA.getPassNoteData(item));
-        startActivity(intent);
+        if (item.getNotesCount() > 0) {
+            Intent intent = new Intent(this, NoteActivity.class);
+            intent.putExtra(PASS_CATEGORY_ITEM, item);
+            intent.putParcelableArrayListExtra(PASS_NOTE_DATA, (ArrayList<PassNoteA>) mPassDataA.getPassNoteData(item));
+            startActivity(intent);
+        }
     }
 
     private class LoadPassDataAsyncTask extends AsyncTask<Void, Void, Boolean> {

@@ -13,13 +13,32 @@
 
     <!-- Main activity theme -->
     <style name="MainAppTheme" parent="AppTheme">
-        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textColor">@color/brightTextColor</item>
     </style>
 
     <!-- Details activity theme -->
     <style name="DetailsAppTheme" parent="MainAppTheme">
+
+    </style>
+
+    <style name="NoteSystem" parent="@style/TextAppearance.AppCompat">
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="NoteUser" parent="@style/TextAppearance.AppCompat">
         <item name="android:textSize">16sp</item>
     </style>
+
+    <style name="NoteName" parent="@style/TextAppearance.AppCompat">
+        <item name="android:textSize">22sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="NoteValue" parent="@style/TextAppearance.AppCompat">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
 
 
 </resources>
