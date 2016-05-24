@@ -4,7 +4,9 @@ import android.os.Environment;
 
 import com.romanpulov.violetnotecore.AESCrypt.AESCryptException;
 import com.romanpulov.violetnotecore.AESCrypt.AESCryptService;
+import com.romanpulov.violetnotecore.Model.PassCategory;
 import com.romanpulov.violetnotecore.Model.PassData;
+import com.romanpulov.violetnotecore.Model.PassNote;
 import com.romanpulov.violetnotecore.Processor.Exception.DataReadWriteException;
 import com.romanpulov.violetnotecore.Processor.XMLPassDataReader;
 
@@ -19,63 +21,54 @@ import java.io.InputStream;
 public class Document {
     public static final String DEF_FILE_NAME = "/temp/1.vnf";
 
-    private PassData mPassData;
-
-    public PassData getPassData() {
-        return mPassData;
-    }
-
-    private String mFileName;
-
-    public String getFileName() {
-        return mFileName;
-    }
-
-    private String mMasterPass;
-
-    private void setFile(String fileName, String masterPass) {
-        mFileName = fileName;
-        mMasterPass = masterPass;
-    }
-
-    public void resetData() {
-        mFileName = null;
-        mMasterPass = null;
-        mPassData = null;
-    }
-
-    public boolean loadPassData(String fileName, String masterPass) {
+    public static PassDataA loadPassDataA(String fileName, String masterPass) {
         if (masterPass == null) {
-            resetData();
-            return false;
+            return null;
         }
 
         try {
             File f = new File(Environment.getExternalStorageDirectory() + fileName);
             if (f.exists()) {
                 InputStream input = AESCryptService.generateCryptInputStream(new FileInputStream(f), masterPass);
-                mPassData = (new XMLPassDataReader()).readStream(input);
-                setFile(fileName, masterPass);
-                return true;
+                PassData pd =  (new XMLPassDataReader()).readStream(input);
+                if (pd != null)
+                    return PassDataA.newInstance(masterPass, pd);
+                else
+                    return null;
             } else
-                return false;
+                return null;
         } catch(IOException | AESCryptException | DataReadWriteException e) {
-            resetData();
-            return false;
+            return null;
         }
     }
 
-    public void setPassData(PassData passData) {
-        mPassData = passData;
+    public static PassDataA loadSamplePassData() {
+        PassData pd = new PassData();
+
+        PassCategory pc = new PassCategory("Category 1");
+        pd.getPassCategoryList().add(pc);
+
+        PassNote pn = new PassNote(pc, "System 1", "User 1", "Password 1", null, null, null);
+        pd.getPassNoteList().add(pn);
+        pn = new PassNote(pc, "System 12", "User 12", "Password 12", null, null, null);
+        pd.getPassNoteList().add(pn);
+        pn = new PassNote(pc, "System 13", "User 13", "Password 13", null, null, null);
+        pd.getPassNoteList().add(pn);
+
+        pc = new PassCategory("Category 2");
+        pd.getPassCategoryList().add(pc);
+
+        pn = new PassNote(pc, "System 2", "User 2", "Password 2", null, null, null);
+        pd.getPassNoteList().add(pn);
+
+        for (int i = 3; i < 30; i ++) {
+            pd.getPassCategoryList().add(new PassCategory("Category " + i));
+        }
+
+        return PassDataA.newInstance(null, pd);
     }
 
     private Document() {
 
-    }
-
-    private static Document mOurInstance = new Document();
-
-    public static Document getInstance() {
-        return mOurInstance;
     }
 }

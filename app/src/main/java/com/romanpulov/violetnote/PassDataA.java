@@ -9,6 +9,8 @@ import java.util.List;
  * Created by rpulov on 26.04.2016.
  */
 public class PassDataA {
+    private String mPassword;
+
     private List<PassCategoryA> mPassCategoryDataA;
 
     public List<PassCategoryA> getPassCategoryData() {
@@ -32,18 +34,15 @@ public class PassDataA {
         return passNoteData;
     }
 
-    private void setData(List<PassCategoryA> passCategoryData, List<PassNoteA> passNoteData) {
-        mPassCategoryDataA = passCategoryData;
-        mPassNoteDataA = passNoteData;
-    }
-
-    public static PassDataA fromPassData(PassData passData) {
+    public static PassDataA newInstance(String password, PassData passData) {
         PassDataReader reader = new PassDataReader(passData);
         reader.readCategoryData();
         reader.readNoteData();
 
         PassDataA newPassDataA = new PassDataA();
-        newPassDataA.setData(reader.getPassCategoryDataA(), reader.getPassNoteDataA());
+        newPassDataA.mPassCategoryDataA = reader.getPassCategoryDataA();
+        newPassDataA.mPassNoteDataA = reader.getPassNoteDataA();
+        newPassDataA.mPassword = password;
 
         return newPassDataA;
     }
