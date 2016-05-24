@@ -17,28 +17,31 @@ import com.romanpulov.violetnotecore.Model.*;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements CategoryFragment.OnListFragmentInteractionListener {
+public class MainActivity extends ActionBarCompatActivity implements CategoryFragment.OnListFragmentInteractionListener {
 
     public static final String PASS_CATEGORY_ITEM = "PassCategoryItem";
     public static final String PASS_NOTE_DATA = "PassNoteData";
 
-    private Fragment fragment;
-
     private PassDataA mPassDataA;
+
+    private boolean mResumeFromChild = false;
 
     private void loadData() {
         PassData passData = Document.getInstance().getPassData();
-        mPassDataA = PassDataA.fromPassData(passData);
+        if (passData != null)
+            mPassDataA = PassDataA.fromPassData(passData);
     }
 
     private void updateData() {
         FragmentManager fm = getSupportFragmentManager();
-        fragment = fm.findFragmentById(R.id.fragment_container);
+        Fragment fragment = fm.findFragmentById(R.id.fragment_container);
 
-        if (fragment == null) {
-            fragment = CategoryFragment.newInstance((ArrayList<PassCategoryA>)mPassDataA.getPassCategoryData());
-            fm.beginTransaction().add(R.id.fragment_container, fragment).commit();
+        if (fragment != null) {
+            fm.beginTransaction().remove(fragment).commit();
         }
+
+        fragment = CategoryFragment.newInstance((ArrayList<PassCategoryA>)mPassDataA.getPassCategoryData());
+        fm.beginTransaction().add(R.id.fragment_container, fragment).commit();
     }
 
     @Override
@@ -47,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements CategoryFragment.
             Intent intent = new Intent(this, NoteActivity.class);
             intent.putExtra(PASS_CATEGORY_ITEM, item);
             intent.putParcelableArrayListExtra(PASS_NOTE_DATA, (ArrayList<PassNoteA>) mPassDataA.getPassNoteData(item));
-            startActivity(intent);
+            startActivityForResult(intent, 0);
         }
     }
 
@@ -63,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements CategoryFragment.
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            return Document.getInstance().loadPassData(Document.getInstance().getDataFileName(MainActivity.this), mPassword);
+            return Document.getInstance().loadPassData(Document.DEF_FILE_NAME, mPassword);
         }
 
         @Override
@@ -118,8 +121,6 @@ public class MainActivity extends AppCompatActivity implements CategoryFragment.
                 public void onPasswordInput(String password) {
                     mPassword = password;
                     loadPassData();
-                    //loadData();
-                    //updateData();
 
                 }
             });
@@ -130,33 +131,63 @@ public class MainActivity extends AppCompatActivity implements CategoryFragment.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_main);
-        setContentView(R.layout.activity_fragment_main);
-
+        /*
         ActionBar actionBar = getSupportActionBar();
         actionBar.setIcon(R.mipmap.ic_launcher);
         actionBar.setDisplayUseLogoEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
-
-
-        /*
-        try { 
-            AESCryptService service = new AESCryptService();
-            InputStream input =service.generateCryptInputStream(new FileInputStream(Environment.getExternalStorageDirectory() + "/temp/1.vnf"), "Password1");
-            PassData pd = (new XMLPassDataReader()).readStream(input);
-            Toast.makeText(getApplicationContext(), pd.getPassCategoryList().toString() + " - " + pd.getPassNoteList().toString(), Toast.LENGTH_SHORT).show();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         */
+        setContentView(R.layout.activity_fragment_main);
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        super.onSaveInstanceState(outState, outPersistentState);
-        Log.d("MainActivity", "OnSaveInstanceState");
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d("MainActivity", "OnActivityResult:" + resultCode);
+        mResumeFromChild = true;
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("MainActivity", "Document.getPassData=" + Document.getInstance().getPassData());
+        if (Document.getInstance().getPassData() != null) {
+            Log.d("MainActivity", "Document.getPassCategoryList=" + Document.getInstance().getPassData().getPassCategoryList());
+            Log.d("MainActivity", "Document.getPassNoteList=" + Document.getInstance().getPassData().getPassNoteList());
+        }
+
+        if (!mResumeFromChild)  {
+            mResumeFromChild = false;
+
+            FragmentManager fm = getSupportFragmentManager();
+            Fragment fragment = fm.findFragmentById(R.id.fragment_container);
+            if (fragment != null) {
+                fm.beginTransaction().remove(fragment).commit();
+            }
+
+            requestPassword();
+        } else {
+            if (mPassDataA == null) {
+                loadData();
+                updateData();
+            }
+        }
+
+        //loadSamplePassData();
+        //loadData();
+        //updateData();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d("MainActivity", "OnPause: passData=" + Document.getInstance().getPassData());
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Log.d("MainActivity", "OnSaveInstanceState");
     }
 
     @Override
@@ -166,26 +197,8 @@ public class MainActivity extends AppCompatActivity implements CategoryFragment.
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        Log.d("MainActivity", "OnResume");
-        //TODO: unlock reset password, lock loadSamplePassData
-        requestPassword();
-        //loadSamplePassData();
-        //loadData();
-        //updateData();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.d("MainActivity", "OnPause");
-        resetPassword();
-        Document.getInstance().resetData();
-        if (fragment != null) {
-            FragmentManager fm = getSupportFragmentManager();
-            fm.beginTransaction().remove(fragment).commit();
-            fragment = null;
-        }
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 }

@@ -7,10 +7,11 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 
 import java.util.ArrayList;
 
-public class NoteActivity extends AppCompatActivity implements NoteFragment.OnListFragmentInteractionListener{
+public class NoteActivity extends ActionBarCompatActivity implements NoteFragment.OnListFragmentInteractionListener{
 
     private PassCategoryA mPassCategoryItem;
     private ArrayList<PassNoteA> mPassNoteData;
@@ -29,12 +30,6 @@ public class NoteActivity extends AppCompatActivity implements NoteFragment.OnLi
         }
 
         setContentView(R.layout.activity_fragment_note);
-
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setIcon(R.mipmap.ic_launcher);
-        actionBar.setDisplayUseLogoEnabled(true);
-        actionBar.setDisplayShowHomeEnabled(true);
-        actionBar.setDisplayHomeAsUpEnabled(true);
 
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.fragment_container);
@@ -89,6 +84,13 @@ public class NoteActivity extends AppCompatActivity implements NoteFragment.OnLi
 //        mPassNoteData = savedInstanceState.getParcelableArrayList(PASS_NOTE_DATA);
     }
 
-
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Workaround for issue with back button in toolbar default behavior
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        } else
+            return super.onOptionsItemSelected(item);
+    }
 }

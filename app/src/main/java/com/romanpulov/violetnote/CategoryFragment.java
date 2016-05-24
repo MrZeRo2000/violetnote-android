@@ -11,6 +11,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +45,7 @@ public class CategoryFragment extends Fragment {
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
     public static CategoryFragment newInstance(ArrayList<PassCategoryA> passCategoryData) {
+        Log.d("CategoryFragment", "newInstance");
         CategoryFragment fragment = new CategoryFragment();
         Bundle args = new Bundle();
         args.putParcelableArrayList(CategoryFragment.PASS_CATEGORY_DATA, passCategoryData);

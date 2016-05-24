@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class NoteDetailsActivity extends AppCompatActivity implements NoteDetailsFragment.OnListFragmentInteractionListener {
+public class NoteDetailsActivity extends ActionBarCompatActivity implements NoteDetailsFragment.OnListFragmentInteractionListener {
 
     private PassNoteA mPassNoteData;
 
@@ -19,12 +19,6 @@ public class NoteDetailsActivity extends AppCompatActivity implements NoteDetail
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment_note_details);
-
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setIcon(R.mipmap.ic_launcher);
-        actionBar.setDisplayUseLogoEnabled(true);
-        actionBar.setDisplayShowHomeEnabled(true);
-        actionBar.setDisplayHomeAsUpEnabled(true);
 
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.note_details_fragment_container);
@@ -38,7 +32,6 @@ public class NoteDetailsActivity extends AppCompatActivity implements NoteDetail
             fm.beginTransaction().add(R.id.note_details_fragment_container, fragment).commit();
         }
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
