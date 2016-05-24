@@ -6,11 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.romanpulov.violetnote.ItemFragment.OnListFragmentInteractionListener;
+import com.romanpulov.violetnote.NoteDetailsFragment.OnListFragmentInteractionListener;
 import com.romanpulov.violetnote.dummy.DummyContent.DummyItem;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
@@ -19,10 +18,10 @@ import java.util.Map;
  */
 public class NoteDetailsRecyclerViewAdapter extends RecyclerView.Adapter<NoteDetailsRecyclerViewAdapter.ViewHolder> {
 
-    private final Map<String, String> mValues;
+    private final List<PassNoteA.AttrItem> mValues;
     private final OnListFragmentInteractionListener mListener;
 
-    public NoteDetailsRecyclerViewAdapter(Map<String, String> items, OnListFragmentInteractionListener listener) {
+    public NoteDetailsRecyclerViewAdapter(List<PassNoteA.AttrItem> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -30,15 +29,15 @@ public class NoteDetailsRecyclerViewAdapter extends RecyclerView.Adapter<NoteDet
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_item, parent, false);
+                .inflate(R.layout.fragment_note_details, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        holder.mNameView.setText(mValues.get(position).mName);
+        holder.mValueView.setText(mValues.get(position).mValue);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,20 +58,20 @@ public class NoteDetailsRecyclerViewAdapter extends RecyclerView.Adapter<NoteDet
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView mIdView;
-        public final TextView mContentView;
-        public DummyItem mItem;
+        public final TextView mNameView;
+        public final TextView mValueView;
+        public PassNoteA.AttrItem mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.id);
-            mContentView = (TextView) view.findViewById(R.id.content);
+            mNameView = (TextView) view.findViewById(R.id.name);
+            mValueView = (TextView) view.findViewById(R.id.value);
         }
 
         @Override
         public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
+            return super.toString() + " '" + mValueView.getText() + "'";
         }
     }
 }

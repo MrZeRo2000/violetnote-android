@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class NoteDetailsActivity extends AppCompatActivity {
+public class NoteDetailsActivity extends AppCompatActivity implements NoteDetailsFragment.OnListFragmentInteractionListener {
 
     private PassNoteA mPassNoteData;
 
@@ -31,7 +31,7 @@ public class NoteDetailsActivity extends AppCompatActivity {
         //PassCategoryA passCategoryItem = getIntent().getParcelableExtra(PASS_CATEGORY_ITEM);
         //ArrayList<PassNoteA> passNoteData = getIntent().getParcelableArrayListExtra(PASS_NOTE_DATA);
 
-        mPassNoteData = getIntent().getParcelableExtra(NoteActivity.PASS_NOTE_DATA);
+        mPassNoteData = getIntent().getParcelableExtra(MainActivity.PASS_NOTE_DATA);
 
         if (fragment == null) {
             fragment = NoteDetailsFragment.newInstance(mPassNoteData);
@@ -48,5 +48,10 @@ public class NoteDetailsActivity extends AppCompatActivity {
             return true;
         } else
             return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onListFragmentInteraction(PassNoteA.AttrItem item) {
+
     }
 }

@@ -19,9 +19,6 @@ public class NoteActivity extends AppCompatActivity implements NoteFragment.OnLi
         Log.d("NoteActivity", message);
     }
 
-    public static final String PASS_CATEGORY_ITEM = "PassCategoryItem";
-    public static final String PASS_NOTE_DATA = "PassNoteData";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,8 +39,8 @@ public class NoteActivity extends AppCompatActivity implements NoteFragment.OnLi
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.fragment_container);
 
-        mPassCategoryItem = getIntent().getParcelableExtra(PASS_CATEGORY_ITEM);
-        mPassNoteData = getIntent().getParcelableArrayListExtra(PASS_NOTE_DATA);
+        mPassCategoryItem = getIntent().getParcelableExtra(MainActivity.PASS_CATEGORY_ITEM);
+        mPassNoteData = getIntent().getParcelableArrayListExtra(MainActivity.PASS_NOTE_DATA);
 
         log("PassCategoryItem:" + mPassCategoryItem);
         log("PassNoteData:" + mPassNoteData);
@@ -57,7 +54,7 @@ public class NoteActivity extends AppCompatActivity implements NoteFragment.OnLi
     @Override
     public void onListFragmentInteraction(PassNoteA item) {
         Intent intent = new Intent(this, NoteDetailsActivity.class);
-        intent.putExtra(NoteActivity.PASS_NOTE_DATA, item);
+        intent.putExtra(MainActivity.PASS_NOTE_DATA, item);
         startActivity(intent);
     }
 
@@ -78,8 +75,8 @@ public class NoteActivity extends AppCompatActivity implements NoteFragment.OnLi
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         log("saving instance state :" + mPassCategoryItem + ", " + mPassNoteData);
-        outState.putParcelable(PASS_CATEGORY_ITEM, mPassCategoryItem);
-        outState.putParcelableArrayList(PASS_NOTE_DATA, mPassNoteData);
+        outState.putParcelable(MainActivity.PASS_CATEGORY_ITEM, mPassCategoryItem);
+        outState.putParcelableArrayList(MainActivity.PASS_NOTE_DATA, mPassNoteData);
         outState.putInt("TestInt", 1);
         super.onSaveInstanceState(outState);
     }

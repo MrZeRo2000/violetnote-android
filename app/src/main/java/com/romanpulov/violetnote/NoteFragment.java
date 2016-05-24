@@ -48,8 +48,8 @@ public class NoteFragment extends Fragment {
         log("newInstance");
         NoteFragment fragment = new NoteFragment();
         Bundle args = new Bundle();
-        args.putParcelable(NoteActivity.PASS_CATEGORY_ITEM, passCategory);
-        args.putParcelableArrayList(NoteActivity.PASS_NOTE_DATA, passNoteData);
+        args.putParcelable(MainActivity.PASS_CATEGORY_ITEM, passCategory);
+        args.putParcelableArrayList(MainActivity.PASS_NOTE_DATA, passNoteData);
         fragment.setArguments(args);
         return fragment;
     }
@@ -61,8 +61,8 @@ public class NoteFragment extends Fragment {
         log("onCreate getArguments = " + getArguments());
 
         if (getArguments() != null) {
-            mPassCategory =getArguments().getParcelable(NoteActivity.PASS_CATEGORY_ITEM);
-            mPassNoteData = getArguments().getParcelableArrayList(NoteActivity.PASS_NOTE_DATA);
+            mPassCategory =getArguments().getParcelable(MainActivity.PASS_CATEGORY_ITEM);
+            mPassNoteData = getArguments().getParcelableArrayList(MainActivity.PASS_NOTE_DATA);
         }
     }
 
@@ -123,7 +123,7 @@ public class NoteFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        getArguments().putParcelable(NoteActivity.PASS_CATEGORY_ITEM, mPassCategory);
-        getArguments().putParcelableArrayList(NoteActivity.PASS_NOTE_DATA, mPassNoteData);
+        getArguments().putParcelable(MainActivity.PASS_CATEGORY_ITEM, mPassCategory);
+        getArguments().putParcelableArrayList(MainActivity.PASS_NOTE_DATA, mPassNoteData);
     }
 }

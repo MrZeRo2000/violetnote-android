@@ -30,8 +30,8 @@ public class NoteRecyclerViewAdapter extends RecyclerView.Adapter<NoteRecyclerVi
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mSystemView.setText(mValues.get(position).getSystem());
-        holder.mUserView.setText(mValues.get(position).getUser());
+        holder.mSystemView.setText(mValues.get(position).getAttrId(1));
+        holder.mUserView.setText(mValues.get(position).getAttrId(2));
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override

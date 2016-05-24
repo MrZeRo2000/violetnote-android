@@ -1,5 +1,6 @@
 package com.romanpulov.violetnote;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,10 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.romanpulov.violetnote.dummy.DummyContent;
-import com.romanpulov.violetnote.dummy.DummyContent.DummyItem;
-
 import java.util.List;
+import java.util.Map;
 
 /**
  * A fragment representing a list of Items.
@@ -25,10 +24,7 @@ public class NoteDetailsFragment extends Fragment {
 
     PassNoteA mPassNote;
 
-    // TODO: Customize parameter argument names
-    private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
-    private int mColumnCount = 1;
+    private static final String PASS_NOTE = "PassNote";
     private OnListFragmentInteractionListener mListener;
 
     /**
@@ -38,12 +34,11 @@ public class NoteDetailsFragment extends Fragment {
     public NoteDetailsFragment() {
     }
 
-    // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
     public static NoteDetailsFragment newInstance(PassNoteA passNote) {
         NoteDetailsFragment fragment = new NoteDetailsFragment();
         Bundle args = new Bundle();
-        //args.putInt(ARG_COLUMN_COUNT, columnCount);
+        args.putParcelable(PASS_NOTE, passNote);
         fragment.setArguments(args);
         return fragment;
     }
@@ -53,7 +48,7 @@ public class NoteDetailsFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
+            mPassNote = getArguments().getParcelable(PASS_NOTE);
         }
     }
 
@@ -66,19 +61,15 @@ public class NoteDetailsFragment extends Fragment {
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
-            recyclerView.setAdapter(new NoteDetailsRecyclerViewAdapter(mPassNote.getNoteAttr(), mListener));
+            recyclerView.setLayoutManager(new LinearLayoutManager(context));
+            recyclerView.setAdapter(new NoteDetailsRecyclerViewAdapter(mPassNote.getNoteAttrList(), mListener));
         }
         return view;
     }
 
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(Activity context) {
         super.onAttach(context);
         if (context instanceof OnListFragmentInteractionListener) {
             mListener = (OnListFragmentInteractionListener) context;
@@ -105,7 +96,6 @@ public class NoteDetailsFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(PassNoteA.AttrItem item);
     }
 }

@@ -19,6 +19,9 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements CategoryFragment.OnListFragmentInteractionListener {
 
+    public static final String PASS_CATEGORY_ITEM = "PassCategoryItem";
+    public static final String PASS_NOTE_DATA = "PassNoteData";
+
     private Fragment fragment;
 
     private PassDataA mPassDataA;
@@ -41,8 +44,8 @@ public class MainActivity extends AppCompatActivity implements CategoryFragment.
     @Override
     public void onListFragmentInteraction(PassCategoryA item) {
         Intent intent = new Intent(this, NoteActivity.class);
-        intent.putExtra(NoteActivity.PASS_CATEGORY_ITEM, item);
-        intent.putParcelableArrayListExtra(NoteActivity.PASS_NOTE_DATA, (ArrayList<PassNoteA>) mPassDataA.getPassNoteData(item));
+        intent.putExtra(PASS_CATEGORY_ITEM, item);
+        intent.putParcelableArrayListExtra(PASS_NOTE_DATA, (ArrayList<PassNoteA>) mPassDataA.getPassNoteData(item));
         startActivity(intent);
     }
 
