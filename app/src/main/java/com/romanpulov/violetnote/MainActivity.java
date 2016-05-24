@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements CategoryFragment.
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            return Document.getInstance().loadPassData(Document.DEF_FILE_NAME, mPassword);
+            return Document.getInstance().loadPassData(Document.getInstance().getDataFileName(MainActivity.this), mPassword);
         }
 
         @Override
@@ -170,10 +170,10 @@ public class MainActivity extends AppCompatActivity implements CategoryFragment.
         super.onResume();
         Log.d("MainActivity", "OnResume");
         //TODO: unlock reset password, lock loadSamplePassData
-        //requestPassword();
-        loadSamplePassData();
-        loadData();
-        updateData();
+        requestPassword();
+        //loadSamplePassData();
+        //loadData();
+        //updateData();
     }
 
     @Override

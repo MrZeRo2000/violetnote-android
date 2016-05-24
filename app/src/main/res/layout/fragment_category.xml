@@ -14,9 +14,7 @@
         android:layout_marginTop="@dimen/text_margin_half"
         android:layout_marginLeft="@dimen/text_margin"
         android:layout_marginRight="@dimen/text_margin"
-        android:textStyle="bold"
-        android:textSize="22sp"
-        android:textAppearance="?attr/textAppearanceListItem" />
+        android:textAppearance="@style/CategoryName" />
 
     <TextView
         android:id="@+id/category_description"
@@ -26,6 +24,5 @@
         android:layout_marginRight="@dimen/text_margin"
         android:layout_marginTop="@dimen/text_margin_half"
         android:layout_marginBottom="@dimen/text_margin_half"
-        android:textSize="16sp"
-        android:textAppearance="?attr/textAppearanceListItem" />
+        android:textAppearance="@style/CategoryDescription" />
 </LinearLayout>

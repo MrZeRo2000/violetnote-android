@@ -13,8 +13,7 @@
         android:layout_height="wrap_content"
         android:padding="8dp"
         android:id="@+id/headerTextView"
-        android:textSize="24sp"
-        android:textStyle="bold"
+        android:textAppearance="@style/CategoryHeader"
         android:background="@color/headerBackground"
         android:text="Sample text"
         />
