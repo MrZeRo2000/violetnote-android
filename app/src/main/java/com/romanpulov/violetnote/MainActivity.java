@@ -13,14 +13,16 @@ import android.util.Log;
 import java.util.ArrayList;
 
 public class MainActivity extends ActionBarCompatActivity implements CategoryFragment.OnListFragmentInteractionListener {
-    public static final boolean mSampleData = true;
+    public static final boolean mSampleData = false;
 
+    public static final String PASS_DATA = "PassData";
     public static final String PASS_CATEGORY_ITEM = "PassCategoryItem";
     public static final String PASS_NOTE_DATA = "PassNoteData";
 
     private PassDataA mPassDataA;
 
     private boolean mResumeFromChild = false;
+    private boolean mRestoreState = false;
 
     private void refreshFragment() {
         FragmentManager fm = getSupportFragmentManager();
@@ -77,7 +79,13 @@ public class MainActivity extends ActionBarCompatActivity implements CategoryFra
         passwordInputDialog.setOnPasswordInputListener(new PasswordInputDialog.OnPasswordInputListener() {
             @Override
             public void onPasswordInput(String password) {
-                new LoadPassDataAsyncTask(password).execute();
+                if (password != null) {
+                    if ((mPassDataA != null) && (mPassDataA.getPassword().equals(password))) {
+                        refreshFragment();
+                    } else {
+                        new LoadPassDataAsyncTask(password).execute();
+                    }
+                }
             }
         });
         passwordInputDialog.show();
@@ -105,16 +113,19 @@ public class MainActivity extends ActionBarCompatActivity implements CategoryFra
             refreshFragment();
         } else {
             if (!mResumeFromChild) {
-                mResumeFromChild = false;
 
-                FragmentManager fm = getSupportFragmentManager();
-                Fragment fragment = fm.findFragmentById(R.id.fragment_container);
-                if (fragment != null) {
-                    fm.beginTransaction().remove(fragment).commit();
-                }
+                if (!mRestoreState) {
+                    FragmentManager fm = getSupportFragmentManager();
+                    Fragment fragment = fm.findFragmentById(R.id.fragment_container);
+                    if (fragment != null) {
+                        fm.beginTransaction().remove(fragment).commit();
+                    }
 
-                requestPassword();
+                    requestPassword();
+                } else
+                    mRestoreState = false;
             } else {
+                mResumeFromChild = false;
                 if (mPassDataA == null) {
                     refreshFragment();
                 }
@@ -130,12 +141,15 @@ public class MainActivity extends ActionBarCompatActivity implements CategoryFra
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putParcelable(PASS_DATA, mPassDataA);
         Log.d("MainActivity", "OnSaveInstanceState");
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
+        mPassDataA = savedInstanceState.getParcelable(PASS_DATA);
+        mRestoreState = true;
         Log.d("MainActivity", "OnRestoreInstanceState");
     }
 
