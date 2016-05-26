@@ -99,7 +99,7 @@ public class DataModelTest {
 
         sda = PassDataA.newSearchInstance(pda, "stem 12");
         assertEquals(sda.getPassCategoryData().size(), 1);
-        
+
         sda = PassDataA.newSearchInstance(pda, "xxx");
         assertNull(sda.getPassCategoryData());
         assertNull(sda.getPassNoteData());
