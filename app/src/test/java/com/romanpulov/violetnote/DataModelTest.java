@@ -9,6 +9,8 @@ import org.junit.Test;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by rpulov on 04.04.2016.
@@ -21,11 +23,11 @@ public class DataModelTest {
         PassCategory pc = new PassCategory("Category 1");
         result.getPassCategoryList().add(pc);
 
-        PassNote pn = new PassNote(pc, "System 1", "User 1", "Password 1", null, null, null);
+        PassNote pn = new PassNote(pc, "System 1", "Alexander", "Password 1", null, null, null);
         result.getPassNoteList().add(pn);
-        pn = new PassNote(pc, "System 12", "User 12", "Password 12", null, null, null);
+        pn = new PassNote(pc, "System 12", "Michael", "Password 12", null, null, null);
         result.getPassNoteList().add(pn);
-        pn = new PassNote(pc, "System 13", "User 13", "Password 13", null, null, null);
+        pn = new PassNote(pc, "System 13", "George", "Password 13", null, null, null);
         result.getPassNoteList().add(pn);
 
         pc = new PassCategory("Category 2");
@@ -65,5 +67,18 @@ public class DataModelTest {
             System.out.println(p);
         }
     }
+
+    @Test
+    public void SearchTest() {
+        String searchString = "George";
+        assertTrue(searchString.matches("(?i:.*geor.*)"));
+        assertFalse(searchString.matches("(?i:.*ger.*)"));
+        assertTrue(searchString.matches("(?i:.*GeOr.*)"));
+        assertTrue(searchString.matches("(?i:.*eOr.*)"));
+        assertTrue(searchString.matches("(?i:.*rge.*)"));
+        assertTrue(searchString.matches("(?i:.*rGe.*)"));
+        assertFalse(searchString.matches("(?i:.*tge.*)"));
+    }
+
 
 }
