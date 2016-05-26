@@ -10,6 +10,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -37,6 +38,11 @@ public class DataModelTest {
         result.getPassNoteList().add(pn);
 
         return result;
+    }
+
+    public PassDataA createTestPassDataA() {
+        PassData pd = createTestPassData();
+        return PassDataA.newInstance(null, pd);
     }
 
     @Test
@@ -80,5 +86,23 @@ public class DataModelTest {
         assertFalse(searchString.matches("(?i:.*tge.*)"));
     }
 
+    @Test
+    public void SearchInstanceTest() {
+        PassDataA pda = createTestPassDataA();
+
+        PassDataA sda = PassDataA.newSearchInstance(pda, "eOr");
+        assertEquals(sda.getPassCategoryData().size(), 1);
+        assertEquals(sda.getPassNoteData().size(), 1);
+
+        sda = PassDataA.newSearchInstance(pda, "yste");
+        assertEquals(sda.getPassCategoryData().size(), 2);
+
+        sda = PassDataA.newSearchInstance(pda, "stem 12");
+        assertEquals(sda.getPassCategoryData().size(), 1);
+        
+        sda = PassDataA.newSearchInstance(pda, "xxx");
+        assertNull(sda.getPassCategoryData());
+        assertNull(sda.getPassNoteData());
+    }
 
 }

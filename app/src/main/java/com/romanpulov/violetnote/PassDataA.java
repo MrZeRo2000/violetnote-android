@@ -6,7 +6,9 @@ import android.os.Parcelable;
 import com.romanpulov.violetnotecore.Model.PassData;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by rpulov on 26.04.2016.
@@ -60,6 +62,46 @@ public class PassDataA implements Parcelable {
         newPassDataA.mPassNoteDataA = reader.getPassNoteDataA();
 
         return newPassDataA;
+    }
+
+    public static PassDataA newSearchInstance(PassDataA source, String searchString) {
+        final int max_attr_count = 2;
+
+        Set<PassCategoryA> categorySet = new HashSet<>();
+        List<PassNoteA> noteList = null;
+
+        for (PassNoteA note : source.getPassNoteData()) {
+            int attrCount = 0;
+            String searchRegExpString = "(?i:.*" + searchString + ".*)";
+            for (String a : note.getNoteAttr().keySet()) {
+                if (note.getNoteAttr().get(a).matches(searchRegExpString)) {
+                    if (noteList == null)
+                        noteList =  new ArrayList<>();
+                    noteList.add(note);
+                    categorySet.add(note.getCategory());
+                    break;
+                }
+
+                attrCount ++;
+                if (attrCount > max_attr_count)
+                    break;
+            }
+        }
+
+        List<PassCategoryA> categoryList = null;
+        if (noteList != null) {
+            categoryList = new ArrayList<>();
+            for (PassCategoryA category : categorySet) {
+                categoryList.add(category);
+            }
+        }
+
+        PassDataA searchInstance = new PassDataA();
+        searchInstance.mPassword = source.mPassword;
+        searchInstance.mPassCategoryDataA = categoryList;
+        searchInstance.mPassNoteDataA = noteList;
+
+        return searchInstance;
     }
 
     @Override
