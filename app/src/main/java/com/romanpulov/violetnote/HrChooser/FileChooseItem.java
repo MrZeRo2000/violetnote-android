@@ -10,12 +10,12 @@ import java.util.List;
  * Created by romanpulov on 27.05.2016.
  */
 public class FileChooseItem implements ChooseItem {
-    private File mParentFile;
+    private ChooseItem mParentItem;
     private File mFile;
 
-    public FileChooseItem(File file, File parentFile) {
+    public FileChooseItem(File file, ChooseItem parentItem) {
         this(file);
-        mParentFile = parentFile;
+        mParentItem = parentItem;
     }
 
     public FileChooseItem(File file) {
@@ -46,9 +46,13 @@ public class FileChooseItem implements ChooseItem {
     public List<ChooseItem> getItems() {
         List<ChooseItem> result = new ArrayList<>();
         for (File f : mFile.listFiles()) {
-            result.add(new FileChooseItem(f, mFile));
+            result.add(new FileChooseItem(f, this));
         }
         return result;
+    }
+
+    public ChooseItem getParentItem() {
+        return mParentItem;
     }
 
     @Override
