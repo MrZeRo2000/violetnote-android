@@ -29,10 +29,11 @@ public class PasswordInputDialog {
     }
 
     public void show() {
-        final AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
+        final AlertDialog.Builder alert = new AlertDialog.Builder(mContext, R.style.AlertDialogStyle);
         final EditText input = new EditText(mContext);
 
         input.setInputType(InputType.TYPE_CLASS_TEXT| InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        input.setTextColor(mContext.getResources().getColor(R.color.brightTextColor));
 
         alert.setView(input);
         alert.setTitle(R.string.password_required);

@@ -58,7 +58,7 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
 
         @Override
         protected void onPreExecute() {
-            progressDialog = new ProgressDialog(PasswordActivity.this);
+            progressDialog = new ProgressDialog(PasswordActivity.this, R.style.DialogTheme);
             progressDialog.setTitle(R.string.caption_loading);
             progressDialog.show();
         }

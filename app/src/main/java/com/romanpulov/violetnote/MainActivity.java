@@ -19,9 +19,6 @@ import java.util.ArrayList;
 public class MainActivity extends PasswordActivity implements CategoryFragment.OnListFragmentInteractionListener {
     public static final boolean mSampleData = false;
 
-    public static final String PASS_CATEGORY_ITEM = "PassCategoryItem";
-    public static final String PASS_NOTE_DATA = "PassNoteData";
-
     @Override
     protected int getFragmentContainerId() {
         return R.id.fragment_container;

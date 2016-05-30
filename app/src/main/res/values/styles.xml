@@ -21,6 +21,37 @@
 
     </style>
 
+    <style name="AlertDialogStyle" parent="Theme.AppCompat.Dialog.Alert">
+        <!-- Used for the buttons -->
+        <item name="colorAccent">@color/brightTextColor</item>
+        <!-- Used for the title and text -->
+        <item name="android:textColor">@color/brightTextColor</item>
+        <!-- Used for the background -->
+        <item name="android:background">@color/windowBackground</item>
+    </style>
+
+    <style name="DialogTheme" parent="Theme.AppCompat.Dialog">
+        <item name="android:alertDialogStyle">@style/ProgressDialogStyle</item>
+        <item name="android:textColorPrimary">@color/brightTextColor</item>
+        <item name="android:windowMinWidthMajor">97%</item>
+        <item name="android:windowMinWidthMinor">97%</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+    <style name="ProgressDialogStyle">
+        <item name="android:bottomBright">@color/windowBackground</item>
+        <item name="android:bottomDark">@color/windowBackground</item>
+        <item name="android:bottomMedium">@color/windowBackground</item>
+        <item name="android:centerBright">@color/windowBackground</item>
+        <item name="android:centerDark">@color/windowBackground</item>
+        <item name="android:centerMedium">@color/windowBackground</item>
+        <item name="android:fullBright">@color/windowBackground</item>
+        <item name="android:fullDark">@color/windowBackground</item>
+        <item name="android:topBright">@color/windowBackground</item>
+        <item name="android:topDark">@color/windowBackground</item>
+    </style>
+
     <style name="NoteCommon" parent="@style/TextAppearance.AppCompat">
         <item name="android:textColor">@color/brightTextColor</item>
     </style>
