@@ -29,7 +29,7 @@ public class MainActivity extends PasswordActivity implements CategoryFragment.O
 
     @Override
     protected void refreshFragment() {
-        Fragment fragment = CategoryFragment.newInstance((ArrayList<PassCategoryA>)mPassDataA.getPassCategoryData());
+        Fragment fragment = CategoryFragment.newInstance(mPassDataA);
         removeFragment().beginTransaction().add(getFragmentContainerId(), fragment).commit();
     }
 
@@ -37,8 +37,8 @@ public class MainActivity extends PasswordActivity implements CategoryFragment.O
     public void onListFragmentInteraction(PassCategoryA item) {
         if (item.getNotesCount() > 0) {
             Intent intent = new Intent(this, NoteActivity.class);
-            intent.putExtra(PASS_CATEGORY_ITEM, item);
-            intent.putParcelableArrayListExtra(PASS_NOTE_DATA, (ArrayList<PassNoteA>) mPassDataA.getPassNoteData(item));
+            intent.putExtra(PASS_DATA, PassDataA.newCategoryInstance(mPassDataA, item));
+            intent.putExtra(PASSWORD_REQUIRED, false);
             startActivityForResult(intent, 0);
         }
     }
@@ -80,5 +80,19 @@ public class MainActivity extends PasswordActivity implements CategoryFragment.O
         searchView.setIconified(false);
 
         return true;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(PASS_DATA, mPassDataA);
+        Log.d("MainActivity", "OnSaveInstanceState");
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        mPassDataA = savedInstanceState.getParcelable(PASS_DATA);
+        Log.d("MainActivity", "OnRestoreInstanceState");
     }
 }

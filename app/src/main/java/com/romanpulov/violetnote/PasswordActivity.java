@@ -13,9 +13,10 @@ import android.util.Log;
  */
 public abstract class PasswordActivity extends ActionBarCompatActivity {
     public static final String PASS_DATA = "PassData";
+    public static final String PASSWORD_REQUIRED = "PasswordRequired";
 
     protected PassDataA mPassDataA;
-    protected boolean mResumeFromChild = false;
+    protected boolean mPasswordRequired = true;
 
     protected String getPassword() {
         if (mPassDataA != null)
@@ -25,6 +26,16 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
     }
 
     protected abstract int getFragmentContainerId();
+
+    protected boolean fragmentExists() {
+        FragmentManager fm = getSupportFragmentManager();
+        Fragment fragment = fm.findFragmentById(getFragmentContainerId());
+        return (fragment != null);
+    }
+
+    protected void updateResult() {
+        setResult(fragmentExists() ? RESULT_OK : RESULT_CANCELED);
+    }
 
     protected FragmentManager removeFragment() {
         FragmentManager fm = getSupportFragmentManager();
@@ -83,38 +94,33 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
         passwordInputDialog.show();
     }
 
-
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelable(PASS_DATA, mPassDataA);
-        Log.d("PasswordActivity", "OnSaveInstanceState");
-    }
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        mPassDataA = savedInstanceState.getParcelable(PASS_DATA);
-        Log.d("PasswordActivity", "OnRestoreInstanceState");
+        mPassDataA = getIntent().getParcelableExtra(PASS_DATA);
+
+        mPasswordRequired = getIntent().getBooleanExtra(PASSWORD_REQUIRED, true);
+        getIntent().removeExtra(PASSWORD_REQUIRED);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Log.d("PasswordActivity", "OnActivityResult:" + resultCode);
-        mResumeFromChild = true;
+        mPasswordRequired = resultCode != RESULT_OK;
     }
 
     @Override
-    protected void onPostResume() {
-        super.onPostResume();
-        if (!mResumeFromChild) {
-            Log.d("PasswordActivity", "OnResume: not resume from child");
+    protected void onResume() {
+        super.onResume();
+        if (mPasswordRequired) {
+            Log.d("PasswordActivity", "OnResume: password required");
             removeFragment();
             requestPassword();
         } else {
-            Log.d("PasswordActivity", "OnResume: resume from child");
-            mResumeFromChild = false;
+            Log.d("PasswordActivity", "OnResume: password not required");
+            mPasswordRequired = true;
             if (mPassDataA == null) {
                 refreshFragment();
             }

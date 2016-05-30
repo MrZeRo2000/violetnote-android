@@ -22,9 +22,8 @@ import java.util.Map;
  */
 public class NoteDetailsFragment extends Fragment {
 
-    PassNoteA mPassNote;
+    PassDataA mPassDataA;
 
-    private static final String PASS_NOTE = "PassNote";
     private OnListFragmentInteractionListener mListener;
 
     /**
@@ -35,10 +34,10 @@ public class NoteDetailsFragment extends Fragment {
     }
 
     @SuppressWarnings("unused")
-    public static NoteDetailsFragment newInstance(PassNoteA passNote) {
+    public static NoteDetailsFragment newInstance(PassDataA passDataA) {
         NoteDetailsFragment fragment = new NoteDetailsFragment();
         Bundle args = new Bundle();
-        args.putParcelable(PASS_NOTE, passNote);
+        args.putParcelable(PasswordActivity.PASS_DATA, passDataA);
         fragment.setArguments(args);
         return fragment;
     }
@@ -48,7 +47,7 @@ public class NoteDetailsFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
-            mPassNote = getArguments().getParcelable(PASS_NOTE);
+            mPassDataA = getArguments().getParcelable(PasswordActivity.PASS_DATA);
         }
     }
 
@@ -62,7 +61,7 @@ public class NoteDetailsFragment extends Fragment {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            recyclerView.setAdapter(new NoteDetailsRecyclerViewAdapter(mPassNote.getNoteAttrList(), mListener));
+            recyclerView.setAdapter(new NoteDetailsRecyclerViewAdapter(mPassDataA.getPassNoteData().get(0).getNoteAttrList(), mListener));
             // add decoration
             recyclerView.addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(getActivity(), RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_white_black_gradient));
         }

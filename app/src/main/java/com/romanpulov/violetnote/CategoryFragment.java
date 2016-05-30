@@ -29,8 +29,6 @@ import java.util.List;
  */
 public class CategoryFragment extends Fragment {
 
-    public static final String PASS_CATEGORY_DATA = "PassCategoryData";
-
     private OnListFragmentInteractionListener mListener;
 
     private List<PassCategoryA> mPassCategoryDataA;
@@ -44,11 +42,11 @@ public class CategoryFragment extends Fragment {
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static CategoryFragment newInstance(ArrayList<PassCategoryA> passCategoryData) {
+    public static CategoryFragment newInstance(PassDataA passDataA) {
         Log.d("CategoryFragment", "newInstance");
         CategoryFragment fragment = new CategoryFragment();
         Bundle args = new Bundle();
-        args.putParcelableArrayList(CategoryFragment.PASS_CATEGORY_DATA, passCategoryData);
+        args.putParcelable(PasswordActivity.PASS_DATA, passDataA);
         fragment.setArguments(args);
         return fragment;
     }
@@ -70,8 +68,9 @@ public class CategoryFragment extends Fragment {
             RecyclerView recyclerView = (RecyclerView) view;
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-            ArrayList<PassCategoryA> passCategoryDataA = this.getArguments().getParcelableArrayList(PASS_CATEGORY_DATA);
-            recyclerView.setAdapter(new CategoryRecyclerViewAdapter(getActivity(), passCategoryDataA, mListener));
+            PassDataA passDataA = this.getArguments().getParcelable(PasswordActivity.PASS_DATA);
+            if ((passDataA != null) && (passDataA.getPassCategoryData() != null))
+                recyclerView.setAdapter(new CategoryRecyclerViewAdapter(getActivity(), passDataA.getPassCategoryData(), mListener));
             // add decoration
             recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_white_black_gradient));
         }

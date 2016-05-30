@@ -11,32 +11,32 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class NoteDetailsActivity extends ActionBarCompatActivity implements NoteDetailsFragment.OnListFragmentInteractionListener {
+public class NoteDetailsActivity extends PasswordActivity implements NoteDetailsFragment.OnListFragmentInteractionListener {
 
-    private PassNoteA mPassNoteData;
+    @Override
+    protected int getFragmentContainerId() {
+        return R.id.note_details_fragment_container;
+    }
+
+    @Override
+    protected void refreshFragment() {
+        Fragment fragment = NoteDetailsFragment.newInstance(mPassDataA);
+        removeFragment().beginTransaction().add(getFragmentContainerId(), fragment).commit();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment_note_details);
 
-        FragmentManager fm = getSupportFragmentManager();
-        Fragment fragment = fm.findFragmentById(R.id.note_details_fragment_container);
-        //PassCategoryA passCategoryItem = getIntent().getParcelableExtra(PASS_CATEGORY_ITEM);
-        //ArrayList<PassNoteA> passNoteData = getIntent().getParcelableArrayListExtra(PASS_NOTE_DATA);
-
-        mPassNoteData = getIntent().getParcelableExtra(MainActivity.PASS_NOTE_DATA);
-
-        if (fragment == null) {
-            fragment = NoteDetailsFragment.newInstance(mPassNoteData);
-            fm.beginTransaction().add(R.id.note_details_fragment_container, fragment).commit();
-        }
+        refreshFragment();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Workaround for issue with back button in toolbar default behavior
         if (item.getItemId() == android.R.id.home) {
+            updateResult();
             finish();
             return true;
         } else
@@ -46,5 +46,12 @@ public class NoteDetailsActivity extends ActionBarCompatActivity implements Note
     @Override
     public void onListFragmentInteraction(PassNoteA.AttrItem item) {
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        updateResult();
+        finish();
+        super.onBackPressed();
     }
 }

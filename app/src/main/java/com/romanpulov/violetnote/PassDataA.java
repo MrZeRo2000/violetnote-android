@@ -47,8 +47,8 @@ public class PassDataA implements Parcelable {
         return passNoteData;
     }
 
-    private PassDataA() {
-
+    private PassDataA(String password) {
+        mPassword = password;
     }
 
     public static PassDataA newInstance(String password, PassData passData) {
@@ -56,8 +56,7 @@ public class PassDataA implements Parcelable {
         reader.readCategoryData();
         reader.readNoteData();
 
-        PassDataA newPassDataA = new PassDataA();
-        newPassDataA.mPassword = password;
+        PassDataA newPassDataA = new PassDataA(password);
         newPassDataA.mPassCategoryDataA = reader.getPassCategoryDataA();
         newPassDataA.mPassNoteDataA = reader.getPassNoteDataA();
 
@@ -96,12 +95,36 @@ public class PassDataA implements Parcelable {
             }
         }
 
-        PassDataA searchInstance = new PassDataA();
-        searchInstance.mPassword = source.mPassword;
+        PassDataA searchInstance = new PassDataA(source.mPassword);
         searchInstance.mPassCategoryDataA = categoryList;
         searchInstance.mPassNoteDataA = noteList;
 
         return searchInstance;
+    }
+
+    public static PassDataA newCategoryInstance(PassDataA source, PassCategoryA category) {
+        List<PassCategoryA> categoryList = new ArrayList<>(1);
+        categoryList.add(category);
+
+        List<PassNoteA> noteList = source.getPassNoteData(category);
+
+        PassDataA categoryInstance = new PassDataA(source.mPassword);
+        categoryInstance.mPassCategoryDataA = categoryList;
+        categoryInstance.mPassNoteDataA = noteList;
+        return categoryInstance;
+    }
+
+    public static PassDataA newNoteInstance(PassDataA source, PassNoteA note) {
+        List<PassCategoryA> categoryList = new ArrayList<>(1);
+        categoryList.add(note.getCategory());
+
+        List<PassNoteA> noteList = new ArrayList<>(1);
+        noteList.add(note);
+
+        PassDataA noteInstance = new PassDataA(source.mPassword);
+        noteInstance.mPassCategoryDataA = categoryList;
+        noteInstance.mPassNoteDataA = noteList;
+        return noteInstance;
     }
 
     @Override

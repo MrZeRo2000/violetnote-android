@@ -29,9 +29,7 @@ public class NoteFragment extends Fragment {
         Log.d("NoteFragment", message);
     }
 
-
-    private PassCategoryA mPassCategory;
-    private ArrayList<PassNoteA> mPassNoteData;
+    private PassDataA mPassDataA;
 
     private OnListFragmentInteractionListener mListener;
 
@@ -44,12 +42,11 @@ public class NoteFragment extends Fragment {
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static NoteFragment newInstance(PassCategoryA passCategory, ArrayList<PassNoteA> passNoteData) {
+    public static NoteFragment newInstance(PassDataA passDataA) {
         log("newInstance");
         NoteFragment fragment = new NoteFragment();
         Bundle args = new Bundle();
-        args.putParcelable(MainActivity.PASS_CATEGORY_ITEM, passCategory);
-        args.putParcelableArrayList(MainActivity.PASS_NOTE_DATA, passNoteData);
+        args.putParcelable(PasswordActivity.PASS_DATA, passDataA);
         fragment.setArguments(args);
         return fragment;
     }
@@ -61,8 +58,7 @@ public class NoteFragment extends Fragment {
         log("onCreate getArguments = " + getArguments());
 
         if (getArguments() != null) {
-            mPassCategory =getArguments().getParcelable(MainActivity.PASS_CATEGORY_ITEM);
-            mPassNoteData = getArguments().getParcelableArrayList(MainActivity.PASS_NOTE_DATA);
+            mPassDataA = getArguments().getParcelable(PasswordActivity.PASS_DATA);
         }
     }
 
@@ -75,12 +71,12 @@ public class NoteFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_note_list, container, false);
 
         TextView headerTextView = (TextView)view.findViewById(R.id.headerTextView);
-        headerTextView.setText(mPassCategory.getCategoryName());
+        headerTextView.setText(mPassDataA.getPassCategoryData().get(0).getCategoryName());
         RecyclerView recyclerView = (RecyclerView)view.findViewById(R.id.list);
         // Set the adapter
         Context context = view.getContext();
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        recyclerView.setAdapter(new NoteRecyclerViewAdapter(mPassNoteData, mListener));
+        recyclerView.setAdapter(new NoteRecyclerViewAdapter(mPassDataA.getPassNoteData(), mListener));
         // add decoration
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_orange_black_gradient));
 
@@ -116,14 +112,11 @@ public class NoteFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onListFragmentInteraction(PassNoteA item);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        getArguments().putParcelable(MainActivity.PASS_CATEGORY_ITEM, mPassCategory);
-        getArguments().putParcelableArrayList(MainActivity.PASS_NOTE_DATA, mPassNoteData);
     }
 }
