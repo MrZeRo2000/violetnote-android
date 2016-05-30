@@ -16,28 +16,21 @@ import android.view.MenuInflater;
 
 import java.util.ArrayList;
 
-public class MainActivity extends ActionBarCompatActivity implements CategoryFragment.OnListFragmentInteractionListener {
-    public static final boolean mSampleData = true;
+public class MainActivity extends PasswordActivity implements CategoryFragment.OnListFragmentInteractionListener {
+    public static final boolean mSampleData = false;
 
-    public static final String PASS_DATA = "PassData";
     public static final String PASS_CATEGORY_ITEM = "PassCategoryItem";
     public static final String PASS_NOTE_DATA = "PassNoteData";
 
-    private PassDataA mPassDataA;
+    @Override
+    protected int getFragmentContainerId() {
+        return R.id.fragment_container;
+    }
 
-    private boolean mResumeFromChild = false;
-    private boolean mRestoreState = false;
-
-    private void refreshFragment() {
-        FragmentManager fm = getSupportFragmentManager();
-        Fragment fragment = fm.findFragmentById(R.id.fragment_container);
-
-        if (fragment != null) {
-            fm.beginTransaction().remove(fragment).commit();
-        }
-
-        fragment = CategoryFragment.newInstance((ArrayList<PassCategoryA>)mPassDataA.getPassCategoryData());
-        fm.beginTransaction().add(R.id.fragment_container, fragment).commit();
+    @Override
+    protected void refreshFragment() {
+        Fragment fragment = CategoryFragment.newInstance((ArrayList<PassCategoryA>)mPassDataA.getPassCategoryData());
+        removeFragment().beginTransaction().add(getFragmentContainerId(), fragment).commit();
     }
 
     @Override
@@ -50,51 +43,6 @@ public class MainActivity extends ActionBarCompatActivity implements CategoryFra
         }
     }
 
-    private class LoadPassDataAsyncTask extends AsyncTask<Void, Void, Boolean> {
-        ProgressDialog progressDialog;
-        String mPassword;
-
-        public LoadPassDataAsyncTask(String password) {
-            mPassword = password;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            progressDialog = new ProgressDialog(MainActivity.this);
-            progressDialog.setTitle(R.string.caption_loading);
-            progressDialog.show();
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            mPassDataA = Document.loadPassDataA(Document.DEF_FILE_NAME, mPassword);
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute(Boolean aBoolean) {
-            progressDialog.dismiss();
-            refreshFragment();
-        }
-    }
-
-    private void requestPassword() {
-        PasswordInputDialog passwordInputDialog = new PasswordInputDialog(this);
-        passwordInputDialog.setOnPasswordInputListener(new PasswordInputDialog.OnPasswordInputListener() {
-            @Override
-            public void onPasswordInput(String password) {
-                if (password != null) {
-                    if ((mPassDataA != null) && (mPassDataA.getPassword().equals(password))) {
-                        refreshFragment();
-                    } else {
-                        new LoadPassDataAsyncTask(password).execute();
-                    }
-                }
-            }
-        });
-        passwordInputDialog.show();
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,59 +50,13 @@ public class MainActivity extends ActionBarCompatActivity implements CategoryFra
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Log.d("MainActivity", "OnActivityResult:" + resultCode);
-        mResumeFromChild = true;
-    }
-
-    @Override
     protected void onResume() {
-        super.onResume();
-
-        if (mSampleData) {
+        if ((mSampleData) && (mPassDataA == null)) {
             mPassDataA = Document.loadSamplePassData();
             refreshFragment();
         } else {
-            if (!mResumeFromChild) {
-
-                if (!mRestoreState) {
-                    FragmentManager fm = getSupportFragmentManager();
-                    Fragment fragment = fm.findFragmentById(R.id.fragment_container);
-                    if (fragment != null) {
-                        fm.beginTransaction().remove(fragment).commit();
-                    }
-
-                    requestPassword();
-                } else
-                    mRestoreState = false;
-            } else {
-                mResumeFromChild = false;
-                if (mPassDataA == null) {
-                    refreshFragment();
-                }
-            }
+            super.onResume();
         }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelable(PASS_DATA, mPassDataA);
-        Log.d("MainActivity", "OnSaveInstanceState");
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        mPassDataA = savedInstanceState.getParcelable(PASS_DATA);
-        mRestoreState = true;
-        Log.d("MainActivity", "OnRestoreInstanceState");
     }
 
     @Override
