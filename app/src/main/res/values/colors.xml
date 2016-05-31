@@ -2,10 +2,9 @@
 <resources>
     <color name="colorPrimary">#FF996699</color>
     <color name="colorPrimaryDark">#FF663366</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#0fAB7C</color>
     <color name="windowBackground">#FF222233</color>
     <color name="listSelection">#FF00ABF1</color>
     <color name="brightTextColor">#FFFFFFFF</color>
-    <color name="headerBackground">#FFCD7135</color>
-
+    <color name="colorHeader">#FFCD7135</color>
 </resources>

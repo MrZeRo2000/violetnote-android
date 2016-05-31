@@ -14,7 +14,7 @@
         android:padding="8dp"
         android:id="@+id/headerTextView"
         android:textAppearance="@style/CategoryHeader"
-        android:background="@color/headerBackground"
+        android:background="@color/colorHeader"
         android:text="Sample text"
         />
 

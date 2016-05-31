@@ -7,7 +7,6 @@ import android.text.InputType;
 import android.util.AttributeSet;
 import android.util.Xml;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import org.xmlpull.v1.XmlPullParser;
 
@@ -33,7 +32,7 @@ public class PasswordInputDialog {
     }
 
     public void show() {
-        final AlertDialog.Builder alert = new AlertDialog.Builder(mContext, R.style.AlertDialogStyle);
+        final AlertDialog.Builder alert = new AlertDialog.Builder(mContext, R.style.AlertDialogTheme);
 
         //trick to achieve white caret color
         AttributeSet editTextCursorAttributeSet = null;

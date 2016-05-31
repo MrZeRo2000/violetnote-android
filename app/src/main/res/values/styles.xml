@@ -21,15 +21,20 @@
 
     </style>
 
-    <style name="AlertDialogStyle" parent="Theme.AppCompat.Dialog.Alert">
+    <!-- For AlertDialogs: Password, Preferences dialog -->
+    <style name="AlertDialogTheme" parent="Theme.AppCompat.Dialog.Alert">
         <!-- Used for the buttons -->
         <item name="colorAccent">@color/brightTextColor</item>
-        <!-- Used for the title and text -->
-        <item name="android:textColor">@color/brightTextColor</item>
-        <!-- Used for the background -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+
+        <item name="android:textColor">@color/colorHeader</item>
+        <item name="android:textColorPrimary">@color/colorHeader</item>
+        <item name="android:textColorSecondary">@color/brightTextColor</item>
+
         <item name="android:background">@color/windowBackground</item>
     </style>
 
+    <!-- ProgressDialog/Theme -->
     <style name="DialogTheme" parent="Theme.AppCompat.Dialog">
         <item name="android:alertDialogStyle">@style/ProgressDialogStyle</item>
         <item name="android:textColorPrimary">@color/brightTextColor</item>
@@ -39,6 +44,7 @@
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
+    <!-- ProgressDialog/Style -->
     <style name="ProgressDialogStyle">
         <item name="android:bottomBright">@color/windowBackground</item>
         <item name="android:bottomDark">@color/windowBackground</item>
@@ -52,53 +58,21 @@
         <item name="android:topDark">@color/windowBackground</item>
     </style>
 
+    <!-- Preferences/Theme -->
     <style name="PreferencesTheme" parent="@style/MainAppTheme" >
+        <item name="android:textColorSecondary">@color/brightTextColor</item>
         <item name="android:textColor">@color/brightTextColor</item>
-        <item name="android:textColorSecondary">@color/headerBackground</item>
         <item name="android:listDivider">@drawable/divider_white_black_gradient</item>
-        <item name="android:alertDialogTheme">@style/PreferencesDialogTheme</item>
-        <item name="android:alertDialogStyle">@style/PreferencesDialogStyle</item>
-        <item name="android:dialogTheme">@style/PreferencesDialogTheme</item>
     </style>
 
+    <!-- Preferences/Category Divider -->
     <style name="PreferencesCategoryDivider">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
         <item name="android:background">@drawable/divider_orange_black_gradient</item>
     </style>
 
-    <style name="PreferencesDialogTheme" parent="Theme.AppCompat.Light.Dialog">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:background">@color/windowBackground</item>
-        <item name="android:buttonBarStyle">@style/PreferencesButtonBar</item>
-        <item name="android:buttonBarButtonStyle">@style/PreferencesButtonBarBorderlessButton</item>
-    </style>
-
-    <style name="PreferencesDialogStyle">
-        <item name="android:bottomBright">@color/windowBackground</item>
-        <item name="android:bottomDark">@color/windowBackground</item>
-        <item name="android:bottomMedium">@color/windowBackground</item>
-        <item name="android:centerBright">@color/windowBackground</item>
-        <item name="android:centerDark">@color/windowBackground</item>
-        <item name="android:centerMedium">@color/windowBackground</item>
-        <item name="android:fullBright">@color/windowBackground</item>
-        <item name="android:fullDark">@color/windowBackground</item>
-        <item name="android:topBright">@color/windowBackground</item>
-        <item name="android:topDark">@color/windowBackground</item>
-    </style>
-
-    <style name="PreferencesButtonBar">
-        <!-- Define a background for the button bar and a divider between the buttons here -->
-        <item name="android:background">@color/windowBackground</item>
-    </style>
-
-    <style name="PreferencesButtonBarBorderlessButton">
-        <!-- Set background drawable and text size of the buttons here -->
-        <item name="android:background">@color/windowBackground</item>
-    </style>
-
+    <!-- Different elements styles, may need rework -->
     <style name="NoteCommon" parent="@style/TextAppearance.AppCompat">
         <item name="android:textColor">@color/brightTextColor</item>
     </style>
@@ -135,7 +109,5 @@
         <item name="android:textSize">18sp</item>
         <item name="android:textStyle">normal</item>
     </style>
-
-
 
 </resources>
