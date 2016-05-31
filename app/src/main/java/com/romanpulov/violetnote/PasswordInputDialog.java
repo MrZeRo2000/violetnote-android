@@ -4,8 +4,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
+import android.util.AttributeSet;
+import android.util.Xml;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import org.xmlpull.v1.XmlPullParser;
 
 /**
  * Created by rpulov on 27.03.2016.
@@ -30,7 +34,28 @@ public class PasswordInputDialog {
 
     public void show() {
         final AlertDialog.Builder alert = new AlertDialog.Builder(mContext, R.style.AlertDialogStyle);
-        final EditText input = new EditText(mContext);
+
+        //trick to achieve white caret color
+        AttributeSet editTextCursorAttributeSet = null;
+        int res = mContext.getResources().getIdentifier("cursor_edit_text", "layout", mContext.getPackageName());
+        XmlPullParser parser = mContext.getResources().getXml(res);
+        int state=0;
+        do {
+            try {
+                state = parser.next();
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+            if (state == XmlPullParser.START_TAG) {
+                if (parser.getName().equals("EditText")) {
+                    editTextCursorAttributeSet = Xml.asAttributeSet(parser);
+                    break;
+                }
+            }
+        } while(state != XmlPullParser.END_DOCUMENT);
+
+        final EditText input = new EditText(mContext, editTextCursorAttributeSet);
+        //final EditText input = new EditText(mContext);
 
         input.setInputType(InputType.TYPE_CLASS_TEXT| InputType.TYPE_TEXT_VARIATION_PASSWORD);
         input.setTextColor(mContext.getResources().getColor(R.color.brightTextColor));
