@@ -2,11 +2,13 @@ package com.romanpulov.violetnote;
 
 
 import android.os.Bundle;
+import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 
 public class SettingsFragment extends PreferenceFragment {
@@ -19,6 +21,15 @@ public class SettingsFragment extends PreferenceFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
+
+        Preference button1 = findPreference("button1");
+        button1.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Toast.makeText(getActivity(), "Button1", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
     }
 
     @Override
