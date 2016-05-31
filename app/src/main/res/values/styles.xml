@@ -52,6 +52,27 @@
         <item name="android:topDark">@color/windowBackground</item>
     </style>
 
+    <style name="PreferencesTheme" parent="@style/MainAppTheme" >
+        <item name="android:windowBackground">@color/windowBackground</item>
+        <item name="android:textAppearance">@style/PreferencesTextAppearance</item>
+        <item name="android:textColor">@color/brightTextColor</item>
+        <item name="android:textColorPrimary">@color/brightTextColor</item>
+        <item name="android:textColorSecondary">@color/headerBackground</item>
+        <item name="android:listDivider">@drawable/divider_white_black_gradient</item>
+    </style>
+
+    <style name="PreferencesTextAppearance" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/brightTextColor</item>
+        <item name="android:textColorPrimary">@color/brightTextColor</item>
+        <item name="android:textColorSecondary">@color/headerBackground</item>
+    </style>
+
+    <style name="PreferencesCategoryDivider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">@drawable/divider_orange_black_gradient</item>
+    </style>
+
     <style name="NoteCommon" parent="@style/TextAppearance.AppCompat">
         <item name="android:textColor">@color/brightTextColor</item>
     </style>

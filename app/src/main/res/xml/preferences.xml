@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="@string/pref_title_data"
+        android:layout="@layout/prefences_category"
+        >
+        <ListPreference
+            android:key="pref_source_type"
+            android:title="@string/pref_title_source_type"
+            android:entries="@array/pref_source_type_entries"
+            android:entryValues="@array/pref_source_type_values"
+            />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
