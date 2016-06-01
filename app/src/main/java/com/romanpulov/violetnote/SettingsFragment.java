@@ -39,7 +39,7 @@ public class SettingsFragment extends PreferenceFragment {
                     }
                 }
 
-                preference.getPreferenceManager().getSharedPreferences().edit().remove(preference.getKey()).commit();
+                //preference.getPreferenceManager().getSharedPreferences().edit().remove(preference.getKey()).commit();
 
                 final SelectionResult result = new SelectionResult(preference.getPreferenceManager().getSharedPreferences().getInt(preference.getKey(), DEFAULT_SOURCE_TYPE));
 
