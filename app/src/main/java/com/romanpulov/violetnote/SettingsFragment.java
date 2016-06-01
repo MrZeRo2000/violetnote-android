@@ -2,6 +2,7 @@ package com.romanpulov.violetnote;
 
 
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 
 
 public class SettingsFragment extends PreferenceFragment {
+    private static final int DEFAULT_SOURCE_TYPE = 0;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -25,22 +27,26 @@ public class SettingsFragment extends PreferenceFragment {
         addPreferencesFromResource(R.xml.preferences);
 
 
-        Preference button1 = findPreference("button1");
-        button1.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        Preference prefSourceType = findPreference("pref_source_type");
+        prefSourceType.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
-            public boolean onPreferenceClick(Preference preference) {
-                Toast.makeText(getActivity(), "Button1", Toast.LENGTH_SHORT).show();
+            public boolean onPreferenceClick(final Preference preference) {
 
                 class SelectionResult {
-                    int which = -1;
+                    int which;
+                    SelectionResult(int which) {
+                        this.which = which;
+                    }
                 }
 
-                final SelectionResult result = new SelectionResult();
+                preference.getPreferenceManager().getSharedPreferences().edit().remove(preference.getKey()).commit();
+
+                final SelectionResult result = new SelectionResult(preference.getPreferenceManager().getSharedPreferences().getInt(preference.getKey(), DEFAULT_SOURCE_TYPE));
 
                 final AlertDialog.Builder alert = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
                 alert
-                        .setTitle("My Title")
-                        .setSingleChoiceItems(R.array.pref_source_type_entries, 1, new DialogInterface.OnClickListener() {
+                        .setTitle(R.string.pref_title_source_type)
+                        .setSingleChoiceItems(R.array.pref_source_type_entries, result.which, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 result.which = which;
@@ -49,7 +55,7 @@ public class SettingsFragment extends PreferenceFragment {
                         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Toast.makeText(getActivity(), "Positive with " + result.which, Toast.LENGTH_SHORT).show();
+                                preference.getPreferenceManager().getSharedPreferences().edit().putInt(preference.getKey(), which).commit();
                             }
                         })
                         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
