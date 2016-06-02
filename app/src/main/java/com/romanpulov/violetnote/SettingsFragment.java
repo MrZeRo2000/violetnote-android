@@ -26,8 +26,21 @@ public class SettingsFragment extends PreferenceFragment {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
 
+        setupPrefSourceType();
+        setupPrefSourcePath();
+    }
+
+    private void setupPrefSourcePath() {
+        Preference prefSourceType = findPreference("pref_source_path");
+
+    }
+
+    private void setupPrefSourceType() {
+        final String[] prefSourceTypeEntries = getResources().getStringArray(R.array.pref_source_type_entries);
 
         Preference prefSourceType = findPreference("pref_source_type");
+        prefSourceType.setSummary(prefSourceTypeEntries[prefSourceType.getPreferenceManager().getSharedPreferences().getInt(prefSourceType.getKey(), DEFAULT_SOURCE_TYPE)]);
+
         prefSourceType.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(final Preference preference) {
@@ -38,8 +51,6 @@ public class SettingsFragment extends PreferenceFragment {
                         this.which = which;
                     }
                 }
-
-                //preference.getPreferenceManager().getSharedPreferences().edit().remove(preference.getKey()).commit();
 
                 final SelectionResult result = new SelectionResult(preference.getPreferenceManager().getSharedPreferences().getInt(preference.getKey(), DEFAULT_SOURCE_TYPE));
 
@@ -55,7 +66,8 @@ public class SettingsFragment extends PreferenceFragment {
                         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                preference.getPreferenceManager().getSharedPreferences().edit().putInt(preference.getKey(), which).commit();
+                                preference.getPreferenceManager().getSharedPreferences().edit().putInt(preference.getKey(), result.which).commit();
+                                preference.setSummary(prefSourceTypeEntries[preference.getPreferenceManager().getSharedPreferences().getInt(preference.getKey(), DEFAULT_SOURCE_TYPE)]);
                             }
                         })
                         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
