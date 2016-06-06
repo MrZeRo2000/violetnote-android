@@ -10,49 +10,66 @@ import java.util.List;
  * Created by romanpulov on 27.05.2016.
  */
 public class FileChooseItem implements ChooseItem {
-    private ChooseItem mParentItem;
     private File mFile;
+    private String mPath;
+    private String mName;
+    private int mItemType;
 
-    public FileChooseItem(File file, ChooseItem parentItem) {
-        this(file);
-        mParentItem = parentItem;
+    private static FileChooseItem newParentItem(File file) {
+        FileChooseItem newItem = new FileChooseItem(file);
+        newItem.mItemType = ChooseItem.ITEM_PARENT;
+        return newItem;
     }
 
     public FileChooseItem(File file) {
         mFile = file;
+        mPath = mFile.getAbsolutePath();
+        mName = mFile.getName();
+        if (mFile.isDirectory())
+            mItemType = ChooseItem.ITEM_DIRECTORY;
+        else if (mFile.isFile())
+            mItemType = ChooseItem.ITEM_FILE;
+        else
+            mItemType = ChooseItem.ITEM_UNKNOWN;
     }
 
     @Override
     public String getItemPath() {
-        return mFile.getAbsolutePath();
+        return mPath;
     }
 
     @Override
     public String getItemName() {
-        return mFile.getName();
+        return mName;
     }
 
     @Override
     public int getItemType() {
-        if (mFile.isDirectory())
-            return ChooseItem.ITEM_DIRECTORY;
-        else if (mFile.isFile())
-            return ChooseItem.ITEM_FILE;
-        else
-            return ChooseItem.ITEM_UNKNOWN;
+        return mItemType;
     }
 
     @Override
     public List<ChooseItem> getItems() {
         List<ChooseItem> result = new ArrayList<>();
-        for (File f : mFile.listFiles()) {
-            result.add(new FileChooseItem(f, this));
+        File parentFile = mFile.getParentFile();
+        if (parentFile != null)
+            result.add(newParentItem(parentFile));
+        File[] listFiles = mFile.listFiles();
+        if (listFiles != null) {
+            for (File f : mFile.listFiles()) {
+                if (f.canRead())
+                    result.add(new FileChooseItem(f));
+            }
         }
         return result;
     }
 
     public ChooseItem getParentItem() {
-        return mParentItem;
+        File parentFile = mFile.getParentFile();
+        if (parentFile != null)
+            return new FileChooseItem(parentFile);
+        else
+            return null;
     }
 
     @Override

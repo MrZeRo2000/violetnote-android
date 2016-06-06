@@ -1,5 +1,6 @@
 package com.romanpulov.violetnote.HrChooser;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,10 +15,13 @@ import com.romanpulov.violetnote.ActionBarCompatActivity;
 import com.romanpulov.violetnote.R;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 public class HrChooserActivity extends ActionBarCompatActivity {
     public static final String HR_CHOOSER_INITIAL_PATH = "InitialPath";
+    public static final String HR_CHOOSER_RESULT_PATH = "ResultPath";
+    public static final String HR_CHOOSER_RESULT_NAME = "ResultName";
 
     public interface OnChooserInteractionListener {
         void onChooserInteraction(ChooseItem item);
@@ -25,14 +29,13 @@ public class HrChooserActivity extends ActionBarCompatActivity {
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
+    private List<ChooseItem> mChooseItemList;
 
     public static class ChooserAdapter extends RecyclerView.Adapter<ChooserAdapter.ViewHolder> {
-        private final ChooseItem mInitialItem;
         private final List<ChooseItem> mItems;
         private final OnChooserInteractionListener mListener;
 
-        public ChooserAdapter(ChooseItem initialItem, List<ChooseItem> items, OnChooserInteractionListener listener) {
-            mInitialItem = initialItem;
+        public ChooserAdapter(List<ChooseItem> items, OnChooserInteractionListener listener) {
             mItems = items;
             mListener = listener;
         }
@@ -45,7 +48,15 @@ public class HrChooserActivity extends ActionBarCompatActivity {
 
         @Override
         public void onBindViewHolder(ViewHolder holder, final int position) {
-            holder.mTextView.setText(mItems.get(position).getItemName());
+            switch (mItems.get(position).getItemType()) {
+                case ChooseItem.ITEM_PARENT:
+                    holder.mTextView.setText(ChooseItem.ITEM_PARENT_NAME);
+                    break;
+                default:
+                    holder.mTextView.setText(mItems.get(position).getItemName());
+                    break;
+            }
+
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -87,12 +98,29 @@ public class HrChooserActivity extends ActionBarCompatActivity {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         FileChooseItem item = new FileChooseItem(new File(initialPath));
-        mAdapter = new ChooserAdapter(item, item.getItems(), new OnChooserInteractionListener() {
+        mChooseItemList = new ArrayList<>();
+        mChooseItemList.add(item);
+        mChooseItemList.addAll(item.getItems());
+
+        mAdapter = new ChooserAdapter(mChooseItemList, new OnChooserInteractionListener() {
             @Override
             public void onChooserInteraction(ChooseItem item) {
-                Toast.makeText(HrChooserActivity.this, "Choose " + item, Toast.LENGTH_SHORT).show();
-                HrChooserActivity.this.setResult(-30);
-                HrChooserActivity.this.finish();
+                switch (item.getItemType()) {
+                    case ChooseItem.ITEM_FILE:
+                        Intent resultIntent = new Intent();
+                        resultIntent.putExtra(HR_CHOOSER_RESULT_PATH, item.getItemPath());
+                        resultIntent.putExtra(HR_CHOOSER_RESULT_NAME, item.getItemName());
+                        setResult(RESULT_OK, resultIntent);
+                        finish();
+                        break;
+                    case ChooseItem.ITEM_DIRECTORY:
+                    case ChooseItem.ITEM_PARENT:
+                        mChooseItemList.clear();
+                        mChooseItemList.addAll(item.getItems());
+                        mAdapter.notifyDataSetChanged();
+                        break;
+                }
+
             }
         });
         mRecyclerView.setAdapter(mAdapter);

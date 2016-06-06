@@ -9,6 +9,9 @@ public interface ChooseItem {
     int ITEM_UNKNOWN = 0;
     int ITEM_DIRECTORY = 1;
     int ITEM_FILE = 2;
+    int ITEM_PARENT = 3;
+
+    String ITEM_PARENT_NAME = "..";
 
     String getItemPath();
     String getItemName();

@@ -44,7 +44,7 @@ public class SettingsFragment extends PreferenceFragment {
             public boolean onPreferenceClick(Preference preference) {
                 Intent intent =  new Intent(getActivity(), HrChooserActivity.class);
                 intent.putExtra(HrChooserActivity.HR_CHOOSER_INITIAL_PATH, sourcePath);
-                getActivity().startActivityForResult(intent, 0);
+                startActivityForResult(intent, 0);
                 return true;
             }
         });
@@ -53,9 +53,10 @@ public class SettingsFragment extends PreferenceFragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Toast.makeText(getActivity(), "Resultcode=" + requestCode, Toast.LENGTH_SHORT).show();
+        //super.onActivityResult(requestCode, resultCode, data);
+        Toast.makeText(getActivity(), "Result=" + data.getStringExtra(HrChooserActivity.HR_CHOOSER_RESULT_PATH) + data.getStringExtra(HrChooserActivity.HR_CHOOSER_RESULT_NAME), Toast.LENGTH_SHORT).show();
     }
+
 
     private void setupPrefSourceType() {
         final String[] prefSourceTypeEntries = getResources().getStringArray(R.array.pref_source_type_entries);
