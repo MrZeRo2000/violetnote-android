@@ -47,8 +47,13 @@
         <activity
             android:name=".SettingsActivity"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/PreferencesTheme"
-            />
+            android:theme="@style/PreferencesTheme" />
+        <activity
+            android:name=".HrChooser.HrChooserActivity"
+            android:parentActivityName=".SettingsActivity"
+            android:theme="@style/MainAppTheme"
+            >
+        </activity>
     </application>
 
 </manifest>

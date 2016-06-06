@@ -2,8 +2,10 @@ package com.romanpulov.violetnote;
 
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.support.v7.app.AlertDialog;
@@ -12,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.romanpulov.violetnote.HrChooser.HrChooserActivity;
 
 
 public class SettingsFragment extends PreferenceFragment {
@@ -31,8 +35,26 @@ public class SettingsFragment extends PreferenceFragment {
     }
 
     private void setupPrefSourcePath() {
-        Preference prefSourceType = findPreference("pref_source_path");
+        Preference prefSourcePath = findPreference("pref_source_path");
 
+        final String sourcePath = prefSourcePath.getPreferenceManager().getSharedPreferences().getString(prefSourcePath.getKey(), Environment.getRootDirectory().getAbsolutePath());
+
+        prefSourcePath.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Intent intent =  new Intent(getActivity(), HrChooserActivity.class);
+                intent.putExtra(HrChooserActivity.HR_CHOOSER_INITIAL_PATH, sourcePath);
+                getActivity().startActivityForResult(intent, 0);
+                return true;
+            }
+        });
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Toast.makeText(getActivity(), "Resultcode=" + requestCode, Toast.LENGTH_SHORT).show();
     }
 
     private void setupPrefSourceType() {
