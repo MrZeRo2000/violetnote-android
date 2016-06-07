@@ -1,24 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/hr_chooser_list_item"
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/hr_chooser_text"
+    android:layout_height="wrap_content"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:background="@drawable/list_selector"
-    >
-
-    <ImageView
-        android:layout_width="14dp"
-        android:layout_height="14dp"
-        android:scaleType="center"
-        android:contentDescription="File item type"
-        />
-
-    <TextView
-        android:id="@+id/hr_chooser_text"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:layout_margin="8dp"
-        android:textAppearance="@style/Text3"
-        />
-</LinearLayout>
+    android:layout_margin="@dimen/text_margin_half"
+    android:textAppearance="@style/Text3"
+    />

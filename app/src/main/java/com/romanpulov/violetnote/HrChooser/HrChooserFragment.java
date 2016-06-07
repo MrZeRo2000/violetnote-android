@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.RecyclerViewHelper;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -54,7 +55,7 @@ public class HrChooserFragment extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(ViewHolder holder, final int position) {
+        public void onBindViewHolder(final ViewHolder holder, final int position) {
             switch (mItems.get(position).getItemType()) {
                 case ChooseItem.ITEM_PARENT:
                     holder.mTextView.setText(ChooseItem.ITEM_PARENT_NAME);
@@ -68,7 +69,7 @@ public class HrChooserFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     if (null != mListener) {
-                        mListener.onChooserInteraction(mItems.get(position));
+                        mListener.onChooserInteraction(mItems.get(holder.getAdapterPosition()));
                     }
                 }
             });
@@ -80,13 +81,13 @@ public class HrChooserFragment extends Fragment {
         }
 
         public static class ViewHolder extends RecyclerView.ViewHolder {
-            public TextView mTextView;
+            public final TextView mTextView;
             public final View mView;
 
             public ViewHolder(View v) {
                 super(v);
                 mView = v;
-                mTextView = (TextView) v.findViewById(R.id.hr_chooser_text);
+                mTextView = (TextView) v;
             }
         }
     }
@@ -123,6 +124,9 @@ public class HrChooserFragment extends Fragment {
         mRecyclerView = (RecyclerView) (v.findViewById(R.id.chooser_list));
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+        // add decoration
+        mRecyclerView.addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(getActivity(), RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_gray_solid));
+
         FileChooseItem item = new FileChooseItem(new File(mInitialPath));
         mChooseItemList = new ArrayList<>();
         mChooseItemList.add(item);
@@ -135,13 +139,6 @@ public class HrChooserFragment extends Fragment {
                     case ChooseItem.ITEM_FILE:
                         if (mListener != null)
                             mListener.onChooserInteraction(item);
-                        /*
-                        Intent resultIntent = new Intent();
-                        resultIntent.putExtra(HR_CHOOSER_RESULT_PATH, item.getItemPath());
-                        resultIntent.putExtra(HR_CHOOSER_RESULT_NAME, item.getItemName());
-                        getActivity().setResult(Activity.RESULT_OK, resultIntent);
-                        getActivity().finish();
-                        */
                         break;
                     case ChooseItem.ITEM_DIRECTORY:
                     case ChooseItem.ITEM_PARENT:
@@ -150,7 +147,6 @@ public class HrChooserFragment extends Fragment {
                         mAdapter.notifyDataSetChanged();
                         break;
                 }
-
             }
         });
         mRecyclerView.setAdapter(mAdapter);
@@ -174,5 +170,4 @@ public class HrChooserFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
-
 }
