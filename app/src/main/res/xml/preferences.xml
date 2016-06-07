@@ -2,7 +2,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory
         android:title="@string/pref_title_data"
-        android:layout="@layout/prefences_category"
+        android:layout="@layout/preferences_category"
         >
         <Preference
             android:key="pref_source_type"
