@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.romanpulov.violetnote.HrChooser.HrChooserActivity;
+import com.romanpulov.violetnote.HrChooser.HrChooserFragment;
 
 
 public class SettingsFragment extends PreferenceFragment {
@@ -43,7 +44,7 @@ public class SettingsFragment extends PreferenceFragment {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 Intent intent =  new Intent(getActivity(), HrChooserActivity.class);
-                intent.putExtra(HrChooserActivity.HR_CHOOSER_INITIAL_PATH, sourcePath);
+                intent.putExtra(HrChooserFragment.HR_CHOOSER_INITIAL_PATH, sourcePath);
                 startActivityForResult(intent, 0);
                 return true;
             }
@@ -54,7 +55,7 @@ public class SettingsFragment extends PreferenceFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         //super.onActivityResult(requestCode, resultCode, data);
-        Toast.makeText(getActivity(), "Result=" + data.getStringExtra(HrChooserActivity.HR_CHOOSER_RESULT_PATH) + data.getStringExtra(HrChooserActivity.HR_CHOOSER_RESULT_NAME), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "Result=" + data.getStringExtra(HrChooserFragment.HR_CHOOSER_RESULT_PATH) + data.getStringExtra(HrChooserFragment.HR_CHOOSER_RESULT_NAME), Toast.LENGTH_SHORT).show();
     }
 
 
