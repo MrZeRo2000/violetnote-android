@@ -29,6 +29,7 @@ public abstract class HrChooserFragment extends Fragment {
 
     protected String mInitialPath;
 
+    protected TextView mHeader;
     protected RecyclerView.Adapter mAdapter;
     protected List<ChooseItem> mChooseItemList;
 
@@ -101,7 +102,8 @@ public abstract class HrChooserFragment extends Fragment {
 
     protected abstract ChooseItem getChooseItem();
 
-    protected void updateChooseItemListFromItem(ChooseItem item) {
+    protected void updateFromChooseItem(ChooseItem item) {
+        mHeader.setText(item.getItemPath());
         List<ChooseItem> items = item.getItems();
         Collections.sort(items, new ChooseItemComparator());
         mChooseItemList.clear();
@@ -114,19 +116,17 @@ public abstract class HrChooserFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_hr_chooser, container, false);
 
-        TextView header = (TextView) (v.findViewById(R.id.chooser_header));
-        header.setText(mInitialPath);
-
+        //UI components
+        mHeader = (TextView) (v.findViewById(R.id.chooser_header));
         RecyclerView recyclerView = (RecyclerView) (v.findViewById(R.id.chooser_list));
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         // add decoration
         recyclerView.addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(getActivity(), RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_gray_solid));
 
-        //ChooseItem item = new FileChooseItem(new File(mInitialPath));
         ChooseItem item = getChooseItem();
         mChooseItemList = new ArrayList<>();
-        updateChooseItemListFromItem(item);
+        updateFromChooseItem(item);
 
         mAdapter = new ChooserAdapter(mChooseItemList, new OnChooserInteractionListener() {
             @Override
@@ -138,7 +138,7 @@ public abstract class HrChooserFragment extends Fragment {
                         break;
                     case ChooseItem.ITEM_DIRECTORY:
                     case ChooseItem.ITEM_PARENT:
-                        updateChooseItemListFromItem(item);
+                        updateFromChooseItem(item);
                         mAdapter.notifyDataSetChanged();
                         break;
                 }

@@ -37,12 +37,13 @@ public class SettingsFragment extends PreferenceFragment {
         Preference prefSourcePath = findPreference("pref_source_path");
 
         final String sourcePath = prefSourcePath.getPreferenceManager().getSharedPreferences().getString(prefSourcePath.getKey(), Environment.getRootDirectory().getAbsolutePath());
+        prefSourcePath.setSummary(sourcePath);
 
         prefSourcePath.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 Intent intent =  new Intent(getActivity(), FileChooserActivity.class);
-                intent.putExtra(FileChooserActivity.CHOOSER_INITIAL_PATH, sourcePath);
+                intent.putExtra(FileChooserActivity.CHOOSER_INITIAL_PATH, getPreferenceManager().getSharedPreferences().getString("pref_source_path", Environment.getRootDirectory().getAbsolutePath()));
                 startActivityForResult(intent, 0);
                 return true;
             }
@@ -52,7 +53,12 @@ public class SettingsFragment extends PreferenceFragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Toast.makeText(getActivity(), "Result=" + data.getStringExtra(FileChooserActivity.CHOOSER_RESULT_PATH) + data.getStringExtra(FileChooserActivity.CHOOSER_RESULT_NAME), Toast.LENGTH_SHORT).show();
+        if ((data != null) && (data.hasExtra(FileChooserActivity.CHOOSER_RESULT_PATH))) {
+            String resultPath = data.getStringExtra(FileChooserActivity.CHOOSER_RESULT_PATH);
+            getPreferenceManager().getSharedPreferences().edit().putString("pref_source_path", resultPath).commit();
+            Preference prefSourcePath = findPreference("pref_source_path");
+            prefSourcePath.setSummary(resultPath);
+        }
     }
 
 

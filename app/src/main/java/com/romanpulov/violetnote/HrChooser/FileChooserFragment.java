@@ -11,7 +11,13 @@ public class FileChooserFragment extends HrChooserFragment {
 
     @Override
     protected ChooseItem getChooseItem() {
-        return new FileChooseItem(new File(mInitialPath));
+        File file = new File(mInitialPath);
+        if (file.isFile()) {
+            File parentFile = file.getParentFile();
+            if (parentFile != null)
+                return new FileChooseItem(parentFile);
+        }
+        return new FileChooseItem(file);
     }
 
     public static HrChooserFragment newInstance(String initialPath) {
