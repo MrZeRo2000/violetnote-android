@@ -49,7 +49,7 @@
             android:parentActivityName=".MainActivity"
             android:theme="@style/PreferencesTheme" />
         <activity
-            android:name=".HrChooser.HrChooserActivity"
+            android:name=".HrChooser.FileChooserActivity"
             android:parentActivityName=".SettingsActivity"
             android:theme="@style/MainAppTheme"
             >

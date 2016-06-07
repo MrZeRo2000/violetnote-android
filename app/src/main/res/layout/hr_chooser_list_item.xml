@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/hr_chooser_text"
-    android:layout_height="wrap_content"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/hr_chooser_list_item"
     android:layout_width="match_parent"
-    android:layout_margin="@dimen/text_margin_half"
-    android:textAppearance="@style/Text3"
-    />
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:background="@drawable/list_selector"
+    >
+
+    <TextView
+        android:id="@+id/hr_chooser_text"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_margin="@dimen/text_margin_half"
+        android:textAppearance="@style/Text3"
+        />
+</LinearLayout>

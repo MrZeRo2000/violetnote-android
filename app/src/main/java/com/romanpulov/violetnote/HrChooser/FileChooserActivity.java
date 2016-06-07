@@ -7,7 +7,7 @@ import android.os.Bundle;
 import com.romanpulov.violetnote.ActionBarCompatActivity;
 import com.romanpulov.violetnote.R;
 
-public class HrChooserActivity extends ActionBarCompatActivity implements FileChooserFragment.OnChooserInteractionListener {
+public class FileChooserActivity extends ActionBarCompatActivity implements FileChooserFragment.OnChooserInteractionListener {
     public static final String CHOOSER_INITIAL_PATH = "ChooserInitialPath";
     public static final String CHOOSER_RESULT_PATH = "ChooserResultPath";
     public static final String CHOOSER_RESULT_NAME = "ChooserResultName";

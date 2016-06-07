@@ -13,12 +13,12 @@ import android.widget.TextView;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.RecyclerViewHelper;
 
-import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
-public class HrChooserFragment extends Fragment {
+public abstract class HrChooserFragment extends Fragment {
     public static final String HR_CHOOSER_INITIAL_PATH = "InitialPath";
     public static final String HR_CHOOSER_RESULT_PATH = "ResultPath";
     public static final String HR_CHOOSER_RESULT_NAME = "ResultName";
@@ -27,13 +27,12 @@ public class HrChooserFragment extends Fragment {
         void onChooserInteraction(ChooseItem item);
     }
 
-    private String mInitialPath;
+    protected String mInitialPath;
 
-    private RecyclerView.Adapter mAdapter;
-    private List<ChooseItem> mChooseItemList;
+    protected RecyclerView.Adapter mAdapter;
+    protected List<ChooseItem> mChooseItemList;
 
-    private OnChooserInteractionListener mListener;
-
+    protected OnChooserInteractionListener mListener;
 
     public static class ChooserAdapter extends RecyclerView.Adapter<ChooserAdapter.ViewHolder> {
         private final List<ChooseItem> mItems;
@@ -83,7 +82,7 @@ public class HrChooserFragment extends Fragment {
             public ViewHolder(View v) {
                 super(v);
                 mView = v;
-                mTextView = (TextView) v;
+                mTextView = (TextView) (v.findViewById(R.id.hr_chooser_text));
             }
         }
     }
@@ -92,20 +91,21 @@ public class HrChooserFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static HrChooserFragment newInstance(String initialPath) {
-        HrChooserFragment fragment = new HrChooserFragment();
-        Bundle args = new Bundle();
-        args.putString(HR_CHOOSER_INITIAL_PATH, initialPath);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mInitialPath = getArguments().getString(HR_CHOOSER_INITIAL_PATH);
         }
+    }
+
+    protected abstract ChooseItem getChooseItem();
+
+    protected void updateChooseItemListFromItem(ChooseItem item) {
+        List<ChooseItem> items = item.getItems();
+        Collections.sort(items, new ChooseItemComparator());
+        mChooseItemList.clear();
+        mChooseItemList.addAll(items);
     }
 
     @Override
@@ -123,10 +123,10 @@ public class HrChooserFragment extends Fragment {
         // add decoration
         recyclerView.addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(getActivity(), RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_gray_solid));
 
-        FileChooseItem item = new FileChooseItem(new File(mInitialPath));
+        //ChooseItem item = new FileChooseItem(new File(mInitialPath));
+        ChooseItem item = getChooseItem();
         mChooseItemList = new ArrayList<>();
-        mChooseItemList.add(item);
-        mChooseItemList.addAll(item.getItems());
+        updateChooseItemListFromItem(item);
 
         mAdapter = new ChooserAdapter(mChooseItemList, new OnChooserInteractionListener() {
             @Override
@@ -138,8 +138,7 @@ public class HrChooserFragment extends Fragment {
                         break;
                     case ChooseItem.ITEM_DIRECTORY:
                     case ChooseItem.ITEM_PARENT:
-                        mChooseItemList.clear();
-                        mChooseItemList.addAll(item.getItems());
+                        updateChooseItemListFromItem(item);
                         mAdapter.notifyDataSetChanged();
                         break;
                 }

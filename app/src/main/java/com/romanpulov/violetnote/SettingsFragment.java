@@ -3,7 +3,6 @@ package com.romanpulov.violetnote;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.Preference;
@@ -15,8 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.romanpulov.violetnote.HrChooser.HrChooserActivity;
-import com.romanpulov.violetnote.HrChooser.HrChooserFragment;
+import com.romanpulov.violetnote.HrChooser.FileChooserActivity;
 
 
 public class SettingsFragment extends PreferenceFragment {
@@ -43,8 +41,8 @@ public class SettingsFragment extends PreferenceFragment {
         prefSourcePath.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                Intent intent =  new Intent(getActivity(), HrChooserActivity.class);
-                intent.putExtra(HrChooserActivity.CHOOSER_INITIAL_PATH, sourcePath);
+                Intent intent =  new Intent(getActivity(), FileChooserActivity.class);
+                intent.putExtra(FileChooserActivity.CHOOSER_INITIAL_PATH, sourcePath);
                 startActivityForResult(intent, 0);
                 return true;
             }
@@ -54,7 +52,7 @@ public class SettingsFragment extends PreferenceFragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Toast.makeText(getActivity(), "Result=" + data.getStringExtra(HrChooserActivity.CHOOSER_RESULT_PATH) + data.getStringExtra(HrChooserActivity.CHOOSER_RESULT_NAME), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "Result=" + data.getStringExtra(FileChooserActivity.CHOOSER_RESULT_PATH) + data.getStringExtra(FileChooserActivity.CHOOSER_RESULT_NAME), Toast.LENGTH_SHORT).show();
     }
 
 
