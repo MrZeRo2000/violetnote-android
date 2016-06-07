@@ -1,9 +1,6 @@
 package com.romanpulov.violetnote.HrChooser;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -32,7 +29,6 @@ public class HrChooserFragment extends Fragment {
 
     private String mInitialPath;
 
-    private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private List<ChooseItem> mChooseItemList;
 
@@ -121,11 +117,11 @@ public class HrChooserFragment extends Fragment {
         TextView header = (TextView) (v.findViewById(R.id.chooser_header));
         header.setText(mInitialPath);
 
-        mRecyclerView = (RecyclerView) (v.findViewById(R.id.chooser_list));
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        RecyclerView recyclerView = (RecyclerView) (v.findViewById(R.id.chooser_list));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         // add decoration
-        mRecyclerView.addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(getActivity(), RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_gray_solid));
+        recyclerView.addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(getActivity(), RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_gray_solid));
 
         FileChooseItem item = new FileChooseItem(new File(mInitialPath));
         mChooseItemList = new ArrayList<>();
@@ -149,7 +145,7 @@ public class HrChooserFragment extends Fragment {
                 }
             }
         });
-        mRecyclerView.setAdapter(mAdapter);
+        recyclerView.setAdapter(mAdapter);
 
         return v;
     }
