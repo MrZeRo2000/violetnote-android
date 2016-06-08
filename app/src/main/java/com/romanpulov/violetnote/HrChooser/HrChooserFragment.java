@@ -54,7 +54,16 @@ public abstract class HrChooserFragment extends Fragment {
         public void onBindViewHolder(final ViewHolder holder, final int position) {
             switch (mItems.get(position).getItemType()) {
                 case ChooseItem.ITEM_PARENT:
-                    holder.mTextView.setText(ChooseItem.ITEM_PARENT_NAME);
+                    holder.mTextView.setText(null);
+                    holder.mTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_arrow_top, 0, 0, 0);
+                    break;
+                case ChooseItem.ITEM_DIRECTORY:
+                    holder.mTextView.setText(mItems.get(position).getItemName());
+                    holder.mTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_folder_closed, 0, 0, 0);
+                    break;
+                case ChooseItem.ITEM_FILE:
+                    holder.mTextView.setText(mItems.get(position).getItemName());
+                    holder.mTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_document, 0, 0, 0);
                     break;
                 default:
                     holder.mTextView.setText(mItems.get(position).getItemName());

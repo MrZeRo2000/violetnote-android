@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:layout_margin="@dimen/text_margin_half"
+        android:gravity="left|center"
         android:textAppearance="@style/Text3"
         />
 </LinearLayout>
