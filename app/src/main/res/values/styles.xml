@@ -77,12 +77,16 @@
         <item name="android:textColor">@color/brightTextColor</item>
     </style>
 
-    <style name="Header1Text" parent="@style/BrightText">
+    <style name="HeaderText" parent="@style/TextAppearance.AppCompat">
+        <item name="android:textColor">@color/colorHeader</item>
+    </style>
+
+    <style name="Header1Text" parent="@style/HeaderText">
         <item name="android:textSize">24sp</item>
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="Header2Text" parent="BrightText">
+    <style name="Header2Text" parent="@style/HeaderText">
         <item name="android:textSize">22sp</item>
         <item name="android:textStyle">bold</item>
     </style>
