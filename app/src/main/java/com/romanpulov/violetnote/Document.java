@@ -1,6 +1,6 @@
 package com.romanpulov.violetnote;
 
-import android.os.Environment;
+import android.content.Context;
 
 import com.romanpulov.violetnotecore.AESCrypt.AESCryptException;
 import com.romanpulov.violetnotecore.AESCrypt.AESCryptService;
@@ -12,22 +12,49 @@ import com.romanpulov.violetnotecore.Processor.XMLPassDataReader;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by rpulov on 03.04.2016.
  */
 public class Document {
-    public static final String DEF_FILE_NAME = "/temp/1.vnf";
+    private static final String DOCUMENT_FILE_NAME = "document.vnf";
 
-    public static PassDataA loadPassDataA(String fileName, String masterPass) {
+    private static Document mInstance;
+
+
+    public static Document getInstance(Context context) {
+        if (mInstance == null) {
+            mInstance = new Document(context);
+        }
+        return mInstance;
+    }
+
+    private Context mContext;
+
+    private List<String> mLoadErrorList = new ArrayList<>();
+
+    public List<String> getLoadErrorList() {
+        return mLoadErrorList;
+    }
+
+    public String getFileName() {
+        return mContext.getCacheDir() + DOCUMENT_FILE_NAME;
+    }
+
+    public PassDataA loadPassDataA(String fileName, String masterPass) {
+        mLoadErrorList.clear();
+
         if (masterPass == null) {
             return null;
         }
 
         try {
-            File f = new File(Environment.getExternalStorageDirectory() + fileName);
+            File f = new File(fileName);
             if (f.exists()) {
                 InputStream input = AESCryptService.generateCryptInputStream(new FileInputStream(f), masterPass);
                 PassData pd =  (new XMLPassDataReader()).readStream(input);
@@ -36,8 +63,22 @@ public class Document {
                 else
                     return null;
             } else
-                return null;
-        } catch(IOException | AESCryptException | DataReadWriteException e) {
+                throw new FileNotFoundException();
+        }
+        catch(FileNotFoundException e) {
+            mLoadErrorList.add(mContext.getResources().getString(R.string.error_file_not_found));
+            return null;
+        }
+        catch (IOException e) {
+            mLoadErrorList.add(mContext.getResources().getString(R.string.error_io));
+            return null;
+        }
+        catch (AESCryptException e) {
+            mLoadErrorList.add(mContext.getResources().getString(R.string.error_crypt));
+            return null;
+        }
+        catch(DataReadWriteException e) {
+            mLoadErrorList.add(mContext.getResources().getString(R.string.error_read));
             return null;
         }
     }
@@ -68,7 +109,7 @@ public class Document {
         return PassDataA.newInstance(null, pd);
     }
 
-    private Document() {
-
+    private Document(Context context) {
+        mContext = context;
     }
 }

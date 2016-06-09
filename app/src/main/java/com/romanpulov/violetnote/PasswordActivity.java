@@ -1,12 +1,17 @@
 package com.romanpulov.violetnote;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
+import android.widget.Toast;
+
+import java.io.File;
+import java.util.List;
 
 /**
  * Created by rpulov on 30.05.2016.
@@ -51,27 +56,51 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
     private class LoadPassDataAsyncTask extends AsyncTask<Void, Void, Boolean> {
         ProgressDialog progressDialog;
         String mPassword;
+        final Context mContext;
+        Boolean mFileExists;
 
         public LoadPassDataAsyncTask(String password) {
             mPassword = password;
+            mContext = PasswordActivity.this;
         }
 
         @Override
         protected void onPreExecute() {
-            progressDialog = new ProgressDialog(PasswordActivity.this, R.style.DialogTheme);
-            progressDialog.setTitle(R.string.caption_loading);
-            progressDialog.show();
+            File file = new File(Document.getInstance(mContext).getFileName());
+            mFileExists = file.exists();
+            if (mFileExists) {
+                progressDialog = new ProgressDialog(mContext, R.style.DialogTheme);
+                progressDialog.setTitle(R.string.caption_loading);
+                progressDialog.show();
+            }
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            mPassDataA = Document.loadPassDataA(Document.DEF_FILE_NAME, mPassword);
-            return true;
+            Document document = Document.getInstance(mContext);
+            mPassDataA = document.loadPassDataA(document.getFileName(), mPassword);
+            return mPassDataA != null;
         }
 
         @Override
-        protected void onPostExecute(Boolean aBoolean) {
-            progressDialog.dismiss();
+        protected void onPostExecute(Boolean result) {
+            if (progressDialog != null)
+                progressDialog.dismiss();
+
+            String errorText = null;
+            if (!mFileExists)
+                errorText = mContext.getString(R.string.error_file_not_found);
+
+            if (!result) {
+                List<String> errorList = Document.getInstance(mContext).getLoadErrorList();
+                if (errorList.size() > 0) {
+                    errorText = errorList.get(0);
+                }
+            }
+
+            if (errorText != null)
+                Toast.makeText(mContext, errorText, Toast.LENGTH_SHORT).show();
+
             refreshFragment();
         }
     }
