@@ -7,12 +7,14 @@
         <Preference
             android:key="pref_source_type"
             android:title="@string/pref_title_source_type"
-            android:summary=""
             />
         <Preference
             android:key="pref_source_path"
             android:title="@string/pref_title_source_path"
-            android:summary=""
+            />
+        <Preference
+            android:key="pref_load"
+            android:title="@string/pref_title_load"
             />
     </PreferenceCategory>
 

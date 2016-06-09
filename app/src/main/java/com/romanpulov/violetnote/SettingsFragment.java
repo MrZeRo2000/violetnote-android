@@ -16,11 +16,19 @@ import android.widget.Toast;
 
 import com.romanpulov.violetnote.HrChooser.FileChooserActivity;
 
+import java.text.DateFormat;
+import java.util.Date;
+
 
 public class SettingsFragment extends PreferenceFragment {
     private static final int DEFAULT_SOURCE_TYPE = 0;
     public static final String PREF_KEY_SOURCE_PATH = "pref_source_path";
     public static final String PREF_KEY_SOURCE_TYPE = "pref_source_type";
+    public static final String PREF_KEY_LOAD = "pref_load";
+    public static final String PREF_KEY_LAST_LOADED = "pref_last_loaded";
+
+    private static final String FMT_LAST_LOADED = "Last loaded: %s";
+    private static final String FMT_LAST_LOADED_NEVER = "Last loaded: Never";
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -33,6 +41,7 @@ public class SettingsFragment extends PreferenceFragment {
 
         setupPrefSourceType();
         setupPrefSourcePath();
+        setupPrefLoad();
     }
 
     private void setupPrefSourcePath() {
@@ -61,6 +70,20 @@ public class SettingsFragment extends PreferenceFragment {
     private void setSourcePathPreferenceValue(String value) {
         getPreferenceManager().getSharedPreferences().edit().putString(PREF_KEY_SOURCE_PATH, value).commit();
         findPreference(PREF_KEY_SOURCE_PATH).setSummary(value);
+    }
+
+    /**
+     * Updates summary for preference after update
+     * @param preference load preference
+     * @param value new value
+     */
+    private void updateLoadPreferenceSummary(Preference preference, long value) {
+        if (value == 0)
+            preference.setSummary(R.string.pref_message_last_loaded_never);
+        else
+            preference.setSummary(String.format(
+                    getActivity().getResources().getString(R.string.pref_message_last_loaded_format),
+                    DateFormat.getDateTimeInstance().format(new Date(value))));
     }
 
     @Override
@@ -124,6 +147,11 @@ public class SettingsFragment extends PreferenceFragment {
                 return true;
             }
         });
+    }
+
+    private void setupPrefLoad() {
+        Preference prefLoad = findPreference(PREF_KEY_LOAD);
+        updateLoadPreferenceSummary(prefLoad, prefLoad.getPreferenceManager().getSharedPreferences().getLong(PREF_KEY_LAST_LOADED, 0L));
     }
 
     @Override
