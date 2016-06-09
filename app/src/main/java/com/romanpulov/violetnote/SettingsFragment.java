@@ -19,6 +19,8 @@ import com.romanpulov.violetnote.HrChooser.FileChooserActivity;
 
 public class SettingsFragment extends PreferenceFragment {
     private static final int DEFAULT_SOURCE_TYPE = 0;
+    public static final String PREF_KEY_SOURCE_PATH = "pref_source_path";
+    public static final String PREF_KEY_SOURCE_TYPE = "pref_source_type";
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -34,16 +36,16 @@ public class SettingsFragment extends PreferenceFragment {
     }
 
     private void setupPrefSourcePath() {
-        Preference prefSourcePath = findPreference("pref_source_path");
+        Preference prefSourcePath = findPreference(PREF_KEY_SOURCE_PATH);
 
-        final String sourcePath = prefSourcePath.getPreferenceManager().getSharedPreferences().getString(prefSourcePath.getKey(), Environment.getRootDirectory().getAbsolutePath());
+        final String sourcePath = prefSourcePath.getPreferenceManager().getSharedPreferences().getString(prefSourcePath.getKey(), null);
         prefSourcePath.setSummary(sourcePath);
 
         prefSourcePath.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 Intent intent =  new Intent(getActivity(), FileChooserActivity.class);
-                intent.putExtra(FileChooserActivity.CHOOSER_INITIAL_PATH, getPreferenceManager().getSharedPreferences().getString("pref_source_path", Environment.getRootDirectory().getAbsolutePath()));
+                intent.putExtra(FileChooserActivity.CHOOSER_INITIAL_PATH, getPreferenceManager().getSharedPreferences().getString(PREF_KEY_SOURCE_PATH, Environment.getRootDirectory().getAbsolutePath()));
                 startActivityForResult(intent, 0);
                 return true;
             }
@@ -51,21 +53,28 @@ public class SettingsFragment extends PreferenceFragment {
 
     }
 
+    /**
+     * Sets and commits Source Path Preference value
+     * @param value new value to set
+     *
+     */
+    private void setSourcePathPreferenceValue(String value) {
+        getPreferenceManager().getSharedPreferences().edit().putString(PREF_KEY_SOURCE_PATH, value).commit();
+        findPreference(PREF_KEY_SOURCE_PATH).setSummary(value);
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if ((data != null) && (data.hasExtra(FileChooserActivity.CHOOSER_RESULT_PATH))) {
             String resultPath = data.getStringExtra(FileChooserActivity.CHOOSER_RESULT_PATH);
-            getPreferenceManager().getSharedPreferences().edit().putString("pref_source_path", resultPath).commit();
-            Preference prefSourcePath = findPreference("pref_source_path");
-            prefSourcePath.setSummary(resultPath);
+            setSourcePathPreferenceValue(resultPath);
         }
     }
-
 
     private void setupPrefSourceType() {
         final String[] prefSourceTypeEntries = getResources().getStringArray(R.array.pref_source_type_entries);
 
-        Preference prefSourceType = findPreference("pref_source_type");
+        Preference prefSourceType = findPreference(PREF_KEY_SOURCE_TYPE);
         prefSourceType.setSummary(prefSourceTypeEntries[prefSourceType.getPreferenceManager().getSharedPreferences().getInt(prefSourceType.getKey(), DEFAULT_SOURCE_TYPE)]);
 
         prefSourceType.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -93,8 +102,14 @@ public class SettingsFragment extends PreferenceFragment {
                         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                preference.getPreferenceManager().getSharedPreferences().edit().putInt(preference.getKey(), result.which).commit();
-                                preference.setSummary(prefSourceTypeEntries[preference.getPreferenceManager().getSharedPreferences().getInt(preference.getKey(), DEFAULT_SOURCE_TYPE)]);
+                                int oldSourceType = preference.getPreferenceManager().getSharedPreferences().getInt(preference.getKey(), DEFAULT_SOURCE_TYPE);
+                                int newSourceType = result.which;
+
+                                if (oldSourceType != newSourceType) {
+                                    preference.getPreferenceManager().getSharedPreferences().edit().putInt(preference.getKey(), newSourceType).commit();
+                                    preference.setSummary(prefSourceTypeEntries[preference.getPreferenceManager().getSharedPreferences().getInt(preference.getKey(), DEFAULT_SOURCE_TYPE)]);
+                                    setSourcePathPreferenceValue(null);
+                                }
                             }
                         })
                         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
