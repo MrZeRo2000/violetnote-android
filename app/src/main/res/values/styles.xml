@@ -60,9 +60,10 @@
 
     <!-- Preferences/Theme -->
     <style name="PreferencesTheme" parent="@style/MainAppTheme" >
-        <item name="android:textColorSecondary">@color/brightTextColor</item>
         <item name="android:textColor">@color/brightTextColor</item>
+        <item name="android:textColorSecondary">@color/brightTextColor</item>
         <item name="android:listDivider">@drawable/divider_white_black_gradient</item>
+        <item name="android:selectableItemBackground">@drawable/list_selector</item>
     </style>
 
     <!-- Preferences/Category Divider -->
