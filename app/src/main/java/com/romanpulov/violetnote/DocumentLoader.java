@@ -3,6 +3,9 @@ package com.romanpulov.violetnote;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
+
+import java.io.File;
 
 /**
  * Created by romanpulov on 09.06.2016.
@@ -13,6 +16,8 @@ public abstract class DocumentLoader {
 
     protected Context mContext;
     protected int mLoadAppearance;
+    protected String mSourcePath;
+    protected File mDestFile;
 
     public interface OnDocumentLoadedListener {
         void onDocumentLoaded(String result);
@@ -22,6 +27,16 @@ public abstract class DocumentLoader {
 
     public DocumentLoader(Context context) {
         mContext = context;
+        mSourcePath = getSourcePath();
+        mDestFile = getDestFile();
+    }
+
+    private String getSourcePath() {
+        return PreferenceManager.getDefaultSharedPreferences(mContext).getString(SettingsFragment.PREF_KEY_SOURCE_PATH, null);
+    }
+
+    private File getDestFile() {
+        return new File(mContext.getCacheDir() + Document.DOCUMENT_FILE_NAME);
     }
 
     public void setOnDocumentLoadedListener(OnDocumentLoadedListener listener) {

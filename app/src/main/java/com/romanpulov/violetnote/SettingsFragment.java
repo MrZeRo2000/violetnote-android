@@ -27,9 +27,6 @@ public class SettingsFragment extends PreferenceFragment {
     public static final String PREF_KEY_LOAD = "pref_load";
     public static final String PREF_KEY_LAST_LOADED = "pref_last_loaded";
 
-    private static final String FMT_LAST_LOADED = "Last loaded: %s";
-    private static final String FMT_LAST_LOADED_NEVER = "Last loaded: Never";
-
     public SettingsFragment() {
         // Required empty public constructor
     }

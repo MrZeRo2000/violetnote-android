@@ -22,7 +22,7 @@ import java.util.List;
  * Created by rpulov on 03.04.2016.
  */
 public class Document {
-    private static final String DOCUMENT_FILE_NAME = "document.vnf";
+    public static final String DOCUMENT_FILE_NAME = "document.vnf";
 
     private static Document mInstance;
 
