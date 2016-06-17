@@ -11,11 +11,12 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp"
+        android:layout_marginTop="@dimen/text_margin_half"
+        android:layout_marginBottom="@dimen/text_margin_half"
+        android:padding="@dimen/text_margin_half"
         android:id="@+id/headerTextView"
         android:textAppearance="@style/Header1Text"
-        android:background="@color/colorHeader"
-        android:text="Sample text"
+        android:background="@color/windowBackgroundLight"
         />
 
     <android.support.v7.widget.RecyclerView

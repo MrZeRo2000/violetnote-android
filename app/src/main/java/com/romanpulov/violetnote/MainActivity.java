@@ -87,6 +87,9 @@ public class MainActivity extends PasswordActivity implements CategoryFragment.O
                 Intent intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
                 return true;
+            case R.id.action_refresh:
+                removeFragment();
+                requestPassword();
             default:
                 return super.onOptionsItemSelected(item);
         }
