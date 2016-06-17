@@ -131,6 +131,8 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
 
         mPasswordRequired = getIntent().getBooleanExtra(PASSWORD_REQUIRED, true);
         getIntent().removeExtra(PASSWORD_REQUIRED);
+
+        Log.d("PasswordActivity", "Create, passData = " + mPassDataA);
     }
 
     @Override

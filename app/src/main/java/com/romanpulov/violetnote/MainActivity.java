@@ -69,14 +69,16 @@ public class MainActivity extends PasswordActivity implements CategoryFragment.O
         getMenuInflater().inflate(R.menu.main, menu);
 
         // Associate searchable configuration with the SearchView
+        /*
         SearchManager searchManager =
                 (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView =
                 (SearchView) menu.findItem(R.id.action_search).getActionView();
         searchView.setSearchableInfo(
                 searchManager.getSearchableInfo(getComponentName()));
-        searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
+        searchView.setIconifiedByDefault(false);
         searchView.setIconified(false);
+        */
 
         return true;
     }
@@ -85,10 +87,16 @@ public class MainActivity extends PasswordActivity implements CategoryFragment.O
     public void startActivity(Intent intent) {
         // check if search intent
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            intent.putExtra("Test", "VALUE");
-        }
-
-        super.startActivity(intent);
+            /*
+            intent.putExtra(PASS_DATA, mPassDataA);
+            intent.putExtra(PASSWORD_REQUIRED, false);
+            */
+            Intent intent1 = new Intent(this, SearchResultActivity.class);
+            intent1.putExtra(PASS_DATA, mPassDataA);
+            intent1.putExtra(PASSWORD_REQUIRED, false);
+            startActivityForResult(intent1, 0);
+        } else
+            super.startActivity(intent);
     }
 
     @Override
@@ -101,10 +109,15 @@ public class MainActivity extends PasswordActivity implements CategoryFragment.O
             case R.id.action_refresh:
                 removeFragment();
                 requestPassword();
+                return true;
+            case R.id.action_search:
+                Toast.makeText(this, "Search invoked", Toast.LENGTH_SHORT).show();
+                PasswordInputDialog passwordInputDialog = new PasswordInputDialog(this);
+                passwordInputDialog.show();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-
     }
 
     @Override
