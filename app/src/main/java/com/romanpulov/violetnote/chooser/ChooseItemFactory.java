@@ -1,4 +1,4 @@
-package com.romanpulov.violetnote.HrChooser;
+package com.romanpulov.violetnote.chooser;
 
 /**
  * Created by romanpulov on 07.06.2016.

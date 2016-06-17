@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 
 import java.util.ArrayList;
@@ -78,6 +79,16 @@ public class MainActivity extends PasswordActivity implements CategoryFragment.O
         searchView.setIconified(false);
 
         return true;
+    }
+
+    @Override
+    public void startActivity(Intent intent) {
+        // check if search intent
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            intent.putExtra("Test", "VALUE");
+        }
+
+        super.startActivity(intent);
     }
 
     @Override

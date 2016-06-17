@@ -22,7 +22,8 @@ public class SearchResultActivity extends ActionBarCompatActivity {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
             //use the query to search your data somehow
-            Toast.makeText(this, query, Toast.LENGTH_SHORT).show();
+
+            Toast.makeText(this, query + " Extra : " + intent.getStringExtra("Test") , Toast.LENGTH_SHORT).show();
         }
     }
 }

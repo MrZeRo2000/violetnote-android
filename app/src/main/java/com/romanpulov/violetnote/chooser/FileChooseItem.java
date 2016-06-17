@@ -1,9 +1,7 @@
-package com.romanpulov.violetnote.HrChooser;
+package com.romanpulov.violetnote.chooser;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**

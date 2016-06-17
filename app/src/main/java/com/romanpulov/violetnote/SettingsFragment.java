@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.romanpulov.violetnote.HrChooser.FileChooserActivity;
+import com.romanpulov.violetnote.chooser.FileChooserActivity;
 
 import java.text.DateFormat;
 import java.util.Date;

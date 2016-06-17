@@ -1,4 +1,4 @@
-package com.romanpulov.violetnote.HrChooser;
+package com.romanpulov.violetnote.chooser;
 
 import android.app.Activity;
 import android.os.Bundle;

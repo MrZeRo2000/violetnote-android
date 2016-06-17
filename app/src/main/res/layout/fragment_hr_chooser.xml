@@ -3,7 +3,7 @@
 xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
-tools:context="com.romanpulov.violetnote.HrChooser.HrChooserFragment">
+tools:context="com.romanpulov.violetnote.chooser.HrChooserFragment">
 
 <TextView
     android:id="@+id/chooser_header"

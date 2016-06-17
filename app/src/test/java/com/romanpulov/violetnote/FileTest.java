@@ -1,13 +1,12 @@
 package com.romanpulov.violetnote;
 
-import com.romanpulov.violetnote.HrChooser.ChooseItem;
-import com.romanpulov.violetnote.HrChooser.FileChooseItem;
+import com.romanpulov.violetnote.chooser.ChooseItem;
+import com.romanpulov.violetnote.chooser.FileChooseItem;
 
 import org.junit.Test;
 
 import java.io.File;
 
-import static org.junit.Assert.*;
 /**
  * Created by romanpulov on 27.05.2016.
  */
