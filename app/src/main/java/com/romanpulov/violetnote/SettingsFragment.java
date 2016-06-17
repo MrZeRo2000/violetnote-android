@@ -21,7 +21,10 @@ import java.util.Date;
 
 
 public class SettingsFragment extends PreferenceFragment {
-    private static final int DEFAULT_SOURCE_TYPE = 0;
+    public static final int SOURCE_TYPE_FILE = 0;
+    public static final int SOURCE_TYPE_DROPBOX = 0;
+    private static final int DEFAULT_SOURCE_TYPE = SOURCE_TYPE_FILE;
+
     public static final String PREF_KEY_SOURCE_PATH = "pref_source_path";
     public static final String PREF_KEY_SOURCE_TYPE = "pref_source_type";
     public static final String PREF_KEY_LOAD = "pref_load";
@@ -147,8 +150,34 @@ public class SettingsFragment extends PreferenceFragment {
     }
 
     private void setupPrefLoad() {
-        Preference prefLoad = findPreference(PREF_KEY_LOAD);
+        final Preference prefLoad = findPreference(PREF_KEY_LOAD);
         updateLoadPreferenceSummary(prefLoad, prefLoad.getPreferenceManager().getSharedPreferences().getLong(PREF_KEY_LAST_LOADED, 0L));
+
+        prefLoad.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Preference prefSourceType = findPreference(PREF_KEY_SOURCE_TYPE);
+                int type = prefSourceType.getPreferenceManager().getSharedPreferences().getInt(prefSourceType.getKey(), DEFAULT_SOURCE_TYPE);
+
+                DocumentLoader loader = DocumentLoaderFactory.fromType(getActivity(), type);
+                if (loader != null) {
+                    loader.setOnDocumentLoadedListener(new DocumentLoader.OnDocumentLoadedListener() {
+                        @Override
+                        public void onDocumentLoaded(String result) {
+                            if (result == null) {
+                                prefLoad.getPreferenceManager().getSharedPreferences().edit().putLong(PREF_KEY_LAST_LOADED, System.currentTimeMillis()).commit();
+                                updateLoadPreferenceSummary(prefLoad, prefLoad.getPreferenceManager().getSharedPreferences().getLong(PREF_KEY_LAST_LOADED, 0L));
+                            } else {
+                                Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                    loader.execute();
+                }
+
+                return true;
+            }
+        });
     }
 
     @Override
