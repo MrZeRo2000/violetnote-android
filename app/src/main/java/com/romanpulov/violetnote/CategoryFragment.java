@@ -9,12 +9,20 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
+import android.support.v7.internal.view.menu.ExpandedMenuView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.romanpulov.violetnote.RecyclerViewHelper.*;
 
@@ -57,23 +65,51 @@ public class CategoryFragment extends Fragment {
 
     }
 
+    public void showSearchLayout() {
+        View view = getView();
+        if (view != null) {
+            View searchView = view.findViewById(R.id.search_layout);
+            if (searchView != null)
+                searchView.setVisibility(View.VISIBLE);
+        }
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_category_list, container, false);
+        RecyclerView recyclerView = (RecyclerView)view.findViewById(R.id.list);
 
         // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
-            recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        Context context = view.getContext();
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        PassDataA passDataA = this.getArguments().getParcelable(PasswordActivity.PASS_DATA);
+        if ((passDataA != null) && (passDataA.getPassCategoryData() != null))
+            recyclerView.setAdapter(new CategoryRecyclerViewAdapter(getActivity(), passDataA.getPassCategoryData(), mListener));
+        // add decoration
+        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_white_black_gradient));
 
-            PassDataA passDataA = this.getArguments().getParcelable(PasswordActivity.PASS_DATA);
-            if ((passDataA != null) && (passDataA.getPassCategoryData() != null))
-                recyclerView.setAdapter(new CategoryRecyclerViewAdapter(getActivity(), passDataA.getPassCategoryData(), mListener));
-            // add decoration
-            recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_white_black_gradient));
-        }
+        final View searchView = view.findViewById(R.id.search_layout);
+
+        Button searchCancelButton = (Button)view.findViewById(R.id.cancel_button);
+        searchCancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                searchView.setVisibility(View.GONE);
+            }
+        });
+
+        EditText searchEditText = (EditText)view.findViewById(R.id.search_edit_text);
+        searchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if (keyEvent.getAction() == KeyEvent.ACTION_DOWN)
+                    searchView.setVisibility(View.GONE);
+                    Toast.makeText(getActivity(), "ActionDown with value " + textView.getText(), Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        });
+
         return view;
     }
 

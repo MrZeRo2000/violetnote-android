@@ -111,9 +111,12 @@ public class MainActivity extends PasswordActivity implements CategoryFragment.O
                 requestPassword();
                 return true;
             case R.id.action_search:
-                Toast.makeText(this, "Search invoked", Toast.LENGTH_SHORT).show();
-                PasswordInputDialog passwordInputDialog = new PasswordInputDialog(this);
-                passwordInputDialog.show();
+                Fragment fragment = getFragment();
+                if (fragment != null)
+                    ((CategoryFragment)fragment).showSearchLayout();
+                //Toast.makeText(this, "Search invoked", Toast.LENGTH_SHORT).show();
+                //PasswordInputDialog passwordInputDialog = new PasswordInputDialog(this);
+                //passwordInputDialog.show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

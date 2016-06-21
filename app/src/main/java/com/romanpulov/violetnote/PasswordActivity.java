@@ -33,9 +33,12 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
     protected abstract int getFragmentContainerId();
 
     protected boolean fragmentExists() {
+        return (getFragment() != null);
+    }
+
+    public Fragment getFragment() {
         FragmentManager fm = getSupportFragmentManager();
-        Fragment fragment = fm.findFragmentById(getFragmentContainerId());
-        return (fragment != null);
+        return fm.findFragmentById(getFragmentContainerId());
     }
 
     protected void updateResult() {

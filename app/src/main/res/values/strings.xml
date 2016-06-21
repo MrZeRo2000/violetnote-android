@@ -4,6 +4,7 @@
     <string name="cancel">Cancel</string>
     <string name="password_required">Password Required</string>
     <string name="caption_loading">Loading ...</string>
+    <string name="hint_search">Search by system or user</string>
 
     <string name="layout_notes_count">Notes : %d</string>
 
