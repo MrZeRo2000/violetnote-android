@@ -2,27 +2,27 @@ package com.romanpulov.violetnote;
 
 import android.app.Activity;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link SearchResultFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link SearchResultFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class SearchResultFragment extends Fragment {
+    private static final String SEARCH_TEXT_DISPLAY_FORMAT = " ..%s..";
 
     private PassDataA mPassDataA;
+    private String mSearchText;
 
-    private OnFragmentInteractionListener mListener;
+    private String getDisplaySearchText() {
+        return String.format(SEARCH_TEXT_DISPLAY_FORMAT, mSearchText);
+    }
+
+    private OnPassNoteItemInteractionListener mListener;
 
     public SearchResultFragment() {
         // Required empty public constructor
@@ -36,10 +36,11 @@ public class SearchResultFragment extends Fragment {
      * @return A new instance of fragment SearchResultFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static SearchResultFragment newInstance(PassDataA passDataA) {
+    public static SearchResultFragment newInstance(PassDataA passDataA, String searchText) {
         SearchResultFragment fragment = new SearchResultFragment();
         Bundle args = new Bundle();
         args.putParcelable(PasswordActivity.PASS_DATA, passDataA);
+        args.putString(SearchResultActivity.SEARCH_TEXT, searchText);
         fragment.setArguments(args);
         return fragment;
     }
@@ -49,6 +50,7 @@ public class SearchResultFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mPassDataA = getArguments().getParcelable(PasswordActivity.PASS_DATA);
+            mSearchText = getArguments().getString(SearchResultActivity.SEARCH_TEXT);
         }
     }
 
@@ -56,14 +58,30 @@ public class SearchResultFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_search_result, container, false);
+        //return inflater.inflate(R.layout.fragment_search_result, container, false);
+
+        View view = inflater.inflate(R.layout.fragment_note_list, container, false);
+
+        TextView headerTextView = (TextView)view.findViewById(R.id.headerTextView);
+        headerTextView.setText(getDisplaySearchText());
+        headerTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_search ,0, 0, 0);
+        RecyclerView recyclerView = (RecyclerView)view.findViewById(R.id.list);
+        // Set the adapter
+        Context context = view.getContext();
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        recyclerView.setAdapter(new NoteRecyclerViewAdapter(mPassDataA.getPassNoteData(), mListener));
+        // add decoration
+        recyclerView.addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(getActivity(), RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_orange_black_gradient));
+
+        return view;
+
     }
 
     @Override
     public void onAttach(Activity context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof OnPassNoteItemInteractionListener) {
+            mListener = (OnPassNoteItemInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -74,19 +92,5 @@ public class SearchResultFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(PassNoteA item);
     }
 }

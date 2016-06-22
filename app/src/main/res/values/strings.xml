@@ -2,7 +2,7 @@
     <string name="app_name">Violet Note</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
-    <string name="password_required">Password Required</string>
+    <string name="password_required">Password required</string>
     <string name="caption_loading">Loading ...</string>
     <string name="hint_search">Search by system or user</string>
 

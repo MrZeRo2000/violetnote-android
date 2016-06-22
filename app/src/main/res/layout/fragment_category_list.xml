@@ -32,6 +32,7 @@
             android:inputType="text"
             android:layout_centerVertical="true"
             android:hint="@string/hint_search"
+            android:textCursorDrawable="@null"
             />
 
     </RelativeLayout>

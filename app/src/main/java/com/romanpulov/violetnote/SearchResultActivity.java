@@ -1,16 +1,15 @@
 package com.romanpulov.violetnote;
 
-import android.app.SearchManager;
 import android.content.Intent;
-import android.net.Uri;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.Toast;
 
-public class SearchResultActivity extends PasswordActivity implements SearchResultFragment.OnFragmentInteractionListener {
+public class SearchResultActivity extends PasswordActivity implements OnPassNoteItemInteractionListener {
+    public static String SEARCH_TEXT = "SearchText";
+
+    private String mSearchText;
 
     private static void log(String message) {
         Log.d("SearchResultActivity", message);
@@ -23,7 +22,7 @@ public class SearchResultActivity extends PasswordActivity implements SearchResu
 
     @Override
     protected void refreshFragment() {
-        Fragment fragment = SearchResultFragment.newInstance(mPassDataA);
+        Fragment fragment = SearchResultFragment.newInstance(mPassDataA, mSearchText);
         removeFragment().beginTransaction().add(getFragmentContainerId(), fragment).commit();
     }
 
@@ -32,24 +31,18 @@ public class SearchResultActivity extends PasswordActivity implements SearchResu
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_result);
 
-        handleIntent(getIntent());
+        mSearchText = getIntent().getStringExtra(SEARCH_TEXT);
 
-        log("onCreate");
+        refreshFragment();
     }
 
-
-    private void handleIntent(Intent intent) {
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
-            //use the query to search your data somehow
-
-            Toast.makeText(this, query + " Extra : " + intent.getParcelableExtra(PasswordActivity.PASS_DATA), Toast.LENGTH_SHORT).show();
-        }
-    }
 
     @Override
-    public void onFragmentInteraction(PassNoteA item) {
-
+    public void onPassNoteItemInteraction(PassNoteA item) {
+        Intent intent = new Intent(this, NoteDetailsActivity.class);
+        intent.putExtra(PasswordActivity.PASS_DATA, PassDataA.newNoteInstance(mPassDataA, item));
+        intent.putExtra(PASSWORD_REQUIRED, false);
+        startActivityForResult(intent, 0);
     }
 
     @Override

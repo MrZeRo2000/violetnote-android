@@ -38,6 +38,7 @@ import java.util.List;
 public class CategoryFragment extends Fragment {
 
     private OnListFragmentInteractionListener mListener;
+    private OnSearchFragmentInteractionListener mSearchListener;
 
     private List<PassCategoryA> mPassCategoryDataA;
 
@@ -106,7 +107,7 @@ public class CategoryFragment extends Fragment {
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
                     searchView.setVisibility(View.GONE);
-                    Toast.makeText(getActivity(), "ActionDown with value " + textView.getText(), Toast.LENGTH_SHORT).show();
+                    mSearchListener.onSearchFragmentInteraction(textView.getText().toString());
                     //clear search text for future
                     searchEditText.setText(null);
                 }
@@ -126,8 +127,16 @@ public class CategoryFragment extends Fragment {
         }
         else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnListFragmentInteractionListener");
+                    + " must implement OnPassNoteItemInteractionListener");
         }
+        if (context instanceof OnSearchFragmentInteractionListener) {
+            mSearchListener = (OnSearchFragmentInteractionListener) context;
+        }
+        else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnSearchFragmentInteractionListener");
+        }
+
     }
 
     @Override
@@ -138,5 +147,9 @@ public class CategoryFragment extends Fragment {
 
     public interface OnListFragmentInteractionListener {
         void onListFragmentInteraction(PassCategoryA item);
+    }
+
+    public interface OnSearchFragmentInteractionListener {
+        void onSearchFragmentInteraction(String searchText);
     }
 }

@@ -2,16 +2,11 @@ package com.romanpulov.violetnote;
 
 import android.content.Intent;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 
-import java.util.ArrayList;
-
-public class NoteActivity extends PasswordActivity implements NoteFragment.OnListFragmentInteractionListener{
+public class NoteActivity extends PasswordActivity implements OnPassNoteItemInteractionListener {
 
     private static void log(String message) {
         Log.d("NoteActivity", message);
@@ -37,7 +32,7 @@ public class NoteActivity extends PasswordActivity implements NoteFragment.OnLis
     }
 
     @Override
-    public void onListFragmentInteraction(PassNoteA item) {
+    public void onPassNoteItemInteraction(PassNoteA item) {
         Intent intent = new Intent(this, NoteDetailsActivity.class);
         intent.putExtra(PasswordActivity.PASS_DATA, PassDataA.newNoteInstance(mPassDataA, item));
         intent.putExtra(PASSWORD_REQUIRED, false);

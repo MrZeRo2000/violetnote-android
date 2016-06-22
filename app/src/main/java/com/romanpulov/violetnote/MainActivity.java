@@ -1,24 +1,14 @@
 package com.romanpulov.violetnote;
 
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.app.ProgressDialog;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-
-import java.util.ArrayList;
-
-public class MainActivity extends PasswordActivity implements CategoryFragment.OnListFragmentInteractionListener {
+public class MainActivity extends PasswordActivity implements CategoryFragment.OnListFragmentInteractionListener, CategoryFragment.OnSearchFragmentInteractionListener {
     public static final boolean mSampleData = false;
 
     @Override
@@ -40,6 +30,16 @@ public class MainActivity extends PasswordActivity implements CategoryFragment.O
             intent.putExtra(PASSWORD_REQUIRED, false);
             startActivityForResult(intent, 0);
         }
+    }
+
+    @Override
+    public void onSearchFragmentInteraction(String searchText) {
+        Toast.makeText(this, "Search with value " + searchText, Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, SearchResultActivity.class);
+        intent.putExtra(PASS_DATA, PassDataA.newSearchInstance(mPassDataA, searchText));
+        intent.putExtra(PASSWORD_REQUIRED, false);
+        intent.putExtra(SearchResultActivity.SEARCH_TEXT, searchText);
+        startActivityForResult(intent, 0);
     }
 
     @Override

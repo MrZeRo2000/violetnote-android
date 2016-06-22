@@ -2,7 +2,6 @@ package com.romanpulov.violetnote;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,15 +13,7 @@ import android.widget.TextView;
 
 import com.romanpulov.violetnote.RecyclerViewHelper.*;
 
-import java.util.ArrayList;
 
-
-/**
- * A fragment representing a list of Items.
- * <p/>
- * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
- * interface.
- */
 public class NoteFragment extends Fragment {
 
     private static void log(String message) {
@@ -31,7 +22,7 @@ public class NoteFragment extends Fragment {
 
     private PassDataA mPassDataA;
 
-    private OnListFragmentInteractionListener mListener;
+    private OnPassNoteItemInteractionListener mListener;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -87,11 +78,11 @@ public class NoteFragment extends Fragment {
     @Override
     public void onAttach(android.app.Activity context) {
         super.onAttach(context);
-        if (context instanceof OnListFragmentInteractionListener) {
-            mListener = (OnListFragmentInteractionListener) context;
+        if (context instanceof OnPassNoteItemInteractionListener) {
+            mListener = (OnPassNoteItemInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnListFragmentInteractionListener");
+                    + " must implement OnPassNoteItemInteractionListener");
         }
     }
 
@@ -99,20 +90,6 @@ public class NoteFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnListFragmentInteractionListener {
-        void onListFragmentInteraction(PassNoteA item);
     }
 
     @Override
