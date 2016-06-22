@@ -48,6 +48,9 @@ public class MainActivity extends PasswordActivity implements CategoryFragment.O
         setContentView(R.layout.activity_fragment_main);
     }
 
+    /**
+     * To support loading sample data, should not be used in normal operation
+     */
     @Override
     protected void onResume() {
         if ((mSampleData) && (mPassDataA == null)) {
@@ -84,22 +87,6 @@ public class MainActivity extends PasswordActivity implements CategoryFragment.O
     }
 
     @Override
-    public void startActivity(Intent intent) {
-        // check if search intent
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            /*
-            intent.putExtra(PASS_DATA, mPassDataA);
-            intent.putExtra(PASSWORD_REQUIRED, false);
-            */
-            Intent intent1 = new Intent(this, SearchResultActivity.class);
-            intent1.putExtra(PASS_DATA, mPassDataA);
-            intent1.putExtra(PASSWORD_REQUIRED, false);
-            startActivityForResult(intent1, 0);
-        } else
-            super.startActivity(intent);
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_settings:
@@ -114,9 +101,6 @@ public class MainActivity extends PasswordActivity implements CategoryFragment.O
                 Fragment fragment = getFragment();
                 if (fragment != null)
                     ((CategoryFragment)fragment).showSearchLayout();
-                //Toast.makeText(this, "Search invoked", Toast.LENGTH_SHORT).show();
-                //PasswordInputDialog passwordInputDialog = new PasswordInputDialog(this);
-                //passwordInputDialog.show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

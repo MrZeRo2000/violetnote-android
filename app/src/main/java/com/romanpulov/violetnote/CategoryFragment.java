@@ -69,8 +69,9 @@ public class CategoryFragment extends Fragment {
         View view = getView();
         if (view != null) {
             View searchView = view.findViewById(R.id.search_layout);
-            if (searchView != null)
+            if (searchView != null) {
                 searchView.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -99,13 +100,16 @@ public class CategoryFragment extends Fragment {
             }
         });
 
-        EditText searchEditText = (EditText)view.findViewById(R.id.search_edit_text);
+        final EditText searchEditText = (EditText)view.findViewById(R.id.search_edit_text);
         searchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                if (keyEvent.getAction() == KeyEvent.ACTION_DOWN)
+                if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
                     searchView.setVisibility(View.GONE);
                     Toast.makeText(getActivity(), "ActionDown with value " + textView.getText(), Toast.LENGTH_SHORT).show();
+                    //clear search text for future
+                    searchEditText.setText(null);
+                }
                 return false;
             }
         });
