@@ -31,7 +31,6 @@
             android:layout_toLeftOf="@id/cancel_button"
             android:inputType="text"
             android:layout_centerVertical="true"
-            android:theme="@style/SearchEditTextTheme"
             android:hint="@string/hint_search"
             />
 
