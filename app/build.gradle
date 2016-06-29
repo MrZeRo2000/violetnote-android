@@ -26,4 +26,6 @@ dependencies {
     compile 'com.romanpulov:violetnote-core:1.0-SNAPSHOT'
     compile 'com.android.support:support-v4:22.2.1'
     compile 'com.android.support:recyclerview-v7:22.2.1'
+    compile 'com.dropbox.core:dropbox-core-sdk:2.0.2'
+    compile 'com.squareup.okhttp:okhttp:2.4.0'
 }
