@@ -19,6 +19,9 @@
 
     <!-- Preferences -->
     <string name="pref_title_data">Data</string>
+    <string name="pref_title_account">Account</string>
+    <string name="pref_title_account_dropbox">Dropbox</string>
+
     <!-- Source type -->
     <string name="pref_title_source_type">Source type</string>
     <string name="pref_title_source_path">Remote path</string>

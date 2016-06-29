@@ -17,5 +17,15 @@
             android:title="@string/pref_title_load"
             />
     </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/pref_title_account"
+        android:layout="@layout/preferences_category"
+        >
+        <Preference
+            android:key="pref_account_dropbox"
+            android:title="@string/pref_title_account_dropbox"
+            />
+    </PreferenceCategory>
+
 
 </PreferenceScreen>
