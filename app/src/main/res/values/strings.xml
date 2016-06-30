@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Violet Note</string>
+    <!-- DropBox -->
+    <string name="app_key">lnxj3kbbxeetpa8</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="password_required">Password required</string>

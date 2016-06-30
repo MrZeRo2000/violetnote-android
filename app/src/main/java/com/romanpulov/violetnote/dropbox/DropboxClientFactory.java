@@ -2,7 +2,6 @@ package com.romanpulov.violetnote.dropbox;
 
 import com.dropbox.core.http.OkHttpRequestor;
 import com.dropbox.core.v2.DbxClientV2;
-import com.dropbox.core.DbxHost;
 import com.dropbox.core.DbxRequestConfig;
 
 import java.util.Locale;
@@ -18,7 +17,7 @@ public class DropboxClientFactory {
         if (sDbxClient == null) {
             String userLocale = Locale.getDefault().toString();
             DbxRequestConfig requestConfig = new DbxRequestConfig(
-                    "com.romanpulov.violetnotebox",
+                    DropBoxManager.CLIENT_IDENTIFIER,
                     userLocale,
                     OkHttpRequestor.INSTANCE);
 
