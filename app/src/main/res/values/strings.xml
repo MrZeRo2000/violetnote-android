@@ -45,6 +45,7 @@
     <string name="error_io">I/O error</string>
     <string name="error_crypt">Cryptography error</string>
     <string name="error_read">Data read error</string>
+    <string name="error_dropbox_auth">Invalid access token. Please, authenticate</string>
 
 
 </resources>

@@ -23,7 +23,7 @@ import java.util.Date;
 
 public class SettingsFragment extends PreferenceFragment {
     public static final int SOURCE_TYPE_FILE = 0;
-    public static final int SOURCE_TYPE_DROPBOX = 0;
+    public static final int SOURCE_TYPE_DROPBOX = 1;
     private static final int DEFAULT_SOURCE_TYPE = SOURCE_TYPE_FILE;
 
     public static final String PREF_KEY_SOURCE_PATH = "pref_source_path";
@@ -188,7 +188,7 @@ public class SettingsFragment extends PreferenceFragment {
         prefAccountDropbox.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                DropBoxHelper.getInstance(getActivity()).invokeAuthActivity(getActivity().getResources().getString(R.string.app_key));
+                DropBoxHelper.getInstance(getActivity().getApplicationContext()).invokeAuthActivity(getActivity().getResources().getString(R.string.app_key));
                 return true;
             }
         });
@@ -197,7 +197,7 @@ public class SettingsFragment extends PreferenceFragment {
     @Override
     public void onResume() {
         super.onResume();
-        DropBoxHelper.getInstance(getActivity()).refreshAccessToken();
+        DropBoxHelper.getInstance(getActivity().getApplicationContext()).refreshAccessToken();
     }
 
     @Override

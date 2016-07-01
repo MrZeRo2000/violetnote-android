@@ -10,6 +10,8 @@ public class DocumentLoaderFactory {
         switch(type) {
             case SettingsFragment.SOURCE_TYPE_FILE:
                 return new DocumentFileLoader(context);
+            case SettingsFragment.SOURCE_TYPE_DROPBOX:
+                return new DocumentDropboxLoader(context);
             default:
                 return null;
         }

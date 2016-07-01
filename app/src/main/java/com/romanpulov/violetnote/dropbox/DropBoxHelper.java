@@ -59,7 +59,7 @@ public class DropBoxHelper {
         }
     }
 
-    private DbxClientV2 getClient() {
+    public DbxClientV2 getClient() {
         refreshAccessToken();
         DropboxClientFactory.init(mAccessToken);
         return DropboxClientFactory.getClient();

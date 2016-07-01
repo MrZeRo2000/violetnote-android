@@ -73,9 +73,14 @@ public abstract class DocumentLoader {
         }
     }
 
+    protected void preLoad() {
+
+    }
+
     protected abstract void load() throws Exception;
 
     public void execute() {
+        preLoad();
         new DocumentLoadAsyncTask().execute();
     }
 }
