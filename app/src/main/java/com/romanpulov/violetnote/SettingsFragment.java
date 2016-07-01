@@ -14,7 +14,8 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.romanpulov.violetnote.chooser.FileChooserActivity;
+import com.romanpulov.violetnote.filechooser.FileChooserActivity;
+import com.romanpulov.violetnote.dropbox.DropBoxHelper;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -29,6 +30,7 @@ public class SettingsFragment extends PreferenceFragment {
     public static final String PREF_KEY_SOURCE_TYPE = "pref_source_type";
     public static final String PREF_KEY_LOAD = "pref_load";
     public static final String PREF_KEY_LAST_LOADED = "pref_last_loaded";
+    public static final String PREF_KEY_ACCOUNT_DROPBOX = "pref_account_dropbox";
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -42,6 +44,7 @@ public class SettingsFragment extends PreferenceFragment {
         setupPrefSourceType();
         setupPrefSourcePath();
         setupPrefLoad();
+        setupPrefAccountDropbox();
     }
 
     private void setupPrefSourcePath() {
@@ -178,6 +181,23 @@ public class SettingsFragment extends PreferenceFragment {
                 return true;
             }
         });
+    }
+
+    private void setupPrefAccountDropbox() {
+        final Preference prefAccountDropbox = findPreference(PREF_KEY_ACCOUNT_DROPBOX);
+        prefAccountDropbox.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                DropBoxHelper.getInstance(getActivity()).invokeAuthActivity(getActivity().getResources().getString(R.string.app_key));
+                return true;
+            }
+        });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        DropBoxHelper.getInstance(getActivity()).refreshAccessToken();
     }
 
     @Override

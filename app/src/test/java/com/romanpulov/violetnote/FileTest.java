@@ -1,7 +1,7 @@
 package com.romanpulov.violetnote;
 
 import com.romanpulov.violetnote.chooser.ChooseItem;
-import com.romanpulov.violetnote.chooser.FileChooseItem;
+import com.romanpulov.violetnote.filechooser.FileChooseItem;
 
 import org.junit.Test;
 

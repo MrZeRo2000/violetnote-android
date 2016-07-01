@@ -4,11 +4,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.dropbox.core.android.Auth;
+import com.dropbox.core.v2.DbxClientV2;
 
 /**
  * Created by romanpulov on 30.06.2016.
  */
-public class DropBoxManager {
+public class DropBoxHelper {
     // public constants
     public final static String CLIENT_IDENTIFIER = "com.romanpulov.violetnote";
 
@@ -20,21 +21,21 @@ public class DropBoxManager {
     private SharedPreferences mPrefs;
     private String mAccessToken;
 
-    private static DropBoxManager mInstance;
+    private static DropBoxHelper mInstance;
 
-    public static DropBoxManager getInstance(Context context) {
+    public static DropBoxHelper getInstance(Context context) {
         if (mInstance == null)
-            mInstance = new DropBoxManager(context);
+            mInstance = new DropBoxHelper(context);
         return mInstance;
     }
 
-    private DropBoxManager(Context context) {
+    private DropBoxHelper(Context context) {
         mContext = context;
         mPrefs = mContext.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
         mAccessToken = getAccessToken();
     }
 
-    private String getAccessToken() {
+    public String getAccessToken() {
         return mPrefs.getString(SHARED_PREFERENCES_ACCESS_TOKEN, null);
     }
 
@@ -49,5 +50,18 @@ public class DropBoxManager {
 
     public String getAuthToken() {
         return Auth.getOAuth2Token();
+    }
+
+    public void refreshAccessToken() {
+        String newAccessToken = getAuthToken();
+        if (newAccessToken != null) {
+            setAccessToken(newAccessToken);
+        }
+    }
+
+    private DbxClientV2 getClient() {
+        refreshAccessToken();
+        DropboxClientFactory.init(mAccessToken);
+        return DropboxClientFactory.getClient();
     }
 }

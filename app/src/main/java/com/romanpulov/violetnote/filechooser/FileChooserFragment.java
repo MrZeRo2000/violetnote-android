@@ -1,6 +1,9 @@
-package com.romanpulov.violetnote.chooser;
+package com.romanpulov.violetnote.filechooser;
 
 import android.os.Bundle;
+
+import com.romanpulov.violetnote.chooser.ChooseItem;
+import com.romanpulov.violetnote.chooser.HrChooserFragment;
 
 import java.io.File;
 

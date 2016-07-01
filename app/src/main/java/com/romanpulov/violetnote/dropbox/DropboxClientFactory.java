@@ -17,7 +17,7 @@ public class DropboxClientFactory {
         if (sDbxClient == null) {
             String userLocale = Locale.getDefault().toString();
             DbxRequestConfig requestConfig = new DbxRequestConfig(
-                    DropBoxManager.CLIENT_IDENTIFIER,
+                    DropBoxHelper.CLIENT_IDENTIFIER,
                     userLocale,
                     OkHttpRequestor.INSTANCE);
 

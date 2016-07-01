@@ -1,4 +1,6 @@
-package com.romanpulov.violetnote.chooser;
+package com.romanpulov.violetnote.filechooser;
+
+import com.romanpulov.violetnote.chooser.ChooseItem;
 
 import java.io.File;
 import java.util.ArrayList;

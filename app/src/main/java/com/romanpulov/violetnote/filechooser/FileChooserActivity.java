@@ -1,4 +1,4 @@
-package com.romanpulov.violetnote.chooser;
+package com.romanpulov.violetnote.filechooser;
 
 import android.content.Intent;
 import android.support.v4.app.Fragment;
@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import com.romanpulov.violetnote.ActionBarCompatActivity;
 import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.chooser.ChooseItem;
 
 public class FileChooserActivity extends ActionBarCompatActivity implements FileChooserFragment.OnChooserInteractionListener {
     public static final String CHOOSER_INITIAL_PATH = "ChooserInitialPath";
