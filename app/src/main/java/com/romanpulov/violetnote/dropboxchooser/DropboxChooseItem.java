@@ -18,16 +18,17 @@ import java.util.List;
 public class DropboxChooseItem implements ChooseItem {
     private final DbxClientV2 mClient;
     private final Metadata mMetaData;
-    private final List<ChooseItem> mItems;
+    private List<ChooseItem> mItems;
 
     public DropboxChooseItem(DbxClientV2 client, Metadata metaData) {
         mClient = client;
         mMetaData = metaData;
-        mItems = new ArrayList<>();
-        initItems();
     }
 
-    private void initItems() {
+
+    @Override
+    public void fillItems() {
+        mItems = new ArrayList<>();
         try {
             for (Metadata m : mClient.files().listFolder(mMetaData.getPathDisplay()).getEntries()) {
                 mItems.add(new DropboxChooseItem(mClient, m));

@@ -1,6 +1,7 @@
 package com.romanpulov.violetnote.chooser;
 
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -112,11 +113,38 @@ public abstract class HrChooserFragment extends Fragment {
     protected abstract ChooseItem getChooseItem();
 
     protected void updateFromChooseItem(ChooseItem item) {
-        mHeader.setText(item.getItemPath());
+        if (item == null)
+            item = getChooseItem();
         List<ChooseItem> items = item.getItems();
+
+        mHeader.setText(item.getItemPath());
         Collections.sort(items, new ChooseItemComparator());
         mChooseItemList.clear();
         mChooseItemList.addAll(items);
+        mAdapter.notifyDataSetChanged();
+    }
+
+    private class ChooseItemUpdaterTask extends AsyncTask<ChooseItem, Void, ChooseItem> {
+
+        @Override
+        protected ChooseItem doInBackground(ChooseItem... params) {
+            ChooseItem result;
+            if (params[0] == null)
+                result = getChooseItem();
+            else
+                result = params[0];
+            result.fillItems();
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(ChooseItem chooseItem) {
+            mHeader.setText(chooseItem.getItemPath());
+            Collections.sort(chooseItem.getItems(), new ChooseItemComparator());
+            mChooseItemList.clear();
+            mChooseItemList.addAll(chooseItem.getItems());
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -136,9 +164,6 @@ public abstract class HrChooserFragment extends Fragment {
         // reserve for incoming data
         mChooseItemList = new ArrayList<>();
 
-        ChooseItem item = getChooseItem();
-        updateFromChooseItem(item);
-
         mAdapter = new ChooserAdapter(mChooseItemList, new OnChooserInteractionListener() {
             @Override
             public void onChooserInteraction(ChooseItem item) {
@@ -149,13 +174,16 @@ public abstract class HrChooserFragment extends Fragment {
                         break;
                     case ChooseItem.ITEM_DIRECTORY:
                     case ChooseItem.ITEM_PARENT:
-                        updateFromChooseItem(item);
-                        mAdapter.notifyDataSetChanged();
+                        new ChooseItemUpdaterTask().execute(item);
+                        //updateFromChooseItem(item);
                         break;
                 }
             }
         });
         recyclerView.setAdapter(mAdapter);
+
+        //updateFromChooseItem(null);
+        new ChooseItemUpdaterTask().execute((ChooseItem)null);
 
         return v;
     }

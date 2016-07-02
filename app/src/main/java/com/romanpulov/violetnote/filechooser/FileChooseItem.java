@@ -14,6 +14,7 @@ public class FileChooseItem implements ChooseItem {
     private String mPath;
     private String mName;
     private int mItemType;
+    private List<ChooseItem> mItems;
 
     private static FileChooseItem newParentItem(File file) {
         FileChooseItem newItem = new FileChooseItem(file);
@@ -49,19 +50,23 @@ public class FileChooseItem implements ChooseItem {
     }
 
     @Override
-    public List<ChooseItem> getItems() {
-        List<ChooseItem> result = new ArrayList<>();
+    public void fillItems() {
+        mItems = new ArrayList<>();
         File parentFile = mFile.getParentFile();
         if (parentFile != null)
-            result.add(newParentItem(parentFile));
+            mItems.add(newParentItem(parentFile));
         File[] listFiles = mFile.listFiles();
         if (listFiles != null) {
             for (File f : mFile.listFiles()) {
                 if (f.canRead())
-                    result.add(new FileChooseItem(f));
+                    mItems.add(new FileChooseItem(f));
             }
         }
-        return result;
+    }
+
+    @Override
+    public List<ChooseItem> getItems() {
+        return mItems;
     }
 
     public ChooseItem getParentItem() {

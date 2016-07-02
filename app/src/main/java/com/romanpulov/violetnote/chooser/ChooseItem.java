@@ -16,6 +16,7 @@ public interface ChooseItem {
     String getItemPath();
     String getItemName();
     int getItemType();
+    void fillItems();
     List<ChooseItem> getItems();
     ChooseItem getParentItem();
 }
