@@ -18,10 +18,22 @@ import java.util.List;
 public class DropboxChooseItem implements ChooseItem {
     private final DbxClientV2 mClient;
     private final Metadata mMetaData;
+    private final List<ChooseItem> mItems = new ArrayList<>();
 
     public DropboxChooseItem(DbxClientV2 client, Metadata metaData) {
         mClient = client;
         mMetaData = metaData;
+        initItems();
+    }
+
+    private void initItems() {
+        try {
+            for (Metadata m : mClient.files().listFolder(mMetaData.getPathDisplay()).getEntries()) {
+                mItems.add(new DropboxChooseItem(mClient, m));
+            }
+        } catch (DbxException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -46,15 +58,7 @@ public class DropboxChooseItem implements ChooseItem {
 
     @Override
     public List<ChooseItem> getItems() {
-        List<ChooseItem> result = new ArrayList<>();
-        try {
-            for (Metadata m : mClient.files().listFolder(mMetaData.getPathDisplay()).getEntries()) {
-                result.add(new DropboxChooseItem(mClient, m));
-            }
-        } catch (DbxException e) {
-            throw new RuntimeException(e);
-        }
-        return result;
+        return mItems;
     }
 
     private String getParentItemPath(String path) {
