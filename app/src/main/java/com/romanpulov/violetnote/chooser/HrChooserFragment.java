@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.RecyclerViewHelper;
@@ -127,6 +128,11 @@ public abstract class HrChooserFragment extends Fragment {
     private class ChooseItemUpdaterTask extends AsyncTask<ChooseItem, Void, ChooseItem> {
 
         @Override
+        protected void onPreExecute() {
+            mHeader.setText(getActivity().getText(R.string.caption_loading));
+        }
+
+        @Override
         protected ChooseItem doInBackground(ChooseItem... params) {
             ChooseItem result;
             if (params[0] == null)
@@ -139,7 +145,11 @@ public abstract class HrChooserFragment extends Fragment {
 
         @Override
         protected void onPostExecute(ChooseItem chooseItem) {
-            mHeader.setText(chooseItem.getItemPath());
+            if (chooseItem.getFillItemsError() != null) {
+                mHeader.setText(getText(R.string.error_load).toString());
+                Toast.makeText(getActivity(), chooseItem.getFillItemsError(), Toast.LENGTH_SHORT).show();
+            } else
+                mHeader.setText(chooseItem.getItemPath());
             Collections.sort(chooseItem.getItems(), new ChooseItemComparator());
             mChooseItemList.clear();
             mChooseItemList.addAll(chooseItem.getItems());

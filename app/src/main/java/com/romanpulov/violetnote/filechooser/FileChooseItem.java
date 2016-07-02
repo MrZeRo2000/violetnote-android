@@ -11,6 +11,12 @@ import java.util.List;
  */
 public class FileChooseItem implements ChooseItem {
     private File mFile;
+
+    @Override
+    public String getFillItemsError() {
+        return null;
+    }
+
     private String mPath;
     private String mName;
     private int mItemType;

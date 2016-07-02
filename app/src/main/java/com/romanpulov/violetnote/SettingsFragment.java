@@ -48,6 +48,10 @@ public class SettingsFragment extends PreferenceFragment {
         setupPrefAccountDropbox();
     }
 
+    private void displayError(String message) {
+        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+    }
+
     private void setupPrefSourcePath() {
         Preference prefSourcePath = findPreference(PREF_KEY_SOURCE_PATH);
 
@@ -67,10 +71,19 @@ public class SettingsFragment extends PreferenceFragment {
                         startActivityForResult(intent, 0);
                         return true;
                     case SOURCE_TYPE_DROPBOX:
-                        intent =  new Intent(getActivity(), DropboxChooserActivity.class);
-                        intent.putExtra(DropboxChooserActivity.CHOOSER_INITIAL_PATH, getPreferenceManager().getSharedPreferences().getString(PREF_KEY_SOURCE_PATH, Environment.getRootDirectory().getAbsolutePath()));
-                        startActivityForResult(intent, 0);
-                        return true;
+                        try {
+                            DropBoxHelper.getInstance(getActivity().getApplication()).validateDropBox();
+
+                            intent = new Intent(getActivity(), DropboxChooserActivity.class);
+                            intent.putExtra(DropboxChooserActivity.CHOOSER_INITIAL_PATH, getPreferenceManager().getSharedPreferences().getString(PREF_KEY_SOURCE_PATH, Environment.getRootDirectory().getAbsolutePath()));
+                            startActivityForResult(intent, 0);
+                            return true;
+                        } catch (DropBoxHelper.DBHNoAccessTokenException e) {
+                            displayError(getActivity().getResources().getString(R.string.error_dropbox_auth));
+                        } catch (DropBoxHelper.DBHException e) {
+                            displayError(String.format(getActivity().getResources().getString(R.string.error_dropbox_other), e.getMessage()));
+                        }
+
                     default:
                         return false;
                 }

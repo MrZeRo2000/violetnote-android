@@ -3,6 +3,8 @@ package com.romanpulov.violetnote.dropbox;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.dropbox.core.DbxException;
+import com.dropbox.core.DbxWebAuth;
 import com.dropbox.core.android.Auth;
 import com.dropbox.core.v2.DbxClientV2;
 
@@ -10,6 +12,19 @@ import com.dropbox.core.v2.DbxClientV2;
  * Created by romanpulov on 30.06.2016.
  */
 public class DropBoxHelper {
+    public class DBHException extends Exception {
+        public DBHException() {}
+
+        public DBHException(String message) {
+            super(message);
+        }
+    }
+    public class DBHNoAccessTokenException extends DBHException {
+        public DBHNoAccessTokenException() {
+            super();
+        }
+    };
+
     // public constants
     public final static String CLIENT_IDENTIFIER = "com.romanpulov.violetnote";
 
@@ -63,5 +78,10 @@ public class DropBoxHelper {
         refreshAccessToken();
         DropboxClientFactory.init(mAccessToken);
         return DropboxClientFactory.getClient();
+    }
+
+    public void validateDropBox() throws DBHException {
+        if (getAccessToken() == null)
+            throw new DBHNoAccessTokenException();
     }
 }

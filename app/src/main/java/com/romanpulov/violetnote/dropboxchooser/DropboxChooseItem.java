@@ -7,7 +7,6 @@ import com.dropbox.core.v2.files.FolderMetadata;
 import com.romanpulov.violetnote.chooser.ChooseItem;
 
 import com.dropbox.core.v2.files.Metadata;
-import com.romanpulov.violetnote.dropbox.DropBoxHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,37 +18,52 @@ public class DropboxChooseItem implements ChooseItem {
     private final DbxClientV2 mClient;
     private final Metadata mMetaData;
     private List<ChooseItem> mItems;
+    private String mFillItemsError;
 
     public DropboxChooseItem(DbxClientV2 client, Metadata metaData) {
         mClient = client;
         mMetaData = metaData;
     }
 
-
     @Override
     public void fillItems() {
         mItems = new ArrayList<>();
         try {
-            for (Metadata m : mClient.files().listFolder(mMetaData.getPathDisplay()).getEntries()) {
+            for (Metadata m : mClient.files().listFolder(getItemPath()).getEntries()) {
                 mItems.add(new DropboxChooseItem(mClient, m));
             }
         } catch (DbxException e) {
             e.printStackTrace();
+            mFillItemsError = e.getMessage();
         }
     }
 
     @Override
+    public String getFillItemsError() {
+        return mFillItemsError;
+    }
+
+    @Override
     public String getItemPath() {
-        return mMetaData.getPathDisplay();
+        if (mMetaData == null)
+            return "";
+        else
+            return mMetaData.getPathDisplay();
     }
 
     @Override
     public String getItemName() {
-        return mMetaData.getName();
+        if (mMetaData == null)
+            return null;
+        else
+            return mMetaData.getName();
     }
 
     @Override
     public int getItemType() {
+        if (mMetaData == null)
+            return ChooseItem.ITEM_DIRECTORY;
+
         if (mMetaData instanceof FileMetadata)
             return ChooseItem.ITEM_FILE;
         else if (mMetaData instanceof FolderMetadata)
@@ -73,7 +87,7 @@ public class DropboxChooseItem implements ChooseItem {
 
     @Override
     public ChooseItem getParentItem() {
-        String parentItemPath = getParentItemPath(mMetaData.getPathDisplay());
+        String parentItemPath = getParentItemPath(getItemPath());
         return fromPath(mClient, parentItemPath);
     }
 
@@ -83,14 +97,6 @@ public class DropboxChooseItem implements ChooseItem {
             metadata = client.files().getMetadata(path);
         } catch (DbxException e) {
             e.printStackTrace();
-        }
-        if (metadata == null) {
-            try {
-                metadata = client.files().getMetadata("");
-            } catch (DbxException e) {
-                e.printStackTrace();
-                return null;
-            }
         }
 
         return new DropboxChooseItem(client, metadata);
