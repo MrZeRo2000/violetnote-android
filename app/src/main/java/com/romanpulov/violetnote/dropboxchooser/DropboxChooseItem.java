@@ -7,6 +7,7 @@ import com.dropbox.core.v2.files.FolderMetadata;
 import com.romanpulov.violetnote.chooser.ChooseItem;
 
 import com.dropbox.core.v2.files.Metadata;
+import com.romanpulov.violetnote.dropbox.DropBoxHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,8 +57,36 @@ public class DropboxChooseItem implements ChooseItem {
         return result;
     }
 
+    private String getParentItemPath(String path) {
+        int iPath = path.lastIndexOf("/");
+        if (iPath>-1)
+            return path.substring(0, iPath);
+        else
+            return "";
+    }
+
     @Override
     public ChooseItem getParentItem() {
-        return null;
+        String parentItemPath = getParentItemPath(mMetaData.getPathDisplay());
+        return fromPath(mClient, parentItemPath);
+    }
+
+    public static ChooseItem fromPath(DbxClientV2 client, String path) {
+        Metadata metadata = null;
+        try {
+            metadata = client.files().getMetadata(path);
+        } catch (DbxException e) {
+            e.printStackTrace();
+        }
+        if (metadata == null) {
+            try {
+                metadata = client.files().getMetadata("");
+            } catch (DbxException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        return new DropboxChooseItem(client, metadata);
     }
 }

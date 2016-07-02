@@ -59,6 +59,12 @@
             android:theme="@style/MainAppTheme"
             >
         </activity>
+        <activity
+            android:name=".dropboxchooser.DropboxChooserActivity"
+            android:parentActivityName=".SettingsActivity"
+            android:theme="@style/MainAppTheme"
+            >
+        </activity>
     </application>
 
 </manifest>

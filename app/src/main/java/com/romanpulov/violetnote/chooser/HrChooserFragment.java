@@ -133,8 +133,10 @@ public abstract class HrChooserFragment extends Fragment {
         // add decoration
         recyclerView.addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(getActivity(), RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_gray_solid));
 
-        ChooseItem item = getChooseItem();
+        // reserve for incoming data
         mChooseItemList = new ArrayList<>();
+
+        ChooseItem item = getChooseItem();
         updateFromChooseItem(item);
 
         mAdapter = new ChooserAdapter(mChooseItemList, new OnChooserInteractionListener() {

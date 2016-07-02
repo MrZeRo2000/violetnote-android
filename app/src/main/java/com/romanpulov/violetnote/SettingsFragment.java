@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.romanpulov.violetnote.dropboxchooser.DropboxChooserActivity;
 import com.romanpulov.violetnote.filechooser.FileChooserActivity;
 import com.romanpulov.violetnote.dropbox.DropBoxHelper;
 
@@ -56,10 +57,23 @@ public class SettingsFragment extends PreferenceFragment {
         prefSourcePath.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                Intent intent =  new Intent(getActivity(), FileChooserActivity.class);
-                intent.putExtra(FileChooserActivity.CHOOSER_INITIAL_PATH, getPreferenceManager().getSharedPreferences().getString(PREF_KEY_SOURCE_PATH, Environment.getRootDirectory().getAbsolutePath()));
-                startActivityForResult(intent, 0);
-                return true;
+                int sourceType = preference.getPreferenceManager().getSharedPreferences().getInt(PREF_KEY_SOURCE_TYPE, DEFAULT_SOURCE_TYPE);
+
+                Intent intent;
+                switch (sourceType) {
+                    case SOURCE_TYPE_FILE:
+                        intent =  new Intent(getActivity(), FileChooserActivity.class);
+                        intent.putExtra(FileChooserActivity.CHOOSER_INITIAL_PATH, getPreferenceManager().getSharedPreferences().getString(PREF_KEY_SOURCE_PATH, Environment.getRootDirectory().getAbsolutePath()));
+                        startActivityForResult(intent, 0);
+                        return true;
+                    case SOURCE_TYPE_DROPBOX:
+                        intent =  new Intent(getActivity(), DropboxChooserActivity.class);
+                        intent.putExtra(DropboxChooserActivity.CHOOSER_INITIAL_PATH, getPreferenceManager().getSharedPreferences().getString(PREF_KEY_SOURCE_PATH, Environment.getRootDirectory().getAbsolutePath()));
+                        startActivityForResult(intent, 0);
+                        return true;
+                    default:
+                        return false;
+                }
             }
         });
 
