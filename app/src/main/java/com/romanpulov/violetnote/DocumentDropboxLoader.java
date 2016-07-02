@@ -6,6 +6,9 @@ import android.widget.Toast;
 
 import com.dropbox.core.DbxWebAuth;
 import com.dropbox.core.v2.DbxClientV2;
+import com.dropbox.core.v2.files.ListFolderResult;
+import com.dropbox.core.v2.files.MediaInfo;
+import com.dropbox.core.v2.files.Metadata;
 import com.romanpulov.violetnote.dropbox.DropBoxHelper;
 
 /**
@@ -20,11 +23,6 @@ public class DocumentDropboxLoader extends DocumentLoader {
     }
 
     @Override
-    protected void preLoad() {
-        mClient = mDropBoxHelper.getClient();
-    }
-
-    @Override
     protected void load() throws Exception {
         log("Running load DropBox");
         String accessToken = mDropBoxHelper.getAccessToken();
@@ -32,12 +30,16 @@ public class DocumentDropboxLoader extends DocumentLoader {
             throw new Exception(mContext.getResources().getString(R.string.error_dropbox_auth));
         log("Access token:" + accessToken);
 
-        log("init with access token:" + accessToken);
+        ListFolderResult folderResult = mClient.files().listFolder("");
+        for (Metadata m : folderResult.getEntries()) {
+            log(m.toString());
+        }
     }
 
     public DocumentDropboxLoader(Context context) {
         super(context);
         mLoadAppearance = LOAD_APPEARANCE_ASYNC;
         mDropBoxHelper = DropBoxHelper.getInstance(context.getApplicationContext());
+        mClient = mDropBoxHelper.getClient();
     }
 }
