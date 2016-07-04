@@ -14,6 +14,7 @@ public interface ChooseItem {
     String ITEM_PARENT_NAME = "..";
 
     String getItemPath();
+    String getDisplayItemPath();
     String getItemName();
     int getItemType();
     void fillItems();

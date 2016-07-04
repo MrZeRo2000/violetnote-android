@@ -46,6 +46,11 @@ public class FileChooseItem implements ChooseItem {
     }
 
     @Override
+    public String getDisplayItemPath() {
+        return mPath;
+    }
+
+    @Override
     public String getItemName() {
         return mName;
     }

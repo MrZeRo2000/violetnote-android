@@ -148,8 +148,9 @@ public abstract class HrChooserFragment extends Fragment {
             if (chooseItem.getFillItemsError() != null) {
                 mHeader.setText(getText(R.string.error_load).toString());
                 Toast.makeText(getActivity(), chooseItem.getFillItemsError(), Toast.LENGTH_SHORT).show();
-            } else
-                mHeader.setText(chooseItem.getItemPath());
+            } else {
+                mHeader.setText(chooseItem.getDisplayItemPath());
+            }
             Collections.sort(chooseItem.getItems(), new ChooseItemComparator());
             mChooseItemList.clear();
             mChooseItemList.addAll(chooseItem.getItems());

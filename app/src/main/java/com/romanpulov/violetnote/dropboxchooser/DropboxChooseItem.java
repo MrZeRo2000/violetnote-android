@@ -18,16 +18,35 @@ public class DropboxChooseItem implements ChooseItem {
     private final DbxClientV2 mClient;
     private final Metadata mMetaData;
     private List<ChooseItem> mItems;
+    private int mItemType;
     private String mFillItemsError;
 
     public DropboxChooseItem(DbxClientV2 client, Metadata metaData) {
         mClient = client;
         mMetaData = metaData;
+
+        if (mMetaData == null)
+            mItemType = ChooseItem.ITEM_DIRECTORY;
+
+        if (mMetaData instanceof FileMetadata)
+            mItemType = ChooseItem.ITEM_FILE;
+        else if (mMetaData instanceof FolderMetadata)
+            mItemType = ChooseItem.ITEM_DIRECTORY;
+        else
+            mItemType = ChooseItem.ITEM_UNKNOWN;
     }
 
     @Override
     public void fillItems() {
         mItems = new ArrayList<>();
+
+        // for non root folder
+        if (mMetaData != null) {
+            DropboxChooseItem newItem = (DropboxChooseItem)getParentItem();
+            newItem.mItemType = ChooseItem.ITEM_PARENT;
+            mItems.add(newItem);
+        }
+
         try {
             for (Metadata m : mClient.files().listFolder(getItemPath()).getEntries()) {
                 mItems.add(new DropboxChooseItem(mClient, m));
@@ -52,6 +71,14 @@ public class DropboxChooseItem implements ChooseItem {
     }
 
     @Override
+    public String getDisplayItemPath() {
+        if (mMetaData == null)
+            return "/";
+        else
+            return getItemPath();
+    }
+
+    @Override
     public String getItemName() {
         if (mMetaData == null)
             return null;
@@ -61,15 +88,7 @@ public class DropboxChooseItem implements ChooseItem {
 
     @Override
     public int getItemType() {
-        if (mMetaData == null)
-            return ChooseItem.ITEM_DIRECTORY;
-
-        if (mMetaData instanceof FileMetadata)
-            return ChooseItem.ITEM_FILE;
-        else if (mMetaData instanceof FolderMetadata)
-            return ChooseItem.ITEM_DIRECTORY;
-        else
-            return ChooseItem.ITEM_UNKNOWN;
+        return  mItemType;
     }
 
     @Override
@@ -95,7 +114,7 @@ public class DropboxChooseItem implements ChooseItem {
         Metadata metadata = null;
         try {
             metadata = client.files().getMetadata(path);
-        } catch (DbxException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
