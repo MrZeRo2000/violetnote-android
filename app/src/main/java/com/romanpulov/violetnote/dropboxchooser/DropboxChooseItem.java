@@ -96,7 +96,7 @@ public class DropboxChooseItem implements ChooseItem {
         return mItems;
     }
 
-    private String getParentItemPath(String path) {
+    public static String getParentItemPath(String path) {
         int iPath = path.lastIndexOf("/");
         if (iPath>-1)
             return path.substring(0, iPath);
@@ -112,10 +112,13 @@ public class DropboxChooseItem implements ChooseItem {
 
     public static ChooseItem fromPath(DbxClientV2 client, String path) {
         Metadata metadata = null;
-        try {
-            metadata = client.files().getMetadata(path);
-        } catch (Exception e) {
-            e.printStackTrace();
+
+        if (!path.isEmpty()) {
+            try {
+                metadata = client.files().getMetadata(path);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         return new DropboxChooseItem(client, metadata);
