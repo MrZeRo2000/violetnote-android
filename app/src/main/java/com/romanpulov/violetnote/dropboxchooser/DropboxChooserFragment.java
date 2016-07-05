@@ -19,6 +19,7 @@ public class DropboxChooserFragment extends HrChooserFragment {
 
     public static HrChooserFragment newInstance(String initialPath) {
         HrChooserFragment fragment = new DropboxChooserFragment();
+        fragment.setFillMode(HR_MODE_ASYNC);
         Bundle args = new Bundle();
         args.putString(HR_CHOOSER_INITIAL_PATH, initialPath);
         fragment.setArguments(args);

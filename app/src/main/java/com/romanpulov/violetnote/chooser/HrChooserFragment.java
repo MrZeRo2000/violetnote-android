@@ -22,8 +22,9 @@ import java.util.List;
 
 public abstract class HrChooserFragment extends Fragment {
     public static final String HR_CHOOSER_INITIAL_PATH = "InitialPath";
-    public static final String HR_CHOOSER_RESULT_PATH = "ResultPath";
-    public static final String HR_CHOOSER_RESULT_NAME = "ResultName";
+
+    public static final int HR_MODE_SYNC = 0;
+    public static final int HR_MODE_ASYNC = 1;
 
     public interface OnChooserInteractionListener {
         void onChooserInteraction(ChooseItem item);
@@ -34,8 +35,13 @@ public abstract class HrChooserFragment extends Fragment {
     protected TextView mHeader;
     protected RecyclerView.Adapter mAdapter;
     protected List<ChooseItem> mChooseItemList;
+    protected int mFillMode;
 
     protected OnChooserInteractionListener mListener;
+
+    public void setFillMode(int fillMode) {
+        mFillMode = fillMode;
+    }
 
     public static class ChooserAdapter extends RecyclerView.Adapter<ChooserAdapter.ViewHolder> {
         private final List<ChooseItem> mItems;
@@ -113,20 +119,53 @@ public abstract class HrChooserFragment extends Fragment {
 
     protected abstract ChooseItem getChooseItem();
 
-    protected void updateFromChooseItem(ChooseItem item) {
+    /**
+     * Fills sub items for given item
+     * @param item Initial item, may be empty
+     * @return item with filled internal items
+     */
+    private ChooseItem fillChooseItem (ChooseItem item) {
+        ChooseItem result;
         if (item == null)
-            item = getChooseItem();
-        List<ChooseItem> items = item.getItems();
+            result = getChooseItem();
+        else
+            result = item;
+        result.fillItems();
+        return result;
+    }
 
-        mHeader.setText(item.getItemPath());
-        Collections.sort(items, new ChooseItemComparator());
+    /**
+     * Update UI to reflect item change
+     * @param item Item to reflect changes
+     */
+    private void updateChooseItem(ChooseItem item) {
+        if (item.getFillItemsError() != null) {
+            mHeader.setText(getText(R.string.error_load).toString());
+            Toast.makeText(getActivity(), item.getFillItemsError(), Toast.LENGTH_SHORT).show();
+        } else {
+            mHeader.setText(item.getDisplayItemPath());
+        }
+        Collections.sort(item.getItems(), new ChooseItemComparator());
         mChooseItemList.clear();
-        mChooseItemList.addAll(items);
+        mChooseItemList.addAll(item.getItems());
         mAdapter.notifyDataSetChanged();
     }
 
-    private class ChooseItemUpdaterTask extends AsyncTask<ChooseItem, Void, ChooseItem> {
+    /**
+     * Handles item changed event depending on FillMode ; sync or async
+     * @param item Item to process changes
+     */
+    private void chooseItemChanged(ChooseItem item) {
+        switch (mFillMode) {
+            case HR_MODE_SYNC:
+                updateChooseItem(fillChooseItem(item));
+                break;
+            case HR_MODE_ASYNC:
+                new ChooseItemUpdaterTask().execute(item);
+        }
+    }
 
+    private class ChooseItemUpdaterTask extends AsyncTask<ChooseItem, Void, ChooseItem> {
         @Override
         protected void onPreExecute() {
             mHeader.setText(getActivity().getText(R.string.caption_loading));
@@ -134,28 +173,13 @@ public abstract class HrChooserFragment extends Fragment {
 
         @Override
         protected ChooseItem doInBackground(ChooseItem... params) {
-            ChooseItem result;
-            if (params[0] == null)
-                result = getChooseItem();
-            else
-                result = params[0];
-            result.fillItems();
-            return result;
+            return fillChooseItem(params[0]);
         }
 
         @Override
         protected void onPostExecute(ChooseItem chooseItem) {
             if (isAdded()) {
-                if (chooseItem.getFillItemsError() != null) {
-                    mHeader.setText(getText(R.string.error_load).toString());
-                    Toast.makeText(getActivity(), chooseItem.getFillItemsError(), Toast.LENGTH_SHORT).show();
-                } else {
-                    mHeader.setText(chooseItem.getDisplayItemPath());
-                }
-                Collections.sort(chooseItem.getItems(), new ChooseItemComparator());
-                mChooseItemList.clear();
-                mChooseItemList.addAll(chooseItem.getItems());
-                mAdapter.notifyDataSetChanged();
+                updateChooseItem(chooseItem);
             }
         }
     }
@@ -187,16 +211,14 @@ public abstract class HrChooserFragment extends Fragment {
                         break;
                     case ChooseItem.ITEM_DIRECTORY:
                     case ChooseItem.ITEM_PARENT:
-                        new ChooseItemUpdaterTask().execute(item);
-                        //updateFromChooseItem(item);
+                        chooseItemChanged(item);
                         break;
                 }
             }
         });
         recyclerView.setAdapter(mAdapter);
 
-        //updateFromChooseItem(null);
-        new ChooseItemUpdaterTask().execute((ChooseItem)null);
+        chooseItemChanged(null);
 
         return v;
     }
