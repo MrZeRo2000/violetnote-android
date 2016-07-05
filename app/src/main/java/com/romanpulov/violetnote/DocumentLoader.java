@@ -51,6 +51,7 @@ public abstract class DocumentLoader {
             if (mLoadAppearance == LOAD_APPEARANCE_ASYNC) {
                 progressDialog = new ProgressDialog(mContext, R.style.DialogTheme);
                 progressDialog.setTitle(R.string.caption_loading);
+                progressDialog.show();
             }
         }
 

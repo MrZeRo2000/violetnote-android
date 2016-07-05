@@ -2,14 +2,13 @@ package com.romanpulov.violetnote;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
-
-import com.dropbox.core.DbxWebAuth;
 import com.dropbox.core.v2.DbxClientV2;
-import com.dropbox.core.v2.files.ListFolderResult;
-import com.dropbox.core.v2.files.MediaInfo;
+import com.dropbox.core.v2.files.FileMetadata;
 import com.dropbox.core.v2.files.Metadata;
 import com.romanpulov.violetnote.dropbox.DropBoxHelper;
+
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 
 /**
  * Created by romanpulov on 01.07.2016.
@@ -24,15 +23,22 @@ public class DocumentDropboxLoader extends DocumentLoader {
 
     @Override
     protected void load() throws Exception {
-        log("Running load DropBox");
         String accessToken = mDropBoxHelper.getAccessToken();
         if (accessToken == null)
             throw new Exception(mContext.getResources().getString(R.string.error_dropbox_auth));
-        log("Access token:" + accessToken);
 
-        ListFolderResult folderResult = mClient.files().listFolder("");
-        for (Metadata m : folderResult.getEntries()) {
-            log(m.toString());
+        Metadata m = mClient.files().getMetadata(mSourcePath);
+        if ((m == null) || !(m instanceof FileMetadata))
+            throw new Exception(String.format(mContext.getText(R.string.error_dropbox_load_file_data).toString(), mSourcePath));
+
+        FileMetadata fm = (FileMetadata) m;
+
+        OutputStream outputStream = new FileOutputStream(mDestFile);
+        try {
+            mClient.files().download(fm.getPathLower(), fm.getRev()).download(outputStream);
+        } finally {
+            outputStream.flush();
+            outputStream.close();
         }
     }
 
