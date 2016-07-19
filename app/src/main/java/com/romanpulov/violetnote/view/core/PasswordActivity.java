@@ -1,4 +1,4 @@
-package com.romanpulov.violetnote;
+package com.romanpulov.violetnote.view.core;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -9,6 +9,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.model.Document;
+import com.romanpulov.violetnote.model.PassDataA;
 
 import java.io.File;
 import java.util.List;

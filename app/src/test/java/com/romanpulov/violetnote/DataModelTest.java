@@ -1,5 +1,9 @@
 package com.romanpulov.violetnote;
 
+import com.romanpulov.violetnote.model.PassCategoryA;
+import com.romanpulov.violetnote.model.PassDataA;
+import com.romanpulov.violetnote.model.PassDataExp;
+import com.romanpulov.violetnote.model.PassDataReader;
 import com.romanpulov.violetnotecore.Model.PassCategory;
 import com.romanpulov.violetnotecore.Model.PassData;
 import com.romanpulov.violetnotecore.Model.PassNote;

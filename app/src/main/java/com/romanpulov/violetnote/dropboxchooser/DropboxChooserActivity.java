@@ -7,7 +7,7 @@ package com.romanpulov.violetnote.dropboxchooser;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.romanpulov.violetnote.ActionBarCompatActivity;
+import com.romanpulov.violetnote.view.core.ActionBarCompatActivity;
 import android.support.v4.app.Fragment;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.chooser.ChooseItem;

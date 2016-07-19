@@ -1,9 +1,13 @@
-package com.romanpulov.violetnote;
+package com.romanpulov.violetnote.document;
 
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
+
+import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.view.SettingsFragment;
+import com.romanpulov.violetnote.model.Document;
 
 import java.io.File;
 

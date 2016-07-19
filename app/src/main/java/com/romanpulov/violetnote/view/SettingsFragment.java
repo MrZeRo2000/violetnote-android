@@ -1,4 +1,4 @@
-package com.romanpulov.violetnote;
+package com.romanpulov.violetnote.view;
 
 
 import android.content.DialogInterface;
@@ -14,6 +14,9 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.document.DocumentLoader;
+import com.romanpulov.violetnote.document.DocumentLoaderFactory;
 import com.romanpulov.violetnote.dropboxchooser.DropboxChooserActivity;
 import com.romanpulov.violetnote.filechooser.FileChooserActivity;
 import com.romanpulov.violetnote.dropbox.DropBoxHelper;

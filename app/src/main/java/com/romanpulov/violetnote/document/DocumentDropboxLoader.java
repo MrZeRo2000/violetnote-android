@@ -1,10 +1,11 @@
-package com.romanpulov.violetnote;
+package com.romanpulov.violetnote.document;
 
 import android.content.Context;
 import android.util.Log;
 import com.dropbox.core.v2.DbxClientV2;
 import com.dropbox.core.v2.files.FileMetadata;
 import com.dropbox.core.v2.files.Metadata;
+import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.dropbox.DropBoxHelper;
 
 import java.io.FileOutputStream;
@@ -16,10 +17,6 @@ import java.io.OutputStream;
 public class DocumentDropboxLoader extends DocumentLoader {
     private DbxClientV2 mClient;
     private DropBoxHelper mDropBoxHelper;
-
-    private static void log(String message) {
-        Log.d("DocumentDropboxLoader", message);
-    }
 
     @Override
     protected void load() throws Exception {

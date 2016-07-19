@@ -1,7 +1,8 @@
-package com.romanpulov.violetnote;
+package com.romanpulov.violetnote.model;
 
 import android.content.Context;
 
+import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnotecore.AESCrypt.AESCryptException;
 import com.romanpulov.violetnotecore.AESCrypt.AESCryptService;
 import com.romanpulov.violetnotecore.Model.PassCategory;

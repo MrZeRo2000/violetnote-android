@@ -11,8 +11,6 @@ public interface ChooseItem {
     int ITEM_DIRECTORY = 2;
     int ITEM_FILE = 3;
 
-    String ITEM_PARENT_NAME = "..";
-
     String getItemPath();
     String getDisplayItemPath();
     String getItemName();

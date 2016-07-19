@@ -1,15 +1,12 @@
-package com.romanpulov.violetnote;
+package com.romanpulov.violetnote.view;
 
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.NavUtils;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.Toast;
 
-import java.util.ArrayList;
+import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.view.core.PasswordActivity;
+import com.romanpulov.violetnote.model.PassNoteA;
 
 public class NoteDetailsActivity extends PasswordActivity implements NoteDetailsFragment.OnListFragmentInteractionListener {
 

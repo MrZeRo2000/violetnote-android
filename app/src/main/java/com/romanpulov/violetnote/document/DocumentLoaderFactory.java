@@ -1,6 +1,8 @@
-package com.romanpulov.violetnote;
+package com.romanpulov.violetnote.document;
 
 import android.content.Context;
+
+import com.romanpulov.violetnote.view.SettingsFragment;
 
 /**
  * Created by romanpulov on 16.06.2016.

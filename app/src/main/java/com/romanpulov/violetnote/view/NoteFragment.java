@@ -1,4 +1,4 @@
-package com.romanpulov.violetnote;
+package com.romanpulov.violetnote.view;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -11,7 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.romanpulov.violetnote.RecyclerViewHelper.*;
+import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.view.core.PasswordActivity;
+import com.romanpulov.violetnote.view.core.RecyclerViewHelper.*;
+import com.romanpulov.violetnote.model.PassDataA;
 
 
 public class NoteFragment extends Fragment {

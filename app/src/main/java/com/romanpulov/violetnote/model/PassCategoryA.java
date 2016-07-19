@@ -1,4 +1,4 @@
-package com.romanpulov.violetnote;
+package com.romanpulov.violetnote.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;

@@ -1,7 +1,6 @@
-package com.romanpulov.violetnote;
+package com.romanpulov.violetnote.document;
 
 import android.content.Context;
-
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;

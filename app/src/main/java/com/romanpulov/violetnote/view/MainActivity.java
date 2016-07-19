@@ -1,4 +1,4 @@
-package com.romanpulov.violetnote;
+package com.romanpulov.violetnote.view;
 
 import android.content.Intent;
 import android.support.v4.app.Fragment;
@@ -7,6 +7,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+
+import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.view.core.PasswordActivity;
+import com.romanpulov.violetnote.model.Document;
+import com.romanpulov.violetnote.model.PassCategoryA;
+import com.romanpulov.violetnote.model.PassDataA;
 
 public class MainActivity extends PasswordActivity implements CategoryFragment.OnListFragmentInteractionListener, CategoryFragment.OnSearchFragmentInteractionListener {
     public static final boolean mSampleData = false;

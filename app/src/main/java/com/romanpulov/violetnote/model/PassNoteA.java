@@ -1,9 +1,7 @@
-package com.romanpulov.violetnote;
+package com.romanpulov.violetnote.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
-import com.romanpulov.violetnotecore.Model.PassNote;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -20,8 +18,8 @@ public class PassNoteA implements Parcelable {
     private String mCategoryName;
 
     public static class AttrItem {
-        final String mName;
-        final String mValue;
+        public final String mName;
+        public final String mValue;
 
         public AttrItem(String name, String value) {
             mName = name;

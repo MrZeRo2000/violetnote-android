@@ -1,14 +1,16 @@
-package com.romanpulov.violetnote;
+package com.romanpulov.violetnote.view.core;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import com.romanpulov.violetnote.R;
+
 /**
  * Created by rpulov on 24.05.2016.
  */
-public class ActionBarCompatActivity extends AppCompatActivity {
+public abstract class ActionBarCompatActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

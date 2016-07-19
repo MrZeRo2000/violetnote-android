@@ -13,7 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.romanpulov.violetnote.R;
-import com.romanpulov.violetnote.RecyclerViewHelper;
+import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 
 import java.util.ArrayList;
 import java.util.Collections;

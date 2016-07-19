@@ -1,4 +1,4 @@
-package com.romanpulov.violetnote;
+package com.romanpulov.violetnote.view.core;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -7,6 +7,8 @@ import android.text.InputType;
 import android.util.AttributeSet;
 import android.util.Xml;
 import android.widget.EditText;
+
+import com.romanpulov.violetnote.R;
 
 import org.xmlpull.v1.XmlPullParser;
 

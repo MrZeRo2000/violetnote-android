@@ -1,4 +1,4 @@
-package com.romanpulov.violetnote;
+package com.romanpulov.violetnote.view;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -7,7 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.romanpulov.violetnote.CategoryFragment.OnListFragmentInteractionListener;
+import com.romanpulov.violetnote.view.CategoryFragment.OnListFragmentInteractionListener;
+import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.model.PassCategoryA;
 
 import java.util.List;
 

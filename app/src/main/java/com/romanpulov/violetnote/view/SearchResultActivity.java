@@ -1,4 +1,4 @@
-package com.romanpulov.violetnote;
+package com.romanpulov.violetnote.view;
 
 import android.content.Intent;
 import android.support.v4.app.Fragment;
@@ -6,30 +6,41 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 
-public class NoteActivity extends PasswordActivity implements OnPassNoteItemInteractionListener {
+import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.view.core.PasswordActivity;
+import com.romanpulov.violetnote.model.PassDataA;
+import com.romanpulov.violetnote.model.PassNoteA;
+
+public class SearchResultActivity extends PasswordActivity implements OnPassNoteItemInteractionListener {
+    public static String SEARCH_TEXT = "SearchText";
+
+    private String mSearchText;
 
     private static void log(String message) {
-        Log.d("NoteActivity", message);
+        Log.d("SearchResultActivity", message);
+    }
+
+    @Override
+    protected int getFragmentContainerId() {
+        return R.id.search_result_fragment_container;
+    }
+
+    @Override
+    protected void refreshFragment() {
+        Fragment fragment = SearchResultFragment.newInstance(mPassDataA, mSearchText);
+        removeFragment().beginTransaction().add(getFragmentContainerId(), fragment).commit();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_fragment_note);
+        setContentView(R.layout.activity_search_result);
+
+        mSearchText = getIntent().getStringExtra(SEARCH_TEXT);
 
         refreshFragment();
     }
 
-    @Override
-    protected int getFragmentContainerId() {
-        return R.id.note_fragment_container;
-    }
-
-    @Override
-    protected void refreshFragment() {
-        Fragment fragment = NoteFragment.newInstance(mPassDataA);
-        removeFragment().beginTransaction().add(getFragmentContainerId(), fragment).commit();
-    }
 
     @Override
     public void onPassNoteItemInteraction(PassNoteA item) {

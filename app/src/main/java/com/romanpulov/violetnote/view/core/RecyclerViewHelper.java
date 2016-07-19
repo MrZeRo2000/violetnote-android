@@ -1,4 +1,4 @@
-package com.romanpulov.violetnote;
+package com.romanpulov.violetnote.view.core;
 
 import android.content.Context;
 import android.content.res.TypedArray;

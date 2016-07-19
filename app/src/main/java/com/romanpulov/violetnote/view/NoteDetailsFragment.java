@@ -1,18 +1,20 @@
-package com.romanpulov.violetnote;
+package com.romanpulov.violetnote.view;
 
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.List;
-import java.util.Map;
+import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.view.core.PasswordActivity;
+import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
+import com.romanpulov.violetnote.model.PassDataA;
+import com.romanpulov.violetnote.model.PassNoteA;
 
 /**
  * A fragment representing a list of Items.

@@ -1,4 +1,4 @@
-package com.romanpulov.violetnote;
+package com.romanpulov.violetnote.view;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -6,7 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.romanpulov.violetnote.NoteDetailsFragment.OnListFragmentInteractionListener;
+import com.romanpulov.violetnote.view.NoteDetailsFragment.OnListFragmentInteractionListener;
+import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.model.PassNoteA;
 
 import java.util.List;
 
