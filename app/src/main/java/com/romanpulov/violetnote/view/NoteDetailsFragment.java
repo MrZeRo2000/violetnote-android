@@ -24,7 +24,7 @@ import com.romanpulov.violetnote.model.PassNoteA;
  */
 public class NoteDetailsFragment extends Fragment {
 
-    PassDataA mPassDataA;
+    private PassDataA mPassDataA;
 
     private OnListFragmentInteractionListener mListener;
 

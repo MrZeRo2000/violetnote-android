@@ -94,9 +94,4 @@ public class NoteFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
 }

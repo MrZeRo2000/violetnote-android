@@ -21,7 +21,7 @@ public class DropboxChooseItem implements ChooseItem {
     private int mItemType;
     private String mFillItemsError;
 
-    public DropboxChooseItem(DbxClientV2 client, Metadata metaData) {
+    private DropboxChooseItem(DbxClientV2 client, Metadata metaData) {
         mClient = client;
         mMetaData = metaData;
 
@@ -104,8 +104,7 @@ public class DropboxChooseItem implements ChooseItem {
             return "";
     }
 
-    @Override
-    public ChooseItem getParentItem() {
+    private ChooseItem getParentItem() {
         String parentItemPath = getParentItemPath(getItemPath());
         return fromPath(mClient, parentItemPath);
     }

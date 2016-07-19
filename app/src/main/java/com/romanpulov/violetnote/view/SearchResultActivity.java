@@ -3,7 +3,6 @@ package com.romanpulov.violetnote.view;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 
 import com.romanpulov.violetnote.R;
@@ -12,13 +11,9 @@ import com.romanpulov.violetnote.model.PassDataA;
 import com.romanpulov.violetnote.model.PassNoteA;
 
 public class SearchResultActivity extends PasswordActivity implements OnPassNoteItemInteractionListener {
-    public static String SEARCH_TEXT = "SearchText";
+    public static final String SEARCH_TEXT = "SearchText";
 
     private String mSearchText;
-
-    private static void log(String message) {
-        Log.d("SearchResultActivity", message);
-    }
 
     @Override
     protected int getFragmentContainerId() {

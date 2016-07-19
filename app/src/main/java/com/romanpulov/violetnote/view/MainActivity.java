@@ -15,7 +15,7 @@ import com.romanpulov.violetnote.model.PassCategoryA;
 import com.romanpulov.violetnote.model.PassDataA;
 
 public class MainActivity extends PasswordActivity implements CategoryFragment.OnListFragmentInteractionListener, CategoryFragment.OnSearchFragmentInteractionListener {
-    public static final boolean mSampleData = false;
+    private static final boolean mSampleData = false;
 
     @Override
     protected int getFragmentContainerId() {

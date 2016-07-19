@@ -15,13 +15,13 @@ import java.io.File;
  * Created by romanpulov on 09.06.2016.
  */
 public abstract class DocumentLoader {
-    public static final int LOAD_APPEARANCE_SYNC = 0;
-    public static final int LOAD_APPEARANCE_ASYNC = 1;
+    static final int LOAD_APPEARANCE_SYNC = 0;
+    static final int LOAD_APPEARANCE_ASYNC = 1;
 
-    protected Context mContext;
-    protected int mLoadAppearance;
-    protected String mSourcePath;
-    protected File mDestFile;
+    final Context mContext;
+    int mLoadAppearance;
+    final String mSourcePath;
+    final File mDestFile;
 
     public interface OnDocumentLoadedListener {
         void onDocumentLoaded(String result);
@@ -29,7 +29,7 @@ public abstract class DocumentLoader {
 
     private OnDocumentLoadedListener mListener;
 
-    public DocumentLoader(Context context) {
+    DocumentLoader(Context context) {
         mContext = context;
         mSourcePath = getSourcePath();
         mDestFile = getDestFile();

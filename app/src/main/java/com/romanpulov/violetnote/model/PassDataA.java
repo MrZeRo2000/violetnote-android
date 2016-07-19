@@ -14,11 +14,7 @@ import java.util.Set;
  * Created by rpulov on 26.04.2016.
  */
 public class PassDataA implements Parcelable {
-    private static final String PASSWORD_NAME="Password";
-    private static final String CATEGORY_DATA_NAME="CategoryData";
-    private static final String NOTE_DATA_NAME="NoteData";
-
-    private String mPassword;
+    private final String mPassword;
 
     public String getPassword() {
         return mPassword;
@@ -36,7 +32,7 @@ public class PassDataA implements Parcelable {
         return mPassNoteDataA;
     }
 
-    public List<PassNoteA> getPassNoteData(PassCategoryA category) {
+    private List<PassNoteA> getPassNoteData(PassCategoryA category) {
         List<PassNoteA> passNoteData = new ArrayList<>();
         for (PassNoteA p : mPassNoteDataA) {
             if (p.getCategory().equals(category)) {

@@ -1,7 +1,6 @@
 package com.romanpulov.violetnote.document;
 
 import android.content.Context;
-import android.util.Log;
 import com.dropbox.core.v2.DbxClientV2;
 import com.dropbox.core.v2.files.FileMetadata;
 import com.dropbox.core.v2.files.Metadata;
@@ -13,10 +12,11 @@ import java.io.OutputStream;
 
 /**
  * Created by romanpulov on 01.07.2016.
+ * DropBox document loader
  */
 public class DocumentDropboxLoader extends DocumentLoader {
-    private DbxClientV2 mClient;
-    private DropBoxHelper mDropBoxHelper;
+    private final DbxClientV2 mClient;
+    private final DropBoxHelper mDropBoxHelper;
 
     @Override
     protected void load() throws Exception {

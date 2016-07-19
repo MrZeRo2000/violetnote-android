@@ -21,10 +21,10 @@ import java.util.List;
 
 
 public abstract class HrChooserFragment extends Fragment {
-    public static final String HR_CHOOSER_INITIAL_PATH = "InitialPath";
+    protected static final String HR_CHOOSER_INITIAL_PATH = "InitialPath";
 
-    public static final int HR_MODE_SYNC = 0;
-    public static final int HR_MODE_ASYNC = 1;
+    protected static final int HR_MODE_SYNC = 0;
+    protected static final int HR_MODE_ASYNC = 1;
 
     public interface OnChooserInteractionListener {
         void onChooserInteraction(ChooseItem item);
@@ -32,12 +32,12 @@ public abstract class HrChooserFragment extends Fragment {
 
     protected String mInitialPath;
 
-    protected TextView mHeader;
-    protected RecyclerView.Adapter mAdapter;
-    protected List<ChooseItem> mChooseItemList;
-    protected int mFillMode;
+    private TextView mHeader;
+    private RecyclerView.Adapter mAdapter;
+    private List<ChooseItem> mChooseItemList;
+    private int mFillMode;
 
-    protected OnChooserInteractionListener mListener;
+    private OnChooserInteractionListener mListener;
 
     public void setFillMode(int fillMode) {
         mFillMode = fillMode;

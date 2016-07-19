@@ -15,7 +15,7 @@ public class PassCategoryA implements Parcelable {
         return mSourcePassCategory;
     }
 
-    private String mCategoryName;
+    private final String mCategoryName;
 
     public String getCategoryName() {
         return mCategoryName;
@@ -59,10 +59,6 @@ public class PassCategoryA implements Parcelable {
 
     private PassCategoryA(Parcel in) {
         mCategoryName = in.readString();
-    }
-
-    public PassCategoryA(String categoryName) {
-        mCategoryName = categoryName;
     }
 
     public PassCategoryA(PassCategory sourcePassCategory) {

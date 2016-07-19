@@ -11,7 +11,7 @@ import com.romanpulov.violetnote.chooser.ChooseItem;
 public class FileChooserActivity extends ActionBarCompatActivity implements FileChooserFragment.OnChooserInteractionListener {
     public static final String CHOOSER_INITIAL_PATH = "ChooserInitialPath";
     public static final String CHOOSER_RESULT_PATH = "ChooserResultPath";
-    public static final String CHOOSER_RESULT_NAME = "ChooserResultName";
+    private static final String CHOOSER_RESULT_NAME = "ChooserResultName";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

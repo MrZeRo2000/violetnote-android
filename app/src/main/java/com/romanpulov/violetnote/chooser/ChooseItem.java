@@ -4,6 +4,7 @@ import java.util.List;
 
 /**
  * Created by romanpulov on 27.05.2016.
+ * General interface for Choose Item
  */
 public interface ChooseItem {
     int ITEM_UNKNOWN = 10;
@@ -18,5 +19,4 @@ public interface ChooseItem {
     void fillItems();
     String getFillItemsError();
     List<ChooseItem> getItems();
-    ChooseItem getParentItem();
 }

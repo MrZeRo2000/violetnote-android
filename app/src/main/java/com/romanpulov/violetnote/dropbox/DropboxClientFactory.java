@@ -9,7 +9,7 @@ import java.util.Locale;
 /**
  * Singleton instance of {@link DbxClientV2} and friends
  */
-public class DropboxClientFactory {
+class DropboxClientFactory {
 
     private static DbxClientV2 sDbxClient;
 

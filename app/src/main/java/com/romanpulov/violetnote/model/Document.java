@@ -21,12 +21,12 @@ import java.util.List;
 
 /**
  * Created by rpulov on 03.04.2016.
+ * Document data model class
  */
 public class Document {
     public static final String DOCUMENT_FILE_NAME = "document.vnf";
 
     private static Document mInstance;
-
 
     public static Document getInstance(Context context) {
         if (mInstance == null) {
@@ -35,9 +35,9 @@ public class Document {
         return mInstance;
     }
 
-    private Context mContext;
+    private final Context mContext;
 
-    private List<String> mLoadErrorList = new ArrayList<>();
+    private final List<String> mLoadErrorList = new ArrayList<>();
 
     public List<String> getLoadErrorList() {
         return mLoadErrorList;

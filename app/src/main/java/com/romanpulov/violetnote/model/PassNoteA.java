@@ -15,7 +15,6 @@ public class PassNoteA implements Parcelable {
     private final static int ATTR_COUNT = 6;
 
     private PassCategoryA mCategory;
-    private String mCategoryName;
 
     public static class AttrItem {
         public final String mName;
@@ -29,14 +28,6 @@ public class PassNoteA implements Parcelable {
 
     public PassCategoryA getCategory() {
         return mCategory;
-    }
-
-    public void setCategory(PassCategoryA category) {
-        mCategory = category;
-    }
-
-    public String getCategoryName() {
-        return mCategory == null ? mCategoryName : mCategory.getCategoryName();
     }
 
     public String getAttrId(int id) {

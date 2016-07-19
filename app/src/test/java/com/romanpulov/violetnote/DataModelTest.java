@@ -22,7 +22,7 @@ import static org.junit.Assert.assertTrue;
  */
 public class DataModelTest {
 
-    public PassData createTestPassData() {
+    private PassData createTestPassData() {
         PassData result = new PassData();
 
         PassCategory pc = new PassCategory("Category 1");
@@ -44,7 +44,7 @@ public class DataModelTest {
         return result;
     }
 
-    public PassDataA createTestPassDataA() {
+    private PassDataA createTestPassDataA() {
         PassData pd = createTestPassData();
         return PassDataA.newInstance(null, pd);
     }

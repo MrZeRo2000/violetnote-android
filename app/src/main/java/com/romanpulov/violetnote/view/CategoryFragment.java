@@ -20,8 +20,6 @@ import com.romanpulov.violetnote.view.core.RecyclerViewHelper.*;
 import com.romanpulov.violetnote.model.PassCategoryA;
 import com.romanpulov.violetnote.model.PassDataA;
 
-import java.util.List;
-
 /**
  * A fragment representing a list of Items.
  * <p/>
@@ -32,8 +30,6 @@ public class CategoryFragment extends Fragment {
 
     private OnListFragmentInteractionListener mListener;
     private OnSearchFragmentInteractionListener mSearchListener;
-
-    private List<PassCategoryA> mPassCategoryDataA;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -51,12 +47,6 @@ public class CategoryFragment extends Fragment {
         args.putParcelable(PasswordActivity.PASS_DATA, passDataA);
         fragment.setArguments(args);
         return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
     }
 
     public void showSearchLayout() {

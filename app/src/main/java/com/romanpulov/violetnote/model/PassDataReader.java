@@ -15,7 +15,7 @@ import java.util.Map;
  * Created by rpulov on 25.04.2016.
  */
 public class PassDataReader {
-    private PassData mPassData;
+    private final PassData mPassData;
 
     private List<PassCategoryA> mPassCategoryDataA;
 

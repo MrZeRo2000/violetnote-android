@@ -22,12 +22,12 @@ import java.util.List;
  */
 public abstract class PasswordActivity extends ActionBarCompatActivity {
     public static final String PASS_DATA = "PassData";
-    public static final String PASSWORD_REQUIRED = "PasswordRequired";
+    protected static final String PASSWORD_REQUIRED = "PasswordRequired";
 
     protected PassDataA mPassDataA;
-    protected boolean mPasswordRequired = true;
+    private boolean mPasswordRequired = true;
 
-    protected String getPassword() {
+    private String getPassword() {
         if (mPassDataA != null)
             return mPassDataA.getPassword();
         else
@@ -36,11 +36,11 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
 
     protected abstract int getFragmentContainerId();
 
-    protected boolean fragmentExists() {
+    private boolean fragmentExists() {
         return (getFragment() != null);
     }
 
-    public Fragment getFragment() {
+    protected Fragment getFragment() {
         FragmentManager fm = getSupportFragmentManager();
         return fm.findFragmentById(getFragmentContainerId());
     }
@@ -62,7 +62,7 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
 
     private class LoadPassDataAsyncTask extends AsyncTask<Void, Void, Boolean> {
         ProgressDialog progressDialog;
-        String mPassword;
+        final String mPassword;
         final Context mContext;
         Boolean mFileExists;
 

@@ -13,8 +13,7 @@ public class DropboxChooserFragment extends HrChooserFragment {
     @Override
     protected ChooseItem getChooseItem() {
         DropBoxHelper dropBoxHelper = DropBoxHelper.getInstance(getActivity().getApplication());
-        ChooseItem item = DropboxChooseItem.fromPath(dropBoxHelper.getClient(), DropboxChooseItem.getParentItemPath(mInitialPath));
-        return item;
+        return DropboxChooseItem.fromPath(dropBoxHelper.getClient(), DropboxChooseItem.getParentItemPath(mInitialPath));
     }
 
     public static HrChooserFragment newInstance(String initialPath) {

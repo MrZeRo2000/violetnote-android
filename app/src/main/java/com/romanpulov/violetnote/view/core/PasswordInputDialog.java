@@ -15,7 +15,7 @@ import org.xmlpull.v1.XmlPullParser;
 /**
  * Created by rpulov on 27.03.2016.
  */
-public class PasswordInputDialog {
+class PasswordInputDialog {
 
     interface OnPasswordInputListener {
         void onPasswordInput(String password);

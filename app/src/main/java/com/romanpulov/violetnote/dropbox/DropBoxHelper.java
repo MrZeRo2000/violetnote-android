@@ -3,8 +3,6 @@ package com.romanpulov.violetnote.dropbox;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.dropbox.core.DbxException;
-import com.dropbox.core.DbxWebAuth;
 import com.dropbox.core.android.Auth;
 import com.dropbox.core.v2.DbxClientV2;
 
@@ -14,16 +12,13 @@ import com.dropbox.core.v2.DbxClientV2;
 public class DropBoxHelper {
     public class DBHException extends Exception {
         public DBHException() {}
-
-        public DBHException(String message) {
-            super(message);
-        }
     }
+
     public class DBHNoAccessTokenException extends DBHException {
         public DBHNoAccessTokenException() {
             super();
         }
-    };
+    }
 
     // public constants
     public final static String CLIENT_IDENTIFIER = "com.romanpulov.violetnote";
@@ -32,8 +27,8 @@ public class DropBoxHelper {
     private static final String SHARED_PREFERENCES_NAME = "dropbox-preferences";
     private static final String SHARED_PREFERENCES_ACCESS_TOKEN = "access-token";
 
-    private Context mContext;
-    private SharedPreferences mPrefs;
+    private final Context mContext;
+    private final SharedPreferences mPrefs;
     private String mAccessToken;
 
     private static DropBoxHelper mInstance;
@@ -63,7 +58,7 @@ public class DropBoxHelper {
         Auth.startOAuth2Authentication(mContext, appKey);
     }
 
-    public String getAuthToken() {
+    private String getAuthToken() {
         return Auth.getOAuth2Token();
     }
 

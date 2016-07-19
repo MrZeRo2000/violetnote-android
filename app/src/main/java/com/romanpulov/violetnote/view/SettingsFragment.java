@@ -31,10 +31,10 @@ public class SettingsFragment extends PreferenceFragment {
     private static final int DEFAULT_SOURCE_TYPE = SOURCE_TYPE_FILE;
 
     public static final String PREF_KEY_SOURCE_PATH = "pref_source_path";
-    public static final String PREF_KEY_SOURCE_TYPE = "pref_source_type";
-    public static final String PREF_KEY_LOAD = "pref_load";
-    public static final String PREF_KEY_LAST_LOADED = "pref_last_loaded";
-    public static final String PREF_KEY_ACCOUNT_DROPBOX = "pref_account_dropbox";
+    private static final String PREF_KEY_SOURCE_TYPE = "pref_source_type";
+    private static final String PREF_KEY_LOAD = "pref_load";
+    private static final String PREF_KEY_LAST_LOADED = "pref_last_loaded";
+    private static final String PREF_KEY_ACCOUNT_DROPBOX = "pref_account_dropbox";
 
     public SettingsFragment() {
         // Required empty public constructor

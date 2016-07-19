@@ -10,15 +10,15 @@ import java.util.List;
  * Created by romanpulov on 27.05.2016.
  */
 public class FileChooseItem implements ChooseItem {
-    private File mFile;
+    private final File mFile;
 
     @Override
     public String getFillItemsError() {
         return null;
     }
 
-    private String mPath;
-    private String mName;
+    private final String mPath;
+    private final String mName;
     private int mItemType;
     private List<ChooseItem> mItems;
 
@@ -78,14 +78,6 @@ public class FileChooseItem implements ChooseItem {
     @Override
     public List<ChooseItem> getItems() {
         return mItems;
-    }
-
-    public ChooseItem getParentItem() {
-        File parentFile = mFile.getParentFile();
-        if (parentFile != null)
-            return new FileChooseItem(parentFile);
-        else
-            return null;
     }
 
     @Override

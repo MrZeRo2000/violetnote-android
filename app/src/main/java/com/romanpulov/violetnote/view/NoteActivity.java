@@ -3,7 +3,6 @@ package com.romanpulov.violetnote.view;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 
 import com.romanpulov.violetnote.R;
@@ -12,11 +11,6 @@ import com.romanpulov.violetnote.model.PassDataA;
 import com.romanpulov.violetnote.model.PassNoteA;
 
 public class NoteActivity extends PasswordActivity implements OnPassNoteItemInteractionListener {
-
-    private static void log(String message) {
-        Log.d("NoteActivity", message);
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
