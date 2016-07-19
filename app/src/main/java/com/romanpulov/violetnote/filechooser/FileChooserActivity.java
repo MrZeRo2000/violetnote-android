@@ -16,12 +16,12 @@ public class FileChooserActivity extends ActionBarCompatActivity implements File
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_fragment_hr_chooser);
+        //setContentView(R.layout.activity_fragment_hr_chooser);
 
         String initialPath = getIntent().getStringExtra(CHOOSER_INITIAL_PATH);
 
         Fragment fragment = FileChooserFragment.newInstance(initialPath);
-        getSupportFragmentManager().beginTransaction().add(R.id.hr_fragment_container, fragment).commit();
+        getSupportFragmentManager().beginTransaction().add(android.R.id.content, fragment).commit();
     }
 
     @Override

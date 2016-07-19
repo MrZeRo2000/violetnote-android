@@ -18,11 +18,6 @@ public class MainActivity extends PasswordActivity implements CategoryFragment.O
     private static final boolean mSampleData = false;
 
     @Override
-    protected int getFragmentContainerId() {
-        return R.id.fragment_container;
-    }
-
-    @Override
     protected void refreshFragment() {
         Fragment fragment = CategoryFragment.newInstance(mPassDataA);
         removeFragment().beginTransaction().add(getFragmentContainerId(), fragment).commit();
@@ -46,12 +41,6 @@ public class MainActivity extends PasswordActivity implements CategoryFragment.O
         intent.putExtra(PASSWORD_REQUIRED, false);
         intent.putExtra(SearchResultActivity.SEARCH_TEXT, searchText);
         startActivityForResult(intent, 0);
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_fragment_main);
     }
 
     /**

@@ -9,12 +9,6 @@ import com.romanpulov.violetnote.view.core.PasswordActivity;
 import com.romanpulov.violetnote.model.PassNoteA;
 
 public class NoteDetailsActivity extends PasswordActivity implements NoteDetailsFragment.OnListFragmentInteractionListener {
-
-    @Override
-    protected int getFragmentContainerId() {
-        return R.id.note_details_fragment_container;
-    }
-
     @Override
     protected void refreshFragment() {
         Fragment fragment = NoteDetailsFragment.newInstance(mPassDataA);
@@ -24,7 +18,6 @@ public class NoteDetailsActivity extends PasswordActivity implements NoteDetails
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_fragment_note_details);
 
         refreshFragment();
     }

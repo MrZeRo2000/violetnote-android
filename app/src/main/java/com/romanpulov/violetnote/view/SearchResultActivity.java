@@ -16,11 +16,6 @@ public class SearchResultActivity extends PasswordActivity implements OnPassNote
     private String mSearchText;
 
     @Override
-    protected int getFragmentContainerId() {
-        return R.id.search_result_fragment_container;
-    }
-
-    @Override
     protected void refreshFragment() {
         Fragment fragment = SearchResultFragment.newInstance(mPassDataA, mSearchText);
         removeFragment().beginTransaction().add(getFragmentContainerId(), fragment).commit();
@@ -29,7 +24,6 @@ public class SearchResultActivity extends PasswordActivity implements OnPassNote
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_result);
 
         mSearchText = getIntent().getStringExtra(SEARCH_TEXT);
 

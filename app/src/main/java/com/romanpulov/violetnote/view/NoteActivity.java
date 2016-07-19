@@ -14,14 +14,8 @@ public class NoteActivity extends PasswordActivity implements OnPassNoteItemInte
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_fragment_note);
 
         refreshFragment();
-    }
-
-    @Override
-    protected int getFragmentContainerId() {
-        return R.id.note_fragment_container;
     }
 
     @Override
