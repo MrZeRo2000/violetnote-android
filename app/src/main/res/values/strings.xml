@@ -10,14 +10,9 @@
 
     <string name="layout_notes_count">Notes : %d</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
-    <string name="layout_note_details_system">System</string>
     <string name="action_refresh">Refresh</string>
     <string name="action_settings">Settings</string>
     <string name="action_search">Search</string>
-    <string name="action_search_hint">system or user</string>
 
     <!-- Preferences -->
     <string name="pref_title_data">Data</string>
@@ -32,11 +27,6 @@
         <item>Local storage</item>
         <item>Dropbox</item>
     </string-array>
-    <string-array name="pref_source_type_values">
-        <item>local_storage</item>
-        <item>dropbox</item>
-    </string-array>
-    <string name="pref_title_source_type_default">local_storage</string>
     <string name="pref_message_last_loaded_never">Last loaded: Never</string>
     <string name="pref_message_last_loaded_format">Last loaded: %s</string>
 
