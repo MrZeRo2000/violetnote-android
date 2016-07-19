@@ -36,7 +36,7 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
 
     protected int getFragmentContainerId() {
         return android.R.id.content;
-    };
+    }
 
     private boolean fragmentExists() {
         return (getFragment() != null);
