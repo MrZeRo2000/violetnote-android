@@ -33,6 +33,7 @@
             android:layout_centerVertical="true"
             android:hint="@string/hint_search"
             android:textCursorDrawable="@null"
+            android:imeOptions="actionSearch"
             />
 
     </RelativeLayout>

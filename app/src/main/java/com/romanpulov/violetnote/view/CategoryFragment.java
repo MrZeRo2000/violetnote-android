@@ -10,6 +10,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -88,11 +89,17 @@ public class CategoryFragment extends Fragment {
         searchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
+                if (
+                        // editor with action
+                        (i == EditorInfo.IME_ACTION_SEARCH) ||
+                        // editor with Enter button
+                        ((i == EditorInfo.IME_ACTION_UNSPECIFIED) && (keyEvent != null) && (keyEvent.getAction() == KeyEvent.ACTION_DOWN))
+                ) {
                     searchView.setVisibility(View.GONE);
                     mSearchListener.onSearchFragmentInteraction(textView.getText().toString());
                     //clear search text for future
                     searchEditText.setText(null);
+                    return true;
                 }
                 return false;
             }

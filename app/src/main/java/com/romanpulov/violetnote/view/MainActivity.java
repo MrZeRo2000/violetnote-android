@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.view.core.PasswordActivity;
@@ -35,7 +34,6 @@ public class MainActivity extends PasswordActivity implements CategoryFragment.O
 
     @Override
     public void onSearchFragmentInteraction(String searchText) {
-        Toast.makeText(this, "Search with value " + searchText, Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, SearchResultActivity.class);
         intent.putExtra(PASS_DATA, PassDataA.newSearchInstance(mPassDataA, searchText));
         intent.putExtra(PASSWORD_REQUIRED, false);
@@ -65,19 +63,6 @@ public class MainActivity extends PasswordActivity implements CategoryFragment.O
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
-
-        // Associate searchable configuration with the SearchView
-        /*
-        SearchManager searchManager =
-                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView =
-                (SearchView) menu.findItem(R.id.action_search).getActionView();
-        searchView.setSearchableInfo(
-                searchManager.getSearchableInfo(getComponentName()));
-        searchView.setIconifiedByDefault(false);
-        searchView.setIconified(false);
-        */
-
         return true;
     }
 
