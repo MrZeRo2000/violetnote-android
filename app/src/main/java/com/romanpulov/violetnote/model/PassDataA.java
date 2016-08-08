@@ -59,7 +59,7 @@ public class PassDataA implements Parcelable {
         return newPassDataA;
     }
 
-    public static PassDataA newSearchInstance(PassDataA source, String searchString) {
+    public static PassDataA newSearchInstance(PassDataA source, String searchString, boolean isSearchSystem, boolean isSearchUser) {
         final int max_attr_count = 2;
 
         Set<PassCategoryA> categorySet = new HashSet<>();
@@ -69,12 +69,16 @@ public class PassDataA implements Parcelable {
             int attrCount = 0;
             String searchRegExpString = "(?i:.*" + searchString + ".*)";
             for (String a : note.getNoteAttr().keySet()) {
-                if (note.getNoteAttr().get(a).matches(searchRegExpString)) {
-                    if (noteList == null)
-                        noteList =  new ArrayList<>();
-                    noteList.add(note);
-                    categorySet.add(note.getCategory());
-                    break;
+                //check for allowed search criteria
+                if (((attrCount == 0) && isSearchSystem) || ((attrCount == 1) && isSearchUser)) {
+                    //check if matches expression
+                    if (note.getNoteAttr().get(a).matches(searchRegExpString)) {
+                        if (noteList == null)
+                            noteList = new ArrayList<>();
+                        noteList.add(note);
+                        categorySet.add(note.getCategory());
+                        break;
+                    }
                 }
 
                 attrCount ++;

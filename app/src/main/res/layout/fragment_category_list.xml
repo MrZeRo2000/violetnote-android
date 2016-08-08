@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/text_margin"
         android:id="@+id/search_layout"
-        android:visibility="visible"
+        android:visibility="gone"
         >
 
         <Button
@@ -40,15 +40,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/search_system_check"
-            android:layout_toLeftOf="@id/cancel_button"
+            android:layout_toLeftOf="@+id/search_user_check"
             android:text="System"
             android:checked="true"
             />
         <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/search_name_check"
-            android:layout_toLeftOf="@id/search_system_check"
+            android:id="@+id/search_user_check"
+            android:layout_toLeftOf="@+id/cancel_button"
             android:text="User"
             android:checked="true"
             />

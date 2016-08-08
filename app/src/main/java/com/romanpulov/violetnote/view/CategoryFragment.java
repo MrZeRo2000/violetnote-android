@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -96,7 +97,11 @@ public class CategoryFragment extends Fragment {
                         ((i == EditorInfo.IME_ACTION_UNSPECIFIED) && (keyEvent != null) && (keyEvent.getAction() == KeyEvent.ACTION_DOWN))
                 ) {
                     searchView.setVisibility(View.GONE);
-                    mSearchListener.onSearchFragmentInteraction(textView.getText().toString());
+
+                    final CheckBox searchSystemCheckBox = (CheckBox) searchView.findViewById(R.id.search_system_check);
+                    final CheckBox searchUserCheckBox = (CheckBox) searchView.findViewById(R.id.search_user_check);
+
+                    mSearchListener.onSearchFragmentInteraction(textView.getText().toString(), searchSystemCheckBox.isChecked(), searchUserCheckBox.isChecked());
                     //clear search text for future
                     searchEditText.setText(null);
                     return true;
@@ -140,6 +145,6 @@ public class CategoryFragment extends Fragment {
     }
 
     public interface OnSearchFragmentInteractionListener {
-        void onSearchFragmentInteraction(String searchText);
+        void onSearchFragmentInteraction(String searchText, boolean isSearchSystem, boolean isSearchUser);
     }
 }

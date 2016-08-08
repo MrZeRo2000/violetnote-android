@@ -33,9 +33,9 @@ public class MainActivity extends PasswordActivity implements CategoryFragment.O
     }
 
     @Override
-    public void onSearchFragmentInteraction(String searchText) {
+    public void onSearchFragmentInteraction(String searchText, boolean isSearchSystem, boolean isSearchUser) {
         Intent intent = new Intent(this, SearchResultActivity.class);
-        intent.putExtra(PASS_DATA, PassDataA.newSearchInstance(mPassDataA, searchText));
+        intent.putExtra(PASS_DATA, PassDataA.newSearchInstance(mPassDataA, searchText, isSearchSystem, isSearchUser));
         intent.putExtra(PASSWORD_REQUIRED, false);
         intent.putExtra(SearchResultActivity.SEARCH_TEXT, searchText);
         startActivityForResult(intent, 0);
