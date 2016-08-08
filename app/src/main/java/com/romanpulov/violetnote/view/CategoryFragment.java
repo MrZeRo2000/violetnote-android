@@ -56,7 +56,7 @@ public class CategoryFragment extends Fragment {
     public void showSearchLayout() {
         View view = getView();
         if (view != null) {
-            View searchView = view.findViewById(R.id.search_layout);
+            View searchView = view.findViewById(R.id.search_layout_include);
             if (searchView != null) {
                 searchView.setVisibility(View.VISIBLE);
             }
@@ -78,7 +78,7 @@ public class CategoryFragment extends Fragment {
         // add decoration
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_white_black_gradient));
 
-        final View searchView = view.findViewById(R.id.search_layout);
+        final View searchView = view.findViewById(R.id.search_layout_include);
 
         Button searchCancelButton = (Button)view.findViewById(R.id.cancel_button);
         searchCancelButton.setOnClickListener(new View.OnClickListener() {

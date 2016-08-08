@@ -43,5 +43,8 @@
     <string name="error_dropbox_other">Dropbox error: %s</string>
     <string name="error_dropbox_load_file_data">No information for file : %s</string>
 
+    <!-- UI Text -->
+    <string name="ui_text_search_system">System</string>
+    <string name="ui_text_search_user">User</string>
 
 </resources>

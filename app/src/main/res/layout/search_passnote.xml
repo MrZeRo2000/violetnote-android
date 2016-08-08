@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/text_margin"
+    android:id="@+id/search_layout"
+    >
+
+    <Button
+        android:layout_width="@dimen/search_button_size"
+        android:layout_height="@dimen/search_button_size"
+        android:id="@+id/cancel_button"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="false"
+        android:background="@drawable/ic_action_cancel"
+        />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/search_edit_text"
+        android:layout_toLeftOf="@id/cancel_button"
+        android:inputType="text"
+        android:layout_centerVertical="false"
+        android:hint="@string/hint_search"
+        android:textCursorDrawable="@null"
+        android:imeOptions="actionSearch"
+        />
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/search_system_check"
+        android:layout_toLeftOf="@+id/search_user_check"
+        android:text="@string/ui_text_search_system"
+        android:checked="true"
+        />
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/search_user_check"
+        android:layout_toLeftOf="@+id/cancel_button"
+        android:text="@string/ui_text_search_user"
+        android:checked="true"
+        />
+    >
+
+</RelativeLayout>
