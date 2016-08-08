@@ -6,7 +6,7 @@
     <string name="cancel">Cancel</string>
     <string name="password_required">Password required</string>
     <string name="caption_loading">Loading &#8230;</string>
-    <string name="hint_search">Search by system or user</string>
+    <string name="hint_search">Search &#8230;</string>
 
     <string name="layout_notes_count">Notes : %d</string>
 

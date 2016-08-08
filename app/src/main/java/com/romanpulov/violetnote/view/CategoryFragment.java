@@ -32,7 +32,8 @@ import com.romanpulov.violetnote.model.PassDataA;
 public class CategoryFragment extends Fragment {
 
     private OnListFragmentInteractionListener mListener;
-    private OnSearchFragmentInteractionListener mSearchListener;
+    private OnSearchInteractionListener mSearchListener;
+    private SearchActionHelper mSearchActionHelper;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -54,13 +55,8 @@ public class CategoryFragment extends Fragment {
     }
 
     public void showSearchLayout() {
-        View view = getView();
-        if (view != null) {
-            View searchView = view.findViewById(R.id.search_layout_include);
-            if (searchView != null) {
-                searchView.setVisibility(View.VISIBLE);
-            }
-        }
+        if (mSearchActionHelper != null)
+            mSearchActionHelper.showLayout();
     }
 
     @Override
@@ -75,42 +71,13 @@ public class CategoryFragment extends Fragment {
         PassDataA passDataA = this.getArguments().getParcelable(PasswordActivity.PASS_DATA);
         if ((passDataA != null) && (passDataA.getPassCategoryData() != null))
             recyclerView.setAdapter(new CategoryRecyclerViewAdapter(getActivity(), passDataA.getPassCategoryData(), mListener));
+
         // add decoration
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_white_black_gradient));
 
-        final View searchView = view.findViewById(R.id.search_layout_include);
-
-        Button searchCancelButton = (Button)view.findViewById(R.id.cancel_button);
-        searchCancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                searchView.setVisibility(View.GONE);
-            }
-        });
-
-        final EditText searchEditText = (EditText)view.findViewById(R.id.search_edit_text);
-        searchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                if (
-                        // editor with action
-                        (i == EditorInfo.IME_ACTION_SEARCH) ||
-                        // editor with Enter button
-                        ((i == EditorInfo.IME_ACTION_UNSPECIFIED) && (keyEvent != null) && (keyEvent.getAction() == KeyEvent.ACTION_DOWN))
-                ) {
-                    searchView.setVisibility(View.GONE);
-
-                    final CheckBox searchSystemCheckBox = (CheckBox) searchView.findViewById(R.id.search_system_check);
-                    final CheckBox searchUserCheckBox = (CheckBox) searchView.findViewById(R.id.search_user_check);
-
-                    mSearchListener.onSearchFragmentInteraction(textView.getText().toString(), searchSystemCheckBox.isChecked(), searchUserCheckBox.isChecked());
-                    //clear search text for future
-                    searchEditText.setText(null);
-                    return true;
-                }
-                return false;
-            }
-        });
+        // setup search action helper
+        mSearchActionHelper = new SearchActionHelper(view, SearchActionHelper.DISPLAY_TYPE_SYSTEM_USER);
+        mSearchActionHelper.setOnSearchInteractionListener(mSearchListener);
 
         return view;
     }
@@ -126,8 +93,8 @@ public class CategoryFragment extends Fragment {
             throw new RuntimeException(context.toString()
                     + " must implement OnPassNoteItemInteractionListener");
         }
-        if (context instanceof OnSearchFragmentInteractionListener) {
-            mSearchListener = (OnSearchFragmentInteractionListener) context;
+        if (context instanceof OnSearchInteractionListener) {
+            mSearchListener = (OnSearchInteractionListener) context;
         }
         else {
             throw new RuntimeException(context.toString()
@@ -144,9 +111,5 @@ public class CategoryFragment extends Fragment {
 
     public interface OnListFragmentInteractionListener {
         void onListFragmentInteraction(PassCategoryA item);
-    }
-
-    public interface OnSearchFragmentInteractionListener {
-        void onSearchFragmentInteraction(String searchText, boolean isSearchSystem, boolean isSearchUser);
     }
 }

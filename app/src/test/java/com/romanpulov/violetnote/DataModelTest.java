@@ -94,17 +94,17 @@ public class DataModelTest {
     public void SearchInstanceTest() {
         PassDataA pda = createTestPassDataA();
 
-        PassDataA sda = PassDataA.newSearchInstance(pda, "eOr");
+        PassDataA sda = PassDataA.newSearchInstance(pda, "eOr", true, true);
         assertEquals(sda.getPassCategoryData().size(), 1);
         assertEquals(sda.getPassNoteData().size(), 1);
 
-        sda = PassDataA.newSearchInstance(pda, "yste");
+        sda = PassDataA.newSearchInstance(pda, "yste", true, true);
         assertEquals(sda.getPassCategoryData().size(), 2);
 
-        sda = PassDataA.newSearchInstance(pda, "stem 12");
+        sda = PassDataA.newSearchInstance(pda, "stem 12", true, true);
         assertEquals(sda.getPassCategoryData().size(), 1);
 
-        sda = PassDataA.newSearchInstance(pda, "xxx");
+        sda = PassDataA.newSearchInstance(pda, "xxx", true, true);
         assertNull(sda.getPassCategoryData());
         assertNull(sda.getPassNoteData());
     }

@@ -3,8 +3,10 @@ package com.romanpulov.violetnote.view;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 
+import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.view.core.PasswordActivity;
 import com.romanpulov.violetnote.model.PassDataA;
 import com.romanpulov.violetnote.model.PassNoteA;
@@ -32,14 +34,27 @@ public class NoteActivity extends PasswordActivity implements OnPassNoteItemInte
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.passnote, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Workaround for issue with back button in toolbar default behavior
-        if (item.getItemId() == android.R.id.home) {
-            updateResult();
-            finish();
-            return true;
-        } else
-            return super.onOptionsItemSelected(item);
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                updateResult();
+                finish();
+                return true;
+            case R.id.action_search:
+                Fragment fragment = getFragment();
+                if (fragment != null)
+                    ((NoteFragment)fragment).showSearchLayout();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override

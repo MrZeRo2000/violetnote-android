@@ -56,6 +56,17 @@ public class NoteFragment extends Fragment {
         }
     }
 
+    public void showSearchLayout() {
+        View view = getView();
+        if (view != null) {
+            View searchView = view.findViewById(R.id.search_layout_include);
+            if (searchView != null) {
+                searchView.findViewById(R.id.search_system_check).setVisibility(View.GONE);
+                searchView.findViewById(R.id.search_user_check).setVisibility(View.GONE);
+                searchView.setVisibility(View.VISIBLE);
+            }
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
