@@ -2,20 +2,13 @@ package com.romanpulov.violetnote.view;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.view.core.PasswordActivity;
@@ -98,9 +91,8 @@ public class CategoryFragment extends Fragment {
         }
         else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnSearchFragmentInteractionListener");
+                    + " must implement OnSearchInteractionListener");
         }
-
     }
 
     @Override
