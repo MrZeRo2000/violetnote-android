@@ -2,6 +2,7 @@ package com.romanpulov.violetnote.view;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -38,6 +39,7 @@ public class CategoryFragment extends Fragment {
      * fragment (e.g. upon screen orientation changes).
      */
     public CategoryFragment() {
+
     }
 
     // TODO: Customize parameter initialization

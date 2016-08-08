@@ -11,9 +11,10 @@
         android:id="@+id/category_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/text_margin_half"
         android:layout_marginLeft="@dimen/text_margin"
         android:layout_marginRight="@dimen/text_margin"
+        android:layout_marginTop="@dimen/text_margin_half"
+        android:layout_marginBottom="@dimen/text_margin_half"
         android:textAppearance="@style/Header2Text" />
 
     <TextView
@@ -22,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/text_margin"
         android:layout_marginRight="@dimen/text_margin"
-        android:layout_marginTop="@dimen/text_margin_half"
+        android:layout_marginTop="0px"
         android:layout_marginBottom="@dimen/text_margin_half"
         android:textAppearance="@style/Text3" />
 </LinearLayout>

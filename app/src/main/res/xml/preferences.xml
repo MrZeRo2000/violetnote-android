@@ -26,6 +26,15 @@
             android:title="@string/pref_title_account_dropbox"
             />
     </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/pref_title_interface"
+        android:layout="@layout/preferences_category"
+        >
+        <CheckBoxPreference
+            android:key="hide_category_details"
+            android:title="@string/pref_interface_hide_category_details"
+            />
 
+    </PreferenceCategory>
 
 </PreferenceScreen>

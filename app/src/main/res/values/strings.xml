@@ -18,6 +18,7 @@
     <string name="pref_title_data">Data</string>
     <string name="pref_title_account">Account</string>
     <string name="pref_title_account_dropbox">Dropbox</string>
+    <string name="pref_title_interface">Interface</string>
 
     <!-- Source type -->
     <string name="pref_title_source_type">Source type</string>
@@ -29,6 +30,8 @@
     </string-array>
     <string name="pref_message_last_loaded_never">Last loaded: Never</string>
     <string name="pref_message_last_loaded_format">Last loaded: %s</string>
+
+    <string name="pref_interface_hide_category_details">Hide category details</string>
 
     <!-- Exceptions errors -->
     <string name="error_file_not_found">File not found</string>
