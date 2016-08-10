@@ -22,7 +22,7 @@ import java.util.List;
  */
 public abstract class PasswordActivity extends ActionBarCompatActivity {
     public static final String PASS_DATA = "PassData";
-    protected static final String PASSWORD_REQUIRED = "PasswordRequired";
+    public static final String PASSWORD_REQUIRED = "PasswordRequired";
 
     protected PassDataA mPassDataA;
     private boolean mPasswordRequired = true;

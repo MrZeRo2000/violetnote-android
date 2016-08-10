@@ -8,6 +8,13 @@
     tools:context=".view.NoteFragment"
     >
 
+    <include layout="@layout/search_passnote"
+        android:id="@+id/search_layout_include"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        />
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -15,6 +22,7 @@
         android:layout_marginBottom="@dimen/text_margin_half"
         android:padding="@dimen/text_margin_half"
         android:id="@+id/headerTextView"
+        android:layout_below="@+id/search_layout_include"
         android:textAppearance="@style/Header1Text"
         android:background="@color/windowBackgroundLight"
         />

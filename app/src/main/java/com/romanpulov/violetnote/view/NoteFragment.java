@@ -1,6 +1,7 @@
 package com.romanpulov.violetnote.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,6 +25,7 @@ public class NoteFragment extends Fragment {
     }
 
     private PassDataA mPassDataA;
+    private SearchActionHelper mSearchActionHelper;
 
     private OnPassNoteItemInteractionListener mListener;
 
@@ -57,15 +59,8 @@ public class NoteFragment extends Fragment {
     }
 
     public void showSearchLayout() {
-        View view = getView();
-        if (view != null) {
-            View searchView = view.findViewById(R.id.search_layout_include);
-            if (searchView != null) {
-                searchView.findViewById(R.id.search_system_check).setVisibility(View.GONE);
-                searchView.findViewById(R.id.search_user_check).setVisibility(View.GONE);
-                searchView.setVisibility(View.VISIBLE);
-            }
-        }
+        if (mSearchActionHelper != null)
+            mSearchActionHelper.showLayout();
     }
 
     @Override
@@ -82,8 +77,22 @@ public class NoteFragment extends Fragment {
         Context context = view.getContext();
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setAdapter(new NoteRecyclerViewAdapter(mPassDataA.getPassNoteData(), mListener));
+
         // add decoration
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_orange_black_gradient));
+
+        // setup search action helper
+        mSearchActionHelper = new SearchActionHelper(view, SearchActionHelper.DISPLAY_TYPE_SYSTEM_USER);
+        mSearchActionHelper.setOnSearchInteractionListener(new OnSearchInteractionListener() {
+            @Override
+            public void onSearchFragmentInteraction(String searchText, boolean isSearchSystem, boolean isSearchUser) {
+                Intent intent = new Intent(getActivity(), SearchResultActivity.class);
+                intent.putExtra(PasswordActivity.PASS_DATA, PassDataA.newSearchInstance(mPassDataA, searchText, isSearchSystem, isSearchUser));
+                intent.putExtra(PasswordActivity.PASSWORD_REQUIRED, false);
+                intent.putExtra(SearchResultActivity.SEARCH_TEXT, searchText);
+                startActivityForResult(intent, 0);
+            }
+        });
 
         return view;
     }

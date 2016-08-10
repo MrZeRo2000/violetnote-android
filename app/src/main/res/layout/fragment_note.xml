@@ -7,13 +7,6 @@
     android:background="@drawable/list_selector"
     >
 
-    <include layout="@layout/search_passnote"
-        android:id="@+id/search_layout_include"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        />
-
     <TextView
         android:id="@+id/system"
         android:layout_width="wrap_content"
