@@ -37,8 +37,7 @@
         <activity
             android:name=".view.CategoryActivity"
             android:parentActivityName=".view.DashboardActivity"
-            android:theme="@style/MainAppTheme">
-        </activity>
+            android:theme="@style/MainAppTheme"></activity>
         <activity
             android:name=".view.NoteActivity"
             android:parentActivityName=".view.CategoryActivity"
@@ -65,6 +64,12 @@
             android:name=".dropboxchooser.DropboxChooserActivity"
             android:parentActivityName=".view.SettingsActivity"
             android:theme="@style/MainAppTheme" />
+        <activity
+            android:name=".view.BasicNoteActivity"
+            android:parentActivityName=".view.DashboardActivity"
+            android:label="@string/title_activity_basic_note"
+            android:theme="@style/MainAppTheme">
+        </activity>
     </application>
 
 </manifest>

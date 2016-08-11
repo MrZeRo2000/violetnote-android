@@ -12,6 +12,11 @@ import com.romanpulov.violetnote.view.core.ActionBarCompatActivity;
 
 public class DashboardActivity extends ActionBarCompatActivity {
 
+    private void startActivity(Class<?> clazz) {
+        Intent intent = new Intent(this, clazz);
+        startActivity(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,13 +27,17 @@ public class DashboardActivity extends ActionBarCompatActivity {
         passNoteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(DashboardActivity.this, CategoryActivity.class);
-                DashboardActivity.this.startActivity(intent);
+                startActivity(CategoryActivity.class);
             }
         });
 
-
-        //startActivity(new Intent(this, CategoryActivity.class));
+        Button basicNoteButton = (Button)findViewById(R.id.basic_note_button);
+        basicNoteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(BasicNoteActivity.class);
+            }
+        });
     }
 
 }

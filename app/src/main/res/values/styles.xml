@@ -78,7 +78,7 @@
     </style>
 
     <!-- Preferences/Theme -->
-    <style name="PreferencesTheme" parent="@style/MainAppTheme" >
+    <style name="PreferencesTheme" parent="@style/MainAppTheme">
         <item name="android:textColor">@color/brightTextColor</item>
         <item name="android:textColorSecondary">@color/brightTextColor</item>
         <item name="android:listDivider">@drawable/divider_white_black_gradient</item>
@@ -122,5 +122,14 @@
     <style name="Text3" parent="@style/BrightText">
         <item name="android:textSize">16sp</item>
     </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

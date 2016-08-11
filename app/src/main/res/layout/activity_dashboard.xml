@@ -35,7 +35,7 @@
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
-        android:id="@+id/note_button"
+        android:id="@+id/basic_note_button"
         android:drawableTop="@drawable/img_simple_note"
         android:drawablePadding="20dp"
         android:background="@drawable/list_selector"

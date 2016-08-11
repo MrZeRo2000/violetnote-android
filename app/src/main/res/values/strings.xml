@@ -48,5 +48,6 @@
     <string name="ui_text_search_user">User</string>
     <string name="ui_text_pass_note">Password notes</string>
     <string name="ui_text_simple_note">Simple notes</string>
+    <string name="title_activity_basic_note">Basic Note</string>
 
 </resources>
