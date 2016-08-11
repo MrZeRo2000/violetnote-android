@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory
-        android:title="@string/pref_title_data"
+        android:title="@string/pref_title_pass_note_data"
         android:layout="@layout/preferences_category"
         >
         <Preference

@@ -15,7 +15,7 @@
     <string name="action_search">Search</string>
 
     <!-- Preferences -->
-    <string name="pref_title_data">Data</string>
+    <string name="pref_title_pass_note_data">Password Notes Data</string>
     <string name="pref_title_account">Account</string>
     <string name="pref_title_account_dropbox">Dropbox</string>
     <string name="pref_title_interface">Interface</string>

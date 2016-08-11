@@ -62,7 +62,7 @@ public class CategoryActivity extends PasswordActivity implements CategoryFragme
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.menu_pass_category, menu);
         return true;
     }
 

@@ -35,7 +35,7 @@ public class NoteActivity extends PasswordActivity implements OnPassNoteItemInte
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.passnote, menu);
+        getMenuInflater().inflate(R.menu.menu_pass_note, menu);
         return true;
     }
 
