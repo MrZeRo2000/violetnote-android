@@ -22,7 +22,7 @@ public abstract class ActionBarCompatActivity extends AppCompatActivity {
 
         /*
         -- hopefully this will not be required
-        if (!(this.getClass().getName().equals(MainActivity.class.getName()))){
+        if (!(this.getClass().getName().equals(CategoryActivity.class.getName()))){
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
         */

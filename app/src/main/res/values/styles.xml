@@ -16,12 +16,18 @@
         <!-- Edit style -->
         <item name="colorControlNormal">@color/dimTextColor</item>
         <item name="editTextStyle">@style/SearchEditText</item>
+
+        <item name="buttonStyle">@style/ButtonStyle</item>
     </style>
 
     <!-- Edit style for main app theme -->
     <style name="SearchEditText" parent="@style/Widget.AppCompat.EditText">
         <item name="android:textColor">@color/brightTextColor</item>
         <item name="android:textColorHint">@color/dimTextColor</item>
+    </style>
+
+    <style name="ButtonStyle" parent="Widget.AppCompat.Button">
+        <item name="android:textColor">@color/brightTextColor</item>
     </style>
 
     <!-- Main activity theme -->

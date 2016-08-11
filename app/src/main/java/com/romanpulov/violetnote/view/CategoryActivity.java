@@ -13,7 +13,7 @@ import com.romanpulov.violetnote.model.Document;
 import com.romanpulov.violetnote.model.PassCategoryA;
 import com.romanpulov.violetnote.model.PassDataA;
 
-public class MainActivity extends PasswordActivity implements CategoryFragment.OnListFragmentInteractionListener, OnSearchInteractionListener {
+public class CategoryActivity extends PasswordActivity implements CategoryFragment.OnListFragmentInteractionListener, OnSearchInteractionListener {
     private static final boolean mSampleData = false;
 
     @Override
@@ -91,13 +91,13 @@ public class MainActivity extends PasswordActivity implements CategoryFragment.O
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(PASS_DATA, mPassDataA);
-        Log.d("MainActivity", "OnSaveInstanceState");
+        Log.d("CategoryActivity", "OnSaveInstanceState");
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         mPassDataA = savedInstanceState.getParcelable(PASS_DATA);
-        Log.d("MainActivity", "OnRestoreInstanceState");
+        Log.d("CategoryActivity", "OnRestoreInstanceState");
     }
 }
