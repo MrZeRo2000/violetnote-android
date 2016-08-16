@@ -6,10 +6,10 @@ import java.util.List;
  * Created by rpulov on 11.08.2016.
  */
 public class BasicNoteA {
-
-    private long mLastModified;
     private long mId;
-    private int mType;
+    private long mLastModified;
+    private long mOrderId;
+    private int mNoteType;
     private String mTitle;
     private boolean mIsEncrypted;
     private String mEncryptedString;
