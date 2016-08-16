@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.db.DBBasicNoteHelper;
 import com.romanpulov.violetnote.view.core.ActionBarCompatActivity;
 
 public class BasicNoteActivity extends ActionBarCompatActivity {
@@ -19,6 +20,8 @@ public class BasicNoteActivity extends ActionBarCompatActivity {
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = new BasicNoteActivityFragment();
         fm.beginTransaction().add(android.R.id.content, fragment).commit();
+
+        DBBasicNoteHelper.getInstance(getApplicationContext()).openDB();
 
     }
 

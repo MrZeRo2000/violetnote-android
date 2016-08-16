@@ -1,0 +1,1 @@
+"C:\Documents and Settings\romanpulov\AppData\Local\Android\sdk\platform-tools\adb.exe" pull /data/data/com.romanpulov.violetnote/databases/basic_note.db

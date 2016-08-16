@@ -29,7 +29,7 @@ public class DBBasicNoteOpenHelper extends SQLiteOpenHelper {
                     NOTES_TABLE_COLS[2] + " INTEGER NOT NULL," +
                     NOTES_TABLE_COLS[3] + " INTEGER NOT NULL," +
                     NOTES_TABLE_COLS[4] + " TEXT NOT NULL," +
-                    NOTES_TABLE_COLS[5] + " INTEGER NOT NULL," +
+                    NOTES_TABLE_COLS[5] + " INTEGER," +
                     NOTES_TABLE_COLS[6] + " TEXT" +
                     ");";
 
@@ -46,15 +46,15 @@ public class DBBasicNoteOpenHelper extends SQLiteOpenHelper {
             "checked"
     };
     private static final String NOTE_ITEMS_TABLE_CREATE =
-            "CREATE TABLE " + NOTES_TABLE_NAME + " (" +
+            "CREATE TABLE " + NOTE_ITEMS_TABLE_NAME + " (" +
                     NOTE_ITEMS_TABLE_COLS[0] + " INTEGER PRIMARY KEY," +
-                    NOTES_TABLE_COLS[1] + " INTEGER NOT NULL," +
-                    NOTES_TABLE_COLS[2] + " INTEGER NOT NULL," +
-                    NOTES_TABLE_COLS[3] + " INTEGER NOT NULL," +
-                    NOTES_TABLE_COLS[4] + " TEXT," +
-                    NOTES_TABLE_COLS[5] + " TEXT," +
-                    NOTES_TABLE_COLS[5] + " INTEGER NOT NULL," +
-                    " FOREIGN KEY (" + NOTES_TABLE_COLS[2] + ") REFERENCES " + NOTES_TABLE_NAME + "(" + NOTES_TABLE_COLS[0] + ")" +
+                    NOTE_ITEMS_TABLE_COLS[1] + " INTEGER NOT NULL," +
+                    NOTE_ITEMS_TABLE_COLS[2] + " INTEGER NOT NULL," +
+                    NOTE_ITEMS_TABLE_COLS[3] + " INTEGER NOT NULL," +
+                    NOTE_ITEMS_TABLE_COLS[4] + " TEXT," +
+                    NOTE_ITEMS_TABLE_COLS[5] + " TEXT," +
+                    NOTE_ITEMS_TABLE_COLS[6] + " INTEGER," +
+                    " FOREIGN KEY (" + NOTE_ITEMS_TABLE_COLS[2] + ") REFERENCES " + NOTES_TABLE_NAME + "(" + NOTES_TABLE_COLS[0] + ")" +
                     ");";
 
     public DBBasicNoteOpenHelper(Context context) {
