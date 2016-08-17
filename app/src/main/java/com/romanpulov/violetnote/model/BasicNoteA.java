@@ -111,4 +111,28 @@ public final class BasicNoteA {
 
         return instance;
     }
+
+    public static BasicNoteA newEditInstance(int noteType, String title, boolean isEncrypted, String encryptedString) {
+        BasicNoteA instance = new BasicNoteA();
+
+        instance.mNoteType = noteType;
+        instance.mTitle = title;
+        instance.mIsEncrypted = isEncrypted;
+        instance.mEncryptedString = encryptedString;
+
+        return instance;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "[id=" + mId + "]," +
+                "[lastModified=" + mLastModified + "]," +
+                "[orderId=" + mOrderId + "]," +
+                "[noteType=" + mNoteType + "]," +
+                "[title=" + mTitle + "]," +
+                "[isEncrypted=" + mIsEncrypted + "]," +
+                "[encryptedString=" + mEncryptedString + "]" +
+                "}";
+    }
 }
