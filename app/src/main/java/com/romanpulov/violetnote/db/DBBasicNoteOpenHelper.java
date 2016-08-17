@@ -32,7 +32,7 @@ public class DBBasicNoteOpenHelper extends SQLiteOpenHelper {
                     NOTES_TABLE_COLS[5] + " INTEGER," +
                     NOTES_TABLE_COLS[6] + " TEXT" +
                     ");";
-
+    public static final String DEFAULT_ORDER_COLUMN = NOTES_TABLE_COLS[2];
 
     //note items
     public static final String NOTE_ITEMS_TABLE_NAME = "note_items";

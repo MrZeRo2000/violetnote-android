@@ -1,6 +1,7 @@
 package com.romanpulov.violetnote.db;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 /**
@@ -36,4 +37,21 @@ public class DBBasicNoteHelper {
             mDB = null;
         }
     }
+
+    public SQLiteDatabase getDB() {
+        return mDB;
+    }
+
+    public long getMaxOrderId(String tableName) {
+        Cursor c = null;
+        try {
+            c = mDB.query(tableName, new String[]{"MAX(" + DBBasicNoteOpenHelper.DEFAULT_ORDER_COLUMN + ")"}, null, null, null, null, null);
+            c.moveToFirst();
+            return c.isNull(0) ? 0 : c.getLong(0);
+        } finally {
+            if ((c !=null) && !c.isClosed())
+                c.close();
+        }
+    }
+
 }
