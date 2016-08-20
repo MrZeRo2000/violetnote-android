@@ -22,8 +22,8 @@ public class DBNoteManager {
         mDB = DBBasicNoteHelper.getInstance(mContext).getDB();
     }
 
-    public List<BasicNoteA> queryNotes() {
-        List<BasicNoteA> result = new ArrayList<>();
+    public ArrayList<BasicNoteA> queryNotes() {
+        ArrayList<BasicNoteA> result = new ArrayList<>();
 
         Cursor c = null;
         try {

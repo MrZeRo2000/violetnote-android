@@ -10,11 +10,24 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.model.BasicNoteA;
+import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A placeholder fragment containing a simple view.
  */
 public class BasicNoteActivityFragment extends Fragment {
+
+    public static BasicNoteActivityFragment newInstance(ArrayList<BasicNoteA> noteList) {
+        BasicNoteActivityFragment fragment = new BasicNoteActivityFragment();
+        Bundle args = new Bundle();
+        args.putParcelableArrayList(BasicNoteActivity.NOTE_LIST, noteList);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     public BasicNoteActivityFragment() {
     }
@@ -28,6 +41,13 @@ public class BasicNoteActivityFragment extends Fragment {
         // Set the adapter
         Context context = view.getContext();
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
+
+        ArrayList<BasicNoteA> noteList = this.getArguments().getParcelableArrayList(BasicNoteActivity.NOTE_LIST);
+        if (noteList != null)
+            recyclerView.setAdapter(new BasicNoteRecycleViewAdapter(noteList));
+
+        // add decoration
+        recyclerView.addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(getActivity(), RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_white_black_gradient));
 
         return view;
     }

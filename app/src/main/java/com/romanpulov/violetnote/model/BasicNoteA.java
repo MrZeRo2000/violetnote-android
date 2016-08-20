@@ -1,12 +1,15 @@
 package com.romanpulov.violetnote.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by rpulov on 11.08.2016.
  */
-public final class BasicNoteA {
+public final class BasicNoteA implements Parcelable {
     public static boolean fromInt(int value) {
         switch (value) {
             case 0: return false;
@@ -135,4 +138,43 @@ public final class BasicNoteA {
                 "[encryptedString=" + mEncryptedString + "]" +
                 "}";
     }
+
+    private BasicNoteA(Parcel in) {
+        mId = in.readLong();
+        mLastModified = in.readLong();
+        mOrderId = in.readLong();
+        mNoteType = in.readInt();
+        mTitle = in.readString();
+        mIsEncrypted = fromInt(in.readInt());
+        mEncryptedString = in.readString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(mId);
+        dest.writeLong(mLastModified);
+        dest.writeLong(mOrderId);
+        dest.writeInt(mNoteType);
+        dest.writeString(mTitle);
+        dest.writeInt(toInt(mIsEncrypted));
+        dest.writeString(mEncryptedString);
+    }
+
+    public static final Parcelable.Creator<BasicNoteA> CREATOR = new Parcelable.Creator<BasicNoteA>() {
+        @Override
+        public BasicNoteA createFromParcel(Parcel source) {
+            return new BasicNoteA(source);
+        }
+
+        @Override
+        public BasicNoteA[] newArray(int size) {
+            return new BasicNoteA[size];
+        }
+    };
+
 }

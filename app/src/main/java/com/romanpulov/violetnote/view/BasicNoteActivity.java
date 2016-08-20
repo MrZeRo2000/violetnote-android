@@ -9,19 +9,28 @@ import android.view.View;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBBasicNoteHelper;
+import com.romanpulov.violetnote.db.DBNoteManager;
+import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.view.core.ActionBarCompatActivity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class BasicNoteActivity extends ActionBarCompatActivity {
+    public static final String NOTE_LIST = "NoteList";
+
+    private ArrayList<BasicNoteA> mNoteList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        FragmentManager fm = getSupportFragmentManager();
-        Fragment fragment = new BasicNoteActivityFragment();
-        fm.beginTransaction().add(android.R.id.content, fragment).commit();
+        DBNoteManager noteManager = new DBNoteManager(this);
+        mNoteList = noteManager.queryNotes();
 
-        DBBasicNoteHelper.getInstance(getApplicationContext()).openDB();
+        FragmentManager fm = getSupportFragmentManager();
+        Fragment fragment = BasicNoteActivityFragment.newInstance(mNoteList);
+        fm.beginTransaction().add(android.R.id.content, fragment).commit();
 
     }
 
