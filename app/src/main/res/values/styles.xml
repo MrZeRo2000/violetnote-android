@@ -16,8 +16,10 @@
         <!-- Edit style -->
         <item name="colorControlNormal">@color/dimTextColor</item>
         <item name="editTextStyle">@style/SearchEditText</item>
-
         <item name="buttonStyle">@style/ButtonStyle</item>
+        <item name="android:spinnerItemStyle">@style/SpinnerItem</item>
+        <item name="android:spinnerDropDownItemStyle">@style/spinnerDropDownItemStyle</item>
+        <item name="android:dropDownListViewStyle">@style/DownListViewStyle</item>
     </style>
 
     <!-- Edit style for main app theme -->
@@ -28,6 +30,22 @@
 
     <style name="ButtonStyle" parent="Widget.AppCompat.Button">
         <item name="android:textColor">@color/brightTextColor</item>
+    </style>
+
+    <style name="SpinnerItem" parent="android:Widget.TextView.SpinnerItem">
+        <item name="android:textColor">@color/brightTextColor</item>
+    </style>
+
+    <style name="spinnerDropDownItemStyle" parent="android:TextAppearance.Widget.TextView.SpinnerItem">
+        <item name="android:textColor">@color/brightTextColor</item>
+        <item name="android:background">@drawable/list_selector</item>
+        <item name="android:paddingLeft">@dimen/text_margin_half</item>
+        <item name="android:layout_margin">1dip</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="DownListViewStyle" parent="android:Widget.ListView.DropDown">
+        <item name="divider">@color/dimTextColor</item>
     </style>
 
     <!-- Main activity theme -->
@@ -92,6 +110,21 @@
         <item name="android:background">@drawable/divider_orange_black_gradient</item>
     </style>
 
+    <!-- Edit/Theme -->
+    <style name="EditTheme" parent="@style/MainAppTheme">
+        <item name="android:textColor">@color/brightTextColor</item>
+        <item name="android:radioButtonStyle">@style/RadioButton</item>
+    </style>
+
+    <!-- Radio Button style, works only via direct set from layout -->
+    <style name="RadioButton" parent="@style/MainAppTheme">
+        <item name="android:textColor">@color/brightTextColor</item>
+        <item name="colorAccent">@color/brightTextColor</item>
+        <item name="android:textColorSecondary">@color/brightTextColor</item>
+        <item name="colorControlNormal">@color/brightTextColor</item>
+        <item name="colorControlActivated">@color/brightTextColor</item>
+    </style>
+
     <!-- Different elements styles, may need rework -->
     <style name="BrightText" parent="@style/TextAppearance.AppCompat">
         <item name="android:textColor">@color/brightTextColor</item>
@@ -128,13 +161,9 @@
         <item name="android:textSize">16sp</item>
     </style>
 
-    <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
+    <style name="LabelText" parent="@style/BrightText">
+        <item name="android:textSize">16sp</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

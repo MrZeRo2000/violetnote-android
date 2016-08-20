@@ -1,5 +1,6 @@
 package com.romanpulov.violetnote.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -48,7 +49,8 @@ public class BasicNoteActivity extends ActionBarCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_add:
-                Toast.makeText(this, "Action add", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this, BasicNoteEditActivity.class);
+                startActivityForResult(intent, 0);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

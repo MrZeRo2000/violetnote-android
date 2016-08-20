@@ -37,7 +37,7 @@
         <activity
             android:name=".view.CategoryActivity"
             android:parentActivityName=".view.DashboardActivity"
-            android:theme="@style/MainAppTheme"></activity>
+            android:theme="@style/MainAppTheme" />
         <activity
             android:name=".view.NoteActivity"
             android:parentActivityName=".view.CategoryActivity"
@@ -66,10 +66,14 @@
             android:theme="@style/MainAppTheme" />
         <activity
             android:name=".view.BasicNoteActivity"
-            android:parentActivityName=".view.DashboardActivity"
             android:label="@string/title_activity_basic_note"
-            android:theme="@style/MainAppTheme">
-        </activity>
+            android:parentActivityName=".view.DashboardActivity"
+            android:theme="@style/MainAppTheme" />
+        <activity
+            android:name=".view.BasicNoteEditActivity"
+            android:label="@string/title_activity_basic_note_edit"
+            android:parentActivityName=".view.BasicNoteActivity"
+            android:theme="@style/EditTheme" />
     </application>
 
 </manifest>
