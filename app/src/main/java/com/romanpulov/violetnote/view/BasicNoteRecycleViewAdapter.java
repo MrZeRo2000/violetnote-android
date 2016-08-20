@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.model.BasicNoteA;
@@ -38,8 +39,14 @@ public class BasicNoteRecycleViewAdapter extends RecyclerView.Adapter<BasicNoteR
             holder.mEncryptedImage.setVisibility(View.GONE);
         else
             holder.mEncryptedImage.setVisibility(View.VISIBLE);
-        DateFormat.getDateInstance().format(new Date(mItems.get(position).getLastModified()));
+        holder.mLastModified.setText(DateFormat.getDateInstance().format(new Date(mItems.get(position).getLastModified())));
         //holder.mLastModified.setText(mItems.get(position).getLastModified());
+        holder.mView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(v.getContext(), "Clicked", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
@@ -48,12 +55,14 @@ public class BasicNoteRecycleViewAdapter extends RecyclerView.Adapter<BasicNoteR
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        public final View mView;
         public final TextView mTitle;
         public final TextView mLastModified;
         public final ImageView mEncryptedImage;
 
         public ViewHolder(View view) {
             super(view);
+            mView = view;
             mTitle = (TextView) view.findViewById(R.id.title);
             mLastModified = (TextView) view.findViewById(R.id.last_modified);
             mEncryptedImage = (ImageView) view.findViewById(R.id.encrypted_image);
