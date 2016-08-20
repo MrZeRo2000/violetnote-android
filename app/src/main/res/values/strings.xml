@@ -13,6 +13,7 @@
     <string name="action_refresh">Refresh</string>
     <string name="action_settings">Settings</string>
     <string name="action_search">Search</string>
+    <string name="action_add">Add</string>
 
     <!-- Preferences -->
     <string name="pref_title_pass_note_data">Password Notes Data</string>

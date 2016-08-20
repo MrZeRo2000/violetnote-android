@@ -40,8 +40,12 @@ public class DataGeneratorTest extends ApplicationTestCase<Application> {
 
         log("Create notes");
         DBNoteManager noteManager = new DBNoteManager(getContext());
-        for (int i = 1; i <= MAX_NOTES; i++)
-            noteManager.insertNote(BasicNoteA.newEditInstance(1, String.format(Locale.getDefault(), "New Note %2d", i), false, null));
+        for (int i = 1; i <= MAX_NOTES; i++) {
+            String titleFormat = "Note %2d";
+            if (i == 3)
+                titleFormat = "This is a very very very very very very long note with number %2d";
+            noteManager.insertNote(BasicNoteA.newEditInstance(1, String.format(Locale.getDefault(), titleFormat, i), false, null));
+        }
         List<BasicNoteA> noteList = noteManager.queryNotes();
         assertEquals(noteList.size(), MAX_NOTES);
         log("Created " + MAX_NOTES + " notes");

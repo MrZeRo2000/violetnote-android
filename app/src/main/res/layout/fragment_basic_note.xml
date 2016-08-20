@@ -15,7 +15,6 @@
         android:layout_alignParentLeft="true"
         android:layout_toLeftOf="@+id/encrypted_image"
         android:textAppearance="@style/Header3Text"
-        android:text="Title qwe qwe qwe qwe qw eqwe qwe qweqweqwe qwe qwe qwe q"
         />
 
     <TextView
@@ -25,7 +24,6 @@
         android:layout_alignParentRight="true"
         android:textAppearance="@style/Text3"
         android:layout_centerVertical="true"
-        android:text="Last Modified"
         />
 
     <ImageView
