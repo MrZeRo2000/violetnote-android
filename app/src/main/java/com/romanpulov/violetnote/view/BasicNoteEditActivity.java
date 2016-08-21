@@ -23,9 +23,6 @@ public class BasicNoteEditActivity extends ActionBarCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_basic_note_edit);
-
-        Button passwordButton = (Button) findViewById(R.id.password_button);
-        updatePasswordButton(passwordButton, PASSWORD_SET_TAG);
     }
 
     private void updatePasswordButton(Button button, Integer tag) {
@@ -41,12 +38,6 @@ public class BasicNoteEditActivity extends ActionBarCompatActivity {
                 button.getCompoundDrawables()[0].setAlpha(PASSWORD_CLEAR_TAG);
                 break;
         }
-    }
-
-    public void passwordButtonClick(View view) {
-        Integer tag = (Integer)view.getTag();
-        Integer newTag = tag == PASSWORD_SET_TAG ? PASSWORD_CLEAR_TAG : PASSWORD_SET_TAG;
-        updatePasswordButton((Button)view, newTag);
     }
 
     public void okButtonClick(View view) {
