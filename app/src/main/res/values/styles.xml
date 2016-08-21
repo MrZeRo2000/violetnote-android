@@ -112,7 +112,6 @@
 
     <!-- Edit/Theme -->
     <style name="EditTheme" parent="@style/MainAppTheme">
-        <item name="android:textColor">@color/brightTextColor</item>
         <item name="android:radioButtonStyle">@style/RadioButton</item>
     </style>
 

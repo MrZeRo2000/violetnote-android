@@ -9,37 +9,27 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.romanpulov.violetnote.view.BasicNoteEditActivity">
 
-    <TextView
+    <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/note_type_text"
-        android:text="Note Type"
-        android:textAppearance="@style/Text3"
-        />
-
-
-    <Spinner
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/note_type_spinner"
-        android:layout_below="@+id/note_type_text"
-        android:layout_alignLeft="@+id/note_type_text"
-        android:entries="@array/ui_note_type_entries"
-        android:spinnerMode="dropdown"
-        android:popupBackground="@android:color/transparent"
+        android:id="@+id/title_edit_text"
+        android:textCursorDrawable="@null"
+        android:hint="@string/ui_note_title_hint"
         />
 
     <RadioGroup
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_below="@+id/note_type_spinner"
+        android:orientation="horizontal"
+        android:layout_below="@+id/title_edit_text"
+        android:id="@+id/note_type_radio_group"
         >
         <RadioButton android:id="@+id/note_type_checked"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:background="@drawable/list_selector"
-            android:text="Checked"
+            android:text="@string/ui_note_type_checked"
             android:checked="true"
             android:textColor="@color/brightTextColor"
             android:theme="@style/RadioButton"
@@ -47,11 +37,33 @@
         <RadioButton android:id="@+id/note_type_named"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:background="@drawable/list_selector"
-            android:text="Named"
+            android:text="@string/ui_note_type_named"
             android:textColor="@color/brightTextColor"
             android:theme="@style/RadioButton"
             />
     </RadioGroup>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/note_type_radio_group"
+        android:id="@+id/password_button"
+        android:drawableLeft="@drawable/ic_action_key"
+        android:background="?android:attr/selectableItemBackground"
+        android:text="@string/ui_text_set_password"
+        android:onClick="passwordButtonClick"
+        />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/password_button"
+        android:id="@+id/ok_button"
+        android:background="?android:attr/selectableItemBackground"
+        android:text="@android:string/ok"
+        android:onClick="okButtonClick"
+        />
 
 </RelativeLayout>

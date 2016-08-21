@@ -52,9 +52,10 @@
     <string name="ui_image_encrypted_description">Is encrypted</string>
     <string name="title_activity_basic_note">Basic Note</string>
     <string name="title_activity_basic_note_edit">Basic Note Edit</string>
-    <string-array name="ui_note_type_entries">
-        <item>Checked</item>
-        <item>Named</item>
-    </string-array>
+    <string name="ui_note_type_checked">Checked</string>
+    <string name="ui_note_type_named">Named</string>
+    <string name="ui_note_title_hint">Title ...</string>
+    <string name="ui_text_set_password">Set password</string>
+    <string name="ui_text_clear_password">Clear password</string>
 
 </resources>
