@@ -23,20 +23,22 @@ import java.util.List;
 
 public class BasicNoteActivity extends ActionBarCompatActivity {
     public static final String NOTE_LIST = "NoteList";
+    public static final String NOTE = "Note";
 
     private ArrayList<BasicNoteA> mNoteList;
+    private BasicNoteActivityFragment mFragment;
+    private DBNoteManager mNoteManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        DBNoteManager noteManager = new DBNoteManager(this);
-        mNoteList = noteManager.queryNotes();
+        mNoteManager = new DBNoteManager(this);
+        mNoteList = mNoteManager.queryNotes();
 
         FragmentManager fm = getSupportFragmentManager();
-        Fragment fragment = BasicNoteActivityFragment.newInstance(mNoteList);
-        fm.beginTransaction().add(android.R.id.content, fragment).commit();
-
+        mFragment = BasicNoteActivityFragment.newInstance(mNoteList);
+        fm.beginTransaction().add(android.R.id.content, mFragment).commit();
     }
 
     @Override
@@ -55,5 +57,25 @@ public class BasicNoteActivity extends ActionBarCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if ((data != null) && (data.getComponent().getClassName().equals(BasicNoteEditActivity.class.getName()))) {
+            BasicNoteA newNote = data.getParcelableExtra(NOTE);
+            if (newNote != null) {
+                if ((new DBNoteManager(this)).insertNote(newNote) != -1) {
+                    mNoteList.clear();
+                    mNoteList.addAll(mNoteManager.queryNotes());
+                    mFragment.updateList();
+                }
+            }
+        }
+
+
+
+        //Toast.makeText(this, "requestCode=" + requestCode + ", resultCode=" + resultCode + ", intent=" + data, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "component=" + data.getComponent().getClassName(), Toast.LENGTH_SHORT).show();;
+        //super.onActivityResult(requestCode, resultCode, data);
     }
 }

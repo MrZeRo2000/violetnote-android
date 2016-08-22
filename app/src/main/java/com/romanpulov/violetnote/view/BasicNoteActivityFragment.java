@@ -20,12 +20,16 @@ import java.util.List;
  * A placeholder fragment containing a simple view.
  */
 public class BasicNoteActivityFragment extends Fragment {
+    private List<BasicNoteA> mNoteList;
 
     public static BasicNoteActivityFragment newInstance(ArrayList<BasicNoteA> noteList) {
         BasicNoteActivityFragment fragment = new BasicNoteActivityFragment();
+        fragment.mNoteList = noteList;
+        /*
         Bundle args = new Bundle();
         args.putParcelableArrayList(BasicNoteActivity.NOTE_LIST, noteList);
         fragment.setArguments(args);
+        */
         return fragment;
     }
 
@@ -42,13 +46,25 @@ public class BasicNoteActivityFragment extends Fragment {
         Context context = view.getContext();
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
+        if (mNoteList != null)
+            recyclerView.setAdapter(new BasicNoteRecycleViewAdapter(mNoteList));
+        /*
         ArrayList<BasicNoteA> noteList = this.getArguments().getParcelableArrayList(BasicNoteActivity.NOTE_LIST);
         if (noteList != null)
             recyclerView.setAdapter(new BasicNoteRecycleViewAdapter(noteList));
+            */
 
         // add decoration
         recyclerView.addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(getActivity(), RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_white_black_gradient));
 
         return view;
+    }
+
+    public void updateList() {
+        View view = getView();
+        if (view != null) {
+            RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
+            recyclerView.getAdapter().notifyDataSetChanged();
+        }
     }
 }

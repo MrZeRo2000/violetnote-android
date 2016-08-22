@@ -43,6 +43,7 @@
     <string name="error_dropbox_auth">Invalid access token. Please, authenticate</string>
     <string name="error_dropbox_other">Dropbox error: %s</string>
     <string name="error_dropbox_load_file_data">No information for file : %s</string>
+    <string name="error_field_not_empty">Field should not be empty</string>
 
     <!-- UI Text -->
     <string name="ui_text_search_system">System</string>
