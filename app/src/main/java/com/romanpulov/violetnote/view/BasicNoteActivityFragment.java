@@ -26,6 +26,7 @@ import java.util.List;
  */
 public class BasicNoteActivityFragment extends Fragment {
     private List<BasicNoteA> mNoteList;
+    private RecyclerView mRecyclerView;
 
     public static BasicNoteActivityFragment newInstance(ArrayList<BasicNoteA> noteList) {
         BasicNoteActivityFragment fragment = new BasicNoteActivityFragment();
@@ -45,14 +46,14 @@ public class BasicNoteActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_basic_note_list, container, false);
-        RecyclerView recyclerView = (RecyclerView)view.findViewById(R.id.list);
+        mRecyclerView = (RecyclerView)view.findViewById(R.id.list);
 
         // Set the adapter
         Context context = view.getContext();
-        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
 
         if (mNoteList != null)
-            recyclerView.setAdapter(new BasicNoteRecycleViewAdapter(mNoteList, this));
+            mRecyclerView.setAdapter(new BasicNoteRecycleViewAdapter(mNoteList));
 
         /*
         ArrayList<BasicNoteA> noteList = this.getArguments().getParcelableArrayList(BasicNoteActivity.NOTE_LIST);
@@ -61,29 +62,14 @@ public class BasicNoteActivityFragment extends Fragment {
             */
 
         // add decoration
-        recyclerView.addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(getActivity(), RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_white_black_gradient));
+        mRecyclerView.addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(getActivity(), RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_white_black_gradient));
 
         return view;
     }
 
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        MenuInflater inflater = getActivity().getMenuInflater();
-        inflater.inflate(R.menu.menu_listitem_generic_actions, menu);
-    }
-
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        Toast.makeText(this.getActivity(), "Something is selected:" + item, Toast.LENGTH_SHORT).show();
-        return super.onContextItemSelected(item);
-    }
-
     public void updateList() {
         View view = getView();
-        if (view != null) {
-            RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
-            recyclerView.getAdapter().notifyDataSetChanged();
-        }
+        if ((view != null) && (mRecyclerView != null))
+            mRecyclerView.getAdapter().notifyDataSetChanged();
     }
 }

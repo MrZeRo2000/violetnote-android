@@ -1,7 +1,10 @@
 package com.romanpulov.violetnote.view;
 
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -20,11 +23,9 @@ import java.util.List;
  */
 public class BasicNoteRecycleViewAdapter extends RecyclerView.Adapter<BasicNoteRecycleViewAdapter.ViewHolder> {
     private final List<BasicNoteA> mItems;
-    private final View.OnCreateContextMenuListener mContextMenuListener;
 
-    public BasicNoteRecycleViewAdapter(List<BasicNoteA> items, View.OnCreateContextMenuListener contextMenuListener) {
+    public BasicNoteRecycleViewAdapter(List<BasicNoteA> items) {
         mItems = items;
-        mContextMenuListener = contextMenuListener;
     }
 
     @Override
@@ -32,7 +33,7 @@ public class BasicNoteRecycleViewAdapter extends RecyclerView.Adapter<BasicNoteR
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_basic_note, parent, false);
 
-        view.setOnCreateContextMenuListener(mContextMenuListener);
+        //view.setOnCreateContextMenuListener(mContextMenuListener);
         return new ViewHolder(view);
     }
 
@@ -52,16 +53,23 @@ public class BasicNoteRecycleViewAdapter extends RecyclerView.Adapter<BasicNoteR
             }
         });
 
-        /*
         holder.mView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Toast.makeText(v.getContext(), "Long pressed " + holder.getAdapterPosition(), Toast.LENGTH_SHORT).show();
+                PopupMenu popupMenu = new PopupMenu(holder.mView.getContext(), holder.mView);
+                popupMenu.getMenuInflater().inflate(R.menu.menu_listitem_generic_actions, popupMenu.getMenu());
+                popupMenu.show();
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        Toast.makeText(holder.mView.getContext(), "Long pressed " + holder.getAdapterPosition() + " and selected " + item, Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+                });
+                //Toast.makeText(v.getContext(), "Long pressed " + holder.getAdapterPosition(), Toast.LENGTH_SHORT).show();
                 return true;
             }
         });
-        */
-
     }
 
     @Override

@@ -19,7 +19,14 @@
         <item name="buttonStyle">@style/ButtonStyle</item>
         <item name="android:spinnerItemStyle">@style/SpinnerItem</item>
         <item name="android:spinnerDropDownItemStyle">@style/spinnerDropDownItemStyle</item>
-        <item name="android:dropDownListViewStyle">@style/DownListViewStyle</item>
+        <item name="android:popupMenuStyle">@style/PopupMenuStyle</item>
+        <item name="popupMenuStyle">@style/PopupMenuStyle</item>
+        <item name="textAppearanceLargePopupMenu">@style/PopupMenuLargeTextAppearanceStyle</item>
+        <item name="textAppearanceSmallPopupMenu">@style/PopupMenuSmallTextAppearanceStyle</item>
+        <item name="android:dropDownListViewStyle">@style/ListViewStyle</item>
+        <item name="dropDownListViewStyle">@style/ListViewStyle</item>
+        <!-- For background in overflow menu -->
+        <item name="android:itemBackground">@drawable/list_lighter_selector</item>
     </style>
 
     <!-- Edit style for main app theme -->
@@ -44,8 +51,29 @@
         <item name="android:gravity">center</item>
     </style>
 
-    <style name="DownListViewStyle" parent="android:Widget.ListView.DropDown">
+    <style name="DropDownListViewStyle" parent="Widget.AppCompat.ListView.DropDown">
         <item name="divider">@color/dimTextColor</item>
+        <item name="android:background">@color/windowBackground</item>
+    </style>
+
+    <style name="PopupMenuStyle" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:popupBackground">@drawable/white_border_shape</item>
+    </style>
+
+    <style name="PopupMenuLargeTextAppearanceStyle" parent="TextAppearance.AppCompat.Light.Widget.PopupMenu.Large">
+        <item name="android:textColor">@color/brightTextColor</item>
+    </style>
+
+    <style name="PopupMenuSmallTextAppearanceStyle" parent="TextAppearance.AppCompat.Light.Widget.PopupMenu.Small">
+        <item name="android:textColor">@color/brightTextColor</item>
+    </style>
+
+    <!-- For list in PopupMenu -->
+    <style name="ListViewStyle" parent="@android:style/Widget.ListView">
+        <item name="android:listSelector">@drawable/list_lighter_selector</item>
+        <item name="android:divider">@color/dimTextColor</item>
+        <item name="android:dividerHeight">1dip</item>
+        <item name="android:padding">1dip</item>
     </style>
 
     <!-- Main activity theme -->

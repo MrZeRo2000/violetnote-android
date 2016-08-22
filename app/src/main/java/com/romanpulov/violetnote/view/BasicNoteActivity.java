@@ -82,9 +82,9 @@ public class BasicNoteActivity extends ActionBarCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_add:
-                //Intent intent = new Intent(this, BasicNoteEditActivity.class);
-                //startActivityForResult(intent, 0);
-                this.startSupportActionMode(new ActionBarCallBack());
+                Intent intent = new Intent(this, BasicNoteEditActivity.class);
+                startActivityForResult(intent, 0);
+                //this.startSupportActionMode(new ActionBarCallBack());
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

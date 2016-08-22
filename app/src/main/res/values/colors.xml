@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#FF663366</color>
     <color name="colorAccent">#FF00ABF1</color>
     <color name="windowBackground">#FF222233</color>
+    <color name="windowBackgroundLighter">#FF333344</color>
     <color name="windowBackgroundLight">#FF555566</color>
     <color name="listSelection">#FF00ABF1</color>
     <color name="brightTextColor">#FFFFFFFF</color>
