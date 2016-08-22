@@ -3,11 +3,16 @@ package com.romanpulov.violetnote.view;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.internal.widget.AdapterViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.model.BasicNoteA;
@@ -47,7 +52,8 @@ public class BasicNoteActivityFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
         if (mNoteList != null)
-            recyclerView.setAdapter(new BasicNoteRecycleViewAdapter(mNoteList));
+            recyclerView.setAdapter(new BasicNoteRecycleViewAdapter(mNoteList, this));
+
         /*
         ArrayList<BasicNoteA> noteList = this.getArguments().getParcelableArrayList(BasicNoteActivity.NOTE_LIST);
         if (noteList != null)
@@ -58,6 +64,19 @@ public class BasicNoteActivityFragment extends Fragment {
         recyclerView.addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(getActivity(), RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_white_black_gradient));
 
         return view;
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getActivity().getMenuInflater();
+        inflater.inflate(R.menu.menu_listitem_generic_actions, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        Toast.makeText(this.getActivity(), "Something is selected:" + item, Toast.LENGTH_SHORT).show();
+        return super.onContextItemSelected(item);
     }
 
     public void updateList() {

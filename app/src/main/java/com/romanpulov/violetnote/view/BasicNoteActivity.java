@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ActionMode;
 import android.support.v7.widget.Toolbar;
 import android.view.ContextMenu;
 import android.view.Menu;
@@ -41,6 +42,36 @@ public class BasicNoteActivity extends ActionBarCompatActivity {
         fm.beginTransaction().add(android.R.id.content, mFragment).commit();
     }
 
+    class ActionBarCallBack implements ActionMode.Callback {
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            // TODO Auto-generated method stub
+            return false;
+        }
+
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            // TODO Auto-generated method stub
+            mode.getMenuInflater().inflate(R.menu.menu_listitem_generic_actions, menu);
+            return true;
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            // TODO Auto-generated method stub
+
+            mode.setTitle("CheckBox is Checked");
+            return false;
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_basic_note, menu);
@@ -51,8 +82,9 @@ public class BasicNoteActivity extends ActionBarCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_add:
-                Intent intent = new Intent(this, BasicNoteEditActivity.class);
-                startActivityForResult(intent, 0);
+                //Intent intent = new Intent(this, BasicNoteEditActivity.class);
+                //startActivityForResult(intent, 0);
+                this.startSupportActionMode(new ActionBarCallBack());
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

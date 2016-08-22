@@ -19,21 +19,25 @@ import java.util.List;
  * Created by romanpulov on 18.08.2016.
  */
 public class BasicNoteRecycleViewAdapter extends RecyclerView.Adapter<BasicNoteRecycleViewAdapter.ViewHolder> {
-    private  final List<BasicNoteA> mItems;
+    private final List<BasicNoteA> mItems;
+    private final View.OnCreateContextMenuListener mContextMenuListener;
 
-    public BasicNoteRecycleViewAdapter(List<BasicNoteA> items) {
+    public BasicNoteRecycleViewAdapter(List<BasicNoteA> items, View.OnCreateContextMenuListener contextMenuListener) {
         mItems = items;
+        mContextMenuListener = contextMenuListener;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_basic_note, parent, false);
+
+        view.setOnCreateContextMenuListener(mContextMenuListener);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         holder.mTitle.setText(mItems.get(position).getTitle());
         if (!mItems.get(position).getIsEncrypted())
             holder.mEncryptedImage.setVisibility(View.GONE);
@@ -44,9 +48,20 @@ public class BasicNoteRecycleViewAdapter extends RecyclerView.Adapter<BasicNoteR
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(), "Clicked", Toast.LENGTH_SHORT).show();
+                Toast.makeText(v.getContext(), "Clicked " + holder.getAdapterPosition(), Toast.LENGTH_SHORT).show();
             }
         });
+
+        /*
+        holder.mView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Toast.makeText(v.getContext(), "Long pressed " + holder.getAdapterPosition(), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
+        */
+
     }
 
     @Override
