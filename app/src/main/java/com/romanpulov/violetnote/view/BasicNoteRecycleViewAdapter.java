@@ -1,7 +1,9 @@
 package com.romanpulov.violetnote.view;
 
+import android.app.Activity;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -23,6 +25,7 @@ import java.util.List;
  */
 public class BasicNoteRecycleViewAdapter extends RecyclerView.Adapter<BasicNoteRecycleViewAdapter.ViewHolder> {
     private final List<BasicNoteA> mItems;
+    public int mSelectedItem = -1;
 
     public BasicNoteRecycleViewAdapter(List<BasicNoteA> items) {
         mItems = items;
@@ -53,12 +56,20 @@ public class BasicNoteRecycleViewAdapter extends RecyclerView.Adapter<BasicNoteR
             }
         });
 
+        if (position == mSelectedItem) {
+            Log.d("RecycleViewAdapter", "set selected position, position=" + position + ", selectedItem=" + mSelectedItem);
+            holder.mView.setBackgroundResource(R.color.colorAccent);
+        } else {
+            Log.d("RecycleViewAdapter", "set not selected position, position=" + position + ", selectedItem=" + mSelectedItem);
+            holder.mView.setBackgroundResource(R.color.windowBackground);
+        }
+
         holder.mView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
+                /*
                 PopupMenu popupMenu = new PopupMenu(holder.mView.getContext(), holder.mView);
                 popupMenu.getMenuInflater().inflate(R.menu.menu_listitem_generic_actions, popupMenu.getMenu());
-                popupMenu.show();
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
@@ -66,7 +77,22 @@ public class BasicNoteRecycleViewAdapter extends RecyclerView.Adapter<BasicNoteR
                         return false;
                     }
                 });
-                //Toast.makeText(v.getContext(), "Long pressed " + holder.getAdapterPosition(), Toast.LENGTH_SHORT).show();
+                popupMenu.show();
+                */
+                BasicNoteActivity activity = (BasicNoteActivity)v.getContext();
+                activity.startSupportActionMode(activity.new ActionBarCallBack());
+
+                if (mSelectedItem != -1)
+                    BasicNoteRecycleViewAdapter.this.notifyItemChanged(mSelectedItem);
+
+                Log.d("RecycleViewAdapter", "set selectedItem=" + holder.getAdapterPosition());
+                mSelectedItem = holder.getAdapterPosition();
+
+                BasicNoteRecycleViewAdapter.this.notifyItemChanged(mSelectedItem);
+
+                Toast.makeText(holder.mView.getContext(), "Selected " + holder.getAdapterPosition(), Toast.LENGTH_SHORT).show();
+                //BasicNoteRecycleViewAdapter.this.notifyDataSetChanged();
+
                 return true;
             }
         });
@@ -77,7 +103,7 @@ public class BasicNoteRecycleViewAdapter extends RecyclerView.Adapter<BasicNoteR
         return mItems.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView mTitle;
         public final TextView mLastModified;

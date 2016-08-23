@@ -42,7 +42,7 @@ public class BasicNoteActivity extends ActionBarCompatActivity {
         fm.beginTransaction().add(android.R.id.content, mFragment).commit();
     }
 
-    class ActionBarCallBack implements ActionMode.Callback {
+    public class ActionBarCallBack implements ActionMode.Callback {
 
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
