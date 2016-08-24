@@ -7,14 +7,22 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 /**
  * Created by rpulov on 15.05.2016.
  */
 public class RecyclerViewHelper {
+    public static void log(String message) {
+        Log.d("RecyclerViewHelper", message);
+    }
 
     /**
      * Taken from
@@ -104,5 +112,108 @@ public class RecyclerViewHelper {
         }
     }
 
+    public static class SelectableViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener, View.OnClickListener {
+        public final View mView;
+        private final RecyclerViewSelector mViewSelector;
 
+        public RecyclerViewSelector getViewSelector() {
+            return  mViewSelector;
+        }
+
+        public SelectableViewHolder(View view, RecyclerViewSelector viewSelector) {
+            super(view);
+            mView = view;
+            mViewSelector = viewSelector;
+
+            //setup handlers
+            mView.setOnLongClickListener(this);
+            mView.setOnClickListener(this);
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            mViewSelector.startActionMode(v, getAdapterPosition());
+            return true;
+        }
+
+        @Override
+        public void onClick(View v) {
+            mViewSelector.setSelectedView(v, getAdapterPosition());
+        }
+    }
+
+    public static class RecyclerViewSelector {
+        private int mSelectedItem = -1;
+        private final RecyclerView.Adapter<?> mAdapter;
+        private final int mMenuRes;
+
+        public int getSelectedItem() {
+            return mSelectedItem;
+        }
+
+        public RecyclerViewSelector(RecyclerView.Adapter<?> adapter, int menuRes) {
+            mAdapter = adapter;
+            mMenuRes = menuRes;
+        }
+
+        public class ActionBarCallBack implements ActionMode.Callback {
+            private final int mMenuRes;
+
+            public ActionBarCallBack(int menuRes) {
+                mMenuRes = menuRes;
+            }
+
+            @Override
+            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                // TODO Auto-generated method stub
+                mode.setTitle("onActionItemClicked:" + item);
+                return false;
+            }
+
+            @Override
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                // TODO Auto-generated method stub
+                mode.setTitle("onCreateActionMode");
+                mode.getMenuInflater().inflate(mMenuRes, menu);
+                return true;
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode mode) {
+                // TODO Auto-generated method stub
+                finishActionMode();
+            }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                // TODO Auto-generated method stub
+                mode.setTitle("onPrepareActionMode");
+                return false;
+            }
+        }
+
+        public void startActionMode(View v, int position) {
+            if (mSelectedItem == -1) {
+                AppCompatActivity activity = (AppCompatActivity) v.getContext();
+                activity.startSupportActionMode(new ActionBarCallBack(mMenuRes));
+                setSelectedView(v, position);
+                mSelectedItem = position;
+                mAdapter.notifyDataSetChanged();
+            } else
+                setSelectedView(v, position);
+        }
+
+        public void setSelectedView(View v, int position) {
+            if ((mSelectedItem != position) && (mSelectedItem != -1)) {
+                mAdapter.notifyItemChanged(mSelectedItem);
+                mSelectedItem = position;
+                mAdapter.notifyItemChanged(mSelectedItem);
+            }
+        }
+
+        public void finishActionMode() {
+            mSelectedItem = -1;
+            mAdapter.notifyDataSetChanged();
+        }
+    }
 }

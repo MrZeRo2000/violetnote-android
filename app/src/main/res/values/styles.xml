@@ -13,6 +13,11 @@
         <!-- <item name="android:textColor">@android:color/white</item> -->
         <item name="android:windowBackground">@color/windowBackground</item>
 
+        <item name="actionModeBackground">@color/colorPrimaryDark</item>
+        <item name="android:actionModeBackground">@color/colorPrimaryDark</item>
+        <item name="actionModeCloseDrawable">@drawable/ic_action_cancel</item>
+        <item name="android:actionModeCloseDrawable">@drawable/ic_action_cancel</item>
+
         <!-- Edit style -->
         <item name="colorControlNormal">@color/dimTextColor</item>
         <item name="editTextStyle">@style/SearchEditText</item>
