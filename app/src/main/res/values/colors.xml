@@ -9,5 +9,6 @@
     <color name="listSelection">#FF00ABF1</color>
     <color name="brightTextColor">#FFFFFFFF</color>
     <color name="dimTextColor">#FF888888</color>
+    <color name="highlightTextColor">#FFF1D1AF</color>
     <color name="colorHeader">#FFCD7135</color>
 </resources>
