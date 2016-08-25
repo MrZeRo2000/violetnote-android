@@ -197,6 +197,11 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="Highlight3Text" parent="@style/HighlightText">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
     <style name="DimText" parent="@style/TextAppearance.AppCompat">
         <item name="android:textColor">@color/dimTextColor</item>
     </style>

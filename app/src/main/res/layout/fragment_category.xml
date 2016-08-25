@@ -15,7 +15,7 @@
         android:layout_marginRight="@dimen/text_margin"
         android:layout_marginTop="@dimen/text_margin_half"
         android:layout_marginBottom="@dimen/text_margin_half"
-        android:textAppearance="@style/Highlight2Text" />
+        android:textAppearance="@style/Highlight3Text" />
 
     <TextView
         android:id="@+id/category_description"
