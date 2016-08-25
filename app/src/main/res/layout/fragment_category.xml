@@ -15,7 +15,7 @@
         android:layout_marginRight="@dimen/text_margin"
         android:layout_marginTop="@dimen/text_margin_half"
         android:layout_marginBottom="@dimen/text_margin_half"
-        android:textAppearance="@style/Header2Text" />
+        android:textAppearance="@style/Highlight2Text" />
 
     <TextView
         android:id="@+id/category_description"
@@ -25,5 +25,5 @@
         android:layout_marginRight="@dimen/text_margin"
         android:layout_marginTop="0px"
         android:layout_marginBottom="@dimen/text_margin_half"
-        android:textAppearance="@style/Text3" />
+        android:textAppearance="@style/Dim2Text" />
 </LinearLayout>

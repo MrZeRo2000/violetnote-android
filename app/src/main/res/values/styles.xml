@@ -56,11 +56,6 @@
         <item name="android:gravity">center</item>
     </style>
 
-    <style name="DropDownListViewStyle" parent="Widget.AppCompat.ListView.DropDown">
-        <item name="divider">@color/dimTextColor</item>
-        <item name="android:background">@color/windowBackground</item>
-    </style>
-
     <style name="PopupMenuStyle" parent="Widget.AppCompat.PopupMenu">
         <item name="android:popupBackground">@drawable/white_border_shape</item>
     </style>
@@ -132,8 +127,13 @@
     <style name="PreferencesTheme" parent="@style/MainAppTheme">
         <item name="android:textColor">@color/brightTextColor</item>
         <item name="android:textColorSecondary">@color/brightTextColor</item>
-        <item name="android:listDivider">@drawable/divider_white_black_gradient</item>
-        <item name="android:selectableItemBackground">@drawable/list_selector</item>
+        <item name="android:listViewStyle">@style/PreferencesListViewStyle</item>
+    </style>
+
+    <!-- For list in Preferences -->
+    <style name="PreferencesListViewStyle" parent="@android:style/Widget.ListView">
+        <item name="android:listSelector">@drawable/list_selector</item>
+        <item name="android:divider">@drawable/divider_white_black_gradient</item>
     </style>
 
     <!-- Preferences/Category Divider -->
@@ -197,6 +197,21 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="DimText" parent="@style/TextAppearance.AppCompat">
+        <item name="android:textColor">@color/dimTextColor</item>
+    </style>
+
+    <style name="Dim2Text" parent="@style/DimText">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="Dim3Text" parent="@style/DimText">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+
     <style name="Text1" parent="@style/BrightText">
         <item name="android:textSize">20sp</item>
     </style>
@@ -206,7 +221,7 @@
     </style>
 
     <style name="Text3" parent="@style/BrightText">
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">14sp</item>
     </style>
 
     <style name="LabelText" parent="@style/BrightText">

@@ -1,0 +1,1 @@
+%LOCALAPPDATA%\Android\sdk\platform-tools\adb.exe push 1.vnf /mnt/sdcard/

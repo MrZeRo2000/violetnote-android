@@ -5,9 +5,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.romanpulov.violetnote.helper.DateTimeFormatterHelper;
 import com.romanpulov.violetnote.model.BasicNoteA;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -32,10 +34,13 @@ public class DBNoteManager {
                     null, null, null, null, DBBasicNoteOpenHelper.DEFAULT_ORDER_COLUMN
             );
 
+            DateTimeFormatterHelper dtf = new DateTimeFormatterHelper(mContext);
+
             for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
                 BasicNoteA newNote = BasicNoteA.newInstance(
                         c.getLong(0),
                         c.getLong(1),
+                        dtf.formatDateTimeDelimited(new Date(c.getLong(1)), "\n"),
                         c.getLong(2),
                         c.getInt(3),
                         c.getString(4),

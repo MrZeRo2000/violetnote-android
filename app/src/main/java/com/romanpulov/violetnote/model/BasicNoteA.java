@@ -23,6 +23,7 @@ public final class BasicNoteA implements Parcelable {
 
     private long mId;
     private long mLastModified;
+    private String mLastModifiedString;
     private long mOrderId;
     private int mNoteType;
     private String mTitle;
@@ -43,6 +44,10 @@ public final class BasicNoteA implements Parcelable {
 
     public void setLastModified(long mLastModified) {
         this.mLastModified = mLastModified;
+    }
+
+    public String getLastModifiedString() {
+        return mLastModifiedString;
     }
 
     public long getOrderId() {
@@ -97,15 +102,16 @@ public final class BasicNoteA implements Parcelable {
         return mValues;
     }
 
-    public BasicNoteA() {
+    private BasicNoteA() {
 
     }
 
-    public static BasicNoteA newInstance(long id, long lastModified, long orderId, int noteType, String title, boolean isEncrypted, String encryptedString) {
+    public static BasicNoteA newInstance(long id, long lastModified, String lastModifiedString, long orderId, int noteType, String title, boolean isEncrypted, String encryptedString) {
         BasicNoteA instance = new BasicNoteA();
 
         instance.mId = id;
         instance.mLastModified = lastModified;
+        instance.mLastModifiedString = lastModifiedString;
         instance.mOrderId = orderId;
         instance.mNoteType = noteType;
         instance.mTitle = title;
@@ -142,6 +148,7 @@ public final class BasicNoteA implements Parcelable {
     private BasicNoteA(Parcel in) {
         mId = in.readLong();
         mLastModified = in.readLong();
+        mLastModifiedString = in.readString();
         mOrderId = in.readLong();
         mNoteType = in.readInt();
         mTitle = in.readString();
@@ -158,6 +165,7 @@ public final class BasicNoteA implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(mId);
         dest.writeLong(mLastModified);
+        dest.writeString(mLastModifiedString);
         dest.writeLong(mOrderId);
         dest.writeInt(mNoteType);
         dest.writeString(mTitle);

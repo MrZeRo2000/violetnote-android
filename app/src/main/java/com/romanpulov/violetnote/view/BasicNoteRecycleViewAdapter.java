@@ -53,7 +53,7 @@ public class BasicNoteRecycleViewAdapter extends RecyclerView.Adapter<BasicNoteR
         // encrypted icon
         holder.mEncryptedImage.setVisibility(mItems.get(position).getIsEncrypted() ? View.VISIBLE : View.GONE);
         // last modified
-        holder.mLastModified.setText(DateFormat.getDateInstance().format(new Date(mItems.get(position).getLastModified())));
+        holder.mLastModified.setText(mItems.get(position).getLastModifiedString());
         // background
         holder.updateBackground();
     }

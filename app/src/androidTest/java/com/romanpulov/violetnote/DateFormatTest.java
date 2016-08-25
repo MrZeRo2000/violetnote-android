@@ -1,6 +1,7 @@
 package com.romanpulov.violetnote;
 
 import android.app.Application;
+import android.provider.Settings;
 import android.test.ApplicationTestCase;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -27,5 +28,6 @@ public class DateFormatTest extends ApplicationTestCase<Application> {
 
         log(DateFormat.getDateFormat(getContext()).format(dt));
         log(DateFormat.getTimeFormat(getContext()).format(dt));
+        log(Settings.System.getString(getContext().getContentResolver(), Settings.System.DATE_FORMAT));
     }
 }

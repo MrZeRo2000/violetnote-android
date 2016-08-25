@@ -55,13 +55,21 @@
     <string name="ui_text_search_system">System</string>
     <string name="ui_text_search_user">User</string>
     <string name="ui_text_pass_note">Password notes</string>
-    <string name="ui_text_simple_note">Simple notes</string>
+    <string name="ui_text_basic_note">Basic notes</string>
     <string name="ui_image_encrypted_description">Is encrypted</string>
+
     <string name="title_activity_basic_note">Basic Note</string>
     <string name="title_activity_basic_note_edit">Basic Note Edit</string>
+    <string name="title_activity_password_category">Note category</string>
+    <string name="title_activity_password_note">Note list</string>
+    <string name="title_activity_password_note_details">Note details</string>
+    <string name="title_activity_password_note_search">Note search</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_file_chooser">File chooser</string>
+
     <string name="ui_note_type_checked">Checked</string>
     <string name="ui_note_type_named">Named</string>
-    <string name="ui_note_title_hint">Title ...</string>
+    <string name="ui_note_title_hint">Title</string>
     <string name="ui_text_set_password">Set password</string>
     <string name="ui_text_clear_password">Clear password</string>
 

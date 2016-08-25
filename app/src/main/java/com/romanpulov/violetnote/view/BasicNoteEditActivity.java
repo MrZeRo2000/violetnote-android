@@ -76,18 +76,18 @@ public class BasicNoteEditActivity extends ActionBarCompatActivity {
     }
 
     private BasicNoteA newNote() {
-        BasicNoteA newNote = new BasicNoteA();
-
-        newNote.setTitle(mViewHolder.mTitle.getText().toString());
-        newNote.setNoteType(mViewHolder.mNoteTypeChecked.isChecked() ? 0 : 1);
-        newNote.setIsEncrypted(mViewHolder.mIsEncrypted.isChecked());
-
-        return newNote;
+        return BasicNoteA.newEditInstance(
+                mViewHolder.mNoteTypeChecked.isChecked() ? 0 : 1,
+                mViewHolder.mTitle.getText().toString(),
+                mViewHolder.mIsEncrypted.isChecked(),
+                null
+        );
     }
 
     public void okButtonClick(View view) {
         if (mViewHolder.validateInput()) {
-            getIntent().putExtra(BasicNoteActivity.NOTE, newNote());
+            getIntent().putExtra(BasicNoteActivity.NOTE,
+                    newNote());
             setResult(RESULT_OK, getIntent());
             finish();
         }
