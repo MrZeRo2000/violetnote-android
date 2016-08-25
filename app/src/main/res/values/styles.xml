@@ -173,11 +173,6 @@
         <item name="android:textColor">@color/colorHeader</item>
     </style>
 
-    <style name="HighlightText" parent="@style/TextAppearance.AppCompat">
-        <item name="android:textColor">@color/highlightTextColor</item>
-    </style>
-
-
     <style name="Header1Text" parent="@style/HeaderText">
         <item name="android:textSize">24sp</item>
         <item name="android:textStyle">bold</item>
@@ -193,8 +188,12 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="Highlight3Text" parent="@style/HighlightText">
-        <item name="android:textSize">18sp</item>
+    <style name="HighlightText" parent="@style/TextAppearance.AppCompat">
+        <item name="android:textColor">@color/brightTextColor</item>
+    </style>
+
+    <style name="Highlight2Text" parent="@style/HighlightText">
+        <item name="android:textSize">22sp</item>
         <item name="android:textStyle">bold</item>
     </style>
 
