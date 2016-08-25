@@ -16,6 +16,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.romanpulov.violetnote.R;
+
 /**
  * Created by rpulov on 15.05.2016.
  */
@@ -139,6 +141,21 @@ public class RecyclerViewHelper {
         @Override
         public void onClick(View v) {
             mViewSelector.setSelectedView(v, getAdapterPosition());
+        }
+
+        public void updateBackground() {
+            int selectedItem = mViewSelector.getSelectedItem();
+            int bgResId;
+
+            if (selectedItem == -1)
+                bgResId = R.drawable.list_selector;
+            else
+            if (getAdapterPosition() == selectedItem)
+                bgResId = R.color.colorAccent;
+            else
+                bgResId = R.color.windowBackground;
+
+            mView.setBackgroundResource(bgResId);
         }
     }
 

@@ -48,19 +48,8 @@ public class BasicNoteRecycleViewAdapter extends RecyclerView.Adapter<BasicNoteR
         holder.mEncryptedImage.setVisibility(mItems.get(position).getIsEncrypted() ? View.VISIBLE : View.GONE);
         // last modified
         holder.mLastModified.setText(DateFormat.getDateInstance().format(new Date(mItems.get(position).getLastModified())));
-
-        // calculate background
-        int selectedItem = holder.getViewSelector().getSelectedItem();
-        int bgResId;
-
-        if (selectedItem == -1)
-            bgResId = R.drawable.list_selector;
-        else
-            if (holder.getAdapterPosition() == selectedItem)
-                bgResId = R.color.colorAccent;
-            else
-                bgResId = R.color.windowBackground;
-        holder.mView.setBackgroundResource(bgResId);
+        // background
+        holder.updateBackground();
     }
 
     @Override
