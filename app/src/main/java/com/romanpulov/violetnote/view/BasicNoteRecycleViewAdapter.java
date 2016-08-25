@@ -1,5 +1,6 @@
 package com.romanpulov.violetnote.view;
 
+import android.support.v7.view.ActionMode;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
@@ -24,11 +25,15 @@ public class BasicNoteRecycleViewAdapter extends RecyclerView.Adapter<BasicNoteR
     private final List<BasicNoteA> mItems;
     private final RecyclerViewHelper.RecyclerViewSelector mRecyclerViewSelector;
 
-    public BasicNoteRecycleViewAdapter(List<BasicNoteA> items) {
+    public RecyclerViewHelper.RecyclerViewSelector getRecyclerViewSelector() {
+        return mRecyclerViewSelector;
+    }
+
+    public BasicNoteRecycleViewAdapter(List<BasicNoteA> items, ActionMode.Callback actionModeCallback) {
         mItems = items;
         mRecyclerViewSelector = new RecyclerViewHelper.RecyclerViewSelector(
                 this,
-                R.menu.menu_listitem_generic_actions
+                actionModeCallback
         );
     }
 

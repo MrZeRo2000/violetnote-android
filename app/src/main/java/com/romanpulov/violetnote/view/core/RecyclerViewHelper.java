@@ -162,57 +162,21 @@ public class RecyclerViewHelper {
     public static class RecyclerViewSelector {
         private int mSelectedItem = -1;
         private final RecyclerView.Adapter<?> mAdapter;
-        private final int mMenuRes;
+        private final ActionMode.Callback mActionModeCallback;
 
         public int getSelectedItem() {
             return mSelectedItem;
         }
 
-        public RecyclerViewSelector(RecyclerView.Adapter<?> adapter, int menuRes) {
+        public RecyclerViewSelector(RecyclerView.Adapter<?> adapter, ActionMode.Callback actionModeCallback) {
             mAdapter = adapter;
-            mMenuRes = menuRes;
-        }
-
-        public class ActionBarCallBack implements ActionMode.Callback {
-            private final int mMenuRes;
-
-            public ActionBarCallBack(int menuRes) {
-                mMenuRes = menuRes;
-            }
-
-            @Override
-            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-                // TODO Auto-generated method stub
-                mode.setTitle("onActionItemClicked:" + item);
-                return false;
-            }
-
-            @Override
-            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                // TODO Auto-generated method stub
-                mode.setTitle("onCreateActionMode");
-                mode.getMenuInflater().inflate(mMenuRes, menu);
-                return true;
-            }
-
-            @Override
-            public void onDestroyActionMode(ActionMode mode) {
-                // TODO Auto-generated method stub
-                finishActionMode();
-            }
-
-            @Override
-            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-                // TODO Auto-generated method stub
-                mode.setTitle("onPrepareActionMode");
-                return false;
-            }
+            mActionModeCallback = actionModeCallback;
         }
 
         public void startActionMode(View v, int position) {
             if (mSelectedItem == -1) {
                 AppCompatActivity activity = (AppCompatActivity) v.getContext();
-                activity.startSupportActionMode(new ActionBarCallBack(mMenuRes));
+                activity.startSupportActionMode(mActionModeCallback);
                 setSelectedView(v, position);
                 mSelectedItem = position;
                 mAdapter.notifyDataSetChanged();

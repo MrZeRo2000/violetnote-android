@@ -4,10 +4,12 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.internal.widget.AdapterViewCompat;
+import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -42,6 +44,37 @@ public class BasicNoteActivityFragment extends Fragment {
     public BasicNoteActivityFragment() {
     }
 
+    public class ActionBarCallBack implements ActionMode.Callback {
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            // TODO Auto-generated method stub
+            mode.setTitle("onActionItemClicked:" + item);
+            return false;
+        }
+
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            // TODO Auto-generated method stub
+            mode.setTitle("onCreateActionMode");
+            mode.getMenuInflater().inflate(R.menu.menu_listitem_generic_actions, menu);
+            return true;
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            // TODO Auto-generated method stub
+            ((BasicNoteRecycleViewAdapter)mRecyclerView.getAdapter()).getRecyclerViewSelector().finishActionMode();
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            // TODO Auto-generated method stub
+            mode.setTitle("onPrepareActionMode");
+            return false;
+        }
+    }
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -53,7 +86,7 @@ public class BasicNoteActivityFragment extends Fragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
 
         if (mNoteList != null)
-            mRecyclerView.setAdapter(new BasicNoteRecycleViewAdapter(mNoteList));
+            mRecyclerView.setAdapter(new BasicNoteRecycleViewAdapter(mNoteList, new ActionBarCallBack()));
 
         /*
         ArrayList<BasicNoteA> noteList = this.getArguments().getParcelableArrayList(BasicNoteActivity.NOTE_LIST);
