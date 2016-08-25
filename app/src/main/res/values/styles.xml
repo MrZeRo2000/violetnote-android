@@ -13,8 +13,8 @@
         <!-- <item name="android:textColor">@android:color/white</item> -->
         <item name="android:windowBackground">@color/windowBackground</item>
 
-        <item name="actionModeBackground">@color/colorPrimaryDark</item>
-        <item name="android:actionModeBackground">@color/colorPrimaryDark</item>
+        <item name="actionModeBackground">@color/colorHeader</item>
+        <item name="android:actionModeBackground">@color/colorHeader</item>
         <item name="actionModeCloseDrawable">@drawable/ic_action_cancel</item>
         <item name="android:actionModeCloseDrawable">@drawable/ic_action_cancel</item>
 
@@ -227,6 +227,10 @@
 
     <style name="Text3" parent="@style/BrightText">
         <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="Text4" parent="@style/BrightText">
+        <item name="android:textSize">12sp</item>
     </style>
 
     <style name="LabelText" parent="@style/BrightText">

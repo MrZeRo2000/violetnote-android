@@ -29,6 +29,8 @@ import java.util.List;
 public class BasicNoteActivityFragment extends Fragment {
     private List<BasicNoteA> mNoteList;
     private RecyclerView mRecyclerView;
+    private BasicNoteRecycleViewAdapter mRecyclerViewAdapter;
+    private RecyclerViewHelper.RecyclerViewSelector mRecyclerViewSelector;
 
     public static BasicNoteActivityFragment newInstance(ArrayList<BasicNoteA> noteList) {
         BasicNoteActivityFragment fragment = new BasicNoteActivityFragment();
@@ -49,6 +51,11 @@ public class BasicNoteActivityFragment extends Fragment {
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             // TODO Auto-generated method stub
             mode.setTitle("onActionItemClicked:" + item);
+            Toast.makeText(getActivity(), mNoteList.get(
+                    mRecyclerViewSelector.getSelectedItem()).getTitle(),
+            Toast.LENGTH_SHORT
+            ).show();
+
             return false;
         }
 
@@ -63,7 +70,8 @@ public class BasicNoteActivityFragment extends Fragment {
         @Override
         public void onDestroyActionMode(ActionMode mode) {
             // TODO Auto-generated method stub
-            ((BasicNoteRecycleViewAdapter)mRecyclerView.getAdapter()).getRecyclerViewSelector().finishActionMode();
+            if (mRecyclerViewSelector != null)
+                mRecyclerViewSelector.finishActionMode();
         }
 
         @Override
@@ -85,14 +93,11 @@ public class BasicNoteActivityFragment extends Fragment {
         Context context = view.getContext();
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-        if (mNoteList != null)
-            mRecyclerView.setAdapter(new BasicNoteRecycleViewAdapter(mNoteList, new ActionBarCallBack()));
-
-        /*
-        ArrayList<BasicNoteA> noteList = this.getArguments().getParcelableArrayList(BasicNoteActivity.NOTE_LIST);
-        if (noteList != null)
-            recyclerView.setAdapter(new BasicNoteRecycleViewAdapter(noteList));
-            */
+        if (mNoteList != null) {
+            mRecyclerViewAdapter = new BasicNoteRecycleViewAdapter(mNoteList, new ActionBarCallBack());
+            mRecyclerViewSelector = mRecyclerViewAdapter.getRecyclerViewSelector();
+            mRecyclerView.setAdapter(mRecyclerViewAdapter);
+        }
 
         // add decoration
         mRecyclerView.addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(getActivity(), RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_white_black_gradient));
