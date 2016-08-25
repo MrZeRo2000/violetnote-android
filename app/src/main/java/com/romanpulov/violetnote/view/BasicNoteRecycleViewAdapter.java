@@ -22,6 +22,10 @@ import java.util.List;
  * Created by romanpulov on 18.08.2016.
  */
 public class BasicNoteRecycleViewAdapter extends RecyclerView.Adapter<BasicNoteRecycleViewAdapter.ViewHolder> {
+    private static void log(String message) {
+        Log.d("RecycleViewAdapter", message);
+    }
+
     private final List<BasicNoteA> mItems;
     private final RecyclerViewHelper.RecyclerViewSelector mRecyclerViewSelector;
 
