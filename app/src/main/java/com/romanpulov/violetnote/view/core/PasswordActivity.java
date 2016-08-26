@@ -116,9 +116,9 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
 
     protected void requestPassword() {
         PasswordInputDialog passwordInputDialog = new PasswordInputDialog(this);
-        passwordInputDialog.setOnPasswordInputListener(new PasswordInputDialog.OnPasswordInputListener() {
+        passwordInputDialog.setOnTextInputListener(new TextInputDialog.OnTextInputListener() {
             @Override
-            public void onPasswordInput(String password) {
+            public void onTextInput(String password) {
                 if (password != null) {
                     String oldPassword = getPassword();
                     if ((oldPassword != null) && (oldPassword.equals(password))) {
