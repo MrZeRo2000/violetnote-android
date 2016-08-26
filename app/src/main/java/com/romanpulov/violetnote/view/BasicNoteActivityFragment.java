@@ -4,18 +4,14 @@ import android.content.Context;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.support.v7.internal.widget.AdapterViewCompat;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBNoteManager;
@@ -39,11 +35,6 @@ public class BasicNoteActivityFragment extends Fragment {
     public static BasicNoteActivityFragment newInstance(ArrayList<BasicNoteA> noteList) {
         BasicNoteActivityFragment fragment = new BasicNoteActivityFragment();
         fragment.mNoteList = noteList;
-        /*
-        Bundle args = new Bundle();
-        args.putParcelableArrayList(BasicNoteActivity.NOTE_LIST, noteList);
-        fragment.setArguments(args);
-        */
         return fragment;
     }
 
@@ -69,7 +60,6 @@ public class BasicNoteActivityFragment extends Fragment {
         });
         dialog.show(getFragmentManager(), null);
     }
-
 
     private void editItem(final ActionMode mode, final BasicNoteA item) {
         final String oldTitle = item.getTitle();
@@ -116,7 +106,6 @@ public class BasicNoteActivityFragment extends Fragment {
 
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            // TODO Auto-generated method stub
             mode.getMenuInflater().inflate(R.menu.menu_listitem_generic_actions, menu);
             if (mRecyclerViewSelector.getSelectedItem() != -1)
                 mode.setTitle(mNoteList.get(mRecyclerViewSelector.getSelectedItem()).getTitle());
@@ -125,15 +114,12 @@ public class BasicNoteActivityFragment extends Fragment {
 
         @Override
         public void onDestroyActionMode(ActionMode mode) {
-            // TODO Auto-generated method stub
             if (mRecyclerViewSelector != null)
                 mRecyclerViewSelector.finishActionMode();
         }
 
         @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            // TODO Auto-generated method stub
-            mode.setTitle("onPrepareActionMode");
             return false;
         }
     }
