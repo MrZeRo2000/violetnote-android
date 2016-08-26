@@ -17,8 +17,10 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.db.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
+import com.romanpulov.violetnote.view.core.TextInputDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,16 +48,41 @@ public class BasicNoteActivityFragment extends Fragment {
     public BasicNoteActivityFragment() {
     }
 
+    private void editItem(final ActionMode mode, final BasicNoteA item) {
+        final String oldTitle = item.getTitle();
+        TextInputDialog dialog = new TextInputDialog(getActivity(), getResources().getString(R.string.ui_note_title));
+        dialog.setText(oldTitle);
+        dialog.setOnTextInputListener(new TextInputDialog.OnTextInputListener() {
+            @Override
+            public void onTextInput(String text) {
+                if (text != null) {
+                    if (!text.equals(oldTitle)) {
+                        // prepare and update item
+                        item.setTitle(text);
+                        DBNoteManager mNoteManager = new DBNoteManager(getActivity());
+                        mNoteManager.updateNote(item);
+                        // refresh list
+                        List<BasicNoteA> newNoteList = mNoteManager.queryNotes();
+                        mNoteList.clear();
+                        mNoteList.addAll(newNoteList);
+                    }
+                    // finish anyway
+                    mode.finish();
+                }
+            }
+        });
+        dialog.show();
+    }
+
     public class ActionBarCallBack implements ActionMode.Callback {
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            // TODO Auto-generated method stub
-            mode.setTitle("onActionItemClicked:" + item);
-            Toast.makeText(getActivity(), mNoteList.get(
-                    mRecyclerViewSelector.getSelectedItem()).getTitle(),
-            Toast.LENGTH_SHORT
-            ).show();
-
+            int selectedItem = mRecyclerViewSelector.getSelectedItem();
+            if (selectedItem != -1) {
+                if (item.getItemId() == R.id.edit) {
+                    editItem(mode, mNoteList.get(selectedItem));
+                }
+            }
             return false;
         }
 

@@ -16,16 +16,20 @@ import org.xmlpull.v1.XmlPullParser;
  * Created by romanpulov on 26.08.2016.
  */
 
-class TextInputDialog {
+public class TextInputDialog {
 
-    interface OnTextInputListener {
-        void onTextInput(String password);
+    public interface OnTextInputListener {
+        void onTextInput(String text);
     }
 
     private final Context mContext;
     private final String mTitle;
-
+    protected String mText;
     protected int mInputType;
+
+    public void setText(String value) {
+        mText = value;
+    }
 
     private OnTextInputListener mOnTextInputListener;
 
@@ -66,6 +70,7 @@ class TextInputDialog {
 
         input.setInputType(mInputType);
         input.setTextColor(mContext.getResources().getColor(R.color.brightTextColor));
+        input.setText(mText);
 
         alert.setView(input);
         alert.setTitle(mTitle);

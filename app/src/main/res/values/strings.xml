@@ -69,6 +69,7 @@
 
     <string name="ui_note_type_checked">Checked</string>
     <string name="ui_note_type_named">Named</string>
+    <string name="ui_note_title">Title</string>
     <string name="ui_note_title_hint">Title</string>
     <string name="ui_text_set_password">Set password</string>
     <string name="ui_text_clear_password">Clear password</string>

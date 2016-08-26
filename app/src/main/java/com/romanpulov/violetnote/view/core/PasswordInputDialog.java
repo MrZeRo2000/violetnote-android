@@ -15,7 +15,7 @@ import org.xmlpull.v1.XmlPullParser;
 /**
  * Created by rpulov on 27.03.2016.
  */
-class PasswordInputDialog extends TextInputDialog{
+public class PasswordInputDialog extends TextInputDialog {
 
     public PasswordInputDialog(Context context) {
         super(context, context.getString(R.string.password_required));

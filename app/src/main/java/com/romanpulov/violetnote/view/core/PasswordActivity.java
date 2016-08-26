@@ -118,13 +118,13 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
         PasswordInputDialog passwordInputDialog = new PasswordInputDialog(this);
         passwordInputDialog.setOnTextInputListener(new TextInputDialog.OnTextInputListener() {
             @Override
-            public void onTextInput(String password) {
-                if (password != null) {
+            public void onTextInput(String text) {
+                if (text != null) {
                     String oldPassword = getPassword();
-                    if ((oldPassword != null) && (oldPassword.equals(password))) {
+                    if ((oldPassword != null) && (oldPassword.equals(text))) {
                         refreshFragment();
                     } else {
-                        new LoadPassDataAsyncTask(password).execute();
+                        new LoadPassDataAsyncTask(text).execute();
                     }
                 }
             }
