@@ -116,7 +116,7 @@ public class RecyclerViewHelper {
 
     public static class SelectableViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener, View.OnClickListener {
         public final View mView;
-        private final RecyclerViewSelector mViewSelector;
+        protected final RecyclerViewSelector mViewSelector;
 
         public RecyclerViewSelector getViewSelector() {
             return  mViewSelector;
@@ -163,9 +163,14 @@ public class RecyclerViewHelper {
         private int mSelectedItem = -1;
         private final RecyclerView.Adapter<?> mAdapter;
         private final ActionMode.Callback mActionModeCallback;
+        private ActionMode mActionMode;
 
         public int getSelectedItem() {
             return mSelectedItem;
+        }
+
+        public ActionMode getActionMode() {
+            return mActionMode;
         }
 
         public RecyclerViewSelector(RecyclerView.Adapter<?> adapter, ActionMode.Callback actionModeCallback) {
@@ -175,11 +180,12 @@ public class RecyclerViewHelper {
 
         public void startActionMode(View v, int position) {
             if (mSelectedItem == -1) {
-                AppCompatActivity activity = (AppCompatActivity) v.getContext();
-                activity.startSupportActionMode(mActionModeCallback);
                 setSelectedView(v, position);
                 mSelectedItem = position;
                 mAdapter.notifyDataSetChanged();
+
+                AppCompatActivity activity = (AppCompatActivity) v.getContext();
+                mActionMode = activity.startSupportActionMode(mActionModeCallback);
             } else
                 setSelectedView(v, position);
         }
@@ -194,6 +200,7 @@ public class RecyclerViewHelper {
 
         public void finishActionMode() {
             mSelectedItem = -1;
+            mActionMode = null;
             mAdapter.notifyDataSetChanged();
         }
     }

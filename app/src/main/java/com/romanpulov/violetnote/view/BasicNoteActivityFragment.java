@@ -62,8 +62,9 @@ public class BasicNoteActivityFragment extends Fragment {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             // TODO Auto-generated method stub
-            mode.setTitle("onCreateActionMode");
             mode.getMenuInflater().inflate(R.menu.menu_listitem_generic_actions, menu);
+            if (mRecyclerViewSelector.getSelectedItem() != -1)
+                mode.setTitle(mNoteList.get(mRecyclerViewSelector.getSelectedItem()).getTitle());
             return true;
         }
 

@@ -74,5 +74,24 @@ public class BasicNoteRecycleViewAdapter extends RecyclerView.Adapter<BasicNoteR
             mLastModified = (TextView) view.findViewById(R.id.last_modified);
             mEncryptedImage = (ImageView) view.findViewById(R.id.encrypted_image);
         }
+
+        private void updateSelectedTitle() {
+            ActionMode actionMode;
+            if ((mRecyclerViewSelector != null) && ((actionMode = mRecyclerViewSelector.getActionMode()) != null) && (mRecyclerViewSelector.getSelectedItem() != -1))
+                actionMode.setTitle(mItems.get(mRecyclerViewSelector.getSelectedItem()).getTitle());
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            super.onLongClick(v);
+            updateSelectedTitle();
+            return true;
+        }
+
+        @Override
+        public void onClick(View v) {
+            super.onClick(v);
+            updateSelectedTitle();
+        }
     }
 }
