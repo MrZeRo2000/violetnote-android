@@ -97,6 +97,15 @@
         <item name="android:textColorSecondary">@color/brightTextColor</item>
 
         <item name="android:background">@color/windowBackground</item>
+
+        <item name="buttonBarPositiveButtonStyle">@style/ButtonBarButtonStyle</item>
+        <item name="buttonBarNegativeButtonStyle">@style/ButtonBarButtonStyle</item>
+    </style>
+
+    <!-- for Ok and Cancel button background -->
+    <style name="ButtonBarButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">@color/brightTextColor</item>
+        <item name="android:background">@drawable/list_selector</item>
     </style>
 
     <!-- ProgressDialog/Theme -->

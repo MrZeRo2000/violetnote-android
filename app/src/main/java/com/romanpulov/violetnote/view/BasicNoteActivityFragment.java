@@ -1,6 +1,7 @@
 package com.romanpulov.violetnote.view;
 
 import android.content.Context;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.internal.widget.AdapterViewCompat;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicNoteA;
+import com.romanpulov.violetnote.view.core.AlertOkCancelDialogFragment;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 import com.romanpulov.violetnote.view.core.TextInputDialog;
 
@@ -47,6 +49,27 @@ public class BasicNoteActivityFragment extends Fragment {
 
     public BasicNoteActivityFragment() {
     }
+
+    private void deleteItem(final ActionMode mode, final BasicNoteA item) {
+        AlertOkCancelDialogFragment dialog = AlertOkCancelDialogFragment.newAlertOkCancelDialog(R.string.ui_question_are_you_sure);
+        dialog.setOkButtonClickListener(new AlertOkCancelDialogFragment.OnClickListener() {
+            @Override
+            public void OnClick(DialogFragment dialog) {
+                // delete item
+                DBNoteManager mNoteManager = new DBNoteManager(getActivity());
+                mNoteManager.deleteNote(item);
+                // refresh list
+                List<BasicNoteA> newNoteList = mNoteManager.queryNotes();
+                mNoteList.clear();
+                mNoteList.addAll(newNoteList);
+
+                //finish action
+                mode.finish();
+            }
+        });
+        dialog.show(getFragmentManager(), null);
+    }
+
 
     private void editItem(final ActionMode mode, final BasicNoteA item) {
         final String oldTitle = item.getTitle();
@@ -79,8 +102,13 @@ public class BasicNoteActivityFragment extends Fragment {
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             int selectedItem = mRecyclerViewSelector.getSelectedItem();
             if (selectedItem != -1) {
-                if (item.getItemId() == R.id.edit) {
-                    editItem(mode, mNoteList.get(selectedItem));
+                switch (item.getItemId()) {
+                    case R.id.delete:
+                        deleteItem(mode, mNoteList.get(selectedItem));
+                        break;
+                    case R.id.edit:
+                        editItem(mode, mNoteList.get(selectedItem));
+                        break;
                 }
             }
             return false;
