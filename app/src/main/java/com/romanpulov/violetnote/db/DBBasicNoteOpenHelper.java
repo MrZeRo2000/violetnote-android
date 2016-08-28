@@ -11,12 +11,17 @@ public class DBBasicNoteOpenHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "basic_note.db";
     public static final int DATABASE_VERSION = 1;
 
+    //common column names
+    public static final String ID_COLUMN_NAME = "_id";
+    public static final String LAST_MODIFIED_COLUMN_NAME = "last_modified";
+    public static final String ORDER_COLUMN_NAME = "order_id";
+
     //notes
     public static final String NOTES_TABLE_NAME = "notes";
     public static final String[] NOTES_TABLE_COLS = new String[] {
-        "_id",
-        "last_modified",
-        "order_id",
+        ID_COLUMN_NAME,
+        LAST_MODIFIED_COLUMN_NAME,
+        ORDER_COLUMN_NAME,
         "note_type",
         "title",
         "is_encrypted",
@@ -32,15 +37,15 @@ public class DBBasicNoteOpenHelper extends SQLiteOpenHelper {
                     NOTES_TABLE_COLS[5] + " INTEGER," +
                     NOTES_TABLE_COLS[6] + " TEXT" +
                     ");";
-    public static final String DEFAULT_ORDER_COLUMN = NOTES_TABLE_COLS[2];
+
 
     //note items
     public static final String NOTE_ITEMS_TABLE_NAME = "note_items";
     public static final String[] NOTE_ITEMS_TABLE_COLS = new String[] {
-            "_id",
-            "last_modified",
+            ID_COLUMN_NAME,
+            LAST_MODIFIED_COLUMN_NAME,
             "note_id",
-            "order_id",
+            ORDER_COLUMN_NAME,
             "name",
             "value",
             "checked"

@@ -8,6 +8,9 @@ import android.database.sqlite.SQLiteDatabase;
  * Created by romanpulov on 16.08.2016.
  */
 public class DBBasicNoteHelper {
+    public static String MAX_AGGREGATE_FUNCTION_NAME = "MAX";
+    public static String MIN_AGGREGATE_FUNCTION_NAME = "MIN";
+
     private static DBBasicNoteHelper mInstance;
 
     public static DBBasicNoteHelper getInstance(Context context) {
@@ -42,10 +45,10 @@ public class DBBasicNoteHelper {
         return mDB;
     }
 
-    public long getMaxOrderId(String tableName) {
+    public long getAggregateColumn(String tableName, String columnName, String aggregateFunction, String selection, String[] selectionArgs) {
         Cursor c = null;
         try {
-            c = mDB.query(tableName, new String[]{"MAX(" + DBBasicNoteOpenHelper.DEFAULT_ORDER_COLUMN + ")"}, null, null, null, null, null);
+            c = mDB.query(tableName, new String[]{aggregateFunction + "(" + columnName + ")"}, selection, selectionArgs, null, null, null);
             c.moveToFirst();
             return c.isNull(0) ? 0 : c.getLong(0);
         } finally {
@@ -54,4 +57,19 @@ public class DBBasicNoteHelper {
         }
     }
 
+    public long getMaxOrderId(String tableName) {
+        return getAggregateColumn(tableName, DBBasicNoteOpenHelper.ORDER_COLUMN_NAME, MAX_AGGREGATE_FUNCTION_NAME, null, null);
+    }
+
+    public long getMinOrderId(String tableName) {
+        return getAggregateColumn(tableName, DBBasicNoteOpenHelper.ORDER_COLUMN_NAME, MIN_AGGREGATE_FUNCTION_NAME, null, null);
+    }
+
+    public long getMaxId(String tableName) {
+        return getAggregateColumn(tableName, DBBasicNoteOpenHelper.ID_COLUMN_NAME, MAX_AGGREGATE_FUNCTION_NAME, null, null);
+    }
+
+    public long getMinId(String tableName) {
+        return getAggregateColumn(tableName, DBBasicNoteOpenHelper.ID_COLUMN_NAME, MIN_AGGREGATE_FUNCTION_NAME, null, null);
+    }
 }

@@ -9,54 +9,11 @@ import java.util.List;
 /**
  * Created by rpulov on 11.08.2016.
  */
-public final class BasicNoteA implements Parcelable {
-    public static boolean fromInt(int value) {
-        switch (value) {
-            case 0: return false;
-            case 1: return true;
-            default: throw new IllegalArgumentException();
-        }
-    }
-    public static int toInt(boolean value){
-        return value ? 1 : 0;
-    }
-
-    private long mId;
-    private long mLastModified;
-    private String mLastModifiedString;
-    private long mOrderId;
+public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
     private int mNoteType;
     private String mTitle;
     private boolean mIsEncrypted;
     private String mEncryptedString;
-
-    public long getId() {
-        return mId;
-    }
-
-    public void setId(long mId) {
-        this.mId = mId;
-    }
-
-    public long getLastModified() {
-        return mLastModified;
-    }
-
-    public void setLastModified(long mLastModified) {
-        this.mLastModified = mLastModified;
-    }
-
-    public String getLastModifiedString() {
-        return mLastModifiedString;
-    }
-
-    public long getOrderId() {
-        return mOrderId;
-    }
-
-    public void setOrderId(long mOrderId) {
-        this.mOrderId = mOrderId;
-    }
 
     public int getNoteType() {
         return mNoteType;

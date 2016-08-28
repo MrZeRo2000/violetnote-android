@@ -16,6 +16,7 @@ import java.util.Locale;
  */
 public class DataGeneratorTest extends ApplicationTestCase<Application> {
     private final static String TAG = "DataGeneratorTest";
+    public final static int MAX_NOTES = 10;
 
     private static void log(String message) {
         Log.d(TAG, message);
@@ -31,7 +32,6 @@ public class DataGeneratorTest extends ApplicationTestCase<Application> {
     }
 
     public void testGenerateData() {
-        final int MAX_NOTES = 10;
 
         log("************ Data Generator start");
 

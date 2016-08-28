@@ -10,7 +10,6 @@ import com.romanpulov.violetnote.model.BasicNoteA;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by romanpulov on 17.08.2016.
@@ -18,10 +17,25 @@ import java.util.List;
 public class DBNoteManager {
     private final Context mContext;
     private final SQLiteDatabase mDB;
+    private final DateTimeFormatterHelper mDTF;
 
     public DBNoteManager(Context context) {
         mContext = context;
         mDB = DBBasicNoteHelper.getInstance(mContext).getDB();
+        mDTF = new DateTimeFormatterHelper(context);
+    }
+
+    private static BasicNoteA fromCursor(Cursor c, DateTimeFormatterHelper dtf) {
+        return BasicNoteA.newInstance(
+                c.getLong(0),
+                c.getLong(1),
+                dtf.formatDateTimeDelimited(new Date(c.getLong(1)), "\n"),
+                c.getLong(2),
+                c.getInt(3),
+                c.getString(4),
+                BasicNoteA.fromInt(c.getInt(5)),
+                c.getString(6)
+        );
     }
 
     public ArrayList<BasicNoteA> queryNotes() {
@@ -31,23 +45,11 @@ public class DBNoteManager {
         try {
             c = mDB.query(
                     DBBasicNoteOpenHelper.NOTES_TABLE_NAME, DBBasicNoteOpenHelper.NOTES_TABLE_COLS,
-                    null, null, null, null, DBBasicNoteOpenHelper.DEFAULT_ORDER_COLUMN
+                    null, null, null, null, DBBasicNoteOpenHelper.ORDER_COLUMN_NAME
             );
 
-            DateTimeFormatterHelper dtf = new DateTimeFormatterHelper(mContext);
-
             for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
-                BasicNoteA newNote = BasicNoteA.newInstance(
-                        c.getLong(0),
-                        c.getLong(1),
-                        dtf.formatDateTimeDelimited(new Date(c.getLong(1)), "\n"),
-                        c.getLong(2),
-                        c.getInt(3),
-                        c.getString(4),
-                        BasicNoteA.fromInt(c.getInt(5)),
-                        c.getString(6)
-                );
-                result.add(newNote);
+                result.add(fromCursor(c, mDTF));
             }
         } finally {
             if ((c !=null) && !c.isClosed())
@@ -83,5 +85,24 @@ public class DBNoteManager {
         cv.put(DBBasicNoteOpenHelper.NOTES_TABLE_COLS[6], note.getEncryptedString());
 
         return mDB.update(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, cv, DBBasicNoteOpenHelper.NOTES_TABLE_COLS[0] + "=" + note.getId(), null);
+    }
+
+    public BasicNoteA get(int id) {
+        Cursor c = null;
+        try {
+            c = mDB.query(
+                    DBBasicNoteOpenHelper.NOTES_TABLE_NAME, DBBasicNoteOpenHelper.NOTES_TABLE_COLS,
+                    DBBasicNoteOpenHelper.ID_COLUMN_NAME + "=?", new String[]{String.valueOf(id)}, null, null, null
+            );
+            c.moveToFirst();
+            if (!c.isAfterLast()) {
+
+                return fromCursor(c, mDTF);
+            } else
+                return null;
+        } finally {
+            if ((c !=null) && !c.isClosed())
+                c.close();
+        }
     }
 }
