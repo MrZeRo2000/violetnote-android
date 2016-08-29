@@ -14,15 +14,10 @@ import java.util.Date;
 /**
  * Created by romanpulov on 17.08.2016.
  */
-public class DBNoteManager {
-    private final Context mContext;
-    private final SQLiteDatabase mDB;
-    private final DateTimeFormatterHelper mDTF;
+public class DBNoteManager extends BasicCommonNoteManager {
 
     public DBNoteManager(Context context) {
-        mContext = context;
-        mDB = DBBasicNoteHelper.getInstance(mContext).getDB();
-        mDTF = new DateTimeFormatterHelper(context);
+        super(context);
     }
 
     private static BasicNoteA fromCursor(Cursor c, DateTimeFormatterHelper dtf) {
@@ -57,6 +52,25 @@ public class DBNoteManager {
         }
 
         return result;
+    }
+
+    public BasicNoteA queryById(long id) {
+        Cursor c = null;
+        try {
+            c = mDB.query(
+                    DBBasicNoteOpenHelper.NOTES_TABLE_NAME, DBBasicNoteOpenHelper.NOTES_TABLE_COLS,
+                    DBBasicNoteOpenHelper.ID_COLUMN_NAME + "=?", new String[] {String.valueOf(id)}, null, null, null
+            );
+
+            c.moveToFirst();
+            if (!c.isAfterLast()) {
+                return fromCursor(c, mDTF);
+            } else
+                return null;
+        } finally {
+            if ((c !=null) && !c.isClosed())
+                c.close();
+        }
     }
 
     public long insertNote(BasicNoteA note) {
@@ -95,14 +109,14 @@ public class DBNoteManager {
                     DBBasicNoteOpenHelper.ID_COLUMN_NAME + "=?", new String[]{String.valueOf(id)}, null, null, null
             );
             c.moveToFirst();
-            if (!c.isAfterLast()) {
-
+            if (!c.isAfterLast())
                 return fromCursor(c, mDTF);
-            } else
+            else
                 return null;
         } finally {
             if ((c !=null) && !c.isClosed())
                 c.close();
         }
     }
+
 }

@@ -72,4 +72,58 @@ public class DBBasicNoteHelper {
     public long getMinId(String tableName) {
         return getAggregateColumn(tableName, DBBasicNoteOpenHelper.ID_COLUMN_NAME, MIN_AGGREGATE_FUNCTION_NAME, null, null);
     }
+
+    public long getPrevOrderId(String tableName, long orderId) {
+        return getAggregateColumn(
+                tableName,
+                DBBasicNoteOpenHelper.ORDER_COLUMN_NAME,
+                DBBasicNoteHelper.MAX_AGGREGATE_FUNCTION_NAME,
+                DBBasicNoteOpenHelper.ORDER_COLUMN_NAME + " < ?",
+                new String[] {String.valueOf(orderId)}
+        );
+    }
+
+    public long getNextOrderId(String tableName, long orderId) {
+        return getAggregateColumn(
+                tableName,
+                DBBasicNoteOpenHelper.ORDER_COLUMN_NAME,
+                DBBasicNoteHelper.MIN_AGGREGATE_FUNCTION_NAME,
+                DBBasicNoteOpenHelper.ORDER_COLUMN_NAME + " > ?",
+                new String[] {String.valueOf(orderId)}
+        );
+    }
+
+    public void exchangeOrderId(String tableName, long orderId1, long orderId2) {
+        String sql = "UPDATE " + tableName + " SET " + DBBasicNoteOpenHelper.ORDER_COLUMN_NAME + " = " +
+                " CASE" +
+                " WHEN " + DBBasicNoteOpenHelper.ORDER_COLUMN_NAME + " = " + orderId1 + " THEN " + orderId2 +
+                " WHEN " + DBBasicNoteOpenHelper.ORDER_COLUMN_NAME + " = " + orderId2 + " THEN " + orderId1 +
+                " END " +
+                " WHERE " + DBBasicNoteOpenHelper.ORDER_COLUMN_NAME + " IN (" + orderId1 + ", " + orderId2 + ")";
+        mDB.execSQL(sql);
+    }
+
+    public void moveOrderIdTop(String tableName, long orderId) {
+        long minOrderId = getMinOrderId(tableName);
+        String sql = "UPDATE " + tableName + " SET " + DBBasicNoteOpenHelper.ORDER_COLUMN_NAME + " = " +
+                " CASE" +
+                " WHEN " + DBBasicNoteOpenHelper.ORDER_COLUMN_NAME + " = " + orderId + " THEN " + minOrderId +
+                " WHEN " + DBBasicNoteOpenHelper.ORDER_COLUMN_NAME + " < " + orderId + " THEN " + orderId + " + 1" +
+                " END " +
+                " WHERE " + DBBasicNoteOpenHelper.ORDER_COLUMN_NAME + " <= " + orderId;
+        mDB.execSQL(sql);
+    }
+
+    public void moveOrderIdBottom(String tableName, long orderId) {
+        long maxOrderId = getMaxOrderId(tableName);
+        String sql = "UPDATE " + tableName + " SET " + DBBasicNoteOpenHelper.ORDER_COLUMN_NAME + " = " +
+                " CASE" +
+                " WHEN " + DBBasicNoteOpenHelper.ORDER_COLUMN_NAME + " = " + orderId + " THEN " + maxOrderId +
+                " WHEN " + DBBasicNoteOpenHelper.ORDER_COLUMN_NAME + " > " + orderId + " THEN " + orderId + " - 1" +
+                " END " +
+                " WHERE " + DBBasicNoteOpenHelper.ORDER_COLUMN_NAME + " >= " + orderId;
+        mDB.execSQL(sql);
+    }
+
+
 }

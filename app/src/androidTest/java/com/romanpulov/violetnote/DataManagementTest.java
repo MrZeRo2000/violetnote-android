@@ -47,6 +47,39 @@ public class DataManagementTest extends ApplicationTestCase<Application> {
                 DBBasicNoteOpenHelper.ID_COLUMN_NAME + " < ?",
                 new String[] {"7"}
         ));
+
+        log ("Get prev order id(5) = " + DBBasicNoteHelper.getInstance(mContext).getPrevOrderId(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, 5));
+        log ("Get prev order id(1) = " + DBBasicNoteHelper.getInstance(mContext).getPrevOrderId(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, 1));
+        log ("Get prev order id(0) = " + DBBasicNoteHelper.getInstance(mContext).getPrevOrderId(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, 0));
+        log ("Get prev order id(100) = " + DBBasicNoteHelper.getInstance(mContext).getPrevOrderId(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, 100));
+
+        log ("Get next order id(5) = " + DBBasicNoteHelper.getInstance(mContext).getNextOrderId(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, 5));
+        log ("Get next order id(1) = " + DBBasicNoteHelper.getInstance(mContext).getNextOrderId(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, 1));
+        log ("Get next order id(0) = " + DBBasicNoteHelper.getInstance(mContext).getNextOrderId(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, 0));
+        log ("Get next order id(100) = " + DBBasicNoteHelper.getInstance(mContext).getNextOrderId(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, 100));
+
+        //validate exchange
+        BasicNoteA note1 = noteManager.queryById(5);
+        BasicNoteA note2 = noteManager.queryById(4);
+
+        DBBasicNoteHelper.getInstance(mContext).exchangeOrderId(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, note1.getOrderId(), note2.getOrderId());
+
+        note1 = noteManager.queryById(5);
+        note2 = noteManager.queryById(4);
+
+        assertEquals(note1.getOrderId(), 4);
+        assertEquals(note2.getOrderId(), 5);
+
+        DBBasicNoteHelper.getInstance(mContext).exchangeOrderId(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, note1.getOrderId(), note2.getOrderId());
+
+        note1 = noteManager.queryById(5);
+        note2 = noteManager.queryById(4);
+
+        assertEquals(note1.getOrderId(), 5);
+        assertEquals(note2.getOrderId(), 4);
+
+        //move top
+
     }
 
 }
