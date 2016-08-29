@@ -25,12 +25,12 @@ public class DataManagementTest extends ApplicationTestCase<Application> {
         super(Application.class);
     }
 
-    public void test1() {
+    public void disable_test1() {
         log("Data Management test message");
         assertEquals(1, 1);
     }
 
-    public void testMovePrev() {
+    public void disable_testMovePrev() {
         DBNoteManager noteManager = new DBNoteManager(getContext());
         List<BasicNoteA> noteList = noteManager.queryNotes();
 
@@ -79,7 +79,16 @@ public class DataManagementTest extends ApplicationTestCase<Application> {
         assertEquals(note2.getOrderId(), 4);
 
         //move top
+        note1 = noteManager.queryById(5);
+        noteManager.moveTop(note1);
 
+        note1 = noteManager.queryById(5);
+        assertEquals(note1.getOrderId(), 1);
+
+        //move bottom
+        noteManager.moveBottom(note1);
+        note1 = noteManager.queryById(5);
+        assertEquals(note1.getOrderId(), 10);
     }
 
 }

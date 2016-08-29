@@ -3,7 +3,6 @@ package com.romanpulov.violetnote.view;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +13,6 @@ import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 
-import java.text.DateFormat;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -77,8 +74,8 @@ public class BasicNoteRecycleViewAdapter extends RecyclerView.Adapter<BasicNoteR
 
         private void updateSelectedTitle() {
             ActionMode actionMode;
-            if ((mRecyclerViewSelector != null) && ((actionMode = mRecyclerViewSelector.getActionMode()) != null) && (mRecyclerViewSelector.getSelectedItem() != -1))
-                actionMode.setTitle(mItems.get(mRecyclerViewSelector.getSelectedItem()).getTitle());
+            if ((mRecyclerViewSelector != null) && ((actionMode = mRecyclerViewSelector.getActionMode()) != null) && (mRecyclerViewSelector.getSelectedItemPos() != -1))
+                actionMode.setTitle(mItems.get(mRecyclerViewSelector.getSelectedItemPos()).getTitle());
         }
 
         @Override

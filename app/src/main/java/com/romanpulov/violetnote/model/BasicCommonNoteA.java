@@ -1,5 +1,7 @@
 package com.romanpulov.violetnote.model;
 
+import java.util.List;
+
 /**
  * Created by rpulov on 28.08.2016.
  */
@@ -13,6 +15,16 @@ public class BasicCommonNoteA {
     }
     public static int toInt(boolean value){
         return value ? 1 : 0;
+    }
+
+    public static int getNotePosWithId(List<? extends BasicCommonNoteA> noteList, long id) {
+        int pos = 0;
+        for (BasicCommonNoteA note : noteList) {
+            if (note.getId() == id)
+                return pos;
+            pos++;
+        }
+        return -1;
     }
 
     protected long mId;

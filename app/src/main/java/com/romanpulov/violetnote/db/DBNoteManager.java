@@ -10,6 +10,7 @@ import com.romanpulov.violetnote.model.BasicNoteA;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by romanpulov on 17.08.2016.
@@ -52,6 +53,12 @@ public class DBNoteManager extends BasicCommonNoteManager {
         }
 
         return result;
+    }
+
+    public void refreshNotes(ArrayList<BasicNoteA> notes) {
+        ArrayList<BasicNoteA> newNotes = queryNotes();
+        notes.clear();
+        notes.addAll(newNotes);
     }
 
     public BasicNoteA queryById(long id) {

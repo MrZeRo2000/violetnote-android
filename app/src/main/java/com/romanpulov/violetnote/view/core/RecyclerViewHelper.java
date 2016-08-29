@@ -12,8 +12,6 @@ import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 
 import com.romanpulov.violetnote.R;
@@ -144,7 +142,7 @@ public class RecyclerViewHelper {
         }
 
         public void updateBackground() {
-            int selectedItem = mViewSelector.getSelectedItem();
+            int selectedItem = mViewSelector.getSelectedItemPos();
             int bgResId;
 
             if (selectedItem == -1)
@@ -160,13 +158,13 @@ public class RecyclerViewHelper {
     }
 
     public static class RecyclerViewSelector {
-        private int mSelectedItem = -1;
+        private int mSelectedItemPos = -1;
         private final RecyclerView.Adapter<?> mAdapter;
         private final ActionMode.Callback mActionModeCallback;
         private ActionMode mActionMode;
 
-        public int getSelectedItem() {
-            return mSelectedItem;
+        public int getSelectedItemPos() {
+            return mSelectedItemPos;
         }
 
         public ActionMode getActionMode() {
@@ -179,9 +177,9 @@ public class RecyclerViewHelper {
         }
 
         public void startActionMode(View v, int position) {
-            if (mSelectedItem == -1) {
+            if (mSelectedItemPos == -1) {
                 setSelectedView(v, position);
-                mSelectedItem = position;
+                mSelectedItemPos = position;
                 mAdapter.notifyDataSetChanged();
 
                 AppCompatActivity activity = (AppCompatActivity) v.getContext();
@@ -191,15 +189,15 @@ public class RecyclerViewHelper {
         }
 
         public void setSelectedView(View v, int position) {
-            if ((mSelectedItem != position) && (mSelectedItem != -1)) {
-                mAdapter.notifyItemChanged(mSelectedItem);
-                mSelectedItem = position;
-                mAdapter.notifyItemChanged(mSelectedItem);
+            if ((mSelectedItemPos != position) && (mSelectedItemPos != -1)) {
+                mAdapter.notifyItemChanged(mSelectedItemPos);
+                mSelectedItemPos = position;
+                mAdapter.notifyItemChanged(mSelectedItemPos);
             }
         }
 
         public void finishActionMode() {
-            mSelectedItem = -1;
+            mSelectedItemPos = -1;
             mActionMode = null;
             mAdapter.notifyDataSetChanged();
         }

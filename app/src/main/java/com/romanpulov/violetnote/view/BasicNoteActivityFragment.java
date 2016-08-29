@@ -15,19 +15,19 @@ import android.view.ViewGroup;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBNoteManager;
+import com.romanpulov.violetnote.model.BasicCommonNoteA;
 import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.view.core.AlertOkCancelDialogFragment;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 import com.romanpulov.violetnote.view.core.TextInputDialog;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A placeholder fragment containing a simple view.
  */
 public class BasicNoteActivityFragment extends Fragment {
-    private List<BasicNoteA> mNoteList;
+    private ArrayList<BasicNoteA> mNoteList;
     private RecyclerView mRecyclerView;
     private BasicNoteRecycleViewAdapter mRecyclerViewAdapter;
     private RecyclerViewHelper.RecyclerViewSelector mRecyclerViewSelector;
@@ -49,10 +49,9 @@ public class BasicNoteActivityFragment extends Fragment {
                 // delete item
                 DBNoteManager mNoteManager = new DBNoteManager(getActivity());
                 mNoteManager.deleteNote(item);
+
                 // refresh list
-                List<BasicNoteA> newNoteList = mNoteManager.queryNotes();
-                mNoteList.clear();
-                mNoteList.addAll(newNoteList);
+                mNoteManager.refreshNotes(mNoteList);
 
                 //finish action
                 mode.finish();
@@ -74,10 +73,9 @@ public class BasicNoteActivityFragment extends Fragment {
                         item.setTitle(text);
                         DBNoteManager mNoteManager = new DBNoteManager(getActivity());
                         mNoteManager.updateNote(item);
+
                         // refresh list
-                        List<BasicNoteA> newNoteList = mNoteManager.queryNotes();
-                        mNoteList.clear();
-                        mNoteList.addAll(newNoteList);
+                        mNoteManager.refreshNotes(mNoteList);
                     }
                     // finish anyway
                     mode.finish();
@@ -87,17 +85,86 @@ public class BasicNoteActivityFragment extends Fragment {
         dialog.show();
     }
 
+    private abstract class MoveActionExecutor {
+        protected DBNoteManager mNoteManager;
+
+        public MoveActionExecutor() {
+            mNoteManager = new DBNoteManager(getActivity());
+        }
+
+        protected abstract boolean execute(BasicNoteA item);
+
+        protected int executeAndReturnNewPos(BasicNoteA item) {
+            if (execute(item)) {
+                // refresh list
+                mNoteManager.refreshNotes(mNoteList);
+                // find and return new pos of the node
+                return BasicCommonNoteA.getNotePosWithId(mNoteList, item.getId());
+            } else
+                return -1;
+        }
+    }
+
+    private class MoveUpActionExecutor extends MoveActionExecutor {
+        @Override
+        protected boolean execute(BasicNoteA item) {
+            return mNoteManager.moveUp(item);
+        }
+    }
+
+    private class MoveTopActionExecutor extends MoveActionExecutor {
+        @Override
+        protected boolean execute(BasicNoteA item) {
+            return mNoteManager.moveTop(item);
+        }
+    }
+
+    private class MoveDownActionExecutor extends MoveActionExecutor {
+        @Override
+        protected boolean execute(BasicNoteA item) {
+            return mNoteManager.moveDown(item);
+        }
+    }
+
+    private class MoveBottomActionExecutor extends MoveActionExecutor {
+        @Override
+        protected boolean execute(BasicNoteA item) {
+            return mNoteManager.moveBottom(item);
+        }
+    }
+
+    private void performMoveAction(MoveActionExecutor executor, BasicNoteA item) {
+        int notePos = executor.executeAndReturnNewPos(item);
+        if (notePos != -1) {
+            mRecyclerViewSelector.setSelectedView(null, notePos);
+            mRecyclerView.scrollToPosition(notePos);
+        }
+    }
+
     public class ActionBarCallBack implements ActionMode.Callback {
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            int selectedItem = mRecyclerViewSelector.getSelectedItem();
-            if (selectedItem != -1) {
+            int selectedItemPos = mRecyclerViewSelector.getSelectedItemPos();
+            if (selectedItemPos != -1) {
+                BasicNoteA selectedItem = mNoteList.get(selectedItemPos);
                 switch (item.getItemId()) {
                     case R.id.delete:
-                        deleteItem(mode, mNoteList.get(selectedItem));
+                        deleteItem(mode, selectedItem);
                         break;
                     case R.id.edit:
-                        editItem(mode, mNoteList.get(selectedItem));
+                        editItem(mode, selectedItem);
+                        break;
+                    case R.id.move_up:
+                        performMoveAction(new MoveUpActionExecutor(), selectedItem);
+                        break;
+                    case R.id.move_top:
+                        performMoveAction(new MoveTopActionExecutor(), selectedItem);
+                        break;
+                    case R.id.move_down:
+                        performMoveAction(new MoveDownActionExecutor(), selectedItem);
+                        break;
+                    case R.id.move_bottom:
+                        performMoveAction(new MoveBottomActionExecutor(), selectedItem);
                         break;
                 }
             }
@@ -107,8 +174,8 @@ public class BasicNoteActivityFragment extends Fragment {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             mode.getMenuInflater().inflate(R.menu.menu_listitem_generic_actions, menu);
-            if (mRecyclerViewSelector.getSelectedItem() != -1)
-                mode.setTitle(mNoteList.get(mRecyclerViewSelector.getSelectedItem()).getTitle());
+            if (mRecyclerViewSelector.getSelectedItemPos() != -1)
+                mode.setTitle(mNoteList.get(mRecyclerViewSelector.getSelectedItemPos()).getTitle());
             return true;
         }
 
