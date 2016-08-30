@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/title"
         android:layout_alignParentLeft="true"
-        android:layout_toLeftOf="@+id/encrypted_image"
+        android:layout_toLeftOf="@+id/type_image"
         android:textAppearance="@style/Highlight3Text"
         />
 
@@ -22,6 +22,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/last_modified"
         android:layout_alignParentRight="true"
+        android:layout_marginLeft="@dimen/text_margin_half"
         android:layout_centerVertical="true"
         android:gravity="center_horizontal"
         android:textAppearance="@style/Dim3Text"
@@ -30,10 +31,22 @@
     <ImageView
         android:layout_width="30dp"
         android:layout_height="30dp"
+        android:id="@+id/type_image"
+        android:layout_toLeftOf="@+id/encrypted_image"
+        android:layout_marginLeft="@dimen/text_margin_half"
+        android:layout_marginRight="0px"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_action_list"
+        android:contentDescription="@string/ui_image_type_description"
+        />
+
+    <ImageView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:id="@+id/encrypted_image"
         android:layout_toLeftOf="@+id/last_modified"
         android:layout_marginLeft="@dimen/text_margin_half"
-        android:layout_marginRight="@dimen/text_margin_half"
+        android:layout_marginRight="0px"
         android:layout_centerVertical="true"
         android:src="@drawable/ic_action_key"
         android:contentDescription="@string/ui_image_encrypted_description"

@@ -56,6 +56,7 @@
     <string name="ui_text_search_user">User</string>
     <string name="ui_text_pass_note">Password notes</string>
     <string name="ui_text_basic_note">Basic notes</string>
+    <string name="ui_image_type_description">Type</string>
     <string name="ui_image_encrypted_description">Is encrypted</string>
 
     <string name="title_activity_basic_note">Basic Note</string>

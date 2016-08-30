@@ -44,7 +44,7 @@ public class DataGeneratorTest extends ApplicationTestCase<Application> {
             String titleFormat = "Note %2d";
             if (i == 3)
                 titleFormat = "This is a very very very very very very long note with number %2d";
-            noteManager.insertNote(BasicNoteA.newEditInstance(1, String.format(Locale.getDefault(), titleFormat, i), false, null));
+            noteManager.insertNote(BasicNoteA.newEditInstance(i % 2, String.format(Locale.getDefault(), titleFormat, i), (i % 5) == 0 , null));
         }
         List<BasicNoteA> noteList = noteManager.queryNotes();
         assertEquals(noteList.size(), MAX_NOTES);

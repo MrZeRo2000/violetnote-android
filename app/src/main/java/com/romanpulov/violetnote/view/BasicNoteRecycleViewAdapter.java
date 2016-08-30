@@ -47,6 +47,11 @@ public class BasicNoteRecycleViewAdapter extends RecyclerView.Adapter<BasicNoteR
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         // title
         holder.mTitle.setText(mItems.get(position).getTitle());
+        // type icon
+        if (mItems.get(position).getNoteType() == 0)
+            holder.mTypeImage.setImageResource(R.drawable.ic_action_tick);
+        else
+            holder.mTypeImage.setImageResource(R.drawable.ic_action_list);
         // encrypted icon
         holder.mEncryptedImage.setVisibility(mItems.get(position).getIsEncrypted() ? View.VISIBLE : View.GONE);
         // last modified
@@ -61,14 +66,16 @@ public class BasicNoteRecycleViewAdapter extends RecyclerView.Adapter<BasicNoteR
     }
 
     public class ViewHolder extends RecyclerViewHelper.SelectableViewHolder {
-        public final TextView mTitle;
-        public final TextView mLastModified;
-        public final ImageView mEncryptedImage;
+        final TextView mTitle;
+        final TextView mLastModified;
+        final ImageView mTypeImage;
+        final ImageView mEncryptedImage;
 
         public ViewHolder(View view, RecyclerViewHelper.RecyclerViewSelector viewSelector) {
             super(view, viewSelector);
             mTitle = (TextView) view.findViewById(R.id.title);
             mLastModified = (TextView) view.findViewById(R.id.last_modified);
+            mTypeImage = (ImageView) view.findViewById(R.id.type_image);
             mEncryptedImage = (ImageView) view.findViewById(R.id.encrypted_image);
         }
 
