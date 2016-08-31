@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBNoteManager;
@@ -13,7 +14,7 @@ import com.romanpulov.violetnote.view.core.ActionBarCompatActivity;
 
 import java.util.ArrayList;
 
-public class BasicNoteActivity extends ActionBarCompatActivity {
+public class BasicNoteActivity extends ActionBarCompatActivity implements BasicNoteActivityFragment.OnBasicNoteFragmentInteractionListener {
     public static final String NOTE_LIST = "NoteList";
     public static final String NOTE = "Note";
 
@@ -63,5 +64,10 @@ public class BasicNoteActivity extends ActionBarCompatActivity {
                 }
             }
         }
+    }
+
+    @Override
+    public void onBasicNoteFragmentInteraction(BasicNoteA item) {
+        Toast.makeText(this, "Selected item = " + item, Toast.LENGTH_SHORT).show();
     }
 }

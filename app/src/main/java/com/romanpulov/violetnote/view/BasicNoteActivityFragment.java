@@ -1,5 +1,6 @@
 package com.romanpulov.violetnote.view;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -27,6 +28,8 @@ import java.util.ArrayList;
  * A placeholder fragment containing a simple view.
  */
 public class BasicNoteActivityFragment extends Fragment {
+    private OnBasicNoteFragmentInteractionListener mListener;
+
     private ArrayList<BasicNoteA> mNoteList;
     private RecyclerView mRecyclerView;
     private BasicNoteRecycleViewAdapter mRecyclerViewAdapter;
@@ -204,7 +207,7 @@ public class BasicNoteActivityFragment extends Fragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
 
         if (mNoteList != null) {
-            mRecyclerViewAdapter = new BasicNoteRecycleViewAdapter(mNoteList, new ActionBarCallBack());
+            mRecyclerViewAdapter = new BasicNoteRecycleViewAdapter(mNoteList, new ActionBarCallBack(), mListener);
             mRecyclerViewSelector = mRecyclerViewAdapter.getRecyclerViewSelector();
             mRecyclerView.setAdapter(mRecyclerViewAdapter);
         }
@@ -219,5 +222,27 @@ public class BasicNoteActivityFragment extends Fragment {
         View view = getView();
         if ((view != null) && (mRecyclerView != null))
             mRecyclerView.getAdapter().notifyDataSetChanged();
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        if (activity instanceof OnBasicNoteFragmentInteractionListener) {
+            mListener = (OnBasicNoteFragmentInteractionListener) activity;
+        }
+        else {
+            throw new RuntimeException(activity.toString()
+                    + " must implement OnBasicNoteFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    public interface OnBasicNoteFragmentInteractionListener {
+        void onBasicNoteFragmentInteraction(BasicNoteA item);
     }
 }
