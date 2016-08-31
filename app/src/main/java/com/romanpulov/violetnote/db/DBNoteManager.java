@@ -3,14 +3,15 @@ package com.romanpulov.violetnote.db;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 
 import com.romanpulov.violetnote.helper.DateTimeFormatterHelper;
+import com.romanpulov.violetnote.model.BasicCommonNoteA;
 import com.romanpulov.violetnote.model.BasicNoteA;
+import com.romanpulov.violetnote.model.BasicNoteDataA;
+import com.romanpulov.violetnote.model.BasicNoteItemA;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by romanpulov on 17.08.2016.
@@ -21,7 +22,7 @@ public class DBNoteManager extends BasicCommonNoteManager {
         super(context);
     }
 
-    private static BasicNoteA fromCursor(Cursor c, DateTimeFormatterHelper dtf) {
+    private static BasicNoteA noteFromCursor(Cursor c, DateTimeFormatterHelper dtf) {
         return BasicNoteA.newInstance(
                 c.getLong(0),
                 c.getLong(1),
@@ -31,6 +32,18 @@ public class DBNoteManager extends BasicCommonNoteManager {
                 c.getString(4),
                 BasicNoteA.fromInt(c.getInt(5)),
                 c.getString(6)
+        );
+    }
+
+    private static BasicNoteItemA noteItemFromCursor(Cursor c, DateTimeFormatterHelper dtf) {
+        return BasicNoteItemA.newInstance(
+                c.getLong(0),
+                c.getLong(1),
+                dtf.formatDateTimeDelimited(new Date(c.getLong(1)), "\n"),
+                c.getLong(2),
+                c.getString(3),
+                c.getString(4),
+                BasicCommonNoteA.fromInt(c.getInt(5))
         );
     }
 
@@ -45,7 +58,7 @@ public class DBNoteManager extends BasicCommonNoteManager {
             );
 
             for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
-                result.add(fromCursor(c, mDTF));
+                result.add(noteFromCursor(c, mDTF));
             }
         } finally {
             if ((c !=null) && !c.isClosed())
@@ -53,6 +66,35 @@ public class DBNoteManager extends BasicCommonNoteManager {
         }
 
         return result;
+    }
+
+    public BasicNoteDataA queryNoteData(BasicNoteA note) {
+        ArrayList<BasicNoteA> notes = new ArrayList<>();
+
+        //get note
+        notes.add(note);
+
+        //clear items
+        note.getItems().clear();
+
+        //get items
+        Cursor c = null;
+        try {
+            c = mDB.query(
+                    DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME, DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_COLS,
+                    "note_id=?", new String[] {String.valueOf(note.getId())}, null, null, DBBasicNoteOpenHelper.ORDER_COLUMN_NAME
+            );
+
+            for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
+                note.getItems().add(noteItemFromCursor(c, mDTF));
+            }
+
+        } finally {
+            if ((c !=null) && !c.isClosed())
+                c.close();
+        }
+
+        return BasicNoteDataA.newInstance(null, notes);
     }
 
     public void refreshNotes(ArrayList<BasicNoteA> notes) {
@@ -71,7 +113,7 @@ public class DBNoteManager extends BasicCommonNoteManager {
 
             c.moveToFirst();
             if (!c.isAfterLast()) {
-                return fromCursor(c, mDTF);
+                return noteFromCursor(c, mDTF);
             } else
                 return null;
         } finally {
@@ -108,6 +150,19 @@ public class DBNoteManager extends BasicCommonNoteManager {
         return mDB.update(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, cv, DBBasicNoteOpenHelper.NOTES_TABLE_COLS[0] + "=" + note.getId(), null);
     }
 
+    public long insertNoteItem(BasicNoteA note, BasicNoteItemA item) {
+        ContentValues cv = new ContentValues();
+
+        cv.put(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_COLS[1], System.currentTimeMillis());
+        cv.put(DBBasicNoteOpenHelper.NOTES_TABLE_COLS[2], DBBasicNoteHelper.getInstance(mContext).getMaxOrderId(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME) + 1);
+        cv.put(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_COLS[3], note.getId());
+        cv.put(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_COLS[4], item.getName());
+        cv.put(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_COLS[5], item.getValue());
+        cv.put(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_COLS[6], item.getChecked());
+
+        return mDB.insert(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME, null, cv);
+    }
+
     public BasicNoteA get(int id) {
         Cursor c = null;
         try {
@@ -117,7 +172,7 @@ public class DBNoteManager extends BasicCommonNoteManager {
             );
             c.moveToFirst();
             if (!c.isAfterLast())
-                return fromCursor(c, mDTF);
+                return noteFromCursor(c, mDTF);
             else
                 return null;
         } finally {
@@ -125,5 +180,4 @@ public class DBNoteManager extends BasicCommonNoteManager {
                 c.close();
         }
     }
-
 }

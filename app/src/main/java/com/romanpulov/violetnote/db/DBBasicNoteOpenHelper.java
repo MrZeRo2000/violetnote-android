@@ -44,8 +44,8 @@ public class DBBasicNoteOpenHelper extends SQLiteOpenHelper {
     public static final String[] NOTE_ITEMS_TABLE_COLS = new String[] {
             ID_COLUMN_NAME,
             LAST_MODIFIED_COLUMN_NAME,
-            "note_id",
             ORDER_COLUMN_NAME,
+            "note_id",
             "name",
             "value",
             "checked"
@@ -59,7 +59,7 @@ public class DBBasicNoteOpenHelper extends SQLiteOpenHelper {
                     NOTE_ITEMS_TABLE_COLS[4] + " TEXT," +
                     NOTE_ITEMS_TABLE_COLS[5] + " TEXT," +
                     NOTE_ITEMS_TABLE_COLS[6] + " INTEGER," +
-                    " FOREIGN KEY (" + NOTE_ITEMS_TABLE_COLS[2] + ") REFERENCES " + NOTES_TABLE_NAME + "(" + NOTES_TABLE_COLS[0] + ")" +
+                    " FOREIGN KEY (" + NOTE_ITEMS_TABLE_COLS[3] + ") REFERENCES " + NOTES_TABLE_NAME + "(" + NOTES_TABLE_COLS[0] + ")" +
                     ");";
 
     public DBBasicNoteOpenHelper(Context context) {
@@ -76,5 +76,10 @@ public class DBBasicNoteOpenHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int i, int i1) {
 
+    }
+
+    @Override
+    public void onConfigure(SQLiteDatabase db) {
+        db.setForeignKeyConstraintsEnabled(true);
     }
 }
