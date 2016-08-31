@@ -64,6 +64,7 @@ public class BasicNoteActivityFragment extends Fragment {
         final String oldTitle = item.getTitle();
         TextInputDialog dialog = new TextInputDialog(getActivity(), getResources().getString(R.string.ui_note_title));
         dialog.setText(oldTitle);
+        dialog.setNonEmptyErrorMessage(getString(R.string.error_field_not_empty));
         dialog.setOnTextInputListener(new TextInputDialog.OnTextInputListener() {
             @Override
             public void onTextInput(String text) {
