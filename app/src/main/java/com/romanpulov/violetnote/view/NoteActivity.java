@@ -7,11 +7,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.view.core.PassDataPasswordActivity;
 import com.romanpulov.violetnote.view.core.PasswordActivity;
 import com.romanpulov.violetnote.model.PassDataA;
 import com.romanpulov.violetnote.model.PassNoteA;
 
-public class NoteActivity extends PasswordActivity implements OnPassNoteItemInteractionListener {
+public class NoteActivity extends PassDataPasswordActivity implements OnPassNoteItemInteractionListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

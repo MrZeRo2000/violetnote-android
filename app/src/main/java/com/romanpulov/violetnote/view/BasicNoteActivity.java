@@ -10,11 +10,14 @@ import android.widget.Toast;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicNoteA;
+import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.view.core.ActionBarCompatActivity;
+import com.romanpulov.violetnote.view.core.PasswordActivity;
 
 import java.util.ArrayList;
 
 public class BasicNoteActivity extends ActionBarCompatActivity implements BasicNoteActivityFragment.OnBasicNoteFragmentInteractionListener {
+    public static final String BASIC_NOTE_DATA = "BasicNoteData";
     public static final String NOTE_LIST = "NoteList";
     public static final String NOTE = "Note";
 
@@ -68,6 +71,10 @@ public class BasicNoteActivity extends ActionBarCompatActivity implements BasicN
 
     @Override
     public void onBasicNoteFragmentInteraction(BasicNoteA item) {
-        Toast.makeText(this, "Selected item = " + item, Toast.LENGTH_SHORT).show();
+        BasicNoteDataA noteData = mNoteManager.queryNoteData(item);
+        Intent intent = new Intent(this, BasicNoteCheckedItemActivity.class);
+        intent.putExtra(BASIC_NOTE_DATA, noteData);
+        intent.putExtra(PasswordActivity.PASSWORD_REQUIRED, false);
+        startActivityForResult(intent, 0);
     }
 }

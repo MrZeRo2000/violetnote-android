@@ -1,5 +1,6 @@
 package com.romanpulov.violetnote.view;
 
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -11,6 +12,9 @@ public class BasicNoteCheckedItemActivity extends ActionBarCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_basic_note_checked_item);
+/*
+        Fragment fragment = NoteFragment.newInstance(mPassDataA);
+        removeFragment().beginTransaction().add(android.R.id.content, fragment).commit();
+*/
     }
 }

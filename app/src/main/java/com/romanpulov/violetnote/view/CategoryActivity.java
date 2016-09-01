@@ -8,12 +8,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.view.core.PassDataPasswordActivity;
 import com.romanpulov.violetnote.view.core.PasswordActivity;
 import com.romanpulov.violetnote.model.Document;
 import com.romanpulov.violetnote.model.PassCategoryA;
 import com.romanpulov.violetnote.model.PassDataA;
 
-public class CategoryActivity extends PasswordActivity implements CategoryFragment.OnListFragmentInteractionListener, OnSearchInteractionListener {
+public class CategoryActivity extends PassDataPasswordActivity implements CategoryFragment.OnListFragmentInteractionListener, OnSearchInteractionListener {
     private static final boolean mSampleData = false;
 
     @Override

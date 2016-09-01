@@ -2,6 +2,7 @@ package com.romanpulov.violetnote.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.IdRes;
 
 import com.romanpulov.violetnotecore.Model.PassData;
 
@@ -13,9 +14,11 @@ import java.util.Set;
 /**
  * Created by rpulov on 26.04.2016.
  */
-public class PassDataA implements Parcelable {
+public class PassDataA implements Parcelable, PasswordProvider {
+
     private final String mPassword;
 
+    @Override
     public String getPassword() {
         return mPassword;
     }

@@ -4,10 +4,11 @@ import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.romanpulov.violetnote.view.core.PassDataPasswordActivity;
 import com.romanpulov.violetnote.view.core.PasswordActivity;
 import com.romanpulov.violetnote.model.PassNoteA;
 
-public class NoteDetailsActivity extends PasswordActivity implements NoteDetailsFragment.OnListFragmentInteractionListener {
+public class NoteDetailsActivity extends PassDataPasswordActivity implements NoteDetailsFragment.OnListFragmentInteractionListener {
     @Override
     protected void refreshFragment() {
         Fragment fragment = NoteDetailsFragment.newInstance(mPassDataA);

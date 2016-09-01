@@ -5,11 +5,12 @@ import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.romanpulov.violetnote.view.core.PassDataPasswordActivity;
 import com.romanpulov.violetnote.view.core.PasswordActivity;
 import com.romanpulov.violetnote.model.PassDataA;
 import com.romanpulov.violetnote.model.PassNoteA;
 
-public class SearchResultActivity extends PasswordActivity implements OnPassNoteItemInteractionListener {
+public class SearchResultActivity extends PassDataPasswordActivity implements OnPassNoteItemInteractionListener {
     public static final String SEARCH_TEXT = "SearchText";
 
     private String mSearchText;
