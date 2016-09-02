@@ -8,9 +8,15 @@ import java.util.ArrayList;
 /**
  * Created by rpulov on 21.08.2016.
  */
-public class BasicNoteDataA implements Parcelable {
+public class BasicNoteDataA implements Parcelable, PasswordProvider {
     private final String mPassword;
 
+    @Override
+    public boolean isPasswordProtected() {
+        return ((mNoteList != null) && (mNoteList.size() > 0) && (mNoteList.get(0).getIsEncrypted()));
+    }
+
+    @Override
     public String getPassword() {
         return mPassword;
     }

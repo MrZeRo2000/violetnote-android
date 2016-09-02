@@ -12,7 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
+import com.romanpulov.violetnote.view.core.PasswordActivity;
 import com.romanpulov.violetnote.view.dummy.DummyContent.DummyItem;
 
 /**
@@ -38,10 +40,10 @@ public class BasicNoteCheckedItemFragment extends Fragment {
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static BasicNoteCheckedItemFragment newInstance(int columnCount) {
+    public static BasicNoteCheckedItemFragment newInstance(BasicNoteDataA basicNoteDataA) {
         BasicNoteCheckedItemFragment fragment = new BasicNoteCheckedItemFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
+        args.putParcelable(PasswordActivity.PASS_DATA, basicNoteDataA);
         fragment.setArguments(args);
         return fragment;
     }
