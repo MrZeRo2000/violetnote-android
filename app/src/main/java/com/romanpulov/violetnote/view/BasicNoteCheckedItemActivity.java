@@ -3,6 +3,7 @@ package com.romanpulov.violetnote.view;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -14,14 +15,27 @@ import com.romanpulov.violetnote.view.core.BasicNoteDataPasswordActivity;
 public class BasicNoteCheckedItemActivity extends BasicNoteDataPasswordActivity {
 
     @Override
+    protected int getFragmentContainerId() {
+        return R.id.fragment_id;
+    }
+
+    @Override
     protected void refreshFragment() {
         Fragment fragment = BasicNoteCheckedItemFragment.newInstance(mBasicNoteData);
-        removeFragment().beginTransaction().add(android.R.id.content, fragment).commit();
+        removeFragment().beginTransaction().add(getFragmentContainerId(), fragment).commit();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //for ToolBar
+        setContentView(R.layout.activity_basic_note_checked_item);
+
+        //setup ToolBar instead of ActionBar
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        setupActionBar();
 
         refreshFragment();
     }

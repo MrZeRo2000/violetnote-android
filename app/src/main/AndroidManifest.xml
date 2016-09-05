@@ -82,7 +82,7 @@
         <activity android:name=".view.BasicNoteCheckedItemActivity"
             android:label="@string/title_activity_basic_note_checked_item"
             android:parentActivityName=".view.BasicNoteActivity"
-            android:theme="@style/MainAppTheme"
+            android:theme="@style/ToolBarTheme"
             />
     </application>
 

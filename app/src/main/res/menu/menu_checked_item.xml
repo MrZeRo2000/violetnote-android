@@ -11,16 +11,16 @@
     <item
         android:id="@+id/action_checkout"
         android:title="@string/action_checkout"
-        compat:showAsAction="ifRoom|withText"
+        compat:showAsAction="never"
         />
     <item
         android:id="@+id/action_check_all"
         android:title="@string/action_check_all"
-        compat:showAsAction="ifRoom|withText"
+        compat:showAsAction="never"
         />
     <item
         android:id="@+id/action_uncheck_all"
         android:title="@string/action_uncheck_all"
-        compat:showAsAction="ifRoom|withText"
+        compat:showAsAction="never"
         />
 </menu>

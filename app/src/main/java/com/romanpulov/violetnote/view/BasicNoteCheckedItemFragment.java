@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.romanpulov.violetnote.R;
@@ -103,9 +104,17 @@ public class BasicNoteCheckedItemFragment extends Fragment {
     }
 
     public void showAddLayout() {
-        View addPanelView = getView().findViewById(R.id.add_panel_include);
-        if (addPanelView != null)
+        final View addPanelView = getView().findViewById(R.id.add_panel_include);
+        if (addPanelView != null) {
             addPanelView.setVisibility(View.VISIBLE);
+            Button cancelButton = (Button)addPanelView.findViewById(R.id.cancel_button);
+            cancelButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    addPanelView.setVisibility(View.GONE);
+                }
+            });
+        }
     }
 
     public interface OnBasicNoteItemFragmentInteractionListener {
