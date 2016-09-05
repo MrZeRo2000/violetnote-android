@@ -10,11 +10,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.view.core.PasswordActivity;
+import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 import com.romanpulov.violetnote.view.dummy.DummyContent.DummyItem;
 
 /**
@@ -67,7 +69,17 @@ public class BasicNoteCheckedItemFragment extends Fragment {
 
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-            recyclerView.setAdapter(new BasicNoteCheckedItemRecyclerViewAdapter(mBasicNoteData.getNoteList().get(0).getItems(), mListener));
+            recyclerView.setAdapter(new BasicNoteCheckedItemRecyclerViewAdapter(mBasicNoteData.getNoteList().get(0).getItems(),
+                    new OnBasicNoteItemFragmentInteractionListener() {
+                        @Override
+                        public void onBasicNoteItemFragmentInteraction(BasicNoteItemA item) {
+                            Toast.makeText(getActivity(), "Clicked " + item, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+            ));
+
+            // add decoration
+            recyclerView.addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(getActivity(), RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_white_black_gradient));
         }
         return view;
     }
@@ -75,12 +87,6 @@ public class BasicNoteCheckedItemFragment extends Fragment {
     @Override
     public void onAttach(Activity context) {
         super.onAttach(context);
-        if (context instanceof OnBasicNoteItemFragmentInteractionListener) {
-            mListener = (OnBasicNoteItemFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnBasicNoteItemFragmentInteractionListener");
-        }
     }
 
     @Override

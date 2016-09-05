@@ -9,12 +9,7 @@ import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.view.core.ActionBarCompatActivity;
 import com.romanpulov.violetnote.view.core.BasicNoteDataPasswordActivity;
 
-public class BasicNoteCheckedItemActivity extends BasicNoteDataPasswordActivity implements BasicNoteCheckedItemFragment.OnBasicNoteItemFragmentInteractionListener {
-
-    @Override
-    public void onBasicNoteItemFragmentInteraction(BasicNoteItemA item) {
-
-    }
+public class BasicNoteCheckedItemActivity extends BasicNoteDataPasswordActivity {
 
     @Override
     protected void refreshFragment() {

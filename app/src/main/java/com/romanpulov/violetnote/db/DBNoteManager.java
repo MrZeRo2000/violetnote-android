@@ -41,9 +41,9 @@ public class DBNoteManager extends BasicCommonNoteManager {
                 c.getLong(1),
                 dtf.formatDateTimeDelimited(new Date(c.getLong(1)), "\n"),
                 c.getLong(2),
-                c.getString(3),
                 c.getString(4),
-                BasicCommonNoteA.fromInt(c.getInt(5))
+                c.getString(5),
+                BasicCommonNoteA.fromInt(c.getInt(6))
         );
     }
 
