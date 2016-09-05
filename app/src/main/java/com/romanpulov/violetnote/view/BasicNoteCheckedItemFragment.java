@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.db.DBNoteManager;
+import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.view.core.PasswordActivity;
@@ -65,15 +67,23 @@ public class BasicNoteCheckedItemFragment extends Fragment {
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
+            final RecyclerView recyclerView = (RecyclerView) view;
 
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
             recyclerView.setAdapter(new BasicNoteCheckedItemRecyclerViewAdapter(mBasicNoteData.getNoteList().get(0).getItems(),
                     new OnBasicNoteItemFragmentInteractionListener() {
                         @Override
-                        public void onBasicNoteItemFragmentInteraction(BasicNoteItemA item) {
-                            Toast.makeText(getActivity(), "Clicked " + item, Toast.LENGTH_SHORT).show();
+                        public void onBasicNoteItemFragmentInteraction(BasicNoteItemA item, int position) {
+                            DBNoteManager manager = new DBNoteManager(getActivity());
+                            manager.checkNoteItem(item);
+
+                            BasicNoteA note = mBasicNoteData.getNoteList().get(0);
+                            BasicNoteDataA newNoteData = manager.queryNoteData(note);
+                            mBasicNoteData.getNoteList().get(0).getItems().clear();
+                            mBasicNoteData.getNoteList().get(0).getItems().addAll(newNoteData.getNoteList().get(0).getItems());
+
+                            recyclerView.getAdapter().notifyDataSetChanged();
                         }
                     }
             ));
@@ -96,6 +106,6 @@ public class BasicNoteCheckedItemFragment extends Fragment {
     }
 
     public interface OnBasicNoteItemFragmentInteractionListener {
-        void onBasicNoteItemFragmentInteraction(BasicNoteItemA item);
+        void onBasicNoteItemFragmentInteraction(BasicNoteItemA item, int position);
     }
 }

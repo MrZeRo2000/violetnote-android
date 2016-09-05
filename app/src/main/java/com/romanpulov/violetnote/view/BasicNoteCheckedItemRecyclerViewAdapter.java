@@ -40,7 +40,7 @@ public class BasicNoteCheckedItemRecyclerViewAdapter extends RecyclerView.Adapte
             @Override
             public void onClick(View v) {
                 if (null != mListener) {
-                    mListener.onBasicNoteItemFragmentInteraction(holder.mItem);
+                    mListener.onBasicNoteItemFragmentInteraction(holder.mItem, holder.getAdapterPosition());
                 }
             }
         });

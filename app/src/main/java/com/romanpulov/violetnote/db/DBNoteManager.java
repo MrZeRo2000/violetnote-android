@@ -163,6 +163,15 @@ public class DBNoteManager extends BasicCommonNoteManager {
         return mDB.insert(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME, null, cv);
     }
 
+    public void checkNoteItem(BasicNoteItemA item) {
+        String checkedColumnName = DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_COLS[6];
+        String sql = "UPDATE " + DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME + " SET " +
+                checkedColumnName + " = " +
+                " CASE WHEN " + checkedColumnName + " = 0 THEN 1 ELSE 0 END " +
+                " WHERE " + DBBasicNoteOpenHelper.ID_COLUMN_NAME + " = " + item.getId();
+        mDB.execSQL(sql);
+    }
+
     public BasicNoteA get(int id) {
         Cursor c = null;
         try {
