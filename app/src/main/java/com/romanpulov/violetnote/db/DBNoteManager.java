@@ -163,16 +163,35 @@ public class DBNoteManager extends BasicCommonNoteManager {
         return mDB.insert(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME, null, cv);
     }
 
-    public void checkNoteItem(BasicNoteItemA item) {
-        String checkedColumnName = DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_COLS[6];
-        String sql = "UPDATE " + DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME + " SET " +
-                checkedColumnName + " = " +
-                " CASE WHEN " + checkedColumnName + " = 0 THEN 1 ELSE 0 END " +
-                " WHERE " + DBBasicNoteOpenHelper.ID_COLUMN_NAME + " = " + item.getId();
-        mDB.execSQL(sql);
+    public long checkNoteItem(BasicNoteItemA item) {
+        ContentValues cv = new ContentValues();
+
+        cv.put(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_COLS[1], System.currentTimeMillis());
+        cv.put(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_COLS[6], !item.getChecked());
+
+        return mDB.update(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME, cv, DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_COLS[0] + " = ?" , new String[] {String.valueOf(item.getId())});
     }
 
-    public BasicNoteA get(int id) {
+    public BasicNoteItemA getNoteItem(long id) {
+        Cursor c = null;
+        try {
+            c = mDB.query(
+                    DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME, DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_COLS,
+                    DBBasicNoteOpenHelper.ID_COLUMN_NAME + "=?", new String[]{String.valueOf(id)}, null, null, null
+            );
+            c.moveToFirst();
+            if (!c.isAfterLast())
+                return noteItemFromCursor(c, mDTF);
+            else
+                return null;
+        } finally {
+            if ((c !=null) && !c.isClosed())
+                c.close();
+        }
+
+    }
+
+    public BasicNoteA get(long id) {
         Cursor c = null;
         try {
             c = mDB.query(

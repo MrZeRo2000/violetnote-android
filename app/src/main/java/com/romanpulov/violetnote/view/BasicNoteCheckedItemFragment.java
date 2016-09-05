@@ -76,14 +76,13 @@ public class BasicNoteCheckedItemFragment extends Fragment {
                         @Override
                         public void onBasicNoteItemFragmentInteraction(BasicNoteItemA item, int position) {
                             DBNoteManager manager = new DBNoteManager(getActivity());
+                            //update item
                             manager.checkNoteItem(item);
+                            //ensure item is updated and reload
+                            BasicNoteItemA updatedItem = manager.getNoteItem(item.getId());
+                            item.updateChecked(updatedItem);
 
-                            BasicNoteA note = mBasicNoteData.getNoteList().get(0);
-                            BasicNoteDataA newNoteData = manager.queryNoteData(note);
-                            mBasicNoteData.getNoteList().get(0).getItems().clear();
-                            mBasicNoteData.getNoteList().get(0).getItems().addAll(newNoteData.getNoteList().get(0).getItems());
-
-                            recyclerView.getAdapter().notifyDataSetChanged();
+                            recyclerView.getAdapter().notifyItemChanged(position);
                         }
                     }
             ));

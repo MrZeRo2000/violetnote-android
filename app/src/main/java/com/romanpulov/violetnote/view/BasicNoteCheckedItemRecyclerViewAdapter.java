@@ -1,5 +1,7 @@
 package com.romanpulov.violetnote.view;
 
+import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +37,12 @@ public class BasicNoteCheckedItemRecyclerViewAdapter extends RecyclerView.Adapte
         holder.mItem = mValues.get(position);
         holder.mCheckedView.setChecked(holder.mItem.getChecked());
         holder.mValueView.setText(holder.mItem.getValue());
+        if (holder.mItem.getChecked())
+            holder.mValueView.setPaintFlags(holder.mValueView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        else
+            holder.mValueView.setPaintFlags(holder.mValueView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+
+        holder.mLastModifiedView.setText(holder.mItem.getLastModifiedString());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,6 +63,7 @@ public class BasicNoteCheckedItemRecyclerViewAdapter extends RecyclerView.Adapte
         public final View mView;
         public final CheckBox mCheckedView;
         public final TextView mValueView;
+        public final TextView mLastModifiedView;
         public BasicNoteItemA mItem;
 
         public ViewHolder(View view) {
@@ -62,6 +71,7 @@ public class BasicNoteCheckedItemRecyclerViewAdapter extends RecyclerView.Adapte
             mView = view;
             mCheckedView = (CheckBox) view.findViewById(R.id.checked);
             mValueView = (TextView) view.findViewById(R.id.value);
+            mLastModifiedView = (TextView) view.findViewById(R.id.last_modified);
         }
 
         @Override

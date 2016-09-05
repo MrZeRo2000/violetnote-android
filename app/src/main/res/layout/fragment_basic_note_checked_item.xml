@@ -3,7 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/list_selector"
-    android:padding="@dimen/text_margin"
+    android:paddingTop="@dimen/text_margin"
+    android:paddingBottom="@dimen/text_margin"
+    android:paddingLeft="@dimen/text_margin_half"
+    android:paddingRight="@dimen/text_margin_half"
     >
 
     <CheckBox
@@ -11,6 +14,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/checked"
         android:layout_alignParentLeft="true"
+        android:clickable="false"
+        android:theme="@style/EditTheme"
         />
     <TextView
         android:layout_width="wrap_content"
@@ -18,8 +23,21 @@
         android:id="@+id/value"
         android:layout_centerVertical="true"
         android:layout_toRightOf="@+id/checked"
+        android:layout_toLeftOf="@+id/last_modified"
         android:textAppearance="@style/Text2"
         android:text="Value"
         />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/last_modified"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="@dimen/text_margin_half"
+        android:layout_centerVertical="true"
+        android:gravity="center_horizontal"
+        android:textAppearance="@style/Dim3Text"
+        />
+
 
 </RelativeLayout>
