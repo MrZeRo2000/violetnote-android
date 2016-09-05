@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="@dimen/text_margin"
+    android:id="@+id/add_layout"
+    >
+
+    <Button
+        android:layout_width="@dimen/search_button_size"
+        android:layout_height="@dimen/search_button_size"
+        android:id="@+id/cancel_button"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="false"
+        android:background="@drawable/ic_action_cancel"
+        />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/add_edit_text"
+        android:layout_toLeftOf="@id/cancel_button"
+        android:inputType="text"
+        android:layout_centerVertical="false"
+        android:hint="@string/hint_add"
+        android:textCursorDrawable="@null"
+        android:imeOptions="actionGo"
+        />
+
+</RelativeLayout>

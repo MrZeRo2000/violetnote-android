@@ -64,32 +64,30 @@ public class BasicNoteCheckedItemFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_basic_note_checked_item_list, container, false);
 
-        // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            final RecyclerView recyclerView = (RecyclerView) view;
+        Context context = view.getContext();
+        final RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
 
-            recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-            recyclerView.setAdapter(new BasicNoteCheckedItemRecyclerViewAdapter(mBasicNoteData.getNoteList().get(0).getItems(),
-                    new OnBasicNoteItemFragmentInteractionListener() {
-                        @Override
-                        public void onBasicNoteItemFragmentInteraction(BasicNoteItemA item, int position) {
-                            DBNoteManager manager = new DBNoteManager(getActivity());
-                            //update item
-                            manager.checkNoteItem(item);
-                            //ensure item is updated and reload
-                            BasicNoteItemA updatedItem = manager.getNoteItem(item.getId());
-                            item.updateChecked(updatedItem);
+        recyclerView.setAdapter(new BasicNoteCheckedItemRecyclerViewAdapter(mBasicNoteData.getNoteList().get(0).getItems(),
+                new OnBasicNoteItemFragmentInteractionListener() {
+                    @Override
+                    public void onBasicNoteItemFragmentInteraction(BasicNoteItemA item, int position) {
+                        DBNoteManager manager = new DBNoteManager(getActivity());
+                        //update item
+                        manager.checkNoteItem(item);
+                        //ensure item is updated and reload
+                        BasicNoteItemA updatedItem = manager.getNoteItem(item.getId());
+                        item.updateChecked(updatedItem);
 
-                            recyclerView.getAdapter().notifyItemChanged(position);
-                        }
+                        recyclerView.getAdapter().notifyItemChanged(position);
                     }
-            ));
+                }
+        ));
 
-            // add decoration
-            recyclerView.addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(getActivity(), RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_white_black_gradient));
-        }
+        // add decoration
+        recyclerView.addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(getActivity(), RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_white_black_gradient));
+
         return view;
     }
 
@@ -102,6 +100,12 @@ public class BasicNoteCheckedItemFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    public void showAddLayout() {
+        View addPanelView = getView().findViewById(R.id.add_panel_include);
+        if (addPanelView != null)
+            addPanelView.setVisibility(View.VISIBLE);
     }
 
     public interface OnBasicNoteItemFragmentInteractionListener {

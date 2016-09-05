@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:compat="http://schemas.android.com/apk/res-auto"
+    >
+    <item
+        android:id="@+id/action_add"
+        android:title="@string/action_add"
+        android:icon="@drawable/ic_action_add"
+        compat:showAsAction="ifRoom"
+        />
+    <item
+        android:id="@+id/action_checkout"
+        android:title="@string/action_checkout"
+        compat:showAsAction="ifRoom|withText"
+        />
+    <item
+        android:id="@+id/action_check_all"
+        android:title="@string/action_check_all"
+        compat:showAsAction="ifRoom|withText"
+        />
+    <item
+        android:id="@+id/action_uncheck_all"
+        android:title="@string/action_uncheck_all"
+        compat:showAsAction="ifRoom|withText"
+        />
+</menu>

@@ -7,6 +7,7 @@
     <string name="password_required">Password required</string>
     <string name="caption_loading">Loading &#8230;</string>
     <string name="hint_search">Search &#8230;</string>
+    <string name="hint_add">Add &#8230;</string>
 
     <string name="layout_notes_count">Notes : %d</string>
 
@@ -20,6 +21,9 @@
     <string name="action_move_top">Move top</string>
     <string name="action_move_down">Move down</string>
     <string name="action_move_bottom">Move bottom</string>
+    <string name="action_checkout">Checkout</string>
+    <string name="action_check_all">Check all</string>
+    <string name="action_uncheck_all">Uncheck all</string>
 
     <!-- Preferences -->
     <string name="pref_title_pass_note_data">Password Notes Data</string>
