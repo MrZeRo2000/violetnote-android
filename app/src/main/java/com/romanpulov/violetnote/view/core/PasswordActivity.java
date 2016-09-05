@@ -94,7 +94,7 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (mPasswordProvider.isPasswordProtected()) {
+        if ((mPasswordProvider != null) && (mPasswordProvider.isPasswordProtected())) {
             if (mPasswordRequired) {
                 Log.d("PasswordActivity", "OnResume: password required");
                 removeFragment();

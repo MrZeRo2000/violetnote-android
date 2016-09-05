@@ -1,9 +1,12 @@
 package com.romanpulov.violetnote.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by rpulov on 11.08.2016.
  */
-public class BasicNoteItemA extends BasicCommonNoteA {
+public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
     private String mName;
     private String mValue;
     private boolean mChecked;
@@ -50,5 +53,43 @@ public class BasicNoteItemA extends BasicCommonNoteA {
         instance.mValue = value;
         return instance;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int i) {
+        dest.writeLong(mId);
+        dest.writeLong(mLastModified);
+        dest.writeString(mLastModifiedString);
+        dest.writeLong(mOrderId);
+        dest.writeString(mName);
+        dest.writeString(mValue);
+        dest.writeInt(toInt(mChecked));
+    }
+
+    private BasicNoteItemA(Parcel in) {
+        mId = in.readLong();
+        mLastModified = in.readLong();
+        mLastModifiedString = in.readString();
+        mOrderId = in.readLong();
+        mName = in.readString();
+        mValue = in.readString();
+        mChecked = fromInt(in.readInt());
+    }
+
+    public static final Parcelable.Creator<BasicNoteItemA> CREATOR = new Parcelable.Creator<BasicNoteItemA>() {
+        @Override
+        public BasicNoteItemA createFromParcel(Parcel source) {
+            return new BasicNoteItemA(source);
+        }
+
+        @Override
+        public BasicNoteItemA[] newArray(int size) {
+            return new BasicNoteItemA[size];
+        }
+    };
 
 }

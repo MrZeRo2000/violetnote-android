@@ -73,7 +73,7 @@ public class BasicNoteActivity extends ActionBarCompatActivity implements BasicN
     public void onBasicNoteFragmentInteraction(BasicNoteA item) {
         BasicNoteDataA noteData = mNoteManager.queryNoteData(item);
         Intent intent = new Intent(this, BasicNoteCheckedItemActivity.class);
-        intent.putExtra(BASIC_NOTE_DATA, noteData);
+        intent.putExtra(PasswordActivity.PASS_DATA, noteData);
         intent.putExtra(PasswordActivity.PASSWORD_REQUIRED, false);
         startActivityForResult(intent, 0);
     }

@@ -25,10 +25,8 @@ import com.romanpulov.violetnote.view.dummy.DummyContent.DummyItem;
  */
 public class BasicNoteCheckedItemFragment extends Fragment {
 
-    // TODO: Customize parameter argument names
-    private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
-    private int mColumnCount = 1;
+    private BasicNoteDataA mBasicNoteData;
+
     private OnBasicNoteItemFragmentInteractionListener mListener;
 
     /**
@@ -53,7 +51,7 @@ public class BasicNoteCheckedItemFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
+            mBasicNoteData = getArguments().getParcelable(PasswordActivity.PASS_DATA);
         }
     }
 
@@ -66,12 +64,10 @@ public class BasicNoteCheckedItemFragment extends Fragment {
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
-            //recyclerView.setAdapter(new BasicNoteCheckedItemRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+
+            recyclerView.setLayoutManager(new LinearLayoutManager(context));
+
+            recyclerView.setAdapter(new BasicNoteCheckedItemRecyclerViewAdapter(mBasicNoteData.getNoteList().get(0).getItems(), mListener));
         }
         return view;
     }
@@ -93,18 +89,7 @@ public class BasicNoteCheckedItemFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnBasicNoteItemFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onBasicNoteItemFragmentInteraction(BasicNoteItemA item);
     }
 }

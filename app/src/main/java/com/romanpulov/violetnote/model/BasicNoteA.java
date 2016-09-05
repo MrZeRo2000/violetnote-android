@@ -111,6 +111,7 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
         mTitle = in.readString();
         mIsEncrypted = fromInt(in.readInt());
         mEncryptedString = in.readString();
+        in.readTypedList(mItems, BasicNoteItemA.CREATOR);
     }
 
     @Override
@@ -128,6 +129,7 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
         dest.writeString(mTitle);
         dest.writeInt(toInt(mIsEncrypted));
         dest.writeString(mEncryptedString);
+        dest.writeTypedList(mItems);
     }
 
     public static final Parcelable.Creator<BasicNoteA> CREATOR = new Parcelable.Creator<BasicNoteA>() {
