@@ -4,7 +4,10 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by rpulov on 11.08.2016.
@@ -53,9 +56,9 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
         return mItems;
     }
 
-    private List<String> mValues = new ArrayList<>();
+    private Set<String> mValues = new HashSet<>();
 
-    public List<String> getValues() {
+    public Set<String> getValues() {
         return mValues;
     }
 

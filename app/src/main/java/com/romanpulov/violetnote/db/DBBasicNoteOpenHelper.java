@@ -62,15 +62,30 @@ public class DBBasicNoteOpenHelper extends SQLiteOpenHelper {
                     " FOREIGN KEY (" + NOTE_ITEMS_TABLE_COLS[3] + ") REFERENCES " + NOTES_TABLE_NAME + "(" + NOTES_TABLE_COLS[0] + ")" +
                     ");";
 
+    //note values
+    public static final String NOTE_VALUES_TABLE_NAME = "note_values";
+    public static final String[] NOTE_VALUES_TABLE_COLS = new String[] {
+            ID_COLUMN_NAME,
+            "note_id",
+            "value"
+    };
+    private static final String NOTE_VALUES_TABLE_CREATE =
+            "CREATE TABLE " + NOTE_VALUES_TABLE_NAME + " (" +
+                    NOTE_VALUES_TABLE_COLS[0] + " INTEGER PRIMARY KEY," +
+                    NOTE_VALUES_TABLE_COLS[1] + " INTEGER ," +
+                    NOTE_VALUES_TABLE_COLS[2] + " TEXT," +
+                    " FOREIGN KEY (" + NOTE_VALUES_TABLE_COLS[1] + ") REFERENCES " + NOTES_TABLE_NAME + "(" + NOTES_TABLE_COLS[0] + ")" +
+                    ");";
+
     public DBBasicNoteOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
-
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(NOTES_TABLE_CREATE);
         db.execSQL(NOTE_ITEMS_TABLE_CREATE);
+        db.execSQL(NOTE_VALUES_TABLE_CREATE);
     }
 
     @Override

@@ -27,6 +27,10 @@ public class BasicNoteDataA implements Parcelable, PasswordProvider {
         return mNoteList;
     }
 
+    public BasicNoteA getNote() {
+        return mNoteList.get(0);
+    }
+
     private BasicNoteDataA(String password) {
         mPassword = password;
     }

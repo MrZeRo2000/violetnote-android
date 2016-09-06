@@ -77,7 +77,7 @@ public class BasicNoteCheckedItemFragment extends Fragment {
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-        mRecyclerView.setAdapter(new BasicNoteCheckedItemRecyclerViewAdapter(mBasicNoteData.getNoteList().get(0).getItems(),
+        mRecyclerView.setAdapter(new BasicNoteCheckedItemRecyclerViewAdapter(mBasicNoteData.getNote().getItems(),
                 new OnBasicNoteItemFragmentInteractionListener() {
                     @Override
                     public void onBasicNoteItemFragmentInteraction(BasicNoteItemA item, int position) {
@@ -102,13 +102,12 @@ public class BasicNoteCheckedItemFragment extends Fragment {
             public void onAddFragmentInteraction(String text) {
                 DBNoteManager manager = new DBNoteManager(getActivity());
 
-                manager.insertNoteItem(mBasicNoteData.getNoteList().get(0), BasicNoteItemA.newCheckedEditInstance(text));
+                manager.insertNoteItem(mBasicNoteData.getNote(), BasicNoteItemA.newCheckedEditInstance(text));
 
-                //manager.refreshNoteData(mBasicNoteData);
-                manager.queryNoteData(mBasicNoteData.getNoteList().get(0));
+                manager.queryNoteDataItems(mBasicNoteData.getNote());
 
                 //recyclerView.getAdapter().notifyDataSetChanged();
-                mRecyclerView.scrollToPosition(mBasicNoteData.getNoteList().get(0).getItems().size() - 1);
+                mRecyclerView.scrollToPosition(mBasicNoteData.getNote().getItems().size() - 1);
             }
         });
 
@@ -136,7 +135,7 @@ public class BasicNoteCheckedItemFragment extends Fragment {
         DBNoteManager noteManager = new DBNoteManager(getActivity());
 
         noteManager.updateNoteDataChecked(mBasicNoteData, checked);
-        noteManager.queryNoteData(mBasicNoteData.getNoteList().get(0));
+        noteManager.queryNoteDataItems(mBasicNoteData.getNote());
 
         mRecyclerView.getAdapter().notifyDataSetChanged();
     }
@@ -151,9 +150,10 @@ public class BasicNoteCheckedItemFragment extends Fragment {
                 public void OnClick(DialogFragment dialog) {
                     DBNoteManager noteManager = new DBNoteManager(getActivity());
 
-                    noteManager.checkOut(mBasicNoteData.getNoteList().get(0).getItems());
+                    noteManager.checkOut(mBasicNoteData.getNote());
 
-                    noteManager.queryNoteData(mBasicNoteData.getNoteList().get(0));
+                    noteManager.queryNoteDataItems(mBasicNoteData.getNote());
+                    noteManager.queryNoteDataValues(mBasicNoteData.getNote());
                     mRecyclerView.getAdapter().notifyDataSetChanged();
 
                 }

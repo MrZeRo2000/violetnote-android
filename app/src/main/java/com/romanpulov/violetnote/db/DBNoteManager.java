@@ -11,8 +11,11 @@ import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by romanpulov on 17.08.2016.
@@ -69,12 +72,44 @@ public class DBNoteManager extends BasicCommonNoteManager {
         return result;
     }
 
+    public Collection<String> queryNoteValues(BasicNoteA note) {
+        Set<String> values = new HashSet<>();
+
+        Cursor c = null;
+        try {
+            c = mDB.query(
+                    DBBasicNoteOpenHelper.NOTE_VALUES_TABLE_NAME, new String[] {DBBasicNoteOpenHelper.NOTE_VALUES_TABLE_COLS[2]},
+                    "note_id=?", new String[] {String.valueOf(note.getId())}, null, null, null
+            );
+
+            for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
+                values.add(c.getString(0));
+            }
+
+        } finally {
+            if ((c !=null) && !c.isClosed())
+                c.close();
+        }
+
+        return values;
+    }
+
     public BasicNoteDataA queryNoteData(BasicNoteA note) {
         ArrayList<BasicNoteA> notes = new ArrayList<>();
 
         //get note
         notes.add(note);
 
+        //get items
+        queryNoteDataItems(note);
+
+        //get values
+        queryNoteDataValues(note);
+
+        return BasicNoteDataA.newInstance(null, notes);
+    }
+
+    public void queryNoteDataItems(BasicNoteA note) {
         //clear items
         note.getItems().clear();
 
@@ -94,8 +129,28 @@ public class DBNoteManager extends BasicCommonNoteManager {
             if ((c !=null) && !c.isClosed())
                 c.close();
         }
+    }
 
-        return BasicNoteDataA.newInstance(null, notes);
+    public void queryNoteDataValues(BasicNoteA note) {
+        //clear values
+        note.getValues().clear();
+
+        //get values
+        Cursor c = null;
+        try {
+            c = mDB.query(
+                    DBBasicNoteOpenHelper.NOTE_VALUES_TABLE_NAME, new String[] {DBBasicNoteOpenHelper.NOTE_VALUES_TABLE_COLS[2]},
+                    "note_id=?", new String[] {String.valueOf(note.getId())}, null, null, null
+            );
+
+            for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
+                note.getValues().add(c.getString(0));
+            }
+
+        } finally {
+            if ((c !=null) && !c.isClosed())
+                c.close();
+        }
     }
 
     public void refreshNotes(ArrayList<BasicNoteA> notes) {
@@ -175,6 +230,10 @@ public class DBNoteManager extends BasicCommonNoteManager {
         return mDB.insert(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME, null, cv);
     }
 
+    public long deleteNoteItem(BasicNoteItemA item) {
+        return mDB.delete(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME, DBBasicNoteOpenHelper.ID_COLUMN_NAME + "=?", new String[] {String.valueOf(item.getId())});
+    }
+
     public long checkNoteItem(BasicNoteItemA item) {
         ContentValues cv = new ContentValues();
 
@@ -184,8 +243,23 @@ public class DBNoteManager extends BasicCommonNoteManager {
         return mDB.update(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME, cv, DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_COLS[0] + " = ?" , new String[] {String.valueOf(item.getId())});
     }
 
-    public void checkOut(List<BasicNoteItemA> items) {
+    public void checkOut(BasicNoteA note) {
+        for (BasicNoteItemA item : note.getItems()) {
+            if (item.getChecked()) {
+                if (note.getValues().add(item.getValue()))
+                    insertNoteValue(note, item.getValue());
+                deleteNoteItem(item);
+            }
+        }
+    }
 
+    public long insertNoteValue(BasicNoteA note, String value) {
+        ContentValues cv = new ContentValues();
+
+        cv.put(DBBasicNoteOpenHelper.NOTE_VALUES_TABLE_COLS[1], note.getId());
+        cv.put(DBBasicNoteOpenHelper.NOTE_VALUES_TABLE_COLS[2], value);
+
+        return mDB.insert(DBBasicNoteOpenHelper.NOTE_VALUES_TABLE_NAME, null, cv);
     }
 
     public BasicNoteItemA getNoteItem(long id) {
