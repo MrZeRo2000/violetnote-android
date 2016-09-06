@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -58,7 +59,7 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
 
     private Set<String> mValues = new HashSet<>();
 
-    public Set<String> getValues() {
+    public Set<String>  getValues() {
         return mValues;
     }
 
@@ -115,6 +116,9 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
         mIsEncrypted = fromInt(in.readInt());
         mEncryptedString = in.readString();
         in.readTypedList(mItems, BasicNoteItemA.CREATOR);
+
+        String[] values = in.createStringArray();
+        Collections.addAll(mValues, values);
     }
 
     @Override
@@ -133,6 +137,8 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
         dest.writeInt(toInt(mIsEncrypted));
         dest.writeString(mEncryptedString);
         dest.writeTypedList(mItems);
+
+        dest.writeStringArray(mValues.toArray(new String[mValues.size()]));
     }
 
     public static final Parcelable.Creator<BasicNoteA> CREATOR = new Parcelable.Creator<BasicNoteA>() {

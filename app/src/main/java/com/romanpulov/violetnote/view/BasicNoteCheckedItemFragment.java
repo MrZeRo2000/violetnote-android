@@ -95,7 +95,7 @@ public class BasicNoteCheckedItemFragment extends Fragment {
         // add decoration
         mRecyclerView.addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(getActivity(), RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_white_black_gradient));
 
-        mAddActionHelper = new AddActionHelper(view.findViewById(R.id.add_panel_include));
+        mAddActionHelper = new AddActionHelper(view.findViewById(R.id.add_panel_include), mBasicNoteData.getNote().getValues());
         mAddActionHelper.setOnAddInteractionListener(new AddActionHelper.OnAddInteractionListener() {
             @Override
             public void onAddFragmentInteraction(String text) {
@@ -153,8 +153,12 @@ public class BasicNoteCheckedItemFragment extends Fragment {
 
                     noteManager.queryNoteDataItems(mBasicNoteData.getNote());
                     noteManager.queryNoteDataValues(mBasicNoteData.getNote());
+                    
+                    //update main list
                     mRecyclerView.getAdapter().notifyDataSetChanged();
-
+                    //update autocomplete
+                    if (mAddActionHelper != null)
+                        mAddActionHelper.setAutoCompleteList(mBasicNoteData.getNote().getValues());
                 }
             });
             dialog.show(getFragmentManager(), null);

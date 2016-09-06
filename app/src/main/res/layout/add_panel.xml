@@ -24,7 +24,7 @@
         android:background="@drawable/ic_action_cancel"
         />
 
-    <EditText
+    <AutoCompleteTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/add_edit_text"

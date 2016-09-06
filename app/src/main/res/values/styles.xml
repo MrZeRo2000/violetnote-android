@@ -21,6 +21,7 @@
         <!-- Edit style -->
         <item name="colorControlNormal">@color/dimTextColor</item>
         <item name="editTextStyle">@style/SearchEditText</item>
+        <item name="autoCompleteTextViewStyle">@style/SearchEditText</item>
         <item name="buttonStyle">@style/ButtonStyle</item>
         <item name="android:spinnerItemStyle">@style/SpinnerItem</item>
         <item name="android:spinnerDropDownItemStyle">@style/spinnerDropDownItemStyle</item>
@@ -30,6 +31,7 @@
         <item name="textAppearanceSmallPopupMenu">@style/PopupMenuSmallTextAppearanceStyle</item>
         <item name="android:dropDownListViewStyle">@style/ListViewStyle</item>
         <item name="dropDownListViewStyle">@style/ListViewStyle</item>
+        <item name="android:dropDownItemStyle">@style/DropDownItemStyle</item>
         <!-- For background in overflow menu -->
         <item name="android:itemBackground">@drawable/list_lighter_selector</item>
     </style>
@@ -83,6 +85,11 @@
         <item name="android:divider">@color/dimTextColor</item>
         <item name="android:dividerHeight">1dip</item>
         <item name="android:padding">1dip</item>
+    </style>
+
+    <style name="DropDownItemStyle" parent="@android:style/Widget.DropDownItem">
+        <item name="android:textColor">@color/brightTextColor</item>
+        <item name="android:background">@drawable/list_selector</item>
     </style>
 
     <!-- Main activity theme -->
