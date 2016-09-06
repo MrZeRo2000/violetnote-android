@@ -19,7 +19,7 @@ import java.util.Locale;
 public class DataGeneratorTest extends ApplicationTestCase<Application> {
     private final static String TAG = "DataGeneratorTest";
     public final static int MAX_NOTES = 30;
-    public final static int MAX_NOTE_ITEMS = 10;
+    public final static int MAX_NOTE_ITEMS = 20;
 
     private static void log(String message) {
         Log.d(TAG, message);
@@ -53,8 +53,11 @@ public class DataGeneratorTest extends ApplicationTestCase<Application> {
 
             if (i == 2) {
                 newNote.setId(i);
-                String itemValueFormat = "Note item %2d for note %2d";
                 for (int j = 1; j <= MAX_NOTE_ITEMS; j++) {
+                    String itemValueFormat = "Note item %2d for note %2d";
+                    if (j == 4)
+                        itemValueFormat = "This is a very very very very very very long note item %2d for note %2d";
+
                     BasicNoteItemA newNoteItem = BasicNoteItemA.newCheckedEditInstance(String.format(Locale.getDefault(), itemValueFormat, j, i));
                     assertFalse(-1 == noteManager.insertNoteItem(newNote, newNoteItem));
                 }
