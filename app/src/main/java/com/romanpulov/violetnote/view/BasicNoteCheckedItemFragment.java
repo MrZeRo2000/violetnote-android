@@ -34,6 +34,8 @@ public class BasicNoteCheckedItemFragment extends Fragment {
 
     private OnBasicNoteItemFragmentInteractionListener mListener;
 
+    private AddActionHelper mAddActionHelper;
+
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -89,6 +91,14 @@ public class BasicNoteCheckedItemFragment extends Fragment {
         // add decoration
         recyclerView.addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(getActivity(), RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_white_black_gradient));
 
+        mAddActionHelper = new AddActionHelper(view.findViewById(R.id.add_panel_include));
+        mAddActionHelper.setOnAddInteractionListener(new AddActionHelper.OnAddInteractionListener() {
+            @Override
+            public void onAddFragmentInteraction(String text) {
+                Toast.makeText(getActivity(), "Add " + text, Toast.LENGTH_SHORT).show();
+            }
+        });
+
         return view;
     }
 
@@ -104,6 +114,8 @@ public class BasicNoteCheckedItemFragment extends Fragment {
     }
 
     public void showAddLayout() {
+
+
         final View addPanelView = getView().findViewById(R.id.add_panel_include);
         if (addPanelView != null) {
             addPanelView.setVisibility(View.VISIBLE);
