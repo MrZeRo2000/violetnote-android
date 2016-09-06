@@ -1,7 +1,9 @@
 package com.romanpulov.violetnote.view;
 
+import android.app.Activity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -77,5 +79,7 @@ public class SearchActionHelper {
             mSearchView.findViewById(R.id.search_user_check).setVisibility(View.GONE);
         }
         mSearchView.setVisibility(View.VISIBLE);
+        if (mSearchView.findViewById(R.id.search_edit_text).requestFocus())
+            ((Activity)mSearchView.getContext()).getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
     }
 }

@@ -1,7 +1,9 @@
 package com.romanpulov.violetnote.view;
 
+import android.app.Activity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
@@ -40,8 +42,8 @@ public class AddActionHelper {
     }
 
     private void setupEditText() {
-        final EditText searchEditText = (EditText)mActionView.findViewById(R.id.add_edit_text);
-        searchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        final EditText addEditText = (EditText)mActionView.findViewById(R.id.add_edit_text);
+        addEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 if (
@@ -54,12 +56,18 @@ public class AddActionHelper {
                     if (mAddListener != null)
                         mAddListener.onAddFragmentInteraction(textView.getText().toString());
                     //clear search text for future
-                    searchEditText.setText(null);
+                    addEditText.setText(null);
                     return true;
                 }
                 return false;
             }
         });
+    }
+
+    public void showLayout() {
+        mActionView.setVisibility(View.VISIBLE);
+        if (mActionView.findViewById(R.id.add_edit_text).requestFocus())
+            ((Activity)mActionView.getContext()).getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
     }
 
     public interface OnAddInteractionListener {

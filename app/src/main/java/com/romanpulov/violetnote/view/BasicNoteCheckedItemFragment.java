@@ -95,7 +95,16 @@ public class BasicNoteCheckedItemFragment extends Fragment {
         mAddActionHelper.setOnAddInteractionListener(new AddActionHelper.OnAddInteractionListener() {
             @Override
             public void onAddFragmentInteraction(String text) {
-                Toast.makeText(getActivity(), "Add " + text, Toast.LENGTH_SHORT).show();
+                DBNoteManager manager = new DBNoteManager(getActivity());
+
+                manager.insertNoteItem(mBasicNoteData.getNoteList().get(0), BasicNoteItemA.newCheckedEditInstance(text));
+
+                //manager.refreshNoteData(mBasicNoteData);
+                manager.queryNoteData(mBasicNoteData.getNoteList().get(0));
+
+
+                //recyclerView.getAdapter().notifyDataSetChanged();
+                recyclerView.scrollToPosition(mBasicNoteData.getNoteList().get(0).getItems().size() - 1);
             }
         });
 
@@ -114,18 +123,8 @@ public class BasicNoteCheckedItemFragment extends Fragment {
     }
 
     public void showAddLayout() {
-
-
-        final View addPanelView = getView().findViewById(R.id.add_panel_include);
-        if (addPanelView != null) {
-            addPanelView.setVisibility(View.VISIBLE);
-            Button cancelButton = (Button)addPanelView.findViewById(R.id.cancel_button);
-            cancelButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    addPanelView.setVisibility(View.GONE);
-                }
-            });
+        if (mAddActionHelper != null) {
+            mAddActionHelper.showLayout();
         }
     }
 

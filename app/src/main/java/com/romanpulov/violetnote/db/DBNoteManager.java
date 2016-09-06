@@ -103,6 +103,12 @@ public class DBNoteManager extends BasicCommonNoteManager {
         notes.addAll(newNotes);
     }
 
+    public void refreshNoteData(BasicNoteDataA noteData) {
+        BasicNoteDataA newNoteData = queryNoteData(noteData.getNoteList().get(0));
+        noteData.getNoteList().get(0).getItems().clear();
+        noteData.getNoteList().get(0).getItems().addAll(newNoteData.getNoteList().get(0).getItems());
+    }
+
     public BasicNoteA queryById(long id) {
         Cursor c = null;
         try {

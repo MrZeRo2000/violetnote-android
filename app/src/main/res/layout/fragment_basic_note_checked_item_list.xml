@@ -14,6 +14,7 @@
         android:layout_height="match_parent"
         android:layout_marginLeft="0dp"
         android:layout_marginRight="0dp"
+        android:layout_above="@+id/add_panel_include"
         app:layoutManager="LinearLayoutManager"
         tools:listitem="@layout/fragment_basic_note_checked_item" />
 
