@@ -149,6 +149,13 @@ public class BasicNoteCheckedItemFragment extends Fragment {
             dialog.setOkButtonClickListener(new AlertOkCancelDialogFragment.OnClickListener() {
                 @Override
                 public void OnClick(DialogFragment dialog) {
+                    DBNoteManager noteManager = new DBNoteManager(getActivity());
+
+                    noteManager.checkOut(mBasicNoteData.getNoteList().get(0).getItems());
+
+                    noteManager.queryNoteData(mBasicNoteData.getNoteList().get(0));
+                    mRecyclerView.getAdapter().notifyDataSetChanged();
+
                 }
             });
             dialog.show(getFragmentManager(), null);

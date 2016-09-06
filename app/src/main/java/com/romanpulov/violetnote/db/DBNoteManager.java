@@ -12,6 +12,7 @@ import com.romanpulov.violetnote.model.BasicNoteItemA;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by romanpulov on 17.08.2016.
@@ -181,6 +182,10 @@ public class DBNoteManager extends BasicCommonNoteManager {
         cv.put(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_COLS[6], !item.getChecked());
 
         return mDB.update(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME, cv, DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_COLS[0] + " = ?" , new String[] {String.valueOf(item.getId())});
+    }
+
+    public void checkOut(List<BasicNoteItemA> items) {
+
     }
 
     public BasicNoteItemA getNoteItem(long id) {
