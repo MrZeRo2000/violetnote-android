@@ -16,6 +16,12 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
     public static final String PASS_DATA = "PassData";
     public static final String PASSWORD_REQUIRED = "PasswordRequired";
 
+    private boolean mIsPasswordProtected = true;
+
+    protected void setPasswordProtected(boolean value) {
+        mIsPasswordProtected = value;
+    }
+
     protected PasswordProvider mPasswordProvider;
 
     private boolean mPasswordRequired = true;
@@ -94,7 +100,7 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-//        if ((mPasswordProvider != null) && (mPasswordProvider.isPasswordProtected())) {
+          if (mIsPasswordProtected) {
             if (mPasswordRequired) {
                 Log.d("PasswordActivity", "OnResume: password required");
                 removeFragment();
@@ -106,6 +112,6 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
                     refreshFragment();
                 }
             }
-//        }
+        }
     }
 }

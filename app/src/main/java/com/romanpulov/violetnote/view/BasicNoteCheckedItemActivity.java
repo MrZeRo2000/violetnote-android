@@ -35,6 +35,7 @@ public class BasicNoteCheckedItemActivity extends BasicNoteDataPasswordActivity 
 
         //setup ToolBar instead of ActionBar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(mBasicNoteData.getNote().getTitle());
         setSupportActionBar(toolbar);
         setupActionBar();
 

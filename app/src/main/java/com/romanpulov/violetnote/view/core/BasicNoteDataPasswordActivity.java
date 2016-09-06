@@ -21,6 +21,7 @@ public abstract class BasicNoteDataPasswordActivity extends PasswordActivity {
 
         if (mPasswordProvider instanceof BasicNoteDataA) {
             mBasicNoteData = (BasicNoteDataA)mPasswordProvider;
+            setPasswordProtected(mBasicNoteData.getNote().getIsEncrypted());
         }
     }
 }

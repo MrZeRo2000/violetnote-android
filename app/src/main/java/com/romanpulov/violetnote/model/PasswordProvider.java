@@ -5,5 +5,4 @@ package com.romanpulov.violetnote.model;
  */
 public interface PasswordProvider {
     String getPassword();
-    boolean isPasswordProtected();
 }

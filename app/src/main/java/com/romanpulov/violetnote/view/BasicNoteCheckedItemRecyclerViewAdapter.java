@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
-import com.romanpulov.violetnote.view.dummy.DummyContent.DummyItem;
 
 import java.util.List;
 

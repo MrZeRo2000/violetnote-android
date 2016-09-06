@@ -23,7 +23,6 @@ import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.view.core.AlertOkCancelDialogFragment;
 import com.romanpulov.violetnote.view.core.PasswordActivity;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
-import com.romanpulov.violetnote.view.dummy.DummyContent.DummyItem;
 
 /**
  * A fragment representing a list of Items.

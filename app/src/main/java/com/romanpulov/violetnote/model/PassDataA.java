@@ -19,11 +19,6 @@ public class PassDataA implements Parcelable, PasswordProvider {
     private final String mPassword;
 
     @Override
-    public boolean isPasswordProtected() {
-        return true;
-    }
-
-    @Override
     public String getPassword() {
         return mPassword;
     }
