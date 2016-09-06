@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.db.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.view.core.ActionBarCompatActivity;
 import com.romanpulov.violetnote.view.core.BasicNoteDataPasswordActivity;
@@ -48,15 +49,25 @@ public class BasicNoteCheckedItemActivity extends BasicNoteDataPasswordActivity 
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_add:
-                Fragment fragment = getFragment();
-                if (fragment != null) {
-                    ((BasicNoteCheckedItemFragment)fragment).showAddLayout();
-                }
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+        Fragment fragment = getFragment();
+        if (fragment != null) {
+            switch (item.getItemId()) {
+                case R.id.action_add:
+                    ((BasicNoteCheckedItemFragment) fragment).showAddLayout();
+                    return true;
+                case R.id.action_check_all:
+                    ((BasicNoteCheckedItemFragment) fragment).updateNoteDataChecked(true);
+                    return true;
+                case R.id.action_uncheck_all:
+                    ((BasicNoteCheckedItemFragment) fragment).updateNoteDataChecked(false);
+                    return true;
+                case R.id.action_checkout:
+                    ((BasicNoteCheckedItemFragment) fragment).checkOut();
+                    return true;
+                default:
+                    return super.onOptionsItemSelected(item);
+            }
+        } else
+            return super.onOptionsItemSelected(item);
     }
 }

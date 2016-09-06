@@ -3,11 +3,13 @@ package com.romanpulov.violetnote.view;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -18,6 +20,7 @@ import com.romanpulov.violetnote.db.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
+import com.romanpulov.violetnote.view.core.AlertOkCancelDialogFragment;
 import com.romanpulov.violetnote.view.core.PasswordActivity;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 import com.romanpulov.violetnote.view.dummy.DummyContent.DummyItem;
@@ -35,6 +38,8 @@ public class BasicNoteCheckedItemFragment extends Fragment {
     private OnBasicNoteItemFragmentInteractionListener mListener;
 
     private AddActionHelper mAddActionHelper;
+
+    private RecyclerView mRecyclerView;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -68,11 +73,11 @@ public class BasicNoteCheckedItemFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_basic_note_checked_item_list, container, false);
 
         Context context = view.getContext();
-        final RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.list);
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-        recyclerView.setAdapter(new BasicNoteCheckedItemRecyclerViewAdapter(mBasicNoteData.getNoteList().get(0).getItems(),
+        mRecyclerView.setAdapter(new BasicNoteCheckedItemRecyclerViewAdapter(mBasicNoteData.getNoteList().get(0).getItems(),
                 new OnBasicNoteItemFragmentInteractionListener() {
                     @Override
                     public void onBasicNoteItemFragmentInteraction(BasicNoteItemA item, int position) {
@@ -83,13 +88,13 @@ public class BasicNoteCheckedItemFragment extends Fragment {
                         BasicNoteItemA updatedItem = manager.getNoteItem(item.getId());
                         item.updateChecked(updatedItem);
 
-                        recyclerView.getAdapter().notifyItemChanged(position);
+                        mRecyclerView.getAdapter().notifyItemChanged(position);
                     }
                 }
         ));
 
         // add decoration
-        recyclerView.addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(getActivity(), RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_white_black_gradient));
+        mRecyclerView.addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(getActivity(), RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_white_black_gradient));
 
         mAddActionHelper = new AddActionHelper(view.findViewById(R.id.add_panel_include));
         mAddActionHelper.setOnAddInteractionListener(new AddActionHelper.OnAddInteractionListener() {
@@ -102,9 +107,8 @@ public class BasicNoteCheckedItemFragment extends Fragment {
                 //manager.refreshNoteData(mBasicNoteData);
                 manager.queryNoteData(mBasicNoteData.getNoteList().get(0));
 
-
                 //recyclerView.getAdapter().notifyDataSetChanged();
-                recyclerView.scrollToPosition(mBasicNoteData.getNoteList().get(0).getItems().size() - 1);
+                mRecyclerView.scrollToPosition(mBasicNoteData.getNoteList().get(0).getItems().size() - 1);
             }
         });
 
@@ -126,6 +130,35 @@ public class BasicNoteCheckedItemFragment extends Fragment {
         if (mAddActionHelper != null) {
             mAddActionHelper.showLayout();
         }
+    }
+
+    public void updateNoteDataChecked(boolean checked) {
+        DBNoteManager noteManager = new DBNoteManager(getActivity());
+
+        noteManager.updateNoteDataChecked(mBasicNoteData, checked);
+        noteManager.queryNoteData(mBasicNoteData.getNoteList().get(0));
+
+        mRecyclerView.getAdapter().notifyDataSetChanged();
+    }
+
+    public void checkOut() {
+        int checkedCount = mBasicNoteData.getCheckedCount();
+        if (checkedCount > 0) {
+            String queryString = String.format(getString(R.string.ui_question_are_you_sure_checkout_items), new Integer[] {checkedCount});
+            AlertOkCancelDialogFragment dialog = AlertOkCancelDialogFragment.newAlertOkCancelDialog(queryString);
+            dialog.setOkButtonClickListener(new AlertOkCancelDialogFragment.OnClickListener() {
+                @Override
+                public void OnClick(DialogFragment dialog) {
+                }
+            });
+            dialog.show(getFragmentManager(), null);
+
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return super.onOptionsItemSelected(item);
     }
 
     public interface OnBasicNoteItemFragmentInteractionListener {

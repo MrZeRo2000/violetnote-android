@@ -103,10 +103,15 @@ public class DBNoteManager extends BasicCommonNoteManager {
         notes.addAll(newNotes);
     }
 
-    public void refreshNoteData(BasicNoteDataA noteData) {
-        BasicNoteDataA newNoteData = queryNoteData(noteData.getNoteList().get(0));
-        noteData.getNoteList().get(0).getItems().clear();
-        noteData.getNoteList().get(0).getItems().addAll(newNoteData.getNoteList().get(0).getItems());
+    public void updateNoteDataChecked(BasicNoteDataA noteData, boolean checked) {
+        for (BasicNoteItemA item : noteData.getNoteList().get(0).getItems()) {
+            ContentValues cv = new ContentValues();
+
+            cv.put(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_COLS[1], System.currentTimeMillis());
+            cv.put(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_COLS[6], checked);
+
+            mDB.update(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME, cv, DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_COLS[0] + " = ?" , new String[] {String.valueOf(item.getId())});
+        }
     }
 
     public BasicNoteA queryById(long id) {

@@ -37,6 +37,19 @@ public class BasicNoteDataA implements Parcelable, PasswordProvider {
         return newNoteData;
     }
 
+    public int getCheckedCount() {
+        int result = 0;
+
+        for (BasicNoteA note : mNoteList) {
+            for (BasicNoteItemA item : note.getItems()) {
+                if (item.getChecked())
+                    result ++;
+            }
+        }
+
+        return result;
+    }
+
     @Override
     public int describeContents() {
         return 0;

@@ -14,7 +14,7 @@ import com.romanpulov.violetnote.R;
 public class AlertOkCancelDialogFragment extends DialogFragment {
     private final static String STRING_MESSAGE = "MESSAGE";
 
-    private int mMessageId;
+    private String  mMessage;
 
     public interface OnClickListener {
         void OnClick(DialogFragment dialog);
@@ -26,31 +26,31 @@ public class AlertOkCancelDialogFragment extends DialogFragment {
         mOkButtonClickListener = listener;
     }
 
-    public static AlertOkCancelDialogFragment newAlertOkCancelDialog(int message) {
+    public static AlertOkCancelDialogFragment newAlertOkCancelDialog(String message) {
         AlertOkCancelDialogFragment newDialog = new AlertOkCancelDialogFragment() ;
         newDialog.setMessage(message);
         newDialog.setRetainInstance(false);
         return newDialog;
     }
 
-    public void setMessage(int messageId) {
-        mMessageId = messageId;
+    public void setMessage(String  message) {
+        mMessage = message;
     }
 
     @Override
     public void onSaveInstanceState(Bundle data) {
-        data.putInt(AlertOkCancelDialogFragment.STRING_MESSAGE, mMessageId);
+        data.putString(AlertOkCancelDialogFragment.STRING_MESSAGE, mMessage);
         super.onSaveInstanceState(data);
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         if (null != savedInstanceState)
-            mMessageId = savedInstanceState.getInt(AlertOkCancelDialogFragment.STRING_MESSAGE);
+            mMessage = savedInstanceState.getString(AlertOkCancelDialogFragment.STRING_MESSAGE);
 
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
         dialogBuilder
-                .setMessage(mMessageId)
+                .setMessage(mMessage)
                 .setPositiveButton(R.string.ok,
                         new DialogInterface.OnClickListener() {
                             @Override

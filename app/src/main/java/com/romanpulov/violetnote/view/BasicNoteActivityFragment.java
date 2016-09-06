@@ -45,7 +45,7 @@ public class BasicNoteActivityFragment extends Fragment {
     }
 
     private void deleteItem(final ActionMode mode, final BasicNoteA item) {
-        AlertOkCancelDialogFragment dialog = AlertOkCancelDialogFragment.newAlertOkCancelDialog(R.string.ui_question_are_you_sure);
+        AlertOkCancelDialogFragment dialog = AlertOkCancelDialogFragment.newAlertOkCancelDialog(getString(R.string.ui_question_are_you_sure));
         dialog.setOkButtonClickListener(new AlertOkCancelDialogFragment.OnClickListener() {
             @Override
             public void OnClick(DialogFragment dialog) {

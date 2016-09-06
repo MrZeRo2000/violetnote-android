@@ -81,5 +81,6 @@
     <string name="ui_text_clear_password">Clear password</string>
 
     <string name="ui_question_are_you_sure">Are you sure?</string>
+    <string name="ui_question_are_you_sure_checkout_items">Are you sure to checkout %d items?</string>
 
 </resources>
