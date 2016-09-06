@@ -8,6 +8,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.romanpulov.violetnote.R;
@@ -36,7 +37,7 @@ public class SearchActionHelper {
     }
 
     private void setupCancelButton() {
-        Button searchCancelButton = (Button)mSearchView.findViewById(R.id.cancel_button);
+        ImageButton searchCancelButton = (ImageButton)mSearchView.findViewById(R.id.cancel_button);
         searchCancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -15,13 +15,15 @@
         android:id="@+id/separator"
         />
 
-    <Button
+    <ImageButton
         android:layout_width="@dimen/search_button_size"
         android:layout_height="@dimen/search_button_size"
         android:id="@+id/cancel_button"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:background="@drawable/ic_action_cancel"
+        android:src="@drawable/ic_action_cancel"
+        android:background="@drawable/list_lighter_selector"
+        android:contentDescription="@string/ui_image_cancel_description"
         />
 
     <AutoCompleteTextView

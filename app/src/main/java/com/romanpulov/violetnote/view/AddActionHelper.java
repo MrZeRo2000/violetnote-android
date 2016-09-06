@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.romanpulov.violetnote.R;
@@ -21,7 +22,7 @@ import java.util.Collection;
 public class AddActionHelper {
 
     private final View mActionView;
-    private final Button mCancelButton;
+    private final ImageButton mCancelButton;
     private final AutoCompleteTextView mAddEditText;
 
     private Collection<String> mAutoCompleteList;
@@ -36,7 +37,7 @@ public class AddActionHelper {
         mActionView = actionView;
         mAutoCompleteList = autoCompleteList;
 
-        mCancelButton = (Button)mActionView.findViewById(R.id.cancel_button);
+        mCancelButton = (ImageButton) mActionView.findViewById(R.id.cancel_button);
         mAddEditText = (AutoCompleteTextView)mActionView.findViewById(R.id.add_edit_text);
 
         setupCancelButton();

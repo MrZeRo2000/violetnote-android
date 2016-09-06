@@ -153,7 +153,7 @@ public class BasicNoteCheckedItemFragment extends Fragment {
 
                     noteManager.queryNoteDataItems(mBasicNoteData.getNote());
                     noteManager.queryNoteDataValues(mBasicNoteData.getNote());
-                    
+
                     //update main list
                     mRecyclerView.getAdapter().notifyDataSetChanged();
                     //update autocomplete
