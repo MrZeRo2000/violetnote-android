@@ -11,7 +11,8 @@
     <item
         android:id="@+id/action_checkout"
         android:title="@string/action_checkout"
-        compat:showAsAction="never"
+        android:icon="@drawable/ic_action_cart"
+        compat:showAsAction="ifRoom"
         />
     <item
         android:id="@+id/action_check_all"
