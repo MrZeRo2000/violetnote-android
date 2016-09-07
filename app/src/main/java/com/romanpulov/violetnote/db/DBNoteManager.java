@@ -6,6 +6,7 @@ import android.database.Cursor;
 
 import com.romanpulov.violetnote.helper.DateTimeFormatterHelper;
 import com.romanpulov.violetnote.model.BasicCommonNoteA;
+import com.romanpulov.violetnote.model.BasicEntityNoteA;
 import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
@@ -14,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -234,7 +234,7 @@ public class DBNoteManager extends BasicCommonNoteManager {
         return mDB.delete(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME, DBBasicNoteOpenHelper.ID_COLUMN_NAME + "=?", new String[] {String.valueOf(item.getId())});
     }
 
-    public long deleteCommonNote(String tableName, BasicCommonNoteA item) {
+    public long deleteEntityNote(String tableName, BasicEntityNoteA item) {
         return mDB.delete(tableName, DBBasicNoteOpenHelper.ID_COLUMN_NAME + "=?", new String[] {String.valueOf(item.getId())});
     }
 

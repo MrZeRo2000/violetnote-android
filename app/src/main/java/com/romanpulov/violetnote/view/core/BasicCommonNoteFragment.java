@@ -1,10 +1,9 @@
-package com.romanpulov.violetnote.view;
+package com.romanpulov.violetnote.view.core;
 
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 
 import com.romanpulov.violetnote.db.DBNoteManager;
-import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 
 /**
  * Created by rpulov on 07.09.2016.
