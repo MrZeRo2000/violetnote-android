@@ -19,12 +19,14 @@ import android.widget.Toast;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBNoteManager;
+import com.romanpulov.violetnote.model.BasicCommonNoteA;
 import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.view.core.AlertOkCancelDialogFragment;
 import com.romanpulov.violetnote.view.core.PasswordActivity;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
+import com.romanpulov.violetnote.view.core.TextInputDialog;
 
 /**
  * A fragment representing a list of Items.
@@ -70,6 +72,81 @@ public class BasicNoteCheckedItemFragment extends Fragment {
         }
     }
 
+    private abstract class ActionExecutor {
+        protected DBNoteManager mNoteManager;
+
+        public ActionExecutor() {
+            mNoteManager = new DBNoteManager(getActivity());
+        }
+
+        protected abstract boolean execute(final ActionMode mode, final BasicNoteItemA item);
+
+        protected int executeAndReturnNewPos(final ActionMode mode, final BasicNoteItemA item) {
+            if (execute(mode, item)) {
+                // refresh list
+                mNoteManager.queryNoteDataItems(mBasicNoteData.getNote());
+
+                // find and return new pos of the node
+                return BasicCommonNoteA.getNotePosWithId(mBasicNoteData.getNote().getItems(), item.getId());
+            } else
+                return -1;
+        }
+    }
+
+    private class DeleteActionExecutor extends ActionExecutor {
+        @Override
+        protected boolean execute(final ActionMode mode, final BasicNoteItemA item) {
+            AlertOkCancelDialogFragment dialog = AlertOkCancelDialogFragment.newAlertOkCancelDialog(getString(R.string.ui_question_are_you_sure));
+            dialog.setOkButtonClickListener(new AlertOkCancelDialogFragment.OnClickListener() {
+                @Override
+                public void OnClick(DialogFragment dialog) {
+                    // delete item
+                    DBNoteManager mNoteManager = new DBNoteManager(getActivity());
+                    mNoteManager.deleteNoteItem(item);
+
+                    // refresh list
+                    mNoteManager.queryNoteDataItems(mBasicNoteData.getNote());
+
+                    //finish action
+                    mode.finish();
+                }
+            });
+            dialog.show(getFragmentManager(), null);
+
+            return true;
+        }
+    }
+
+    private class EditActionExecutor extends ActionExecutor {
+        @Override
+        protected boolean execute(final ActionMode mode, final BasicNoteItemA item) {
+            final String oldTitle = item.getValue();
+            TextInputDialog dialog = new TextInputDialog(getActivity(), getResources().getString(R.string.ui_note_title));
+            dialog.setText(oldTitle);
+            dialog.setNonEmptyErrorMessage(getString(R.string.error_field_not_empty));
+            dialog.setOnTextInputListener(new TextInputDialog.OnTextInputListener() {
+                @Override
+                public void onTextInput(String text) {
+                    if (text != null) {
+                        if (!text.equals(oldTitle)) {
+                            // prepare and update item
+                            item.setValue(text);
+                            DBNoteManager mNoteManager = new DBNoteManager(getActivity());
+                            mNoteManager.updateNoteItemValue(item);
+
+                            // refresh list
+                            mNoteManager.queryNoteDataItems(mBasicNoteData.getNote());
+                        }
+                        // finish anyway
+                        mode.finish();
+                    }
+                }
+            });
+            dialog.show();
+            return true;
+        }
+    }
+
     public class ActionBarCallBack implements ActionMode.Callback {
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
@@ -78,9 +155,11 @@ public class BasicNoteCheckedItemFragment extends Fragment {
                 BasicNoteItemA selectedItem = mBasicNoteData.getNote().getItems().get(selectedItemPos);
                 switch (item.getItemId()) {
                     case R.id.delete:
+                        (new DeleteActionExecutor()).execute(mode, selectedItem);
                         //deleteItem(mode, selectedItem);
                         break;
                     case R.id.edit:
+                        (new EditActionExecutor()).execute(mode, selectedItem);
                         //editItem(mode, selectedItem);
                         break;
                     case R.id.move_up:

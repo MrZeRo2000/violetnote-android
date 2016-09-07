@@ -19,6 +19,10 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
         return mValue;
     }
 
+    public void setValue(String value) {
+        mValue = value;
+    }
+
     public boolean getChecked() {
         return mChecked;
     }
