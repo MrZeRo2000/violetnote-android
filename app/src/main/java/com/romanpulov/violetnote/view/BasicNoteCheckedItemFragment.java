@@ -29,12 +29,6 @@ import com.romanpulov.violetnote.view.core.PasswordActivity;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 import com.romanpulov.violetnote.view.core.TextInputDialog;
 
-/**
- * A fragment representing a list of Items.
- * <p/>
- * Activities containing this fragment MUST implement the {@link OnBasicNoteItemFragmentInteractionListener}
- * interface.
- */
 public class BasicNoteCheckedItemFragment extends Fragment {
 
     private BasicNoteDataA mBasicNoteData;
@@ -54,8 +48,6 @@ public class BasicNoteCheckedItemFragment extends Fragment {
     public BasicNoteCheckedItemFragment() {
     }
 
-    // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
     public static BasicNoteCheckedItemFragment newInstance(BasicNoteDataA basicNoteDataA) {
         BasicNoteCheckedItemFragment fragment = new BasicNoteCheckedItemFragment();
         Bundle args = new Bundle();
@@ -193,11 +185,9 @@ public class BasicNoteCheckedItemFragment extends Fragment {
                 switch (item.getItemId()) {
                     case R.id.delete:
                         (new DeleteActionExecutor()).execute(mode, selectedItem);
-                        //deleteItem(mode, selectedItem);
                         break;
                     case R.id.edit:
                         (new EditActionExecutor()).execute(mode, selectedItem);
-                        //editItem(mode, selectedItem);
                         break;
                     case R.id.move_up:
                         performMoveAction(new MoveUpActionExecutor(), selectedItem);
@@ -335,7 +325,6 @@ public class BasicNoteCheckedItemFragment extends Fragment {
                 }
             });
             dialog.show(getFragmentManager(), null);
-
         }
     }
 
