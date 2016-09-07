@@ -22,41 +22,40 @@ public class BasicCommonNoteManager {
         mDTF = new DateTimeFormatterHelper(context);
     }
 
-    public boolean moveUp(BasicCommonNoteA note) {
-        long prevOrderId = mDBHelper.getPrevOrderId(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, note.getOrderId());
+    public boolean moveUp(String tableName, BasicCommonNoteA note) {
+        long prevOrderId = mDBHelper.getPrevOrderId(tableName, note.getOrderId());
         if (prevOrderId > 0) {
-            mDBHelper.exchangeOrderId(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, note.getOrderId(), prevOrderId);
+            mDBHelper.exchangeOrderId(tableName, note.getOrderId(), prevOrderId);
             return true;
         } else
             return false;
     }
 
-    public boolean moveDown(BasicCommonNoteA note) {
-        long nextOrderId = mDBHelper.getNextOrderId(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, note.getOrderId());
+    public boolean moveDown(String tableName, BasicCommonNoteA note) {
+        long nextOrderId = mDBHelper.getNextOrderId(tableName, note.getOrderId());
         if (nextOrderId > 0) {
-            mDBHelper.exchangeOrderId(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, note.getOrderId(), nextOrderId);
+            mDBHelper.exchangeOrderId(tableName, note.getOrderId(), nextOrderId);
             return true;
         } else
             return false;
     }
 
-    public boolean moveTop(BasicCommonNoteA note) {
-        long minOrderId = mDBHelper.getMinOrderId(DBBasicNoteOpenHelper.NOTES_TABLE_NAME);
+    public boolean moveTop(String tableName, BasicCommonNoteA note) {
+        long minOrderId = mDBHelper.getMinOrderId(tableName);
         if (note.getOrderId() > minOrderId) {
-            mDBHelper.moveOrderIdTop(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, note.getOrderId());
+            mDBHelper.moveOrderIdTop(tableName, note.getOrderId());
             return true;
         } else
             return false;
     }
 
-    public boolean moveBottom(BasicCommonNoteA note) {
-        long maxOrderId = mDBHelper.getMaxOrderId(DBBasicNoteOpenHelper.NOTES_TABLE_NAME);
+    public boolean moveBottom(String tableName, BasicCommonNoteA note) {
+        long maxOrderId = mDBHelper.getMaxOrderId(tableName);
         if (note.getOrderId() < maxOrderId) {
-            mDBHelper.moveOrderIdBottom(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, note.getOrderId());
+            mDBHelper.moveOrderIdBottom(tableName, note.getOrderId());
             return true;
         } else
             return false;
     }
-
 
 }

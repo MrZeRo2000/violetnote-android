@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.db.DBBasicNoteOpenHelper;
 import com.romanpulov.violetnote.db.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicCommonNoteA;
 import com.romanpulov.violetnote.model.BasicNoteA;
@@ -112,28 +113,28 @@ public class BasicNoteActivityFragment extends Fragment {
     private class MoveUpActionExecutor extends MoveActionExecutor {
         @Override
         protected boolean execute(BasicNoteA item) {
-            return mNoteManager.moveUp(item);
+            return mNoteManager.moveUp(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, item);
         }
     }
 
     private class MoveTopActionExecutor extends MoveActionExecutor {
         @Override
         protected boolean execute(BasicNoteA item) {
-            return mNoteManager.moveTop(item);
+            return mNoteManager.moveTop(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, item);
         }
     }
 
     private class MoveDownActionExecutor extends MoveActionExecutor {
         @Override
         protected boolean execute(BasicNoteA item) {
-            return mNoteManager.moveDown(item);
+            return mNoteManager.moveDown(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, item);
         }
     }
 
     private class MoveBottomActionExecutor extends MoveActionExecutor {
         @Override
         protected boolean execute(BasicNoteA item) {
-            return mNoteManager.moveBottom(item);
+            return mNoteManager.moveBottom(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, item);
         }
     }
 

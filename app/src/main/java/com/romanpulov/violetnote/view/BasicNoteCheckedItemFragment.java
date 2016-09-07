@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.db.DBBasicNoteOpenHelper;
 import com.romanpulov.violetnote.db.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicCommonNoteA;
 import com.romanpulov.violetnote.model.BasicNoteA;
@@ -147,6 +148,42 @@ public class BasicNoteCheckedItemFragment extends Fragment {
         }
     }
 
+    private class MoveUpActionExecutor extends ActionExecutor {
+        @Override
+        protected boolean execute(ActionMode mode, BasicNoteItemA item) {
+            return mNoteManager.moveUp(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME, item);
+        }
+    }
+
+    private class MoveTopActionExecutor extends ActionExecutor {
+        @Override
+        protected boolean execute(ActionMode mode, BasicNoteItemA item) {
+            return mNoteManager.moveTop(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME, item);
+        }
+    }
+
+    private class MoveDownActionExecutor extends ActionExecutor {
+        @Override
+        protected boolean execute(ActionMode mode, BasicNoteItemA item) {
+            return mNoteManager.moveDown(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME, item);
+        }
+    }
+
+    private class MoveBottomActionExecutor extends ActionExecutor {
+        @Override
+        protected boolean execute(ActionMode mode, BasicNoteItemA item) {
+            return mNoteManager.moveBottom(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME, item);
+        }
+    }
+
+    private void performMoveAction(ActionExecutor executor, BasicNoteItemA item) {
+        int notePos = executor.executeAndReturnNewPos(null, item);
+        if (notePos != -1) {
+            mRecyclerViewSelector.setSelectedView(null, notePos);
+            mRecyclerView.scrollToPosition(notePos);
+        }
+    }
+
     public class ActionBarCallBack implements ActionMode.Callback {
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
@@ -163,16 +200,16 @@ public class BasicNoteCheckedItemFragment extends Fragment {
                         //editItem(mode, selectedItem);
                         break;
                     case R.id.move_up:
-                        //performMoveAction(new MoveUpActionExecutor(), selectedItem);
+                        performMoveAction(new MoveUpActionExecutor(), selectedItem);
                         break;
                     case R.id.move_top:
-                        //performMoveAction(new MoveTopActionExecutor(), selectedItem);
+                        performMoveAction(new MoveTopActionExecutor(), selectedItem);
                         break;
                     case R.id.move_down:
-                        //performMoveAction(new MoveDownActionExecutor(), selectedItem);
+                        performMoveAction(new MoveDownActionExecutor(), selectedItem);
                         break;
                     case R.id.move_bottom:
-                        //performMoveAction(new MoveBottomActionExecutor(), selectedItem);
+                        performMoveAction(new MoveBottomActionExecutor(), selectedItem);
                         break;
                 }
             }
