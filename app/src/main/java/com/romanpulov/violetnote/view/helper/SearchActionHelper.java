@@ -1,4 +1,4 @@
-package com.romanpulov.violetnote.view;
+package com.romanpulov.violetnote.view.helper;
 
 import android.app.Activity;
 import android.view.KeyEvent;
@@ -12,6 +12,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.view.OnSearchInteractionListener;
 
 /**
  * Created by romanpulov on 08.08.2016.

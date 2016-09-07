@@ -80,13 +80,13 @@ public class DataManagementTest extends ApplicationTestCase<Application> {
 
         //move top
         note1 = noteManager.queryById(5);
-        noteManager.moveTop(note1);
+        noteManager.moveTop(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, note1);
 
         note1 = noteManager.queryById(5);
         assertEquals(note1.getOrderId(), 1);
 
         //move bottom
-        noteManager.moveBottom(note1);
+        noteManager.moveBottom(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, note1);
         note1 = noteManager.queryById(5);
         assertEquals(note1.getOrderId(), 10);
     }

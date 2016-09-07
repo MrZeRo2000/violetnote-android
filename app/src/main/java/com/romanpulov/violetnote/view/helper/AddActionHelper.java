@@ -1,4 +1,4 @@
-package com.romanpulov.violetnote.view;
+package com.romanpulov.violetnote.view.helper;
 
 import android.app.Activity;
 import android.view.KeyEvent;

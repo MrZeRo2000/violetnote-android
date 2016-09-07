@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBNoteManager;
@@ -16,13 +15,13 @@ import com.romanpulov.violetnote.view.core.PasswordActivity;
 
 import java.util.ArrayList;
 
-public class BasicNoteActivity extends ActionBarCompatActivity implements BasicNoteActivityFragment.OnBasicNoteFragmentInteractionListener {
+public class BasicNoteActivity extends ActionBarCompatActivity implements BasicNoteFragment.OnBasicNoteFragmentInteractionListener {
     public static final String BASIC_NOTE_DATA = "BasicNoteData";
     public static final String NOTE_LIST = "NoteList";
     public static final String NOTE = "Note";
 
     private ArrayList<BasicNoteA> mNoteList;
-    private BasicNoteActivityFragment mFragment;
+    private BasicNoteFragment mFragment;
     private DBNoteManager mNoteManager;
 
     @Override
@@ -33,7 +32,7 @@ public class BasicNoteActivity extends ActionBarCompatActivity implements BasicN
         mNoteList = mNoteManager.queryNotes();
 
         FragmentManager fm = getSupportFragmentManager();
-        mFragment = BasicNoteActivityFragment.newInstance(mNoteList);
+        mFragment = BasicNoteFragment.newInstance(mNoteList);
         fm.beginTransaction().add(android.R.id.content, mFragment).commit();
     }
 

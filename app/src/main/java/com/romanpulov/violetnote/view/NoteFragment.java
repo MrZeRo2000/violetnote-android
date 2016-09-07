@@ -16,6 +16,7 @@ import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.view.core.PasswordActivity;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper.*;
 import com.romanpulov.violetnote.model.PassDataA;
+import com.romanpulov.violetnote.view.helper.SearchActionHelper;
 
 
 public class NoteFragment extends Fragment {

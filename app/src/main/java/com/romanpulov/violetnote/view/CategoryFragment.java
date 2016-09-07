@@ -15,6 +15,7 @@ import com.romanpulov.violetnote.view.core.PasswordActivity;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper.*;
 import com.romanpulov.violetnote.model.PassCategoryA;
 import com.romanpulov.violetnote.model.PassDataA;
+import com.romanpulov.violetnote.view.helper.SearchActionHelper;
 
 /**
  * A fragment representing a list of Items.

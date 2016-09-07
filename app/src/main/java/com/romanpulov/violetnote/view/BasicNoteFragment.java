@@ -3,7 +3,6 @@ package com.romanpulov.violetnote.view;
 import android.app.Activity;
 import android.content.Context;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,6 +18,7 @@ import com.romanpulov.violetnote.db.DBBasicNoteOpenHelper;
 import com.romanpulov.violetnote.db.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicCommonNoteA;
 import com.romanpulov.violetnote.model.BasicNoteA;
+import com.romanpulov.violetnote.view.action.BasicNoteDeleteAction;
 import com.romanpulov.violetnote.view.core.AlertOkCancelDialogFragment;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 import com.romanpulov.violetnote.view.core.TextInputDialog;
@@ -28,21 +28,30 @@ import java.util.ArrayList;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class BasicNoteActivityFragment extends Fragment {
+public class BasicNoteFragment extends BasicCommonNoteFragment {
+
     private OnBasicNoteFragmentInteractionListener mListener;
 
     private ArrayList<BasicNoteA> mNoteList;
-    private RecyclerView mRecyclerView;
     private BasicNoteRecycleViewAdapter mRecyclerViewAdapter;
-    private RecyclerViewHelper.RecyclerViewSelector mRecyclerViewSelector;
 
-    public static BasicNoteActivityFragment newInstance(ArrayList<BasicNoteA> noteList) {
-        BasicNoteActivityFragment fragment = new BasicNoteActivityFragment();
+    public static BasicNoteFragment newInstance(ArrayList<BasicNoteA> noteList) {
+        BasicNoteFragment fragment = new BasicNoteFragment();
         fragment.mNoteList = noteList;
         return fragment;
     }
 
-    public BasicNoteActivityFragment() {
+    public BasicNoteFragment() {
+    }
+
+    @Override
+    public String getDBTableName() {
+        return DBBasicNoteOpenHelper.NOTES_TABLE_NAME;
+    }
+
+    @Override
+    public void refreshList(DBNoteManager noteManager) {
+        noteManager.refreshNotes(mNoteList);
     }
 
     private void deleteItem(final ActionMode mode, final BasicNoteA item) {
@@ -154,7 +163,8 @@ public class BasicNoteActivityFragment extends Fragment {
                 BasicNoteA selectedItem = mNoteList.get(selectedItemPos);
                 switch (item.getItemId()) {
                     case R.id.delete:
-                        deleteItem(mode, selectedItem);
+                        (new BasicNoteDeleteAction(BasicNoteFragment.this)).execute(mode, selectedItem);
+                        //deleteItem(mode, selectedItem);
                         break;
                     case R.id.edit:
                         editItem(mode, selectedItem);

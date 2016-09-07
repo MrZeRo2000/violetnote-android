@@ -4,9 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.support.v7.view.ActionMode;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,22 +12,21 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.Toast;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBBasicNoteOpenHelper;
 import com.romanpulov.violetnote.db.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicCommonNoteA;
-import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
+import com.romanpulov.violetnote.view.action.BasicNoteDeleteAction;
 import com.romanpulov.violetnote.view.core.AlertOkCancelDialogFragment;
 import com.romanpulov.violetnote.view.core.PasswordActivity;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 import com.romanpulov.violetnote.view.core.TextInputDialog;
+import com.romanpulov.violetnote.view.helper.AddActionHelper;
 
-public class BasicNoteCheckedItemFragment extends Fragment {
+public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment {
 
     private BasicNoteDataA mBasicNoteData;
 
@@ -37,9 +34,7 @@ public class BasicNoteCheckedItemFragment extends Fragment {
 
     private AddActionHelper mAddActionHelper;
 
-    private RecyclerView mRecyclerView;
     private BasicNoteCheckedItemRecyclerViewAdapter mRecyclerViewAdapter;
-    private RecyclerViewHelper.RecyclerViewSelector mRecyclerViewSelector;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -63,6 +58,16 @@ public class BasicNoteCheckedItemFragment extends Fragment {
         if (getArguments() != null) {
             mBasicNoteData = getArguments().getParcelable(PasswordActivity.PASS_DATA);
         }
+    }
+
+    @Override
+    public String getDBTableName() {
+        return DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME;
+    }
+
+    @Override
+    public void refreshList(DBNoteManager noteManager) {
+        noteManager.queryNoteDataItems(mBasicNoteData.getNote());
     }
 
     private abstract class ActionExecutor {
@@ -184,7 +189,8 @@ public class BasicNoteCheckedItemFragment extends Fragment {
                 BasicNoteItemA selectedItem = mBasicNoteData.getNote().getItems().get(selectedItemPos);
                 switch (item.getItemId()) {
                     case R.id.delete:
-                        (new DeleteActionExecutor()).execute(mode, selectedItem);
+                        (new BasicNoteDeleteAction(BasicNoteCheckedItemFragment.this)).execute(mode, selectedItem);
+                        //(new DeleteActionExecutor()).execute(mode, selectedItem);
                         break;
                     case R.id.edit:
                         (new EditActionExecutor()).execute(mode, selectedItem);
