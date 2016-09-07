@@ -15,6 +15,7 @@
         android:id="@+id/checked"
         android:layout_alignParentLeft="true"
         android:clickable="false"
+        android:background="@null"
         android:theme="@style/EditTheme"
         />
     <TextView

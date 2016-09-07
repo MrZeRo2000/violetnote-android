@@ -5,10 +5,12 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v7.view.ActionMode;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +41,8 @@ public class BasicNoteCheckedItemFragment extends Fragment {
     private AddActionHelper mAddActionHelper;
 
     private RecyclerView mRecyclerView;
+    private BasicNoteCheckedItemRecyclerViewAdapter mRecyclerViewAdapter;
+    private RecyclerViewHelper.RecyclerViewSelector mRecyclerViewSelector;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -66,6 +70,57 @@ public class BasicNoteCheckedItemFragment extends Fragment {
         }
     }
 
+    public class ActionBarCallBack implements ActionMode.Callback {
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            int selectedItemPos = mRecyclerViewSelector.getSelectedItemPos();
+            if (selectedItemPos != -1) {
+                BasicNoteItemA selectedItem = mBasicNoteData.getNote().getItems().get(selectedItemPos);
+                switch (item.getItemId()) {
+                    case R.id.delete:
+                        //deleteItem(mode, selectedItem);
+                        break;
+                    case R.id.edit:
+                        //editItem(mode, selectedItem);
+                        break;
+                    case R.id.move_up:
+                        //performMoveAction(new MoveUpActionExecutor(), selectedItem);
+                        break;
+                    case R.id.move_top:
+                        //performMoveAction(new MoveTopActionExecutor(), selectedItem);
+                        break;
+                    case R.id.move_down:
+                        //performMoveAction(new MoveDownActionExecutor(), selectedItem);
+                        break;
+                    case R.id.move_bottom:
+                        //performMoveAction(new MoveBottomActionExecutor(), selectedItem);
+                        break;
+                }
+            }
+            return false;
+        }
+
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            mode.getMenuInflater().inflate(R.menu.menu_listitem_generic_actions, menu);
+            if (mRecyclerViewSelector.getSelectedItemPos() != -1)
+                mode.setTitle( mBasicNoteData.getNote().getItems().get(mRecyclerViewSelector.getSelectedItemPos()).getValue());
+            return true;
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            if (mRecyclerViewSelector != null)
+                mRecyclerViewSelector.finishActionMode();
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+    }
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -76,7 +131,7 @@ public class BasicNoteCheckedItemFragment extends Fragment {
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-        mRecyclerView.setAdapter(new BasicNoteCheckedItemRecyclerViewAdapter(mBasicNoteData.getNote().getItems(),
+        mRecyclerViewAdapter = new BasicNoteCheckedItemRecyclerViewAdapter(mBasicNoteData.getNote().getItems(), new ActionBarCallBack(),
                 new OnBasicNoteItemFragmentInteractionListener() {
                     @Override
                     public void onBasicNoteItemFragmentInteraction(BasicNoteItemA item, int position) {
@@ -90,7 +145,9 @@ public class BasicNoteCheckedItemFragment extends Fragment {
                         mRecyclerView.getAdapter().notifyItemChanged(position);
                     }
                 }
-        ));
+        );
+        mRecyclerViewSelector = mRecyclerViewAdapter.getRecyclerViewSelector();
+        mRecyclerView.setAdapter(mRecyclerViewAdapter);
 
         // add decoration
         mRecyclerView.addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(getActivity(), RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_white_black_gradient));
