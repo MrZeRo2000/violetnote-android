@@ -234,6 +234,10 @@ public class DBNoteManager extends BasicCommonNoteManager {
         return mDB.delete(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME, DBBasicNoteOpenHelper.ID_COLUMN_NAME + "=?", new String[] {String.valueOf(item.getId())});
     }
 
+    public long deleteCommonNote(String tableName, BasicCommonNoteA item) {
+        return mDB.delete(tableName, DBBasicNoteOpenHelper.ID_COLUMN_NAME + "=?", new String[] {String.valueOf(item.getId())});
+    }
+
     public long checkNoteItem(BasicNoteItemA item) {
         ContentValues cv = new ContentValues();
 
