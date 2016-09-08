@@ -1,8 +1,6 @@
-package com.romanpulov.violetnote.view.helper;
+package com.romanpulov.violetnote.view.core;
 
 import android.content.Context;
-
-import com.romanpulov.violetnote.view.core.TextInputDialog;
 
 /**
  * Created by romanpulov on 08.09.2016.

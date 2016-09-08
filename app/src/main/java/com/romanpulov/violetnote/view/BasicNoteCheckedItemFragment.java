@@ -31,7 +31,7 @@ import com.romanpulov.violetnote.view.core.PasswordActivity;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 import com.romanpulov.violetnote.view.core.TextInputDialog;
 import com.romanpulov.violetnote.view.helper.AddActionHelper;
-import com.romanpulov.violetnote.view.helper.TextEditDialogBuilder;
+import com.romanpulov.violetnote.view.core.TextEditDialogBuilder;
 
 public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment {
 

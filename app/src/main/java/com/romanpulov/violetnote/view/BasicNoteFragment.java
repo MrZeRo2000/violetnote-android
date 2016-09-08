@@ -2,7 +2,6 @@ package com.romanpulov.violetnote.view;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.v4.app.DialogFragment;
 import android.os.Bundle;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,11 +23,10 @@ import com.romanpulov.violetnote.view.action.BasicNoteMoveBottomAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveDownAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveTopAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveUpAction;
-import com.romanpulov.violetnote.view.core.AlertOkCancelDialogFragment;
 import com.romanpulov.violetnote.view.core.BasicCommonNoteFragment;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 import com.romanpulov.violetnote.view.core.TextInputDialog;
-import com.romanpulov.violetnote.view.helper.TextEditDialogBuilder;
+import com.romanpulov.violetnote.view.core.TextEditDialogBuilder;
 
 import java.util.ArrayList;
 
