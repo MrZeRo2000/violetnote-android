@@ -53,7 +53,7 @@ public class BasicNoteRecycleViewAdapter extends RecyclerView.Adapter<BasicNoteR
         if (mItems.get(position).getNoteType() == 0)
             holder.mTypeImage.setImageResource(R.drawable.ic_action_tick);
         else
-            holder.mTypeImage.setImageResource(R.drawable.ic_action_list);
+            holder.mTypeImage.setImageResource(R.drawable.ic_view_agenda);
         // encrypted icon
         holder.mEncryptedImage.setVisibility(mItems.get(position).getIsEncrypted() ? View.VISIBLE : View.GONE);
         // last modified
