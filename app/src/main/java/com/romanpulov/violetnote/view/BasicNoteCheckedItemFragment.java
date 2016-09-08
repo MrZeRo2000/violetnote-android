@@ -97,30 +97,6 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment {
         }
     }
 
-    private class DeleteActionExecutor extends ActionExecutor {
-        @Override
-        protected boolean execute(final ActionMode mode, final BasicNoteItemA item) {
-            AlertOkCancelDialogFragment dialog = AlertOkCancelDialogFragment.newAlertOkCancelDialog(getString(R.string.ui_question_are_you_sure));
-            dialog.setOkButtonClickListener(new AlertOkCancelDialogFragment.OnClickListener() {
-                @Override
-                public void OnClick(DialogFragment dialog) {
-                    // delete item
-                    DBNoteManager mNoteManager = new DBNoteManager(getActivity());
-                    mNoteManager.deleteNoteItem(item);
-
-                    // refresh list
-                    mNoteManager.queryNoteDataItems(mBasicNoteData.getNote());
-
-                    //finish action
-                    mode.finish();
-                }
-            });
-            dialog.show(getFragmentManager(), null);
-
-            return true;
-        }
-    }
-
     private class EditActionExecutor extends ActionExecutor {
         @Override
         protected boolean execute(final ActionMode mode, final BasicNoteItemA item) {
@@ -151,42 +127,6 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment {
         }
     }
 
-    private class MoveUpActionExecutor extends ActionExecutor {
-        @Override
-        protected boolean execute(ActionMode mode, BasicNoteItemA item) {
-            return mNoteManager.moveUp(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME, item);
-        }
-    }
-
-    private class MoveTopActionExecutor extends ActionExecutor {
-        @Override
-        protected boolean execute(ActionMode mode, BasicNoteItemA item) {
-            return mNoteManager.moveTop(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME, item);
-        }
-    }
-
-    private class MoveDownActionExecutor extends ActionExecutor {
-        @Override
-        protected boolean execute(ActionMode mode, BasicNoteItemA item) {
-            return mNoteManager.moveDown(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME, item);
-        }
-    }
-
-    private class MoveBottomActionExecutor extends ActionExecutor {
-        @Override
-        protected boolean execute(ActionMode mode, BasicNoteItemA item) {
-            return mNoteManager.moveBottom(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME, item);
-        }
-    }
-
-    private void performMoveAction(ActionExecutor executor, BasicNoteItemA item) {
-        int notePos = executor.executeAndReturnNewPos(null, item);
-        if (notePos != -1) {
-            mRecyclerViewSelector.setSelectedView(null, notePos);
-            mRecyclerView.scrollToPosition(notePos);
-        }
-    }
-
     private void performMoveAction(BasicNoteAction<BasicCommonNoteA> action, BasicNoteItemA item) {
         int notePos = action.executeAndReturnNewPos(mBasicNoteData.getNote().getItems(), item);
         if (notePos != -1) {
@@ -204,25 +144,20 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment {
                 switch (item.getItemId()) {
                     case R.id.delete:
                         (new BasicNoteDeleteAction(BasicNoteCheckedItemFragment.this)).execute(mode, selectedItem);
-                        //(new DeleteActionExecutor()).execute(mode, selectedItem);
                         break;
                     case R.id.edit:
                         (new EditActionExecutor()).execute(mode, selectedItem);
                         break;
                     case R.id.move_up:
-                        //performMoveAction(new MoveUpActionExecutor(), selectedItem);
                         performMoveAction(new BasicNoteMoveUpAction<>(BasicNoteCheckedItemFragment.this), selectedItem);
                         break;
                     case R.id.move_top:
-                        //performMoveAction(new MoveTopActionExecutor(), selectedItem);
                         performMoveAction(new BasicNoteMoveTopAction<>(BasicNoteCheckedItemFragment.this), selectedItem);
                         break;
                     case R.id.move_down:
-                        //performMoveAction(new MoveDownActionExecutor(), selectedItem);
                         performMoveAction(new BasicNoteMoveDownAction<>(BasicNoteCheckedItemFragment.this), selectedItem);
                         break;
                     case R.id.move_bottom:
-                        //performMoveAction(new MoveBottomActionExecutor(), selectedItem);
                         performMoveAction(new BasicNoteMoveBottomAction<>(BasicNoteCheckedItemFragment.this), selectedItem);
                         break;
                 }
