@@ -31,6 +31,7 @@ import com.romanpulov.violetnote.view.core.PasswordActivity;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 import com.romanpulov.violetnote.view.core.TextInputDialog;
 import com.romanpulov.violetnote.view.helper.AddActionHelper;
+import com.romanpulov.violetnote.view.helper.TextEditDialogBuilder;
 
 public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment {
 
@@ -76,55 +77,32 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment {
         noteManager.queryNoteDataItems(mBasicNoteData.getNote());
     }
 
-    private abstract class ActionExecutor {
-        protected DBNoteManager mNoteManager;
-
-        public ActionExecutor() {
-            mNoteManager = new DBNoteManager(getActivity());
-        }
-
-        protected abstract boolean execute(final ActionMode mode, final BasicNoteItemA item);
-
-        protected int executeAndReturnNewPos(final ActionMode mode, final BasicNoteItemA item) {
-            if (execute(mode, item)) {
-                // refresh list
-                mNoteManager.queryNoteDataItems(mBasicNoteData.getNote());
-
-                // find and return new pos of the node
-                return BasicCommonNoteA.getNotePosWithId(mBasicNoteData.getNote().getItems(), item.getId());
-            } else
-                return -1;
-        }
+    private void performDeleteAction(final ActionMode mode, final BasicNoteItemA item) {
+        (new BasicNoteDeleteAction(BasicNoteCheckedItemFragment.this)).execute(mode, item);
     }
 
-    private class EditActionExecutor extends ActionExecutor {
-        @Override
-        protected boolean execute(final ActionMode mode, final BasicNoteItemA item) {
-            final String oldTitle = item.getValue();
-            TextInputDialog dialog = new TextInputDialog(getActivity(), getResources().getString(R.string.ui_note_title));
-            dialog.setText(oldTitle);
-            dialog.setNonEmptyErrorMessage(getString(R.string.error_field_not_empty));
-            dialog.setOnTextInputListener(new TextInputDialog.OnTextInputListener() {
-                @Override
-                public void onTextInput(String text) {
-                    if (text != null) {
-                        if (!text.equals(oldTitle)) {
-                            // prepare and update item
+    private void performEditAction(final ActionMode mode, final BasicNoteItemA item) {
+        (new TextEditDialogBuilder(getActivity(), getString(R.string.ui_note_title), item.getValue()))
+                .setNonEmptyErrorMessage(getString(R.string.error_field_not_empty))
+                .setOnTextInputListener(new TextInputDialog.OnTextInputListener() {
+                    @Override
+                    public void onTextInput(String text) {
+                        if (!text.equals(item.getValue())) {
+                            //change
                             item.setValue(text);
-                            DBNoteManager mNoteManager = new DBNoteManager(getActivity());
-                            mNoteManager.updateNoteItemValue(item);
 
-                            // refresh list
-                            mNoteManager.queryNoteDataItems(mBasicNoteData.getNote());
+                            //update database
+                            DBNoteManager noteManager = new DBNoteManager(getActivity());
+                            noteManager.updateNoteItemValue(item);
+
+                            //refresh list
+                            BasicNoteCheckedItemFragment.this.refreshList(noteManager);
                         }
                         // finish anyway
                         mode.finish();
                     }
-                }
-            });
-            dialog.show();
-            return true;
-        }
+                })
+                .execute();
     }
 
     private void performMoveAction(BasicNoteAction<BasicCommonNoteA> action, BasicNoteItemA item) {
@@ -143,10 +121,10 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment {
                 BasicNoteItemA selectedItem = mBasicNoteData.getNote().getItems().get(selectedItemPos);
                 switch (item.getItemId()) {
                     case R.id.delete:
-                        (new BasicNoteDeleteAction(BasicNoteCheckedItemFragment.this)).execute(mode, selectedItem);
+                        performDeleteAction(mode, selectedItem);
                         break;
                     case R.id.edit:
-                        (new EditActionExecutor()).execute(mode, selectedItem);
+                        performEditAction(mode, selectedItem);
                         break;
                     case R.id.move_up:
                         performMoveAction(new BasicNoteMoveUpAction<>(BasicNoteCheckedItemFragment.this), selectedItem);

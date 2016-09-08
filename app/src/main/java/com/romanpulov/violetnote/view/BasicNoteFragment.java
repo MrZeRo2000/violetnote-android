@@ -28,6 +28,7 @@ import com.romanpulov.violetnote.view.core.AlertOkCancelDialogFragment;
 import com.romanpulov.violetnote.view.core.BasicCommonNoteFragment;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 import com.romanpulov.violetnote.view.core.TextInputDialog;
+import com.romanpulov.violetnote.view.helper.TextEditDialogBuilder;
 
 import java.util.ArrayList;
 
@@ -60,30 +61,32 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
         noteManager.refreshNotes(mNoteList);
     }
 
-    private void editItem(final ActionMode mode, final BasicNoteA item) {
-        final String oldTitle = item.getTitle();
-        TextInputDialog dialog = new TextInputDialog(getActivity(), getResources().getString(R.string.ui_note_title));
-        dialog.setText(oldTitle);
-        dialog.setNonEmptyErrorMessage(getString(R.string.error_field_not_empty));
-        dialog.setOnTextInputListener(new TextInputDialog.OnTextInputListener() {
-            @Override
-            public void onTextInput(String text) {
-                if (text != null) {
-                    if (!text.equals(oldTitle)) {
-                        // prepare and update item
-                        item.setTitle(text);
-                        DBNoteManager mNoteManager = new DBNoteManager(getActivity());
-                        mNoteManager.updateNote(item);
+    private void performDeleteAction(final ActionMode mode, final BasicNoteA item) {
+        (new BasicNoteDeleteAction(BasicNoteFragment.this)).execute(mode, item);
+    }
 
-                        // refresh list
-                        mNoteManager.refreshNotes(mNoteList);
+    private void performEditAction(final ActionMode mode, final BasicNoteA item) {
+        (new TextEditDialogBuilder(getActivity(), getString(R.string.ui_note_title), item.getTitle()))
+                .setNonEmptyErrorMessage(getString(R.string.error_field_not_empty))
+                .setOnTextInputListener(new TextInputDialog.OnTextInputListener() {
+                    @Override
+                    public void onTextInput(String text) {
+                        if (!text.equals(item.getTitle())) {
+                            //change
+                            item.setTitle(text);
+
+                            //update database
+                            DBNoteManager noteManager = new DBNoteManager(getActivity());
+                            noteManager.updateNote(item);
+
+                            //refresh list
+                            BasicNoteFragment.this.refreshList(noteManager);
+                        }
+                        // finish anyway
+                        mode.finish();
                     }
-                    // finish anyway
-                    mode.finish();
-                }
-            }
-        });
-        dialog.show();
+                })
+                .execute();
     }
 
     private void performMoveAction(BasicNoteAction<BasicCommonNoteA> action, BasicNoteA item) {
@@ -102,10 +105,10 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
                 BasicNoteA selectedItem = mNoteList.get(selectedItemPos);
                 switch (item.getItemId()) {
                     case R.id.delete:
-                        (new BasicNoteDeleteAction(BasicNoteFragment.this)).execute(mode, selectedItem);
+                        performDeleteAction(mode, selectedItem);
                         break;
                     case R.id.edit:
-                        editItem(mode, selectedItem);
+                        performEditAction(mode, selectedItem);
                         break;
                     case R.id.move_up:
                         performMoveAction(new BasicNoteMoveUpAction<>(BasicNoteFragment.this), selectedItem);
