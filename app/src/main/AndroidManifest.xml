@@ -79,11 +79,15 @@
             android:label="@string/title_activity_basic_note_edit"
             android:parentActivityName=".view.BasicNoteActivity"
             android:theme="@style/EditTheme" />
-        <activity android:name=".view.BasicNoteCheckedItemActivity"
+        <activity
+            android:name=".view.BasicNoteCheckedItemActivity"
             android:label="@string/title_activity_basic_note_checked_item"
             android:parentActivityName=".view.BasicNoteActivity"
-            android:theme="@style/ToolBarTheme"
-            />
+            android:theme="@style/ToolBarTheme" />
+        <activity android:name=".view.BasicNoteNamedItemActivity"
+            android:label="@string/title_activity_basic_note_named_item"
+            android:parentActivityName=".view.BasicNoteActivity"
+            android:theme="@style/ToolBarTheme" />
     </application>
 
 </manifest>
