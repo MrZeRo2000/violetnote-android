@@ -42,6 +42,8 @@ public class BasicNoteNamedItemRecyclerViewAdapter extends RecyclerView.Adapter<
         holder.mNameView.setText(mItems.get(position).getName());
         holder.mValueView.setText(mItems.get(position).getValue());
         holder.mLastModifiedView.setText(holder.mItem.getLastModifiedString());
+        // background
+        holder.updateBackground();
     }
 
     @Override
@@ -62,6 +64,27 @@ public class BasicNoteNamedItemRecyclerViewAdapter extends RecyclerView.Adapter<
             mNameView = (TextView) view.findViewById(R.id.name);
             mValueView = (TextView) view.findViewById(R.id.value);
             mLastModifiedView = (TextView) view.findViewById(R.id.last_modified);
+        }
+
+        private void updateSelectedTitle() {
+            ActionMode actionMode;
+            if ((mRecyclerViewSelector != null) && ((actionMode = mRecyclerViewSelector.getActionMode()) != null) && (mRecyclerViewSelector.getSelectedItemPos() != -1))
+                actionMode.setTitle(mItems.get(mRecyclerViewSelector.getSelectedItemPos()).getValue());
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            super.onLongClick(v);
+            updateSelectedTitle();
+            return true;
+        }
+
+        @Override
+        public void onClick(View v) {
+            super.onClick(v);
+            updateSelectedTitle();
+            if ((mListener != null) && (mRecyclerViewSelector.getSelectedItemPos() == -1))
+                mListener.onBasicNoteItemFragmentInteraction(mItems.get(getAdapterPosition()), getAdapterPosition());
         }
 
         @Override

@@ -50,16 +50,6 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         return fragment;
     }
 
-    @Override
-    public String getDBTableName() {
-        return DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME;
-    }
-
-    @Override
-    public void refreshList(DBNoteManager noteManager) {
-        noteManager.queryNoteDataItems(mBasicNoteData.getNote());
-    }
-
     private void performDeleteAction(final ActionMode mode, final BasicNoteItemA item) {
         (new BasicNoteDeleteAction(BasicNoteCheckedItemFragment.this)).execute(mode, item);
     }

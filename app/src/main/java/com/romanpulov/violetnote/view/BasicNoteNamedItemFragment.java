@@ -43,16 +43,6 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
         return fragment;
     }
 
-    @Override
-    public String getDBTableName() {
-        return DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME;
-    }
-
-    @Override
-    public void refreshList(DBNoteManager noteManager) {
-
-    }
-
     private void performMoveAction(BasicNoteAction<BasicCommonNoteA> action, BasicNoteItemA item) {
         int notePos = action.executeAndReturnNewPos(mBasicNoteData.getNote().getItems(), item);
         if (notePos != -1) {

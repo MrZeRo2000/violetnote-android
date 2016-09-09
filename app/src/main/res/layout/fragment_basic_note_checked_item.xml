@@ -39,6 +39,4 @@
         android:gravity="center_horizontal"
         android:textAppearance="@style/Dim3Text"
         />
-
-
 </RelativeLayout>

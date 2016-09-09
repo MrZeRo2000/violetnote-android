@@ -1,27 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:background="@drawable/list_selector"
+    android:paddingTop="@dimen/text_margin"
+    android:paddingBottom="@dimen/text_margin"
+    android:paddingLeft="@dimen/text_margin_half"
+    android:paddingRight="@dimen/text_margin_half"
+    >
 
     <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@+id/last_modified"
+        android:textAppearance="@style/Text2"
+        android:singleLine="true"
+        android:text="Name"
         />
 
+
     <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/value"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/name"
+        android:layout_toLeftOf="@+id/last_modified"
+        android:textAppearance="@style/Text3"
+        android:singleLine="false"
+        android:text="Value"
         />
 
     <TextView
-        android:id="@+id/last_modified"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
+        android:id="@+id/last_modified"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="@dimen/text_margin_half"
+        android:layout_centerVertical="true"
+        android:gravity="center_horizontal"
+        android:textAppearance="@style/Dim3Text"
+        android:text="last_modified"
         />
-</LinearLayout>
+</RelativeLayout>

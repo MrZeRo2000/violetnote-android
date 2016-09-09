@@ -43,6 +43,8 @@ public class BasicNoteCheckedItemRecyclerViewAdapter extends RecyclerView.Adapte
         holder.mItem = mItems.get(position);
         holder.mCheckedView.setChecked(holder.mItem.getChecked());
         holder.mValueView.setText(holder.mItem.getValue());
+
+        //strike thru for checked
         if (holder.mItem.getChecked())
             holder.mValueView.setPaintFlags(holder.mValueView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         else
@@ -51,16 +53,6 @@ public class BasicNoteCheckedItemRecyclerViewAdapter extends RecyclerView.Adapte
         holder.mLastModifiedView.setText(holder.mItem.getLastModifiedString());
         // background
         holder.updateBackground();
-/*
-        holder.mView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (null != mListener) {
-                    mListener.onBasicNoteItemFragmentInteraction(holder.mItem, holder.getAdapterPosition());
-                }
-            }
-        });
-        */
     }
 
     @Override
