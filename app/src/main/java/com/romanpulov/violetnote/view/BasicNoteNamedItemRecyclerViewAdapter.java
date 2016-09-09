@@ -19,6 +19,10 @@ public class BasicNoteNamedItemRecyclerViewAdapter extends RecyclerView.Adapter<
     private final RecyclerViewHelper.RecyclerViewSelector mRecyclerViewSelector;
     private final BasicNoteCheckedItemFragment.OnBasicNoteItemFragmentInteractionListener mListener;
 
+    public RecyclerViewHelper.RecyclerViewSelector getRecyclerViewSelector() {
+        return mRecyclerViewSelector;
+    }
+
     public BasicNoteNamedItemRecyclerViewAdapter(List<BasicNoteItemA> items, ActionMode.Callback actionModeCallback, BasicNoteCheckedItemFragment.OnBasicNoteItemFragmentInteractionListener listener) {
         mItems = items;
         mRecyclerViewSelector = new RecyclerViewHelper.RecyclerViewSelector(this, actionModeCallback);
@@ -36,7 +40,7 @@ public class BasicNoteNamedItemRecyclerViewAdapter extends RecyclerView.Adapter<
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mItems.get(position);
         holder.mNameView.setText(mItems.get(position).getName());
-        holder.mNameView.setText(mItems.get(position).getValue());
+        holder.mValueView.setText(mItems.get(position).getValue());
         holder.mLastModifiedView.setText(holder.mItem.getLastModifiedString());
     }
 

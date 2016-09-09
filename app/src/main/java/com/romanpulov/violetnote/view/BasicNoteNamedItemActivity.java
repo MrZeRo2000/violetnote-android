@@ -17,8 +17,8 @@ public class BasicNoteNamedItemActivity extends BasicNoteDataPasswordActivity {
 
     @Override
     protected void refreshFragment() {
-        //Fragment fragment = BasicNoteCheckedItemFragment.newInstance(mBasicNoteData);
-        //removeFragment().beginTransaction().add(getFragmentContainerId(), fragment).commit();
+        Fragment fragment = BasicNoteNamedItemFragment.newInstance(mBasicNoteData);
+        removeFragment().beginTransaction().add(getFragmentContainerId(), fragment).commit();
     }
 
 
