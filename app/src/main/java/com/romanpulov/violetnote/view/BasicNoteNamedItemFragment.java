@@ -48,6 +48,10 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
         (new BasicNoteDeleteAction(BasicNoteNamedItemFragment.this)).execute(mode, item);
     }
 
+    private void performEditAction(final ActionMode mode, final BasicNoteItemA item) {
+
+    }
+
     private void performMoveAction(BasicNoteAction<BasicCommonNoteA> action, BasicNoteItemA item) {
         int notePos = action.executeAndReturnNewPos(mBasicNoteData.getNote().getItems(), item);
         if (notePos != -1) {
