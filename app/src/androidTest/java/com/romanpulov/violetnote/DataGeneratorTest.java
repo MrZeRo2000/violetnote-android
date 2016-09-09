@@ -51,7 +51,8 @@ public class DataGeneratorTest extends ApplicationTestCase<Application> {
             BasicNoteA newNote = BasicNoteA.newEditInstance(i % 2, String.format(Locale.getDefault(), titleFormat, i), (i % 5) == 0 , null);
             assertFalse(-1 == noteManager.insertNote(newNote));
 
-            if (i == 2) {
+            if (i % 2 == 0) {
+                //checked items
                 newNote.setId(i);
                 for (int j = 1; j <= MAX_NOTE_ITEMS; j++) {
                     String itemValueFormat = "Note item %2d for note %2d";
@@ -59,6 +60,25 @@ public class DataGeneratorTest extends ApplicationTestCase<Application> {
                         itemValueFormat = "This is a very very very very very very long note item %2d for note %2d";
 
                     BasicNoteItemA newNoteItem = BasicNoteItemA.newCheckedEditInstance(String.format(Locale.getDefault(), itemValueFormat, j, i));
+                    assertFalse(-1 == noteManager.insertNoteItem(newNote, newNoteItem));
+                }
+            } else {
+                //named items
+                newNote.setId(i);
+                for (int j = 1; j <= MAX_NOTE_ITEMS; j++) {
+                    String itemNameFormat = "Name note item %2d for note %2d";
+                    String itemValueFormat = "Value note item %2d for note %2d";
+                    if (j == 3) {
+                        itemNameFormat = "This is a very very very very very very long note item name %2d for note %2d";
+                    }
+                    if (j == 4) {
+                        itemValueFormat = "This is a very very very very very very long note item value %2d for note %2d";
+                    }
+
+                    BasicNoteItemA newNoteItem = BasicNoteItemA.newNamedEditInstance(
+                            String.format(Locale.getDefault(), itemNameFormat, j, i),
+                            String.format(Locale.getDefault(), itemValueFormat, j, i)
+                    );
                     assertFalse(-1 == noteManager.insertNoteItem(newNote, newNoteItem));
                 }
             }
