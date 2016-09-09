@@ -1,6 +1,5 @@
 package com.romanpulov.violetnote.view;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -26,22 +25,15 @@ import com.romanpulov.violetnote.view.action.BasicNoteMoveDownAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveTopAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveUpAction;
 import com.romanpulov.violetnote.view.core.AlertOkCancelDialogFragment;
-import com.romanpulov.violetnote.view.core.BasicCommonNoteFragment;
 import com.romanpulov.violetnote.view.core.PasswordActivity;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 import com.romanpulov.violetnote.view.core.TextInputDialog;
 import com.romanpulov.violetnote.view.helper.AddActionHelper;
 import com.romanpulov.violetnote.view.core.TextEditDialogBuilder;
 
-public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment {
-
-    private BasicNoteDataA mBasicNoteData;
-
-    private OnBasicNoteItemFragmentInteractionListener mListener;
+public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
 
     private AddActionHelper mAddActionHelper;
-
-    private BasicNoteCheckedItemRecyclerViewAdapter mRecyclerViewAdapter;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -56,15 +48,6 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment {
         args.putParcelable(PasswordActivity.PASS_DATA, basicNoteDataA);
         fragment.setArguments(args);
         return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        if (getArguments() != null) {
-            mBasicNoteData = getArguments().getParcelable(PasswordActivity.PASS_DATA);
-        }
     }
 
     @Override
@@ -174,7 +157,7 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment {
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-        mRecyclerViewAdapter = new BasicNoteCheckedItemRecyclerViewAdapter(mBasicNoteData.getNote().getItems(), new ActionBarCallBack(),
+        BasicNoteCheckedItemRecyclerViewAdapter recyclerViewAdapter = new BasicNoteCheckedItemRecyclerViewAdapter(mBasicNoteData.getNote().getItems(), new ActionBarCallBack(),
                 new OnBasicNoteItemFragmentInteractionListener() {
                     @Override
                     public void onBasicNoteItemFragmentInteraction(BasicNoteItemA item, int position) {
@@ -189,8 +172,8 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment {
                     }
                 }
         );
-        mRecyclerViewSelector = mRecyclerViewAdapter.getRecyclerViewSelector();
-        mRecyclerView.setAdapter(mRecyclerViewAdapter);
+        mRecyclerViewSelector = recyclerViewAdapter.getRecyclerViewSelector();
+        mRecyclerView.setAdapter(recyclerViewAdapter);
 
         // add decoration
         mRecyclerView.addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(getActivity(), RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_white_black_gradient));
@@ -211,17 +194,6 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment {
         });
 
         return view;
-    }
-
-    @Override
-    public void onAttach(Activity context) {
-        super.onAttach(context);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
     }
 
     public void showAddLayout() {
@@ -263,14 +235,5 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment {
             });
             dialog.show(getFragmentManager(), null);
         }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
-    }
-
-    public interface OnBasicNoteItemFragmentInteractionListener {
-        void onBasicNoteItemFragmentInteraction(BasicNoteItemA item, int position);
     }
 }
