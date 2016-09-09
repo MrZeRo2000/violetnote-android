@@ -18,6 +18,7 @@ import com.romanpulov.violetnote.model.BasicCommonNoteA;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.view.action.BasicNoteAction;
+import com.romanpulov.violetnote.view.action.BasicNoteDeleteAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveBottomAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveDownAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveTopAction;
@@ -43,6 +44,10 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
         return fragment;
     }
 
+    private void performDeleteAction(final ActionMode mode, final BasicNoteItemA item) {
+        (new BasicNoteDeleteAction(BasicNoteNamedItemFragment.this)).execute(mode, item);
+    }
+
     private void performMoveAction(BasicNoteAction<BasicCommonNoteA> action, BasicNoteItemA item) {
         int notePos = action.executeAndReturnNewPos(mBasicNoteData.getNote().getItems(), item);
         if (notePos != -1) {
@@ -59,7 +64,7 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
                 BasicNoteItemA selectedItem = mBasicNoteData.getNote().getItems().get(selectedItemPos);
                 switch (item.getItemId()) {
                     case R.id.delete:
-                        //performDeleteAction(mode, selectedItem);
+                        performDeleteAction(mode, selectedItem);
                         break;
                     case R.id.edit:
                         //performEditAction(mode, selectedItem);
