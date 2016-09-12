@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBBasicNoteOpenHelper;
@@ -24,6 +25,7 @@ import com.romanpulov.violetnote.view.action.BasicNoteMoveDownAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveTopAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveUpAction;
 import com.romanpulov.violetnote.view.core.BasicCommonNoteFragment;
+import com.romanpulov.violetnote.view.core.NameValueInputDialog;
 import com.romanpulov.violetnote.view.core.PasswordActivity;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 
@@ -44,12 +46,31 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
         return fragment;
     }
 
+    public void performAddAction() {
+        NameValueInputDialog dialog = new NameValueInputDialog(getActivity(), getString(R.string.ui_name_value_title));
+        dialog.setOnNameValueInputListener(new NameValueInputDialog.OnNameValueInputListener() {
+            @Override
+            public void onNameValueInput(String name, String value) {
+
+            }
+        });
+        dialog.show();
+    }
+
     private void performDeleteAction(final ActionMode mode, final BasicNoteItemA item) {
         (new BasicNoteDeleteAction(BasicNoteNamedItemFragment.this)).execute(mode, item);
     }
 
     private void performEditAction(final ActionMode mode, final BasicNoteItemA item) {
+        NameValueInputDialog dialog = new NameValueInputDialog(getActivity(), getString(R.string.ui_name_value_title));
+        dialog.setNameValue(item.getName(), item.getValue());
+        dialog.setOnNameValueInputListener(new NameValueInputDialog.OnNameValueInputListener() {
+            @Override
+            public void onNameValueInput(String name, String value) {
 
+            }
+        });
+        dialog.show();
     }
 
     private void performMoveAction(BasicNoteAction<BasicCommonNoteA> action, BasicNoteItemA item) {
@@ -71,7 +92,7 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
                         performDeleteAction(mode, selectedItem);
                         break;
                     case R.id.edit:
-                        //performEditAction(mode, selectedItem);
+                        performEditAction(mode, selectedItem);
                         break;
                     case R.id.move_up:
                         performMoveAction(new BasicNoteMoveUpAction<>(BasicNoteNamedItemFragment.this), selectedItem);

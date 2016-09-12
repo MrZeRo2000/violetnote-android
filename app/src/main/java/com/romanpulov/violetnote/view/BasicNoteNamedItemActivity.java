@@ -1,9 +1,10 @@
 package com.romanpulov.violetnote.view;
 
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.view.core.BasicNoteDataPasswordActivity;
@@ -36,5 +37,26 @@ public class BasicNoteNamedItemActivity extends BasicNoteDataPasswordActivity {
         setupActionBar();
 
         refreshFragment();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_named_item, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Fragment fragment = getFragment();
+        if (fragment != null) {
+            switch (item.getItemId()) {
+                case R.id.action_add:
+                    ((BasicNoteNamedItemFragment)getFragment()).performAddAction();
+                    return true;
+                default:
+                    return super.onOptionsItemSelected(item);
+            }
+        }  else
+            return super.onOptionsItemSelected(item);
     }
 }
