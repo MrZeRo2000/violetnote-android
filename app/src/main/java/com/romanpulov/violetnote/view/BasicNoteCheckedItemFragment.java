@@ -176,7 +176,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
 
                 manager.insertNoteItem(mBasicNoteData.getNote(), BasicNoteItemA.newCheckedEditInstance(text));
 
-                manager.queryNoteDataItems(mBasicNoteData.getNote());
+                refreshList(manager);
 
                 //recyclerView.getAdapter().notifyDataSetChanged();
                 mRecyclerView.scrollToPosition(mBasicNoteData.getNote().getItems().size() - 1);

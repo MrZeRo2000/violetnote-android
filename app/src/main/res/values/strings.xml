@@ -8,6 +8,8 @@
     <string name="caption_loading">Loading &#8230;</string>
     <string name="hint_search">Search &#8230;</string>
     <string name="hint_add">Add &#8230;</string>
+    <string name="hint_name">Name &#8230;</string>
+    <string name="hint_value">Value &#8230;</string>
 
     <string name="layout_notes_count">Notes : %d</string>
 
@@ -80,8 +82,6 @@
     <string name="ui_note_title">Title</string>
     <string name="ui_name_value_title">Name and value</string>
     <string name="ui_note_title_hint">Title</string>
-    <string name="ui_name_hint">Name</string>
-    <string name="ui_value_hint">Value</string>
     <string name="ui_text_set_password">Set password</string>
     <string name="ui_text_clear_password">Clear password</string>
 
