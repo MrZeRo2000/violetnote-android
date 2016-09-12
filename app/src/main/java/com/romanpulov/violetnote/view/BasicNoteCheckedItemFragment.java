@@ -19,6 +19,7 @@ import com.romanpulov.violetnote.db.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicCommonNoteA;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
+import com.romanpulov.violetnote.model.PassNoteItemCryptService;
 import com.romanpulov.violetnote.view.action.BasicNoteAction;
 import com.romanpulov.violetnote.view.action.BasicNoteDeleteAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveBottomAction;
@@ -27,6 +28,7 @@ import com.romanpulov.violetnote.view.action.BasicNoteMoveTopAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveUpAction;
 import com.romanpulov.violetnote.view.core.AlertOkCancelDialogFragment;
 import com.romanpulov.violetnote.view.core.PasswordActivity;
+import com.romanpulov.violetnote.view.core.PasswordInputDialog;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 import com.romanpulov.violetnote.view.core.TextInputDialog;
 import com.romanpulov.violetnote.view.helper.AddActionHelper;
@@ -185,15 +187,41 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         mAddActionHelper = new AddActionHelper(view.findViewById(R.id.add_panel_include), mBasicNoteData.getNote().getValues());
         mAddActionHelper.setOnAddInteractionListener(new AddActionHelper.OnAddInteractionListener() {
             @Override
-            public void onAddFragmentInteraction(String text) {
-                DBNoteManager manager = new DBNoteManager(getActivity());
+            public void onAddFragmentInteraction(final String text) {
+                final DBNoteManager manager = new DBNoteManager(getActivity());
 
-                manager.insertNoteItem(mBasicNoteData.getNote(), BasicNoteItemA.newCheckedEditInstance(text));
+                if ((mBasicNoteData.getNote().getIsEncrypted()) && (mBasicNoteData.getPassword() == null)) {
+                    PasswordInputDialog passwordInputDialog = new PasswordInputDialog(getActivity());
+                    passwordInputDialog.setOnTextInputListener(new TextInputDialog.OnTextInputListener() {
+                        @Override
+                        public void onTextInput(String password) {
+                            if (!password.isEmpty()) {
+                                //set new password
+                                mBasicNoteData.setPassword(password);
 
-                refreshList(manager);
+                                //encrypt data
+                                BasicNoteItemA newItem = BasicNoteItemA.newCheckedEditInstance(text);
 
-                //recyclerView.getAdapter().notifyDataSetChanged();
-                mRecyclerView.scrollToPosition(mBasicNoteData.getNote().getItems().size() - 1);
+                                //save encrypted item
+                                if (PassNoteItemCryptService.encryptBasicNoteCheckedItem(newItem, password)) {
+                                    manager.insertNoteItem(mBasicNoteData.getNote(), newItem);
+                                }
+
+                                //refresh list
+                                refreshList(manager);
+                            }
+                        }
+                    });
+                    passwordInputDialog.show();
+                    mEditorDialog = passwordInputDialog.getAlertDialog();
+                } else {
+                    manager.insertNoteItem(mBasicNoteData.getNote(), BasicNoteItemA.newCheckedEditInstance(text));
+
+                    refreshList(manager);
+
+                    //recyclerView.getAdapter().notifyDataSetChanged();
+                    mRecyclerView.scrollToPosition(mBasicNoteData.getNote().getItems().size() - 1);
+                }
             }
         });
 

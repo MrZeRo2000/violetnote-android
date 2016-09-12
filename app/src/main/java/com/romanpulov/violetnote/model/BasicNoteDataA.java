@@ -9,11 +9,15 @@ import java.util.ArrayList;
  * Created by rpulov on 21.08.2016.
  */
 public class BasicNoteDataA implements Parcelable, PasswordProvider {
-    private final String mPassword;
+    private String mPassword;
 
     @Override
     public String getPassword() {
         return mPassword;
+    }
+
+    public void setPassword(String password) {
+        mPassword = password;
     }
 
     private ArrayList<BasicNoteA> mNoteList;
@@ -24,6 +28,13 @@ public class BasicNoteDataA implements Parcelable, PasswordProvider {
 
     public BasicNoteA getNote() {
         return mNoteList.get(0);
+    }
+
+    public boolean isPasswordRequired() {
+        return (
+            (mPassword == null) &&
+            (getNote() != null) && getNote().getIsEncrypted() && getNote().getItems().size() > 0
+        );
     }
 
     private BasicNoteDataA(String password) {

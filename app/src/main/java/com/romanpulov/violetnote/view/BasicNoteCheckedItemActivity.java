@@ -27,6 +27,11 @@ public class BasicNoteCheckedItemActivity extends BasicNoteDataPasswordActivity 
     }
 
     @Override
+    protected void updatePassword(String password) {
+        super.updatePassword(password);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 

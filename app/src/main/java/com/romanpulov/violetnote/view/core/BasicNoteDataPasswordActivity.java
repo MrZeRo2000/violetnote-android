@@ -1,6 +1,7 @@
 package com.romanpulov.violetnote.view.core;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 
