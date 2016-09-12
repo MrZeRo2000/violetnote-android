@@ -1,6 +1,7 @@
 package com.romanpulov.violetnote.view.core;
 
 import android.content.Context;
+import android.support.v7.app.AlertDialog;
 
 /**
  * Created by romanpulov on 08.09.2016.
@@ -29,7 +30,7 @@ public class TextEditDialogBuilder {
         return this;
     }
 
-    public void execute() {
+    public AlertDialog execute() {
         TextInputDialog dialog = new TextInputDialog(mContext, mTitle);
         dialog.setText(mInitialValue);
         if (mNonEmptyErrorMessage != null)
@@ -44,5 +45,6 @@ public class TextEditDialogBuilder {
             }
         });
         dialog.show();
+        return dialog.getAlertDialog();
     }
 }

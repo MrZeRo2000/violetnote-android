@@ -87,6 +87,10 @@ public class AddActionHelper {
             ((Activity)mActionView.getContext()).getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
     }
 
+    public void hideLayout() {
+        mActionView.setVisibility(View.GONE);
+    }
+
     public interface OnAddInteractionListener {
         void onAddFragmentInteraction(String text);
     }

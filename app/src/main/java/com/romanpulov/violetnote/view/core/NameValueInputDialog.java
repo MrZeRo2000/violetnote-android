@@ -15,7 +15,7 @@ import com.romanpulov.violetnote.R;
 /**
  * Created by romanpulov on 09.09.2016.
  */
-public class NameValueInputDialog {
+public class NameValueInputDialog extends AlertInputDialog {
 
     public interface OnNameValueInputListener {
         void onNameValueInput(String name, String value);
@@ -64,12 +64,12 @@ public class NameValueInputDialog {
         alert.setNegativeButton(R.string.cancel, null);
 
         //create
-        final AlertDialog alertDialog = alert.create();
+        mAlertDialog = alert.create();
 
-        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+        mAlertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialogInterface) {
-                Button b = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                Button b = mAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
                 b.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -84,13 +84,13 @@ public class NameValueInputDialog {
                             else {
                                 if (mOnNameValueInputListener != null)
                                     mOnNameValueInputListener.onNameValueInput(name, value);
-                                alertDialog.dismiss();
+                                mAlertDialog.dismiss();
                             }
                     }
                 });
             }
         });
 
-        alertDialog.show();
+        mAlertDialog.show();
     }
 }

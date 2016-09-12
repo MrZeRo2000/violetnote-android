@@ -61,6 +61,7 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
             }
         });
         dialog.show();
+        mEditorDialog = dialog.getAlertDialog();
     }
 
     private void performDeleteAction(final ActionMode mode, final BasicNoteItemA item) {
@@ -87,9 +88,12 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
                 }
                 // finish anyway
                 mode.finish();
+                //
+                mEditorDialog = null;
             }
         });
         dialog.show();
+        mEditorDialog = dialog.getAlertDialog();
     }
 
     private void performMoveAction(BasicNoteAction<BasicCommonNoteA> action, BasicNoteItemA item) {
@@ -184,5 +188,14 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
             mRecyclerView.addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(getActivity(), RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_white_black_gradient));
         }
         return view;
+    }
+
+    @Override
+    public void onPause() {
+        if (mEditorDialog != null) {
+            mEditorDialog.dismiss();
+            mEditorDialog = null;
+        }
+        super.onPause();
     }
 }

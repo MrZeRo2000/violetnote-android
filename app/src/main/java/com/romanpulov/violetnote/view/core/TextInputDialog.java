@@ -21,7 +21,7 @@ import org.xmlpull.v1.XmlPullParser;
  * Created by romanpulov on 26.08.2016.
  */
 
-public class TextInputDialog {
+public class TextInputDialog extends AlertInputDialog {
 
     public interface OnTextInputListener {
         void onTextInput(String text);
@@ -109,13 +109,13 @@ public class TextInputDialog {
             }
         });
 
-        final AlertDialog alertDialog = alert.create();
+        mAlertDialog = alert.create();
 
         if (mNonEmptyErrorMessage != null) {
-            alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            mAlertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
                 @Override
                 public void onShow(DialogInterface dialogInterface) {
-                    Button b = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                    Button b = mAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
                     b.setOnClickListener(new View.OnClickListener() {
 
                         @Override
@@ -126,7 +126,7 @@ public class TextInputDialog {
                             else {
                                 if (mOnTextInputListener != null)
                                     mOnTextInputListener.onTextInput(password);
-                                alertDialog.dismiss();
+                                mAlertDialog.dismiss();
                             }
                         }
                     });
@@ -134,6 +134,6 @@ public class TextInputDialog {
             });
         }
 
-        alertDialog.show();
+        mAlertDialog.show();
     }
 }

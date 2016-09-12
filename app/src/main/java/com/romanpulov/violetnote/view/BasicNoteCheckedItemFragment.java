@@ -6,6 +6,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -55,7 +56,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
     }
 
     private void performEditAction(final ActionMode mode, final BasicNoteItemA item) {
-        (new TextEditDialogBuilder(getActivity(), getString(R.string.ui_note_title), item.getValue()))
+        mEditorDialog = (new TextEditDialogBuilder(getActivity(), getString(R.string.ui_note_title), item.getValue()))
                 .setNonEmptyErrorMessage(getString(R.string.error_field_not_empty))
                 .setOnTextInputListener(new TextInputDialog.OnTextInputListener() {
                     @Override
@@ -73,9 +74,22 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                         }
                         // finish anyway
                         mode.finish();
+                        //clear editor reference
+                        mEditorDialog = null;
                     }
                 })
                 .execute();
+    }
+
+    @Override
+    public void onPause() {
+        //hide editors
+        mAddActionHelper.hideLayout();
+        if (mEditorDialog != null) {
+            mEditorDialog.dismiss();
+            mEditorDialog = null;
+        }
+        super.onPause();
     }
 
     private void performMoveAction(BasicNoteAction<BasicCommonNoteA> action, BasicNoteItemA item) {
@@ -185,6 +199,8 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
 
         return view;
     }
+
+
 
     public void showAddLayout() {
         if (mAddActionHelper != null) {
