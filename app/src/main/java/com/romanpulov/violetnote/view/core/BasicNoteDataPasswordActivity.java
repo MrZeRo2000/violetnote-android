@@ -24,6 +24,8 @@ public abstract class BasicNoteDataPasswordActivity extends PasswordActivity {
             public void onExecutionCompleted(boolean result) {
                 if (result)
                     refreshFragment();
+                else
+                    setLoadErrorFragment();
             }
         });
         executor.executeAsync();

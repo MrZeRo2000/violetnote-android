@@ -61,6 +61,16 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
 
     protected abstract void refreshFragment();
 
+    protected void setLoadErrorFragment() {
+        LoadErrorFragment fragment = new LoadErrorFragment();
+        removeFragment().beginTransaction().add(getFragmentContainerId(), fragment).commit();
+    }
+
+    public void reload() {
+        removeFragment();
+        requestPassword();
+    }
+
     protected abstract void updatePassword(String password);
 
     protected void requestPassword() {
@@ -75,7 +85,8 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
                     } else {
                         updatePassword(text);
                     }
-                }
+                } else
+                    setLoadErrorFragment();
             }
         });
         passwordInputDialog.show();

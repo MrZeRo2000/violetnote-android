@@ -11,4 +11,5 @@
     <color name="dimTextColor">#FF888888</color>
     <color name="highlightTextColor">#FFF1D1AF</color>
     <color name="colorHeader">#FFCD7135</color>
+    <color name="colorError">#FFDD0000</color>
 </resources>

@@ -56,7 +56,7 @@ public class BasicNoteCheckedItemActivity extends BasicNoteDataPasswordActivity 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Fragment fragment = getFragment();
-        if (fragment != null) {
+        if ((fragment != null) && (fragment instanceof BasicNoteCheckedItemFragment)) {
             switch (item.getItemId()) {
                 case R.id.action_add:
                     ((BasicNoteCheckedItemFragment) fragment).showAddLayout();
