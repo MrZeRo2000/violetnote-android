@@ -8,9 +8,9 @@ import com.romanpulov.violetnote.model.PassNoteItemCryptService;
 /**
  * Created by romanpulov on 13.09.2016.
  */
-public class BasicNoteDataInsertCheckedItemAction extends BasicNoteDataAction {
+public class BasicNoteDataAddItemAction extends BasicNoteDataAction {
 
-    public BasicNoteDataInsertCheckedItemAction(BasicNoteDataA basicNoteData, BasicNoteItemA item) {
+    public BasicNoteDataAddItemAction(BasicNoteDataA basicNoteData, BasicNoteItemA item) {
         super(basicNoteData);
         mItem = item;
     }

@@ -50,8 +50,13 @@ public abstract class PassDataPasswordActivity extends PasswordActivity {
 
         @Override
         protected void onPostExecute(Boolean result) {
-            if (progressDialog != null)
-                progressDialog.dismiss();
+            try {
+                if (progressDialog != null)
+                    progressDialog.dismiss();
+            } catch (Exception e) {
+                progressDialog = null;
+                return;
+            }
 
             String errorText = null;
             if (!mFileExists)

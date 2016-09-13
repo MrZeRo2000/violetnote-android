@@ -17,8 +17,10 @@ import com.romanpulov.violetnote.db.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicCommonNoteA;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
-import com.romanpulov.violetnote.model.PassNoteItemCryptService;
 import com.romanpulov.violetnote.view.action.BasicNoteAction;
+import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutor;
+import com.romanpulov.violetnote.view.action.BasicNoteDataAddItemAction;
+import com.romanpulov.violetnote.view.action.BasicNoteDataRefreshAction;
 import com.romanpulov.violetnote.view.action.BasicNoteDeleteAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveBottomAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveDownAction;
@@ -26,7 +28,6 @@ import com.romanpulov.violetnote.view.action.BasicNoteMoveTopAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveUpAction;
 import com.romanpulov.violetnote.view.core.AlertOkCancelDialogFragment;
 import com.romanpulov.violetnote.view.core.PasswordActivity;
-import com.romanpulov.violetnote.view.core.PasswordInputDialog;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 import com.romanpulov.violetnote.view.core.TextInputDialog;
 import com.romanpulov.violetnote.view.helper.AddActionHelper;
@@ -49,6 +50,14 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         args.putParcelable(PasswordActivity.PASS_DATA, basicNoteDataA);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    private void performAddAction(final BasicNoteItemA item) {
+        BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity());
+        executor.addAction(new BasicNoteDataAddItemAction(mBasicNoteData, item));
+        executor.addAction(new BasicNoteDataRefreshAction(mBasicNoteData));
+        executor.execute();
+        mRecyclerView.scrollToPosition(mBasicNoteData.getNote().getItems().size() - 1);
     }
 
     private void performDeleteAction(final ActionMode mode, final BasicNoteItemA item) {
@@ -186,6 +195,11 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         mAddActionHelper.setOnAddInteractionListener(new AddActionHelper.OnAddInteractionListener() {
             @Override
             public void onAddFragmentInteraction(final String text) {
+                // create new note
+
+                performAddAction(BasicNoteItemA.newCheckedEditInstance(text));
+
+                /*
                 final DBNoteManager manager = new DBNoteManager(getActivity());
 
                 if ((mBasicNoteData.getNote().isEncrypted()) && (mBasicNoteData.getPassword() == null)) {
@@ -217,9 +231,9 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
 
                     refreshList(manager);
 
-                    //recyclerView.getAdapter().notifyDataSetChanged();
                     mRecyclerView.scrollToPosition(mBasicNoteData.getNote().getItems().size() - 1);
                 }
+                */
             }
         });
 
