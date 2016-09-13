@@ -203,7 +203,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                                 BasicNoteItemA newItem = BasicNoteItemA.newCheckedEditInstance(text);
 
                                 //save encrypted item
-                                if (PassNoteItemCryptService.encryptBasicNoteCheckedItem(newItem, password)) {
+                                if (PassNoteItemCryptService.encryptBasicNoteItem(newItem, password)) {
                                     manager.insertNoteItem(mBasicNoteData.getNote(), newItem);
                                 }
 
