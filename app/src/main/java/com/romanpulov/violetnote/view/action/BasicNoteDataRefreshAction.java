@@ -20,7 +20,7 @@ public class BasicNoteDataRefreshAction extends BasicNoteDataAction {
         noteManager.queryNoteDataItems(mBasicNoteData.getNote());
 
         //decrypt
-        if (mBasicNoteData.getNote().getIsEncrypted()) {
+        if (mBasicNoteData.getNote().isEncrypted()) {
             for (BasicNoteItemA item : mBasicNoteData.getNote().getItems()) {
                 if (!PassNoteItemCryptService.decryptBasicNoteItem(item, mBasicNoteData.getPassword()))
                     return false;

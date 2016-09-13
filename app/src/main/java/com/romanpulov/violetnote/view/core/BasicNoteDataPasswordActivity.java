@@ -1,7 +1,6 @@
 package com.romanpulov.violetnote.view.core;
 
 import android.os.Bundle;
-import android.widget.Toast;
 
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 
@@ -22,7 +21,7 @@ public abstract class BasicNoteDataPasswordActivity extends PasswordActivity {
 
         if (mPasswordProvider instanceof BasicNoteDataA) {
             mBasicNoteData = (BasicNoteDataA)mPasswordProvider;
-            setPasswordProtected(mBasicNoteData.getNote().getIsEncrypted());
+            setPasswordProtected(mBasicNoteData.getNote().isEncrypted());
         }
     }
 }

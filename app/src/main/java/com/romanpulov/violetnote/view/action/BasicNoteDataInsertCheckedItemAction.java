@@ -18,7 +18,7 @@ public class BasicNoteDataInsertCheckedItemAction extends BasicNoteDataAction {
     @Override
     public boolean execute(DBNoteManager noteManager) {
         //encrypt
-        if (mBasicNoteData.getNote().getIsEncrypted()) {
+        if (mBasicNoteData.getNote().isEncrypted()) {
             if (!PassNoteItemCryptService.encryptBasicNoteItem(mItem, mBasicNoteData.getPassword()))
                 return false;
         }

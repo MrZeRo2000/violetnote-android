@@ -6,7 +6,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.romanpulov.violetnote.R;
-import com.romanpulov.violetnote.db.DBBasicNoteOpenHelper;
 import com.romanpulov.violetnote.db.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicCommonNoteA;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
@@ -190,7 +188,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
             public void onAddFragmentInteraction(final String text) {
                 final DBNoteManager manager = new DBNoteManager(getActivity());
 
-                if ((mBasicNoteData.getNote().getIsEncrypted()) && (mBasicNoteData.getPassword() == null)) {
+                if ((mBasicNoteData.getNote().isEncrypted()) && (mBasicNoteData.getPassword() == null)) {
                     PasswordInputDialog passwordInputDialog = new PasswordInputDialog(getActivity());
                     passwordInputDialog.setOnTextInputListener(new TextInputDialog.OnTextInputListener() {
                         @Override

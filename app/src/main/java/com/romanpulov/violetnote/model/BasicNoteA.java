@@ -18,7 +18,7 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
 
     private int mNoteType;
     private String mTitle;
-    private boolean mIsEncrypted;
+    private boolean mEncrypted;
     private String mEncryptedString;
 
     public int getNoteType() {
@@ -37,12 +37,12 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
         this.mTitle = mTitle;
     }
 
-    public boolean getIsEncrypted() {
-        return mIsEncrypted;
+    public boolean isEncrypted() {
+        return mEncrypted;
     }
 
-    public void setIsEncrypted(boolean mIsEncrypted) {
-        this.mIsEncrypted = mIsEncrypted;
+    public void setIsEncrypted(boolean encrypted) {
+        this.mEncrypted = encrypted;
     }
 
     public String getEncryptedString() {
@@ -69,7 +69,7 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
 
     }
 
-    public static BasicNoteA newInstance(long id, long lastModified, String lastModifiedString, long orderId, int noteType, String title, boolean isEncrypted, String encryptedString) {
+    public static BasicNoteA newInstance(long id, long lastModified, String lastModifiedString, long orderId, int noteType, String title, boolean encrypted, String encryptedString) {
         BasicNoteA instance = new BasicNoteA();
 
         instance.mId = id;
@@ -78,18 +78,18 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
         instance.mOrderId = orderId;
         instance.mNoteType = noteType;
         instance.mTitle = title;
-        instance.mIsEncrypted = isEncrypted;
+        instance.mEncrypted = encrypted;
         instance.mEncryptedString = encryptedString;
 
         return instance;
     }
 
-    public static BasicNoteA newEditInstance(int noteType, String title, boolean isEncrypted, String encryptedString) {
+    public static BasicNoteA newEditInstance(int noteType, String title, boolean encrypted, String encryptedString) {
         BasicNoteA instance = new BasicNoteA();
 
         instance.mNoteType = noteType;
         instance.mTitle = title;
-        instance.mIsEncrypted = isEncrypted;
+        instance.mEncrypted = encrypted;
         instance.mEncryptedString = encryptedString;
 
         return instance;
@@ -103,7 +103,7 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
                 "[orderId=" + mOrderId + "]," +
                 "[noteType=" + mNoteType + "]," +
                 "[title=" + mTitle + "]," +
-                "[isEncrypted=" + mIsEncrypted + "]," +
+                "[encrypted=" + mEncrypted + "]," +
                 "[encryptedString=" + mEncryptedString + "]" +
                 "}";
     }
@@ -115,7 +115,7 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
         mOrderId = in.readLong();
         mNoteType = in.readInt();
         mTitle = in.readString();
-        mIsEncrypted = fromInt(in.readInt());
+        mEncrypted = fromInt(in.readInt());
         mEncryptedString = in.readString();
         in.readTypedList(mItems, BasicNoteItemA.CREATOR);
 
@@ -136,7 +136,7 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
         dest.writeLong(mOrderId);
         dest.writeInt(mNoteType);
         dest.writeString(mTitle);
-        dest.writeInt(toInt(mIsEncrypted));
+        dest.writeInt(toInt(mEncrypted));
         dest.writeString(mEncryptedString);
         dest.writeTypedList(mItems);
 

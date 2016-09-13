@@ -196,7 +196,7 @@ public class DBNoteManager extends BasicCommonNoteManager {
         cv.put(DBBasicNoteOpenHelper.NOTES_TABLE_COLS[2], DBBasicNoteHelper.getInstance(mContext).getMaxOrderId(DBBasicNoteOpenHelper.NOTES_TABLE_NAME) + 1);
         cv.put(DBBasicNoteOpenHelper.NOTES_TABLE_COLS[3], note.getNoteType());
         cv.put(DBBasicNoteOpenHelper.NOTES_TABLE_COLS[4], note.getTitle());
-        cv.put(DBBasicNoteOpenHelper.NOTES_TABLE_COLS[5], BasicNoteA.toInt(note.getIsEncrypted()));
+        cv.put(DBBasicNoteOpenHelper.NOTES_TABLE_COLS[5], BasicNoteA.toInt(note.isEncrypted()));
         cv.put(DBBasicNoteOpenHelper.NOTES_TABLE_COLS[6], note.getEncryptedString());
 
         return mDB.insert(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, null, cv);
@@ -211,7 +211,7 @@ public class DBNoteManager extends BasicCommonNoteManager {
         cv.put(DBBasicNoteOpenHelper.NOTES_TABLE_COLS[1], System.currentTimeMillis());
         cv.put(DBBasicNoteOpenHelper.NOTES_TABLE_COLS[3], note.getNoteType());
         cv.put(DBBasicNoteOpenHelper.NOTES_TABLE_COLS[4], note.getTitle());
-        cv.put(DBBasicNoteOpenHelper.NOTES_TABLE_COLS[5], BasicNoteA.toInt(note.getIsEncrypted()));
+        cv.put(DBBasicNoteOpenHelper.NOTES_TABLE_COLS[5], BasicNoteA.toInt(note.isEncrypted()));
         cv.put(DBBasicNoteOpenHelper.NOTES_TABLE_COLS[6], note.getEncryptedString());
 
         return mDB.update(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, cv, DBBasicNoteOpenHelper.NOTES_TABLE_COLS[0] + "=" + note.getId(), null);
