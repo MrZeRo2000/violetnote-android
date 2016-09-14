@@ -56,8 +56,17 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity());
         executor.addAction(new BasicNoteDataAddItemAction(mBasicNoteData, item));
         executor.addAction(new BasicNoteDataRefreshAction(mBasicNoteData));
-        executor.execute();
-        mRecyclerView.scrollToPosition(mBasicNoteData.getNote().getItems().size() - 1);
+        executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
+            @Override
+            public void onExecutionCompleted(boolean result) {
+                if (result)
+                    mRecyclerView.scrollToPosition(mBasicNoteData.getNote().getItems().size() - 1);
+            }
+        });
+        if (mBasicNoteData.getNote().isEncrypted())
+            executor.executeAsync();
+        else
+            executor.execute();
     }
 
     private void performDeleteAction(final ActionMode mode, final BasicNoteItemA item) {

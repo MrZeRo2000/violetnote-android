@@ -16,6 +16,7 @@ import java.util.List;
 public class BasicNoteDataActionExecutor {
     private final Context mContext;
     private List<BasicNoteDataAction> mActionList = new ArrayList<>();
+    Map.
     private OnExecutionCompletedListener mListener;
 
     public BasicNoteDataActionExecutor(Context context) {
@@ -51,7 +52,7 @@ public class BasicNoteDataActionExecutor {
         new ExecuteAsyncTask().execute();
     }
 
-    private class ExecuteAsyncTask extends AsyncTask<Void, Void, Boolean> {
+    private class ExecuteAsyncTask extends AsyncTask<Void, String, Boolean> {
         ProgressDialog progressDialog;
 
         @Override
@@ -64,6 +65,11 @@ public class BasicNoteDataActionExecutor {
         @Override
         protected Boolean doInBackground(Void... params) {
             return internalExecute();
+        }
+
+        @Override
+        protected void onProgressUpdate(String... values) {
+
         }
 
         @Override

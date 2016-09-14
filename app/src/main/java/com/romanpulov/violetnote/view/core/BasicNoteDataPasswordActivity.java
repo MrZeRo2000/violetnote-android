@@ -15,7 +15,6 @@ public abstract class BasicNoteDataPasswordActivity extends PasswordActivity {
 
     @Override
     protected void updatePassword(String password) {
-        // TODO: 02.09.2016 actions after password updated
         mBasicNoteData.setPassword(password);
         BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(this);
         executor.addAction(new BasicNoteDataRefreshAction(mBasicNoteData));
@@ -28,7 +27,10 @@ public abstract class BasicNoteDataPasswordActivity extends PasswordActivity {
                     setLoadErrorFragment();
             }
         });
-        executor.executeAsync();
+        if (mBasicNoteData.getNote().getItems().size() > 0)
+            executor.executeAsync();
+        else
+            executor.execute();
     }
 
     @Override
