@@ -16,7 +16,6 @@ import java.util.List;
 public class BasicNoteDataActionExecutor {
     private final Context mContext;
     private List<BasicNoteDataAction> mActionList = new ArrayList<>();
-    Map.
     private OnExecutionCompletedListener mListener;
 
     public BasicNoteDataActionExecutor(Context context) {
