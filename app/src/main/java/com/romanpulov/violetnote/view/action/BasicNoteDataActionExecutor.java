@@ -1,5 +1,6 @@
 package com.romanpulov.violetnote.view.action;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -19,9 +20,12 @@ public class BasicNoteDataActionExecutor {
     private final Context mContext;
     private List<Map.Entry<String, BasicNoteDataAction>> mActionList = new ArrayList<>();
     private OnExecutionCompletedListener mListener;
+    private OnDialogCreatedListener mDialogCreatedListener;
 
     public BasicNoteDataActionExecutor(Context context) {
         mContext = context;
+        if (context instanceof OnDialogCreatedListener)
+            mDialogCreatedListener = (OnDialogCreatedListener)context;
     }
 
     public void addAction(String description, BasicNoteDataAction action) {
@@ -30,6 +34,10 @@ public class BasicNoteDataActionExecutor {
 
     public void setOnExecutionCompletedListener(OnExecutionCompletedListener listener) {
         mListener = listener;
+    }
+
+    public void setOnDialogCreatedListener(OnDialogCreatedListener listener) {
+        mDialogCreatedListener = listener;
     }
 
     private boolean internalExecute() {
@@ -61,6 +69,8 @@ public class BasicNoteDataActionExecutor {
             progressDialog = new ProgressDialog(mContext, R.style.DialogTheme);
             progressDialog.setTitle(R.string.caption_processing);
             progressDialog.show();
+            if (mDialogCreatedListener != null)
+                mDialogCreatedListener.onDialogCreated(progressDialog);
         }
 
         @Override
@@ -109,5 +119,9 @@ public class BasicNoteDataActionExecutor {
 
     public interface OnExecutionCompletedListener {
         void onExecutionCompleted(boolean result);
+    }
+
+    public interface OnDialogCreatedListener {
+        void onDialogCreated(Dialog dialog);
     }
 }

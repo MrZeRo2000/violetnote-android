@@ -112,7 +112,9 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
 
     @Override
     protected void onPause() {
-        removeFragment();
+        if (mIsPasswordProtected) {
+            removeFragment();
+        }
         super.onPause();
     }
 
