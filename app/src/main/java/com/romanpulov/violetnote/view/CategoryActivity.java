@@ -24,6 +24,11 @@ public class CategoryActivity extends PassDataPasswordActivity implements Catego
     }
 
     @Override
+    protected void updatePassword(String password) {
+        new LoadPassDataAsyncTask(password).execute();
+    }
+
+    @Override
     public void onListFragmentInteraction(PassCategoryA item) {
         if (item.getNotesCount() > 0) {
             Intent intent = new Intent(this, NoteActivity.class);
@@ -40,6 +45,15 @@ public class CategoryActivity extends PassDataPasswordActivity implements Catego
         intent.putExtra(PASSWORD_REQUIRED, false);
         intent.putExtra(SearchResultActivity.SEARCH_TEXT, searchText);
         startActivityForResult(intent, 0);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            mPassDataA = savedInstanceState.getParcelable(PASS_DATA);
+            mPasswordProvider = mPassDataA;
+        }
     }
 
     /**

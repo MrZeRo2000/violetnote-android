@@ -22,6 +22,11 @@ public class SearchResultActivity extends PassDataPasswordActivity implements On
     }
 
     @Override
+    protected void updatePassword(String password) {
+        setLoadErrorFragment();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 

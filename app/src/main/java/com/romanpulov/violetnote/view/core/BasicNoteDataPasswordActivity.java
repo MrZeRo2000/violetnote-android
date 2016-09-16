@@ -27,6 +27,7 @@ public abstract class BasicNoteDataPasswordActivity extends PasswordActivity {
                 else
                     setLoadErrorFragment();
             }
+
         });
         if (mBasicNoteData.getNote().getItems().size() > 0)
             executor.executeAsync();

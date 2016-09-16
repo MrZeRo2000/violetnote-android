@@ -19,7 +19,7 @@ import java.util.List;
 public abstract class PassDataPasswordActivity extends PasswordActivity {
     protected PassDataA mPassDataA;
 
-    private class LoadPassDataAsyncTask extends AsyncTask<Void, Void, Boolean> {
+    protected class LoadPassDataAsyncTask extends AsyncTask<Void, Void, Boolean> {
         ProgressDialog progressDialog;
         final String mPassword;
         final Context mContext;
@@ -45,6 +45,7 @@ public abstract class PassDataPasswordActivity extends PasswordActivity {
         protected Boolean doInBackground(Void... params) {
             Document document = Document.getInstance(mContext);
             mPassDataA = document.loadPassDataA(document.getFileName(), mPassword);
+            mPasswordProvider = mPassDataA;
             return mPassDataA != null;
         }
 
@@ -53,32 +54,28 @@ public abstract class PassDataPasswordActivity extends PasswordActivity {
             try {
                 if (progressDialog != null)
                     progressDialog.dismiss();
+
+                String errorText = null;
+                if (!mFileExists)
+                    errorText = mContext.getString(R.string.error_file_not_found);
+
+                if (!result) {
+                    List<String> errorList = Document.getInstance(mContext).getLoadErrorList();
+                    if (errorList.size() > 0) {
+                        errorText = errorList.get(0);
+                    }
+                }
+
+                if (errorText != null)
+                    setLoadErrorFragment();
+                else
+                    refreshFragment();
+
             } catch (Exception e) {
                 progressDialog = null;
                 return;
             }
-
-            String errorText = null;
-            if (!mFileExists)
-                errorText = mContext.getString(R.string.error_file_not_found);
-
-            if (!result) {
-                List<String> errorList = Document.getInstance(mContext).getLoadErrorList();
-                if (errorList.size() > 0) {
-                    errorText = errorList.get(0);
-                }
-            }
-
-            if (errorText != null)
-                Toast.makeText(mContext, errorText, Toast.LENGTH_SHORT).show();
-
-            refreshFragment();
         }
-    }
-
-    @Override
-    protected void updatePassword(String password) {
-        new LoadPassDataAsyncTask(password).execute();
     }
 
     @Override

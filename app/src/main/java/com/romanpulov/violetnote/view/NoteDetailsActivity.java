@@ -16,6 +16,11 @@ public class NoteDetailsActivity extends PassDataPasswordActivity implements Not
     }
 
     @Override
+    protected void updatePassword(String password) {
+        setLoadErrorFragment();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 

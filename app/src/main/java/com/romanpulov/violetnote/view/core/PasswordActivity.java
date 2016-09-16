@@ -38,7 +38,7 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
     }
 
     private boolean fragmentExists() {
-        return (getFragment() != null);
+        return ((getFragment() != null) && (!(getFragment() instanceof LoadErrorFragment)));
     }
 
     protected Fragment getFragment() {
@@ -85,8 +85,10 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
                     } else {
                         updatePassword(text);
                     }
-                } else
+                } else {
+                    setResult(RESULT_CANCELED);
                     setLoadErrorFragment();
+                }
             }
         });
         passwordInputDialog.show();
@@ -109,6 +111,12 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
     }
 
     @Override
+    protected void onPause() {
+        removeFragment();
+        super.onPause();
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
           if (mIsPasswordProtected) {
@@ -118,10 +126,13 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
                 requestPassword();
             } else {
                 Log.d("PasswordActivity", "OnResume: password not required");
+                refreshFragment();
                 mPasswordRequired = true;
+                /*
                 if (mPasswordProvider == null) {
                     refreshFragment();
                 }
+                */
             }
         }
     }

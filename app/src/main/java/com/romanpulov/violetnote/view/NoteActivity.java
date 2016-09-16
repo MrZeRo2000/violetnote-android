@@ -27,6 +27,11 @@ public class NoteActivity extends PassDataPasswordActivity implements OnPassNote
     }
 
     @Override
+    protected void updatePassword(String password) {
+        setLoadErrorFragment();
+    }
+
+    @Override
     public void onPassNoteItemInteraction(PassNoteA item) {
         Intent intent = new Intent(this, NoteDetailsActivity.class);
         intent.putExtra(PasswordActivity.PASS_DATA, PassDataA.newNoteInstance(mPassDataA, item));
