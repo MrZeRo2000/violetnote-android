@@ -54,8 +54,8 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
 
     private void performAddAction(final BasicNoteItemA item) {
         BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity());
-        executor.addAction(new BasicNoteDataAddItemAction(mBasicNoteData, item));
-        executor.addAction(new BasicNoteDataRefreshAction(mBasicNoteData));
+        executor.addAction(getString(R.string.caption_processing), new BasicNoteDataAddItemAction(mBasicNoteData, item));
+        executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData));
         executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
             @Override
             public void onExecutionCompleted(boolean result) {

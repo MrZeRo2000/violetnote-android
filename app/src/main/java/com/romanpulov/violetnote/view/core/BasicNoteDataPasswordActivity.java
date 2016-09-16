@@ -2,6 +2,7 @@ package com.romanpulov.violetnote.view.core;
 
 import android.os.Bundle;
 
+import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutor;
 import com.romanpulov.violetnote.view.action.BasicNoteDataAddItemAction;
@@ -17,7 +18,7 @@ public abstract class BasicNoteDataPasswordActivity extends PasswordActivity {
     protected void updatePassword(String password) {
         mBasicNoteData.setPassword(password);
         BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(this);
-        executor.addAction(new BasicNoteDataRefreshAction(mBasicNoteData));
+        executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData));
         executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
             @Override
             public void onExecutionCompleted(boolean result) {

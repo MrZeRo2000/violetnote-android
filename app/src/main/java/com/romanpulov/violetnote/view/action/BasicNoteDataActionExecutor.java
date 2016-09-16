@@ -7,23 +7,25 @@ import android.os.AsyncTask;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBNoteManager;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by romanpulov on 13.09.2016.
  */
 public class BasicNoteDataActionExecutor {
     private final Context mContext;
-    private List<BasicNoteDataAction> mActionList = new ArrayList<>();
+    private List<Map.Entry<String, BasicNoteDataAction>> mActionList = new ArrayList<>();
     private OnExecutionCompletedListener mListener;
 
     public BasicNoteDataActionExecutor(Context context) {
         mContext = context;
     }
 
-    public void addAction(BasicNoteDataAction action) {
-        mActionList.add(action);
+    public void addAction(String description, BasicNoteDataAction action) {
+        mActionList.add(new AbstractMap.SimpleEntry<>(description, action));
     }
 
     public void setOnExecutionCompletedListener(OnExecutionCompletedListener listener) {
@@ -32,8 +34,8 @@ public class BasicNoteDataActionExecutor {
 
     private boolean internalExecute() {
         DBNoteManager noteManager = new DBNoteManager(mContext);
-        for (BasicNoteDataAction action : mActionList) {
-            if (!action.execute(noteManager)) {
+        for (Map.Entry<String, BasicNoteDataAction> entry : mActionList) {
+            if (!entry.getValue().execute(noteManager)) {
                 return false;
             }
         }
@@ -63,12 +65,25 @@ public class BasicNoteDataActionExecutor {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            return internalExecute();
+            DBNoteManager noteManager = new DBNoteManager(mContext);
+            for (Map.Entry<String, BasicNoteDataAction> entry : mActionList) {
+                publishProgress(entry.getKey());
+                if (!entry.getValue().execute(noteManager)) {
+                    return false;
+                }
+            }
+            return true;
         }
 
         @Override
         protected void onProgressUpdate(String... values) {
-
+            try {
+                if (progressDialog != null)
+                    progressDialog.setTitle(values[0]);
+            } catch (Exception e) {
+                progressDialog = null;
+                return;
+            }
         }
 
         @Override
