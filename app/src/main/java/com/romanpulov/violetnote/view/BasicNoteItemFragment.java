@@ -1,6 +1,7 @@
 package com.romanpulov.violetnote.view;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -17,9 +18,13 @@ import com.romanpulov.violetnote.view.core.PasswordActivity;
  */
 public class BasicNoteItemFragment extends BasicCommonNoteFragment {
     protected BasicNoteDataA mBasicNoteData;
-    protected AlertDialog mEditorDialog;
+    protected Dialog mEditorDialog;
 
     protected OnBasicNoteItemFragmentInteractionListener mListener;
+
+    public BasicNoteDataA getBasicNoteData() {
+        return mBasicNoteData;
+    }
 
     @Override
     public String getDBTableName() {

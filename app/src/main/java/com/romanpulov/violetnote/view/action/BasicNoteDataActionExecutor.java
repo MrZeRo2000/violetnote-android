@@ -67,7 +67,14 @@ public class BasicNoteDataActionExecutor {
         protected Boolean doInBackground(Void... params) {
             DBNoteManager noteManager = new DBNoteManager(mContext);
             for (Map.Entry<String, BasicNoteDataAction> entry : mActionList) {
-                publishProgress(entry.getKey());
+                //get caption, default if no caption
+                String caption = entry.getKey();
+                if ((caption == null) || caption.isEmpty())
+                    caption = mContext.getString(R.string.caption_processing);
+                //update caption
+                publishProgress(caption);
+
+                //execute
                 if (!entry.getValue().execute(noteManager)) {
                     return false;
                 }
@@ -82,7 +89,6 @@ public class BasicNoteDataActionExecutor {
                     progressDialog.setTitle(values[0]);
             } catch (Exception e) {
                 progressDialog = null;
-                return;
             }
         }
 

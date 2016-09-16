@@ -20,6 +20,7 @@ import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.view.action.BasicNoteAction;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutor;
 import com.romanpulov.violetnote.view.action.BasicNoteDataAddItemAction;
+import com.romanpulov.violetnote.view.action.BasicNoteDataDeleteItemAction;
 import com.romanpulov.violetnote.view.action.BasicNoteDataRefreshAction;
 import com.romanpulov.violetnote.view.action.BasicNoteDeleteAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveBottomAction;
@@ -70,8 +71,37 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
     }
 
     private void performDeleteAction(final ActionMode mode, final BasicNoteItemA item) {
+        AlertOkCancelDialogFragment dialog = AlertOkCancelDialogFragment.newAlertOkCancelDialog(getString(R.string.ui_question_are_you_sure));
+        dialog.setOkButtonClickListener(new AlertOkCancelDialogFragment.OnClickListener() {
+            @Override
+            public void OnClick(DialogFragment dialog) {
+                BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity());
+                executor.addAction(getString(R.string.caption_processing), new BasicNoteDataDeleteItemAction(mBasicNoteData, item));
+                executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData));
+                executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
+                    @Override
+                    public void onExecutionCompleted(boolean result) {
+                        if (result)
+                            mode.finish();;
+                    }
+                });
+                if (mBasicNoteData.getNote().isEncrypted())
+                    executor.executeAsync();
+                else
+                    executor.execute();
+
+            }
+        });
+
+        dialog.show(getFragmentManager(), null);
+    }
+
+
+    /*
+    private void performDeleteAction(final ActionMode mode, final BasicNoteItemA item) {
         (new BasicNoteDeleteAction(BasicNoteCheckedItemFragment.this)).execute(mode, item);
     }
+       */
 
     private void performEditAction(final ActionMode mode, final BasicNoteItemA item) {
         mEditorDialog = (new TextEditDialogBuilder(getActivity(), getString(R.string.ui_note_title), item.getValue()))
