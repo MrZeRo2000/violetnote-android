@@ -10,10 +10,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.romanpulov.violetnote.R;
-import com.romanpulov.violetnote.db.DBBasicNoteOpenHelper;
 import com.romanpulov.violetnote.db.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicCommonNoteA;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
@@ -24,7 +22,6 @@ import com.romanpulov.violetnote.view.action.BasicNoteMoveBottomAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveDownAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveTopAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveUpAction;
-import com.romanpulov.violetnote.view.core.BasicCommonNoteFragment;
 import com.romanpulov.violetnote.view.core.NameValueInputDialog;
 import com.romanpulov.violetnote.view.core.PasswordActivity;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
@@ -145,7 +142,7 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
         @Override
         public void onDestroyActionMode(ActionMode mode) {
             if (mRecyclerViewSelector != null)
-                mRecyclerViewSelector.finishActionMode();
+                mRecyclerViewSelector.destroyActionMode();
         }
 
         @Override

@@ -21,8 +21,8 @@ import com.romanpulov.violetnote.view.action.BasicNoteAction;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutor;
 import com.romanpulov.violetnote.view.action.BasicNoteDataAddItemAction;
 import com.romanpulov.violetnote.view.action.BasicNoteDataDeleteItemAction;
+import com.romanpulov.violetnote.view.action.BasicNoteDataEditNameValueAction;
 import com.romanpulov.violetnote.view.action.BasicNoteDataRefreshAction;
-import com.romanpulov.violetnote.view.action.BasicNoteDeleteAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveBottomAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveDownAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveTopAction;
@@ -82,7 +82,9 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                     @Override
                     public void onExecutionCompleted(boolean result) {
                         if (result)
-                            mode.finish();;
+                            mode.finish();
+                        mDialogFragment.dismiss();
+                        mDialogFragment = null;
                     }
                 });
                 if (mBasicNoteData.getNote().isEncrypted())
@@ -94,6 +96,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         });
 
         dialog.show(getFragmentManager(), null);
+        mDialogFragment = dialog;
     }
 
 
@@ -113,17 +116,24 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                             //change
                             item.setValue(text);
 
-                            //update database
-                            DBNoteManager noteManager = new DBNoteManager(getActivity());
-                            noteManager.updateNoteItemValue(item);
-
-                            //refresh list
-                            BasicNoteCheckedItemFragment.this.refreshList(noteManager);
+                            BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity());
+                            executor.addAction(getString(R.string.caption_processing), new BasicNoteDataEditNameValueAction(mBasicNoteData, item));
+                            executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData));
+                            executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
+                                @Override
+                                public void onExecutionCompleted(boolean result) {
+                                    // finish anyway
+                                    mode.finish();
+                                    //clear editor reference
+                                    mEditorDialog.dismiss();
+                                    mEditorDialog = null;
+                                }
+                            });
+                            if (mBasicNoteData.getNote().isEncrypted())
+                                executor.executeAsync();
+                            else
+                                executor.execute();
                         }
-                        // finish anyway
-                        mode.finish();
-                        //clear editor reference
-                        mEditorDialog = null;
                     }
                 })
                 .execute();
@@ -133,10 +143,21 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
     public void onPause() {
         //hide editors
         mAddActionHelper.hideLayout();
+
+        //close editor
         if (mEditorDialog != null) {
             mEditorDialog.dismiss();
             mEditorDialog = null;
         }
+        //close dialog
+        if (mDialogFragment != null) {
+            mDialogFragment.dismiss();
+            mDialogFragment = null;
+        }
+
+        //finish action
+        mRecyclerViewSelector.finishActionMode();
+
         super.onPause();
     }
 
@@ -189,7 +210,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         @Override
         public void onDestroyActionMode(ActionMode mode) {
             if (mRecyclerViewSelector != null)
-                mRecyclerViewSelector.finishActionMode();
+                mRecyclerViewSelector.destroyActionMode();
         }
 
         @Override

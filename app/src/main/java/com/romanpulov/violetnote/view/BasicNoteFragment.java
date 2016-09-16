@@ -136,7 +136,7 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
         @Override
         public void onDestroyActionMode(ActionMode mode) {
             if (mRecyclerViewSelector != null)
-                mRecyclerViewSelector.finishActionMode();
+                mRecyclerViewSelector.destroyActionMode();
         }
 
         @Override

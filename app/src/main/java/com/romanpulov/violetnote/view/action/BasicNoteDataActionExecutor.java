@@ -97,13 +97,13 @@ public class BasicNoteDataActionExecutor {
             try {
                 if (progressDialog != null)
                     progressDialog.dismiss();
+
+                if (mListener != null)
+                    mListener.onExecutionCompleted(result);
             } catch (Exception e) {
                 progressDialog = null;
                 return;
             }
-
-            if (mListener != null)
-                mListener.onExecutionCompleted(result);
         }
     }
 

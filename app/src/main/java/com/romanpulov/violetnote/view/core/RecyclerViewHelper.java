@@ -171,6 +171,11 @@ public class RecyclerViewHelper {
             return mActionMode;
         }
 
+        public void finishActionMode() {
+            if (mActionMode != null)
+                mActionMode.finish();
+        }
+
         public RecyclerViewSelector(RecyclerView.Adapter<?> adapter, ActionMode.Callback actionModeCallback) {
             mAdapter = adapter;
             mActionModeCallback = actionModeCallback;
@@ -196,7 +201,7 @@ public class RecyclerViewHelper {
             }
         }
 
-        public void finishActionMode() {
+        public void destroyActionMode() {
             mSelectedItemPos = -1;
             mActionMode = null;
             mAdapter.notifyDataSetChanged();

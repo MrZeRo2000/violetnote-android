@@ -2,8 +2,10 @@ package com.romanpulov.violetnote.view;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 
 import com.romanpulov.violetnote.db.DBBasicNoteOpenHelper;
@@ -18,7 +20,8 @@ import com.romanpulov.violetnote.view.core.PasswordActivity;
  */
 public class BasicNoteItemFragment extends BasicCommonNoteFragment {
     protected BasicNoteDataA mBasicNoteData;
-    protected Dialog mEditorDialog;
+    protected DialogInterface mEditorDialog;
+    protected DialogFragment mDialogFragment;
 
     protected OnBasicNoteItemFragmentInteractionListener mListener;
 
