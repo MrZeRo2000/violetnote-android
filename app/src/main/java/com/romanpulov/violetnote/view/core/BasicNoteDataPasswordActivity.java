@@ -15,15 +15,16 @@ public abstract class BasicNoteDataPasswordActivity extends PasswordActivity {
     protected BasicNoteDataA mBasicNoteData;
 
     @Override
-    protected void updatePassword(String password) {
-        mBasicNoteData.setPassword(password);
+    protected void updatePassword(final String password) {
         BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(this);
-        executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData));
+        executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData, password));
         executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
             @Override
             public void onExecutionCompleted(boolean result) {
-                if (result)
+                if (result) {
+                    mBasicNoteData.setPassword(password);
                     refreshFragment();
+                }
                 else
                     setLoadErrorFragment();
             }
