@@ -1,7 +1,6 @@
 package com.romanpulov.violetnote.view.action;
 
-import android.support.v7.view.ActionMode;
-
+import com.romanpulov.violetnote.db.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicCommonNoteA;
 import com.romanpulov.violetnote.view.core.BasicCommonNoteFragment;
 
@@ -15,7 +14,7 @@ public class BasicNoteMoveUpAction<T extends BasicCommonNoteA> extends BasicNote
     }
 
     @Override
-    public boolean execute(T item) {
-        return mNoteManager.moveUp(mFragment.getDBTableName(), item);
+    public boolean execute(DBNoteManager noteManager, T item) {
+        return noteManager.moveUp(mDBDataProvider.getDBTableName(), item);
     }
 }

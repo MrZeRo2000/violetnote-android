@@ -9,13 +9,11 @@ import com.romanpulov.violetnote.db.DBNoteManager;
 /**
  * Created by rpulov on 07.09.2016.
  */
-public abstract class BasicCommonNoteFragment extends Fragment{
+public abstract class BasicCommonNoteFragment extends Fragment implements DBDataProvider {
     protected DialogFragment mDialogFragment;
 
     protected RecyclerView mRecyclerView;
     protected RecyclerViewHelper.RecyclerViewSelector mRecyclerViewSelector;
-
-    public abstract String getDBTableName();
 
     public abstract void refreshList(DBNoteManager noteManager);
 }

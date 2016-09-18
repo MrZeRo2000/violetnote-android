@@ -6,7 +6,6 @@ import android.os.Bundle;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutor;
-import com.romanpulov.violetnote.view.action.BasicNoteDataAddItemAction;
 import com.romanpulov.violetnote.view.action.BasicNoteDataRefreshAction;
 
 /**

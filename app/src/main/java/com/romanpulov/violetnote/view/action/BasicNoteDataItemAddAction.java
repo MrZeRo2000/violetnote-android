@@ -1,20 +1,16 @@
 package com.romanpulov.violetnote.view.action;
 
-import android.support.v7.view.ActionMode;
-
 import com.romanpulov.violetnote.db.DBNoteManager;
-import com.romanpulov.violetnote.model.BasicEntityNoteA;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.model.PassNoteItemCryptService;
-import com.romanpulov.violetnote.view.core.BasicCommonNoteFragment;
 
 /**
- * Created by rpulov on 16.09.2016.
+ * Created by romanpulov on 13.09.2016.
  */
-public class BasicNoteDataEditNameValueAction extends BasicNoteDataItemAction  {
+public class BasicNoteDataItemAddAction extends BasicNoteDataItemAction {
 
-    public BasicNoteDataEditNameValueAction(BasicNoteDataA basicNoteData, BasicNoteItemA item) {
+    public BasicNoteDataItemAddAction(BasicNoteDataA basicNoteData, BasicNoteItemA item) {
         super(basicNoteData, item);
     }
 
@@ -26,7 +22,7 @@ public class BasicNoteDataEditNameValueAction extends BasicNoteDataItemAction  {
                 return false;
         }
 
-        //update
-        return noteManager.updateNoteItemNameValue(mItem) == 1;
+        //insert
+        return noteManager.insertNoteItem(mBasicNoteData.getNote(), mItem) != -1;
     }
 }

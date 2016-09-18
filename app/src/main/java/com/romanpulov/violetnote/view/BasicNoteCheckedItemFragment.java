@@ -14,14 +14,11 @@ import android.view.ViewGroup;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBNoteManager;
-import com.romanpulov.violetnote.model.BasicEntityNoteA;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
-import com.romanpulov.violetnote.view.action.BasicNoteAction;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutor;
-import com.romanpulov.violetnote.view.action.BasicNoteDataAddItemAction;
-import com.romanpulov.violetnote.view.action.BasicNoteDataEditNameValueAction;
-import com.romanpulov.violetnote.view.action.BasicNoteDataNoteItemAction;
+import com.romanpulov.violetnote.view.action.BasicNoteDataItemAddAction;
+import com.romanpulov.violetnote.view.action.BasicNoteDataItemEditNameValueAction;
 import com.romanpulov.violetnote.view.action.BasicNoteDataRefreshAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveBottomAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveDownAction;
@@ -55,7 +52,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
 
     private void performAddAction(final BasicNoteItemA item) {
         BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity());
-        executor.addAction(getString(R.string.caption_processing), new BasicNoteDataAddItemAction(mBasicNoteData, item));
+        executor.addAction(getString(R.string.caption_processing), new BasicNoteDataItemAddAction(mBasicNoteData, item));
         executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData));
         executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
             @Override
@@ -85,7 +82,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                             item.setValue(text);
 
                             BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity());
-                            executor.addAction(getString(R.string.caption_processing), new BasicNoteDataEditNameValueAction(mBasicNoteData, item));
+                            executor.addAction(getString(R.string.caption_processing), new BasicNoteDataItemEditNameValueAction(mBasicNoteData, item));
                             executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData));
                             executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
                                 @Override

@@ -17,6 +17,6 @@ public class BasicNoteDataNoteItemAction extends BasicNoteDataItemAction {
 
     @Override
     public boolean execute(DBNoteManager noteManager) {
-        return mNoteAction.execute(mItem);
+        return mNoteAction.execute(noteManager, mItem);
     }
 }

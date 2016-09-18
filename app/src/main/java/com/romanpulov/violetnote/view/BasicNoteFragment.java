@@ -106,18 +106,14 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
     }
 
     private void performMoveAction(BasicNoteAction<BasicCommonNoteA> action, BasicNoteA item) {
-        /*
-        if (action.execute(null, item)) {
-            refreshList(mNoteManager);
-            return BasicEntityNoteA.getNotePosWithId(items, item.getId());
-        }
-        */
-
-
-        int notePos = action.executeAndReturnNewPos(mNoteList, item);
-        if (notePos != -1) {
-            mRecyclerViewSelector.setSelectedView(null, notePos);
-            mRecyclerView.scrollToPosition(notePos);
+        DBNoteManager noteManager = new DBNoteManager(getActivity());
+        if (action.execute(noteManager, item)) {
+            refreshList(noteManager);
+            int notePos = BasicEntityNoteA.getNotePosWithId(mNoteList, item.getId());
+            if (notePos != -1) {
+                mRecyclerViewSelector.setSelectedView(null, notePos);
+                mRecyclerView.scrollToPosition(notePos);
+            }
         }
     }
 
