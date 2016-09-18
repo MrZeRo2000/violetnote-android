@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicCommonNoteA;
+import com.romanpulov.violetnote.model.BasicEntityNoteA;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.view.action.BasicNoteAction;
@@ -22,6 +23,7 @@ import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutor;
 import com.romanpulov.violetnote.view.action.BasicNoteDataAddItemAction;
 import com.romanpulov.violetnote.view.action.BasicNoteDataDeleteItemAction;
 import com.romanpulov.violetnote.view.action.BasicNoteDataEditNameValueAction;
+import com.romanpulov.violetnote.view.action.BasicNoteDataNoteItemAction;
 import com.romanpulov.violetnote.view.action.BasicNoteDataRefreshAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveBottomAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveDownAction;
@@ -161,12 +163,31 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         super.onPause();
     }
 
-    private void performMoveAction(BasicNoteAction<BasicCommonNoteA> action, BasicNoteItemA item) {
+    private void performMoveAction(final BasicNoteAction<BasicNoteItemA> action, final BasicNoteItemA item) {
+        /*
         int notePos = action.executeAndReturnNewPos(mBasicNoteData.getNote().getItems(), item);
         if (notePos != -1) {
             mRecyclerViewSelector.setSelectedView(null, notePos);
             mRecyclerView.scrollToPosition(notePos);
         }
+        */
+        BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity());
+        executor.addAction(getString(R.string.caption_processing), new BasicNoteDataNoteItemAction(mBasicNoteData, action, item));
+        executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData));
+        executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
+            @Override
+            public void onExecutionCompleted(boolean result) {
+                int notePos = BasicEntityNoteA.getNotePosWithId(mBasicNoteData.getNote().getItems(), item.getId());
+                if (notePos != -1) {
+                    mRecyclerViewSelector.setSelectedView(null, notePos);
+                    mRecyclerView.scrollToPosition(notePos);
+                }
+            }
+        });
+        if (mBasicNoteData.getNote().isEncrypted())
+            executor.executeAsync();
+        else
+            executor.execute();
     }
 
     public class ActionBarCallBack implements ActionMode.Callback {
@@ -183,16 +204,16 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                         performEditAction(mode, selectedItem);
                         break;
                     case R.id.move_up:
-                        performMoveAction(new BasicNoteMoveUpAction<>(BasicNoteCheckedItemFragment.this), selectedItem);
+                        performMoveAction(new BasicNoteMoveUpAction<BasicNoteItemA>(BasicNoteCheckedItemFragment.this), selectedItem);
                         break;
                     case R.id.move_top:
-                        performMoveAction(new BasicNoteMoveTopAction<>(BasicNoteCheckedItemFragment.this), selectedItem);
+                        performMoveAction(new BasicNoteMoveTopAction<BasicNoteItemA>(BasicNoteCheckedItemFragment.this), selectedItem);
                         break;
                     case R.id.move_down:
-                        performMoveAction(new BasicNoteMoveDownAction<>(BasicNoteCheckedItemFragment.this), selectedItem);
+                        performMoveAction(new BasicNoteMoveDownAction<BasicNoteItemA>(BasicNoteCheckedItemFragment.this), selectedItem);
                         break;
                     case R.id.move_bottom:
-                        performMoveAction(new BasicNoteMoveBottomAction<>(BasicNoteCheckedItemFragment.this), selectedItem);
+                        performMoveAction(new BasicNoteMoveBottomAction<BasicNoteItemA>(BasicNoteCheckedItemFragment.this), selectedItem);
                         break;
                 }
             }
