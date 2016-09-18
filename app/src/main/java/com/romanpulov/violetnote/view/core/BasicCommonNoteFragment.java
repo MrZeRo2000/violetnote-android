@@ -4,6 +4,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 
+import com.romanpulov.violetnote.db.DBDataProvider;
 import com.romanpulov.violetnote.db.DBNoteManager;
 
 /**

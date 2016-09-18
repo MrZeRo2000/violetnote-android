@@ -1,4 +1,4 @@
-package com.romanpulov.violetnote.view.core;
+package com.romanpulov.violetnote.db;
 
 /**
  * Created by rpulov on 18.09.2016.
