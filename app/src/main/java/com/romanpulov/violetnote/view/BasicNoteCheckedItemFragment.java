@@ -19,6 +19,7 @@ import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutor;
 import com.romanpulov.violetnote.view.action.BasicNoteDataItemAddAction;
 import com.romanpulov.violetnote.view.action.BasicNoteDataItemEditNameValueAction;
+import com.romanpulov.violetnote.view.action.BasicNoteDataItemUpdateCheckedAction;
 import com.romanpulov.violetnote.view.action.BasicNoteDataRefreshAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveBottomAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveDownAction;
@@ -63,13 +64,6 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         });
         executor.execute(mBasicNoteData.getNote().isEncrypted());
     }
-
-
-    /*
-    private void performDeleteAction(final ActionMode mode, final BasicNoteItemA item) {
-        (new BasicNoteDeleteAction(BasicNoteCheckedItemFragment.this)).execute(mode, item);
-    }
-       */
 
     private void performEditAction(final ActionMode mode, final BasicNoteItemA item) {
         mEditorDialog = (new TextEditDialogBuilder(getActivity(), getString(R.string.ui_note_title), item.getValue()))
@@ -209,52 +203,12 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         mAddActionHelper.setOnAddInteractionListener(new AddActionHelper.OnAddInteractionListener() {
             @Override
             public void onAddFragmentInteraction(final String text) {
-                // create new note
-
                 performAddAction(BasicNoteItemA.newCheckedEditInstance(text));
-
-                /*
-                final DBNoteManager manager = new DBNoteManager(getActivity());
-
-                if ((mBasicNoteData.getNote().isEncrypted()) && (mBasicNoteData.getPassword() == null)) {
-                    PasswordInputDialog passwordInputDialog = new PasswordInputDialog(getActivity());
-                    passwordInputDialog.setOnTextInputListener(new TextInputDialog.OnTextInputListener() {
-                        @Override
-                        public void onTextInput(String password) {
-                            if (!password.isEmpty()) {
-                                //set new password
-                                mBasicNoteData.setPassword(password);
-
-                                //encrypt data
-                                BasicNoteItemA newItem = BasicNoteItemA.newCheckedEditInstance(text);
-
-                                //save encrypted item
-                                if (PassNoteItemCryptService.encryptBasicNoteItem(newItem, password)) {
-                                    manager.insertNoteItem(mBasicNoteData.getNote(), newItem);
-                                }
-
-                                //refresh list
-                                refreshList(manager);
-                            }
-                        }
-                    });
-                    passwordInputDialog.show();
-                    mEditorDialog = passwordInputDialog.getAlertDialog();
-                } else {
-                    manager.insertNoteItem(mBasicNoteData.getNote(), BasicNoteItemA.newCheckedEditInstance(text));
-
-                    refreshList(manager);
-
-                    mRecyclerView.scrollToPosition(mBasicNoteData.getNote().getItems().size() - 1);
-                }
-                */
             }
         });
 
         return view;
     }
-
-
 
     public void showAddLayout() {
         if (mAddActionHelper != null) {
@@ -263,12 +217,19 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
     }
 
     public void updateNoteDataChecked(boolean checked) {
-        DBNoteManager noteManager = new DBNoteManager(getActivity());
+        BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity());
 
-        noteManager.updateNoteDataChecked(mBasicNoteData, checked);
-        noteManager.queryNoteDataItems(mBasicNoteData.getNote());
+        executor.addAction(getString(R.string.caption_processing), new BasicNoteDataItemUpdateCheckedAction(mBasicNoteData, null, checked));
+        executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData));
 
-        mRecyclerView.getAdapter().notifyDataSetChanged();
+        executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
+            @Override
+            public void onExecutionCompleted(boolean result) {
+                mRecyclerView.getAdapter().notifyDataSetChanged();
+            }
+        });
+        
+        executor.execute(mBasicNoteData.getNote().isEncrypted());
     }
 
     public void checkOut() {
@@ -279,6 +240,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
             dialog.setOkButtonClickListener(new AlertOkCancelDialogFragment.OnClickListener() {
                 @Override
                 public void OnClick(DialogFragment dialog) {
+
                     DBNoteManager noteManager = new DBNoteManager(getActivity());
 
                     noteManager.checkOut(mBasicNoteData.getNote());
@@ -288,6 +250,9 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
 
                     //update main list
                     mRecyclerView.getAdapter().notifyDataSetChanged();
+
+
+
                     //update autocomplete
                     if (mAddActionHelper != null)
                         mAddActionHelper.setAutoCompleteList(mBasicNoteData.getNote().getValues());

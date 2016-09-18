@@ -10,6 +10,7 @@ import com.romanpulov.violetnote.model.PassNoteItemCryptService;
  */
 public class BasicNoteDataRefreshAction extends BasicNoteDataAction {
     private final String mPassword;
+    private boolean mRequireValues = false;
 
     public BasicNoteDataRefreshAction(BasicNoteDataA basicNoteData) {
         super(basicNoteData);
@@ -21,10 +22,17 @@ public class BasicNoteDataRefreshAction extends BasicNoteDataAction {
         mPassword = password;
     }
 
+    public BasicNoteDataRefreshAction requireValues() {
+        mRequireValues = true;
+        return this;
+    }
+
     @Override
     public boolean execute(DBNoteManager noteManager) {
         //retrieve data
         noteManager.queryNoteDataItems(mBasicNoteData.getNote());
+        if (mRequireValues)
+            noteManager.queryNoteDataValues(mBasicNoteData.getNote());
 
         //decrypt
         if (mBasicNoteData.getNote().isEncrypted()) {

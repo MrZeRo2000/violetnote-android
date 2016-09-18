@@ -23,6 +23,12 @@ public class BasicNoteDataActionExecutor {
     private OnExecutionCompletedListener mListener;
     private OnDialogCreatedListener mDialogCreatedListener;
 
+    private long mNoteId = 0;
+
+    public void setNoteId(long value) {
+        mNoteId = value;
+    }
+
     public BasicNoteDataActionExecutor(Context context) {
         mContext = context;
         if (context instanceof OnDialogCreatedListener)
@@ -41,8 +47,15 @@ public class BasicNoteDataActionExecutor {
         mDialogCreatedListener = listener;
     }
 
-    private boolean internalExecute() {
+    private DBNoteManager createNoteManager() {
         DBNoteManager noteManager = new DBNoteManager(mContext);
+        noteManager.setNoteId(mNoteId);
+        return noteManager;
+    }
+
+    private boolean internalExecute() {
+        DBNoteManager noteManager = createNoteManager();
+
         for (Map.Entry<String, BasicNoteDataAction> entry : mActionList) {
             if (!entry.getValue().execute(noteManager)) {
                 return false;
@@ -76,7 +89,8 @@ public class BasicNoteDataActionExecutor {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            DBNoteManager noteManager = new DBNoteManager(mContext);
+            DBNoteManager noteManager = createNoteManager();
+
             for (Map.Entry<String, BasicNoteDataAction> entry : mActionList) {
                 //get caption, default if no caption
                 String caption = entry.getKey();

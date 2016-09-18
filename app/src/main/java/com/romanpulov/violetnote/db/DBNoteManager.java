@@ -135,21 +135,23 @@ public class DBNoteManager extends BasicCommonNoteManager {
         //clear values
         note.getValues().clear();
 
-        //get values
-        Cursor c = null;
-        try {
-            c = mDB.query(
-                    DBBasicNoteOpenHelper.NOTE_VALUES_TABLE_NAME, new String[] {DBBasicNoteOpenHelper.NOTE_VALUES_TABLE_COLS[2]},
-                    "note_id=?", new String[] {String.valueOf(note.getId())}, null, null, null
-            );
+        if (!note.isEncrypted()) {
+            //get values
+            Cursor c = null;
+            try {
+                c = mDB.query(
+                        DBBasicNoteOpenHelper.NOTE_VALUES_TABLE_NAME, new String[]{DBBasicNoteOpenHelper.NOTE_VALUES_TABLE_COLS[2]},
+                        "note_id=?", new String[]{String.valueOf(note.getId())}, null, null, null
+                );
 
-            for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
-                note.getValues().add(c.getString(0));
+                for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
+                    note.getValues().add(c.getString(0));
+                }
+
+            } finally {
+                if ((c != null) && !c.isClosed())
+                    c.close();
             }
-
-        } finally {
-            if ((c !=null) && !c.isClosed())
-                c.close();
         }
     }
 
@@ -164,9 +166,9 @@ public class DBNoteManager extends BasicCommonNoteManager {
             ContentValues cv = new ContentValues();
 
             cv.put(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_COLS[1], System.currentTimeMillis());
-            cv.put(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_COLS[6], checked);
+            cv.put(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_COLS[6], BasicCommonNoteA.toInt(checked));
 
-            mDB.update(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME, cv, DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_COLS[0] + " = ?" , new String[] {String.valueOf(item.getId())});
+            mDB.update(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME, cv, DBBasicNoteOpenHelper.ID_COLUMN_NAME + " = ?" , new String[] {String.valueOf(item.getId())});
         }
     }
 
@@ -261,8 +263,13 @@ public class DBNoteManager extends BasicCommonNoteManager {
     public void checkOut(BasicNoteA note) {
         for (BasicNoteItemA item : note.getItems()) {
             if (item.getChecked()) {
-                if (note.getValues().add(item.getValue()))
-                    insertNoteValue(note, item.getValue());
+                //add note values for not encrypted only
+                if (!note.isEncrypted()) {
+                    if (note.getValues().add(item.getValue()))
+                        insertNoteValue(note, item.getValue());
+                }
+
+                //delete note
                 deleteNoteItem(item);
             }
         }

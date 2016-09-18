@@ -70,9 +70,15 @@ public class BasicNoteItemFragment extends BasicCommonNoteFragment {
     }
 
     protected void performMoveAction(final BasicNoteAction<BasicNoteItemA> action, final BasicNoteItemA item) {
+        //executor
         BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity());
+        executor.setNoteId(mBasicNoteData.getNote().getId());
+
+        //actions
         executor.addAction(getString(R.string.caption_processing), new BasicNoteDataNoteItemAction(mBasicNoteData, action, item));
         executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData));
+
+        //on complete
         executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
             @Override
             public void onExecutionCompleted(boolean result) {
@@ -83,6 +89,8 @@ public class BasicNoteItemFragment extends BasicCommonNoteFragment {
                 }
             }
         });
+
+        //execute
         executor.execute(mBasicNoteData.getNote().isEncrypted());
     }
 
