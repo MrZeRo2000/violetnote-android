@@ -1,16 +1,12 @@
 package com.romanpulov.violetnote.view;
 
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.romanpulov.violetnote.R;
-import com.romanpulov.violetnote.db.DBNoteManager;
-import com.romanpulov.violetnote.model.BasicNoteItemA;
-import com.romanpulov.violetnote.view.core.ActionBarCompatActivity;
 import com.romanpulov.violetnote.view.core.BasicNoteDataPasswordActivity;
 
 public class BasicNoteCheckedItemActivity extends BasicNoteDataPasswordActivity {
@@ -62,10 +58,10 @@ public class BasicNoteCheckedItemActivity extends BasicNoteDataPasswordActivity 
                     ((BasicNoteCheckedItemFragment) fragment).showAddLayout();
                     return true;
                 case R.id.action_check_all:
-                    ((BasicNoteCheckedItemFragment) fragment).updateNoteDataChecked(true);
+                    ((BasicNoteCheckedItemFragment) fragment).performUpdateChecked(true);
                     return true;
                 case R.id.action_uncheck_all:
-                    ((BasicNoteCheckedItemFragment) fragment).updateNoteDataChecked(false);
+                    ((BasicNoteCheckedItemFragment) fragment).performUpdateChecked(false);
                     return true;
                 case R.id.action_checkout:
                     ((BasicNoteCheckedItemFragment) fragment).checkOut();

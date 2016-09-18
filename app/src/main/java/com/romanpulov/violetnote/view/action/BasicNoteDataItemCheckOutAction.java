@@ -7,17 +7,15 @@ import com.romanpulov.violetnote.model.BasicNoteItemA;
 /**
  * Created by rpulov on 18.09.2016.
  */
-public class BasicNoteDataItemUpdateCheckedAction extends BasicNoteDataItemAction  {
-    private final boolean mChecked;
+public class BasicNoteDataItemCheckOutAction extends BasicNoteDataItemAction {
 
-    public BasicNoteDataItemUpdateCheckedAction(BasicNoteDataA basicNoteData, boolean checked) {
+    public BasicNoteDataItemCheckOutAction(BasicNoteDataA basicNoteData) {
         super(basicNoteData, null);
-        mChecked = checked;
     }
 
     @Override
     public boolean execute(DBNoteManager noteManager) {
-        noteManager.updateNoteDataChecked(mBasicNoteData, mChecked);
+        noteManager.checkOut(mBasicNoteData.getNote());
         return true;
     }
 }

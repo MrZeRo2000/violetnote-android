@@ -25,28 +25,24 @@ public class AddActionHelper {
     private final ImageButton mCancelButton;
     private final AutoCompleteTextView mAddEditText;
 
-    private Collection<String> mAutoCompleteList;
-
     private OnAddInteractionListener mAddListener;
 
     public void setOnAddInteractionListener(OnAddInteractionListener listener) {
         mAddListener = listener;
     }
 
-    public AddActionHelper(View actionView, Collection<String> autoCompleteList) {
+    public AddActionHelper(View actionView) {
         mActionView = actionView;
-        mAutoCompleteList = autoCompleteList;
 
         mCancelButton = (ImageButton) mActionView.findViewById(R.id.cancel_button);
         mAddEditText = (AutoCompleteTextView)mActionView.findViewById(R.id.add_edit_text);
 
         setupCancelButton();
         setupEditText();
-        setAutoCompleteList(autoCompleteList);
     }
 
     public void setAutoCompleteList(Collection<String> autoCompleteList) {
-        ArrayAdapter<?> adapter = new ArrayAdapter<>(mAddEditText.getContext(), android.R.layout.simple_dropdown_item_1line, mAutoCompleteList.toArray(new String[mAutoCompleteList.size()]));
+        ArrayAdapter<?> adapter = new ArrayAdapter<>(mAddEditText.getContext(), android.R.layout.simple_dropdown_item_1line, autoCompleteList.toArray(new String[autoCompleteList.size()]));
         mAddEditText.setAdapter(adapter);
     }
 
