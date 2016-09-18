@@ -39,10 +39,7 @@ public abstract class BasicNoteDataPasswordActivity extends PasswordActivity imp
 
         });
 
-        if (mBasicNoteData.getNote().getItems().size() > 0)
-            executor.executeAsync();
-        else
-            executor.execute();
+        executor.execute(mBasicNoteData.getNote().getItems().size() > 0);
     }
 
     @Override

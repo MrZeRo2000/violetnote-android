@@ -9,10 +9,13 @@ import android.support.v7.view.ActionMode;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBBasicNoteOpenHelper;
 import com.romanpulov.violetnote.db.DBNoteManager;
+import com.romanpulov.violetnote.model.BasicEntityNoteA;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
+import com.romanpulov.violetnote.view.action.BasicNoteAction;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutor;
 import com.romanpulov.violetnote.view.action.BasicNoteDataDeleteEntityAction;
+import com.romanpulov.violetnote.view.action.BasicNoteDataNoteItemAction;
 import com.romanpulov.violetnote.view.action.BasicNoteDataRefreshAction;
 import com.romanpulov.violetnote.view.core.AlertOkCancelDialogFragment;
 import com.romanpulov.violetnote.view.core.BasicCommonNoteFragment;
@@ -58,11 +61,7 @@ public class BasicNoteItemFragment extends BasicCommonNoteFragment {
                         mDialogFragment = null;
                     }
                 });
-                if (mBasicNoteData.getNote().isEncrypted())
-                    executor.executeAsync();
-                else
-                    executor.execute();
-
+                executor.execute(mBasicNoteData.getNote().isEncrypted());
             }
         });
 
@@ -70,6 +69,22 @@ public class BasicNoteItemFragment extends BasicCommonNoteFragment {
         mDialogFragment = dialog;
     }
 
+    protected void performMoveAction(final BasicNoteAction<BasicNoteItemA> action, final BasicNoteItemA item) {
+        BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity());
+        executor.addAction(getString(R.string.caption_processing), new BasicNoteDataNoteItemAction(mBasicNoteData, action, item));
+        executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData));
+        executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
+            @Override
+            public void onExecutionCompleted(boolean result) {
+                int notePos = BasicEntityNoteA.getNotePosWithId(mBasicNoteData.getNote().getItems(), item.getId());
+                if (notePos != -1) {
+                    mRecyclerViewSelector.setSelectedView(null, notePos);
+                    mRecyclerView.scrollToPosition(notePos);
+                }
+            }
+        });
+        executor.execute(mBasicNoteData.getNote().isEncrypted());
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

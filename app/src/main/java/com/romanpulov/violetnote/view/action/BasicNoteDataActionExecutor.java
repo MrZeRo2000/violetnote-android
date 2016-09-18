@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBNoteManager;
+import com.romanpulov.violetnote.view.core.PasswordActivity;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -50,15 +51,15 @@ public class BasicNoteDataActionExecutor {
         return true;
     }
 
-    public void execute() {
-        boolean executionResult = internalExecute();
+    public void execute(boolean isAsync) {
+        if (isAsync)
+            new ExecuteAsyncTask().execute();
+        else {
+            boolean executionResult = internalExecute();
 
-        if (mListener != null)
-            mListener.onExecutionCompleted(executionResult);
-    }
-
-    public void executeAsync() {
-        new ExecuteAsyncTask().execute();
+            if (mListener != null)
+                mListener.onExecutionCompleted(executionResult);
+        }
     }
 
     private class ExecuteAsyncTask extends AsyncTask<Void, String, Boolean> {

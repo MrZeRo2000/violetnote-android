@@ -88,14 +88,6 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
         mEditorDialog = dialog.getAlertDialog();
     }
 
-    private void performMoveAction(BasicNoteAction<BasicCommonNoteA> action, BasicNoteItemA item) {
-        int notePos = action.executeAndReturnNewPos(mBasicNoteData.getNote().getItems(), item);
-        if (notePos != -1) {
-            mRecyclerViewSelector.setSelectedView(null, notePos);
-            mRecyclerView.scrollToPosition(notePos);
-        }
-    }
-
     public class ActionBarCallBack implements ActionMode.Callback {
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
@@ -110,16 +102,16 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
                         performEditAction(mode, selectedItem);
                         break;
                     case R.id.move_up:
-                        performMoveAction(new BasicNoteMoveUpAction<>(BasicNoteNamedItemFragment.this), selectedItem);
+                        performMoveAction(new BasicNoteMoveUpAction<BasicNoteItemA>(BasicNoteNamedItemFragment.this), selectedItem);
                         break;
                     case R.id.move_top:
-                        performMoveAction(new BasicNoteMoveTopAction<>(BasicNoteNamedItemFragment.this), selectedItem);
+                        performMoveAction(new BasicNoteMoveTopAction<BasicNoteItemA>(BasicNoteNamedItemFragment.this), selectedItem);
                         break;
                     case R.id.move_down:
-                        performMoveAction(new BasicNoteMoveDownAction<>(BasicNoteNamedItemFragment.this), selectedItem);
+                        performMoveAction(new BasicNoteMoveDownAction<BasicNoteItemA>(BasicNoteNamedItemFragment.this), selectedItem);
                         break;
                     case R.id.move_bottom:
-                        performMoveAction(new BasicNoteMoveBottomAction<>(BasicNoteNamedItemFragment.this), selectedItem);
+                        performMoveAction(new BasicNoteMoveBottomAction<BasicNoteItemA>(BasicNoteNamedItemFragment.this), selectedItem);
                         break;
                 }
             }

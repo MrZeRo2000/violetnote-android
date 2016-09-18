@@ -13,20 +13,18 @@ import java.util.List;
  * Created by romanpulov on 07.09.2016.
  */
 public abstract class BasicNoteAction <T extends BasicEntityNoteA>  {
-    protected final Context mContext;
     protected final BasicCommonNoteFragment mFragment;
     protected final DBNoteManager mNoteManager;
 
     public BasicNoteAction(BasicCommonNoteFragment fragment) {
-        mContext = fragment.getActivity();
         mFragment = fragment;
-        mNoteManager = new DBNoteManager(mContext);
+        mNoteManager = new DBNoteManager(fragment.getActivity());
     }
 
-    public abstract boolean execute(final ActionMode mode, final T item);
+    public abstract boolean execute(final T item);
 
     public int executeAndReturnNewPos(List<? extends T> items, final T item) {
-        if (execute(null, item)) {
+        if (execute(item)) {
             // refresh list
             mFragment.refreshList(mNoteManager);
 

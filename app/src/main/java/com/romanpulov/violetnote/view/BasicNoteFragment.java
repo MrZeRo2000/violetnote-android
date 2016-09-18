@@ -17,6 +17,7 @@ import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBBasicNoteOpenHelper;
 import com.romanpulov.violetnote.db.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicCommonNoteA;
+import com.romanpulov.violetnote.model.BasicEntityNoteA;
 import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.view.action.BasicNoteAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveBottomAction;
@@ -105,6 +106,14 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
     }
 
     private void performMoveAction(BasicNoteAction<BasicCommonNoteA> action, BasicNoteA item) {
+        /*
+        if (action.execute(null, item)) {
+            refreshList(mNoteManager);
+            return BasicEntityNoteA.getNotePosWithId(items, item.getId());
+        }
+        */
+
+
         int notePos = action.executeAndReturnNewPos(mNoteList, item);
         if (notePos != -1) {
             mRecyclerViewSelector.setSelectedView(null, notePos);

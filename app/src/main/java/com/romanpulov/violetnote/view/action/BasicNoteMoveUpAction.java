@@ -15,7 +15,7 @@ public class BasicNoteMoveUpAction<T extends BasicCommonNoteA> extends BasicNote
     }
 
     @Override
-    public boolean execute(ActionMode mode, T item) {
+    public boolean execute(T item) {
         return mNoteManager.moveUp(mFragment.getDBTableName(), item);
     }
 }

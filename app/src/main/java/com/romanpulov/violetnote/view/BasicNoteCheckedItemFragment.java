@@ -64,10 +64,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                     mRecyclerView.scrollToPosition(mBasicNoteData.getNote().getItems().size() - 1);
             }
         });
-        if (mBasicNoteData.getNote().isEncrypted())
-            executor.executeAsync();
-        else
-            executor.execute();
+        executor.execute(mBasicNoteData.getNote().isEncrypted());
     }
 
 
@@ -100,10 +97,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                                     mEditorDialog = null;
                                 }
                             });
-                            if (mBasicNoteData.getNote().isEncrypted())
-                                executor.executeAsync();
-                            else
-                                executor.execute();
+                            executor.execute(mBasicNoteData.getNote().isEncrypted());
                         }
                     }
                 })
@@ -130,33 +124,6 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         mRecyclerViewSelector.finishActionMode();
 
         super.onPause();
-    }
-
-    private void performMoveAction(final BasicNoteAction<BasicNoteItemA> action, final BasicNoteItemA item) {
-        /*
-        int notePos = action.executeAndReturnNewPos(mBasicNoteData.getNote().getItems(), item);
-        if (notePos != -1) {
-            mRecyclerViewSelector.setSelectedView(null, notePos);
-            mRecyclerView.scrollToPosition(notePos);
-        }
-        */
-        BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity());
-        executor.addAction(getString(R.string.caption_processing), new BasicNoteDataNoteItemAction(mBasicNoteData, action, item));
-        executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData));
-        executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
-            @Override
-            public void onExecutionCompleted(boolean result) {
-                int notePos = BasicEntityNoteA.getNotePosWithId(mBasicNoteData.getNote().getItems(), item.getId());
-                if (notePos != -1) {
-                    mRecyclerViewSelector.setSelectedView(null, notePos);
-                    mRecyclerView.scrollToPosition(notePos);
-                }
-            }
-        });
-        if (mBasicNoteData.getNote().isEncrypted())
-            executor.executeAsync();
-        else
-            executor.execute();
     }
 
     public class ActionBarCallBack implements ActionMode.Callback {
