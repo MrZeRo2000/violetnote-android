@@ -3,6 +3,7 @@ package com.romanpulov.violetnote.view;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,11 +19,11 @@ import com.romanpulov.violetnote.db.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicCommonNoteA;
 import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.view.action.BasicNoteAction;
-import com.romanpulov.violetnote.view.action.BasicNoteDeleteAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveBottomAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveDownAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveTopAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveUpAction;
+import com.romanpulov.violetnote.view.core.AlertOkCancelDialogFragment;
 import com.romanpulov.violetnote.view.core.BasicCommonNoteFragment;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 import com.romanpulov.violetnote.view.core.TextInputDialog;
@@ -60,7 +61,23 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
     }
 
     private void performDeleteAction(final ActionMode mode, final BasicNoteA item) {
-        (new BasicNoteDeleteAction(BasicNoteFragment.this)).execute(mode, item);
+        AlertOkCancelDialogFragment dialog = AlertOkCancelDialogFragment.newAlertOkCancelDialog(getString(R.string.ui_question_are_you_sure));
+        dialog.setOkButtonClickListener(new AlertOkCancelDialogFragment.OnClickListener() {
+            @Override
+            public void OnClick(DialogFragment dialog) {
+                // delete item
+                DBNoteManager mNoteManager = new DBNoteManager(getActivity());
+                mNoteManager.deleteEntityNote(getDBTableName(), item);
+
+                // refresh list
+                refreshList(mNoteManager);
+
+                //finish action
+                mode.finish();
+            }
+        });
+
+        dialog.show(getFragmentManager(), null);
     }
 
     private void performEditAction(final ActionMode mode, final BasicNoteA item) {

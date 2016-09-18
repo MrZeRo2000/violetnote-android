@@ -7,13 +7,12 @@ import com.romanpulov.violetnote.model.BasicNoteItemA;
 /**
  * Created by rpulov on 18.09.2016.
  */
-public class BasicNoteDataNoteItemAction extends BasicNoteDataAction {
+public class BasicNoteDataNoteItemAction extends BasicNoteDataItemAction {
     private final BasicNoteAction<BasicNoteItemA> mNoteAction;
 
     public BasicNoteDataNoteItemAction(BasicNoteDataA basicNoteData, BasicNoteAction<BasicNoteItemA> noteAction, BasicNoteItemA item) {
-        super(basicNoteData);
+        super(basicNoteData, item);
         mNoteAction = noteAction;
-        mItem = item;
     }
 
     @Override

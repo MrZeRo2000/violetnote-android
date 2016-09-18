@@ -14,14 +14,12 @@ import android.view.ViewGroup;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBNoteManager;
-import com.romanpulov.violetnote.model.BasicCommonNoteA;
 import com.romanpulov.violetnote.model.BasicEntityNoteA;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.view.action.BasicNoteAction;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutor;
 import com.romanpulov.violetnote.view.action.BasicNoteDataAddItemAction;
-import com.romanpulov.violetnote.view.action.BasicNoteDataDeleteItemAction;
 import com.romanpulov.violetnote.view.action.BasicNoteDataEditNameValueAction;
 import com.romanpulov.violetnote.view.action.BasicNoteDataNoteItemAction;
 import com.romanpulov.violetnote.view.action.BasicNoteDataRefreshAction;
@@ -70,35 +68,6 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
             executor.executeAsync();
         else
             executor.execute();
-    }
-
-    private void performDeleteAction(final ActionMode mode, final BasicNoteItemA item) {
-        AlertOkCancelDialogFragment dialog = AlertOkCancelDialogFragment.newAlertOkCancelDialog(getString(R.string.ui_question_are_you_sure));
-        dialog.setOkButtonClickListener(new AlertOkCancelDialogFragment.OnClickListener() {
-            @Override
-            public void OnClick(DialogFragment dialog) {
-                BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity());
-                executor.addAction(getString(R.string.caption_processing), new BasicNoteDataDeleteItemAction(mBasicNoteData, item));
-                executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData));
-                executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
-                    @Override
-                    public void onExecutionCompleted(boolean result) {
-                        if (result)
-                            mode.finish();
-                        mDialogFragment.dismiss();
-                        mDialogFragment = null;
-                    }
-                });
-                if (mBasicNoteData.getNote().isEncrypted())
-                    executor.executeAsync();
-                else
-                    executor.execute();
-
-            }
-        });
-
-        dialog.show(getFragmentManager(), null);
-        mDialogFragment = dialog;
     }
 
 

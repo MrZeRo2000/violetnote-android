@@ -12,11 +12,10 @@ import com.romanpulov.violetnote.view.core.BasicCommonNoteFragment;
 /**
  * Created by rpulov on 16.09.2016.
  */
-public class BasicNoteDataEditNameValueAction extends BasicNoteDataAction  {
+public class BasicNoteDataEditNameValueAction extends BasicNoteDataItemAction  {
 
     public BasicNoteDataEditNameValueAction(BasicNoteDataA basicNoteData, BasicNoteItemA item) {
-        super(basicNoteData);
-        mItem = item;
+        super(basicNoteData, item);
     }
 
     @Override

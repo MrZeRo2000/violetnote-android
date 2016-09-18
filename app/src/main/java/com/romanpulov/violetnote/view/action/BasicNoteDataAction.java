@@ -11,7 +11,6 @@ import com.romanpulov.violetnote.model.BasicNoteItemA;
  */
 public abstract class BasicNoteDataAction {
     protected final BasicNoteDataA mBasicNoteData;
-    protected BasicNoteItemA mItem;
 
     public BasicNoteDataAction(BasicNoteDataA basicNoteData) {
         mBasicNoteData = basicNoteData;

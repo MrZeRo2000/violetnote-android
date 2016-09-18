@@ -17,7 +17,6 @@ import com.romanpulov.violetnote.model.BasicCommonNoteA;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.view.action.BasicNoteAction;
-import com.romanpulov.violetnote.view.action.BasicNoteDeleteAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveBottomAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveDownAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveTopAction;
@@ -59,10 +58,6 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
         });
         dialog.show();
         mEditorDialog = dialog.getAlertDialog();
-    }
-
-    private void performDeleteAction(final ActionMode mode, final BasicNoteItemA item) {
-        (new BasicNoteDeleteAction(BasicNoteNamedItemFragment.this)).execute(mode, item);
     }
 
     private void performEditAction(final ActionMode mode, final BasicNoteItemA item) {

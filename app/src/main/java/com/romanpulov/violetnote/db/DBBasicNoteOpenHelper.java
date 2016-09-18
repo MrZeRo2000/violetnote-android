@@ -13,6 +13,7 @@ public class DBBasicNoteOpenHelper extends SQLiteOpenHelper {
 
     //common column names
     public static final String ID_COLUMN_NAME = "_id";
+    public static final String NOTE_ID_COLUMN_NAME = "note_id";
     public static final String LAST_MODIFIED_COLUMN_NAME = "last_modified";
     public static final String ORDER_COLUMN_NAME = "order_id";
 
@@ -45,7 +46,7 @@ public class DBBasicNoteOpenHelper extends SQLiteOpenHelper {
             ID_COLUMN_NAME,
             LAST_MODIFIED_COLUMN_NAME,
             ORDER_COLUMN_NAME,
-            "note_id",
+            NOTE_ID_COLUMN_NAME,
             "name",
             "value",
             "checked"
@@ -66,7 +67,7 @@ public class DBBasicNoteOpenHelper extends SQLiteOpenHelper {
     public static final String NOTE_VALUES_TABLE_NAME = "note_values";
     public static final String[] NOTE_VALUES_TABLE_COLS = new String[] {
             ID_COLUMN_NAME,
-            "note_id",
+            NOTE_ID_COLUMN_NAME,
             "value"
     };
     private static final String NOTE_VALUES_TABLE_CREATE =
@@ -76,6 +77,9 @@ public class DBBasicNoteOpenHelper extends SQLiteOpenHelper {
                     NOTE_VALUES_TABLE_COLS[2] + " TEXT," +
                     " FOREIGN KEY (" + NOTE_VALUES_TABLE_COLS[1] + ") REFERENCES " + NOTES_TABLE_NAME + "(" + NOTES_TABLE_COLS[0] + ")" +
                     ");";
+
+    //note_id selection
+    public static final String NOTE_ID_SELECTION_STRING = NOTE_ID_COLUMN_NAME + " = ?";
 
     public DBBasicNoteOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

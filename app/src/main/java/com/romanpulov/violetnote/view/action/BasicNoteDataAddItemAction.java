@@ -8,11 +8,10 @@ import com.romanpulov.violetnote.model.PassNoteItemCryptService;
 /**
  * Created by romanpulov on 13.09.2016.
  */
-public class BasicNoteDataAddItemAction extends BasicNoteDataAction {
+public class BasicNoteDataAddItemAction extends BasicNoteDataItemAction {
 
     public BasicNoteDataAddItemAction(BasicNoteDataA basicNoteData, BasicNoteItemA item) {
-        super(basicNoteData);
-        mItem = item;
+        super(basicNoteData, item);
     }
 
     @Override
