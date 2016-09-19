@@ -15,6 +15,7 @@ import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.view.action.BasicNoteAction;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutor;
 import com.romanpulov.violetnote.view.action.BasicNoteDataDeleteEntityAction;
+import com.romanpulov.violetnote.view.action.BasicNoteDataItemAddAction;
 import com.romanpulov.violetnote.view.action.BasicNoteDataNoteItemAction;
 import com.romanpulov.violetnote.view.action.BasicNoteDataRefreshAction;
 import com.romanpulov.violetnote.view.core.AlertOkCancelDialogFragment;
@@ -42,6 +43,20 @@ public class BasicNoteItemFragment extends BasicCommonNoteFragment {
     @Override
     public void refreshList(DBNoteManager noteManager) {
         noteManager.queryNoteDataItems(mBasicNoteData.getNote());
+    }
+
+    protected void performAddAction(final BasicNoteItemA item) {
+        BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity());
+        executor.addAction(getString(R.string.caption_processing), new BasicNoteDataItemAddAction(mBasicNoteData, item));
+        executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData));
+        executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
+            @Override
+            public void onExecutionCompleted(boolean result) {
+                if (result)
+                    mRecyclerView.scrollToPosition(mBasicNoteData.getNote().getItems().size() - 1);
+            }
+        });
+        executor.execute(mBasicNoteData.getNote().isEncrypted());
     }
 
     protected void performDeleteAction(final ActionMode mode, final BasicNoteItemA item) {
@@ -112,6 +127,28 @@ public class BasicNoteItemFragment extends BasicCommonNoteFragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onPause() {
+        // for password protected fragment close editors and action mode
+        if (mBasicNoteData.getNote().isEncrypted()) {
+            //close editor
+            if (mEditorDialog != null) {
+                mEditorDialog.dismiss();
+                mEditorDialog = null;
+            }
+            //close dialog
+            if (mDialogFragment != null) {
+                mDialogFragment.dismiss();
+                mDialogFragment = null;
+            }
+
+            //finish action
+            mRecyclerViewSelector.finishActionMode();
+        }
+
+        super.onPause();
     }
 
     public interface OnBasicNoteItemFragmentInteractionListener {

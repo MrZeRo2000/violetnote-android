@@ -47,13 +47,9 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
         dialog.setOnNameValueInputListener(new NameValueInputDialog.OnNameValueInputListener() {
             @Override
             public void onNameValueInput(String name, String value) {
-                DBNoteManager manager = new DBNoteManager(getActivity());
-
-                manager.insertNoteItem(mBasicNoteData.getNote(), BasicNoteItemA.newNamedEditInstance(name, value));
-
-                refreshList(manager);
-
-                mRecyclerView.scrollToPosition(mBasicNoteData.getNote().getItems().size() - 1);
+                if ((name != null) && (value != null)) {
+                    performAddAction(BasicNoteItemA.newNamedEditInstance(name, value));
+                }
             }
         });
         dialog.show();

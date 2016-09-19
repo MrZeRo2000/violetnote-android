@@ -51,7 +51,8 @@ public class BasicNoteNamedItemActivity extends BasicNoteDataPasswordActivity {
         if (fragment != null) {
             switch (item.getItemId()) {
                 case R.id.action_add:
-                    ((BasicNoteNamedItemFragment)getFragment()).performAddAction();
+                    if (fragment instanceof BasicNoteNamedItemFragment)
+                        ((BasicNoteNamedItemFragment)fragment).performAddAction();
                     return true;
                 default:
                     return super.onOptionsItemSelected(item);

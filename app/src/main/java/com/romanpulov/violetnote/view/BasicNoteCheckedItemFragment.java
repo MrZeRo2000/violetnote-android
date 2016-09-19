@@ -52,20 +52,6 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         return fragment;
     }
 
-    private void performAddAction(final BasicNoteItemA item) {
-        BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity());
-        executor.addAction(getString(R.string.caption_processing), new BasicNoteDataItemAddAction(mBasicNoteData, item));
-        executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData));
-        executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
-            @Override
-            public void onExecutionCompleted(boolean result) {
-                if (result)
-                    mRecyclerView.scrollToPosition(mBasicNoteData.getNote().getItems().size() - 1);
-            }
-        });
-        executor.execute(mBasicNoteData.getNote().isEncrypted());
-    }
-
     private void performEditAction(final ActionMode mode, final BasicNoteItemA item) {
         mEditorDialog = (new TextEditDialogBuilder(getActivity(), getString(R.string.ui_note_title), item.getValue()))
                 .setNonEmptyErrorMessage(getString(R.string.error_field_not_empty))
@@ -100,20 +86,6 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
     public void onPause() {
         //hide editors
         mAddActionHelper.hideLayout();
-
-        //close editor
-        if (mEditorDialog != null) {
-            mEditorDialog.dismiss();
-            mEditorDialog = null;
-        }
-        //close dialog
-        if (mDialogFragment != null) {
-            mDialogFragment.dismiss();
-            mDialogFragment = null;
-        }
-
-        //finish action
-        mRecyclerViewSelector.finishActionMode();
 
         super.onPause();
     }
