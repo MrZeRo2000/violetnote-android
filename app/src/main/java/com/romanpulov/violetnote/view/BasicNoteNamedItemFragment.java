@@ -13,10 +13,11 @@ import android.view.ViewGroup;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBNoteManager;
-import com.romanpulov.violetnote.model.BasicCommonNoteA;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
-import com.romanpulov.violetnote.view.action.BasicNoteAction;
+import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutor;
+import com.romanpulov.violetnote.view.action.BasicNoteDataItemEditNameValueAction;
+import com.romanpulov.violetnote.view.action.BasicNoteDataRefreshAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveBottomAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveDownAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveTopAction;
@@ -67,12 +68,20 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
                     item.setName(name);
                     item.setValue(value);
 
-                    //update database
-                    DBNoteManager noteManager = new DBNoteManager(getActivity());
-                    noteManager.updateNoteItemNameValue(item);
-
-                    //refresh list
-                    BasicNoteNamedItemFragment.this.refreshList(noteManager);
+                    BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity());
+                    executor.addAction(getString(R.string.caption_processing), new BasicNoteDataItemEditNameValueAction(mBasicNoteData, item));
+                    executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData));
+                    executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
+                        @Override
+                        public void onExecutionCompleted(boolean result) {
+                            // finish anyway
+                            mode.finish();
+                            //clear editor reference
+                            mEditorDialog.dismiss();
+                            mEditorDialog = null;
+                        }
+                    });
+                    executor.execute(mBasicNoteData.getNote().isEncrypted());
                 }
                 // finish anyway
                 mode.finish();
@@ -150,14 +159,8 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
                     new OnBasicNoteItemFragmentInteractionListener() {
                         @Override
                         public void onBasicNoteItemFragmentInteraction(BasicNoteItemA item, int position) {
-                            DBNoteManager manager = new DBNoteManager(getActivity());
-                            //update item
-                            manager.checkNoteItem(item);
-                            //ensure item is updated and reload
-                            BasicNoteItemA updatedItem = manager.getNoteItem(item.getId());
-                            item.updateChecked(updatedItem);
-
-                            mRecyclerView.getAdapter().notifyItemChanged(position);
+                            // no action currently required
+                            //placeholder for future
                         }
                     }
             );
@@ -168,14 +171,5 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
             mRecyclerView.addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(getActivity(), RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_white_black_gradient));
         }
         return view;
-    }
-
-    @Override
-    public void onPause() {
-        if (mEditorDialog != null) {
-            mEditorDialog.dismiss();
-            mEditorDialog = null;
-        }
-        super.onPause();
     }
 }

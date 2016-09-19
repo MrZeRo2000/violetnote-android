@@ -61,6 +61,17 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
         noteManager.refreshNotes(mNoteList);
     }
 
+    public void performAddAction(final BasicNoteA item) {
+        DBNoteManager mNoteManager = new DBNoteManager(getActivity());
+        if (mNoteManager.insertNote(item) != -1) {
+            // refresh list
+            refreshList(mNoteManager);
+
+            //scroll to bottom
+            mRecyclerView.scrollToPosition(mNoteList.size() - 1);
+        }
+    }
+
     private void performDeleteAction(final ActionMode mode, final BasicNoteA item) {
         AlertOkCancelDialogFragment dialog = AlertOkCancelDialogFragment.newAlertOkCancelDialog(getString(R.string.ui_question_are_you_sure));
         dialog.setOkButtonClickListener(new AlertOkCancelDialogFragment.OnClickListener() {
@@ -188,12 +199,6 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
         mRecyclerView.addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(getActivity(), RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_white_black_gradient));
 
         return view;
-    }
-
-    public void updateList() {
-        View view = getView();
-        if ((view != null) && (mRecyclerView != null))
-            mRecyclerView.getAdapter().notifyDataSetChanged();
     }
 
     @Override

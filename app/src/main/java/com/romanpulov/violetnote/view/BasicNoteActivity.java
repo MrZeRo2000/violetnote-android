@@ -59,11 +59,7 @@ public class BasicNoteActivity extends ActionBarCompatActivity implements BasicN
         if ((data != null) && (data.getComponent().getClassName().equals(BasicNoteEditActivity.class.getName()))) {
             BasicNoteA newNote = data.getParcelableExtra(NOTE);
             if (newNote != null) {
-                if ((new DBNoteManager(this)).insertNote(newNote) != -1) {
-                    mNoteList.clear();
-                    mNoteList.addAll(mNoteManager.queryNotes());
-                    mFragment.updateList();
-                }
+                mFragment.performAddAction(newNote);
             }
         }
     }
