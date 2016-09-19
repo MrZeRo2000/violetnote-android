@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.romanpulov.violetnote.view.CategoryFragment.OnListFragmentInteractionListener;
+import com.romanpulov.violetnote.view.CategoryFragment.OnPassCategoryInteractionListener;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.model.PassCategoryA;
 
@@ -18,11 +18,11 @@ public class CategoryRecyclerViewAdapter extends RecyclerView.Adapter<CategoryRe
 
     private final Context mContext;
     private final List<PassCategoryA> mValues;
-    private final OnListFragmentInteractionListener mListener;
+    private final OnPassCategoryInteractionListener mListener;
 
     private final boolean mHideCategoryDetailsPreference;
 
-    public CategoryRecyclerViewAdapter(Context context, List<PassCategoryA> items, OnListFragmentInteractionListener listener) {
+    public CategoryRecyclerViewAdapter(Context context, List<PassCategoryA> items, OnPassCategoryInteractionListener listener) {
         mContext = context;
         mValues = items;
         mListener = listener;
@@ -52,7 +52,7 @@ public class CategoryRecyclerViewAdapter extends RecyclerView.Adapter<CategoryRe
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem);
+                    mListener.onPassCategorySelection(holder.mItem);
                 }
             }
         });

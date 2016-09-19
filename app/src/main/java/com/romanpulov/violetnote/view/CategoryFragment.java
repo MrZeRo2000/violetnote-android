@@ -20,12 +20,12 @@ import com.romanpulov.violetnote.view.helper.SearchActionHelper;
 /**
  * A fragment representing a list of Items.
  * <p/>
- * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
+ * Activities containing this fragment MUST implement the {@link OnPassCategoryInteractionListener}
  * interface.
  */
 public class CategoryFragment extends Fragment {
 
-    private OnListFragmentInteractionListener mListener;
+    private OnPassCategoryInteractionListener mListener;
     private OnSearchInteractionListener mSearchListener;
     private SearchActionHelper mSearchActionHelper;
 
@@ -80,8 +80,8 @@ public class CategoryFragment extends Fragment {
     @Override
     public void onAttach(android.app.Activity context) {
         super.onAttach(context);
-        if (context instanceof OnListFragmentInteractionListener) {
-            mListener = (OnListFragmentInteractionListener) context;
+        if (context instanceof OnPassCategoryInteractionListener) {
+            mListener = (OnPassCategoryInteractionListener) context;
         }
         else {
             throw new RuntimeException(context.toString()
@@ -102,7 +102,7 @@ public class CategoryFragment extends Fragment {
         mListener = null;
     }
 
-    public interface OnListFragmentInteractionListener {
-        void onListFragmentInteraction(PassCategoryA item);
+    public interface OnPassCategoryInteractionListener {
+        void onPassCategorySelection(PassCategoryA item);
     }
 }

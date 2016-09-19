@@ -19,14 +19,14 @@ import com.romanpulov.violetnote.model.PassNoteA;
 /**
  * A fragment representing a list of Items.
  * <p/>
- * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
+ * Activities containing this fragment MUST implement the {@link OnNoteDetailsInteractionListener}
  * interface.
  */
 public class NoteDetailsFragment extends Fragment {
 
     private PassDataA mPassDataA;
 
-    private OnListFragmentInteractionListener mListener;
+    private OnNoteDetailsInteractionListener mListener;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -74,8 +74,8 @@ public class NoteDetailsFragment extends Fragment {
     @Override
     public void onAttach(Activity context) {
         super.onAttach(context);
-        if (context instanceof OnListFragmentInteractionListener) {
-            mListener = (OnListFragmentInteractionListener) context;
+        if (context instanceof OnNoteDetailsInteractionListener) {
+            mListener = (OnNoteDetailsInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnPassNoteItemInteractionListener");
@@ -98,7 +98,7 @@ public class NoteDetailsFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnListFragmentInteractionListener {
-        void onListFragmentInteraction(PassNoteA.AttrItem item);
+    public interface OnNoteDetailsInteractionListener {
+        void onAttrItemSelection(PassNoteA.AttrItem item);
     }
 }

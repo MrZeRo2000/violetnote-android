@@ -5,10 +5,9 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.romanpulov.violetnote.view.core.PassDataPasswordActivity;
-import com.romanpulov.violetnote.view.core.PasswordActivity;
 import com.romanpulov.violetnote.model.PassNoteA;
 
-public class NoteDetailsActivity extends PassDataPasswordActivity implements NoteDetailsFragment.OnListFragmentInteractionListener {
+public class NoteDetailsActivity extends PassDataPasswordActivity implements NoteDetailsFragment.OnNoteDetailsInteractionListener {
     @Override
     protected void refreshFragment() {
         Fragment fragment = NoteDetailsFragment.newInstance(mPassDataA);
@@ -39,7 +38,7 @@ public class NoteDetailsActivity extends PassDataPasswordActivity implements Not
     }
 
     @Override
-    public void onListFragmentInteraction(PassNoteA.AttrItem item) {
+    public void onAttrItemSelection(PassNoteA.AttrItem item) {
 
     }
 

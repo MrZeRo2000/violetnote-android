@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.romanpulov.violetnote.view.NoteDetailsFragment.OnListFragmentInteractionListener;
+import com.romanpulov.violetnote.view.NoteDetailsFragment.OnNoteDetailsInteractionListener;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.model.PassNoteA;
 
@@ -15,9 +15,9 @@ import java.util.List;
 public class NoteDetailsRecyclerViewAdapter extends RecyclerView.Adapter<NoteDetailsRecyclerViewAdapter.ViewHolder> {
 
     private final List<PassNoteA.AttrItem> mValues;
-    private final OnListFragmentInteractionListener mListener;
+    private final OnNoteDetailsInteractionListener mListener;
 
-    public NoteDetailsRecyclerViewAdapter(List<PassNoteA.AttrItem> items, OnListFragmentInteractionListener listener) {
+    public NoteDetailsRecyclerViewAdapter(List<PassNoteA.AttrItem> items, OnNoteDetailsInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -41,7 +41,7 @@ public class NoteDetailsRecyclerViewAdapter extends RecyclerView.Adapter<NoteDet
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem);
+                    mListener.onAttrItemSelection(holder.mItem);
                 }
             }
         });

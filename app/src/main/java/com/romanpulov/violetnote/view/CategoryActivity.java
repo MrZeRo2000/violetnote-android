@@ -9,12 +9,11 @@ import android.view.MenuItem;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.view.core.PassDataPasswordActivity;
-import com.romanpulov.violetnote.view.core.PasswordActivity;
 import com.romanpulov.violetnote.model.Document;
 import com.romanpulov.violetnote.model.PassCategoryA;
 import com.romanpulov.violetnote.model.PassDataA;
 
-public class CategoryActivity extends PassDataPasswordActivity implements CategoryFragment.OnListFragmentInteractionListener, OnSearchInteractionListener {
+public class CategoryActivity extends PassDataPasswordActivity implements CategoryFragment.OnPassCategoryInteractionListener, OnSearchInteractionListener {
     private static final boolean mSampleData = false;
 
     @Override
@@ -29,7 +28,7 @@ public class CategoryActivity extends PassDataPasswordActivity implements Catego
     }
 
     @Override
-    public void onListFragmentInteraction(PassCategoryA item) {
+    public void onPassCategorySelection(PassCategoryA item) {
         if (item.getNotesCount() > 0) {
             Intent intent = new Intent(this, NoteActivity.class);
             intent.putExtra(PASS_DATA, PassDataA.newCategoryInstance(mPassDataA, item));
