@@ -1,5 +1,6 @@
 package com.romanpulov.violetnote.view.core;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,6 +16,8 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
 
     public static final String PASS_DATA = "PassData";
     public static final String PASSWORD_REQUIRED = "PasswordRequired";
+
+    private DialogInterface mDialog;
 
     private boolean mIsPasswordProtected = true;
 
@@ -78,6 +81,11 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
         passwordInputDialog.setOnTextInputListener(new TextInputDialog.OnTextInputListener() {
             @Override
             public void onTextInput(String text) {
+                //dismiss dialog
+                mDialog.dismiss();
+                mDialog = null;
+
+                //process input
                 if (text != null) {
                     String oldPassword = getPassword();
                     if ((oldPassword != null) && (oldPassword.equals(text))) {
@@ -92,6 +100,7 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
             }
         });
         passwordInputDialog.show();
+        mDialog = passwordInputDialog.getAlertDialog();
     }
 
     @Override
@@ -114,6 +123,11 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
     protected void onPause() {
         if (mIsPasswordProtected) {
             removeFragment();
+
+            if (mDialog != null) {
+                mDialog.dismiss();
+                mDialog = null;
+            }
         }
         super.onPause();
     }
