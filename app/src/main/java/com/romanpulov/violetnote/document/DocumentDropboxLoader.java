@@ -8,6 +8,7 @@ import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.dropbox.DropBoxHelper;
 
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 
 /**
@@ -34,8 +35,12 @@ public class DocumentDropboxLoader extends DocumentLoader {
         try {
             mClient.files().download(fm.getPathLower(), fm.getRev()).download(outputStream);
         } finally {
-            outputStream.flush();
-            outputStream.close();
+            try {
+                outputStream.flush();
+                outputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

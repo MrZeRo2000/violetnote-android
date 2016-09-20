@@ -1,10 +1,7 @@
 package com.romanpulov.violetnote.view.action;
 
-import android.content.Context;
-
 import com.romanpulov.violetnote.db.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
-import com.romanpulov.violetnote.model.BasicNoteItemA;
 
 /**
  * Created by romanpulov on 13.09.2016.

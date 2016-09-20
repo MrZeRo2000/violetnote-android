@@ -3,12 +3,10 @@ package com.romanpulov.violetnote.view.core;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.support.annotation.StringDef;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.romanpulov.violetnote.R;
 

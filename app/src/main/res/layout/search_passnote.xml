@@ -36,14 +36,14 @@
         android:text="@string/ui_text_search_system"
         android:checked="true"
         />
+
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/search_user_check"
-        android:layout_toLeftOf="@+id/cancel_button"
         android:text="@string/ui_text_search_user"
         android:checked="true"
-        />
-    >
-
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/cancel_button"
+        android:layout_toStartOf="@+id/cancel_button" />
 </RelativeLayout>

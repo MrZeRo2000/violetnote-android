@@ -2,7 +2,6 @@ package com.romanpulov.violetnote.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.IdRes;
 
 import com.romanpulov.violetnotecore.Model.PassData;
 

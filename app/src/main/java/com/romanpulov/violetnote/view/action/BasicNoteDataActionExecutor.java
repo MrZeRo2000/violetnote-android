@@ -7,7 +7,6 @@ import android.os.AsyncTask;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBNoteManager;
-import com.romanpulov.violetnote.view.core.PasswordActivity;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;

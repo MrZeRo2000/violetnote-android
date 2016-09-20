@@ -26,13 +26,8 @@ import java.util.List;
 public class Document {
     public static final String DOCUMENT_FILE_NAME = "document.vnf";
 
-    private static Document mInstance;
-
     public static Document getInstance(Context context) {
-        if (mInstance == null) {
-            mInstance = new Document(context);
-        }
-        return mInstance;
+        return new Document(context);
     }
 
     private final Context mContext;

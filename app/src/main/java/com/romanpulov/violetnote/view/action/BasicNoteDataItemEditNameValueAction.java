@@ -1,13 +1,9 @@
 package com.romanpulov.violetnote.view.action;
 
-import android.support.v7.view.ActionMode;
-
 import com.romanpulov.violetnote.db.DBNoteManager;
-import com.romanpulov.violetnote.model.BasicEntityNoteA;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.model.PassNoteItemCryptService;
-import com.romanpulov.violetnote.view.core.BasicCommonNoteFragment;
 
 /**
  * Created by rpulov on 16.09.2016.

@@ -3,6 +3,7 @@ package com.romanpulov.violetnote.document;
 import android.content.Context;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -20,9 +21,13 @@ public class DocumentFileLoader extends DocumentLoader {
             while ((len = inputStream.read(buf)) > 0)
                 outputStream.write(buf, 0, len);
         } finally {
-            inputStream.close();
-            outputStream.flush();
-            outputStream.close();
+            try {
+                inputStream.close();
+                outputStream.flush();
+                outputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

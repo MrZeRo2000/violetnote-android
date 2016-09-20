@@ -16,8 +16,7 @@
         android:layout_alignParentLeft="true"
         android:layout_toLeftOf="@+id/last_modified"
         android:textAppearance="@style/Text2"
-        android:singleLine="true"
-        android:text="Name"
+        android:maxLines="1"
         />
 
 
@@ -29,8 +28,6 @@
         android:layout_below="@+id/name"
         android:layout_toLeftOf="@+id/last_modified"
         android:textAppearance="@style/Text3"
-        android:singleLine="false"
-        android:text="Value"
         />
 
     <TextView
@@ -42,6 +39,5 @@
         android:layout_centerVertical="true"
         android:gravity="center_horizontal"
         android:textAppearance="@style/Dim3Text"
-        android:text="last_modified"
         />
 </RelativeLayout>

@@ -1,7 +1,5 @@
 package com.romanpulov.violetnote.model;
 
-import java.util.List;
-
 /**
  * Created by rpulov on 28.08.2016.
  */

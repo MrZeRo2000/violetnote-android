@@ -2,7 +2,6 @@ package com.romanpulov.violetnote.view.action;
 
 import com.romanpulov.violetnote.db.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
-import com.romanpulov.violetnote.model.BasicNoteItemA;
 
 /**
  * Created by rpulov on 18.09.2016.

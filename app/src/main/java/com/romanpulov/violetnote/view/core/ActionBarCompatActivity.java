@@ -3,7 +3,6 @@ package com.romanpulov.violetnote.view.core;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.view.DashboardActivity;

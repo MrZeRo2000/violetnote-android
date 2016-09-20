@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.model.Document;

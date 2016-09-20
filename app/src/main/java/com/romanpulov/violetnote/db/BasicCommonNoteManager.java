@@ -5,7 +5,6 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.romanpulov.violetnote.helper.DateTimeFormatterHelper;
 import com.romanpulov.violetnote.model.BasicCommonNoteA;
-import com.romanpulov.violetnote.model.BasicNoteItemA;
 
 /**
  * Created by romanpulov on 29.08.2016.

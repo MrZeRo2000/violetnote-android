@@ -31,12 +31,8 @@ public class DropBoxHelper {
     private final SharedPreferences mPrefs;
     private String mAccessToken;
 
-    private static DropBoxHelper mInstance;
-
     public static DropBoxHelper getInstance(Context context) {
-        if (mInstance == null)
-            mInstance = new DropBoxHelper(context);
-        return mInstance;
+        return new DropBoxHelper(context);
     }
 
     private DropBoxHelper(Context context) {

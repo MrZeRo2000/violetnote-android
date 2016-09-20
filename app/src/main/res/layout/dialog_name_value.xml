@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/name"
         android:inputType="text"
-        android:singleLine="true"
+        android:maxLines="1"
         android:hint="@string/hint_name"
         />
 
@@ -22,7 +22,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/value"
         android:inputType="textMultiLine"
-        android:singleLine="false"
         android:hint="@string/hint_value"
         />
 

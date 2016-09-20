@@ -26,7 +26,6 @@
         android:layout_toRightOf="@+id/checked"
         android:layout_toLeftOf="@+id/last_modified"
         android:textAppearance="@style/Text2"
-        android:text="Value"
         />
 
     <TextView

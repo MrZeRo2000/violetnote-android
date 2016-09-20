@@ -17,7 +17,6 @@ import com.romanpulov.violetnote.db.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutor;
-import com.romanpulov.violetnote.view.action.BasicNoteDataItemAddAction;
 import com.romanpulov.violetnote.view.action.BasicNoteDataItemCheckOutAction;
 import com.romanpulov.violetnote.view.action.BasicNoteDataItemEditNameValueAction;
 import com.romanpulov.violetnote.view.action.BasicNoteDataItemUpdateCheckedAction;

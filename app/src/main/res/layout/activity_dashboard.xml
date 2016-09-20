@@ -24,6 +24,8 @@
         android:background="@drawable/list_selector"
         android:textAllCaps="false"
         android:gravity="center"
+        style="?android:attr/buttonBarButtonStyle"
+        android:textColor="@color/brightTextColor"
         android:text="@string/ui_text_pass_note"
         />
 
@@ -41,6 +43,8 @@
         android:background="@drawable/list_selector"
         android:textAllCaps="false"
         android:gravity="center"
+        style="?android:attr/buttonBarButtonStyle"
+        android:textColor="@color/brightTextColor"
         android:text="@string/ui_text_basic_note"
         />
 
