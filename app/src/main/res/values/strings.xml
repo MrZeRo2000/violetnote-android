@@ -73,6 +73,7 @@
     <string name="title_activity_basic_note_edit">Basic Note Edit</string>
     <string name="title_activity_basic_note_checked_item">Checked Note</string>
     <string name="title_activity_basic_note_named_item">Named Note</string>
+    <string name="title_activity_basic_note_value">Values</string>
     <string name="title_activity_password_category">Note category</string>
     <string name="title_activity_password_note">Note list</string>
     <string name="title_activity_password_note_details">Note details</string>

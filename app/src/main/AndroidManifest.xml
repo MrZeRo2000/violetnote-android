@@ -38,56 +38,74 @@
             android:name=".view.CategoryActivity"
             android:label="@string/title_activity_password_category"
             android:parentActivityName=".view.DashboardActivity"
-            android:theme="@style/MainAppTheme" />
+            android:theme="@style/MainAppTheme"
+            />
         <activity
             android:name=".view.NoteActivity"
             android:label="@string/title_activity_password_note"
             android:parentActivityName=".view.CategoryActivity"
-            android:theme="@style/MainAppTheme" />
+            android:theme="@style/MainAppTheme"
+            />
         <activity
             android:name=".view.NoteDetailsActivity"
             android:label="@string/title_activity_password_note_details"
             android:parentActivityName=".view.NoteActivity"
-            android:theme="@style/DetailsAppTheme" />
+            android:theme="@style/DetailsAppTheme"
+            />
         <activity
             android:name=".view.SearchResultActivity"
             android:label="@string/title_activity_password_note_search"
             android:launchMode="singleTop"
             android:parentActivityName=".view.CategoryActivity"
-            android:theme="@style/MainAppTheme" />
+            android:theme="@style/MainAppTheme"
+            />
         <activity
             android:name=".view.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:parentActivityName=".view.CategoryActivity"
-            android:theme="@style/PreferencesTheme" />
+            android:theme="@style/PreferencesTheme"
+            />
         <activity
             android:name=".filechooser.FileChooserActivity"
             android:label="@string/title_activity_file_chooser"
             android:parentActivityName=".view.SettingsActivity"
-            android:theme="@style/MainAppTheme" />
+            android:theme="@style/MainAppTheme"
+            />
         <activity
             android:name=".dropboxchooser.DropboxChooserActivity"
             android:parentActivityName=".view.SettingsActivity"
-            android:theme="@style/MainAppTheme" />
+            android:theme="@style/MainAppTheme"
+            />
         <activity
             android:name=".view.BasicNoteActivity"
             android:label="@string/title_activity_basic_note"
             android:parentActivityName=".view.DashboardActivity"
-            android:theme="@style/MainAppTheme" />
+            android:theme="@style/MainAppTheme"
+            />
         <activity
             android:name=".view.BasicNoteEditActivity"
             android:label="@string/title_activity_basic_note_edit"
             android:parentActivityName=".view.BasicNoteActivity"
-            android:theme="@style/EditTheme" />
+            android:theme="@style/EditTheme"
+            />
         <activity
             android:name=".view.BasicNoteCheckedItemActivity"
             android:label="@string/title_activity_basic_note_checked_item"
             android:parentActivityName=".view.BasicNoteActivity"
-            android:theme="@style/ToolBarTheme" />
-        <activity android:name=".view.BasicNoteNamedItemActivity"
+            android:theme="@style/ToolBarTheme"
+            />
+        <activity
+            android:name=".view.BasicNoteNamedItemActivity"
             android:label="@string/title_activity_basic_note_named_item"
             android:parentActivityName=".view.BasicNoteActivity"
-            android:theme="@style/ToolBarTheme" />
+            android:theme="@style/ToolBarTheme"
+            />
+        <activity
+            android:name=".view.BasicNoteValueActivity"
+            android:label="@string/title_activity_basic_note_value"
+            android:parentActivityName=".view.BasicNoteCheckedItemActivity"
+            android:theme="@style/MainAppTheme"
+            />
     </application>
 
 </manifest>

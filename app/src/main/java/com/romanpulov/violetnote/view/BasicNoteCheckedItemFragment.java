@@ -1,6 +1,7 @@
 package com.romanpulov.violetnote.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.view.ActionMode;
@@ -188,12 +189,19 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
             mAddActionHelper.setOnListClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(getActivity(), "List click", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getActivity(), BasicNoteValueActivity.class);
+                    startActivityForResult(intent, 0);
                 }
             });
         }
 
         return view;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Toast.makeText(getActivity(), "Result from activity", Toast.LENGTH_SHORT).show();
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     public void showAddLayout() {

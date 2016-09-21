@@ -2,6 +2,7 @@ package com.romanpulov.violetnote.view.core;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
