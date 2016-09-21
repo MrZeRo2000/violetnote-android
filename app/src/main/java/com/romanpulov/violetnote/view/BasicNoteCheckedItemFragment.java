@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBNoteManager;
@@ -171,15 +172,26 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         // add decoration
         mRecyclerView.addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(getActivity(), RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_white_black_gradient));
 
+        //add action panel
         mAddActionHelper = new AddActionHelper(view.findViewById(R.id.add_panel_include));
-        if (!mBasicNoteData.getNote().isEncrypted())
-            mAddActionHelper.setAutoCompleteList(mBasicNoteData.getNote().getValues());
         mAddActionHelper.setOnAddInteractionListener(new AddActionHelper.OnAddInteractionListener() {
             @Override
             public void onAddFragmentInteraction(final String text) {
                 performAddAction(BasicNoteItemA.newCheckedEditInstance(text));
             }
         });
+
+        // for not encrypted set up AutoComplete and list button
+        if (!mBasicNoteData.getNote().isEncrypted()) {
+            mAddActionHelper.setAutoCompleteList(mBasicNoteData.getNote().getValues());
+
+            mAddActionHelper.setOnListClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(getActivity(), "List click", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
 
         return view;
     }

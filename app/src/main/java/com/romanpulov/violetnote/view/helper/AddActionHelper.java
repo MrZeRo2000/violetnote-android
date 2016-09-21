@@ -11,6 +11,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 
 import java.util.Collection;
 
@@ -20,21 +21,33 @@ import java.util.Collection;
 public class AddActionHelper {
 
     private final View mActionView;
+    private final ImageButton mListButton;
     private final ImageButton mCancelButton;
     private final AutoCompleteTextView mAddEditText;
 
     private OnAddInteractionListener mAddListener;
+    private View.OnClickListener mListClickListener;
 
     public void setOnAddInteractionListener(OnAddInteractionListener listener) {
         mAddListener = listener;
     }
 
+    public void setOnListClickListener(View.OnClickListener listener) {
+        mListClickListener = listener;
+        if (mListClickListener != null)
+            mListButton.setVisibility(View.VISIBLE);
+        else
+            mListButton.setVisibility(View.GONE);
+    }
+
     public AddActionHelper(View actionView) {
         mActionView = actionView;
 
+        mListButton = (ImageButton) mActionView.findViewById(R.id.list_button);
         mCancelButton = (ImageButton) mActionView.findViewById(R.id.cancel_button);
         mAddEditText = (AutoCompleteTextView)mActionView.findViewById(R.id.add_edit_text);
 
+        setupListButton();
         setupCancelButton();
         setupEditText();
     }
@@ -42,6 +55,16 @@ public class AddActionHelper {
     public void setAutoCompleteList(Collection<String> autoCompleteList) {
         ArrayAdapter<?> adapter = new ArrayAdapter<>(mAddEditText.getContext(), android.R.layout.simple_dropdown_item_1line, autoCompleteList.toArray(new String[autoCompleteList.size()]));
         mAddEditText.setAdapter(adapter);
+    }
+
+    private void setupListButton() {
+        mListButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mListClickListener != null)
+                    mListClickListener.onClick(v);
+            }
+        });
     }
 
     private void setupCancelButton() {
