@@ -149,7 +149,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_basic_note_checked_item_list, container, false);
+        final View view = inflater.inflate(R.layout.fragment_basic_note_checked_item_list, container, false);
 
         Context context = view.getContext();
         mRecyclerView = (RecyclerView) view.findViewById(R.id.list);
@@ -196,7 +196,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                     // new intent for activity
                     Intent intent = new Intent(getActivity(), BasicNoteValueActivity.class);
 
-                    //get values
+                    //retrieve data
                     List<String> values = new ArrayList<>();
                     DBNoteManager manager = new DBNoteManager(getActivity());
                     manager.queryNoteDataValuesOrdered(mBasicNoteData.getNote(), values);

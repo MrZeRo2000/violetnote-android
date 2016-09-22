@@ -70,7 +70,10 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
     public class ActionBarCallBack implements ActionMode.Callback {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            return false;
+            mode.getMenuInflater().inflate(R.menu.menu_listitem_minimal_actions, menu);
+            if (mRecyclerViewSelector.getSelectedItemPos() != -1)
+                mode.setTitle(mBasicNoteValueData.getValues().get(mRecyclerViewSelector.getSelectedItemPos()));
+            return true;
         }
 
         @Override
@@ -80,12 +83,23 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
 
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            int selectedItemPos = mRecyclerViewSelector.getSelectedItemPos();
+            if (selectedItemPos != -1) {
+                String value = mBasicNoteValueData.getValues().get(selectedItemPos);
+                switch (item.getItemId()) {
+                    case R.id.delete:
+                        break;
+                    case R.id.edit:
+                        break;
+                }
+            }
             return false;
         }
 
         @Override
         public void onDestroyActionMode(ActionMode mode) {
-
+            if (mRecyclerViewSelector != null)
+                mRecyclerViewSelector.destroyActionMode();
         }
     }
 

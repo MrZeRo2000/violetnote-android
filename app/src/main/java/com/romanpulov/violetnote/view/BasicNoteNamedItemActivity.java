@@ -41,7 +41,7 @@ public class BasicNoteNamedItemActivity extends BasicNoteDataPasswordActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_named_item, menu);
+        getMenuInflater().inflate(R.menu.menu_add_action, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
