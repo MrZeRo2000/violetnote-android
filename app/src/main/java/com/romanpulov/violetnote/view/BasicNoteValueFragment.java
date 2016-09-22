@@ -3,8 +3,6 @@ package com.romanpulov.violetnote.view;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,12 +14,10 @@ import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBNoteManager;
 import com.romanpulov.violetnote.view.core.BasicCommonNoteFragment;
 
-import java.util.List;
-
 /**
  * A fragment representing a list of Items.
  * <p/>
- * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
+ * Activities containing this fragment MUST implement the {@link OnNoteValueFragmentInteractionListener}
  * interface.
  */
 public class BasicNoteValueFragment extends BasicCommonNoteFragment {
@@ -39,7 +35,7 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
-    private OnListFragmentInteractionListener mListener;
+    private OnNoteValueFragmentInteractionListener mListener;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -91,11 +87,11 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
     @Override
     public void onAttach(Activity context) {
         super.onAttach(context);
-        if (context instanceof OnListFragmentInteractionListener) {
-            mListener = (OnListFragmentInteractionListener) context;
+        if (context instanceof OnNoteValueFragmentInteractionListener) {
+            mListener = (OnNoteValueFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnListFragmentInteractionListener");
+                    + " must implement OnNoteValueFragmentInteractionListener");
         }
     }
 
@@ -115,8 +111,8 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnListFragmentInteractionListener {
+    public interface OnNoteValueFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(String item);
+        void onNoteValueClicked(String item, int adapterPosition);
     }
 }

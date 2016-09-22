@@ -16,6 +16,7 @@ public class DBBasicNoteOpenHelper extends SQLiteOpenHelper {
     public static final String NOTE_ID_COLUMN_NAME = "note_id";
     public static final String LAST_MODIFIED_COLUMN_NAME = "last_modified";
     public static final String ORDER_COLUMN_NAME = "order_id";
+    public static final String VALUE_COLUMN_NAME = "value";
 
     //notes
     public static final String NOTES_TABLE_NAME = "notes";
@@ -48,7 +49,7 @@ public class DBBasicNoteOpenHelper extends SQLiteOpenHelper {
             ORDER_COLUMN_NAME,
             NOTE_ID_COLUMN_NAME,
             "name",
-            "value",
+            VALUE_COLUMN_NAME,
             "checked"
     };
     private static final String NOTE_ITEMS_TABLE_CREATE =
@@ -62,13 +63,17 @@ public class DBBasicNoteOpenHelper extends SQLiteOpenHelper {
                     NOTE_ITEMS_TABLE_COLS[6] + " INTEGER," +
                     " FOREIGN KEY (" + NOTE_ITEMS_TABLE_COLS[3] + ") REFERENCES " + NOTES_TABLE_NAME + "(" + NOTES_TABLE_COLS[0] + ")" +
                     ");";
+    private static final String NOTE_ITEMS_FK_INDEX_CREATE =
+            "CREATE INDEX fk_" + NOTE_ITEMS_TABLE_NAME +
+                    " ON " + NOTE_ITEMS_TABLE_NAME + "(" +
+                    NOTE_ID_COLUMN_NAME + ")";
 
     //note values
     public static final String NOTE_VALUES_TABLE_NAME = "note_values";
     public static final String[] NOTE_VALUES_TABLE_COLS = new String[] {
             ID_COLUMN_NAME,
             NOTE_ID_COLUMN_NAME,
-            "value"
+            VALUE_COLUMN_NAME
     };
     private static final String NOTE_VALUES_TABLE_CREATE =
             "CREATE TABLE " + NOTE_VALUES_TABLE_NAME + " (" +
@@ -76,6 +81,37 @@ public class DBBasicNoteOpenHelper extends SQLiteOpenHelper {
                     NOTE_VALUES_TABLE_COLS[1] + " INTEGER ," +
                     NOTE_VALUES_TABLE_COLS[2] + " TEXT," +
                     " FOREIGN KEY (" + NOTE_VALUES_TABLE_COLS[1] + ") REFERENCES " + NOTES_TABLE_NAME + "(" + NOTES_TABLE_COLS[0] + ")" +
+                    ");";
+    private static final String NOTE_VALUES_FK_INDEX_CREATE =
+            "CREATE INDEX fk_" + NOTE_VALUES_TABLE_NAME +
+                    " ON " + NOTE_VALUES_TABLE_NAME + "(" +
+                    NOTE_ID_COLUMN_NAME + ")";
+
+    //note items history
+    public static final String NOTE_ITEMS_HISTORY_TABLE_NAME = "note_items_history";
+    public static final String[] NOTE_ITEMS_HISTORY_COLS = new String[] {
+            ID_COLUMN_NAME,
+            LAST_MODIFIED_COLUMN_NAME,
+            NOTE_ID_COLUMN_NAME,
+            VALUE_COLUMN_NAME
+    };
+    private static final String NOTE_ITEMS_HISTORY_TABLE_CREATE =
+            "CREATE TABLE " + NOTE_ITEMS_HISTORY_TABLE_NAME + " (" +
+                    NOTE_ITEMS_HISTORY_COLS[0] + " INTEGER PRIMARY KEY," +
+                    NOTE_ITEMS_HISTORY_COLS[1] + " INTEGER NOT NULL," +
+                    NOTE_ITEMS_HISTORY_COLS[2] + " INTEGER NOT NULL," +
+                    NOTE_ITEMS_HISTORY_COLS[3] + " TEXT NOT NULL," +
+                    " FOREIGN KEY (" + NOTE_ITEMS_HISTORY_COLS[2] + ") REFERENCES " + NOTES_TABLE_NAME + "(" + NOTES_TABLE_COLS[0] + ")" +
+                    ");";
+    private static final String NOTE_ITEMS_HISTORY_FK_INDEX_CREATE =
+            "CREATE INDEX fk_" + NOTE_ITEMS_HISTORY_TABLE_NAME +
+                    " ON " + NOTE_ITEMS_HISTORY_TABLE_NAME + "(" +
+                    NOTE_ID_COLUMN_NAME + ")";
+    private static final String NOTE_ITEMS_HISTORY_U_INDEX_CREATE =
+            "CREATE UNIQUE INDEX u_node_items_history ON " +
+                    NOTE_ITEMS_HISTORY_TABLE_NAME + " (" +
+                    NOTE_ITEMS_HISTORY_COLS[2] + ", " +
+                    NOTE_ITEMS_HISTORY_COLS[3] +
                     ");";
 
     //note_id selection
@@ -89,7 +125,12 @@ public class DBBasicNoteOpenHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(NOTES_TABLE_CREATE);
         db.execSQL(NOTE_ITEMS_TABLE_CREATE);
+        db.execSQL(NOTE_ITEMS_FK_INDEX_CREATE);
         db.execSQL(NOTE_VALUES_TABLE_CREATE);
+        db.execSQL(NOTE_VALUES_FK_INDEX_CREATE);
+        db.execSQL(NOTE_ITEMS_HISTORY_TABLE_CREATE);
+        db.execSQL(NOTE_ITEMS_HISTORY_FK_INDEX_CREATE);
+        db.execSQL(NOTE_ITEMS_HISTORY_U_INDEX_CREATE);
     }
 
     @Override

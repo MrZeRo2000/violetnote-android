@@ -13,9 +13,9 @@ import java.util.List;
 public class BasicNoteValueRecyclerViewAdapter extends RecyclerView.Adapter<BasicNoteValueRecyclerViewAdapter.ViewHolder> {
 
     private final List<String> mValues;
-    private final BasicNoteValueFragment.OnListFragmentInteractionListener mListener;
+    private final BasicNoteValueFragment.OnNoteValueFragmentInteractionListener mListener;
 
-    public BasicNoteValueRecyclerViewAdapter(List<String> items, BasicNoteValueFragment.OnListFragmentInteractionListener listener) {
+    public BasicNoteValueRecyclerViewAdapter(List<String> items, BasicNoteValueFragment.OnNoteValueFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -38,7 +38,7 @@ public class BasicNoteValueRecyclerViewAdapter extends RecyclerView.Adapter<Basi
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem);
+                    mListener.onNoteValueClicked(holder.mItem, holder.getAdapterPosition());
                 }
             }
         });
@@ -51,14 +51,12 @@ public class BasicNoteValueRecyclerViewAdapter extends RecyclerView.Adapter<Basi
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView mIdView;
         public final TextView mContentView;
         public String mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.id);
             mContentView = (TextView) view.findViewById(R.id.content);
         }
 
