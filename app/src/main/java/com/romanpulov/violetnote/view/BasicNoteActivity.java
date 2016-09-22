@@ -22,14 +22,13 @@ public class BasicNoteActivity extends ActionBarCompatActivity implements BasicN
 
     private ArrayList<BasicNoteA> mNoteList;
     private BasicNoteFragment mFragment;
-    private DBNoteManager mNoteManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mNoteManager = new DBNoteManager(this);
-        mNoteList = mNoteManager.queryNotes();
+        DBNoteManager noteManager = new DBNoteManager(this);
+        mNoteList = noteManager.queryNotes();
 
         FragmentManager fm = getSupportFragmentManager();
         mFragment = BasicNoteFragment.newInstance(mNoteList);
@@ -66,7 +65,8 @@ public class BasicNoteActivity extends ActionBarCompatActivity implements BasicN
 
     @Override
     public void onBasicNoteFragmentInteraction(BasicNoteA item) {
-        BasicNoteDataA noteData = mNoteManager.queryNoteData(item);
+        DBNoteManager noteManager = new DBNoteManager(this);
+        BasicNoteDataA noteData = noteManager.queryNoteData(item);
         Intent intent = null;
 
         //select intent

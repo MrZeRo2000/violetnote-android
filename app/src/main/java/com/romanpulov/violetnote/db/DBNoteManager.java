@@ -11,11 +11,13 @@ import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteHistoryItemA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
+import com.romanpulov.violetnote.model.BasicNoteValueDataA;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -162,6 +164,27 @@ public class DBNoteManager extends BasicCommonNoteManager {
                 if ((c != null) && !c.isClosed())
                     c.close();
             }
+        }
+    }
+
+    public void queryNoteDataValuesOrdered(BasicNoteA note, List<String> values) {
+        //clear values
+        values.clear();
+
+        Cursor c = null;
+        try {
+            c = mDB.query(
+                    DBBasicNoteOpenHelper.NOTE_VALUES_TABLE_NAME, new String[]{DBBasicNoteOpenHelper.NOTE_VALUES_TABLE_COLS[2]},
+                    DBBasicNoteOpenHelper.NOTE_ID_COLUMN_NAME + " = ?", new String[]{String.valueOf(note.getId())}, null, null, DBBasicNoteOpenHelper.NOTE_VALUES_TABLE_COLS[2]
+            );
+
+            for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
+                values.add(c.getString(0));
+            }
+
+        } finally {
+            if ((c != null) && !c.isClosed())
+                c.close();
         }
     }
 

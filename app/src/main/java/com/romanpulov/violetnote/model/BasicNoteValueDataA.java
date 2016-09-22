@@ -26,7 +26,7 @@ public class BasicNoteValueDataA implements Parcelable {
 
     }
 
-    public BasicNoteValueDataA newInstance(BasicNoteA note, List<String> values) {
+    public static BasicNoteValueDataA newInstance(BasicNoteA note, List<String> values) {
         BasicNoteValueDataA instance = new BasicNoteValueDataA();
 
         instance.mNote = note;
@@ -36,7 +36,9 @@ public class BasicNoteValueDataA implements Parcelable {
     }
 
     private BasicNoteValueDataA(Parcel in) {
-        mNote = BasicNoteA.CREATOR.createFromParcel(in);
+        //mNote = BasicNoteA.CREATOR.createFromParcel(in);
+        mNote = in.readParcelable(BasicNoteA.class.getClassLoader());
+        mValues = new ArrayList<>();
         in.readStringList(mValues);
     }
 

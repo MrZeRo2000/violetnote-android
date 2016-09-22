@@ -124,12 +124,14 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
     @Override
     public void onAttach(Activity context) {
         super.onAttach(context);
+        /*
         if (context instanceof OnNoteValueFragmentInteractionListener) {
             mListener = (OnNoteValueFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnNoteValueFragmentInteractionListener");
         }
+        */
     }
 
     @Override

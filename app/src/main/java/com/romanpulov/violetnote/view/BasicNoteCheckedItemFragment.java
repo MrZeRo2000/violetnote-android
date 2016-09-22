@@ -18,6 +18,7 @@ import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
+import com.romanpulov.violetnote.model.BasicNoteValueDataA;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutor;
 import com.romanpulov.violetnote.view.action.BasicNoteDataItemCheckOutAction;
 import com.romanpulov.violetnote.view.action.BasicNoteDataItemEditNameValueAction;
@@ -33,6 +34,9 @@ import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 import com.romanpulov.violetnote.view.core.TextInputDialog;
 import com.romanpulov.violetnote.view.helper.AddActionHelper;
 import com.romanpulov.violetnote.view.core.TextEditDialogBuilder;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
 
@@ -189,7 +193,17 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
             mAddActionHelper.setOnListClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    // new intent for activity
                     Intent intent = new Intent(getActivity(), BasicNoteValueActivity.class);
+
+                    //get values
+                    List<String> values = new ArrayList<>();
+                    DBNoteManager manager = new DBNoteManager(getActivity());
+                    manager.queryNoteDataValuesOrdered(mBasicNoteData.getNote(), values);
+                    BasicNoteValueDataA noteValueDataA = BasicNoteValueDataA.newInstance(mBasicNoteData.getNote(), values);
+
+                    //pass and start activity
+                    intent.putExtra(BasicNoteValueDataA.class.getName(), noteValueDataA);
                     startActivityForResult(intent, 0);
                 }
             });
