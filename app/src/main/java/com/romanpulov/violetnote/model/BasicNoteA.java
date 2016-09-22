@@ -65,6 +65,12 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
         return mValues;
     }
 
+    private List<BasicNoteHistoryItemA> mHistoryItems = new ArrayList<>();
+
+    public List<BasicNoteHistoryItemA> getHistoryItems() {
+        return mHistoryItems;
+    }
+
     private BasicNoteA() {
 
     }
@@ -121,6 +127,8 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
 
         String[] values = in.createStringArray();
         Collections.addAll(mValues, values);
+
+        in.readTypedList(mHistoryItems, BasicNoteHistoryItemA.CREATOR);
     }
 
     @Override
@@ -139,8 +147,8 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
         dest.writeInt(toInt(mEncrypted));
         dest.writeString(mEncryptedString);
         dest.writeTypedList(mItems);
-
         dest.writeStringArray(mValues.toArray(new String[mValues.size()]));
+        dest.writeTypedList(mHistoryItems);
     }
 
     public static final Parcelable.Creator<BasicNoteA> CREATOR = new Parcelable.Creator<BasicNoteA>() {

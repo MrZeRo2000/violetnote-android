@@ -52,6 +52,15 @@ public class DBNoteManager extends BasicCommonNoteManager {
         );
     }
 
+    private static BasicNoteHistoryItemA noteHistoryItemFromCursor(Cursor c, DateTimeFormatterHelper dtf) {
+        return BasicNoteHistoryItemA.newInstance(
+                c.getLong(0),
+                c.getLong(1),
+                dtf.formatDateTimeDelimited(new Date(c.getLong(1)), "\n"),
+                c.getString(2)
+        );
+    }
+
     public ArrayList<BasicNoteA> queryNotes() {
         ArrayList<BasicNoteA> result = new ArrayList<>();
 
@@ -153,6 +162,29 @@ public class DBNoteManager extends BasicCommonNoteManager {
                 if ((c != null) && !c.isClosed())
                     c.close();
             }
+        }
+    }
+
+    public void queryNoteHistoryItems(BasicNoteA note) {
+        //clear values
+        note.getHistoryItems().clear();
+
+        Cursor c = null;
+        try {
+            c = mDB.query(
+                    DBBasicNoteOpenHelper.NOTE_ITEMS_HISTORY_TABLE_NAME,
+                    new String[] {DBBasicNoteOpenHelper.NOTE_ITEMS_HISTORY_TABLE_COLS[1], DBBasicNoteOpenHelper.NOTE_ITEMS_HISTORY_TABLE_COLS[3]},
+                    DBBasicNoteOpenHelper.NOTE_ID_COLUMN_NAME + " = ?", new String[] {String.valueOf(note.getId())}, null, null,
+                    DBBasicNoteOpenHelper.ORDER_COLUMN_NAME + " DESC"
+            );
+
+            for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
+                note.getHistoryItems().add(noteHistoryItemFromCursor(c, mDTF));
+            }
+
+        } finally {
+            if ((c != null) && !c.isClosed())
+                c.close();
         }
     }
 
@@ -288,9 +320,9 @@ public class DBNoteManager extends BasicCommonNoteManager {
     public long insertNoteHistory(BasicNoteA note, String value) {
         ContentValues cv = new ContentValues();
 
-        cv.put(DBBasicNoteOpenHelper.NOTE_ITEMS_HISTORY_COLS[1], System.currentTimeMillis());
-        cv.put(DBBasicNoteOpenHelper.NOTE_ITEMS_HISTORY_COLS[2], note.getId());
-        cv.put(DBBasicNoteOpenHelper.NOTE_ITEMS_HISTORY_COLS[3], value);
+        cv.put(DBBasicNoteOpenHelper.NOTE_ITEMS_HISTORY_TABLE_COLS[1], System.currentTimeMillis());
+        cv.put(DBBasicNoteOpenHelper.NOTE_ITEMS_HISTORY_TABLE_COLS[2], note.getId());
+        cv.put(DBBasicNoteOpenHelper.NOTE_ITEMS_HISTORY_TABLE_COLS[3], value);
 
         return mDB.insert(DBBasicNoteOpenHelper.NOTE_ITEMS_HISTORY_TABLE_NAME, null, cv);
     }

@@ -89,7 +89,7 @@ public class DBBasicNoteOpenHelper extends SQLiteOpenHelper {
 
     //note items history
     public static final String NOTE_ITEMS_HISTORY_TABLE_NAME = "note_items_history";
-    public static final String[] NOTE_ITEMS_HISTORY_COLS = new String[] {
+    public static final String[] NOTE_ITEMS_HISTORY_TABLE_COLS = new String[] {
             ID_COLUMN_NAME,
             LAST_MODIFIED_COLUMN_NAME,
             NOTE_ID_COLUMN_NAME,
@@ -97,11 +97,11 @@ public class DBBasicNoteOpenHelper extends SQLiteOpenHelper {
     };
     private static final String NOTE_ITEMS_HISTORY_TABLE_CREATE =
             "CREATE TABLE " + NOTE_ITEMS_HISTORY_TABLE_NAME + " (" +
-                    NOTE_ITEMS_HISTORY_COLS[0] + " INTEGER PRIMARY KEY," +
-                    NOTE_ITEMS_HISTORY_COLS[1] + " INTEGER NOT NULL," +
-                    NOTE_ITEMS_HISTORY_COLS[2] + " INTEGER NOT NULL," +
-                    NOTE_ITEMS_HISTORY_COLS[3] + " TEXT NOT NULL," +
-                    " FOREIGN KEY (" + NOTE_ITEMS_HISTORY_COLS[2] + ") REFERENCES " + NOTES_TABLE_NAME + "(" + NOTES_TABLE_COLS[0] + ")" +
+                    NOTE_ITEMS_HISTORY_TABLE_COLS[0] + " INTEGER PRIMARY KEY," +
+                    NOTE_ITEMS_HISTORY_TABLE_COLS[1] + " INTEGER NOT NULL," +
+                    NOTE_ITEMS_HISTORY_TABLE_COLS[2] + " INTEGER NOT NULL," +
+                    NOTE_ITEMS_HISTORY_TABLE_COLS[3] + " TEXT NOT NULL," +
+                    " FOREIGN KEY (" + NOTE_ITEMS_HISTORY_TABLE_COLS[2] + ") REFERENCES " + NOTES_TABLE_NAME + "(" + NOTES_TABLE_COLS[0] + ")" +
                     ");";
     private static final String NOTE_ITEMS_HISTORY_FK_INDEX_CREATE =
             "CREATE INDEX fk_" + NOTE_ITEMS_HISTORY_TABLE_NAME +
@@ -110,8 +110,8 @@ public class DBBasicNoteOpenHelper extends SQLiteOpenHelper {
     private static final String NOTE_ITEMS_HISTORY_U_INDEX_CREATE =
             "CREATE UNIQUE INDEX u_node_items_history ON " +
                     NOTE_ITEMS_HISTORY_TABLE_NAME + " (" +
-                    NOTE_ITEMS_HISTORY_COLS[2] + ", " +
-                    NOTE_ITEMS_HISTORY_COLS[3] +
+                    NOTE_ITEMS_HISTORY_TABLE_COLS[2] + ", " +
+                    NOTE_ITEMS_HISTORY_TABLE_COLS[3] +
                     ");";
 
     //note_id selection
