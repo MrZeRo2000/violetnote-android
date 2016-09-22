@@ -9,6 +9,7 @@ import com.romanpulov.violetnote.model.BasicCommonNoteA;
 import com.romanpulov.violetnote.model.BasicEntityNoteA;
 import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
+import com.romanpulov.violetnote.model.BasicNoteHistoryItemA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 
 import java.util.ArrayList;
@@ -282,6 +283,16 @@ public class DBNoteManager extends BasicCommonNoteManager {
         cv.put(DBBasicNoteOpenHelper.NOTE_VALUES_TABLE_COLS[2], value);
 
         return mDB.insert(DBBasicNoteOpenHelper.NOTE_VALUES_TABLE_NAME, null, cv);
+    }
+
+    public long insertNoteHistory(BasicNoteA note, String value) {
+        ContentValues cv = new ContentValues();
+
+        cv.put(DBBasicNoteOpenHelper.NOTE_ITEMS_HISTORY_COLS[1], System.currentTimeMillis());
+        cv.put(DBBasicNoteOpenHelper.NOTE_ITEMS_HISTORY_COLS[2], note.getId());
+        cv.put(DBBasicNoteOpenHelper.NOTE_ITEMS_HISTORY_COLS[3], value);
+
+        return mDB.insert(DBBasicNoteOpenHelper.NOTE_ITEMS_HISTORY_TABLE_NAME, null, cv);
     }
 
     public BasicNoteItemA getNoteItem(long id) {

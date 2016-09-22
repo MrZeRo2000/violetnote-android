@@ -20,6 +20,8 @@ public class DataGeneratorTest extends ApplicationTestCase<Application> {
     private final static String TAG = "DataGeneratorTest";
     public final static int MAX_NOTES = 30;
     public final static int MAX_NOTE_ITEMS = 20;
+    public final static int MAX_VALUE_ITEMS = 10;
+    public final static int MAX_HISTORY_ITEMS = 20;
 
     private static void log(String message) {
         Log.d(TAG, message);
@@ -51,12 +53,13 @@ public class DataGeneratorTest extends ApplicationTestCase<Application> {
             BasicNoteA newNote = BasicNoteA.newEditInstance(i % 2, String.format(Locale.getDefault(), titleFormat, i), (i % 5) == 0 , null);
             assertFalse(-1 == noteManager.insertNote(newNote));
 
+            newNote.setId(i);
             //items are for not encrypted only
             if (!newNote.isEncrypted()) {
 
                 if (i % 2 == 0) {
                     //checked items
-                    newNote.setId(i);
+
                     for (int j = 1; j <= MAX_NOTE_ITEMS; j++) {
                         String itemValueFormat = "Note item %2d for note %2d";
                         if (j == 4)
@@ -65,9 +68,32 @@ public class DataGeneratorTest extends ApplicationTestCase<Application> {
                         BasicNoteItemA newNoteItem = BasicNoteItemA.newCheckedEditInstance(String.format(Locale.getDefault(), itemValueFormat, j, i));
                         assertFalse(-1 == noteManager.insertNoteItem(newNote, newNoteItem));
                     }
+
+
+                    //values for checked items
+                    for (int j = 1; j <= MAX_VALUE_ITEMS; j++) {
+                        String valueFormat = "Value %2d";
+                        if (j == 4)
+                            valueFormat = "This is a very very very very very very long value %2d";
+
+                        String newValue = String.format(Locale.getDefault(), valueFormat, j);
+                        assertFalse(-1 == noteManager.insertNoteValue(newNote, newValue));
+                    }
+
+                    //history for checked items
+                    for (int j = 1; j <= MAX_HISTORY_ITEMS; j++) {
+                        String historyValueFormat = "History Value %2d";
+                        if (j == 4)
+                            historyValueFormat = "This is a very very very very very very long history value %2d";
+
+                        String newHistoryValue = String.format(Locale.getDefault(), historyValueFormat, j);
+                        assertFalse(-1 == noteManager.insertNoteHistory(newNote, newHistoryValue));
+
+                        //assertFalse(-1 == noteManager.insertNoteValue(newNote, newHistoryValue));
+                    }
+
                 } else {
                     //named items
-                    newNote.setId(i);
                     for (int j = 1; j <= MAX_NOTE_ITEMS; j++) {
                         String itemNameFormat = "Name note item %2d for note %2d";
                         String itemValueFormat = "Value note item %2d for note %2d";
