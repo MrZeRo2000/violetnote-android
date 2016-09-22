@@ -88,5 +88,4 @@ public class BasicNoteDataA implements Parcelable, PasswordProvider {
             return new BasicNoteDataA[size];
         }
     };
-
 }
