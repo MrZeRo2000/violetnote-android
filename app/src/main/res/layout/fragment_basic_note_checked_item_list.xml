@@ -18,7 +18,6 @@
         app:layoutManager="LinearLayoutManager"
         tools:listitem="@layout/fragment_basic_note_checked_item" />
 
-
     <include layout="@layout/add_panel"
         android:id="@+id/add_panel_include"
         android:layout_width="match_parent"
