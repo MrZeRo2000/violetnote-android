@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBNoteManager;
+import com.romanpulov.violetnote.model.BasicNoteValueA;
 import com.romanpulov.violetnote.model.BasicNoteValueDataA;
 import com.romanpulov.violetnote.view.core.BasicCommonNoteFragment;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
@@ -31,9 +32,11 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
     private AddActionHelper mAddActionHelper;
 
     @Override
-    public void   refreshList(DBNoteManager noteManager) {
-
+    public void refreshList(DBNoteManager noteManager) {
+        //noteManager.qu
+        noteManager.queryNoteDataValuesOrdered(mBasicNoteValueData.getNote(), mBasicNoteValueData.getValues());
     }
+
     @Override
     public String getDBTableName() {
         return null;
@@ -64,6 +67,12 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
 
         if (getArguments() != null) {
             mBasicNoteValueData = getArguments().getParcelable(BasicNoteValueDataA.class.getName());
+        }
+    }
+
+    public void showAddLayout() {
+        if (mAddActionHelper != null) {
+            mAddActionHelper.showLayout();
         }
     }
 
@@ -103,6 +112,21 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
         }
     }
 
+    private void performAddAction(String value) {
+        DBNoteManager mNoteManager = new DBNoteManager(getActivity());
+        if (mNoteManager.insertNoteValue(mBasicNoteValueData.getNote(), value) != -1) {
+            // refresh list
+            refreshList(mNoteManager);
+
+            mRecyclerView.getAdapter().notifyDataSetChanged();
+
+            //ensure added element is visible
+            int newItemPos = mBasicNoteValueData.getValues().indexOf(value);
+            if (newItemPos > -1)
+                mRecyclerView.scrollToPosition(newItemPos);
+        };
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -127,7 +151,7 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
         mAddActionHelper.setOnAddInteractionListener(new AddActionHelper.OnAddInteractionListener() {
             @Override
             public void onAddFragmentInteraction(final String text) {
-                //performAddAction(BasicNoteItemA.newCheckedEditInstance(text));
+                performAddAction(text);
             }
         });
 

@@ -15,20 +15,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BasicNoteValueActivity extends ActionBarCompatActivity {
+    private BasicNoteValueFragment mFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        //setContentView(R.layout.activity_basic_note_value);
 
         BasicNoteValueDataA noteValueData = getIntent().getParcelableExtra(BasicNoteValueDataA.class.getName());
         if (noteValueData != null) {
             setTitle(noteValueData.getNote().getTitle() + " " + getTitle());
 
             FragmentManager fm = getSupportFragmentManager();
-            BasicNoteValueFragment fragment = BasicNoteValueFragment.newInstance(noteValueData);
-            fm.beginTransaction().add(android.R.id.content, fragment).commit();
+            mFragment = BasicNoteValueFragment.newInstance(noteValueData);
+            fm.beginTransaction().add(android.R.id.content, mFragment).commit();
         }
     }
 
@@ -40,12 +39,17 @@ public class BasicNoteValueActivity extends ActionBarCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Workaround for issue with back button in toolbar default behavior
-        if (item.getItemId() == android.R.id.home) {
-            //updateResult();
-            finish();
-            return true;
-        } else
-            return super.onOptionsItemSelected(item);
+        switch ((item.getItemId())) {
+            // Workaround for issue with back button in toolbar default behavior
+            case android.R.id.home:
+                finish();
+                return true;
+            // add action
+            case R.id.action_add:
+                mFragment.showAddLayout();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

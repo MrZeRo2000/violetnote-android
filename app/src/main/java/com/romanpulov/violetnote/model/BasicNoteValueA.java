@@ -27,6 +27,14 @@ public class BasicNoteValueA extends BasicEntityNoteA implements Parcelable  {
         return instance;
     }
 
+    public static BasicNoteValueA newEditInstance(String value) {
+        BasicNoteValueA instance = new BasicNoteValueA();
+
+        instance.mValue = value;
+
+        return instance;
+    }
+
     @Override
     public int describeContents() {
         return 0;
