@@ -3,6 +3,7 @@ package com.romanpulov.violetnote.view;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,9 +15,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.db.DBBasicNoteOpenHelper;
 import com.romanpulov.violetnote.db.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicNoteValueA;
 import com.romanpulov.violetnote.model.BasicNoteValueDataA;
+import com.romanpulov.violetnote.view.core.AlertOkCancelDialogFragment;
 import com.romanpulov.violetnote.view.core.BasicCommonNoteFragment;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 import com.romanpulov.violetnote.view.helper.AddActionHelper;
@@ -76,6 +79,28 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
         }
     }
 
+    private void performDeleteAction(final ActionMode mode, final BasicNoteValueA item) {
+        AlertOkCancelDialogFragment dialog = AlertOkCancelDialogFragment.newAlertOkCancelDialog(getString(R.string.ui_question_are_you_sure));
+        dialog.setOkButtonClickListener(new AlertOkCancelDialogFragment.OnClickListener() {
+            @Override
+            public void OnClick(DialogFragment dialog) {
+                DBNoteManager noteManager = new DBNoteManager(getActivity());
+
+                //delete
+                if (noteManager.deleteEntityNote(DBBasicNoteOpenHelper.NOTE_VALUES_TABLE_NAME, item) == 1) {
+                    refreshList(noteManager);
+                }
+
+                //finish action
+                mode.finish();
+
+            }
+        });
+
+        dialog.show(getFragmentManager(), null);
+
+    }
+
     public class ActionBarCallBack implements ActionMode.Callback {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
@@ -97,7 +122,7 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
                 BasicNoteValueA value = mBasicNoteValueData.getValues().get(selectedItemPos);
                 switch (item.getItemId()) {
                     case R.id.delete:
-                        //performDeleteAction(mode, value);
+                        performDeleteAction(mode, value);
                         break;
                     case R.id.edit:
                         break;
