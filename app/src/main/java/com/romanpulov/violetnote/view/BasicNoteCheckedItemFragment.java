@@ -214,8 +214,13 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Toast.makeText(getActivity(), "Result from activity", Toast.LENGTH_SHORT).show();
-        super.onActivityResult(requestCode, resultCode, data);
+        //update values
+        DBNoteManager noteManager = new DBNoteManager(getActivity());
+        noteManager.queryNoteDataValues(mBasicNoteData.getNote());
+
+        //update autocomplete
+        if (mAddActionHelper != null)
+            mAddActionHelper.setAutoCompleteList(mBasicNoteData.getNote().getValues());
     }
 
     public void showAddLayout() {
