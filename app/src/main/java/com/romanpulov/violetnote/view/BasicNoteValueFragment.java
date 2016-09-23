@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.dropbox.core.DbxWebAuth;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBBasicNoteOpenHelper;
 import com.romanpulov.violetnote.db.DBNoteManager;
@@ -22,6 +23,8 @@ import com.romanpulov.violetnote.model.BasicNoteValueDataA;
 import com.romanpulov.violetnote.view.core.AlertOkCancelDialogFragment;
 import com.romanpulov.violetnote.view.core.BasicCommonNoteFragment;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
+import com.romanpulov.violetnote.view.core.TextEditDialogBuilder;
+import com.romanpulov.violetnote.view.core.TextInputDialog;
 import com.romanpulov.violetnote.view.helper.AddActionHelper;
 
 /**
@@ -93,12 +96,41 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
 
                 //finish action
                 mode.finish();
-
             }
         });
 
         dialog.show(getFragmentManager(), null);
 
+    }
+
+    private void performEditAction(final ActionMode mode, final BasicNoteValueA item) {
+        (new TextEditDialogBuilder(getActivity(), getString(R.string.ui_note_title), item.getValue()))
+                .setNonEmptyErrorMessage(getString(R.string.error_field_not_empty))
+                .setOnTextInputListener(new TextInputDialog.OnTextInputListener() {
+                    @Override
+                    public void onTextInput(String text) {
+                        if (!text.equals(item.getValue())) {
+                            //change
+                            item.setValue(text);
+
+                            //update database
+                            DBNoteManager noteManager = new DBNoteManager(getActivity());
+
+                            try {
+                                if (noteManager.updateNoteValueValue(item) == 1) {
+                                    //refresh list
+                                    refreshList(noteManager);
+                                }
+                            } catch (Exception e) {
+                                //catch possible unique index violation
+                                refreshList(noteManager);
+                            }
+                        }
+                        // finish anyway
+                        mode.finish();
+                    }
+                })
+                .execute();
     }
 
     public class ActionBarCallBack implements ActionMode.Callback {
@@ -125,6 +157,7 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
                         performDeleteAction(mode, value);
                         break;
                     case R.id.edit:
+                        performEditAction(mode, value);
                         break;
                 }
             }
@@ -140,23 +173,30 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
 
     private void performAddAction(BasicNoteValueA value) {
         DBNoteManager mNoteManager = new DBNoteManager(getActivity());
-        if (mNoteManager.insertNoteValue(mBasicNoteValueData.getNote(), value) != -1) {
-            // refresh list
-            refreshList(mNoteManager);
+        try {
+            if (mNoteManager.insertNoteValue(mBasicNoteValueData.getNote(), value) != -1) {
+                // refresh list
+                refreshList(mNoteManager);
 
-            mRecyclerView.getAdapter().notifyDataSetChanged();
+                mRecyclerView.getAdapter().notifyDataSetChanged();
 
-            //ensure added element is visible
-            int newItemPos = - 1;
-            for (int i = 0; i < mBasicNoteValueData.getValues().size(); i++) {
-                if (mBasicNoteValueData.getValues().get(i).getValue().equals(value.getValue())) {
-                    newItemPos = i;
-                    break;
+                //ensure added element is visible
+                int newItemPos = -1;
+                for (int i = 0; i < mBasicNoteValueData.getValues().size(); i++) {
+                    if (mBasicNoteValueData.getValues().get(i).getValue().equals(value.getValue())) {
+                        newItemPos = i;
+                        break;
+                    }
                 }
+                if (newItemPos > -1)
+                    mRecyclerView.scrollToPosition(newItemPos);
             }
-            if (newItemPos > -1)
-                mRecyclerView.scrollToPosition(newItemPos);
-        };
+            ;
+        } catch (Exception e) {
+            //catch possible unique index violation
+            refreshList(mNoteManager);
+            e.printStackTrace();
+        }
     }
 
     @Override

@@ -14,6 +14,10 @@ public class BasicNoteValueA extends BasicEntityNoteA implements Parcelable  {
         return mValue;
     }
 
+    public void setValue(String value) {
+        mValue = value;
+    }
+
     private BasicNoteValueA() {
 
     }

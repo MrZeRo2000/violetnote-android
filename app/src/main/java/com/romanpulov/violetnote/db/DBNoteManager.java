@@ -277,6 +277,14 @@ public class DBNoteManager extends BasicCommonNoteManager {
         return mDB.update(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, cv, DBBasicNoteOpenHelper.NOTES_TABLE_COLS[0] + "=" + note.getId(), null);
     }
 
+    public long updateNoteValueValue(BasicNoteValueA item) {
+        ContentValues cv = new ContentValues();
+
+        cv.put(DBBasicNoteOpenHelper.NOTE_VALUES_TABLE_COLS[2], item.getValue());
+
+        return mDB.update(DBBasicNoteOpenHelper.NOTE_VALUES_TABLE_NAME, cv, DBBasicNoteOpenHelper.ID_COLUMN_NAME + " = ?", new String[] {String.valueOf(item.getId())});
+    }
+
     public long insertNoteItem(BasicNoteA note, BasicNoteItemA item) {
         ContentValues cv = new ContentValues();
 
