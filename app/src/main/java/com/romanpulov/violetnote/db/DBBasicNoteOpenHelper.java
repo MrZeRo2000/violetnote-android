@@ -86,6 +86,13 @@ public class DBBasicNoteOpenHelper extends SQLiteOpenHelper {
             "CREATE INDEX fk_" + NOTE_VALUES_TABLE_NAME +
                     " ON " + NOTE_VALUES_TABLE_NAME + "(" +
                     NOTE_ID_COLUMN_NAME + ")";
+    private static final String NOTE_VALUES_U_INDEX_CREATE =
+            "CREATE UNIQUE INDEX u_" + NOTE_VALUES_TABLE_NAME +
+                    " ON " + NOTE_VALUES_TABLE_NAME + "(" +
+                    NOTE_ID_COLUMN_NAME + ", " +
+                    VALUE_COLUMN_NAME +
+                    ")";
+
 
     //note items history
     public static final String NOTE_ITEMS_HISTORY_TABLE_NAME = "note_items_history";
@@ -122,12 +129,19 @@ public class DBBasicNoteOpenHelper extends SQLiteOpenHelper {
     }
 
     @Override
+    public void onOpen(SQLiteDatabase db) {
+        super.onOpen(db);
+        db.setForeignKeyConstraintsEnabled(true);
+    }
+
+    @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(NOTES_TABLE_CREATE);
         db.execSQL(NOTE_ITEMS_TABLE_CREATE);
         db.execSQL(NOTE_ITEMS_FK_INDEX_CREATE);
         db.execSQL(NOTE_VALUES_TABLE_CREATE);
         db.execSQL(NOTE_VALUES_FK_INDEX_CREATE);
+        db.execSQL(NOTE_VALUES_U_INDEX_CREATE);
         db.execSQL(NOTE_ITEMS_HISTORY_TABLE_CREATE);
         db.execSQL(NOTE_ITEMS_HISTORY_FK_INDEX_CREATE);
         db.execSQL(NOTE_ITEMS_HISTORY_U_INDEX_CREATE);
