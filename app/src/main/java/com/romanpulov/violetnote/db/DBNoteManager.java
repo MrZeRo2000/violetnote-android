@@ -11,6 +11,7 @@ import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteHistoryItemA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
+import com.romanpulov.violetnote.model.BasicNoteValueA;
 import com.romanpulov.violetnote.model.BasicNoteValueDataA;
 
 import java.util.ArrayList;
@@ -91,7 +92,7 @@ public class DBNoteManager extends BasicCommonNoteManager {
         try {
             c = mDB.query(
                     DBBasicNoteOpenHelper.NOTE_VALUES_TABLE_NAME, new String[] {DBBasicNoteOpenHelper.NOTE_VALUES_TABLE_COLS[2]},
-                    "note_id=?", new String[] {String.valueOf(note.getId())}, null, null, null
+                    DBBasicNoteOpenHelper.NOTE_ID_COLUMN_NAME + " = ?", new String[] {String.valueOf(note.getId())}, null, null, null
             );
 
             for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
@@ -130,7 +131,7 @@ public class DBNoteManager extends BasicCommonNoteManager {
         try {
             c = mDB.query(
                     DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME, DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_COLS,
-                    "note_id=?", new String[] {String.valueOf(note.getId())}, null, null, DBBasicNoteOpenHelper.ORDER_COLUMN_NAME
+                    DBBasicNoteOpenHelper.NOTE_ID_COLUMN_NAME + " = ?", new String[] {String.valueOf(note.getId())}, null, null, DBBasicNoteOpenHelper.ORDER_COLUMN_NAME
             );
 
             for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
@@ -153,7 +154,7 @@ public class DBNoteManager extends BasicCommonNoteManager {
             try {
                 c = mDB.query(
                         DBBasicNoteOpenHelper.NOTE_VALUES_TABLE_NAME, new String[]{DBBasicNoteOpenHelper.NOTE_VALUES_TABLE_COLS[2]},
-                        "note_id=?", new String[]{String.valueOf(note.getId())}, null, null, null
+                        DBBasicNoteOpenHelper.NOTE_ID_COLUMN_NAME + " = ?", new String[]{String.valueOf(note.getId())}, null, null, null
                 );
 
                 for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
@@ -167,19 +168,20 @@ public class DBNoteManager extends BasicCommonNoteManager {
         }
     }
 
-    public void queryNoteDataValuesOrdered(BasicNoteA note, List<String> values) {
+    public void queryNoteDataValuesOrdered(BasicNoteA note, List<BasicNoteValueA> values) {
         //clear values
         values.clear();
 
         Cursor c = null;
         try {
             c = mDB.query(
-                    DBBasicNoteOpenHelper.NOTE_VALUES_TABLE_NAME, new String[]{DBBasicNoteOpenHelper.NOTE_VALUES_TABLE_COLS[2]},
+                    DBBasicNoteOpenHelper.NOTE_VALUES_TABLE_NAME, new String[]{DBBasicNoteOpenHelper.NOTE_VALUES_TABLE_COLS[0], DBBasicNoteOpenHelper.NOTE_VALUES_TABLE_COLS[2]},
                     DBBasicNoteOpenHelper.NOTE_ID_COLUMN_NAME + " = ?", new String[]{String.valueOf(note.getId())}, null, null, DBBasicNoteOpenHelper.NOTE_VALUES_TABLE_COLS[2]
             );
 
             for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
-                values.add(c.getString(0));
+                values.add(BasicNoteValueA.newInstance(c.getLong(0), c.getString(1)));
+
             }
 
         } finally {
@@ -319,10 +321,15 @@ public class DBNoteManager extends BasicCommonNoteManager {
     public void checkOut(BasicNoteA note) {
         for (BasicNoteItemA item : note.getItems()) {
             if (item.getChecked()) {
-                //add note values for not encrypted only
+
+                //add note values and history for not encrypted only
                 if (!note.isEncrypted()) {
+                    //insert value
                     if (note.getValues().add(item.getValue()))
-                        insertNoteValue(note, item.getValue());
+                        insertNoteValue(note, BasicNoteValueA.newEditInstance(item.getValue()));
+
+                    //insert history
+                    insertNoteHistory(note, item.getValue());
                 }
 
                 //delete note
@@ -331,11 +338,11 @@ public class DBNoteManager extends BasicCommonNoteManager {
         }
     }
 
-    public long insertNoteValue(BasicNoteA note, String value) {
+    public long insertNoteValue(BasicNoteA note, BasicNoteValueA value) {
         ContentValues cv = new ContentValues();
 
         cv.put(DBBasicNoteOpenHelper.NOTE_VALUES_TABLE_COLS[1], note.getId());
-        cv.put(DBBasicNoteOpenHelper.NOTE_VALUES_TABLE_COLS[2], value);
+        cv.put(DBBasicNoteOpenHelper.NOTE_VALUES_TABLE_COLS[2], value.getValue());
 
         return mDB.insert(DBBasicNoteOpenHelper.NOTE_VALUES_TABLE_NAME, null, cv);
     }

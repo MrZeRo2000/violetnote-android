@@ -81,7 +81,7 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             mode.getMenuInflater().inflate(R.menu.menu_listitem_minimal_actions, menu);
             if (mRecyclerViewSelector.getSelectedItemPos() != -1)
-                mode.setTitle(mBasicNoteValueData.getValues().get(mRecyclerViewSelector.getSelectedItemPos()));
+                mode.setTitle(mBasicNoteValueData.getValues().get(mRecyclerViewSelector.getSelectedItemPos()).getValue());
             return true;
         }
 
@@ -94,9 +94,10 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             int selectedItemPos = mRecyclerViewSelector.getSelectedItemPos();
             if (selectedItemPos != -1) {
-                String value = mBasicNoteValueData.getValues().get(selectedItemPos);
+                BasicNoteValueA value = mBasicNoteValueData.getValues().get(selectedItemPos);
                 switch (item.getItemId()) {
                     case R.id.delete:
+                        //performDeleteAction(mode, value);
                         break;
                     case R.id.edit:
                         break;
@@ -112,7 +113,7 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
         }
     }
 
-    private void performAddAction(String value) {
+    private void performAddAction(BasicNoteValueA value) {
         DBNoteManager mNoteManager = new DBNoteManager(getActivity());
         if (mNoteManager.insertNoteValue(mBasicNoteValueData.getNote(), value) != -1) {
             // refresh list
@@ -121,7 +122,13 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
             mRecyclerView.getAdapter().notifyDataSetChanged();
 
             //ensure added element is visible
-            int newItemPos = mBasicNoteValueData.getValues().indexOf(value);
+            int newItemPos = - 1;
+            for (int i = 0; i < mBasicNoteValueData.getValues().size(); i++) {
+                if (mBasicNoteValueData.getValues().get(i).getValue().equals(value.getValue())) {
+                    newItemPos = i;
+                    break;
+                }
+            }
             if (newItemPos > -1)
                 mRecyclerView.scrollToPosition(newItemPos);
         };
@@ -151,7 +158,7 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
         mAddActionHelper.setOnAddInteractionListener(new AddActionHelper.OnAddInteractionListener() {
             @Override
             public void onAddFragmentInteraction(final String text) {
-                performAddAction(text);
+                performAddAction(BasicNoteValueA.newEditInstance(text));
             }
         });
 
@@ -190,6 +197,6 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
      */
     public interface OnNoteValueFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onNoteValueClicked(String item, int adapterPosition);
+        void onNoteValueClicked(BasicNoteValueA item, int adapterPosition);
     }
 }

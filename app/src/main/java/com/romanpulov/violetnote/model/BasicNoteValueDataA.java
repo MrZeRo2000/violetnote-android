@@ -12,13 +12,13 @@ import java.util.List;
 
 public class BasicNoteValueDataA implements Parcelable {
     protected BasicNoteA mNote;
-    protected List<String> mValues;
+    protected List<BasicNoteValueA> mValues;
 
     public BasicNoteA getNote() {
         return mNote;
     }
 
-    public List<String> getValues() {
+    public List<BasicNoteValueA> getValues() {
         return mValues;
     }
 
@@ -26,7 +26,7 @@ public class BasicNoteValueDataA implements Parcelable {
 
     }
 
-    public static BasicNoteValueDataA newInstance(BasicNoteA note, List<String> values) {
+    public static BasicNoteValueDataA newInstance(BasicNoteA note, List<BasicNoteValueA> values) {
         BasicNoteValueDataA instance = new BasicNoteValueDataA();
 
         instance.mNote = note;
@@ -39,7 +39,7 @@ public class BasicNoteValueDataA implements Parcelable {
         //mNote = BasicNoteA.CREATOR.createFromParcel(in);
         mNote = in.readParcelable(BasicNoteA.class.getClassLoader());
         mValues = new ArrayList<>();
-        in.readStringList(mValues);
+        in.readTypedList(mValues, BasicNoteValueA.CREATOR);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class BasicNoteValueDataA implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeParcelable(mNote, 0);
-        dest.writeStringList(mValues);
+        dest.writeTypedList(mValues);
     }
 
     public static final Parcelable.Creator<BasicNoteValueDataA> CREATOR = new Parcelable.Creator<BasicNoteValueDataA>() {

@@ -18,6 +18,7 @@ import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
+import com.romanpulov.violetnote.model.BasicNoteValueA;
 import com.romanpulov.violetnote.model.BasicNoteValueDataA;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutor;
 import com.romanpulov.violetnote.view.action.BasicNoteDataItemCheckOutAction;
@@ -197,7 +198,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                     Intent intent = new Intent(getActivity(), BasicNoteValueActivity.class);
 
                     //retrieve data
-                    List<String> values = new ArrayList<>();
+                    List<BasicNoteValueA> values = new ArrayList<>();
                     DBNoteManager manager = new DBNoteManager(getActivity());
                     manager.queryNoteDataValuesOrdered(mBasicNoteData.getNote(), values);
                     BasicNoteValueDataA noteValueDataA = BasicNoteValueDataA.newInstance(mBasicNoteData.getNote(), values);

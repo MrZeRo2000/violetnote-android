@@ -8,13 +8,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.model.BasicNoteValueA;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 
 import java.util.List;
 
 public class BasicNoteValueRecyclerViewAdapter extends RecyclerView.Adapter<BasicNoteValueRecyclerViewAdapter.ViewHolder> {
 
-    private final List<String> mItems;
+    private final List<BasicNoteValueA> mItems;
     private final RecyclerViewHelper.RecyclerViewSelector mRecyclerViewSelector;
     private final BasicNoteValueFragment.OnNoteValueFragmentInteractionListener mListener;
 
@@ -22,7 +23,7 @@ public class BasicNoteValueRecyclerViewAdapter extends RecyclerView.Adapter<Basi
         return mRecyclerViewSelector;
     }
 
-    public BasicNoteValueRecyclerViewAdapter(List<String> items, ActionMode.Callback actionModeCallback, BasicNoteValueFragment.OnNoteValueFragmentInteractionListener listener) {
+    public BasicNoteValueRecyclerViewAdapter(List<BasicNoteValueA> items, ActionMode.Callback actionModeCallback, BasicNoteValueFragment.OnNoteValueFragmentInteractionListener listener) {
         mItems = items;
         mRecyclerViewSelector = new RecyclerViewHelper.RecyclerViewSelector(this, actionModeCallback);
         mListener = listener;
@@ -38,7 +39,7 @@ public class BasicNoteValueRecyclerViewAdapter extends RecyclerView.Adapter<Basi
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mItems.get(position);
-        holder.mValueView.setText(mItems.get(position));
+        holder.mValueView.setText(mItems.get(position).getValue());
 
         // background
         holder.updateBackground();
@@ -51,7 +52,7 @@ public class BasicNoteValueRecyclerViewAdapter extends RecyclerView.Adapter<Basi
 
     public class ViewHolder extends RecyclerViewHelper.SelectableViewHolder {
         public final TextView mValueView;
-        public String mItem;
+        public BasicNoteValueA mItem;
 
         public ViewHolder(View view, RecyclerViewHelper.RecyclerViewSelector viewSelector) {
             super(view, viewSelector);
@@ -61,7 +62,7 @@ public class BasicNoteValueRecyclerViewAdapter extends RecyclerView.Adapter<Basi
         private void updateSelectedTitle() {
             ActionMode actionMode;
             if ((mRecyclerViewSelector != null) && ((actionMode = mRecyclerViewSelector.getActionMode()) != null) && (mRecyclerViewSelector.getSelectedItemPos() != -1))
-                actionMode.setTitle(mItems.get(mRecyclerViewSelector.getSelectedItemPos()));
+                actionMode.setTitle(mItems.get(mRecyclerViewSelector.getSelectedItemPos()).getValue());
         }
 
         @Override
