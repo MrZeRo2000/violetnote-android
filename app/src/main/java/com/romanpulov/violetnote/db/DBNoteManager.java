@@ -21,6 +21,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static com.romanpulov.violetnote.db.DBBasicNoteOpenHelper.NOTE_ID_SELECTION_STRING;
+
 /**
  * Created by romanpulov on 17.08.2016.
  */
@@ -263,6 +265,16 @@ public class DBNoteManager extends BasicCommonNoteManager {
     }
 
     public long deleteNote(BasicNoteA note) {
+        String[] noteIdArgs = new String[] {String.valueOf(note.getId())};
+
+        //history
+        mDB.delete(DBBasicNoteOpenHelper.NOTE_ITEMS_HISTORY_TABLE_NAME, DBBasicNoteOpenHelper.NOTE_ID_SELECTION_STRING, noteIdArgs);
+        //values
+        mDB.delete(DBBasicNoteOpenHelper.NOTE_VALUES_TABLE_NAME, DBBasicNoteOpenHelper.NOTE_ID_SELECTION_STRING, noteIdArgs);
+        //items
+        mDB.delete(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME, DBBasicNoteOpenHelper.NOTE_ID_SELECTION_STRING, noteIdArgs);
+
+        //note
         return mDB.delete(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, DBBasicNoteOpenHelper.NOTES_TABLE_COLS[0] + "=" + note.getId(), null);
     }
 

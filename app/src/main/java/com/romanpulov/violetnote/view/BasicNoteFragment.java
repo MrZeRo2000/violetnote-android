@@ -79,7 +79,7 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
             public void OnClick(DialogFragment dialog) {
                 // delete item
                 DBNoteManager mNoteManager = new DBNoteManager(getActivity());
-                mNoteManager.deleteEntityNote(getDBTableName(), item);
+                mNoteManager.deleteNote(item);
 
                 // refresh list
                 refreshList(mNoteManager);
