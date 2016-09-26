@@ -51,21 +51,6 @@ public class BasicNoteEditActivity extends ActionBarCompatActivity {
         }
     }
 
-    private void updatePasswordButton(Button button, Integer tag) {
-        switch (tag) {
-            case PASSWORD_SET_TAG:
-                button.setTag(PASSWORD_SET_TAG);
-                button.setText(R.string.ui_text_set_password);
-                button.getCompoundDrawables()[0].setAlpha(PASSWORD_SET_TAG);
-                break;
-            case PASSWORD_CLEAR_TAG:
-                button.setTag(PASSWORD_CLEAR_TAG);
-                button.setText(R.string.ui_text_clear_password);
-                button.getCompoundDrawables()[0].setAlpha(PASSWORD_CLEAR_TAG);
-                break;
-        }
-    }
-
     private BasicNoteA newNote() {
         return BasicNoteA.newEditInstance(
                 mViewHolder.mNoteTypeChecked.isChecked() ? 0 : 1,

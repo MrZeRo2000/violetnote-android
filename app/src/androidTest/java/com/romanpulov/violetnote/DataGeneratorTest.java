@@ -9,6 +9,7 @@ import com.romanpulov.violetnote.db.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
+import com.romanpulov.violetnote.model.BasicNoteValueA;
 
 import java.util.List;
 import java.util.Locale;
@@ -77,7 +78,7 @@ public class DataGeneratorTest extends ApplicationTestCase<Application> {
                             valueFormat = "This is a very very very very very very long value %2d";
 
                         String newValue = String.format(Locale.getDefault(), valueFormat, j);
-                        assertFalse(-1 == noteManager.insertNoteValue(newNote, newValue));
+                        assertFalse(-1 == noteManager.insertNoteValue(newNote, BasicNoteValueA.newEditInstance(newValue)));
                     }
 
                     //history for checked items

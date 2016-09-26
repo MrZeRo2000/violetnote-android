@@ -15,7 +15,7 @@
         android:id="@+id/title_edit_text"
         android:textCursorDrawable="@null"
         android:maxLines="1"
-        android:hint="@string/ui_note_title_hint"
+        android:hint="@string/hint_title"
         />
 
     <RadioGroup

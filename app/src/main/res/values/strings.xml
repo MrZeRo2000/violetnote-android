@@ -11,6 +11,7 @@
     <string name="hint_add">Add &#8230;</string>
     <string name="hint_name">Name &#8230;</string>
     <string name="hint_value">Value &#8230;</string>
+    <string name="hint_title">Title &#8230;</string>
 
     <string name="layout_notes_count">Notes : %d</string>
 
@@ -85,10 +86,6 @@
     <string name="ui_note_type_named">Named</string>
     <string name="ui_note_title">Title</string>
     <string name="ui_name_value_title">Name and value</string>
-    <string name="ui_note_title_hint">Title</string>
-    <string name="ui_text_set_password">Set password</string>
-    <string name="ui_text_clear_password">Clear password</string>
-
     <string name="ui_question_are_you_sure">Are you sure?</string>
     <string name="ui_question_are_you_sure_checkout_items">Are you sure to checkout %d items?</string>
 
