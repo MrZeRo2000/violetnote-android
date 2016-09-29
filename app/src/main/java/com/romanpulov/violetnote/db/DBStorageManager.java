@@ -14,6 +14,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
+ * Backup and restore for BasicNote database
  * Created by romanpulov on 29.09.2016.
  */
 
