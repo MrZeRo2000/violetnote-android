@@ -47,3 +47,6 @@ captures/
 
 # Database files
 data/*.db
+
+# data test files
+data/*test*
