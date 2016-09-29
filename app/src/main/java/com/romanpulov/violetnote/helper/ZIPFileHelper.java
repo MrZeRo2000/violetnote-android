@@ -11,6 +11,7 @@ import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
 /**
+ * Helper class for zipping and unzipping operations *
  * Created by romanpulov on 29.09.2016.
  */
 
@@ -21,6 +22,12 @@ public class ZIPFileHelper {
         return fileName.substring(0, fileName.lastIndexOf(".")) + ZIP_EXT;
     }
 
+    /**
+     * ZIPs the file to the same path with zip extension
+     * @param filePath path to file
+     * @param fileName file name
+     * @return true if successful
+     */
     public static boolean zipFile(String filePath, String fileName) {
         File sourceFile = new File(filePath + fileName);
         if (!sourceFile.exists())
@@ -73,6 +80,12 @@ public class ZIPFileHelper {
         return true;
     }
 
+    /**
+     * Unzips from archive to the same path with original zipped name
+     * @param filePath path to zipped file
+     * @param fileName zipped file name
+     * @return true if successful
+     */
     public static boolean unZipFile(String filePath, String fileName) {
         ZipFile zipFile = null;
         InputStream inputStream = null;
