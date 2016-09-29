@@ -8,11 +8,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 import static org.junit.Assert.assertTrue;
@@ -24,7 +26,9 @@ import static org.junit.Assert.assertTrue;
 public class ZipTest {
     private static final String FILE_PATH = "../data/";
     private static final String FILE_NAME = "ziptest.txt";
+    private static final String OLD_FILE_NAME = "ziptest.txt.old";
     private static final String ZIP_FILE_NAME = "ziptest.zip";
+    private static final String UNZIP_FILE_NAME = "ziptestunzip.txt";
 
     @Test
     public void test1() {
@@ -37,6 +41,10 @@ public class ZipTest {
             assertTrue(f.delete());
 
         f = new File(FILE_PATH + ZIP_FILE_NAME);
+        if (f.exists())
+            assertTrue(f.delete());
+
+        f = new File(FILE_PATH + OLD_FILE_NAME);
         if (f.exists())
             assertTrue(f.delete());
     }
@@ -87,7 +95,6 @@ public class ZipTest {
         System.out.println(fileName.substring(0, fileName.lastIndexOf(".")));
     }
 
-    @Test
     public void ZipFileHelperTest() throws Exception {
         clearTestFile();
 
@@ -95,4 +102,40 @@ public class ZipTest {
 
         assertTrue(ZIPFileHelper.zipFile(FILE_PATH, FILE_NAME));
     }
+
+    @Test
+    public void unZipFileHelperTest() throws Exception {
+        //create source file
+        ZipFileHelperTest();
+
+        //rename old file
+        File f = new File(FILE_PATH + FILE_NAME);
+        if (f.exists())
+            assertTrue(f.renameTo(new File(FILE_PATH + OLD_FILE_NAME)));
+
+        //unzip
+        assertTrue(ZIPFileHelper.unZipFile(FILE_PATH, ZIP_FILE_NAME));
+
+        /*
+        ZipFile zipFile = new ZipFile(FILE_PATH + ZIP_FILE_NAME);
+
+        if (zipFile.entries().hasMoreElements()) {
+            ZipEntry zipEntry = zipFile.entries().nextElement();
+
+            InputStream inputStream = zipFile.getInputStream(zipEntry);
+            OutputStream outputStream = new FileOutputStream(FILE_PATH + zipEntry.getName() + UNZIP_FILE_NAME);
+
+            byte[] buffer = new byte[1024];
+            int len;
+            while ((len = inputStream.read(buffer)) > 0) {
+                outputStream.write(buffer, 0, len);
+            }
+
+            inputStream.close();
+            outputStream.flush();
+            outputStream.close();
+        }
+        */
+    }
+
 }

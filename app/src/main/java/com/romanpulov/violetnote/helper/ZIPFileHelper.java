@@ -5,7 +5,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
 /**
@@ -62,6 +64,60 @@ public class ZIPFileHelper {
                 try {
                     zipOutputStream.flush();
                     zipOutputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return true;
+    }
+
+    public static boolean unZipFile(String filePath, String fileName) {
+        ZipFile zipFile = null;
+        InputStream inputStream = null;
+        OutputStream outputStream = null;
+        try {
+            zipFile = new ZipFile(filePath + fileName);
+            if (zipFile.entries().hasMoreElements()) {
+                ZipEntry zipEntry = zipFile.entries().nextElement();
+
+                inputStream = zipFile.getInputStream(zipEntry);
+                outputStream = new FileOutputStream(filePath + zipEntry.getName());
+
+                byte[] buffer = new byte[1024];
+                int len;
+                while ((len = inputStream.read(buffer)) > 0) {
+                    outputStream.write(buffer, 0, len);
+                }
+            }
+
+        } catch (IOException e) {
+            return false;
+
+        } finally {
+            //zip file
+            if (zipFile != null)
+            try {
+                zipFile.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            //input stream
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            //output stream
+            if (outputStream != null) {
+                try {
+                    outputStream.flush();
+                    outputStream.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
