@@ -19,7 +19,12 @@ public class ZIPFileHelper {
     private static String ZIP_EXT = ".zip";
 
     private static String getZipFileName(String fileName){
-        return fileName.substring(0, fileName.lastIndexOf(".")) + ZIP_EXT;
+        int extensionPos = fileName.lastIndexOf(".");
+
+        if (extensionPos == -1)
+            return fileName + ZIP_EXT;
+        else
+            return fileName.substring(0, extensionPos) + ZIP_EXT;
     }
 
     /**
