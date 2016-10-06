@@ -98,9 +98,10 @@ public class DBStorageManager {
         String fileName = DBStorageManager.getLocalBackupFolderName() + LOCAL_BACKUP_FILE_NAME;
         String zipFileName = ZIPFileHelper.getZipFileName(DBStorageManager.getLocalBackupFolderName() + LOCAL_BACKUP_FILE_NAME);
 
-        //roll copies of data
+        //roll copies of data: first try rename, then copy
         if (!FileHelper.renameCopies(zipFileName))
-            return null;
+            if ((!FileHelper.saveCopies(zipFileName)))
+                return null;
 
         //create backup
         String result = createLocalBackup();
