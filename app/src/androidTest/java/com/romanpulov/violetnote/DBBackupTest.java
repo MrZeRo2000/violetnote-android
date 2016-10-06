@@ -8,6 +8,9 @@ import com.romanpulov.violetnote.db.DBBasicNoteHelper;
 import com.romanpulov.violetnote.db.DBBasicNoteOpenHelper;
 import com.romanpulov.violetnote.db.DBStorageManager;
 
+//import java.nio.file.StandardCopyOption;
+
+
 /**
  * Created by romanpulov on 29.09.2016.
  */
@@ -32,8 +35,9 @@ public class DBBackupTest extends ApplicationTestCase<Application> {
         DBBasicNoteHelper.getInstance(getContext()).closeDB();
 
         DBStorageManager storageManager = new DBStorageManager(getContext());
-        assertTrue(storageManager.createLocalBackup() != null);
+        assertNotNull(storageManager.createLocalBackup());
 
         DBBasicNoteHelper.getInstance(getContext()).openDB();
     }
+
 }
