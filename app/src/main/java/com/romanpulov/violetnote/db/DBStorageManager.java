@@ -3,6 +3,7 @@ package com.romanpulov.violetnote.db;
 import android.content.Context;
 import android.os.Environment;
 
+import com.romanpulov.violetnote.helper.FileHelper;
 import com.romanpulov.violetnote.helper.ZIPFileHelper;
 
 import java.io.File;
@@ -29,7 +30,7 @@ public class DBStorageManager {
     }
 
     public static String getLocalBackupFileName() {
-        return LOCAL_BACKUP_FILE_NAME;
+        return DBStorageManager.getLocalBackupFolderName() + LOCAL_BACKUP_FILE_NAME;
     }
 
     public DBStorageManager(Context context) {
@@ -54,7 +55,7 @@ public class DBStorageManager {
         OutputStream outputStream = null;
         try {
             inputStream = new FileInputStream(getDatabasePath());
-            outputStream = new FileOutputStream(DBStorageManager.getLocalBackupFolderName() + LOCAL_BACKUP_FILE_NAME);
+            outputStream = new FileOutputStream(getLocalBackupFileName());
 
             //write
             byte[] buffer = new byte[1024];
@@ -89,9 +90,25 @@ public class DBStorageManager {
         }
 
         //archive file
-        if (!ZIPFileHelper.zipFile(DBStorageManager.getLocalBackupFolderName(), LOCAL_BACKUP_FILE_NAME))
+        return ZIPFileHelper.zipFile(DBStorageManager.getLocalBackupFolderName(), LOCAL_BACKUP_FILE_NAME);
+    }
+
+    public String createRollingLocalBackup() {
+        //get file names
+        String fileName = DBStorageManager.getLocalBackupFolderName() + LOCAL_BACKUP_FILE_NAME;
+        String zipFileName = ZIPFileHelper.getZipFileName(DBStorageManager.getLocalBackupFolderName() + LOCAL_BACKUP_FILE_NAME);
+
+        //roll copies of data
+        if (!FileHelper.renameCopies(zipFileName))
             return null;
 
-        return LOCAL_BACKUP_FOLDER_NAME + LOCAL_BACKUP_FILE_NAME;
+        //create backup
+        String result = createLocalBackup();
+
+        //delete non zipped file, ignore any errors
+        if (result != null)
+            FileHelper.delete(fileName);
+
+        return result;
     }
 }

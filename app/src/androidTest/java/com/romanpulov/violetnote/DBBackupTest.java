@@ -35,7 +35,9 @@ public class DBBackupTest extends ApplicationTestCase<Application> {
         DBBasicNoteHelper.getInstance(getContext()).closeDB();
 
         DBStorageManager storageManager = new DBStorageManager(getContext());
-        assertNotNull(storageManager.createLocalBackup());
+
+        //assertNotNull(storageManager.createLocalBackup());
+        assertNotNull(storageManager.createRollingLocalBackup());
 
         DBBasicNoteHelper.getInstance(getContext()).openDB();
     }

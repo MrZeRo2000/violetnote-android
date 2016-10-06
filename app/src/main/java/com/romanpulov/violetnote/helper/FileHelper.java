@@ -14,13 +14,20 @@ import java.util.Locale;
  */
 
 public class FileHelper {
+    private static final int FILE_BUF_LEN = 1024;
     private static final String FILE_EXTENSION = ".";
     private static final String FILE_TEMP_EXTENSION = ".temp";
     private static final String FILE_COPY_FORMAT = "%s.bak%02d";
 
     private static int mFileKeepCopiesCount = 5;
 
+    /**
+     * Sets retained file copies count, default is 5
+     * @param value new value, should be 2 or more
+     */
     public static void setFileKeepCopiesCount(int value) {
+        if (value < 2)
+            throw new RuntimeException("Invalid value for copies count, should be at least 2");
         mFileKeepCopiesCount = value;
     }
 
@@ -71,7 +78,8 @@ public class FileHelper {
             inputStream = new FileInputStream(sourceFileName);
             outputStream = new FileOutputStream(destFileName);
 
-            byte[] buf = new byte[1024];
+            //copy routine
+            byte[] buf = new byte[FILE_BUF_LEN];
             int len;
             while ((len = inputStream.read(buf)) > 0) {
                 outputStream.write(buf, 0, len);
@@ -127,6 +135,28 @@ public class FileHelper {
         return true;
     }
 
+    /**
+     * Save rolling copies of a file
+     * @param fileName full file name path
+     * @return true if successful
+     */
+    public static boolean renameCopies(String fileName) {
+        for (int cp = mFileKeepCopiesCount - 1; cp >= 0; cp--) {
+            File fc = new File(cp == 0 ? fileName : String.format(Locale.getDefault(), FILE_COPY_FORMAT, fileName, cp));
+            String copyFileName = String.format(Locale.getDefault(), FILE_COPY_FORMAT, fileName, cp + 1);
+            if (fc.exists()) {
+                if (!fc.renameTo(new File(copyFileName)))
+                    return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Renames temp file to normal file
+     * @param tempFileName temp file name
+     * @return true if successful
+     */
     public static boolean renameTempFile(String tempFileName) {
         String targetFileName = removeExtension(tempFileName, FILE_TEMP_EXTENSION);
         return ((!targetFileName.equals(tempFileName)) && copy(tempFileName, targetFileName) && delete(tempFileName));

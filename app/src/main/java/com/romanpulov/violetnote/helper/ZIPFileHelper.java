@@ -18,7 +18,7 @@ import java.util.zip.ZipOutputStream;
 public class ZIPFileHelper {
     private static String ZIP_EXT = ".zip";
 
-    private static String getZipFileName(String fileName){
+    public static String getZipFileName(String fileName){
         int extensionPos = fileName.lastIndexOf(".");
 
         if (extensionPos == -1)
@@ -33,10 +33,10 @@ public class ZIPFileHelper {
      * @param fileName file name
      * @return true if successful
      */
-    public static boolean zipFile(String filePath, String fileName) {
+    public static String zipFile(String filePath, String fileName) {
         File sourceFile = new File(filePath + fileName);
         if (!sourceFile.exists())
-            return false;
+            return null;
 
         File zipFile = new File(filePath + getZipFileName(fileName));
 
@@ -60,7 +60,7 @@ public class ZIPFileHelper {
             //complete entry
             zipOutputStream.closeEntry();
         } catch (IOException e) {
-            return false;
+            return null;
         } finally {
             //close input
             if (inputStream != null) {
@@ -82,7 +82,7 @@ public class ZIPFileHelper {
             }
         }
 
-        return true;
+        return zipFile.getPath();
     }
 
     /**
