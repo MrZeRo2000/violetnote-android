@@ -7,12 +7,6 @@ import com.romanpulov.violetnote.helper.FileHelper;
 import com.romanpulov.violetnote.helper.ZIPFileHelper;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 
 /**
  * Backup and restore for BasicNote database
@@ -33,6 +27,10 @@ public class DBStorageManager {
         return DBStorageManager.getLocalBackupFolderName() + LOCAL_BACKUP_FILE_NAME;
     }
 
+    public static String getLocalBackupZIPFileName() {
+        return ZIPFileHelper.getZipFileName(getLocalBackupFileName());
+    }
+
     public DBStorageManager(Context context) {
         mContext = context;
     }
@@ -51,52 +49,38 @@ public class DBStorageManager {
         }
 
         //write file
-        InputStream inputStream = null;
-        OutputStream outputStream = null;
-        try {
-            inputStream = new FileInputStream(getDatabasePath());
-            outputStream = new FileOutputStream(getLocalBackupFileName());
-
-            //write
-            byte[] buffer = new byte[1024];
-            int len;
-            while ((len = inputStream.read(buffer)) > 0) {
-                outputStream.write(buffer, 0, len);
-            }
-
-        } catch (IOException e) {
+        if (!FileHelper.copy(getDatabasePath(), getLocalBackupFileName()))
             return null;
-        }
-        finally {
-            //input stream
-            if (inputStream != null) {
-                try {
-                    inputStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-            //output stream
-            if (outputStream != null) {
-                try {
-                    outputStream.flush();
-                    outputStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
 
         //archive file
         return ZIPFileHelper.zipFile(DBStorageManager.getLocalBackupFolderName(), LOCAL_BACKUP_FILE_NAME);
     }
 
+    public String restoreLocalBackup() {
+        String localBackupFileName = getLocalBackupFileName();
+        String zipFileName = getLocalBackupZIPFileName();
+
+        File zipFile = new File(zipFileName);
+        if (!zipFile.exists())
+            return null;
+
+        if (!ZIPFileHelper.unZipFile(DBStorageManager.getLocalBackupFolderName(), ZIPFileHelper.getZipFileName(LOCAL_BACKUP_FILE_NAME)))
+            return null;
+
+        File file = new File(localBackupFileName);
+        if (!file.exists())
+            return null;
+
+        if (!FileHelper.copy(localBackupFileName, getDatabasePath()))
+            return null;
+
+        return localBackupFileName;
+    }
+
     public String createRollingLocalBackup() {
         //get file names
-        String fileName = DBStorageManager.getLocalBackupFolderName() + LOCAL_BACKUP_FILE_NAME;
-        String zipFileName = ZIPFileHelper.getZipFileName(DBStorageManager.getLocalBackupFolderName() + LOCAL_BACKUP_FILE_NAME);
+        String fileName = getLocalBackupFileName();
+        String zipFileName = getLocalBackupZIPFileName();
 
         //roll copies of data: first try rename, then copy
         if (!FileHelper.renameCopies(zipFileName))

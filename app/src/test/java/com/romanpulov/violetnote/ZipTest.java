@@ -17,6 +17,7 @@ import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
+import static junit.framework.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -100,7 +101,7 @@ public class ZipTest {
 
         createTestFile();
 
-        assertTrue(ZIPFileHelper.zipFile(FILE_PATH, FILE_NAME));
+        assertNotNull(ZIPFileHelper.zipFile(FILE_PATH, FILE_NAME));
     }
 
     @Test
