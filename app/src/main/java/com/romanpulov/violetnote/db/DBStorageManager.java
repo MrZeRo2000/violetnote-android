@@ -58,19 +58,22 @@ public class DBStorageManager {
 
     public String restoreLocalBackup() {
         String localBackupFileName = getLocalBackupFileName();
-        String zipFileName = getLocalBackupZIPFileName();
 
-        File zipFile = new File(zipFileName);
+        //check backup availability
+        File zipFile = new File(getLocalBackupZIPFileName());
         if (!zipFile.exists())
             return null;
 
+        //extract backup
         if (!ZIPFileHelper.unZipFile(DBStorageManager.getLocalBackupFolderName(), ZIPFileHelper.getZipFileName(LOCAL_BACKUP_FILE_NAME)))
             return null;
 
+        //check restored file availability
         File file = new File(localBackupFileName);
         if (!file.exists())
             return null;
 
+        //replace database file
         if (!FileHelper.copy(localBackupFileName, getDatabasePath()))
             return null;
 
