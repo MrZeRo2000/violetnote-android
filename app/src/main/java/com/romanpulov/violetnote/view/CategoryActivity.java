@@ -93,7 +93,7 @@ public class CategoryActivity extends PassDataPasswordActivity implements Catego
                 return true;
             case R.id.action_search:
                 Fragment fragment = getFragment();
-                if (fragment != null)
+                if ((fragment != null) && (fragment instanceof CategoryFragment))
                     ((CategoryFragment)fragment).showSearchLayout();
                 return true;
             default:

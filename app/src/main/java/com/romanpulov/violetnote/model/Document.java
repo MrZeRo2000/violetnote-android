@@ -26,7 +26,7 @@ import java.util.List;
 public class Document {
     public static final String DOCUMENT_FILE_NAME = "document.vnf";
 
-    public static Document getInstance(Context context) {
+    public static Document newInstance(Context context) {
         return new Document(context);
     }
 

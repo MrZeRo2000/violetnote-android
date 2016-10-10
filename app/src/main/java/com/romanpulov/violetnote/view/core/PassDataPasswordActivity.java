@@ -23,6 +23,7 @@ public abstract class PassDataPasswordActivity extends PasswordActivity {
         final String mPassword;
         final Context mContext;
         Boolean mFileExists;
+        List<String> mLoadErrorList;
 
         public LoadPassDataAsyncTask(String password) {
             mPassword = password;
@@ -31,7 +32,7 @@ public abstract class PassDataPasswordActivity extends PasswordActivity {
 
         @Override
         protected void onPreExecute() {
-            File file = new File(Document.getInstance(mContext).getFileName());
+            File file = new File(Document.newInstance(mContext).getFileName());
             mFileExists = file.exists();
             if (mFileExists) {
                 progressDialog = new ProgressDialog(mContext, R.style.DialogTheme);
@@ -42,8 +43,10 @@ public abstract class PassDataPasswordActivity extends PasswordActivity {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            Document document = Document.getInstance(mContext);
+            Document document = Document.newInstance(mContext);
             mPassDataA = document.loadPassDataA(document.getFileName(), mPassword);
+            mLoadErrorList = document.getLoadErrorList();
+
             mPasswordProvider = mPassDataA;
             return mPassDataA != null;
         }
@@ -59,9 +62,8 @@ public abstract class PassDataPasswordActivity extends PasswordActivity {
                     errorText = mContext.getString(R.string.error_file_not_found);
 
                 if (!result) {
-                    List<String> errorList = Document.getInstance(mContext).getLoadErrorList();
-                    if (errorList.size() > 0) {
-                        errorText = errorList.get(0);
+                    if (mLoadErrorList.size() > 0) {
+                        errorText = mLoadErrorList.get(0);
                     }
                 }
 
@@ -72,7 +74,6 @@ public abstract class PassDataPasswordActivity extends PasswordActivity {
 
             } catch (Exception e) {
                 progressDialog = null;
-                return;
             }
         }
     }
