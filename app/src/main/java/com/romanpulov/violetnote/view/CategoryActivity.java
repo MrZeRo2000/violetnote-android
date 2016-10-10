@@ -87,10 +87,6 @@ public class CategoryActivity extends PassDataPasswordActivity implements Catego
                 Intent intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
                 return true;
-            case R.id.action_refresh:
-                removeFragment();
-                requestPassword();
-                return true;
             case R.id.action_search:
                 Fragment fragment = getFragment();
                 if ((fragment != null) && (fragment instanceof CategoryFragment))
