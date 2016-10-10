@@ -12,7 +12,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBNoteManager;
@@ -29,7 +28,7 @@ import com.romanpulov.violetnote.view.action.BasicNoteMoveBottomAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveDownAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveTopAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveUpAction;
-import com.romanpulov.violetnote.view.core.AlertOkCancelDialogFragment;
+import com.romanpulov.violetnote.view.core.AlertOkCancelSupportDialogFragment;
 import com.romanpulov.violetnote.view.core.PasswordActivity;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 import com.romanpulov.violetnote.view.core.TextInputDialog;
@@ -270,8 +269,8 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         int checkedCount = mBasicNoteData.getCheckedCount();
         if (checkedCount > 0) {
             String queryString = String.format(getString(R.string.ui_question_are_you_sure_checkout_items), checkedCount);
-            AlertOkCancelDialogFragment dialog = AlertOkCancelDialogFragment.newAlertOkCancelDialog(queryString);
-            dialog.setOkButtonClickListener(new AlertOkCancelDialogFragment.OnClickListener() {
+            AlertOkCancelSupportDialogFragment dialog = AlertOkCancelSupportDialogFragment.newAlertOkCancelDialog(queryString);
+            dialog.setOkButtonClickListener(new AlertOkCancelSupportDialogFragment.OnClickListener() {
                 @Override
                 public void OnClick(DialogFragment dialog) {
                     performCheckOutAction();

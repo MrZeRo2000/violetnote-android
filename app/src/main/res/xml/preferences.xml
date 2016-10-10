@@ -18,6 +18,21 @@
             />
     </PreferenceCategory>
     <PreferenceCategory
+        android:title="@string/pref_title_basic_note_data"
+        android:layout="@layout/preferences_category"
+        >
+        <Preference
+            android:key="pref_basic_note_local_backup"
+            android:title="@string/pref_title_basic_note_backup"
+            android:summary="@string/pref_summary_basic_note_backup"
+            />
+        <Preference
+            android:key="pref_basic_note_local_restore"
+            android:title="@string/pref_title_basic_note_restore"
+            android:summary="@string/pref_summary_basic_note_restore"
+            />
+    </PreferenceCategory>
+    <PreferenceCategory
         android:title="@string/pref_title_account"
         android:layout="@layout/preferences_category"
         >

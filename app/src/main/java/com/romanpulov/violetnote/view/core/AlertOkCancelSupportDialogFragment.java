@@ -11,7 +11,7 @@ import com.romanpulov.violetnote.R;
 /**
  * Created by romanpulov on 26.08.2016.
  */
-public class AlertOkCancelDialogFragment extends DialogFragment {
+public class AlertOkCancelSupportDialogFragment extends DialogFragment {
     private final static String STRING_MESSAGE = "MESSAGE";
 
     private String  mMessage;
@@ -26,8 +26,8 @@ public class AlertOkCancelDialogFragment extends DialogFragment {
         mOkButtonClickListener = listener;
     }
 
-    public static AlertOkCancelDialogFragment newAlertOkCancelDialog(String message) {
-        AlertOkCancelDialogFragment newDialog = new AlertOkCancelDialogFragment() ;
+    public static AlertOkCancelSupportDialogFragment newAlertOkCancelDialog(String message) {
+        AlertOkCancelSupportDialogFragment newDialog = new AlertOkCancelSupportDialogFragment() ;
         newDialog.setMessage(message);
         newDialog.setRetainInstance(false);
         return newDialog;
@@ -39,14 +39,14 @@ public class AlertOkCancelDialogFragment extends DialogFragment {
 
     @Override
     public void onSaveInstanceState(Bundle data) {
-        data.putString(AlertOkCancelDialogFragment.STRING_MESSAGE, mMessage);
+        data.putString(AlertOkCancelSupportDialogFragment.STRING_MESSAGE, mMessage);
         super.onSaveInstanceState(data);
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         if (null != savedInstanceState)
-            mMessage = savedInstanceState.getString(AlertOkCancelDialogFragment.STRING_MESSAGE);
+            mMessage = savedInstanceState.getString(AlertOkCancelSupportDialogFragment.STRING_MESSAGE);
 
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
         dialogBuilder
@@ -56,7 +56,7 @@ public class AlertOkCancelDialogFragment extends DialogFragment {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 if (null != mOkButtonClickListener)
-                                    mOkButtonClickListener.OnClick(AlertOkCancelDialogFragment.this);
+                                    mOkButtonClickListener.OnClick(AlertOkCancelSupportDialogFragment.this);
                             }
                         }
                 )

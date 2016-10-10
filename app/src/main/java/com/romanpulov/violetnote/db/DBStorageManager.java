@@ -77,6 +77,9 @@ public class DBStorageManager {
         if (!FileHelper.copy(localBackupFileName, getDatabasePath()))
             return null;
 
+        //delete and ignore any errors
+        file.delete();
+
         return localBackupFileName;
     }
 

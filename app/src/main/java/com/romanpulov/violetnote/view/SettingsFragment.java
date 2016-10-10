@@ -15,6 +15,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.db.DBBasicNoteHelper;
+import com.romanpulov.violetnote.db.DBStorageManager;
 import com.romanpulov.violetnote.document.DocumentLoader;
 import com.romanpulov.violetnote.document.DocumentLoaderFactory;
 import com.romanpulov.violetnote.dropboxchooser.DropboxChooserActivity;
@@ -23,6 +25,7 @@ import com.romanpulov.violetnote.dropbox.DropBoxHelper;
 
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 
 public class SettingsFragment extends PreferenceFragment {
@@ -35,6 +38,8 @@ public class SettingsFragment extends PreferenceFragment {
     private static final String PREF_KEY_LOAD = "pref_load";
     private static final String PREF_KEY_LAST_LOADED = "pref_last_loaded";
     private static final String PREF_KEY_ACCOUNT_DROPBOX = "pref_account_dropbox";
+    private static final String PREF_KEY_BASIC_NOTE_LOCAL_BACKUP = "pref_basic_note_local_backup";
+    private static final String PREF_KEY_BASIC_NOTE_LOCAL_RESTORE = "pref_basic_note_local_restore";
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -49,6 +54,7 @@ public class SettingsFragment extends PreferenceFragment {
         setupPrefSourcePath();
         setupPrefLoad();
         setupPrefAccountDropbox();
+        setupPrefBackupRestore();
     }
 
     private void displayError(String message) {
@@ -219,6 +225,58 @@ public class SettingsFragment extends PreferenceFragment {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 DropBoxHelper.getInstance(getActivity().getApplicationContext()).invokeAuthActivity(getActivity().getResources().getString(R.string.app_key));
+                return true;
+            }
+        });
+    }
+
+    private void setupPrefBackupRestore() {
+        Preference prefBackup = findPreference(PREF_KEY_BASIC_NOTE_LOCAL_BACKUP);
+        prefBackup.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                DBStorageManager storageManager = new DBStorageManager(getActivity());
+                String backupResult = storageManager.createRollingLocalBackup();
+
+                String backupMessage;
+                if (backupResult == null)
+                    backupMessage = getString(R.string.error_backup);
+                else
+                    backupMessage = String.format(Locale.getDefault(), getString(R.string.message_backup_created), backupResult);
+
+                Toast.makeText(getActivity(), backupMessage, Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
+
+        Preference prefRestore = findPreference(PREF_KEY_BASIC_NOTE_LOCAL_RESTORE);
+        prefRestore.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                final AlertDialog.Builder alert = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
+                alert
+                        .setTitle(R.string.ui_question_are_you_sure)
+                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                DBBasicNoteHelper.getInstance(getActivity()).closeDB();
+
+                                DBStorageManager storageManager = new DBStorageManager(getActivity());
+                                String restoreResult = storageManager.restoreLocalBackup();
+
+                                String restoreMessage;
+                                if (restoreResult == null)
+                                    restoreMessage = getString(R.string.error_restore);
+                                else
+                                    restoreMessage = String.format(Locale.getDefault(), getString(R.string.message_backup_restored), restoreResult);
+
+                                DBBasicNoteHelper.getInstance(getActivity()).openDB();
+                                Toast.makeText(getActivity(), restoreMessage, Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .setNegativeButton(R.string.cancel, null)
+                        .show();
+
                 return true;
             }
         });
