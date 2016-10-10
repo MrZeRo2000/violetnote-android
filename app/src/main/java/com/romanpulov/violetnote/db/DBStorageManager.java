@@ -15,7 +15,7 @@ import java.io.File;
 
 public class DBStorageManager {
     private static final String LOCAL_BACKUP_FOLDER_NAME = "VioletNoteBackup";
-    private static final String LOCAL_BACKUP_FILE_NAME = "violetnotedb";
+    private static final String LOCAL_BACKUP_FILE_NAME = "violetnotedb_" + DBBasicNoteOpenHelper.DATABASE_VERSION;
 
     private final Context mContext;
 
