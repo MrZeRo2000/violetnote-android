@@ -90,7 +90,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
     @Override
     public void onPause() {
         //hide editors
-        mAddActionHelper.hideLayout();
+        //mAddActionHelper.hideLayout();
 
         super.onPause();
     }

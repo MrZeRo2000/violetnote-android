@@ -91,7 +91,7 @@
 
     <style name="DropDownItemStyle" parent="@android:style/Widget.DropDownItem">
         <item name="android:textColor">@color/brightTextColor</item>
-        <item name="android:background">@drawable/list_selector</item>
+        <item name="android:background">@drawable/list_lighter_selector</item>
     </style>
 
     <!-- Main activity theme -->

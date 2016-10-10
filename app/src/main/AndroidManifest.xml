@@ -94,6 +94,7 @@
             android:label="@string/title_activity_basic_note_checked_item"
             android:parentActivityName=".view.BasicNoteActivity"
             android:theme="@style/ToolBarTheme"
+            android:windowSoftInputMode="adjustResize"
             />
         <activity
             android:name=".view.BasicNoteNamedItemActivity"
@@ -106,6 +107,7 @@
             android:label="@string/title_activity_basic_note_value"
             android:parentActivityName=".view.BasicNoteCheckedItemActivity"
             android:theme="@style/MainAppTheme"
+            android:windowSoftInputMode="adjustResize"
             />
     </application>
 

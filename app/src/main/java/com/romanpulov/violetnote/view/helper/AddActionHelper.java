@@ -1,10 +1,12 @@
 package com.romanpulov.violetnote.view.helper;
 
 import android.app.Activity;
+import android.content.Context;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
@@ -14,6 +16,8 @@ import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 
 import java.util.Collection;
+
+import static android.content.Context.INPUT_METHOD_SERVICE;
 
 /**
  * Created by romanpulov on 06.09.2016.
@@ -61,8 +65,9 @@ public class AddActionHelper {
         mListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mListClickListener != null)
+                if (mListClickListener != null) {
                     mListClickListener.onClick(v);
+                }
             }
         });
     }
@@ -71,7 +76,7 @@ public class AddActionHelper {
         mCancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mActionView.setVisibility(View.GONE);
+                hideLayout();
             }
         });
     }
@@ -100,11 +105,17 @@ public class AddActionHelper {
 
     public void showLayout() {
         mActionView.setVisibility(View.VISIBLE);
-        if (mActionView.findViewById(R.id.add_edit_text).requestFocus())
-            ((Activity)mActionView.getContext()).getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        if (mActionView.findViewById(R.id.add_edit_text).requestFocus()) {
+            InputMethodManager imm = (InputMethodManager) mActionView.getContext().getSystemService(INPUT_METHOD_SERVICE);
+            imm.showSoftInput(mAddEditText, 0);
+        }
     }
 
     public void hideLayout() {
+        InputMethodManager imm = (InputMethodManager) mActionView.getContext().getSystemService(INPUT_METHOD_SERVICE);
+        if (imm.isAcceptingText())
+            imm.hideSoftInputFromWindow(mActionView.getWindowToken(), 0);
+
         mActionView.setVisibility(View.GONE);
     }
 
