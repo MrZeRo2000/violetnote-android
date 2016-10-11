@@ -45,7 +45,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/add_edit_text"
         android:layout_toLeftOf="@id/list_button"
-        android:inputType="text"
+        android:inputType="textCapSentences"
         android:layout_centerVertical="true"
         android:hint="@string/hint_add"
         android:textCursorDrawable="@null"
