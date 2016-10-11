@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -25,6 +27,15 @@ public class BasicNoteEditActivity extends ActionBarCompatActivity {
         setContentView(R.layout.activity_basic_note_edit);
 
         mViewHolder = new ViewHolder(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        mViewHolder.mTitle.requestFocus();
+        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
     }
 
     private static class ViewHolder {
