@@ -5,6 +5,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -12,6 +13,8 @@ import android.widget.TextView;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.view.OnSearchInteractionListener;
+
+import static android.content.Context.INPUT_METHOD_SERVICE;
 
 /**
  * Created by romanpulov on 08.08.2016.
@@ -21,6 +24,7 @@ public class SearchActionHelper {
     public final static int DISPLAY_TYPE_SYSTEM_USER = 1;
 
     private final View mSearchView;
+    private final View mSearchEditTextView;
     private final int mDisplayType;
     private OnSearchInteractionListener mSearchListener;
 
@@ -30,6 +34,7 @@ public class SearchActionHelper {
 
     public SearchActionHelper(View rootView, int displayType) {
         mSearchView = rootView.findViewById(R.id.search_layout_include);
+        mSearchEditTextView =  mSearchView.findViewById(R.id.search_edit_text);
         mDisplayType = displayType;
 
         setupCancelButton();
@@ -41,7 +46,7 @@ public class SearchActionHelper {
         searchCancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mSearchView.setVisibility(View.GONE);
+                hideLayout();
             }
         });
     }
@@ -57,7 +62,7 @@ public class SearchActionHelper {
                                 // editor with Enter button
                                 ((i == EditorInfo.IME_ACTION_UNSPECIFIED) && (keyEvent != null) && (keyEvent.getAction() == KeyEvent.ACTION_DOWN))
                         ) {
-                    mSearchView.setVisibility(View.GONE);
+                    hideLayout();
 
                     final CheckBox searchSystemCheckBox = (CheckBox) mSearchView.findViewById(R.id.search_system_check);
                     final CheckBox searchUserCheckBox = (CheckBox) mSearchView.findViewById(R.id.search_user_check);
@@ -80,7 +85,18 @@ public class SearchActionHelper {
             mSearchView.findViewById(R.id.search_user_check).setVisibility(View.GONE);
         }
         mSearchView.setVisibility(View.VISIBLE);
-        if (mSearchView.findViewById(R.id.search_edit_text).requestFocus())
-            ((Activity)mSearchView.getContext()).getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        if (mSearchEditTextView.requestFocus()) {
+            InputMethodManager imm = (InputMethodManager) mSearchEditTextView.getContext().getSystemService(INPUT_METHOD_SERVICE);
+            imm.showSoftInput(mSearchEditTextView, 0);
+        }
     }
+
+    public void hideLayout() {
+        InputMethodManager imm = (InputMethodManager) mSearchEditTextView.getContext().getSystemService(INPUT_METHOD_SERVICE);
+        if (imm.isAcceptingText())
+            imm.hideSoftInputFromWindow(mSearchEditTextView.getWindowToken(), 0);
+
+        mSearchView.setVisibility(View.GONE);
+    }
+
 }

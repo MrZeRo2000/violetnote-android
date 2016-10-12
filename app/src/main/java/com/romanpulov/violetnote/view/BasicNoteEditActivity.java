@@ -38,6 +38,16 @@ public class BasicNoteEditActivity extends ActionBarCompatActivity {
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        if (imm.isAcceptingText())
+            imm.hideSoftInputFromWindow(mViewHolder.mTitle.getWindowToken(), 0);
+
+    }
+
     private static class ViewHolder {
         Context mContext;
         EditText mTitle;

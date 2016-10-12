@@ -76,6 +76,12 @@ public class CategoryFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onPause() {
+        if (mSearchActionHelper != null)
+            mSearchActionHelper.hideLayout();
+        super.onPause();
+    }
 
     @Override
     public void onAttach(android.app.Activity context) {
