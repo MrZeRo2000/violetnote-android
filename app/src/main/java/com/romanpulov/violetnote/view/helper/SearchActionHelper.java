@@ -1,43 +1,55 @@
 package com.romanpulov.violetnote.view.helper;
 
-import android.app.Activity;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.CheckBox;
-import android.widget.EditText;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.view.OnSearchInteractionListener;
 
+import java.util.Collection;
+
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
 /**
  * Created by romanpulov on 08.08.2016.
  */
-public class SearchActionHelper {
+public class SearchActionHelper implements CompoundButton.OnCheckedChangeListener {
     public final static int DISPLAY_TYPE_NONE = 0;
     public final static int DISPLAY_TYPE_SYSTEM_USER = 1;
 
     private final View mSearchView;
-    private final View mSearchEditTextView;
+    private final AutoCompleteTextView mSearchEditText;
+    private final CheckBox mSearchSystemCheckBox;
+    private final CheckBox mSearchUserCheckBox;
     private final int mDisplayType;
     private OnSearchInteractionListener mSearchListener;
+    private OnSearchConditionChangedListener mSearchConditionChangedListener;
 
-    public void setOnSearchInteractionListener(OnSearchInteractionListener searchInteractionListener) {
-        mSearchListener = searchInteractionListener;
+    public void setOnSearchInteractionListener(OnSearchInteractionListener listener) {
+        mSearchListener = listener;
+    }
+
+    public void setOnSearchConditionChangedListeber(OnSearchConditionChangedListener listener) {
+        mSearchConditionChangedListener = listener;
     }
 
     public SearchActionHelper(View rootView, int displayType) {
         mSearchView = rootView.findViewById(R.id.search_layout_include);
-        mSearchEditTextView =  mSearchView.findViewById(R.id.search_edit_text);
+        mSearchEditText =  (AutoCompleteTextView)mSearchView.findViewById(R.id.search_edit_text);
+        mSearchSystemCheckBox = (CheckBox) mSearchView.findViewById(R.id.search_system_check);
+        mSearchUserCheckBox = (CheckBox) mSearchView.findViewById(R.id.search_user_check);
         mDisplayType = displayType;
 
         setupCancelButton();
+        setupSearchOptions();
         setupEditText();
     }
 
@@ -51,9 +63,13 @@ public class SearchActionHelper {
         });
     }
 
+    private void setupSearchOptions() {
+        mSearchSystemCheckBox.setOnCheckedChangeListener(this);
+        mSearchUserCheckBox.setOnCheckedChangeListener(this);
+    }
+
     private void setupEditText() {
-        final EditText searchEditText = (EditText)mSearchView.findViewById(R.id.search_edit_text);
-        searchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        mSearchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 if (
@@ -64,18 +80,20 @@ public class SearchActionHelper {
                         ) {
                     hideLayout();
 
-                    final CheckBox searchSystemCheckBox = (CheckBox) mSearchView.findViewById(R.id.search_system_check);
-                    final CheckBox searchUserCheckBox = (CheckBox) mSearchView.findViewById(R.id.search_user_check);
-
                     if (mSearchListener != null)
-                        mSearchListener.onSearchFragmentInteraction(textView.getText().toString(), searchSystemCheckBox.isChecked(), searchUserCheckBox.isChecked());
+                        mSearchListener.onSearchFragmentInteraction(textView.getText().toString(), mSearchSystemCheckBox.isChecked(), mSearchUserCheckBox.isChecked());
                     //clear search text for future
-                    searchEditText.setText(null);
+                    mSearchEditText.setText(null);
                     return true;
                 }
                 return false;
             }
         });
+    }
+
+    public void setAutoCompleteList(Collection<String> autoCompleteList) {
+        ArrayAdapter<?> adapter = new ArrayAdapter<>(mSearchEditText.getContext(), android.R.layout.simple_dropdown_item_1line, autoCompleteList.toArray(new String[autoCompleteList.size()]));
+        mSearchEditText.setAdapter(adapter);
     }
 
     public void showLayout() {
@@ -85,18 +103,27 @@ public class SearchActionHelper {
             mSearchView.findViewById(R.id.search_user_check).setVisibility(View.GONE);
         }
         mSearchView.setVisibility(View.VISIBLE);
-        if (mSearchEditTextView.requestFocus()) {
-            InputMethodManager imm = (InputMethodManager) mSearchEditTextView.getContext().getSystemService(INPUT_METHOD_SERVICE);
-            imm.showSoftInput(mSearchEditTextView, 0);
+        if (mSearchEditText.requestFocus()) {
+            InputMethodManager imm = (InputMethodManager) mSearchEditText.getContext().getSystemService(INPUT_METHOD_SERVICE);
+            imm.showSoftInput(mSearchEditText, 0);
         }
     }
 
     public void hideLayout() {
-        InputMethodManager imm = (InputMethodManager) mSearchEditTextView.getContext().getSystemService(INPUT_METHOD_SERVICE);
+        InputMethodManager imm = (InputMethodManager) mSearchEditText.getContext().getSystemService(INPUT_METHOD_SERVICE);
         if (imm.isAcceptingText())
-            imm.hideSoftInputFromWindow(mSearchEditTextView.getWindowToken(), 0);
+            imm.hideSoftInputFromWindow(mSearchEditText.getWindowToken(), 0);
 
         mSearchView.setVisibility(View.GONE);
     }
 
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if (mSearchConditionChangedListener != null)
+            mSearchConditionChangedListener.onSearchConditionChanged(mSearchSystemCheckBox.isChecked(), mSearchUserCheckBox.isChecked());
+    }
+
+    public interface OnSearchConditionChangedListener {
+        void onSearchConditionChanged(boolean isSearchSystem, boolean isSearchUser);
+    }
 }

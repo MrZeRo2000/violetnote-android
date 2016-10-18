@@ -62,7 +62,7 @@ public class CategoryFragment extends Fragment {
         // Set the adapter
         Context context = view.getContext();
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        PassDataA passDataA = this.getArguments().getParcelable(PasswordActivity.PASS_DATA);
+        final PassDataA passDataA = this.getArguments().getParcelable(PasswordActivity.PASS_DATA);
         if ((passDataA != null) && (passDataA.getPassCategoryData() != null))
             recyclerView.setAdapter(new CategoryRecyclerViewAdapter(getActivity(), passDataA.getPassCategoryData(), mListener));
 
@@ -72,6 +72,13 @@ public class CategoryFragment extends Fragment {
         // setup search action helper
         mSearchActionHelper = new SearchActionHelper(view, SearchActionHelper.DISPLAY_TYPE_SYSTEM_USER);
         mSearchActionHelper.setOnSearchInteractionListener(mSearchListener);
+        mSearchActionHelper.setAutoCompleteList(passDataA.getSearchValues(true, true));
+        mSearchActionHelper.setOnSearchConditionChangedListeber(new SearchActionHelper.OnSearchConditionChangedListener() {
+            @Override
+            public void onSearchConditionChanged(boolean isSearchSystem, boolean isSearchUser) {
+                mSearchActionHelper.setAutoCompleteList(passDataA.getSearchValues(isSearchSystem, isSearchUser));
+            }
+        });
 
         return view;
     }

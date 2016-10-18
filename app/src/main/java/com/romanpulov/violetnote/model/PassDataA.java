@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import com.romanpulov.violetnotecore.Model.PassData;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -102,6 +103,27 @@ public class PassDataA implements Parcelable, PasswordProvider {
         searchInstance.mPassNoteDataA = noteList;
 
         return searchInstance;
+    }
+
+    public Collection<String> getSearchValues(boolean isSearchSystem, boolean isSearchUser) {
+        final int max_attr_count = 2;
+
+        Set<String> values = new HashSet<>();
+
+        for (PassNoteA note : getPassNoteData()) {
+            int attrCount = 0;
+
+            for (String a : note.getNoteAttr().keySet()) {
+                if (((attrCount == 0) && isSearchSystem) || ((attrCount == 1) && isSearchUser)) {
+                    values.add(note.getNoteAttr().get(a));
+                }
+
+                if (++attrCount > max_attr_count)
+                    break;
+            }
+        }
+
+        return values;
     }
 
     public static PassDataA newCategoryInstance(PassDataA source, PassCategoryA category) {

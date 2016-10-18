@@ -5,10 +5,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.romanpulov.violetnote.R;
+
+import static android.content.Context.INPUT_METHOD_SERVICE;
 
 /**
  * Created by romanpulov on 09.09.2016.
@@ -80,6 +83,11 @@ public class NameValueInputDialog extends AlertInputDialog {
                             if (value.isEmpty())
                                 valueEditText.setError(mContext.getString(R.string.error_field_not_empty));
                             else {
+                                //hide editor
+                                InputMethodManager imm = (InputMethodManager) valueEditText.getContext().getSystemService(INPUT_METHOD_SERVICE);
+                                if (imm.isAcceptingText())
+                                    imm.hideSoftInputFromWindow(valueEditText.getWindowToken(), 0);
+
                                 if (mOnNameValueInputListener != null)
                                     mOnNameValueInputListener.onNameValueInput(name, value);
                                 mAlertDialog.dismiss();

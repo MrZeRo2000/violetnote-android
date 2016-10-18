@@ -84,6 +84,7 @@ public class NoteFragment extends Fragment {
 
         // setup search action helper
         mSearchActionHelper = new SearchActionHelper(view, SearchActionHelper.DISPLAY_TYPE_SYSTEM_USER);
+        mSearchActionHelper.setAutoCompleteList(mPassDataA.getSearchValues(true, true));
         mSearchActionHelper.setOnSearchInteractionListener(new OnSearchInteractionListener() {
             @Override
             public void onSearchFragmentInteraction(String searchText, boolean isSearchSystem, boolean isSearchUser) {
@@ -92,6 +93,12 @@ public class NoteFragment extends Fragment {
                 intent.putExtra(PasswordActivity.PASSWORD_REQUIRED, false);
                 intent.putExtra(SearchResultActivity.SEARCH_TEXT, searchText);
                 startActivityForResult(intent, 0);
+            }
+        });
+        mSearchActionHelper.setOnSearchConditionChangedListeber(new SearchActionHelper.OnSearchConditionChangedListener() {
+            @Override
+            public void onSearchConditionChanged(boolean isSearchSystem, boolean isSearchUser) {
+                mSearchActionHelper.setAutoCompleteList(mPassDataA.getSearchValues(isSearchSystem, isSearchUser));
             }
         });
 
