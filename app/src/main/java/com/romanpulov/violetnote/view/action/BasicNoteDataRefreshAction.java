@@ -3,7 +3,7 @@ package com.romanpulov.violetnote.view.action;
 import com.romanpulov.violetnote.db.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
-import com.romanpulov.violetnote.model.PassNoteItemCryptService;
+import com.romanpulov.violetnote.model.PassNoteItemJSONCryptService;
 
 /**
  * Created by romanpulov on 13.09.2016.
@@ -37,7 +37,7 @@ public class BasicNoteDataRefreshAction extends BasicNoteDataAction {
         //decrypt
         if (mBasicNoteData.getNote().isEncrypted()) {
             for (BasicNoteItemA item : mBasicNoteData.getNote().getItems()) {
-                if (!PassNoteItemCryptService.decryptBasicNoteItem(item, mPassword))
+                if (!PassNoteItemJSONCryptService.decryptBasicNoteItem(item, mPassword))
                     return false;
             }
         }
