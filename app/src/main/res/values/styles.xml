@@ -36,6 +36,8 @@
         <item name="android:itemBackground">@drawable/list_lighter_selector</item>
         <!-- For correct ToolBar hiding in Overlay mode -->
         <item name="windowActionModeOverlay">true</item>
+        <!-- Activity animation -->
+        <item name="android:windowAnimationStyle">@style/AnimationStyle</item>
     </style>
 
     <style name="ToolBarTheme" parent="AppTheme">
@@ -92,6 +94,13 @@
     <style name="DropDownItemStyle" parent="@android:style/Widget.DropDownItem">
         <item name="android:textColor">@color/brightTextColor</item>
         <item name="android:background">@drawable/list_lighter_selector</item>
+    </style>
+
+    <style name="AnimationStyle" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@android:anim/slide_in_left</item>
+        <item name="android:activityOpenExitAnimation">@android:anim/slide_out_right</item>
+        <item name="android:activityCloseEnterAnimation">@android:anim/slide_in_left</item>
+        <item name="android:activityCloseExitAnimation">@android:anim/slide_out_right</item>
     </style>
 
     <!-- Main activity theme -->
