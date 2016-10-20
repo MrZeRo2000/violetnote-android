@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBNoteManager;
@@ -38,6 +40,8 @@ import com.romanpulov.violetnote.view.core.TextEditDialogBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.content.Context.INPUT_METHOD_SERVICE;
+
 public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
 
     private AddActionHelper mAddActionHelper;
@@ -58,33 +62,46 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
     }
 
     private void performEditAction(final ActionMode mode, final BasicNoteItemA item) {
-        mEditorDialog = (new TextEditDialogBuilder(getActivity(), getString(R.string.ui_note_title), item.getValue()))
-                .setNonEmptyErrorMessage(getString(R.string.error_field_not_empty))
-                .setOnTextInputListener(new TextInputDialog.OnTextInputListener() {
-                    @Override
-                    public void onTextInput(String text) {
-                        if (!text.equals(item.getValue())) {
-                            //change
-                            item.setValue(text);
+        TextEditDialogBuilder textEditDialogBuilder = (new TextEditDialogBuilder(getActivity(), getString(R.string.ui_note_title), item.getValue()))
+                .setNonEmptyErrorMessage(getString(R.string.error_field_not_empty));
 
-                            BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity());
-                            executor.addAction(getString(R.string.caption_processing), new BasicNoteDataItemEditNameValueAction(mBasicNoteData, item));
-                            executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData));
-                            executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
-                                @Override
-                                public void onExecutionCompleted(boolean result) {
-                                    // finish anyway
-                                    mode.finish();
-                                    //clear editor reference
-                                    mEditorDialog.dismiss();
-                                    mEditorDialog = null;
-                                }
-                            });
-                            executor.execute(mBasicNoteData.getNote().isEncrypted());
-                        }
+        final AlertDialog alertDialog = textEditDialogBuilder.execute();
+
+        textEditDialogBuilder.setOnTextInputListener(new TextInputDialog.OnTextInputListener() {
+            @Override
+            public void onTextInput(String text) {
+                if (!text.equals(item.getValue())) {
+                    //hide editor
+                    View focusedView = alertDialog.getCurrentFocus();
+                    if (focusedView != null) {
+                        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(INPUT_METHOD_SERVICE);
+                        if (imm.isAcceptingText())
+                            imm.hideSoftInputFromWindow(focusedView.getWindowToken(), 0);
                     }
-                })
-                .execute();
+
+                    //change
+                    item.setValue(text);
+
+                    // finish anyway
+                    mode.finish();
+
+                    BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity());
+                    executor.addAction(getString(R.string.caption_processing), new BasicNoteDataItemEditNameValueAction(mBasicNoteData, item));
+                    executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData));
+                    executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
+                        @Override
+                        public void onExecutionCompleted(boolean result) {
+                            //clear editor reference
+                            mEditorDialog.dismiss();
+                            mEditorDialog = null;
+                        }
+                    });
+                    executor.execute(mBasicNoteData.getNote().isEncrypted());
+                }
+            }
+        });
+
+        mEditorDialog = alertDialog;
     }
 
     @Override
