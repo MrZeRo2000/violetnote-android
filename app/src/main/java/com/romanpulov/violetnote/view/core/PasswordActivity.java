@@ -17,6 +17,27 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
     public static final String PASS_DATA = "PassData";
     public static final String PASSWORD_REQUIRED = "PasswordRequired";
 
+    /**
+     * Checks validity period for user actions
+     *
+     */
+    public static class ValidityPeriodChecker {
+        private final long mValidityPeriod;
+        private long mValidTimeStamp;
+
+        public ValidityPeriodChecker(long validityPeriod) {
+            mValidityPeriod = validityPeriod;
+        }
+
+        public void startPeriod() {
+            mValidTimeStamp = System.currentTimeMillis();
+        }
+
+        public boolean isValid() {
+            return System.currentTimeMillis() - mValidTimeStamp < mValidityPeriod;
+        }
+    }
+
     private DialogInterface mDialog;
 
     private boolean mIsPasswordProtected = true;
