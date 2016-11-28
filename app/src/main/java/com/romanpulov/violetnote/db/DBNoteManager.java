@@ -109,18 +109,18 @@ public class DBNoteManager extends BasicCommonNoteManager {
         return values;
     }
 
-    public BasicNoteDataA queryNoteData(BasicNoteA note) {
+    public BasicNoteDataA fromNoteData(BasicNoteA note) {
         ArrayList<BasicNoteA> notes = new ArrayList<>();
 
         //get note
         notes.add(note);
-
+        /*
         //get items
         queryNoteDataItems(note);
 
         //get values
         queryNoteDataValues(note);
-
+        */
         return BasicNoteDataA.newInstance(null, notes);
     }
 

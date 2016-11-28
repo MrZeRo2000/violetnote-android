@@ -9,6 +9,7 @@ import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBBasicNoteOpenHelper;
 import com.romanpulov.violetnote.db.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicEntityNoteA;
+import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.view.action.BasicNoteAction;
@@ -114,6 +115,11 @@ public class BasicNoteItemFragment extends BasicCommonNoteFragment {
 
         if (getArguments() != null) {
             mBasicNoteData = getArguments().getParcelable(PasswordActivity.PASS_DATA);
+            if ((mBasicNoteData.getNote() != null) && (!mBasicNoteData.getNote().isEncrypted())) {
+                DBNoteManager noteManager = new DBNoteManager(getActivity());
+                noteManager.queryNoteDataItems(mBasicNoteData.getNote());
+                noteManager.queryNoteDataValues(mBasicNoteData.getNote());
+            }
         }
     }
 
