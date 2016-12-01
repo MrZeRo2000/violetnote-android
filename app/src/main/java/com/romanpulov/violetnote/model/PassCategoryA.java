@@ -44,6 +44,7 @@ public class PassCategoryA implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(mCategoryName);
+        dest.writeInt(mNotesCount);
     }
 
     public static final Parcelable.Creator<PassCategoryA> CREATOR
@@ -59,6 +60,7 @@ public class PassCategoryA implements Parcelable {
 
     private PassCategoryA(Parcel in) {
         mCategoryName = in.readString();
+        mNotesCount = in.readInt();
     }
 
     public PassCategoryA(PassCategory sourcePassCategory) {

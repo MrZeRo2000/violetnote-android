@@ -184,24 +184,10 @@ public class PassDataA implements Parcelable, PasswordProvider {
         }
 
         //category references
-        Map<PassCategoryA, Integer> categoryCounter = new HashMap<>(mPassCategoryDataA.size());
         for (PassNoteA note : mPassNoteDataA) {
             //set reference
             PassCategoryA newCategory = categoryMap.get(note.getCategoryName());
             note.setCategory(newCategory);
-
-            //set counter
-            Integer count = categoryCounter.get(newCategory);
-            if (count == null)
-                count = 1;
-            else
-                count ++;
-            categoryCounter.put(newCategory, count);
-        }
-
-        //update counters
-        for (PassCategoryA category : mPassCategoryDataA) {
-            category.setNotesCount(categoryCounter.get(category));
         }
     }
 

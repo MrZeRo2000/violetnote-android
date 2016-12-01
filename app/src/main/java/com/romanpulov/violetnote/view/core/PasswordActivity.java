@@ -117,6 +117,7 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
                 if (text != null) {
                     String oldPassword = getPassword();
                     if ((oldPassword != null) && (oldPassword.equals(text))) {
+                        PassDataPasswordActivity.getPasswordValidityChecker().startPeriod();
                         refreshFragment();
                     } else {
                         updatePassword(text);

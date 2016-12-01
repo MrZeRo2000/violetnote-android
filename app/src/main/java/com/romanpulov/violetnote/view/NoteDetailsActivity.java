@@ -8,6 +8,7 @@ import com.romanpulov.violetnote.view.core.PassDataPasswordActivity;
 import com.romanpulov.violetnote.model.PassNoteA;
 
 public class NoteDetailsActivity extends PassDataPasswordActivity implements NoteDetailsFragment.OnNoteDetailsInteractionListener {
+
     @Override
     protected void refreshFragment() {
         Fragment fragment = NoteDetailsFragment.newInstance(mPassDataA);

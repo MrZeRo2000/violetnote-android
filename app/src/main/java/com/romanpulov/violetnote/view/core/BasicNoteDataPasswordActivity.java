@@ -32,6 +32,7 @@ public abstract class BasicNoteDataPasswordActivity extends PasswordActivity imp
                 if (result) {
                     mBasicNoteData.setPassword(password);
                     refreshFragment();
+                    PassDataPasswordActivity.getPasswordValidityChecker().startPeriod();
                 }
                 else
                     setLoadErrorFragment();

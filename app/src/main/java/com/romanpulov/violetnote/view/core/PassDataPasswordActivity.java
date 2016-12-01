@@ -69,8 +69,10 @@ public abstract class PassDataPasswordActivity extends PasswordActivity {
 
                 if (errorText != null)
                     setLoadErrorFragment();
-                else
+                else {
                     refreshFragment();
+                    PassDataPasswordActivity.getPasswordValidityChecker().startPeriod();
+                }
 
             } catch (Exception e) {
                 progressDialog = null;
