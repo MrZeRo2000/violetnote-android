@@ -7,8 +7,10 @@ import com.romanpulov.violetnotecore.Model.PassData;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -164,11 +166,43 @@ public class PassDataA implements Parcelable, PasswordProvider {
     }
 
     private PassDataA(Parcel in) {
+        //password
         mPassword = in.readString();
+
+        //category
         mPassCategoryDataA = new ArrayList<>();
         in.readTypedList(mPassCategoryDataA, PassCategoryA.CREATOR);
+
+        //note
         mPassNoteDataA = new ArrayList<>();
         in.readTypedList(mPassNoteDataA, PassNoteA.CREATOR);
+
+        //category map
+        Map<String, PassCategoryA> categoryMap = new HashMap<>(mPassCategoryDataA.size());
+        for (PassCategoryA category : mPassCategoryDataA) {
+            categoryMap.put(category.getCategoryName(), category);
+        }
+
+        //category references
+        Map<PassCategoryA, Integer> categoryCounter = new HashMap<>(mPassCategoryDataA.size());
+        for (PassNoteA note : mPassNoteDataA) {
+            //set reference
+            PassCategoryA newCategory = categoryMap.get(note.getCategoryName());
+            note.setCategory(newCategory);
+
+            //set counter
+            Integer count = categoryCounter.get(newCategory);
+            if (count == null)
+                count = 1;
+            else
+                count ++;
+            categoryCounter.put(newCategory, count);
+        }
+
+        //update counters
+        for (PassCategoryA category : mPassCategoryDataA) {
+            category.setNotesCount(categoryCounter.get(category));
+        }
     }
 
     public static final Parcelable.Creator<PassDataA> CREATOR = new Parcelable.Creator<PassDataA>() {

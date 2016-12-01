@@ -16,6 +16,20 @@ public class PassNoteA implements Parcelable {
 
     private PassCategoryA mCategory;
 
+    public void setCategory(PassCategoryA category) {
+        mCategory = category;
+        if (mCategory != null)
+            mCategoryName = category.getCategoryName();
+        else
+            mCategoryName = null;
+    }
+
+    private String mCategoryName;
+
+    public String getCategoryName() {
+        return mCategoryName;
+    }
+
     public static class AttrItem {
         public final String mName;
         public final String mValue;
@@ -43,7 +57,7 @@ public class PassNoteA implements Parcelable {
     private final Map<String, String> mNoteAttr;
 
     public PassNoteA(PassCategoryA category, Map<String, String> noteAttr) {
-        mCategory = category;
+        setCategory(category);
         mNoteAttr = noteAttr;
     }
 
@@ -54,6 +68,7 @@ public class PassNoteA implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(mCategoryName);
         for (String s : mNoteAttr.keySet()) {
             dest.writeString(s);
             dest.writeString(mNoteAttr.get(s));
@@ -72,6 +87,7 @@ public class PassNoteA implements Parcelable {
     };
 
     private PassNoteA(Parcel in) {
+        mCategoryName = in.readString();
         mNoteAttr = new LinkedHashMap<>();
         for (int i = 0; i < ATTR_COUNT; i ++) {
             String name = in.readString();
