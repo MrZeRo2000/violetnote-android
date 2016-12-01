@@ -12,6 +12,7 @@ import com.romanpulov.violetnote.view.core.PassDataPasswordActivity;
 import com.romanpulov.violetnote.model.Document;
 import com.romanpulov.violetnote.model.PassCategoryA;
 import com.romanpulov.violetnote.model.PassDataA;
+import com.romanpulov.violetnote.view.core.PasswordActivity;
 
 public class CategoryActivity extends PassDataPasswordActivity implements CategoryFragment.OnPassCategoryInteractionListener, OnSearchInteractionListener {
     private static final boolean mSampleData = false;
@@ -32,7 +33,7 @@ public class CategoryActivity extends PassDataPasswordActivity implements Catego
         if (item.getNotesCount() > 0) {
             Intent intent = new Intent(this, NoteActivity.class);
             intent.putExtra(PASS_DATA, PassDataA.newCategoryInstance(mPassDataA, item));
-            intent.putExtra(PASSWORD_REQUIRED, false);
+            PasswordActivity.getPasswordValidityChecker().startPeriod();
             startActivityForResult(intent, 0);
         }
     }
@@ -41,7 +42,7 @@ public class CategoryActivity extends PassDataPasswordActivity implements Catego
     public void onSearchFragmentInteraction(String searchText, boolean isSearchSystem, boolean isSearchUser) {
         Intent intent = new Intent(this, SearchResultActivity.class);
         intent.putExtra(PASS_DATA, PassDataA.newSearchInstance(mPassDataA, searchText, isSearchSystem, isSearchUser));
-        intent.putExtra(PASSWORD_REQUIRED, false);
+        PasswordActivity.getPasswordValidityChecker().startPeriod();
         intent.putExtra(SearchResultActivity.SEARCH_TEXT, searchText);
         startActivityForResult(intent, 0);
     }

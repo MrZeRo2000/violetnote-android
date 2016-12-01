@@ -35,7 +35,7 @@ public class NoteActivity extends PassDataPasswordActivity implements OnPassNote
     public void onPassNoteItemInteraction(PassNoteA item) {
         Intent intent = new Intent(this, NoteDetailsActivity.class);
         intent.putExtra(PasswordActivity.PASS_DATA, PassDataA.newNoteInstance(mPassDataA, item));
-        intent.putExtra(PASSWORD_REQUIRED, false);
+        PasswordActivity.getPasswordValidityChecker().startPeriod();
         startActivityForResult(intent, 0);
     }
 

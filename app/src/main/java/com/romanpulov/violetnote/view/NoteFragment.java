@@ -90,7 +90,7 @@ public class NoteFragment extends Fragment {
             public void onSearchFragmentInteraction(String searchText, boolean isSearchSystem, boolean isSearchUser) {
                 Intent intent = new Intent(getActivity(), SearchResultActivity.class);
                 intent.putExtra(PasswordActivity.PASS_DATA, PassDataA.newSearchInstance(mPassDataA, searchText, isSearchSystem, isSearchUser));
-                intent.putExtra(PasswordActivity.PASSWORD_REQUIRED, false);
+                PasswordActivity.getPasswordValidityChecker().startPeriod();
                 intent.putExtra(SearchResultActivity.SEARCH_TEXT, searchText);
                 startActivityForResult(intent, 0);
             }

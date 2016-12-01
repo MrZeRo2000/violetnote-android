@@ -15,7 +15,8 @@ import com.romanpulov.violetnote.model.PasswordProvider;
 public abstract class PasswordActivity extends ActionBarCompatActivity {
 
     public static final String PASS_DATA = "PassData";
-    public static final String PASSWORD_REQUIRED = "PasswordRequired";
+
+    private static final int PASSWORD_VALIDITY_PERIOD = 10000;
 
     /**
      * Checks validity period for user actions
@@ -34,8 +35,14 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
         }
 
         public boolean isValid() {
-            return System.currentTimeMillis() - mValidTimeStamp < mValidityPeriod;
+            return (System.currentTimeMillis() - mValidTimeStamp) < mValidityPeriod;
         }
+    }
+
+    private static ValidityPeriodChecker mPasswordValidityChecker = new ValidityPeriodChecker(PASSWORD_VALIDITY_PERIOD);
+
+    public static ValidityPeriodChecker getPasswordValidityChecker() {
+        return mPasswordValidityChecker;
     }
 
     private DialogInterface mDialog;
@@ -129,8 +136,7 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
         super.onCreate(savedInstanceState);
 
         mPasswordProvider = getIntent().getParcelableExtra(PASS_DATA);
-        mPasswordRequired = getIntent().getBooleanExtra(PASSWORD_REQUIRED, true);
-        getIntent().removeExtra(PASSWORD_REQUIRED);
+        mPasswordRequired = !mPasswordValidityChecker.isValid();
     }
 
     @Override
