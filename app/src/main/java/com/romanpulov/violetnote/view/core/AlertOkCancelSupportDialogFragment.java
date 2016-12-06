@@ -29,7 +29,7 @@ public class AlertOkCancelSupportDialogFragment extends DialogFragment {
     public static AlertOkCancelSupportDialogFragment newAlertOkCancelDialog(String message) {
         AlertOkCancelSupportDialogFragment newDialog = new AlertOkCancelSupportDialogFragment() ;
         newDialog.setMessage(message);
-        newDialog.setRetainInstance(false);
+        newDialog.setRetainInstance(true);
         return newDialog;
     }
 
