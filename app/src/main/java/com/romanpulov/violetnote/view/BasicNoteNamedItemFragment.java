@@ -129,7 +129,7 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             mode.getMenuInflater().inflate(R.menu.menu_listitem_generic_actions, menu);
             if (mRecyclerViewSelector.getSelectedItemPos() != -1)
-                mode.setTitle( mBasicNoteData.getNote().getItems().get(mRecyclerViewSelector.getSelectedItemPos()).getValue());
+                mode.setTitle( mBasicNoteData.getNote().getItems().get(mRecyclerViewSelector.getSelectedItemPos()).getTitle());
             return true;
         }
 

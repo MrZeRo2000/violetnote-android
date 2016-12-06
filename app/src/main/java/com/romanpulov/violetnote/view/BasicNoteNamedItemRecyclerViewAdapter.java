@@ -69,7 +69,7 @@ public class BasicNoteNamedItemRecyclerViewAdapter extends RecyclerView.Adapter<
         private void updateSelectedTitle() {
             ActionMode actionMode;
             if ((mRecyclerViewSelector != null) && ((actionMode = mRecyclerViewSelector.getActionMode()) != null) && (mRecyclerViewSelector.getSelectedItemPos() != -1))
-                actionMode.setTitle(mItems.get(mRecyclerViewSelector.getSelectedItemPos()).getValue());
+                actionMode.setTitle(mItems.get(mRecyclerViewSelector.getSelectedItemPos()).getTitle());
         }
 
         @Override
