@@ -7,10 +7,12 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
@@ -22,7 +24,7 @@ import static android.content.Context.INPUT_METHOD_SERVICE;
 /**
  * Created by romanpulov on 06.09.2016.
  */
-public class AddActionHelper {
+public class AddActionHelper implements AutoCompleteArrayAdapter.OnAutoCompleteTextListener {
 
     private final View mActionView;
     private final ImageButton mListButton;
@@ -58,7 +60,8 @@ public class AddActionHelper {
 
     public void setAutoCompleteList(Collection<String> autoCompleteList) {
         //ArrayAdapter<?> adapter = new ArrayAdapter<>(mAddEditText.getContext(), android.R.layout.simple_dropdown_item_1line, autoCompleteList.toArray(new String[autoCompleteList.size()]));
-        ArrayAdapter<?> adapter = new AutoCompleteArrayAdapter(mAddEditText.getContext(), R.layout.dropdown_button_item, autoCompleteList.toArray(new String[autoCompleteList.size()]));
+        ArrayAdapter<?> adapter = new AutoCompleteArrayAdapter(mAddEditText.getContext(), R.layout.dropdown_button_item, autoCompleteList.toArray(new String[autoCompleteList.size()]), this);
+        //ArrayAdapter<?> adapter = new AutoCompleteArrayAdapter(mAddEditText.getContext(), android.R.layout.simple_dropdown_item_1line, autoCompleteList.toArray(new String[autoCompleteList.size()]));
         mAddEditText.setAdapter(adapter);
     }
 
@@ -92,17 +95,22 @@ public class AddActionHelper {
                                 // editor with Enter button
                                 ((i == EditorInfo.IME_ACTION_UNSPECIFIED) && (keyEvent != null) && (keyEvent.getAction() == KeyEvent.ACTION_DOWN))
                         ) {
+                    acceptText(textView.getText().toString());
 
-                    if (mAddListener != null)
-                        mAddListener.onAddFragmentInteraction(textView.getText().toString());
-                    //clear search text for future
-                    mAddEditText.setText(null);
                     return true;
                 }
                 return false;
             }
         });
     }
+
+    private void acceptText(String text) {
+        if (mAddListener != null)
+            mAddListener.onAddFragmentInteraction(text);
+        //clear search text for future
+        mAddEditText.setText(null);
+    }
+
 
     public void showLayout() {
         mActionView.setVisibility(View.VISIBLE);
@@ -118,6 +126,18 @@ public class AddActionHelper {
             imm.hideSoftInputFromWindow(mActionView.getWindowToken(), 0);
 
         mActionView.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onSelectText(String text) {
+        mAddEditText.setText(text);
+        mAddEditText.dismissDropDown();
+    }
+
+    @Override
+    public void onCheckText(String text) {
+        acceptText(text);
+        mAddEditText.dismissDropDown();
     }
 
     public interface OnAddInteractionListener {
