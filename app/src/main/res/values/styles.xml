@@ -89,6 +89,7 @@
         <item name="android:divider">@color/dimTextColor</item>
         <item name="android:dividerHeight">1dip</item>
         <item name="android:padding">1dip</item>
+        <item name="android:background">@drawable/white_border_shape</item>
     </style>
 
     <style name="DropDownItemStyle" parent="@android:style/Widget.DropDownItem">
