@@ -44,6 +44,15 @@ public class BasicNoteCheckedItemActivity extends BasicNoteDataPasswordActivity 
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        Fragment fragment = getFragment();
+        if ((fragment != null) && (fragment instanceof BasicNoteCheckedItemFragment)) {
+            ((BasicNoteCheckedItemFragment) fragment).hideAddLayout();
+        }
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_checked_item, menu);
         return super.onCreateOptionsMenu(menu);

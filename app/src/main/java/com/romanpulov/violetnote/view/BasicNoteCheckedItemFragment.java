@@ -241,9 +241,13 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
     }
 
     public void showAddLayout() {
-        if (mAddActionHelper != null) {
+        if (mAddActionHelper != null)
             mAddActionHelper.showLayout();
-        }
+    }
+
+    public void hideAddLayout() {
+        if (mAddActionHelper != null)
+            mAddActionHelper.hideLayout();
     }
 
     public void performUpdateChecked(boolean checked) {
