@@ -20,6 +20,7 @@
     <string name="action_search">Search</string>
     <string name="action_add">Add</string>
     <string name="action_edit">Edit</string>
+    <string name="action_edit_value">Edit value</string>
     <string name="action_delete">Delete</string>
     <string name="action_move_up">Move up</string>
     <string name="action_move_top">Move top</string>

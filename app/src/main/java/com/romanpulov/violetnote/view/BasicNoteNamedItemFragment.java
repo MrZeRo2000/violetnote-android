@@ -2,6 +2,7 @@ package com.romanpulov.violetnote.view;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,6 +26,8 @@ import com.romanpulov.violetnote.view.action.BasicNoteMoveUpAction;
 import com.romanpulov.violetnote.view.core.NameValueInputDialog;
 import com.romanpulov.violetnote.view.core.PasswordActivity;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
+import com.romanpulov.violetnote.view.core.TextEditDialogBuilder;
+import com.romanpulov.violetnote.view.core.TextInputDialog;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
@@ -58,6 +61,50 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
         dialog.show();
         mEditorDialog = dialog.getAlertDialog();
     }
+
+    private void performEditValueAction(final ActionMode mode, final BasicNoteItemA item) {
+        TextEditDialogBuilder textEditDialogBuilder = (new TextEditDialogBuilder(getActivity(), getString(R.string.ui_note_title), item.getValue()))
+                .setNonEmptyErrorMessage(getString(R.string.error_field_not_empty));
+
+        final AlertDialog alertDialog = textEditDialogBuilder.execute();
+
+        textEditDialogBuilder.setOnTextInputListener(new TextInputDialog.OnTextInputListener() {
+            @Override
+            public void onTextInput(String text) {
+                if (!text.equals(item.getValue())) {
+                    //hide editor
+                    View focusedView = alertDialog.getCurrentFocus();
+                    if (focusedView != null) {
+                        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(INPUT_METHOD_SERVICE);
+                        if (imm.isAcceptingText())
+                            imm.hideSoftInputFromWindow(focusedView.getWindowToken(), 0);
+                    }
+
+                    //change
+                    item.setValue(text);
+
+                    // finish anyway
+                    mode.finish();
+
+                    BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity());
+                    executor.addAction(getString(R.string.caption_processing), new BasicNoteDataItemEditNameValueAction(mBasicNoteData, item));
+                    executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData));
+                    executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
+                        @Override
+                        public void onExecutionCompleted(boolean result) {
+                            //clear editor reference
+                            mEditorDialog.dismiss();
+                            mEditorDialog = null;
+                        }
+                    });
+                    executor.execute(mBasicNoteData.getNote().isEncrypted());
+                }
+            }
+        });
+
+        mEditorDialog = alertDialog;
+    }
+
 
     private void performEditAction(final ActionMode mode, final BasicNoteItemA item) {
         NameValueInputDialog dialog = new NameValueInputDialog(getActivity(), getString(R.string.ui_name_value_title));
@@ -105,6 +152,9 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
                     case R.id.delete:
                         performDeleteAction(mode, selectedItem);
                         break;
+                    case R.id.edit_value:
+                        performEditValueAction(mode, selectedItem);
+                        break;
                     case R.id.edit:
                         performEditAction(mode, selectedItem);
                         break;
@@ -127,7 +177,7 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
 
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            mode.getMenuInflater().inflate(R.menu.menu_listitem_generic_actions, menu);
+            mode.getMenuInflater().inflate(R.menu.menu_listitem_namevalue_actions, menu);
             if (mRecyclerViewSelector.getSelectedItemPos() != -1)
                 mode.setTitle( mBasicNoteData.getNote().getItems().get(mRecyclerViewSelector.getSelectedItemPos()).getTitle());
             return true;

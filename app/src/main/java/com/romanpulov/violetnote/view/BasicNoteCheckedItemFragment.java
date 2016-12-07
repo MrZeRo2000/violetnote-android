@@ -61,7 +61,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         return fragment;
     }
 
-    private void performEditAction(final ActionMode mode, final BasicNoteItemA item) {
+    private void performEditValueAction(final ActionMode mode, final BasicNoteItemA item) {
         TextEditDialogBuilder textEditDialogBuilder = (new TextEditDialogBuilder(getActivity(), getString(R.string.ui_note_title), item.getValue()))
                 .setNonEmptyErrorMessage(getString(R.string.error_field_not_empty));
 
@@ -122,8 +122,8 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                     case R.id.delete:
                         performDeleteAction(mode, selectedItem);
                         break;
-                    case R.id.edit:
-                        performEditAction(mode, selectedItem);
+                    case R.id.edit_value:
+                        performEditValueAction(mode, selectedItem);
                         break;
                     case R.id.move_up:
                         performMoveAction(new BasicNoteMoveUpAction<BasicNoteItemA>(BasicNoteCheckedItemFragment.this), selectedItem);
@@ -144,7 +144,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
 
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            mode.getMenuInflater().inflate(R.menu.menu_listitem_generic_actions, menu);
+            mode.getMenuInflater().inflate(R.menu.menu_listitem_checked_actions, menu);
             if (mRecyclerViewSelector.getSelectedItemPos() != -1)
                 mode.setTitle( mBasicNoteData.getNote().getItems().get(mRecyclerViewSelector.getSelectedItemPos()).getValue());
             return true;
