@@ -34,6 +34,10 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
             mValidTimeStamp = System.currentTimeMillis();
         }
 
+        public void resetPeriod() {
+            mValidTimeStamp = 0;
+        }
+
         public boolean isValid() {
             return (System.currentTimeMillis() - mValidTimeStamp) < mValidityPeriod;
         }

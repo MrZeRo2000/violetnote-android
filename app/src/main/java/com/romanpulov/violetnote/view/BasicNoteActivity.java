@@ -79,7 +79,7 @@ public class BasicNoteActivity extends ActionBarCompatActivity implements BasicN
 
         if (intent != null) {
             intent.putExtra(PasswordActivity.PASS_DATA, noteData);
-            PasswordActivity.getPasswordValidityChecker().startPeriod();
+            PasswordActivity.getPasswordValidityChecker().resetPeriod();
             startActivityForResult(intent, 0);
         }
     }
