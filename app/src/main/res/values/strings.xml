@@ -98,6 +98,7 @@
     <string name="ui_note_type_checked">Checked</string>
     <string name="ui_note_type_named">Named</string>
     <string name="ui_note_title">Title</string>
+    <string name="ui_note_value">Value</string>
     <string name="ui_name_value_title">Name and value</string>
     <string name="ui_question_are_you_sure">Are you sure?</string>
     <string name="ui_question_are_you_sure_checkout_items">Are you sure to checkout %d items?</string>
