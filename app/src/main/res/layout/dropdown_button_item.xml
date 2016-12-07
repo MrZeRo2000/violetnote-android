@@ -19,14 +19,15 @@
         android:ellipsize="marquee"
         />
 
-    <Button
+    <ImageButton
         android:layout_width="?android:attr/listPreferredItemHeight"
         android:layout_height="match_parent"
         android:layout_gravity="right"
         android:layout_weight="0"
         android:background="@drawable/list_selector"
         android:id="@android:id/button1"
-        android:text="O"
+        android:src="@drawable/ic_action_tick"
+        android:contentDescription="@string/action_select"
         />
 
 </LinearLayout>

@@ -29,6 +29,7 @@
     <string name="action_check_all">Check all</string>
     <string name="action_uncheck_all">Uncheck all</string>
     <string name="action_reload">Reload</string>
+    <string name="action_select">Select</string>
 
     <!-- Preferences -->
     <string name="pref_title_pass_note_data">Password Notes Data</string>

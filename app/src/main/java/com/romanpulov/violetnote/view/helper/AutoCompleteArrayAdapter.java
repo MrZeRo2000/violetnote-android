@@ -6,10 +6,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 
 /**
+ * Adapter for AutoComplete
  * Created by romanpulov on 06.12.2016.
  */
 
@@ -31,11 +33,11 @@ public class AutoCompleteArrayAdapter extends ArrayAdapter<String> {
 
     private class ViewHolder implements View.OnClickListener {
         TextView mTextView;
-        Button mButton;
+        ImageButton mButton;
 
         ViewHolder(View view) {
             mTextView = (TextView) view.findViewById(android.R.id.text1);
-            mButton = (Button) view.findViewById(android.R.id.button1);
+            mButton = (ImageButton) view.findViewById(android.R.id.button1);
 
             mButton.setTag(mTextView);
 
@@ -47,7 +49,7 @@ public class AutoCompleteArrayAdapter extends ArrayAdapter<String> {
         public void onClick(View v) {
             TextView textView;
 
-            if (v instanceof Button) {
+            if (v instanceof ImageButton) {
                 textView = (TextView)v.getTag();
                 if (mAutoCompleteTextListener != null)
                     mAutoCompleteTextListener.onCheckText(textView.getText().toString());
@@ -61,26 +63,21 @@ public class AutoCompleteArrayAdapter extends ArrayAdapter<String> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        try {
-            View v;
-            ViewHolder holder;
-            if (convertView == null) {
-                LayoutInflater inflater = LayoutInflater.from(getContext());
-                v = inflater.inflate(mResId, parent, false);
-                holder = new ViewHolder(v);
-                v.setTag(holder);
-            } else {
-                v = convertView;
-                holder = (ViewHolder) v.getTag();
-            }
+        View view;
+        ViewHolder holder;
 
-            String value = getItem(position);
-            holder.mTextView.setText(value);
-
-            return v;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return convertView;
+        if (convertView == null) {
+            LayoutInflater inflater = LayoutInflater.from(getContext());
+            view = inflater.inflate(mResId, parent, false);
+            holder = new ViewHolder(view);
+            view.setTag(holder);
+        } else {
+            view = convertView;
+            holder = (ViewHolder) view.getTag();
         }
+
+        holder.mTextView.setText(getItem(position));
+
+        return view;
     }
 }
