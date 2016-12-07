@@ -38,7 +38,7 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
             return mName + "/" + mValue;
     }
 
-    public boolean getChecked() {
+    public boolean isChecked() {
         return mChecked;
     }
 

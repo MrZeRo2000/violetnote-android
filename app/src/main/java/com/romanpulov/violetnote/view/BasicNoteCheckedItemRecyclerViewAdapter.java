@@ -41,11 +41,11 @@ public class BasicNoteCheckedItemRecyclerViewAdapter extends RecyclerView.Adapte
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mItems.get(position);
-        holder.mCheckedView.setChecked(holder.mItem.getChecked());
+        holder.mCheckedView.setChecked(holder.mItem.isChecked());
         holder.mValueView.setText(holder.mItem.getValue());
 
         //strike thru for checked
-        if (holder.mItem.getChecked())
+        if (holder.mItem.isChecked())
             holder.mValueView.setPaintFlags(holder.mValueView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         else
             holder.mValueView.setPaintFlags(holder.mValueView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));

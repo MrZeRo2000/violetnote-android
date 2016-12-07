@@ -12,7 +12,6 @@ import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteHistoryItemA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.model.BasicNoteValueA;
-import com.romanpulov.violetnote.model.BasicNoteValueDataA;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,8 +19,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import static com.romanpulov.violetnote.db.DBBasicNoteOpenHelper.NOTE_ID_SELECTION_STRING;
 
 /**
  * Created by romanpulov on 17.08.2016.
@@ -136,9 +133,19 @@ public class DBNoteManager extends BasicCommonNoteManager {
                     DBBasicNoteOpenHelper.NOTE_ID_COLUMN_NAME + " = ?", new String[] {String.valueOf(note.getId())}, null, null, DBBasicNoteOpenHelper.ORDER_COLUMN_NAME
             );
 
+            int itemCount = 0;
+            int checkedItemCount = 0;
+
             for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
-                note.getItems().add(noteItemFromCursor(c, mDTF));
+                BasicNoteItemA newItem = noteItemFromCursor(c, mDTF);
+                if (newItem.isChecked())
+                    checkedItemCount ++;
+                itemCount ++;
+                note.getItems().add(newItem);
             }
+
+            note.setItemCount(itemCount);
+            note.setCheckedItemCount(checkedItemCount);
 
         } finally {
             if ((c !=null) && !c.isClosed())
@@ -305,7 +312,7 @@ public class DBNoteManager extends BasicCommonNoteManager {
         cv.put(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_COLS[3], note.getId());
         cv.put(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_COLS[4], item.getName());
         cv.put(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_COLS[5], item.getValue());
-        cv.put(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_COLS[6], item.getChecked());
+        cv.put(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_COLS[6], item.isChecked());
 
         return mDB.insert(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME, null, cv);
     }
@@ -322,7 +329,7 @@ public class DBNoteManager extends BasicCommonNoteManager {
         ContentValues cv = new ContentValues();
 
         cv.put(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_COLS[1], System.currentTimeMillis());
-        cv.put(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_COLS[6], !item.getChecked());
+        cv.put(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_COLS[6], !item.isChecked());
 
         return mDB.update(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME, cv, DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_COLS[0] + " = ?" , new String[] {String.valueOf(item.getId())});
     }
@@ -340,7 +347,7 @@ public class DBNoteManager extends BasicCommonNoteManager {
 
     public void checkOut(BasicNoteA note) {
         for (BasicNoteItemA item : note.getItems()) {
-            if (item.getChecked()) {
+            if (item.isChecked()) {
 
                 //add note values and history for not encrypted only
                 if (!note.isEncrypted()) {

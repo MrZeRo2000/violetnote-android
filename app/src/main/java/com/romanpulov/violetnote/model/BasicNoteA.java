@@ -21,6 +21,10 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
     private boolean mEncrypted;
     private String mEncryptedString;
 
+    //calculated
+    private int mItemCount;
+    private int mCheckedItemCount;
+
     public int getNoteType() {
         return mNoteType;
     }
@@ -51,6 +55,22 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
 
     public void setEncryptedString(String mEncryptedString) {
         this.mEncryptedString = mEncryptedString;
+    }
+
+    public int getItemCount() {
+        return mItemCount;
+    }
+
+    public void setItemCount(int value) {
+        mItemCount = value;
+    }
+
+    public int getCheckedItemCount() {
+        return mCheckedItemCount;
+    }
+
+    public void setCheckedItemCount(int value) {
+        mCheckedItemCount = value;
     }
 
     private List<BasicNoteItemA> mItems = new ArrayList<>();
@@ -111,6 +131,8 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
                 "[title=" + mTitle + "]," +
                 "[encrypted=" + mEncrypted + "]," +
                 "[encryptedString=" + mEncryptedString + "]" +
+                "[itemCount=" + mItemCount + "]" +
+                "[checkedItemCount=]" + mCheckedItemCount + "]" +
                 "}";
     }
 
@@ -123,6 +145,8 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
         mTitle = in.readString();
         mEncrypted = fromInt(in.readInt());
         mEncryptedString = in.readString();
+        mItemCount = in.readInt();
+        mCheckedItemCount = in.readInt();
         in.readTypedList(mItems, BasicNoteItemA.CREATOR);
 
         String[] values = in.createStringArray();
@@ -146,6 +170,8 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
         dest.writeString(mTitle);
         dest.writeInt(toInt(mEncrypted));
         dest.writeString(mEncryptedString);
+        dest.writeInt(mItemCount);
+        dest.writeInt(mCheckedItemCount);
         dest.writeTypedList(mItems);
         dest.writeStringArray(mValues.toArray(new String[mValues.size()]));
         dest.writeTypedList(mHistoryItems);
