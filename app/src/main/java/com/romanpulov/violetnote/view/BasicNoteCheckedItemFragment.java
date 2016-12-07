@@ -36,6 +36,7 @@ import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 import com.romanpulov.violetnote.view.core.TextInputDialog;
 import com.romanpulov.violetnote.view.helper.AddActionHelper;
 import com.romanpulov.violetnote.view.core.TextEditDialogBuilder;
+import com.romanpulov.violetnote.view.helper.CheckoutProgressHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +46,13 @@ import static android.content.Context.INPUT_METHOD_SERVICE;
 public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
 
     private AddActionHelper mAddActionHelper;
+    private CheckoutProgressHelper mCheckoutProgressHelper;
+
+    @Override
+    public void refreshList(DBNoteManager noteManager) {
+        super.refreshList(noteManager);
+        updateCheckoutProgress();
+    }
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -59,6 +67,10 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         args.putParcelable(PasswordActivity.PASS_DATA, basicNoteDataA);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    private void updateCheckoutProgress() {
+        mCheckoutProgressHelper.setProgressData(mBasicNoteData.getNote().getCheckedItemCount(), mBasicNoteData.getNote().getItemCount());
     }
 
     private void performEditValueAction(final ActionMode mode, final BasicNoteItemA item) {
@@ -184,6 +196,10 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                         BasicNoteItemA updatedItem = manager.getNoteItem(item.getId());
                         item.updateChecked(updatedItem);
 
+                        //update checked
+                        mBasicNoteData.getNote().addCheckedItemCount(item.isChecked() ? 1 : - 1);
+                        updateCheckoutProgress();
+
                         mRecyclerView.getAdapter().notifyItemChanged(position);
                     }
                 }
@@ -202,6 +218,10 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                 performAddAction(BasicNoteItemA.newCheckedEditInstance(text));
             }
         });
+
+        //add checkout progress
+        mCheckoutProgressHelper = new CheckoutProgressHelper(view.findViewById(R.id.checkout_progress_panel_include));
+        updateCheckoutProgress();
 
         // for not encrypted set up AutoComplete and list button
         if (!mBasicNoteData.getNote().isEncrypted()) {
@@ -260,6 +280,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
             @Override
             public void onExecutionCompleted(boolean result) {
                 mRecyclerView.getAdapter().notifyDataSetChanged();
+                updateCheckoutProgress();
             }
         });
 
@@ -276,6 +297,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
             @Override
             public void onExecutionCompleted(boolean result) {
                 mRecyclerView.getAdapter().notifyDataSetChanged();
+                updateCheckoutProgress();
 
                 //update autocomplete
                 if ((mAddActionHelper != null) && (!mBasicNoteData.getNote().isEncrypted()))

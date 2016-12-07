@@ -73,6 +73,10 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
         mCheckedItemCount = value;
     }
 
+    public void addCheckedItemCount(int value) {
+        mCheckedItemCount += value;
+    }
+
     private List<BasicNoteItemA> mItems = new ArrayList<>();
 
     public List<BasicNoteItemA> getItems() {
