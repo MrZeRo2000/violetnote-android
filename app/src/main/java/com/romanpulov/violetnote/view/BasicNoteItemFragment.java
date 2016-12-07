@@ -45,6 +45,10 @@ public class BasicNoteItemFragment extends BasicCommonNoteFragment {
         noteManager.queryNoteDataItems(mBasicNoteData.getNote());
     }
 
+    protected void afterExecutionCompleted() {
+
+    };
+
     protected void performAddAction(final BasicNoteItemA item) {
         BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity());
         executor.addAction(getString(R.string.caption_processing), new BasicNoteDataItemAddAction(mBasicNoteData, item));
@@ -52,8 +56,10 @@ public class BasicNoteItemFragment extends BasicCommonNoteFragment {
         executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
             @Override
             public void onExecutionCompleted(boolean result) {
-                if (result)
+                if (result) {
+                    afterExecutionCompleted();
                     mRecyclerView.scrollToPosition(mBasicNoteData.getNote().getItems().size() - 1);
+                }
             }
         });
         executor.execute(mBasicNoteData.getNote().isEncrypted());
@@ -70,8 +76,10 @@ public class BasicNoteItemFragment extends BasicCommonNoteFragment {
                 executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
                     @Override
                     public void onExecutionCompleted(boolean result) {
-                        if (result)
+                        if (result) {
+                            afterExecutionCompleted();
                             mode.finish();
+                        }
                         mDialogFragment.dismiss();
                         mDialogFragment = null;
                     }
@@ -97,6 +105,8 @@ public class BasicNoteItemFragment extends BasicCommonNoteFragment {
         executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
             @Override
             public void onExecutionCompleted(boolean result) {
+                if (result)
+                    afterExecutionCompleted();
                 int notePos = BasicEntityNoteA.getNotePosWithId(mBasicNoteData.getNote().getItems(), item.getId());
                 if (notePos != -1) {
                     mRecyclerViewSelector.setSelectedView(null, notePos);

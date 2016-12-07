@@ -54,6 +54,11 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         updateCheckoutProgress();
     }
 
+    @Override
+    protected void afterExecutionCompleted() {
+        updateCheckoutProgress();
+    }
+
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -279,8 +284,8 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
             @Override
             public void onExecutionCompleted(boolean result) {
+                afterExecutionCompleted();
                 mRecyclerView.getAdapter().notifyDataSetChanged();
-                updateCheckoutProgress();
             }
         });
 
@@ -296,8 +301,8 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
             @Override
             public void onExecutionCompleted(boolean result) {
+                afterExecutionCompleted();
                 mRecyclerView.getAdapter().notifyDataSetChanged();
-                updateCheckoutProgress();
 
                 //update autocomplete
                 if ((mAddActionHelper != null) && (!mBasicNoteData.getNote().isEncrypted()))
