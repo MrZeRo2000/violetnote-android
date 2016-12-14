@@ -29,7 +29,7 @@ public class DBNoteManager extends BasicCommonNoteManager {
         super(context);
     }
 
-    private static BasicNoteA noteFromCursor(Cursor c, DateTimeFormatterHelper dtf) {
+    public static BasicNoteA noteFromCursor(Cursor c, DateTimeFormatterHelper dtf) {
         return BasicNoteA.newInstance(
                 c.getLong(0),
                 c.getLong(1),
@@ -42,7 +42,23 @@ public class DBNoteManager extends BasicCommonNoteManager {
         );
     }
 
-    private static BasicNoteItemA noteItemFromCursor(Cursor c, DateTimeFormatterHelper dtf) {
+    public static BasicNoteA noteFromCursorWithTotals(Cursor c, DateTimeFormatterHelper dtf) {
+        return BasicNoteA.newInstanceWithTotals(
+                c.getLong(0),
+                c.getLong(1),
+                dtf.formatDateTimeDelimited(new Date(c.getLong(1)), "\n"),
+                c.getLong(2),
+                c.getInt(3),
+                c.getString(4),
+                BasicNoteA.fromInt(c.getInt(5)),
+                c.getString(6),
+                c.getInt(7),
+                c.getInt(8)
+        );
+    }
+
+
+    public static BasicNoteItemA noteItemFromCursor(Cursor c, DateTimeFormatterHelper dtf) {
         return BasicNoteItemA.newInstance(
                 c.getLong(0),
                 c.getLong(1),
@@ -63,7 +79,19 @@ public class DBNoteManager extends BasicCommonNoteManager {
         );
     }
 
+    /**
+     * Returns notes to UI
+     * @return Note List
+     */
     public ArrayList<BasicNoteA> queryNotes() {
+        return queryNotesTotals();
+    }
+
+    /**
+     * Returns notes from flat table, without totals
+     * @return Note List
+     */
+    public ArrayList<BasicNoteA> queryNotesFlat() {
         ArrayList<BasicNoteA> result = new ArrayList<>();
 
         Cursor c = null;
@@ -74,14 +102,66 @@ public class DBNoteManager extends BasicCommonNoteManager {
             );
 
             for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
-                result.add(noteFromCursor(c, mDTF));
+                BasicNoteA newNote = noteFromCursor(c, mDTF);
+                result.add(newNote);
             }
+
         } finally {
             if ((c !=null) && !c.isClosed())
                 c.close();
         }
 
         return result;
+    }
+
+    /**
+     * Returns notes from raw query, with totals
+     * @return Note List
+     */
+    public ArrayList<BasicNoteA> queryNotesTotals() {
+        ArrayList<BasicNoteA> result = new ArrayList<>();
+
+        Cursor c = null;
+        try {
+            c = mDB.rawQuery(DBRawQueryRepository.NOTES_WITH_TOTALS, null);
+            for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
+                BasicNoteA newNote = noteFromCursorWithTotals(c, mDTF);
+                result.add(newNote);
+            }
+
+        } finally {
+            if ((c !=null) && !c.isClosed())
+                c.close();
+        }
+
+        return result;
+    }
+
+    /**
+     * Updates notes with totals
+     * @param note to calculate totals
+     */
+    public void queryNoteTotals(BasicNoteA note) {
+        Cursor c = null;
+        try {
+            c = mDB.query(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME, new String[]{"checked"},
+                    DBBasicNoteOpenHelper.NOTE_ID_COLUMN_NAME + " = ?", new String[]{String.valueOf(note.getId())}, null, null, null);
+
+            int itemCount = 0;
+            int checkedItemCount = 0;
+
+            for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
+                itemCount ++;
+                checkedItemCount += c.getInt(0);
+            }
+
+            note.setItemCount(itemCount);
+            note.setCheckedItemCount(checkedItemCount);
+
+        } finally {
+            if ((c !=null) && !c.isClosed())
+                c.close();
+        }
     }
 
     public Collection<String> queryNoteValues(BasicNoteA note) {

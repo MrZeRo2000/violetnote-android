@@ -99,6 +99,18 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
 
     }
 
+    /**
+     * Creates notes without totals
+     * @param id
+     * @param lastModified
+     * @param lastModifiedString
+     * @param orderId
+     * @param noteType
+     * @param title
+     * @param encrypted
+     * @param encryptedString
+     * @return new instance
+     */
     public static BasicNoteA newInstance(long id, long lastModified, String lastModifiedString, long orderId, int noteType, String title, boolean encrypted, String encryptedString) {
         BasicNoteA instance = new BasicNoteA();
 
@@ -114,6 +126,46 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
         return instance;
     }
 
+    /**
+     * Creates notes with calculated fields
+     * @param id
+     * @param lastModified
+     * @param lastModifiedString
+     * @param orderId
+     * @param noteType
+     * @param title
+     * @param encrypted
+     * @param encryptedString
+     * @param itemCount
+     * @param checkedItemCount
+     * @return new instance
+     */
+    public static BasicNoteA newInstanceWithTotals(long id, long lastModified, String lastModifiedString, long orderId, int noteType, String title, boolean encrypted, String encryptedString, int itemCount, int checkedItemCount) {
+        BasicNoteA instance = new BasicNoteA();
+
+        instance.mId = id;
+        instance.mLastModified = lastModified;
+        instance.mLastModifiedString = lastModifiedString;
+        instance.mOrderId = orderId;
+        instance.mNoteType = noteType;
+        instance.mTitle = title;
+        instance.mEncrypted = encrypted;
+        instance.mEncryptedString = encryptedString;
+        instance.mItemCount = itemCount;
+        instance.mCheckedItemCount = checkedItemCount;
+
+        return instance;
+    }
+
+    /**
+     * Creates notes for editor
+     * most fields are empty
+     * @param noteType
+     * @param title
+     * @param encrypted
+     * @param encryptedString
+     * @return new instance
+     */
     public static BasicNoteA newEditInstance(int noteType, String title, boolean encrypted, String encryptedString) {
         BasicNoteA instance = new BasicNoteA();
 
@@ -136,7 +188,7 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
                 "[encrypted=" + mEncrypted + "]," +
                 "[encryptedString=" + mEncryptedString + "]" +
                 "[itemCount=" + mItemCount + "]" +
-                "[checkedItemCount=]" + mCheckedItemCount + "]" +
+                "[checkedItemCount=" + mCheckedItemCount + "]" +
                 "}";
     }
 
