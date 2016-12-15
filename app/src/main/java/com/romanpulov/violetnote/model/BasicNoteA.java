@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 /**
@@ -16,6 +17,9 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
     public static final int NOTE_TYPE_CHECKED = 0;
     public static final int NOTE_TYPE_NAMED = 1;
 
+    private static final String CHECKED_ITEM_COUNT_TITLE_FORMAT = "%d/%d";
+    private static final String NAMED_ITEM_COUNT_TITLE_FORMAT = "%d";
+
     private int mNoteType;
     private String mTitle;
     private boolean mEncrypted;
@@ -24,6 +28,7 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
     //calculated
     private int mItemCount;
     private int mCheckedItemCount;
+    private String mItemCountTitle;
 
     public int getNoteType() {
         return mNoteType;
@@ -75,6 +80,23 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
 
     public void addCheckedItemCount(int value) {
         mCheckedItemCount += value;
+    }
+
+    private void updateItemCountTitle() {
+        switch (mNoteType) {
+            case NOTE_TYPE_CHECKED:
+                mItemCountTitle = String.format(Locale.getDefault(), CHECKED_ITEM_COUNT_TITLE_FORMAT, mCheckedItemCount, mItemCount);
+                break;
+            case NOTE_TYPE_NAMED:
+                mItemCountTitle = String.format(Locale.getDefault(), NAMED_ITEM_COUNT_TITLE_FORMAT, mItemCount);
+                break;
+            default:
+                mItemCountTitle = null;
+        }
+    }
+
+    public String getItemCountTitle() {
+        return mItemCountTitle;
     }
 
     private List<BasicNoteItemA> mItems = new ArrayList<>();
@@ -153,6 +175,7 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
         instance.mEncryptedString = encryptedString;
         instance.mItemCount = itemCount;
         instance.mCheckedItemCount = checkedItemCount;
+        instance.updateItemCountTitle();
 
         return instance;
     }

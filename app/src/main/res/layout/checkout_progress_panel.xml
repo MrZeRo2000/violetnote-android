@@ -14,15 +14,12 @@
         android:id="@+id/progress_text_view"
         android:layout_weight="0"
         android:textAppearance="@style/Header1Text"
-        android:text="2/7"
         />
 
     <ProgressBar
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/progress_bar"
-        android:max="100"
-        android:progress="24"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_weight="1"
         />
