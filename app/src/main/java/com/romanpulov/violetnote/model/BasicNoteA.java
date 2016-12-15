@@ -83,16 +83,20 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
     }
 
     private void updateItemCountTitle() {
-        switch (mNoteType) {
-            case NOTE_TYPE_CHECKED:
-                mItemCountTitle = String.format(Locale.getDefault(), CHECKED_ITEM_COUNT_TITLE_FORMAT, mCheckedItemCount, mItemCount);
-                break;
-            case NOTE_TYPE_NAMED:
-                mItemCountTitle = String.format(Locale.getDefault(), NAMED_ITEM_COUNT_TITLE_FORMAT, mItemCount);
-                break;
-            default:
-                mItemCountTitle = null;
-        }
+        if (mItemCount > 0)
+            switch (mNoteType) {
+                case NOTE_TYPE_CHECKED:
+                    mItemCountTitle = String.format(Locale.getDefault(), CHECKED_ITEM_COUNT_TITLE_FORMAT, mCheckedItemCount, mItemCount);
+                    break;
+                case NOTE_TYPE_NAMED:
+                    mItemCountTitle = String.format(Locale.getDefault(), NAMED_ITEM_COUNT_TITLE_FORMAT, mItemCount);
+                    break;
+                default:
+                    mItemCountTitle = null;
+            }
+        else
+            mItemCountTitle = null;
+
     }
 
     public String getItemCountTitle() {
