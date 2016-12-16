@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/category_fragment"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
+    android:paddingLeft="@dimen/text_margin"
+    android:paddingRight="@dimen/text_margin"
+    android:paddingTop="@dimen/text_margin_half"
+    android:paddingBottom="@dimen/text_margin_half"
     android:background="@drawable/list_selector"
     >
 
@@ -11,19 +14,20 @@
         android:id="@+id/category_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/text_margin"
-        android:layout_marginRight="@dimen/text_margin"
-        android:layout_marginTop="@dimen/text_margin_half"
-        android:layout_marginBottom="@dimen/text_margin_half"
-        android:textAppearance="@style/Highlight3Text" />
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@+id/category_description"
+        android:textAppearance="@style/Highlight3Text"
+        android:text="category name"
+        />
 
     <TextView
         android:id="@+id/category_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/text_margin"
-        android:layout_marginRight="@dimen/text_margin"
-        android:layout_marginTop="0px"
-        android:layout_marginBottom="@dimen/text_margin_half"
-        android:textAppearance="@style/Dim2Text" />
-</LinearLayout>
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:textAppearance="@style/Header3Text"
+        android:text="12"
+        />
+</RelativeLayout>

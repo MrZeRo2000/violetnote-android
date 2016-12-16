@@ -20,13 +20,10 @@ public class CategoryRecyclerViewAdapter extends RecyclerView.Adapter<CategoryRe
     private final List<PassCategoryA> mValues;
     private final OnPassCategoryInteractionListener mListener;
 
-    private final boolean mHideCategoryDetailsPreference;
-
     public CategoryRecyclerViewAdapter(Context context, List<PassCategoryA> items, OnPassCategoryInteractionListener listener) {
         mContext = context;
         mValues = items;
         mListener = listener;
-        mHideCategoryDetailsPreference = PreferenceManager.getDefaultSharedPreferences(context).getBoolean("hide_category_details", false);
     }
 
     @Override
@@ -40,11 +37,7 @@ public class CategoryRecyclerViewAdapter extends RecyclerView.Adapter<CategoryRe
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         holder.mCategoryName.setText(mValues.get(position).getCategoryName());
-
-        if (!mHideCategoryDetailsPreference)
-            holder.mCategoryDescription.setText(mContext.getString(R.string.layout_notes_count, mValues.get(position).getNotesCount()));
-        else
-            holder.mCategoryDescription.setVisibility(View.GONE);
+        holder.mCategoryDescription.setText(String.valueOf(mValues.get(position).getNotesCount()));
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
