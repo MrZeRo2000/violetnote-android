@@ -14,7 +14,7 @@ public class FileTest {
 
     @Test
     public void File1() {
-        File f = new File("C:/Temp");
+        File f = new File("../data");
         String[] fs = f.list();
         for (String s : fs) {
             System.out.println(s);
@@ -23,7 +23,8 @@ public class FileTest {
 
     @Test
     public void FileChooseItemTest() {
-        FileChooseItem i1 = new FileChooseItem(new File("C:/Temp"));
+        FileChooseItem i1 = new FileChooseItem(new File("../data"));
+        i1.fillItems();
         for (ChooseItem i : i1.getItems()) {
             System.out.println(i.toString());
         }

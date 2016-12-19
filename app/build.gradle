@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 22
-    buildToolsVersion '22.0.1'
+    buildToolsVersion '23.0.3'
 
     defaultConfig {
         applicationId "com.romanpulov.violetnote"
@@ -21,6 +21,10 @@ android {
     packagingOptions {
         exclude 'META-INF/LICENSE'
     }
+
+    lintOptions {
+        disable 'InvalidPackage'
+    }
 }
 
 dependencies {
@@ -31,6 +35,6 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:22.2.1'
     compile 'com.dropbox.core:dropbox-core-sdk:2.0.2'
     compile 'com.squareup.okhttp:okhttp:2.4.0'
-    compile 'com.romanpulov.library.common:library:1.0.1'
+    compile 'com.romanpulov.library.common:library:1.0.2'
     testCompile 'junit:junit:4.12'
 }
