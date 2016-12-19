@@ -16,7 +16,7 @@ public class DBStorageManager {
     private final BackupUtils mBackupUtils;
 
     public DBStorageManager(Context context) {
-        mBackupUtils = new BackupUtils(context, DBBasicNoteOpenHelper.DATABASE_NAME, LOCAL_BACKUP_FOLDER_NAME, LOCAL_BACKUP_FILE_NAME);
+        mBackupUtils = new BackupUtils(context.getDatabasePath(DBBasicNoteOpenHelper.DATABASE_NAME).toString(), LOCAL_BACKUP_FOLDER_NAME, LOCAL_BACKUP_FILE_NAME);
     }
 
     public String createRollingLocalBackup() {
