@@ -5,7 +5,6 @@ import android.test.ApplicationTestCase;
 import android.util.Log;
 
 import com.romanpulov.violetnote.db.DBBasicNoteHelper;
-import com.romanpulov.violetnote.db.DBBasicNoteOpenHelper;
 import com.romanpulov.violetnote.db.DBStorageManager;
 
 //import java.nio.file.StandardCopyOption;

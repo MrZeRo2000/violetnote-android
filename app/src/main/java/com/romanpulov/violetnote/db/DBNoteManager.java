@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
-import com.romanpulov.violetnote.helper.DateTimeFormatterHelper;
 import com.romanpulov.violetnote.model.BasicCommonNoteA;
 import com.romanpulov.violetnote.model.BasicEntityNoteA;
 import com.romanpulov.violetnote.model.BasicNoteA;
@@ -29,7 +28,7 @@ public class DBNoteManager extends BasicCommonNoteManager {
         super(context);
     }
 
-    public static BasicNoteA noteFromCursor(Cursor c, DateTimeFormatterHelper dtf) {
+    public static BasicNoteA noteFromCursor(Cursor c, DateTimeFormatter dtf) {
         return BasicNoteA.newInstance(
                 c.getLong(0),
                 c.getLong(1),
@@ -42,7 +41,7 @@ public class DBNoteManager extends BasicCommonNoteManager {
         );
     }
 
-    public static BasicNoteA noteFromCursorWithTotals(Cursor c, DateTimeFormatterHelper dtf) {
+    public static BasicNoteA noteFromCursorWithTotals(Cursor c, DateTimeFormatter dtf) {
         return BasicNoteA.newInstanceWithTotals(
                 c.getLong(0),
                 c.getLong(1),
@@ -58,7 +57,7 @@ public class DBNoteManager extends BasicCommonNoteManager {
     }
 
 
-    public static BasicNoteItemA noteItemFromCursor(Cursor c, DateTimeFormatterHelper dtf) {
+    public static BasicNoteItemA noteItemFromCursor(Cursor c, DateTimeFormatter dtf) {
         return BasicNoteItemA.newInstance(
                 c.getLong(0),
                 c.getLong(1),
@@ -70,7 +69,7 @@ public class DBNoteManager extends BasicCommonNoteManager {
         );
     }
 
-    private static BasicNoteHistoryItemA noteHistoryItemFromCursor(Cursor c, DateTimeFormatterHelper dtf) {
+    private static BasicNoteHistoryItemA noteHistoryItemFromCursor(Cursor c, DateTimeFormatter dtf) {
         return BasicNoteHistoryItemA.newInstance(
                 c.getLong(0),
                 c.getLong(1),

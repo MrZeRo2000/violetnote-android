@@ -3,7 +3,6 @@ package com.romanpulov.violetnote.db;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.romanpulov.violetnote.helper.DateTimeFormatterHelper;
 import com.romanpulov.violetnote.model.BasicCommonNoteA;
 
 /**
@@ -13,7 +12,7 @@ public class BasicCommonNoteManager {
     protected final Context mContext;
     protected final DBBasicNoteHelper mDBHelper;
     protected final SQLiteDatabase mDB;
-    protected final DateTimeFormatterHelper mDTF;
+    protected final DateTimeFormatter mDTF;
 
     private long mNoteId = 0;
 
@@ -25,7 +24,7 @@ public class BasicCommonNoteManager {
         mContext = context;
         mDBHelper = DBBasicNoteHelper.getInstance(mContext);
         mDB = mDBHelper.getDB();
-        mDTF = new DateTimeFormatterHelper(context);
+        mDTF = new DateTimeFormatter(context);
     }
 
     public boolean moveUp(String tableName, BasicCommonNoteA note) {

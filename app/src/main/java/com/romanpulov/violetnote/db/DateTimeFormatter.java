@@ -1,4 +1,4 @@
-package com.romanpulov.violetnote.helper;
+package com.romanpulov.violetnote.db;
 
 import android.content.Context;
 import android.text.format.DateFormat;
@@ -8,11 +8,11 @@ import java.util.Date;
 /**
  * Created by rpulov on 25.08.2016.
  */
-public class DateTimeFormatterHelper {
+public class DateTimeFormatter {
     private final java.text.DateFormat mDateFormat;
     private final java.text.DateFormat mTimeFormat;
 
-    public DateTimeFormatterHelper(Context context) {
+    public DateTimeFormatter(Context context) {
         mDateFormat = DateFormat.getDateFormat(context);
         mTimeFormat = DateFormat.getTimeFormat(context);
     }

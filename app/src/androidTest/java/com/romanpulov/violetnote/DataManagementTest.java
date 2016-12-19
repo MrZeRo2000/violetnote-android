@@ -9,9 +9,8 @@ import android.util.Log;
 import com.romanpulov.violetnote.db.DBBasicNoteHelper;
 import com.romanpulov.violetnote.db.DBBasicNoteOpenHelper;
 import com.romanpulov.violetnote.db.DBNoteManager;
-import com.romanpulov.violetnote.helper.DateTimeFormatterHelper;
+import com.romanpulov.violetnote.db.DateTimeFormatter;
 import com.romanpulov.violetnote.model.BasicNoteA;
-import com.romanpulov.violetnote.model.BasicNoteItemA;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -181,7 +180,7 @@ public class DataManagementTest extends ApplicationTestCase<Application> {
         SQLiteDatabase db = dbHelper.getDB();
 
         Cursor c = null;
-        DateTimeFormatterHelper dtf = new DateTimeFormatterHelper(getContext());
+        DateTimeFormatter dtf = new DateTimeFormatter(getContext());
         try {
             c = db.rawQuery(rawSQL, null);
 

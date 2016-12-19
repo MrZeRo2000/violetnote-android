@@ -31,5 +31,6 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:22.2.1'
     compile 'com.dropbox.core:dropbox-core-sdk:2.0.2'
     compile 'com.squareup.okhttp:okhttp:2.4.0'
+    compile 'com.romanpulov.library.common:library:1.0.1'
     testCompile 'junit:junit:4.12'
 }
