@@ -41,6 +41,13 @@ public class BasicNoteActivity extends ActionBarCompatActivity implements BasicN
     }
 
     @Override
+    protected void onRestart() {
+        super.onRestart();
+        // to handle back button from underlying activity
+        mFragment.refreshList(new DBNoteManager(this));
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_add:

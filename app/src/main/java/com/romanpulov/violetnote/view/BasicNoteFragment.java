@@ -59,6 +59,8 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
     @Override
     public void refreshList(DBNoteManager noteManager) {
         noteManager.refreshNotes(mNoteList);
+        if (mRecyclerViewAdapter != null)
+            mRecyclerViewAdapter.notifyDataSetChanged();
     }
 
     public void performAddAction(final BasicNoteA item) {
