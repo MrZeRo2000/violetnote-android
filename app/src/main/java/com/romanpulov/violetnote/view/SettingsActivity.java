@@ -1,6 +1,8 @@
 package com.romanpulov.violetnote.view;
 
+import android.app.Fragment;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.romanpulov.violetnote.view.core.ActionBarCompatActivity;
 
@@ -11,7 +13,10 @@ public class SettingsActivity extends ActionBarCompatActivity {
         super.onCreate(savedInstanceState);
 
         // Display the fragment as the main content.
-        getFragmentManager().beginTransaction()
+        Fragment settingsFragment = getFragmentManager().findFragmentById(android.R.id.content);
+
+        if (settingsFragment == null)
+            getFragmentManager().beginTransaction()
                 .replace(android.R.id.content, new SettingsFragment())
                 .commit();
     }

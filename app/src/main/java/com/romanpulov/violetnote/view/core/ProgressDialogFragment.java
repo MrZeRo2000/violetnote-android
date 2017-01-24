@@ -5,17 +5,18 @@ import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.romanpulov.violetnote.R;
 
 /**
+ *
  * Created by romanpulov on 24.01.2017.
  */
 
 public class ProgressDialogFragment extends DialogFragment {
     public static String TAG = "ProgressDialogFragment";
 
-    private ProgressDialog mProgressDialog;
     private IFragmentDialogCallbacks mCallbacks;
 
     public void setCallbacks(IFragmentDialogCallbacks callbacks) {
@@ -23,7 +24,8 @@ public class ProgressDialogFragment extends DialogFragment {
     }
 
     public ProgressDialogFragment() {
-        this.setCancelable(false);
+        setCancelable(false);
+        setRetainInstance(true);
     }
 
     @Override
@@ -46,5 +48,6 @@ public class ProgressDialogFragment extends DialogFragment {
         super.onDismiss(dialog);
         if (mCallbacks != null)
             mCallbacks.onDissmiss(this, dialog);
+
     }
 }

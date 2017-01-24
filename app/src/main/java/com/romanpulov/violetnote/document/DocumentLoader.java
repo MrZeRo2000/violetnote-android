@@ -25,6 +25,7 @@ public abstract class DocumentLoader {
 
     public interface OnDocumentLoadedListener {
         void onDocumentLoaded(String result);
+        void onPreExecute();
     }
 
     private OnDocumentLoadedListener mListener;
@@ -48,15 +49,10 @@ public abstract class DocumentLoader {
     }
 
     private class DocumentLoadAsyncTask extends AsyncTask<Void, Void, String> {
-        ProgressDialogFragment progressDialog;
-
         @Override
         protected void onPreExecute() {
-            if (mLoadAppearance == LOAD_APPEARANCE_ASYNC) {
-                progressDialog = new ProgressDialogFragment();
-                progressDialog.setRetainInstance(true);
-                progressDialog.show(((Activity)mContext).getFragmentManager(), ProgressDialogFragment.TAG);
-            }
+            if (mListener != null)
+                mListener.onPreExecute();
         }
 
         @Override
@@ -72,12 +68,6 @@ public abstract class DocumentLoader {
 
         @Override
         protected void onPostExecute(String result) {
-            try {
-                if (progressDialog != null)
-                    progressDialog.dismiss();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
             if (mListener != null)
                 mListener.onDocumentLoaded(result);
         }

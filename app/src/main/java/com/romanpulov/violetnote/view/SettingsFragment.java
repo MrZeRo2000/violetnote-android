@@ -1,6 +1,8 @@
 package com.romanpulov.violetnote.view;
 
 
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -30,6 +32,8 @@ import java.util.Locale;
 
 
 public class SettingsFragment extends PreferenceFragment {
+    public static final String TAG = "SettingsFragment";
+
     public static final int SOURCE_TYPE_FILE = 0;
     public static final int SOURCE_TYPE_DROPBOX = 1;
     private static final int DEFAULT_SOURCE_TYPE = SOURCE_TYPE_FILE;
@@ -42,6 +46,35 @@ public class SettingsFragment extends PreferenceFragment {
     private static final String PREF_KEY_BASIC_NOTE_LOCAL_BACKUP = "pref_basic_note_local_backup";
     private static final String PREF_KEY_BASIC_NOTE_LOCAL_RESTORE = "pref_basic_note_local_restore";
 
+    private DocumentLoader mDocumentLoader;
+    private ProgressDialogFragment mProgressDialogFragment;
+    private ProgressDialog mProgressDialog;
+
+    private DocumentLoader.OnDocumentLoadedListener mDocumentLoaderListener = new DocumentLoader.OnDocumentLoadedListener() {
+        @Override
+        public void onDocumentLoaded(String result) {
+            if (mProgressDialog != null) {
+                mProgressDialog.dismiss();
+                mProgressDialog = null;
+            }
+
+            if (result == null) {
+                Preference prefLoad = findPreference(PREF_KEY_LOAD);
+                prefLoad.getPreferenceManager().getSharedPreferences().edit().putLong(PREF_KEY_LAST_LOADED, System.currentTimeMillis()).commit();
+                updateLoadPreferenceSummary(prefLoad, prefLoad.getPreferenceManager().getSharedPreferences().getLong(PREF_KEY_LAST_LOADED, 0L));
+            } else {
+                Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT).show();
+            }
+
+            mDocumentLoader = null;
+        }
+
+        @Override
+        public void onPreExecute() {
+            createAndShowProgressDialog();
+        }
+    };
+
     public SettingsFragment() {
         // Required empty public constructor
     }
@@ -49,6 +82,8 @@ public class SettingsFragment extends PreferenceFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+
         addPreferencesFromResource(R.xml.preferences);
 
         setupPrefSourceType();
@@ -56,6 +91,19 @@ public class SettingsFragment extends PreferenceFragment {
         setupPrefLoad();
         setupPrefAccountDropbox();
         setupPrefBackupRestore();
+    }
+
+    private void createAndShowProgressDialog() {
+        mProgressDialog = new ProgressDialog(getActivity(), R.style.DialogTheme);
+        mProgressDialog.setTitle(R.string.caption_loading);
+        mProgressDialog.show();
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        if (mDocumentLoader != null)
+            createAndShowProgressDialog();
     }
 
     private void displayError(String message) {
@@ -190,32 +238,47 @@ public class SettingsFragment extends PreferenceFragment {
     }
 
     private void setupPrefLoad() {
-        final Preference prefLoad = findPreference(PREF_KEY_LOAD);
+        Preference prefLoad = findPreference(PREF_KEY_LOAD);
         updateLoadPreferenceSummary(prefLoad, prefLoad.getPreferenceManager().getSharedPreferences().getLong(PREF_KEY_LAST_LOADED, 0L));
 
         prefLoad.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                Preference prefSourceType = findPreference(PREF_KEY_SOURCE_TYPE);
+                final Preference prefSourceType = findPreference(PREF_KEY_SOURCE_TYPE);
                 int type = prefSourceType.getPreferenceManager().getSharedPreferences().getInt(prefSourceType.getKey(), DEFAULT_SOURCE_TYPE);
 
                 //ProgressDialogFragment progressDialogFragment = new ProgressDialogFragment();
                 //progressDialogFragment.show(getFragmentManager(), ProgressDialogFragment.TAG);
 
-                DocumentLoader loader = DocumentLoaderFactory.fromType(getActivity(), type);
-                if (loader != null) {
-                    loader.setOnDocumentLoadedListener(new DocumentLoader.OnDocumentLoadedListener() {
+                if (mDocumentLoader == null) {
+                    mDocumentLoader = DocumentLoaderFactory.fromType(getActivity(), type);
+                    mDocumentLoader.setOnDocumentLoadedListener(mDocumentLoaderListener);
+/*
+                    mDocumentLoader.setOnDocumentLoadedListener(new DocumentLoader.OnDocumentLoadedListener() {
                         @Override
                         public void onDocumentLoaded(String result) {
+                            if (mProgressDialogFragment != null) {
+                                mProgressDialogFragment.dismiss();
+                                mProgressDialogFragment = null;
+                            }
+
                             if (result == null) {
+                                Preference prefLoad = findPreference(PREF_KEY_LOAD);
                                 prefLoad.getPreferenceManager().getSharedPreferences().edit().putLong(PREF_KEY_LAST_LOADED, System.currentTimeMillis()).commit();
                                 updateLoadPreferenceSummary(prefLoad, prefLoad.getPreferenceManager().getSharedPreferences().getLong(PREF_KEY_LAST_LOADED, 0L));
                             } else {
                                 Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT).show();
                             }
                         }
+
+                        @Override
+                        public void onPreExecute() {
+                            mProgressDialogFragment = new ProgressDialogFragment();
+                            mProgressDialogFragment.show(getFragmentManager(), ProgressDialogFragment.TAG);
+                        }
                     });
-                    loader.execute();
+*/
+                    mDocumentLoader.execute();
                 }
 
                 return true;
