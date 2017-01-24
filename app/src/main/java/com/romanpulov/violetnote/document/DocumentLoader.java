@@ -71,8 +71,12 @@ public abstract class DocumentLoader {
 
         @Override
         protected void onPostExecute(String result) {
-            if (progressDialog != null)
-                progressDialog.dismiss();
+            try {
+                if (progressDialog != null)
+                    progressDialog.dismiss();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             if (mListener != null)
                 mListener.onDocumentLoaded(result);
         }

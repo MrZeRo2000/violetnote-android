@@ -121,7 +121,7 @@ public class SettingsFragment extends PreferenceFragment {
             preference.setSummary(R.string.pref_message_last_loaded_never);
         else
             preference.setSummary(String.format(
-                    getActivity().getResources().getString(R.string.pref_message_last_loaded_format),
+                    preference.getContext().getResources().getString(R.string.pref_message_last_loaded_format),
                     DateFormat.getDateTimeInstance().format(new Date(value))));
     }
 
