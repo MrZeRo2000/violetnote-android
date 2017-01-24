@@ -22,6 +22,7 @@ import com.romanpulov.violetnote.document.DocumentLoaderFactory;
 import com.romanpulov.violetnote.dropboxchooser.DropboxChooserActivity;
 import com.romanpulov.violetnote.filechooser.FileChooserActivity;
 import com.romanpulov.violetnote.dropbox.DropBoxHelper;
+import com.romanpulov.violetnote.view.core.ProgressDialogFragment;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -197,6 +198,9 @@ public class SettingsFragment extends PreferenceFragment {
             public boolean onPreferenceClick(Preference preference) {
                 Preference prefSourceType = findPreference(PREF_KEY_SOURCE_TYPE);
                 int type = prefSourceType.getPreferenceManager().getSharedPreferences().getInt(prefSourceType.getKey(), DEFAULT_SOURCE_TYPE);
+
+                //ProgressDialogFragment progressDialogFragment = new ProgressDialogFragment();
+                //progressDialogFragment.show(getFragmentManager(), ProgressDialogFragment.TAG);
 
                 DocumentLoader loader = DocumentLoaderFactory.fromType(getActivity(), type);
                 if (loader != null) {

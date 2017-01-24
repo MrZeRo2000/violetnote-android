@@ -1,13 +1,13 @@
 package com.romanpulov.violetnote.document;
 
-import android.app.ProgressDialog;
+import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 
-import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.view.SettingsFragment;
 import com.romanpulov.violetnote.model.Document;
+import com.romanpulov.violetnote.view.core.ProgressDialogFragment;
 
 import java.io.File;
 
@@ -48,14 +48,14 @@ public abstract class DocumentLoader {
     }
 
     private class DocumentLoadAsyncTask extends AsyncTask<Void, Void, String> {
-        ProgressDialog progressDialog;
+        ProgressDialogFragment progressDialog;
 
         @Override
         protected void onPreExecute() {
             if (mLoadAppearance == LOAD_APPEARANCE_ASYNC) {
-                progressDialog = new ProgressDialog(mContext, R.style.DialogTheme);
-                progressDialog.setTitle(R.string.caption_loading);
-                progressDialog.show();
+                progressDialog = new ProgressDialogFragment();
+                progressDialog.setRetainInstance(true);
+                progressDialog.show(((Activity)mContext).getFragmentManager(), ProgressDialogFragment.TAG);
             }
         }
 
@@ -63,6 +63,7 @@ public abstract class DocumentLoader {
         protected String doInBackground(Void... voids) {
             try {
                 load();
+                Thread.sleep(5000);
             } catch (Exception e) {
                 return e.getMessage();
             }
