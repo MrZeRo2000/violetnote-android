@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
+ * File document loader
  * Created by romanpulov on 15.06.2016.
  */
 public class DocumentFileLoader extends DocumentLoader {

@@ -12,8 +12,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * Created by romanpulov on 01.07.2016.
  * DropBox document loader
+ * Created by romanpulov on 01.07.2016. *
  */
 public class DocumentDropboxLoader extends DocumentLoader {
     private final DbxClientV2 mClient;

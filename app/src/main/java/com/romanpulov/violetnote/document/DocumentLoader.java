@@ -1,27 +1,30 @@
 package com.romanpulov.violetnote.document;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 
 import com.romanpulov.violetnote.view.SettingsFragment;
 import com.romanpulov.violetnote.model.Document;
-import com.romanpulov.violetnote.view.core.ProgressDialogFragment;
 
 import java.io.File;
 
 /**
+ * Base class for DocumentLoader
  * Created by romanpulov on 09.06.2016.
  */
 public abstract class DocumentLoader {
-    static final int LOAD_APPEARANCE_SYNC = 0;
-    static final int LOAD_APPEARANCE_ASYNC = 1;
+    public static final int LOAD_APPEARANCE_SYNC = 0;
+    public static final int LOAD_APPEARANCE_ASYNC = 1;
 
     final Context mContext;
-    int mLoadAppearance;
+    int mLoadAppearance = LOAD_APPEARANCE_SYNC;
     final String mSourcePath;
     final File mDestFile;
+
+    public int getLoadAppearance() {
+        return mLoadAppearance;
+    }
 
     public interface OnDocumentLoadedListener {
         void onDocumentLoaded(String result);

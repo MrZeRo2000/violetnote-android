@@ -68,6 +68,7 @@
     <string name="error_field_not_empty">Field should not be empty</string>
     <string name="error_backup">Error creating backup</string>
     <string name="error_restore">Error restoring backup</string>
+    <string name="error_load_process_running">Load process is running</string>
 
     <!-- Messages -->
     <string name="message_backup_created">Successfully created backup %s</string>

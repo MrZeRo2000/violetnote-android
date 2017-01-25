@@ -50,7 +50,7 @@ public class SettingsFragment extends PreferenceFragment {
     private ProgressDialogFragment mProgressDialogFragment;
     private ProgressDialog mProgressDialog;
 
-    private DocumentLoader.OnDocumentLoadedListener mDocumentLoaderListener = new DocumentLoader.OnDocumentLoadedListener() {
+    private final DocumentLoader.OnDocumentLoadedListener mDocumentLoaderListener = new DocumentLoader.OnDocumentLoadedListener() {
         @Override
         public void onDocumentLoaded(String result) {
             if (mProgressDialog != null) {
@@ -71,7 +71,8 @@ public class SettingsFragment extends PreferenceFragment {
 
         @Override
         public void onPreExecute() {
-            createAndShowProgressDialog();
+            if (mDocumentLoader.getLoadAppearance() == DocumentLoader.LOAD_APPEARANCE_ASYNC)
+                createAndShowProgressDialog();
         }
     };
 
@@ -194,7 +195,7 @@ public class SettingsFragment extends PreferenceFragment {
 
                 class SelectionResult {
                     int which;
-                    SelectionResult(int which) {
+                    private SelectionResult(int which) {
                         this.which = which;
                     }
                 }
@@ -247,39 +248,15 @@ public class SettingsFragment extends PreferenceFragment {
                 final Preference prefSourceType = findPreference(PREF_KEY_SOURCE_TYPE);
                 int type = prefSourceType.getPreferenceManager().getSharedPreferences().getInt(prefSourceType.getKey(), DEFAULT_SOURCE_TYPE);
 
-                //ProgressDialogFragment progressDialogFragment = new ProgressDialogFragment();
-                //progressDialogFragment.show(getFragmentManager(), ProgressDialogFragment.TAG);
-
                 if (mDocumentLoader == null) {
                     mDocumentLoader = DocumentLoaderFactory.fromType(getActivity(), type);
-                    mDocumentLoader.setOnDocumentLoadedListener(mDocumentLoaderListener);
-/*
-                    mDocumentLoader.setOnDocumentLoadedListener(new DocumentLoader.OnDocumentLoadedListener() {
-                        @Override
-                        public void onDocumentLoaded(String result) {
-                            if (mProgressDialogFragment != null) {
-                                mProgressDialogFragment.dismiss();
-                                mProgressDialogFragment = null;
-                            }
-
-                            if (result == null) {
-                                Preference prefLoad = findPreference(PREF_KEY_LOAD);
-                                prefLoad.getPreferenceManager().getSharedPreferences().edit().putLong(PREF_KEY_LAST_LOADED, System.currentTimeMillis()).commit();
-                                updateLoadPreferenceSummary(prefLoad, prefLoad.getPreferenceManager().getSharedPreferences().getLong(PREF_KEY_LAST_LOADED, 0L));
-                            } else {
-                                Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT).show();
-                            }
-                        }
-
-                        @Override
-                        public void onPreExecute() {
-                            mProgressDialogFragment = new ProgressDialogFragment();
-                            mProgressDialogFragment.show(getFragmentManager(), ProgressDialogFragment.TAG);
-                        }
-                    });
-*/
-                    mDocumentLoader.execute();
-                }
+                    if (mDocumentLoader != null) {
+                        mDocumentLoader.setOnDocumentLoadedListener(mDocumentLoaderListener);
+                        mDocumentLoader.execute();
+                    }
+                } else
+                    //should not get here under normal circumstances
+                    Toast.makeText(getActivity(), getText(R.string.error_load_process_running), Toast.LENGTH_SHORT).show();
 
                 return true;
             }
