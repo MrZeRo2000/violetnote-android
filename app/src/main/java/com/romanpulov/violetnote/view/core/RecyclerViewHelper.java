@@ -195,9 +195,8 @@ public class RecyclerViewHelper {
 
         public void setSelectedView(View v, int position) {
             if ((mSelectedItemPos != position) && (mSelectedItemPos != -1)) {
-                mAdapter.notifyItemChanged(mSelectedItemPos);
                 mSelectedItemPos = position;
-                mAdapter.notifyItemChanged(mSelectedItemPos);
+                mAdapter.notifyDataSetChanged();
             }
         }
 
