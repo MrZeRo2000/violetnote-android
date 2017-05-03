@@ -162,8 +162,8 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             mode.getMenuInflater().inflate(R.menu.menu_listitem_checked_actions, menu);
-            if (mRecyclerViewSelector.getSelectedItemPos() != -1)
-                mode.setTitle( mBasicNoteData.getNote().getItems().get(mRecyclerViewSelector.getSelectedItemPos()).getValue());
+            if (mRecyclerViewSelector.getSelectedItems().size() > 0)
+                mode.setTitle( mBasicNoteData.getNote().getItems().get(mRecyclerViewSelector.getSelectedItems().iterator().next()).getValue());
             return true;
         }
 

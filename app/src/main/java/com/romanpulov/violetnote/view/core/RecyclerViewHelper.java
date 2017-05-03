@@ -16,6 +16,12 @@ import android.view.View;
 
 import com.romanpulov.violetnote.R;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 /**
  * Created by rpulov on 15.05.2016.
  */
@@ -142,30 +148,38 @@ public class RecyclerViewHelper {
         }
 
         public void updateBackground() {
-            int selectedItem = mViewSelector.getSelectedItemPos();
+            Collection<Integer> selectedItems = mViewSelector.getSelectedItems();
             int bgResId;
 
-            if (selectedItem == -1)
+            if (selectedItems.size() == 0)
                 bgResId = R.drawable.list_selector;
             else
-            if (getAdapterPosition() == selectedItem)
-                bgResId = R.color.colorAccent;
-            else
-                bgResId = R.color.windowBackground;
+                if (selectedItems.contains(getAdapterPosition()))
+                    bgResId = R.color.colorAccent;
+                else
+                    bgResId = R.color.windowBackground;
 
             mView.setBackgroundResource(bgResId);
         }
     }
 
     public static class RecyclerViewSelector {
-        private int mSelectedItemPos = -1;
+        //private int mSelectedItemPos = -1;
+        private Set<Integer> mSelectedItems = new HashSet<>();
+
+        public Collection<Integer> getSelectedItems() {
+            return mSelectedItems;
+        }
+
         private final RecyclerView.Adapter<?> mAdapter;
         private final ActionMode.Callback mActionModeCallback;
         private ActionMode mActionMode;
 
+        /*
         public int getSelectedItemPos() {
             return mSelectedItemPos;
         }
+        */
 
         public ActionMode getActionMode() {
             return mActionMode;
@@ -182,11 +196,9 @@ public class RecyclerViewHelper {
         }
 
         public void startActionMode(View v, int position) {
-            if (mSelectedItemPos == -1) {
-                setSelectedView(v, position);
-                mSelectedItemPos = position;
-                mAdapter.notifyDataSetChanged();
+            setSelectedView(v, position);
 
+            if (mSelectedItems.size() > 0) {
                 AppCompatActivity activity = (AppCompatActivity) v.getContext();
                 mActionMode = activity.startSupportActionMode(mActionModeCallback);
             } else
@@ -194,14 +206,16 @@ public class RecyclerViewHelper {
         }
 
         public void setSelectedView(View v, int position) {
-            if ((mSelectedItemPos != position) && (mSelectedItemPos != -1)) {
-                mSelectedItemPos = position;
-                mAdapter.notifyDataSetChanged();
-            }
+            if (mSelectedItems.contains(position)) {
+                mSelectedItems.remove(position);
+            } else
+                mSelectedItems.add(position);
+            mAdapter.notifyDataSetChanged();
         }
 
         public void destroyActionMode() {
-            mSelectedItemPos = -1;
+            //mSelectedItemPos = -1;
+            mSelectedItems.clear();
             mActionMode = null;
             mAdapter.notifyDataSetChanged();
         }

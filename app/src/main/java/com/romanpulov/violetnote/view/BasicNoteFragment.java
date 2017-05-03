@@ -31,6 +31,8 @@ import com.romanpulov.violetnote.view.core.TextInputDialog;
 import com.romanpulov.violetnote.view.core.TextEditDialogBuilder;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -63,6 +65,15 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
             mRecyclerViewAdapter.notifyDataSetChanged();
     }
 
+    private List<BasicCommonNoteA> getBasicNoteItems(Collection<Integer> items) {
+        List<BasicCommonNoteA> basicNoteItems = new ArrayList<>();
+        for (Integer item : items ) {
+            basicNoteItems.add(mNoteList.get(item));
+        }
+
+        return  basicNoteItems;
+    }
+
     public void performAddAction(final BasicNoteA item) {
         DBNoteManager mNoteManager = new DBNoteManager(getActivity());
         if (mNoteManager.insertNote(item) != -1) {
@@ -74,14 +85,16 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
         }
     }
 
-    private void performDeleteAction(final ActionMode mode, final BasicNoteA item) {
+    private void performDeleteAction(final ActionMode mode, final List<BasicCommonNoteA> items) {
         AlertOkCancelSupportDialogFragment dialog = AlertOkCancelSupportDialogFragment.newAlertOkCancelDialog(getString(R.string.ui_question_are_you_sure));
         dialog.setOkButtonClickListener(new AlertOkCancelSupportDialogFragment.OnClickListener() {
             @Override
             public void OnClick(DialogFragment dialog) {
                 // delete item
                 DBNoteManager mNoteManager = new DBNoteManager(getActivity());
-                mNoteManager.deleteNote(item);
+
+                for (BasicCommonNoteA item : items)
+                    mNoteManager.deleteNote(item);
 
                 // refresh list
                 refreshList(mNoteManager);
@@ -118,11 +131,11 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
                 .execute();
     }
 
-    private void performMoveAction(BasicNoteAction<BasicCommonNoteA> action, BasicNoteA item) {
+    private void performMoveAction(BasicNoteAction<BasicCommonNoteA> action, List<BasicCommonNoteA> items) {
         DBNoteManager noteManager = new DBNoteManager(getActivity());
-        if (action.execute(noteManager, item)) {
+        if (action.execute(noteManager, items)) {
             refreshList(noteManager);
-            int notePos = BasicEntityNoteA.getNotePosWithId(mNoteList, item.getId());
+            int notePos = BasicEntityNoteA.getNotePosWithId(mNoteList, items.get(0).getId());
             if (notePos != -1) {
                 mRecyclerViewSelector.setSelectedView(null, notePos);
                 mRecyclerView.scrollToPosition(notePos);
@@ -133,27 +146,27 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
     public class ActionBarCallBack implements ActionMode.Callback {
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            int selectedItemPos = mRecyclerViewSelector.getSelectedItemPos();
-            if (selectedItemPos != -1) {
-                BasicNoteA selectedItem = mNoteList.get(selectedItemPos);
+            List<BasicCommonNoteA> selectedNoteItems = getBasicNoteItems(mRecyclerViewSelector.getSelectedItems());
+            //int selectedItemPos = mRecyclerViewSelector.getSelectedItemPos();
+            if (selectedNoteItems.size() > 0) {
                 switch (item.getItemId()) {
                     case R.id.delete:
-                        performDeleteAction(mode, selectedItem);
+                        performDeleteAction(mode, selectedNoteItems);
                         break;
                     case R.id.edit:
-                        performEditAction(mode, selectedItem);
+                        performEditAction(mode, (BasicNoteA)selectedNoteItems.get(0));
                         break;
                     case R.id.move_up:
-                        performMoveAction(new BasicNoteMoveUpAction<>(BasicNoteFragment.this), selectedItem);
+                        performMoveAction(new BasicNoteMoveUpAction<>(BasicNoteFragment.this), selectedNoteItems);
                         break;
                     case R.id.move_top:
-                        performMoveAction(new BasicNoteMoveTopAction<>(BasicNoteFragment.this), selectedItem);
+                        performMoveAction(new BasicNoteMoveTopAction<>(BasicNoteFragment.this), selectedNoteItems);
                         break;
                     case R.id.move_down:
-                        performMoveAction(new BasicNoteMoveDownAction<>(BasicNoteFragment.this), selectedItem);
+                        performMoveAction(new BasicNoteMoveDownAction<>(BasicNoteFragment.this), selectedNoteItems);
                         break;
                     case R.id.move_bottom:
-                        performMoveAction(new BasicNoteMoveBottomAction<>(BasicNoteFragment.this), selectedItem);
+                        performMoveAction(new BasicNoteMoveBottomAction<>(BasicNoteFragment.this), selectedNoteItems);
                         break;
                 }
             }
@@ -163,8 +176,8 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             mode.getMenuInflater().inflate(R.menu.menu_listitem_generic_actions, menu);
-            if (mRecyclerViewSelector.getSelectedItemPos() != -1)
-                mode.setTitle(mNoteList.get(mRecyclerViewSelector.getSelectedItemPos()).getTitle());
+            if (mRecyclerViewSelector.getSelectedItems().size() == 1)
+                mode.setTitle(mNoteList.get(mRecyclerViewSelector.getSelectedItems().iterator().next()).getTitle());
             return true;
         }
 

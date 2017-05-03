@@ -350,7 +350,7 @@ public class DBNoteManager extends BasicCommonNoteManager {
         return mDB.insert(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, null, cv);
     }
 
-    public long deleteNote(BasicNoteA note) {
+    public long deleteNote(BasicCommonNoteA note) {
         String[] noteIdArgs = new String[] {String.valueOf(note.getId())};
 
         //history
