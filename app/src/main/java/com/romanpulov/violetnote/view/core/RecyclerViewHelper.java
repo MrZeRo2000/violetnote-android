@@ -196,9 +196,9 @@ public class RecyclerViewHelper {
         }
 
         public void startActionMode(View v, int position) {
-            setSelectedView(v, position);
-
-            if (mSelectedItems.size() > 0) {
+            if (mSelectedItems.size() == 0) {
+                mSelectedItems.add(position);
+                mAdapter.notifyDataSetChanged();
                 AppCompatActivity activity = (AppCompatActivity) v.getContext();
                 mActionMode = activity.startSupportActionMode(mActionModeCallback);
             } else
