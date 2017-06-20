@@ -206,11 +206,16 @@ public class RecyclerViewHelper {
         }
 
         public void setSelectedView(View v, int position) {
-            if (mSelectedItems.contains(position)) {
-                mSelectedItems.remove(position);
-            } else
-                mSelectedItems.add(position);
-            mAdapter.notifyDataSetChanged();
+            if (mSelectedItems.size() > 0) {
+                if (mSelectedItems.contains(position)) {
+                    mSelectedItems.remove(position);
+                    if (mSelectedItems.size() == 0) {
+                        finishActionMode();
+                    }
+                } else
+                    mSelectedItems.add(position);
+                mAdapter.notifyDataSetChanged();
+            }
         }
 
         public void destroyActionMode() {
