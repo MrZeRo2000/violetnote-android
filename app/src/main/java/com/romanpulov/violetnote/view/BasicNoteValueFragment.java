@@ -135,8 +135,8 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             mode.getMenuInflater().inflate(R.menu.menu_listitem_minimal_actions, menu);
-            if (mRecyclerViewSelector.getSelectedItemPos() != -1)
-                mode.setTitle(mBasicNoteValueData.getValues().get(mRecyclerViewSelector.getSelectedItemPos()).getValue());
+            if (mRecyclerViewSelector.getSelectedItems().size() > 0)
+                mode.setTitle(mBasicNoteValueData.getValues().get(mRecyclerViewSelector.getSelectedItems().iterator().next()).getValue());
             return true;
         }
 
@@ -147,7 +147,8 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
 
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            int selectedItemPos = mRecyclerViewSelector.getSelectedItemPos();
+            //int selectedItemPos = mRecyclerViewSelector.getSelectedItemPos();
+            int selectedItemPos = -1;
             if (selectedItemPos != -1) {
                 BasicNoteValueA value = mBasicNoteValueData.getValues().get(selectedItemPos);
                 switch (item.getItemId()) {

@@ -80,8 +80,8 @@ public class BasicNoteRecycleViewAdapter extends RecyclerView.Adapter<BasicNoteR
 
         private void updateSelectedTitle() {
             ActionMode actionMode;
-            if ((mRecyclerViewSelector != null) && ((actionMode = mRecyclerViewSelector.getActionMode()) != null) && (mRecyclerViewSelector.getSelectedItemPos() != -1))
-                actionMode.setTitle(mItems.get(mRecyclerViewSelector.getSelectedItemPos()).getTitle());
+            if ((mRecyclerViewSelector != null) && ((actionMode = mRecyclerViewSelector.getActionMode()) != null) && (mRecyclerViewSelector.getSelectedItems().size() > 0))
+                actionMode.setTitle(mItems.get(mRecyclerViewSelector.getSelectedItems().iterator().next()).getTitle());
         }
 
         @Override
@@ -95,7 +95,7 @@ public class BasicNoteRecycleViewAdapter extends RecyclerView.Adapter<BasicNoteR
         public void onClick(View v) {
             super.onClick(v);
             updateSelectedTitle();
-            if ((mRecyclerViewSelector.getSelectedItemPos() == -1) && (mListener != null)) {
+            if ((mRecyclerViewSelector.getSelectedItems().size() > 0) && (mListener != null) && (getAdapterPosition() != -1)) {
                 mListener.onBasicNoteFragmentInteraction(mItems.get(getAdapterPosition()));
             }
         }

@@ -145,7 +145,8 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
     public class ActionBarCallBack implements ActionMode.Callback {
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            int selectedItemPos = mRecyclerViewSelector.getSelectedItemPos();
+            //int selectedItemPos = mRecyclerViewSelector.getSelectedItemPos();
+            int selectedItemPos = -1;
             if (selectedItemPos != -1) {
                 BasicNoteItemA selectedItem = mBasicNoteData.getNote().getItems().get(selectedItemPos);
                 switch (item.getItemId()) {
@@ -178,8 +179,8 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             mode.getMenuInflater().inflate(R.menu.menu_listitem_namevalue_actions, menu);
-            if (mRecyclerViewSelector.getSelectedItemPos() != -1)
-                mode.setTitle( mBasicNoteData.getNote().getItems().get(mRecyclerViewSelector.getSelectedItemPos()).getTitle());
+            if (mRecyclerViewSelector.getSelectedItems().size() > 0)
+                mode.setTitle( mBasicNoteData.getNote().getItems().get(mRecyclerViewSelector.getSelectedItems().iterator().next()).getTitle());
             return true;
         }
 

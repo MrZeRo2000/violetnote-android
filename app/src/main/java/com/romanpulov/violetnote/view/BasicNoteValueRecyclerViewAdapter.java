@@ -61,8 +61,8 @@ public class BasicNoteValueRecyclerViewAdapter extends RecyclerView.Adapter<Basi
 
         private void updateSelectedTitle() {
             ActionMode actionMode;
-            if ((mRecyclerViewSelector != null) && ((actionMode = mRecyclerViewSelector.getActionMode()) != null) && (mRecyclerViewSelector.getSelectedItemPos() != -1))
-                actionMode.setTitle(mItems.get(mRecyclerViewSelector.getSelectedItemPos()).getValue());
+            if ((mRecyclerViewSelector != null) && ((actionMode = mRecyclerViewSelector.getActionMode()) != null) && (mRecyclerViewSelector.getSelectedItems().size() > 0))
+                actionMode.setTitle(mItems.get(mRecyclerViewSelector.getSelectedItems().iterator().next()).getValue());
         }
 
         @Override
@@ -76,7 +76,7 @@ public class BasicNoteValueRecyclerViewAdapter extends RecyclerView.Adapter<Basi
         public void onClick(View v) {
             super.onClick(v);
             updateSelectedTitle();
-            if ((mListener != null) && (mRecyclerViewSelector.getSelectedItemPos() == -1))
+            if ((mListener != null) && (mRecyclerViewSelector.getSelectedItems().size() == 0))
                 mListener.onNoteValueClicked(mItems.get(getAdapterPosition()), getAdapterPosition());
         }
 

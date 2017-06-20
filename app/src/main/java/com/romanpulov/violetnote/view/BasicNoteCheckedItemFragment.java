@@ -132,7 +132,8 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
     public class ActionBarCallBack implements ActionMode.Callback {
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            int selectedItemPos = mRecyclerViewSelector.getSelectedItemPos();
+            //int selectedItemPos = mRecyclerViewSelector.getSelectedItemPos();
+            int selectedItemPos = -1;
             if (selectedItemPos != -1) {
                 BasicNoteItemA selectedItem = mBasicNoteData.getNote().getItems().get(selectedItemPos);
                 switch (item.getItemId()) {
