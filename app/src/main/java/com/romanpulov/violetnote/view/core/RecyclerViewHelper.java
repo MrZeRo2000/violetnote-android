@@ -148,7 +148,7 @@ public class RecyclerViewHelper {
         }
 
         public void updateBackground() {
-            Collection<Integer> selectedItems = mViewSelector.getSelectedItems();
+            Collection<?> selectedItems = mViewSelector.getSelectedItems();
             int bgResId;
 
             if (selectedItems.size() == 0)
@@ -186,8 +186,10 @@ public class RecyclerViewHelper {
         }
 
         public void finishActionMode() {
-            if (mActionMode != null)
+            if (mActionMode != null) {
                 mActionMode.finish();
+                mActionMode = null;
+            }
         }
 
         public RecyclerViewSelector(RecyclerView.Adapter<?> adapter, ActionMode.Callback actionModeCallback) {

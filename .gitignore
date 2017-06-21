@@ -50,3 +50,6 @@ data/*.db
 
 # data test files
 data/*test*
+
+# VP
+vpproject/
