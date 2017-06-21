@@ -11,6 +11,7 @@ import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 
+import java.util.Collection;
 import java.util.List;
 
 public class BasicNoteNamedItemRecyclerViewAdapter extends RecyclerView.Adapter<BasicNoteNamedItemRecyclerViewAdapter.ViewHolder> {
@@ -66,23 +67,14 @@ public class BasicNoteNamedItemRecyclerViewAdapter extends RecyclerView.Adapter<
             mLastModifiedView = (TextView) view.findViewById(R.id.last_modified);
         }
 
-        private void updateSelectedTitle() {
-            ActionMode actionMode;
-            if ((mRecyclerViewSelector != null) && ((actionMode = mRecyclerViewSelector.getActionMode()) != null) && (mRecyclerViewSelector.getSelectedItems().size() > 0))
-                actionMode.setTitle(mItems.get(mRecyclerViewSelector.getSelectedItems().iterator().next()).getTitle());
-        }
-
         @Override
-        public boolean onLongClick(View v) {
-            super.onLongClick(v);
-            updateSelectedTitle();
-            return true;
+        protected String getSelectedTitle(Collection<Integer> selectedItems) {
+            return mItems.get(selectedItems.iterator().next()).getTitle();
         }
 
         @Override
         public void onClick(View v) {
             super.onClick(v);
-            updateSelectedTitle();
             if ((mRecyclerViewSelector.getSelectedItems().size() == 0) && (mListener != null) && (getAdapterPosition() != -1))
                 mListener.onBasicNoteItemFragmentInteraction(mItems.get(getAdapterPosition()), getAdapterPosition());
         }
