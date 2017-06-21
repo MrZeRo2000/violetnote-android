@@ -13,8 +13,6 @@ import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.view.core.ActionBarCompatActivity;
 import com.romanpulov.violetnote.view.core.PasswordActivity;
 
-import java.util.ArrayList;
-
 public class BasicNoteActivity extends ActionBarCompatActivity implements BasicNoteFragment.OnBasicNoteFragmentInteractionListener {
     public static final String BASIC_NOTE_DATA = "BasicNoteData";
     public static final String NOTE_LIST = "NoteList";
@@ -27,11 +25,16 @@ public class BasicNoteActivity extends ActionBarCompatActivity implements BasicN
         super.onCreate(savedInstanceState);
 
         DBNoteManager noteManager = new DBNoteManager(this);
-        ArrayList<BasicNoteA> noteList = noteManager.queryNotes();
 
         FragmentManager fm = getSupportFragmentManager();
-        mFragment = BasicNoteFragment.newInstance(noteList);
-        fm.beginTransaction().add(android.R.id.content, mFragment).commit();
+
+        mFragment = (BasicNoteFragment)fm.findFragmentById(android.R.id.content);
+        if (mFragment == null) {
+            mFragment = BasicNoteFragment.newInstance(noteManager);
+            fm.beginTransaction().replace(android.R.id.content, mFragment).commit();
+        } else {
+            mFragment.refreshList(noteManager);
+        }
     }
 
     @Override

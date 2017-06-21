@@ -38,15 +38,13 @@ import java.util.List;
  * A placeholder fragment containing a simple view.
  */
 public class BasicNoteFragment extends BasicCommonNoteFragment {
-
     private OnBasicNoteFragmentInteractionListener mListener;
 
-    private ArrayList<BasicNoteA> mNoteList;
-    private BasicNoteRecycleViewAdapter mRecyclerViewAdapter;
+    private ArrayList<BasicNoteA> mNoteList = new ArrayList<>();
 
-    public static BasicNoteFragment newInstance(ArrayList<BasicNoteA> noteList) {
+    public static BasicNoteFragment newInstance(DBNoteManager noteManager) {
         BasicNoteFragment fragment = new BasicNoteFragment();
-        fragment.mNoteList = noteList;
+        fragment.refreshList(noteManager);
         return fragment;
     }
 
@@ -61,8 +59,6 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
     @Override
     public void refreshList(DBNoteManager noteManager) {
         noteManager.refreshNotes(mNoteList);
-        if (mRecyclerViewAdapter != null)
-            mRecyclerViewAdapter.notifyDataSetChanged();
     }
 
     private List<BasicCommonNoteA> getBasicNoteItems(Collection<Integer> items) {
@@ -204,11 +200,12 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
         Context context = view.getContext();
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-        if (mNoteList != null) {
-            mRecyclerViewAdapter = new BasicNoteRecycleViewAdapter(mNoteList, new ActionBarCallBack(), mListener);
-            mRecyclerViewSelector = mRecyclerViewAdapter.getRecyclerViewSelector();
-            mRecyclerView.setAdapter(mRecyclerViewAdapter);
-        }
+        BasicNoteRecycleViewAdapter recyclerViewAdapter = new BasicNoteRecycleViewAdapter(mNoteList, new ActionBarCallBack(), mListener);
+        mRecyclerViewSelector = recyclerViewAdapter.getRecyclerViewSelector();
+        mRecyclerView.setAdapter(recyclerViewAdapter);
+
+        //restore selected items
+        restoreSelectedItems(savedInstanceState, view);
 
         // add decoration
         mRecyclerView.addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(getActivity(), RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_white_black_gradient));
