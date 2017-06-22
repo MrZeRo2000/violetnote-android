@@ -226,7 +226,7 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
         mOrderId = in.readLong();
         mNoteType = in.readInt();
         mTitle = in.readString();
-        mEncrypted = fromInt(in.readInt());
+        mEncrypted = BooleanUtils.fromInt(in.readInt());
         mEncryptedString = in.readString();
         mItemCount = in.readInt();
         mCheckedItemCount = in.readInt();
@@ -251,7 +251,7 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
         dest.writeLong(mOrderId);
         dest.writeInt(mNoteType);
         dest.writeString(mTitle);
-        dest.writeInt(toInt(mEncrypted));
+        dest.writeInt(BooleanUtils.toInt(mEncrypted));
         dest.writeString(mEncryptedString);
         dest.writeInt(mItemCount);
         dest.writeInt(mCheckedItemCount);

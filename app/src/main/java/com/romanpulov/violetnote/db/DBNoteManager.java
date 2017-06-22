@@ -11,6 +11,7 @@ import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteHistoryItemA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.model.BasicNoteValueA;
+import com.romanpulov.violetnote.model.BooleanUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -36,7 +37,7 @@ public class DBNoteManager extends BasicCommonNoteManager {
                 c.getLong(2),
                 c.getInt(3),
                 c.getString(4),
-                BasicNoteA.fromInt(c.getInt(5)),
+                BooleanUtils.fromInt(c.getInt(5)),
                 c.getString(6)
         );
     }
@@ -49,7 +50,7 @@ public class DBNoteManager extends BasicCommonNoteManager {
                 c.getLong(2),
                 c.getInt(3),
                 c.getString(4),
-                BasicNoteA.fromInt(c.getInt(5)),
+                BooleanUtils.fromInt(c.getInt(5)),
                 c.getString(6),
                 c.getInt(7),
                 c.getInt(8)
@@ -65,7 +66,7 @@ public class DBNoteManager extends BasicCommonNoteManager {
                 c.getLong(2),
                 c.getString(4),
                 c.getString(5),
-                BasicCommonNoteA.fromInt(c.getInt(6))
+                BooleanUtils.fromInt(c.getInt(6))
         );
     }
 
@@ -312,7 +313,7 @@ public class DBNoteManager extends BasicCommonNoteManager {
             ContentValues cv = new ContentValues();
 
             cv.put(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_COLS[1], System.currentTimeMillis());
-            cv.put(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_COLS[6], BasicCommonNoteA.toInt(checked));
+            cv.put(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_COLS[6], BooleanUtils.toInt(checked));
 
             mDB.update(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME, cv, DBBasicNoteOpenHelper.ID_COLUMN_NAME + " = ?" , new String[] {String.valueOf(item.getId())});
         }
@@ -344,7 +345,7 @@ public class DBNoteManager extends BasicCommonNoteManager {
         cv.put(DBBasicNoteOpenHelper.NOTES_TABLE_COLS[2], DBBasicNoteHelper.getInstance(mContext).getMaxOrderId(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, 0) + 1);
         cv.put(DBBasicNoteOpenHelper.NOTES_TABLE_COLS[3], note.getNoteType());
         cv.put(DBBasicNoteOpenHelper.NOTES_TABLE_COLS[4], note.getTitle());
-        cv.put(DBBasicNoteOpenHelper.NOTES_TABLE_COLS[5], BasicNoteA.toInt(note.isEncrypted()));
+        cv.put(DBBasicNoteOpenHelper.NOTES_TABLE_COLS[5], BooleanUtils.toInt(note.isEncrypted()));
         cv.put(DBBasicNoteOpenHelper.NOTES_TABLE_COLS[6], note.getEncryptedString());
 
         return mDB.insert(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, null, cv);
@@ -369,7 +370,7 @@ public class DBNoteManager extends BasicCommonNoteManager {
         cv.put(DBBasicNoteOpenHelper.NOTES_TABLE_COLS[1], System.currentTimeMillis());
         cv.put(DBBasicNoteOpenHelper.NOTES_TABLE_COLS[3], note.getNoteType());
         cv.put(DBBasicNoteOpenHelper.NOTES_TABLE_COLS[4], note.getTitle());
-        cv.put(DBBasicNoteOpenHelper.NOTES_TABLE_COLS[5], BasicNoteA.toInt(note.isEncrypted()));
+        cv.put(DBBasicNoteOpenHelper.NOTES_TABLE_COLS[5], BooleanUtils.toInt(note.isEncrypted()));
         cv.put(DBBasicNoteOpenHelper.NOTES_TABLE_COLS[6], note.getEncryptedString());
 
         return mDB.update(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, cv, DBBasicNoteOpenHelper.NOTES_TABLE_COLS[0] + "=" + note.getId(), null);
