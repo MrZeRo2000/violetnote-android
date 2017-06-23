@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.model.BasicCommonNoteA;
 import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 
@@ -80,7 +81,7 @@ public class BasicNoteRecycleViewAdapter extends RecyclerView.Adapter<BasicNoteR
         }
 
         protected String getSelectedTitle(Collection<Integer> selectedItems) {
-            return mItems.get(selectedItems.iterator().next()).getTitle();
+            return BasicCommonNoteA.getItemsDisplayTitle(mItems, selectedItems);
         }
 
         @Override

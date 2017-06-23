@@ -27,11 +27,8 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
         mValue = value;
     }
 
-    /**
-     * Used in ActionMode
-     * @return display title
-     */
-    public String getTitle() {
+    @Override
+    public String getDisplayTitle() {
         if (mName == null)
             return mValue;
         else

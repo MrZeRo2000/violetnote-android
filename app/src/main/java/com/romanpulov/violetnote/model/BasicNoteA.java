@@ -38,6 +38,11 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
         this.mNoteType = mNoteType;
     }
 
+    @Override
+    public String getDisplayTitle() {
+        return mTitle;
+    }
+
     public String getTitle() {
         return mTitle;
     }
