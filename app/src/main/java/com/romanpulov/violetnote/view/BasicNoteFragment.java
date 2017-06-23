@@ -149,6 +149,7 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             List<BasicCommonNoteA> selectedNoteItems = getBasicNoteItems(mRecyclerViewSelector.getSelectedItems());
+
             //int selectedItemPos = mRecyclerViewSelector.getSelectedItemPos();
             if (selectedNoteItems.size() > 0) {
                 switch (item.getItemId()) {
