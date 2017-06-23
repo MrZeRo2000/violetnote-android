@@ -21,6 +21,7 @@ import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.model.BasicNoteValueA;
 import com.romanpulov.violetnote.model.BasicNoteValueDataA;
+import com.romanpulov.violetnote.model.DisplayTitleBuilder;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutor;
 import com.romanpulov.violetnote.view.action.BasicNoteDataItemCheckOutAction;
 import com.romanpulov.violetnote.view.action.BasicNoteDataItemEditNameValueAction;
@@ -163,8 +164,8 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             mode.getMenuInflater().inflate(R.menu.menu_listitem_checked_actions, menu);
-            if (mRecyclerViewSelector.getSelectedItems().size() > 0)
-                mode.setTitle( mBasicNoteData.getNote().getItems().get(mRecyclerViewSelector.getSelectedItems().iterator().next()).getValue());
+            if (mRecyclerViewSelector.isSelected())
+                mode.setTitle(DisplayTitleBuilder.buildItemsDisplayTitle(mBasicNoteData.getNote().getItems(), mRecyclerViewSelector.getSelectedItems()));
             return true;
         }
 

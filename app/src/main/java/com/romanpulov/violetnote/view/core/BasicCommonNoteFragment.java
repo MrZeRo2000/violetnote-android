@@ -25,7 +25,7 @@ public abstract class BasicCommonNoteFragment extends Fragment implements DBData
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        if ((mRecyclerViewSelector != null) && (mRecyclerViewSelector.getSelectedItems() != null)) {
+        if (mRecyclerViewSelector != null) {
             Collection<Integer> selectedItems = mRecyclerViewSelector.getSelectedItems();
             if (selectedItems.size() > 0) {
                 int[] selectedItemsArray = new int[selectedItems.size()];

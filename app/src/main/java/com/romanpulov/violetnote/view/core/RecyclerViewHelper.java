@@ -184,6 +184,18 @@ public class RecyclerViewHelper {
             return mSelectedItems;
         }
 
+        public boolean isSelectedSingle() {
+            return mSelectedItems.size() == 1;
+        }
+
+        public boolean isSelectedMultiple() {
+            return mSelectedItems.size() > 1;
+        }
+
+        public boolean isSelected() {
+            return mSelectedItems.size() > 0;
+        }
+
         private final RecyclerView.Adapter<?> mAdapter;
         private final ActionMode.Callback mActionModeCallback;
         private ActionMode mActionMode;
@@ -205,6 +217,13 @@ public class RecyclerViewHelper {
             }
         }
 
+        private void selectionChanged() {
+            mAdapter.notifyDataSetChanged();
+            if (mActionMode != null) {
+                mActionMode.invalidate();
+            }
+        }
+
         public RecyclerViewSelector(RecyclerView.Adapter<?> adapter, ActionMode.Callback actionModeCallback) {
             mAdapter = adapter;
             mActionModeCallback = actionModeCallback;
@@ -213,7 +232,7 @@ public class RecyclerViewHelper {
         public void startActionMode(View v, int position) {
             if (mSelectedItems.size() == 0) {
                 mSelectedItems.add(position);
-                mAdapter.notifyDataSetChanged();
+                selectionChanged();
                 AppCompatActivity activity = (AppCompatActivity) v.getContext();
                 mActionMode = activity.startSupportActionMode(mActionModeCallback);
             } else
@@ -229,7 +248,7 @@ public class RecyclerViewHelper {
                     }
                 } else
                     mSelectedItems.add(position);
-                mAdapter.notifyDataSetChanged();
+                selectionChanged();
             }
         }
 

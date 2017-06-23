@@ -7,7 +7,7 @@ import android.os.Parcelable;
  * Created by romanpulov on 22.09.2016.
  */
 
-public class BasicNoteValueA extends BasicEntityNoteA implements Parcelable  {
+public class BasicNoteValueA extends BasicEntityNoteA implements Parcelable, DisplayTitleProvider  {
     protected String mValue;
 
     public String getValue() {
@@ -66,4 +66,9 @@ public class BasicNoteValueA extends BasicEntityNoteA implements Parcelable  {
             return new BasicNoteValueA[size];
         }
     };
+
+    @Override
+    public String getDisplayTitle() {
+        return mValue;
+    }
 }

@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.model.BasicNoteValueA;
+import com.romanpulov.violetnote.model.DisplayTitleBuilder;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 
 import java.util.Collection;
@@ -62,13 +63,13 @@ public class BasicNoteValueRecyclerViewAdapter extends RecyclerView.Adapter<Basi
 
         @Override
         protected String getSelectedTitle(Collection<Integer> selectedItems) {
-            return mItems.get(selectedItems.iterator().next()).getValue();
+            return DisplayTitleBuilder.buildItemsDisplayTitle(mItems, selectedItems);
         }
 
         @Override
         public void onClick(View v) {
             super.onClick(v);
-            if ((mRecyclerViewSelector.getSelectedItems().size() == 0) && (mListener != null) && (getAdapterPosition() != -1))
+            if ((!mRecyclerViewSelector.isSelected()) && (mListener != null) && (getAdapterPosition() != -1))
                 mListener.onNoteValueClicked(mItems.get(getAdapterPosition()), getAdapterPosition());
         }
 

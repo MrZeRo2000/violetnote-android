@@ -8,8 +8,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.romanpulov.violetnote.R;
-import com.romanpulov.violetnote.model.BasicCommonNoteA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
+import com.romanpulov.violetnote.model.DisplayTitleBuilder;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 
 import java.util.Collection;
@@ -70,13 +70,13 @@ public class BasicNoteNamedItemRecyclerViewAdapter extends RecyclerView.Adapter<
 
         @Override
         protected String getSelectedTitle(Collection<Integer> selectedItems) {
-            return BasicCommonNoteA.getItemsDisplayTitle(mItems, selectedItems);
+            return DisplayTitleBuilder.buildItemsDisplayTitle(mItems, selectedItems);
         }
 
         @Override
         public void onClick(View v) {
             super.onClick(v);
-            if ((mRecyclerViewSelector.getSelectedItems().size() == 0) && (mListener != null) && (getAdapterPosition() != -1))
+            if ((!mRecyclerViewSelector.isSelected()) && (mListener != null) && (getAdapterPosition() != -1))
                 mListener.onBasicNoteItemFragmentInteraction(mItems.get(getAdapterPosition()), getAdapterPosition());
         }
 

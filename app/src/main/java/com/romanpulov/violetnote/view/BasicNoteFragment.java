@@ -7,6 +7,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,6 +20,7 @@ import com.romanpulov.violetnote.db.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicCommonNoteA;
 import com.romanpulov.violetnote.model.BasicEntityNoteA;
 import com.romanpulov.violetnote.model.BasicNoteA;
+import com.romanpulov.violetnote.model.DisplayTitleBuilder;
 import com.romanpulov.violetnote.view.action.BasicNoteAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveBottomAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveDownAction;
@@ -38,6 +40,10 @@ import java.util.List;
  * A placeholder fragment containing a simple view.
  */
 public class BasicNoteFragment extends BasicCommonNoteFragment {
+    private static void log(String message) {
+        Log.d("BasicNoteFragment", message);
+    }
+
     private OnBasicNoteFragmentInteractionListener mListener;
 
     private ArrayList<BasicNoteA> mNoteList = new ArrayList<>();
@@ -171,11 +177,13 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
 
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            log("onCreateActionMode");
             mode.getMenuInflater().inflate(R.menu.menu_listitem_generic_actions, menu);
-            if (mRecyclerViewSelector.getSelectedItems().size() == 1)
-                mode.setTitle(mNoteList.get(mRecyclerViewSelector.getSelectedItems().iterator().next()).getTitle());
+            if (mRecyclerViewSelector.isSelectedSingle())
+                mode.setTitle(DisplayTitleBuilder.buildItemsDisplayTitle(mNoteList, mRecyclerViewSelector.getSelectedItems()));
             return true;
         }
+
 
         @Override
         public void onDestroyActionMode(ActionMode mode) {
@@ -185,6 +193,12 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
 
         @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            log("onPrepareActionMode");
+            //menu.getItem(R.menu.)
+            MenuItem menuItem = menu.findItem(R.id.edit);
+            if (menuItem != null) {
+                menuItem.setVisible(mRecyclerViewSelector.isSelectedSingle());
+            }
             return false;
         }
     }
