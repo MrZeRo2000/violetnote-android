@@ -10,7 +10,7 @@ import java.util.Comparator;
  */
 
 public class BasicOrderedEntityNoteA extends BasicModifiableEntityNoteA{
-    private long mOrderId;
+    protected long mOrderId;
 
     public long getOrderId() {
         return mOrderId;
