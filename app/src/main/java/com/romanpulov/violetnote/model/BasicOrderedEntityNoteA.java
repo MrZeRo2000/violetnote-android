@@ -2,10 +2,12 @@ package com.romanpulov.violetnote.model;
 
 import android.support.annotation.NonNull;
 
+import java.util.Collections;
 import java.util.Comparator;
-
+import java.util.List;
 
 /**
+ * Entity class with ordering
  * Created by rpulov on 22.09.2016.
  */
 
@@ -49,7 +51,26 @@ public class BasicOrderedEntityNoteA extends BasicModifiableEntityNoteA{
             return 0;
     }
 
-    public static class BasicOrderedEntityNoteAscComparator implements Comparator<BasicOrderedEntityNoteA> {
+    /**
+     * Ascending sorting by orderId
+     * @param list sorted list
+     */
+    public static void sortAsc(List<? extends BasicOrderedEntityNoteA> list) {
+        Collections.sort(list, new BasicOrderedEntityNoteA.BasicOrderedEntityNoteAscComparator());
+    }
+
+    /**
+     * Dedcending sorting by orderId
+     * @param list sorted list
+     */
+    public static void sortDesc(List<? extends BasicOrderedEntityNoteA> list) {
+        Collections.sort(list, new BasicOrderedEntityNoteA.BasicOrderedEntityNoteDescComparator());
+    }
+
+    /**
+     * Ascending comparator
+     */
+    private static class BasicOrderedEntityNoteAscComparator implements Comparator<BasicOrderedEntityNoteA> {
         @Override
         public int compare(BasicOrderedEntityNoteA lhs, BasicOrderedEntityNoteA rhs) {
             if (lhs == rhs)
@@ -64,7 +85,10 @@ public class BasicOrderedEntityNoteA extends BasicModifiableEntityNoteA{
         }
     }
 
-    public static class BasicOrderedEntityNoteDescComparator implements Comparator<BasicOrderedEntityNoteA> {
+    /**
+     * Descending comparator
+     */
+    private static class BasicOrderedEntityNoteDescComparator implements Comparator<BasicOrderedEntityNoteA> {
         @Override
         public int compare(BasicOrderedEntityNoteA lhs, BasicOrderedEntityNoteA rhs) {
             if (lhs == rhs)

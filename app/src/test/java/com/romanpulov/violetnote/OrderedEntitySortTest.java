@@ -38,7 +38,7 @@ public class OrderedEntitySortTest {
         o.setOrderId(4);
         list.add(o);
 
-        Collections.sort(list, new BasicOrderedEntityNoteA.BasicOrderedEntityNoteAscComparator());
+        BasicOrderedEntityNoteA.sortAsc(list);
         BasicOrderedEntityNoteA so = list.get(0);
         System.out.println(so.getId());
         Assert.assertEquals(so.getId(), 2L);
@@ -49,7 +49,7 @@ public class OrderedEntitySortTest {
         System.out.println(so.getId());
         Assert.assertEquals(so.getId(), 1L);
 
-        Collections.sort(list, new BasicOrderedEntityNoteA.BasicOrderedEntityNoteDescComparator());
+        BasicOrderedEntityNoteA.sortDesc(list);
         so = list.get(0);
         System.out.println(so.getId());
         Assert.assertEquals(so.getId(), 1L);
