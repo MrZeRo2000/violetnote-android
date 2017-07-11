@@ -2,6 +2,7 @@ package com.romanpulov.violetnote.view.action;
 
 import com.romanpulov.violetnote.db.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicCommonNoteA;
+import com.romanpulov.violetnote.model.BasicOrderedEntityNoteA;
 import com.romanpulov.violetnote.view.core.BasicCommonNoteFragment;
 
 import java.util.List;
@@ -22,6 +23,17 @@ public class BasicNoteMoveUpAction<T extends BasicCommonNoteA> extends BasicNote
 
     @Override
     public boolean execute(DBNoteManager noteManager, List<T> items) {
-        throw new IllegalArgumentException();
+        //throw new IllegalArgumentException();
+
+        boolean result = false;
+        BasicOrderedEntityNoteA.sortAsc(items);
+        for (T item : items) {
+            if (noteManager.moveUp(mDBDataProvider.getDBTableName(), item)) {
+                result = true;
+            } else
+                break;
+        }
+
+        return result;
     }
 }

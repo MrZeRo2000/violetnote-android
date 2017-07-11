@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
@@ -17,6 +18,7 @@ import android.view.View;
 import com.romanpulov.violetnote.R;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -250,6 +252,13 @@ public class RecyclerViewHelper {
                     mSelectedItems.add(position);
                 selectionChanged();
             }
+        }
+
+        public void setSelectedItems(Integer[] items) {
+            mSelectedItems.clear();
+            mSelectedItems.addAll(Arrays.asList(items));
+
+            selectionChanged();
         }
 
         public void destroyActionMode() {
