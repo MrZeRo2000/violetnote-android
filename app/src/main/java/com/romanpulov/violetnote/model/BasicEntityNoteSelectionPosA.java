@@ -54,4 +54,20 @@ public final class BasicEntityNoteSelectionPosA {
         mMinPos = calcMinPos;
         mMaxPos = calcMaxPos;
     }
+
+    /**
+     * Returns max or min pos depending on direction
+     * @param direction up or down
+     * @return selection position
+     */
+    public int getDirectionPos(int direction) {
+        switch (direction) {
+            case MovementDirection.DIRECTION_UP:
+                return mMinPos;
+            case MovementDirection.DIRECTION_DOWN:
+                return mMaxPos;
+            default:
+                return -1;
+        }
+    }
 }

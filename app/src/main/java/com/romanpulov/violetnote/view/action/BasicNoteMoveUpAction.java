@@ -3,6 +3,7 @@ package com.romanpulov.violetnote.view.action;
 import com.romanpulov.violetnote.db.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicCommonNoteA;
 import com.romanpulov.violetnote.model.BasicOrderedEntityNoteA;
+import com.romanpulov.violetnote.model.MovementDirection;
 import com.romanpulov.violetnote.view.core.BasicCommonNoteFragment;
 
 import java.util.List;
@@ -38,6 +39,6 @@ public class BasicNoteMoveUpAction<T extends BasicCommonNoteA> extends BasicNote
 
     @Override
     public int getDirection() {
-        return BasicNoteMoveAction.DIRECTION_UP;
+        return MovementDirection.DIRECTION_UP;
     }
 }

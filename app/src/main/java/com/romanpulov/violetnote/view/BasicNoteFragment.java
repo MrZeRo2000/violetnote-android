@@ -141,18 +141,8 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
             refreshList(noteManager);
 
             BasicEntityNoteSelectionPosA selectionPos = new BasicEntityNoteSelectionPosA(mNoteList, items);
-            int selectionScrollPos;
+            int selectionScrollPos = selectionPos.getDirectionPos(action.getDirection());
 
-            switch(action.getDirection()) {
-                case BasicNoteMoveAction.DIRECTION_UP:
-                    selectionScrollPos = selectionPos.getMinPos();
-                    break;
-                case BasicNoteMoveAction.DIRECTION_DOWN:
-                    selectionScrollPos = selectionPos.getMaxPos();
-                    break;
-                default:
-                    selectionScrollPos = -1;
-            }
             if (selectionScrollPos != -1) {
                 mRecyclerViewSelector.setSelectedItems(selectionPos.getSelectedItemsPositions());
                 mRecyclerView.scrollToPosition(selectionScrollPos);
