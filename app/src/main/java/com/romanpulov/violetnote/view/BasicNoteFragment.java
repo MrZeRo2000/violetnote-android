@@ -22,6 +22,7 @@ import com.romanpulov.violetnote.model.BasicEntityNoteSelectionPosA;
 import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.DisplayTitleBuilder;
 import com.romanpulov.violetnote.view.action.BasicNoteAction;
+import com.romanpulov.violetnote.view.action.BasicNoteMoveAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveBottomAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveDownAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveTopAction;
@@ -133,16 +134,28 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
                 .execute();
     }
 
-    private void performMoveAction(BasicNoteAction<BasicCommonNoteA> action, List<BasicCommonNoteA> items) {
+    private void performMoveAction(BasicNoteMoveAction<BasicCommonNoteA> action, List<BasicCommonNoteA> items) {
         DBNoteManager noteManager = new DBNoteManager(getActivity());
 
         if (action.execute(noteManager, items)) {
             refreshList(noteManager);
 
             BasicEntityNoteSelectionPosA selectionPos = new BasicEntityNoteSelectionPosA(mNoteList, items);
-            if (selectionPos.getMinPos() != -1) {
+            int selectionScrollPos;
+
+            switch(action.getDirection()) {
+                case BasicNoteMoveAction.DIRECTION_UP:
+                    selectionScrollPos = selectionPos.getMinPos();
+                    break;
+                case BasicNoteMoveAction.DIRECTION_DOWN:
+                    selectionScrollPos = selectionPos.getMaxPos();
+                    break;
+                default:
+                    selectionScrollPos = -1;
+            }
+            if (selectionScrollPos != -1) {
                 mRecyclerViewSelector.setSelectedItems(selectionPos.getSelectedItemsPositions());
-                mRecyclerView.scrollToPosition(selectionPos.getMinPos());
+                mRecyclerView.scrollToPosition(selectionScrollPos);
             }
         }
     }

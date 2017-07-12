@@ -34,7 +34,7 @@ public class DataManagementTest extends ApplicationTestCase<Application> {
         assertEquals(1, 1);
     }
 
-    public void disable_testMovePrev() {
+    public void testMovePrev() {
         DBNoteManager noteManager = new DBNoteManager(getContext());
         List<BasicNoteA> noteList = noteManager.queryNotes();
 
@@ -65,22 +65,24 @@ public class DataManagementTest extends ApplicationTestCase<Application> {
         //validate exchange
         BasicNoteA note1 = noteManager.queryById(5);
         BasicNoteA note2 = noteManager.queryById(4);
+        long order1 = note1.getOrderId();
+        long order2 = note2.getOrderId();
 
         DBBasicNoteHelper.getInstance(mContext).exchangeOrderId(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, 0, note1.getOrderId(), note2.getOrderId());
 
         note1 = noteManager.queryById(5);
         note2 = noteManager.queryById(4);
 
-        assertEquals(note1.getOrderId(), 4);
-        assertEquals(note2.getOrderId(), 5);
+        assertEquals(note1.getOrderId(), order2);
+        assertEquals(note2.getOrderId(), order1);
 
         DBBasicNoteHelper.getInstance(mContext).exchangeOrderId(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, 0, note1.getOrderId(), note2.getOrderId());
 
         note1 = noteManager.queryById(5);
         note2 = noteManager.queryById(4);
 
-        assertEquals(note1.getOrderId(), 5);
-        assertEquals(note2.getOrderId(), 4);
+        assertEquals(note1.getOrderId(), order1);
+        assertEquals(note2.getOrderId(), order2);
 
         //move top
         note1 = noteManager.queryById(5);
@@ -92,8 +94,13 @@ public class DataManagementTest extends ApplicationTestCase<Application> {
         //move bottom
         noteManager.moveBottom(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, note1);
         note1 = noteManager.queryById(5);
-        assertEquals(note1.getOrderId(), 10);
+        assertEquals(note1.getOrderId(), noteList.size());
+
+        //order id
+        long orderId = DBBasicNoteHelper.getInstance(mContext).getOrderId(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, note1.getId());
+        assertEquals(orderId, note1.getOrderId());
     }
+
 
     public void testCheckCount() {
         DBBasicNoteHelper dbHelper = DBBasicNoteHelper.getInstance(getContext());

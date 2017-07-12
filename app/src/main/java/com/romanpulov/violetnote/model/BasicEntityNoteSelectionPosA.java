@@ -9,9 +9,14 @@ import java.util.List;
 
 public final class BasicEntityNoteSelectionPosA {
     private final int mMinPos;
+    private final int mMaxPos;
 
     public int getMinPos() {
         return mMinPos;
+    }
+
+    public int getMaxPos() {
+        return mMaxPos;
     }
 
     private final Integer[] mSelectedItemsPositions;
@@ -24,17 +29,22 @@ public final class BasicEntityNoteSelectionPosA {
         mSelectedItemsPositions = new Integer[selectedItems.size()];
         int itemPosIndex = 0;
         int calcMinPos = -1;
+        int calcMaxPos = -1;
 
         for (BasicEntityNoteA item : selectedItems) {
             int notePos =  BasicEntityNoteA.getNotePosWithId(items, item.getId());
 
-            // calc min note pos
+            // calc min max note pos
             if (itemPosIndex == 0) {
                 calcMinPos = notePos;
+                calcMaxPos = notePos;
             }
             else {
                 if (notePos < calcMinPos) {
                     calcMinPos = notePos;
+                }
+                if (notePos > calcMaxPos) {
+                    calcMaxPos = notePos;
                 }
             }
 
@@ -42,5 +52,6 @@ public final class BasicEntityNoteSelectionPosA {
         }
 
         mMinPos = calcMinPos;
+        mMaxPos = calcMaxPos;
     }
 }

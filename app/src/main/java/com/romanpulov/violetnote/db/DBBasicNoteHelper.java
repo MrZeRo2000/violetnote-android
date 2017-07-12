@@ -166,4 +166,16 @@ public class DBBasicNoteHelper {
             sql = sql + " AND " + DBBasicNoteOpenHelper.NOTE_ID_COLUMN_NAME + " = " + String.valueOf(noteId);
         mDB.execSQL(sql);
     }
+
+    public long getOrderId(String tableName, long noteId) {
+        Cursor c = null;
+        try {
+            c = mDB.query(tableName, new String[]{DBBasicNoteOpenHelper.ORDER_COLUMN_NAME}, DBBasicNoteOpenHelper.ID_COLUMN_NAME + " = ?", new String[] {String.valueOf(noteId)}, null, null, null);
+            c.moveToFirst();
+            return c.isNull(0) ? 0 : c.getLong(0);
+        } finally {
+            if ((c !=null) && !c.isClosed())
+                c.close();
+        }
+    }
 }

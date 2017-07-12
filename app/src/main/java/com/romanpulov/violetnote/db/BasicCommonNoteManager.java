@@ -47,8 +47,9 @@ public class BasicCommonNoteManager {
 
     public boolean moveTop(String tableName, BasicCommonNoteA note) {
         long minOrderId = mDBHelper.getMinOrderId(tableName, mNoteId);
-        if (note.getOrderId() > minOrderId) {
-            mDBHelper.moveOrderIdTop(tableName, mNoteId, note.getOrderId());
+        long orderId = mDBHelper.getOrderId(tableName, note.getId());
+        if (orderId > minOrderId) {
+            mDBHelper.moveOrderIdTop(tableName, mNoteId, orderId);
             return true;
         } else
             return false;
@@ -56,8 +57,9 @@ public class BasicCommonNoteManager {
 
     public boolean moveBottom(String tableName, BasicCommonNoteA note) {
         long maxOrderId = mDBHelper.getMaxOrderId(tableName, mNoteId);
-        if (note.getOrderId() < maxOrderId) {
-            mDBHelper.moveOrderIdBottom(tableName, mNoteId, note.getOrderId());
+        long orderId = mDBHelper.getOrderId(tableName, note.getId());
+        if (orderId < maxOrderId) {
+            mDBHelper.moveOrderIdBottom(tableName, mNoteId, orderId);
             return true;
         } else
             return false;

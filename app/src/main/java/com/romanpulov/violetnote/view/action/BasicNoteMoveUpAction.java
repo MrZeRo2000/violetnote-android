@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Created by rpulov on 07.09.2016.
  */
-public class BasicNoteMoveUpAction<T extends BasicCommonNoteA> extends BasicNoteAction<T> {
+public class BasicNoteMoveUpAction<T extends BasicCommonNoteA> extends BasicNoteMoveAction<T> {
 
     public BasicNoteMoveUpAction(BasicCommonNoteFragment fragment) {
         super(fragment);
@@ -23,10 +23,9 @@ public class BasicNoteMoveUpAction<T extends BasicCommonNoteA> extends BasicNote
 
     @Override
     public boolean execute(DBNoteManager noteManager, List<T> items) {
-        //throw new IllegalArgumentException();
-
         boolean result = false;
         BasicOrderedEntityNoteA.sortAsc(items);
+
         for (T item : items) {
             if (noteManager.moveUp(mDBDataProvider.getDBTableName(), item)) {
                 result = true;
@@ -35,5 +34,10 @@ public class BasicNoteMoveUpAction<T extends BasicCommonNoteA> extends BasicNote
         }
 
         return result;
+    }
+
+    @Override
+    public int getDirection() {
+        return BasicNoteMoveAction.DIRECTION_UP;
     }
 }
