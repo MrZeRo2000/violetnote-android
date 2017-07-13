@@ -17,6 +17,7 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBNoteManager;
+import com.romanpulov.violetnote.model.BasicCommonNoteA;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.model.BasicNoteValueA;
@@ -133,28 +134,27 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
     public class ActionBarCallBack implements ActionMode.Callback {
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            //int selectedItemPos = mRecyclerViewSelector.getSelectedItemPos();
-            int selectedItemPos = -1;
-            if (selectedItemPos != -1) {
-                BasicNoteItemA selectedItem = mBasicNoteData.getNote().getItems().get(selectedItemPos);
+            List<BasicCommonNoteA> selectedNoteItems = BasicCommonNoteA.getItemsByPositions(mBasicNoteData.getNote().getItems(), mRecyclerViewSelector.getSelectedItems());
+
+            if (selectedNoteItems.size() > 0) {
                 switch (item.getItemId()) {
                     case R.id.delete:
-                        performDeleteAction(mode, selectedItem);
+                        //performDeleteAction(mode, selectedNoteItems);
                         break;
                     case R.id.edit_value:
-                        performEditValueAction(mode, selectedItem);
+                        performEditValueAction(mode, (BasicNoteItemA)selectedNoteItems.get(0));
                         break;
                     case R.id.move_up:
-                        performMoveAction(new BasicNoteMoveUpAction<BasicNoteItemA>(BasicNoteCheckedItemFragment.this), selectedItem);
+                        //performMoveAction(new BasicNoteMoveUpAction<BasicNoteItemA>(BasicNoteCheckedItemFragment.this), selectedNoteItems);
                         break;
                     case R.id.move_top:
-                        performMoveAction(new BasicNoteMoveTopAction<BasicNoteItemA>(BasicNoteCheckedItemFragment.this), selectedItem);
+                        //performMoveAction(new BasicNoteMoveTopAction<BasicNoteItemA>(BasicNoteCheckedItemFragment.this), selectedNoteItems);
                         break;
                     case R.id.move_down:
-                        performMoveAction(new BasicNoteMoveDownAction<BasicNoteItemA>(BasicNoteCheckedItemFragment.this), selectedItem);
+                        //performMoveAction(new BasicNoteMoveDownAction<BasicNoteItemA>(BasicNoteCheckedItemFragment.this), selectedNoteItems);
                         break;
                     case R.id.move_bottom:
-                        performMoveAction(new BasicNoteMoveBottomAction<BasicNoteItemA>(BasicNoteCheckedItemFragment.this), selectedItem);
+                       // performMoveAction(new BasicNoteMoveBottomAction<BasicNoteItemA>(BasicNoteCheckedItemFragment.this), selectedNoteItems);
                         break;
                 }
             }

@@ -21,7 +21,6 @@ import com.romanpulov.violetnote.model.BasicCommonNoteA;
 import com.romanpulov.violetnote.model.BasicEntityNoteSelectionPosA;
 import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.DisplayTitleBuilder;
-import com.romanpulov.violetnote.view.action.BasicNoteAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveBottomAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveDownAction;
@@ -34,7 +33,6 @@ import com.romanpulov.violetnote.view.core.TextInputDialog;
 import com.romanpulov.violetnote.view.core.TextEditDialogBuilder;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -68,15 +66,6 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
         noteManager.refreshNotes(mNoteList);
     }
 
-    private List<BasicCommonNoteA> getBasicNoteItems(Collection<Integer> items) {
-        List<BasicCommonNoteA> basicNoteItems = new ArrayList<>();
-        for (Integer item : items ) {
-            basicNoteItems.add(mNoteList.get(item));
-        }
-
-        return  basicNoteItems;
-    }
-
     public void performAddAction(final BasicNoteA item) {
         DBNoteManager mNoteManager = new DBNoteManager(getActivity());
         if (mNoteManager.insertNote(item) != -1) {
@@ -88,7 +77,7 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
         }
     }
 
-    private void performDeleteAction(final ActionMode mode, final List<BasicCommonNoteA> items) {
+    private void performDeleteAction(final ActionMode mode, final List<? extends BasicCommonNoteA> items) {
         AlertOkCancelSupportDialogFragment dialog = AlertOkCancelSupportDialogFragment.newAlertOkCancelDialog(getString(R.string.ui_question_are_you_sure));
         dialog.setOkButtonClickListener(new AlertOkCancelSupportDialogFragment.OnClickListener() {
             @Override
@@ -153,7 +142,7 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
     public class ActionBarCallBack implements ActionMode.Callback {
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            List<BasicCommonNoteA> selectedNoteItems = getBasicNoteItems(mRecyclerViewSelector.getSelectedItems());
+            List<BasicCommonNoteA> selectedNoteItems = BasicCommonNoteA.getItemsByPositions(mNoteList, mRecyclerViewSelector.getSelectedItems());
 
             //int selectedItemPos = mRecyclerViewSelector.getSelectedItemPos();
             if (selectedNoteItems.size() > 0) {
