@@ -148,6 +148,10 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
 
         @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            MenuItem menuItem = menu.findItem(R.id.edit);
+            if (menuItem != null) {
+                menuItem.setVisible(mRecyclerViewSelector.isSelectedSingle());
+            }
             return false;
         }
 
