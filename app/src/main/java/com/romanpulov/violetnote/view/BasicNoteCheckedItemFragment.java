@@ -17,13 +17,12 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBNoteManager;
-import com.romanpulov.violetnote.model.BasicCommonNoteA;
 import com.romanpulov.violetnote.model.BasicEntityNoteSelectionPosA;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.model.BasicNoteValueA;
 import com.romanpulov.violetnote.model.BasicNoteValueDataA;
-import com.romanpulov.violetnote.model.DisplayTitleBuilder;
+import com.romanpulov.violetnote.view.helper.DisplayTitleBuilder;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutor;
 import com.romanpulov.violetnote.view.action.BasicNoteDataItemCheckOutAction;
 import com.romanpulov.violetnote.view.action.BasicNoteDataItemEditNameValueAction;
@@ -149,13 +148,13 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                         performMoveAction(new BasicNoteMoveUpAction<BasicNoteItemA>(BasicNoteCheckedItemFragment.this), selectedNoteItems);
                         break;
                     case R.id.move_top:
-                        //performMoveAction(new BasicNoteMoveTopAction<BasicNoteItemA>(BasicNoteCheckedItemFragment.this), selectedNoteItems);
+                        performMoveAction(new BasicNoteMoveTopAction<BasicNoteItemA>(BasicNoteCheckedItemFragment.this), selectedNoteItems);
                         break;
                     case R.id.move_down:
-                        //performMoveAction(new BasicNoteMoveDownAction<BasicNoteItemA>(BasicNoteCheckedItemFragment.this), selectedNoteItems);
+                        performMoveAction(new BasicNoteMoveDownAction<BasicNoteItemA>(BasicNoteCheckedItemFragment.this), selectedNoteItems);
                         break;
                     case R.id.move_bottom:
-                       // performMoveAction(new BasicNoteMoveBottomAction<BasicNoteItemA>(BasicNoteCheckedItemFragment.this), selectedNoteItems);
+                        performMoveAction(new BasicNoteMoveBottomAction<BasicNoteItemA>(BasicNoteCheckedItemFragment.this), selectedNoteItems);
                         break;
                 }
             }
@@ -165,8 +164,8 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             mode.getMenuInflater().inflate(R.menu.menu_listitem_checked_actions, menu);
-            if (mRecyclerViewSelector.isSelected())
-                mode.setTitle(DisplayTitleBuilder.buildItemsDisplayTitle(mBasicNoteData.getNote().getItems(), mRecyclerViewSelector.getSelectedItems()));
+            if (mRecyclerViewSelector.isSelectedSingle())
+                mode.setTitle(DisplayTitleBuilder.buildItemsDisplayTitle(getActivity(), mBasicNoteData.getNote().getItems(), mRecyclerViewSelector.getSelectedItems()));
             return true;
         }
 

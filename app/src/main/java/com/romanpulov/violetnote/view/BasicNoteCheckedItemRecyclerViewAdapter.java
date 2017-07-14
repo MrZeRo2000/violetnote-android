@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
+import com.romanpulov.violetnote.view.helper.DisplayTitleBuilder;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 
 import java.util.Collection;
@@ -78,7 +79,7 @@ public class BasicNoteCheckedItemRecyclerViewAdapter extends RecyclerView.Adapte
 
         @Override
         protected String getSelectedTitle(Collection<Integer> selectedItems) {
-            return mItems.get(selectedItems.iterator().next()).getValue();
+            return DisplayTitleBuilder.buildItemsDisplayTitle(mView.getContext(), mItems, selectedItems);
         }
 
         @Override

@@ -17,7 +17,7 @@ import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.model.BasicEntityNoteSelectionPosA;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
-import com.romanpulov.violetnote.model.DisplayTitleBuilder;
+import com.romanpulov.violetnote.view.helper.DisplayTitleBuilder;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutor;
 import com.romanpulov.violetnote.view.action.BasicNoteDataItemEditNameValueAction;
 import com.romanpulov.violetnote.view.action.BasicNoteDataRefreshAction;
@@ -183,7 +183,7 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             mode.getMenuInflater().inflate(R.menu.menu_listitem_namevalue_actions, menu);
             if (mRecyclerViewSelector.isSelected())
-                mode.setTitle(DisplayTitleBuilder.buildItemsDisplayTitle(mBasicNoteData.getNote().getItems(), mRecyclerViewSelector.getSelectedItems()));
+                mode.setTitle(DisplayTitleBuilder.buildItemsDisplayTitle(getActivity(), mBasicNoteData.getNote().getItems(), mRecyclerViewSelector.getSelectedItems()));
             return true;
         }
 

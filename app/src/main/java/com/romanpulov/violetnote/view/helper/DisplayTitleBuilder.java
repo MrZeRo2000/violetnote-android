@@ -1,7 +1,13 @@
-package com.romanpulov.violetnote.model;
+package com.romanpulov.violetnote.view.helper;
+
+import android.content.Context;
+
+import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.model.DisplayTitleProvider;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Display title builder class
@@ -9,9 +15,8 @@ import java.util.List;
  */
 
 public class DisplayTitleBuilder {
-    private static String MULTIPLE_ITEMS_DISPLAY_TITLE = "...";
 
-    public static String buildItemsDisplayTitle(List<? extends DisplayTitleProvider> items, Collection<Integer> selectedItems) {
+    public static String buildItemsDisplayTitle(Context context, List<? extends DisplayTitleProvider> items, Collection<Integer> selectedItems) {
         String title = "";
 
         for (Integer selectedItem : selectedItems) {
@@ -20,7 +25,7 @@ public class DisplayTitleBuilder {
                 if (title.isEmpty())
                     title = item.getDisplayTitle();
                 else {
-                    title = MULTIPLE_ITEMS_DISPLAY_TITLE;
+                    title = String.format(Locale.getDefault(), context.getString(R.string.title_multiple_items_selected), selectedItems.size());
                     break;
                 }
             }

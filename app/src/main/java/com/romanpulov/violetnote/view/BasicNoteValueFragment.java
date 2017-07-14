@@ -18,7 +18,7 @@ import com.romanpulov.violetnote.db.DBBasicNoteOpenHelper;
 import com.romanpulov.violetnote.db.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicNoteValueA;
 import com.romanpulov.violetnote.model.BasicNoteValueDataA;
-import com.romanpulov.violetnote.model.DisplayTitleBuilder;
+import com.romanpulov.violetnote.view.helper.DisplayTitleBuilder;
 import com.romanpulov.violetnote.view.core.AlertOkCancelSupportDialogFragment;
 import com.romanpulov.violetnote.view.core.BasicCommonNoteFragment;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
@@ -137,7 +137,7 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             mode.getMenuInflater().inflate(R.menu.menu_listitem_minimal_actions, menu);
             if (mRecyclerViewSelector.isSelected())
-                mode.setTitle(DisplayTitleBuilder.buildItemsDisplayTitle(mBasicNoteValueData.getValues(), mRecyclerViewSelector.getSelectedItems()));
+                mode.setTitle(DisplayTitleBuilder.buildItemsDisplayTitle(getActivity(), mBasicNoteValueData.getValues(), mRecyclerViewSelector.getSelectedItems()));
             return true;
         }
 

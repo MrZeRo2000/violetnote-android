@@ -20,7 +20,7 @@ import com.romanpulov.violetnote.db.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicCommonNoteA;
 import com.romanpulov.violetnote.model.BasicEntityNoteSelectionPosA;
 import com.romanpulov.violetnote.model.BasicNoteA;
-import com.romanpulov.violetnote.model.DisplayTitleBuilder;
+import com.romanpulov.violetnote.view.helper.DisplayTitleBuilder;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveBottomAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveDownAction;
@@ -175,7 +175,7 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
             log("onCreateActionMode");
             mode.getMenuInflater().inflate(R.menu.menu_listitem_generic_actions, menu);
             if (mRecyclerViewSelector.isSelectedSingle())
-                mode.setTitle(DisplayTitleBuilder.buildItemsDisplayTitle(mNoteList, mRecyclerViewSelector.getSelectedItems()));
+                mode.setTitle(DisplayTitleBuilder.buildItemsDisplayTitle(getActivity(), mNoteList, mRecyclerViewSelector.getSelectedItems()));
             return true;
         }
 

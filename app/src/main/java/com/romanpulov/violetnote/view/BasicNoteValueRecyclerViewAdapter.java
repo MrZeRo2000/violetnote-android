@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.model.BasicNoteValueA;
-import com.romanpulov.violetnote.model.DisplayTitleBuilder;
+import com.romanpulov.violetnote.view.helper.DisplayTitleBuilder;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 
 import java.util.Collection;
@@ -63,7 +63,7 @@ public class BasicNoteValueRecyclerViewAdapter extends RecyclerView.Adapter<Basi
 
         @Override
         protected String getSelectedTitle(Collection<Integer> selectedItems) {
-            return DisplayTitleBuilder.buildItemsDisplayTitle(mItems, selectedItems);
+            return DisplayTitleBuilder.buildItemsDisplayTitle(mValueView.getContext(), mItems, selectedItems);
         }
 
         @Override
