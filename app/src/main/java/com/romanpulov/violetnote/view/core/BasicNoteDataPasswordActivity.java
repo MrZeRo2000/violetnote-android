@@ -40,7 +40,8 @@ public abstract class BasicNoteDataPasswordActivity extends PasswordActivity imp
 
         });
 
-        executor.execute(mBasicNoteData.getNote().getItems().size() > 0);
+        //executor.execute(mBasicNoteData.getNote().getItems().size() > 0);
+        executor.execute(mBasicNoteData.getNote().isEncrypted());
     }
 
     @Override
