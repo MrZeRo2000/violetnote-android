@@ -1,5 +1,7 @@
 package com.romanpulov.violetnote.model;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -24,6 +26,23 @@ public final class BasicEntityNoteSelectionPosA {
     public Integer[] getSelectedItemsPositions() {
         return mSelectedItemsPositions;
     }
+
+    /**
+     * Generic method which returns list of items by positions
+     * @param items items to search in
+     * @param itemPositions positions
+     * @return List of items
+     */
+    public static <T> List<T> getItemsByPositions(List<? extends T> items, Collection<Integer> itemPositions) {
+        List<T> itemsPos = new ArrayList<>();
+        
+        for (Integer item : itemPositions ) {
+            itemsPos.add(itemsPos.get(item));
+        }
+
+        return  itemsPos;
+    }
+
 
     public BasicEntityNoteSelectionPosA(List<? extends BasicEntityNoteA> items, List<? extends BasicEntityNoteA> selectedItems) {
         mSelectedItemsPositions = new Integer[selectedItems.size()];
