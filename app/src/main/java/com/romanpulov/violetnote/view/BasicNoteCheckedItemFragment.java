@@ -77,7 +77,8 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
     }
 
     private void updateCheckoutProgress() {
-        mCheckoutProgressHelper.setProgressData(mBasicNoteData.getNote().getCheckedItemCount(), mBasicNoteData.getNote().getItemCount());
+        if (mCheckoutProgressHelper != null)
+            mCheckoutProgressHelper.setProgressData(mBasicNoteData.getNote().getCheckedItemCount(), mBasicNoteData.getNote().getItemCount());
     }
 
     private void performEditValueAction(final ActionMode mode, final BasicNoteItemA item) {
@@ -214,9 +215,6 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         mRecyclerViewSelector = recyclerViewAdapter.getRecyclerViewSelector();
         mRecyclerView.setAdapter(recyclerViewAdapter);
 
-        // add decoration
-        mRecyclerView.addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(getActivity(), RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_white_black_gradient));
-
         //add action panel
         mAddActionHelper = new AddActionHelper(view.findViewById(R.id.add_panel_include));
         mAddActionHelper.setOnAddInteractionListener(new AddActionHelper.OnAddInteractionListener() {
@@ -252,6 +250,12 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                 }
             });
         }
+
+        //restore selected items
+        restoreSelectedItems(savedInstanceState, view);
+
+        // add decoration
+        mRecyclerView.addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(getActivity(), RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_white_black_gradient));
 
         return view;
     }

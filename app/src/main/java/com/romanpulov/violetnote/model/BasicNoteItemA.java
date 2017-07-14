@@ -29,7 +29,7 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
 
     @Override
     public String getDisplayTitle() {
-        if (mName == null)
+        if ((mName == null) || (mName.isEmpty()))
             return mValue;
         else
             return mName + "/" + mValue;

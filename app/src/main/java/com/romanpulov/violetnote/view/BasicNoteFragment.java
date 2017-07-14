@@ -174,7 +174,7 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             log("onCreateActionMode");
             mode.getMenuInflater().inflate(R.menu.menu_listitem_generic_actions, menu);
-            if (mRecyclerViewSelector.isSelectedSingle())
+            if (mRecyclerViewSelector.isSelected())
                 mode.setTitle(DisplayTitleBuilder.buildItemsDisplayTitle(getActivity(), mNoteList, mRecyclerViewSelector.getSelectedItems()));
             return true;
         }

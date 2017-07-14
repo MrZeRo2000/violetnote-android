@@ -26,8 +26,18 @@ public class BasicNoteValueActivity extends ActionBarCompatActivity {
             setTitle(noteValueData.getNote().getTitle() + " " + getTitle());
 
             FragmentManager fm = getSupportFragmentManager();
+
+            /*
             mFragment = BasicNoteValueFragment.newInstance(noteValueData);
             fm.beginTransaction().add(android.R.id.content, mFragment).commit();
+            */
+            mFragment = (BasicNoteValueFragment)fm.findFragmentById(android.R.id.content);
+            if (mFragment == null) {
+                mFragment = BasicNoteValueFragment.newInstance(noteValueData);
+                fm.beginTransaction().replace(android.R.id.content, mFragment).commit();
+            } else {
+                mFragment.refreshList(new DBNoteManager(this));
+            }
         }
     }
 

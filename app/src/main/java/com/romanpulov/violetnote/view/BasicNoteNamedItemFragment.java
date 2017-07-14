@@ -223,6 +223,9 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
             mRecyclerViewSelector = recyclerViewAdapter.getRecyclerViewSelector();
             mRecyclerView.setAdapter(recyclerViewAdapter);
 
+            //restore selected items
+            restoreSelectedItems(savedInstanceState, view);
+
             // add decoration
             mRecyclerView.addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(getActivity(), RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_white_black_gradient));
         }

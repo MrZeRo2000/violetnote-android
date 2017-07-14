@@ -3,6 +3,7 @@ package com.romanpulov.violetnote.view.core;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v7.view.ActionMode;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
@@ -16,6 +17,7 @@ import java.util.Collection;
  */
 public abstract class BasicCommonNoteFragment extends Fragment implements DBDataProvider {
     protected static String KEY_SELECTED_ITEMS_ARRAY = "selected items array";
+    protected static String KEY_SELECTION_TITLE = "selection title";
     protected DialogFragment mDialogFragment;
 
     protected RecyclerView mRecyclerView;
@@ -34,6 +36,9 @@ public abstract class BasicCommonNoteFragment extends Fragment implements DBData
                     selectedItemsArray[i++] = value;
                 }
                 outState.putIntArray(KEY_SELECTED_ITEMS_ARRAY, selectedItemsArray);
+                ActionMode actionMode = mRecyclerViewSelector.getActionMode();
+                if (actionMode != null)
+                    outState.putString(KEY_SELECTION_TITLE, actionMode.getTitle().toString());
             }
         }
         super.onSaveInstanceState(outState);
@@ -50,6 +55,10 @@ public abstract class BasicCommonNoteFragment extends Fragment implements DBData
                     else
                         mRecyclerViewSelector.setSelectedView(view, savedSelectedItems[i]);
                 }
+
+                ActionMode actionMode = mRecyclerViewSelector.getActionMode();
+                if (actionMode != null)
+                    actionMode.setTitle(savedInstanceState.getString(KEY_SELECTION_TITLE, actionMode.getTitle().toString()));
             }
         }
     }
