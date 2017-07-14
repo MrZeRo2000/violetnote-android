@@ -152,7 +152,7 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
                 BasicNoteItemA selectedItem = mBasicNoteData.getNote().getItems().get(selectedItemPos);
                 switch (item.getItemId()) {
                     case R.id.delete:
-                        performDeleteAction(mode, selectedItem);
+                        //performDeleteAction(mode, selectedItem);
                         break;
                     case R.id.edit_value:
                         performEditValueAction(mode, selectedItem);

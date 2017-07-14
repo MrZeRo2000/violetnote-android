@@ -139,7 +139,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
             if (selectedNoteItems.size() > 0) {
                 switch (item.getItemId()) {
                     case R.id.delete:
-                        //performDeleteAction(mode, selectedNoteItems);
+                        performDeleteAction(mode, selectedNoteItems);
                         break;
                     case R.id.edit_value:
                         performEditValueAction(mode, (BasicNoteItemA)selectedNoteItems.get(0));

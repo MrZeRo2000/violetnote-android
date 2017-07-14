@@ -22,6 +22,8 @@ import com.romanpulov.violetnote.view.core.AlertOkCancelSupportDialogFragment;
 import com.romanpulov.violetnote.view.core.BasicCommonNoteFragment;
 import com.romanpulov.violetnote.view.core.PasswordActivity;
 
+import java.util.List;
+
 /**
  * Created by romanpulov on 09.09.2016.
  */
@@ -65,13 +67,13 @@ public class BasicNoteItemFragment extends BasicCommonNoteFragment {
         executor.execute(mBasicNoteData.getNote().isEncrypted());
     }
 
-    protected void performDeleteAction(final ActionMode mode, final BasicNoteItemA item) {
+    protected void performDeleteAction(final ActionMode mode, final List<? extends BasicEntityNoteA> items) {
         AlertOkCancelSupportDialogFragment dialog = AlertOkCancelSupportDialogFragment.newAlertOkCancelDialog(getString(R.string.ui_question_are_you_sure));
         dialog.setOkButtonClickListener(new AlertOkCancelSupportDialogFragment.OnClickListener() {
             @Override
             public void OnClick(DialogFragment dialog) {
                 BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity());
-                executor.addAction(getString(R.string.caption_processing), new BasicNoteDataDeleteEntityAction(mBasicNoteData, getDBTableName(), item));
+                executor.addAction(getString(R.string.caption_processing), new BasicNoteDataDeleteEntityAction(mBasicNoteData, getDBTableName(), items));
                 executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData));
                 executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
                     @Override
