@@ -123,7 +123,7 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
                 .execute();
     }
 
-    private void performMoveAction(BasicNoteMoveAction<BasicCommonNoteA> action, List<BasicCommonNoteA> items) {
+    private void performMoveAction(BasicNoteMoveAction<BasicNoteA> action, List<BasicNoteA> items) {
         DBNoteManager noteManager = new DBNoteManager(getActivity());
 
         if (action.execute(noteManager, items)) {
@@ -142,7 +142,7 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
     public class ActionBarCallBack implements ActionMode.Callback {
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            List<BasicCommonNoteA> selectedNoteItems = BasicCommonNoteA.getItemsByPositions(mNoteList, mRecyclerViewSelector.getSelectedItems());
+            List<BasicNoteA> selectedNoteItems = BasicEntityNoteSelectionPosA.getItemsByPositions(mNoteList, mRecyclerViewSelector.getSelectedItems());
 
             //int selectedItemPos = mRecyclerViewSelector.getSelectedItemPos();
             if (selectedNoteItems.size() > 0) {
@@ -151,19 +151,19 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
                         performDeleteAction(mode, selectedNoteItems);
                         break;
                     case R.id.edit:
-                        performEditAction(mode, (BasicNoteA)selectedNoteItems.get(0));
+                        performEditAction(mode, selectedNoteItems.get(0));
                         break;
                     case R.id.move_up:
-                        performMoveAction(new BasicNoteMoveUpAction<>(BasicNoteFragment.this), selectedNoteItems);
+                        performMoveAction(new BasicNoteMoveUpAction<BasicNoteA>(BasicNoteFragment.this), selectedNoteItems);
                         break;
                     case R.id.move_top:
-                        performMoveAction(new BasicNoteMoveTopAction<>(BasicNoteFragment.this), selectedNoteItems);
+                        performMoveAction(new BasicNoteMoveTopAction<BasicNoteA>(BasicNoteFragment.this), selectedNoteItems);
                         break;
                     case R.id.move_down:
-                        performMoveAction(new BasicNoteMoveDownAction<>(BasicNoteFragment.this), selectedNoteItems);
+                        performMoveAction(new BasicNoteMoveDownAction<BasicNoteA>(BasicNoteFragment.this), selectedNoteItems);
                         break;
                     case R.id.move_bottom:
-                        performMoveAction(new BasicNoteMoveBottomAction<>(BasicNoteFragment.this), selectedNoteItems);
+                        performMoveAction(new BasicNoteMoveBottomAction<BasicNoteA>(BasicNoteFragment.this), selectedNoteItems);
                         break;
                 }
             }

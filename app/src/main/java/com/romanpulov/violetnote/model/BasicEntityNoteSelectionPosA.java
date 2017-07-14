@@ -35,9 +35,9 @@ public final class BasicEntityNoteSelectionPosA {
      */
     public static <T> List<T> getItemsByPositions(List<? extends T> items, Collection<Integer> itemPositions) {
         List<T> itemsPos = new ArrayList<>();
-        
+
         for (Integer item : itemPositions ) {
-            itemsPos.add(itemsPos.get(item));
+            itemsPos.add(items.get(item));
         }
 
         return  itemsPos;
