@@ -33,8 +33,6 @@ public class BasicNoteNamedItemActivity extends BasicNoteDataPasswordActivity {
         if (mFragment == null) {
             mFragment = BasicNoteNamedItemFragment.newInstance(mBasicNoteData);
             fm.beginTransaction().replace(getFragmentContainerId(), mFragment).commit();
-        } else {
-            mFragment.refreshList(new DBNoteManager(this));
         }
     }
 

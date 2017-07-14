@@ -57,10 +57,6 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
         mIsPasswordProtected = value;
     }
 
-    protected boolean getPasswordProtected() {
-        return mIsPasswordProtected;
-    }
-
     protected PasswordProvider mPasswordProvider;
 
     private boolean mPasswordRequired = true;

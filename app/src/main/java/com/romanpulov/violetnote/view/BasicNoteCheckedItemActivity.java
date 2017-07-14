@@ -23,18 +23,17 @@ public class BasicNoteCheckedItemActivity extends BasicNoteDataPasswordActivity 
     @Override
     protected void refreshFragment() {
         /*
-            mFragment = BasicNoteCheckedItemFragment.newInstance(mBasicNoteData);
-            removeFragment().beginTransaction().add(getFragmentContainerId(), mFragment).commit();
+        mFragment = BasicNoteCheckedItemFragment.newInstance(mBasicNoteData);
+        removeFragment().beginTransaction().add(getFragmentContainerId(), mFragment).commit();
         */
+
         FragmentManager fm = getSupportFragmentManager();
 
         mFragment = (BasicNoteCheckedItemFragment)fm.findFragmentById(getFragmentContainerId());
         if (mFragment == null) {
             mFragment = BasicNoteCheckedItemFragment.newInstance(mBasicNoteData);
             fm.beginTransaction().replace(getFragmentContainerId(), mFragment).commit();
-        } else {
-            mFragment.refreshList(new DBNoteManager(this));
-            }
+        }
     }
 
     @Override
