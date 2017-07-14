@@ -16,6 +16,8 @@ import android.view.ViewGroup;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBBasicNoteOpenHelper;
 import com.romanpulov.violetnote.db.DBNoteManager;
+import com.romanpulov.violetnote.model.BasicEntityNoteSelectionPosA;
+import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.model.BasicNoteValueA;
 import com.romanpulov.violetnote.model.BasicNoteValueDataA;
 import com.romanpulov.violetnote.view.helper.DisplayTitleBuilder;
@@ -25,6 +27,8 @@ import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 import com.romanpulov.violetnote.view.core.TextEditDialogBuilder;
 import com.romanpulov.violetnote.view.core.TextInputDialog;
 import com.romanpulov.violetnote.view.helper.AddActionHelper;
+
+import java.util.List;
 
 /**
  * A fragment representing a list of Items.
@@ -81,7 +85,7 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
         }
     }
 
-    private void performDeleteAction(final ActionMode mode, final BasicNoteValueA item) {
+    private void performDeleteAction(final ActionMode mode, final List<BasicNoteValueA> items) {
         AlertOkCancelSupportDialogFragment dialog = AlertOkCancelSupportDialogFragment.newAlertOkCancelDialog(getString(R.string.ui_question_are_you_sure));
         dialog.setOkButtonClickListener(new AlertOkCancelSupportDialogFragment.OnClickListener() {
             @Override
@@ -89,9 +93,10 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
                 DBNoteManager noteManager = new DBNoteManager(getActivity());
 
                 //delete
-                if (noteManager.deleteEntityNote(DBBasicNoteOpenHelper.NOTE_VALUES_TABLE_NAME, item) == 1) {
-                    refreshList(noteManager);
-                }
+                for (BasicNoteValueA item : items)
+                    noteManager.deleteEntityNote(DBBasicNoteOpenHelper.NOTE_VALUES_TABLE_NAME, item);
+
+                refreshList(noteManager);
 
                 //finish action
                 mode.finish();
@@ -148,16 +153,15 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
 
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            //int selectedItemPos = mRecyclerViewSelector.getSelectedItemPos();
-            int selectedItemPos = -1;
-            if (selectedItemPos != -1) {
-                BasicNoteValueA value = mBasicNoteValueData.getValues().get(selectedItemPos);
+            List<BasicNoteValueA> selectedNoteItems = BasicEntityNoteSelectionPosA.getItemsByPositions(mBasicNoteValueData.getValues(), mRecyclerViewSelector.getSelectedItems());
+
+            if (selectedNoteItems.size() > 0) {
                 switch (item.getItemId()) {
                     case R.id.delete:
-                        performDeleteAction(mode, value);
+                        performDeleteAction(mode, selectedNoteItems);
                         break;
                     case R.id.edit:
-                        performEditAction(mode, value);
+                        performEditAction(mode, selectedNoteItems.get(0));
                         break;
                 }
             }
