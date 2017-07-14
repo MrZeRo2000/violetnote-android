@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 
 import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.model.BasicEntityNoteSelectionPosA;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.model.DisplayTitleBuilder;
@@ -29,6 +30,8 @@ import com.romanpulov.violetnote.view.core.PasswordActivity;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 import com.romanpulov.violetnote.view.core.TextEditDialogBuilder;
 import com.romanpulov.violetnote.view.core.TextInputDialog;
+
+import java.util.List;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
@@ -146,31 +149,30 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
     public class ActionBarCallBack implements ActionMode.Callback {
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            //int selectedItemPos = mRecyclerViewSelector.getSelectedItemPos();
-            int selectedItemPos = -1;
-            if (selectedItemPos != -1) {
-                BasicNoteItemA selectedItem = mBasicNoteData.getNote().getItems().get(selectedItemPos);
+            List<BasicNoteItemA> selectedNoteItems = BasicEntityNoteSelectionPosA.getItemsByPositions(mBasicNoteData.getNote().getItems(), mRecyclerViewSelector.getSelectedItems());
+
+            if (selectedNoteItems.size() > 0) {
                 switch (item.getItemId()) {
                     case R.id.delete:
-                        //performDeleteAction(mode, selectedItem);
+                        performDeleteAction(mode, selectedNoteItems);
                         break;
                     case R.id.edit_value:
-                        performEditValueAction(mode, selectedItem);
+                        performEditValueAction(mode, selectedNoteItems.get(0));
                         break;
                     case R.id.edit:
-                        performEditAction(mode, selectedItem);
+                        performEditAction(mode, selectedNoteItems.get(0));
                         break;
                     case R.id.move_up:
-                        performMoveAction(new BasicNoteMoveUpAction<BasicNoteItemA>(BasicNoteNamedItemFragment.this), selectedItem);
+                        performMoveAction(new BasicNoteMoveUpAction<BasicNoteItemA>(BasicNoteNamedItemFragment.this), selectedNoteItems);
                         break;
                     case R.id.move_top:
-                        performMoveAction(new BasicNoteMoveTopAction<BasicNoteItemA>(BasicNoteNamedItemFragment.this), selectedItem);
+                        performMoveAction(new BasicNoteMoveTopAction<BasicNoteItemA>(BasicNoteNamedItemFragment.this), selectedNoteItems);
                         break;
                     case R.id.move_down:
-                        performMoveAction(new BasicNoteMoveDownAction<BasicNoteItemA>(BasicNoteNamedItemFragment.this), selectedItem);
+                        performMoveAction(new BasicNoteMoveDownAction<BasicNoteItemA>(BasicNoteNamedItemFragment.this), selectedNoteItems);
                         break;
                     case R.id.move_bottom:
-                        performMoveAction(new BasicNoteMoveBottomAction<BasicNoteItemA>(BasicNoteNamedItemFragment.this), selectedItem);
+                        performMoveAction(new BasicNoteMoveBottomAction<BasicNoteItemA>(BasicNoteNamedItemFragment.this), selectedNoteItems);
                         break;
                 }
             }

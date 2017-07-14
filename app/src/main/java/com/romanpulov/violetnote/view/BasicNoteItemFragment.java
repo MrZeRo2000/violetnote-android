@@ -9,6 +9,7 @@ import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBBasicNoteOpenHelper;
 import com.romanpulov.violetnote.db.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicEntityNoteA;
+import com.romanpulov.violetnote.model.BasicEntityNoteSelectionPosA;
 import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
@@ -18,6 +19,7 @@ import com.romanpulov.violetnote.view.action.BasicNoteDataDeleteEntityAction;
 import com.romanpulov.violetnote.view.action.BasicNoteDataItemAddAction;
 import com.romanpulov.violetnote.view.action.BasicNoteDataNoteItemAction;
 import com.romanpulov.violetnote.view.action.BasicNoteDataRefreshAction;
+import com.romanpulov.violetnote.view.action.BasicNoteMoveAction;
 import com.romanpulov.violetnote.view.core.AlertOkCancelSupportDialogFragment;
 import com.romanpulov.violetnote.view.core.BasicCommonNoteFragment;
 import com.romanpulov.violetnote.view.core.PasswordActivity;
@@ -94,13 +96,13 @@ public class BasicNoteItemFragment extends BasicCommonNoteFragment {
         mDialogFragment = dialog;
     }
 
-    protected void performMoveAction(final BasicNoteAction<BasicNoteItemA> action, final BasicNoteItemA item) {
+    protected void performMoveAction(final BasicNoteMoveAction<BasicNoteItemA> action, final List<BasicNoteItemA> items) {
         //executor
         BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity());
         executor.setNoteId(mBasicNoteData.getNote().getId());
 
         //actions
-        executor.addAction(getString(R.string.caption_processing), new BasicNoteDataNoteItemAction(mBasicNoteData, action, item));
+        executor.addAction(getString(R.string.caption_processing), new BasicNoteDataNoteItemAction(mBasicNoteData, action, items));
         executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData));
 
         //on complete
@@ -109,10 +111,13 @@ public class BasicNoteItemFragment extends BasicCommonNoteFragment {
             public void onExecutionCompleted(boolean result) {
                 if (result)
                     afterExecutionCompleted();
-                int notePos = BasicEntityNoteA.getNotePosWithId(mBasicNoteData.getNote().getItems(), item.getId());
-                if (notePos != -1) {
-                    mRecyclerViewSelector.setSelectedView(null, notePos);
-                    mRecyclerView.scrollToPosition(notePos);
+
+                BasicEntityNoteSelectionPosA selectionPos = new BasicEntityNoteSelectionPosA(mBasicNoteData.getNote().getItems(), items);
+                int selectionScrollPos = selectionPos.getDirectionPos(action.getDirection());
+
+                if (selectionScrollPos != -1) {
+                    mRecyclerViewSelector.setSelectedItems(selectionPos.getSelectedItemsPositions());
+                    mRecyclerView.scrollToPosition(selectionScrollPos);
                 }
             }
         });

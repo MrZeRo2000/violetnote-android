@@ -143,10 +143,10 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                         performDeleteAction(mode, selectedNoteItems);
                         break;
                     case R.id.edit_value:
-                        performEditValueAction(mode, (BasicNoteItemA)selectedNoteItems.get(0));
+                        performEditValueAction(mode, selectedNoteItems.get(0));
                         break;
                     case R.id.move_up:
-                        //performMoveAction(new BasicNoteMoveUpAction<BasicNoteItemA>(BasicNoteCheckedItemFragment.this), selectedNoteItems);
+                        performMoveAction(new BasicNoteMoveUpAction<BasicNoteItemA>(BasicNoteCheckedItemFragment.this), selectedNoteItems);
                         break;
                     case R.id.move_top:
                         //performMoveAction(new BasicNoteMoveTopAction<BasicNoteItemA>(BasicNoteCheckedItemFragment.this), selectedNoteItems);
