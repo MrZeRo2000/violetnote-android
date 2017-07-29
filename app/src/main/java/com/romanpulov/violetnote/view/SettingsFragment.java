@@ -24,7 +24,6 @@ import com.romanpulov.violetnote.document.DocumentLoaderFactory;
 import com.romanpulov.violetnote.dropboxchooser.DropboxChooserActivity;
 import com.romanpulov.violetnote.filechooser.FileChooserActivity;
 import com.romanpulov.violetnote.dropbox.DropBoxHelper;
-import com.romanpulov.violetnote.view.core.ProgressDialogFragment;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -47,24 +46,19 @@ public class SettingsFragment extends PreferenceFragment {
     private static final String PREF_KEY_BASIC_NOTE_LOCAL_RESTORE = "pref_basic_note_local_restore";
 
     private DocumentLoader mDocumentLoader;
-    private ProgressDialogFragment mProgressDialogFragment;
-    private ProgressDialog mProgressDialog;
 
     private final DocumentLoader.OnDocumentLoadedListener mDocumentLoaderListener = new DocumentLoader.OnDocumentLoadedListener() {
         @Override
         public void onDocumentLoaded(String result) {
-            if (mProgressDialog != null) {
-                mProgressDialog.dismiss();
-                mProgressDialog = null;
-            }
+            Preference prefLoad = findPreference(PREF_KEY_LOAD);
 
             if (result == null) {
-                Preference prefLoad = findPreference(PREF_KEY_LOAD);
                 prefLoad.getPreferenceManager().getSharedPreferences().edit().putLong(PREF_KEY_LAST_LOADED, System.currentTimeMillis()).commit();
-                updateLoadPreferenceSummary(prefLoad, prefLoad.getPreferenceManager().getSharedPreferences().getLong(PREF_KEY_LAST_LOADED, 0L));
             } else {
                 Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT).show();
             }
+
+            updateLoadPreferenceSummary(prefLoad.getPreferenceManager().getSharedPreferences().getLong(PREF_KEY_LAST_LOADED, 0L));
 
             mDocumentLoader = null;
         }
@@ -72,7 +66,7 @@ public class SettingsFragment extends PreferenceFragment {
         @Override
         public void onPreExecute() {
             if (mDocumentLoader.getLoadAppearance() == DocumentLoader.LOAD_APPEARANCE_ASYNC)
-                createAndShowProgressDialog();
+                updateLoadPreferenceSummary(1);
         }
     };
 
@@ -94,17 +88,11 @@ public class SettingsFragment extends PreferenceFragment {
         setupPrefBackupRestore();
     }
 
-    private void createAndShowProgressDialog() {
-        mProgressDialog = new ProgressDialog(getActivity(), R.style.DialogTheme);
-        mProgressDialog.setTitle(R.string.caption_loading);
-        mProgressDialog.show();
-    }
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         if (mDocumentLoader != null)
-            createAndShowProgressDialog();
+            updateLoadPreferenceSummary(1);
     }
 
     private void displayError(String message) {
@@ -163,15 +151,18 @@ public class SettingsFragment extends PreferenceFragment {
 
     /**
      * Updates summary for preference after update
-     * @param preference load preference
      * @param value new value
      */
-    private void updateLoadPreferenceSummary(Preference preference, long value) {
+    private void updateLoadPreferenceSummary(long value) {
+        Preference prefLoad = findPreference(PREF_KEY_LOAD);
+
         if (value == 0)
-            preference.setSummary(R.string.pref_message_last_loaded_never);
+            prefLoad.setSummary(R.string.pref_message_last_loaded_never);
+        else if (value == 1)
+            prefLoad.setSummary(R.string.caption_loading);
         else
-            preference.setSummary(String.format(
-                    preference.getContext().getResources().getString(R.string.pref_message_last_loaded_format),
+            prefLoad.setSummary(String.format(
+                    prefLoad.getContext().getResources().getString(R.string.pref_message_last_loaded_format),
                     DateFormat.getDateTimeInstance().format(new Date(value))));
     }
 
@@ -240,7 +231,7 @@ public class SettingsFragment extends PreferenceFragment {
 
     private void setupPrefLoad() {
         Preference prefLoad = findPreference(PREF_KEY_LOAD);
-        updateLoadPreferenceSummary(prefLoad, prefLoad.getPreferenceManager().getSharedPreferences().getLong(PREF_KEY_LAST_LOADED, 0L));
+        updateLoadPreferenceSummary(prefLoad.getPreferenceManager().getSharedPreferences().getLong(PREF_KEY_LAST_LOADED, 0L));
 
         prefLoad.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -255,7 +246,6 @@ public class SettingsFragment extends PreferenceFragment {
                         mDocumentLoader.execute();
                     }
                 } else
-                    //should not get here under normal circumstances
                     Toast.makeText(getActivity(), getText(R.string.error_load_process_running), Toast.LENGTH_SHORT).show();
 
                 return true;
