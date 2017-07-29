@@ -112,16 +112,18 @@ public class PassDataA implements Parcelable, PasswordProvider {
 
         Set<String> values = new HashSet<>();
 
-        for (PassNoteA note : getPassNoteData()) {
-            int attrCount = 0;
+        if (getPassNoteData() != null) {
+            for (PassNoteA note : getPassNoteData()) {
+                int attrCount = 0;
 
-            for (String a : note.getNoteAttr().keySet()) {
-                if (((attrCount == 0) && isSearchSystem) || ((attrCount == 1) && isSearchUser)) {
-                    values.add(note.getNoteAttr().get(a));
+                for (String a : note.getNoteAttr().keySet()) {
+                    if (((attrCount == 0) && isSearchSystem) || ((attrCount == 1) && isSearchUser)) {
+                        values.add(note.getNoteAttr().get(a));
+                    }
+
+                    if (++attrCount > max_attr_count)
+                        break;
                 }
-
-                if (++attrCount > max_attr_count)
-                    break;
             }
         }
 

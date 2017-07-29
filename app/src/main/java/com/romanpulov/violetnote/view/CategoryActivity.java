@@ -72,7 +72,7 @@ public class CategoryActivity extends PassDataPasswordActivity implements Catego
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        finish();
+        getPasswordValidityChecker().resetPeriod();
     }
 
     @Override
@@ -84,6 +84,9 @@ public class CategoryActivity extends PassDataPasswordActivity implements Catego
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case android.R.id.home:
+                getPasswordValidityChecker().resetPeriod();
+                return super.onOptionsItemSelected(item);
             case R.id.action_settings:
                 Intent intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);

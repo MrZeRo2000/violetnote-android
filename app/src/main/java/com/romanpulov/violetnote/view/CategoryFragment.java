@@ -72,11 +72,13 @@ public class CategoryFragment extends Fragment {
         // setup search action helper
         mSearchActionHelper = new SearchActionHelper(view, SearchActionHelper.DISPLAY_TYPE_SYSTEM_USER);
         mSearchActionHelper.setOnSearchInteractionListener(mSearchListener);
-        mSearchActionHelper.setAutoCompleteList(passDataA.getSearchValues(true, true));
+        if (passDataA != null)
+            mSearchActionHelper.setAutoCompleteList(passDataA.getSearchValues(true, true));
         mSearchActionHelper.setOnSearchConditionChangedListeber(new SearchActionHelper.OnSearchConditionChangedListener() {
             @Override
             public void onSearchConditionChanged(boolean isSearchSystem, boolean isSearchUser) {
-                mSearchActionHelper.setAutoCompleteList(passDataA.getSearchValues(isSearchSystem, isSearchUser));
+                if (passDataA != null)
+                    mSearchActionHelper.setAutoCompleteList(passDataA.getSearchValues(isSearchSystem, isSearchUser));
             }
         });
 
