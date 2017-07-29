@@ -105,4 +105,7 @@
     <string name="ui_question_are_you_sure">Are you sure?</string>
     <string name="ui_question_are_you_sure_checkout_items">Are you sure to checkout %d items?</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

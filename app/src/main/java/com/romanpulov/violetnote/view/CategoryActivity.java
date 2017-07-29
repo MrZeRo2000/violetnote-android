@@ -12,20 +12,46 @@ import com.romanpulov.violetnote.view.core.PassDataPasswordActivity;
 import com.romanpulov.violetnote.model.Document;
 import com.romanpulov.violetnote.model.PassCategoryA;
 import com.romanpulov.violetnote.model.PassDataA;
+import com.romanpulov.violetnote.view.core.PassDataProgressFragment;
 import com.romanpulov.violetnote.view.core.PasswordActivity;
 
-public class CategoryActivity extends PassDataPasswordActivity implements CategoryFragment.OnPassCategoryInteractionListener, OnSearchInteractionListener {
+public class CategoryActivity extends PassDataPasswordActivity implements PassDataProgressFragment.OnPassDataFragmentInteractionListener, CategoryFragment.OnPassCategoryInteractionListener, OnSearchInteractionListener {
     private static final boolean mSampleData = false;
 
     @Override
     protected void refreshFragment() {
-        Fragment fragment = CategoryFragment.newInstance(mPassDataA);
-        removeFragment().beginTransaction().add(getFragmentContainerId(), fragment).commit();
+        //leave Progress if it is active
+        if (!getProgress()) {
+            Fragment fragment = CategoryFragment.newInstance(mPassDataA);
+            removeFragment().beginTransaction().add(getFragmentContainerId(), fragment).commit();
+        }
     }
 
     @Override
     protected void updatePassword(String password) {
-        new LoadPassDataAsyncTask(password).execute();
+        PassDataProgressFragment passDataProgressFragment = PassDataProgressFragment.newInstance(this);
+        removeFragment().beginTransaction().add(getFragmentContainerId(), passDataProgressFragment).commit();
+        passDataProgressFragment.loadPassData(password);
+        setProgress(true);
+    }
+
+    @Override
+    public void onPassDataFragmentAttached() {
+        onProgressAttached();
+    }
+
+    @Override
+    public void onPassDataLoaded(PassDataA passDataA, String errorText) {
+        setProgress(false);
+        removeProgressFragment();
+        mPasswordProvider = passDataA;
+        mPassDataA = passDataA;
+        if (errorText != null)
+            setLoadErrorFragment();
+        else {
+            refreshFragment();
+            PassDataPasswordActivity.getPasswordValidityChecker().startPeriod();
+        }
     }
 
     @Override
@@ -114,4 +140,5 @@ public class CategoryActivity extends PassDataPasswordActivity implements Catego
         mPassDataA = savedInstanceState.getParcelable(PASS_DATA);
         Log.d("CategoryActivity", "OnRestoreInstanceState");
     }
+
 }

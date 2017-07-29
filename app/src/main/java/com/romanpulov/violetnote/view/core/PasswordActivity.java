@@ -60,6 +60,16 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
         mIsPasswordProtected = value;
     }
 
+    private boolean mIsProgress = false;
+
+    protected void setProgress(boolean value) {
+        mIsProgress = value;
+    }
+
+    protected boolean getProgress() {
+        return mIsProgress;
+    }
+
     protected PasswordProvider mPasswordProvider;
 
     private boolean mPasswordRequired = true;
@@ -88,10 +98,28 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
         setResult(fragmentExists() ? RESULT_OK : RESULT_CANCELED);
     }
 
+    /**
+     * Removes any fragment except Progress
+     * @return FragmentManager
+     */
     protected FragmentManager removeFragment() {
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(getFragmentContainerId());
-        if (fragment != null) {
+        //remove fragments but leave progress
+        if ((fragment != null) && !(fragment instanceof ProgressFragment)) {
+            fm.beginTransaction().remove(fragment).commit();
+        }
+        return fm;
+    }
+
+    /**
+     * Removes Progress fragment
+     * @return FragmentManager
+     */
+    protected FragmentManager removeProgressFragment() {
+        FragmentManager fm = getSupportFragmentManager();
+        Fragment fragment = fm.findFragmentById(getFragmentContainerId());
+        if ((fragment != null) && (fragment instanceof ProgressFragment)) {
             fm.beginTransaction().remove(fragment).commit();
         }
         return fm;
@@ -152,7 +180,9 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
         super.onCreate(savedInstanceState);
 
         mPasswordProvider = getIntent().getParcelableExtra(PASS_DATA);
-        mPasswordRequired = !mPasswordValidityChecker.isValid();
+
+        if (mPasswordRequired)
+            mPasswordRequired = !mPasswordValidityChecker.isValid();
     }
 
     @Override
@@ -178,7 +208,7 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-          if (mIsPasswordProtected) {
+        if (mIsPasswordProtected) {
             if (mPasswordRequired) {
                 Log.d("PasswordActivity", "OnResume: password required");
                 removeFragment();
@@ -187,12 +217,12 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
                 Log.d("PasswordActivity", "OnResume: password not required");
                 refreshFragment();
                 mPasswordRequired = true;
-                /*
-                if (mPasswordProvider == null) {
-                    refreshFragment();
-                }
-                */
             }
         }
+    }
+
+    protected void onProgressAttached() {
+        mIsProgress = true;
+        mPasswordRequired = false;
     }
 }
