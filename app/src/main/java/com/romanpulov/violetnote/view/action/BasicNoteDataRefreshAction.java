@@ -41,6 +41,7 @@ public class BasicNoteDataRefreshAction extends BasicNoteDataAction {
                     return false;
             }
         }
+        mBasicNoteData.setPassword(mPassword);
         return true;
     }
 }

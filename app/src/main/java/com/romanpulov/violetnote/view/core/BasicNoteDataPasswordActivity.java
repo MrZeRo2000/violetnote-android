@@ -12,18 +12,40 @@ import com.romanpulov.violetnote.view.action.BasicNoteDataRefreshAction;
 /**
  * Created by romanpulov on 02.09.2016.
  */
-public abstract class BasicNoteDataPasswordActivity extends PasswordActivity {
+public abstract class BasicNoteDataPasswordActivity extends PasswordActivity implements BasicNoteDataProgressFragment.OnBasicNoteDataFragmentInteractionListener {
     protected BasicNoteDataA mBasicNoteData;
 
     @Override
+    public void onBasicNoteDataFragmentAttached() {
+        onProgressAttached();
+    }
+
+    @Override
+    public void onBasicNoteDataLoaded(BasicNoteDataA basicNoteData, boolean result) {
+        setProgress(false);
+        removeProgressFragment();
+        if (result) {
+            mBasicNoteData = basicNoteData;
+            refreshFragment();
+            PassDataPasswordActivity.getPasswordValidityChecker().startPeriod();
+        }
+        else
+            setLoadErrorFragment();
+    }
+
+    @Override
     protected void updatePassword(final String password) {
-        BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(this, mBasicNoteData);
+        BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getApplicationContext(), mBasicNoteData);
         executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData, password));
+
+        BasicNoteDataProgressFragment basicNoteDataProgressFragment = BasicNoteDataProgressFragment.newInstance();
+        removeFragment().beginTransaction().add(getFragmentContainerId(), basicNoteDataProgressFragment).commit();
+        basicNoteDataProgressFragment.execute(executor);
+        setProgress(true);
+        /*
         executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
             @Override
             public void onExecutionCompleted(BasicNoteDataA basicNoteData, boolean result) {
-                setProgress(false);
-                removeProgressFragment();
                 if (result) {
                     mBasicNoteData.setPassword(password);
                     refreshFragment();
@@ -34,8 +56,8 @@ public abstract class BasicNoteDataPasswordActivity extends PasswordActivity {
             }
         });
 
-        //executor.execute(mBasicNoteData.getNote().getItems().size() > 0);
         executor.execute();
+        */
     }
 
     @Override
