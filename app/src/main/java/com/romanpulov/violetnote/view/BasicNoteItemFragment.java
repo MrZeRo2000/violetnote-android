@@ -66,7 +66,7 @@ public class BasicNoteItemFragment extends BasicCommonNoteFragment {
                 }
             }
         });
-        executor.execute(mBasicNoteData.getNote().isEncrypted());
+        executor.execute();
     }
 
     protected void performDeleteAction(final ActionMode mode, final List<? extends BasicEntityNoteA> items) {
@@ -88,7 +88,7 @@ public class BasicNoteItemFragment extends BasicCommonNoteFragment {
                         mDialogFragment = null;
                     }
                 });
-                executor.execute(mBasicNoteData.getNote().isEncrypted());
+                executor.execute();
             }
         });
 
@@ -123,7 +123,7 @@ public class BasicNoteItemFragment extends BasicCommonNoteFragment {
         });
 
         //execute
-        executor.execute(mBasicNoteData.getNote().isEncrypted());
+        executor.execute();
     }
 
     @Override

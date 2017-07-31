@@ -59,8 +59,8 @@ public class BasicNoteDataActionExecutor {
         return true;
     }
 
-    public void execute(boolean isAsync) {
-        if (isAsync)
+    public void execute() {
+        if (mBasicNoteData.getNote().isEncrypted())
             new ExecuteAsyncTask().execute();
         else {
             boolean executionResult = internalExecute();

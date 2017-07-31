@@ -116,7 +116,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                             mEditorDialog = null;
                         }
                     });
-                    executor.execute(mBasicNoteData.getNote().isEncrypted());
+                    executor.execute();
                 }
             }
         });
@@ -295,7 +295,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
             }
         });
 
-        executor.execute(mBasicNoteData.getNote().isEncrypted());
+        executor.execute();
     }
 
     public void performCheckOutAction() {
@@ -316,7 +316,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
             }
         });
 
-        executor.execute(mBasicNoteData.getNote().isEncrypted());
+        executor.execute();
     }
 
     public void checkOut() {

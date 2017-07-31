@@ -101,7 +101,7 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
                             mEditorDialog = null;
                         }
                     });
-                    executor.execute(mBasicNoteData.getNote().isEncrypted());
+                    executor.execute();
                 }
             }
         });
@@ -134,7 +134,7 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
                             mEditorDialog = null;
                         }
                     });
-                    executor.execute(mBasicNoteData.getNote().isEncrypted());
+                    executor.execute();
                 }
                 // finish anyway
                 mode.finish();

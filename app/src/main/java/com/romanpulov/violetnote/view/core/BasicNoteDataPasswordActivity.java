@@ -22,6 +22,8 @@ public abstract class BasicNoteDataPasswordActivity extends PasswordActivity {
         executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
             @Override
             public void onExecutionCompleted(BasicNoteDataA basicNoteData, boolean result) {
+                setProgress(false);
+                removeProgressFragment();
                 if (result) {
                     mBasicNoteData.setPassword(password);
                     refreshFragment();
@@ -33,7 +35,7 @@ public abstract class BasicNoteDataPasswordActivity extends PasswordActivity {
         });
 
         //executor.execute(mBasicNoteData.getNote().getItems().size() > 0);
-        executor.execute(mBasicNoteData.getNote().isEncrypted());
+        executor.execute();
     }
 
     @Override
