@@ -22,6 +22,7 @@ import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.model.BasicNoteValueA;
 import com.romanpulov.violetnote.model.BasicNoteValueDataA;
+import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutorHost;
 import com.romanpulov.violetnote.view.helper.DisplayTitleBuilder;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutor;
 import com.romanpulov.violetnote.view.action.BasicNoteDataItemCheckOutAction;
@@ -68,10 +69,11 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
     public BasicNoteCheckedItemFragment() {
     }
 
-    public static BasicNoteCheckedItemFragment newInstance(BasicNoteDataA basicNoteDataA) {
+    public static BasicNoteCheckedItemFragment newInstance(BasicNoteDataA basicNoteDataA, BasicNoteDataActionExecutorHost host) {
         BasicNoteCheckedItemFragment fragment = new BasicNoteCheckedItemFragment();
         Bundle args = new Bundle();
         args.putParcelable(PasswordActivity.PASS_DATA, basicNoteDataA);
+        fragment.mExecutorHost = host;
         fragment.setArguments(args);
         return fragment;
     }

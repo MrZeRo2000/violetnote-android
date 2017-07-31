@@ -1,18 +1,17 @@
 package com.romanpulov.violetnote.view.core;
 
-import android.app.Dialog;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutor;
+import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutorHost;
 import com.romanpulov.violetnote.view.action.BasicNoteDataRefreshAction;
 
 /**
  * Created by romanpulov on 02.09.2016.
  */
-public abstract class BasicNoteDataPasswordActivity extends PasswordActivity implements BasicNoteDataProgressFragment.OnBasicNoteDataFragmentInteractionListener {
+public abstract class BasicNoteDataPasswordActivity extends PasswordActivity implements BasicNoteDataProgressFragment.OnBasicNoteDataFragmentInteractionListener, BasicNoteDataActionExecutorHost {
     protected BasicNoteDataA mBasicNoteData;
 
     @Override
@@ -37,11 +36,15 @@ public abstract class BasicNoteDataPasswordActivity extends PasswordActivity imp
     protected void updatePassword(final String password) {
         BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getApplicationContext(), mBasicNoteData);
         executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData, password));
+        execute(executor);
 
+        /*
         BasicNoteDataProgressFragment basicNoteDataProgressFragment = BasicNoteDataProgressFragment.newInstance();
         removeFragment().beginTransaction().add(getFragmentContainerId(), basicNoteDataProgressFragment).commit();
         basicNoteDataProgressFragment.execute(executor);
         setProgress(true);
+        */
+
         /*
         executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
             @Override
@@ -73,5 +76,18 @@ public abstract class BasicNoteDataPasswordActivity extends PasswordActivity imp
     @Override
     protected void onPause() {
         super.onPause();
+    }
+
+    @Override
+    public void execute(BasicNoteDataActionExecutor executor) {
+        BasicNoteDataProgressFragment basicNoteDataProgressFragment = BasicNoteDataProgressFragment.newInstance();
+        removeFragment().beginTransaction().add(getFragmentContainerId(), basicNoteDataProgressFragment).commit();
+        basicNoteDataProgressFragment.execute(executor);
+        setProgress(true);
+    }
+
+    @Override
+    public void onExecutionCompleted() {
+        setProgress(false);
     }
 }

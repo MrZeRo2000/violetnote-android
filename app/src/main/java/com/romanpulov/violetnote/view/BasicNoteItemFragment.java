@@ -4,17 +4,17 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.view.ActionMode;
+import android.view.View;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBBasicNoteOpenHelper;
 import com.romanpulov.violetnote.db.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicEntityNoteA;
 import com.romanpulov.violetnote.model.BasicEntityNoteSelectionPosA;
-import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
-import com.romanpulov.violetnote.view.action.BasicNoteAction;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutor;
+import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutorHost;
 import com.romanpulov.violetnote.view.action.BasicNoteDataDeleteEntityAction;
 import com.romanpulov.violetnote.view.action.BasicNoteDataItemAddAction;
 import com.romanpulov.violetnote.view.action.BasicNoteDataNoteItemAction;
@@ -27,11 +27,14 @@ import com.romanpulov.violetnote.view.core.PasswordActivity;
 import java.util.List;
 
 /**
+ * Base class for BasicNoteXXXItemFragment classes
+ * Shall not be instantiated
  * Created by romanpulov on 09.09.2016.
  */
-public class BasicNoteItemFragment extends BasicCommonNoteFragment {
+public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
     protected BasicNoteDataA mBasicNoteData;
     protected DialogInterface mEditorDialog;
+    protected BasicNoteDataActionExecutorHost mExecutorHost;
 
     protected OnBasicNoteItemFragmentInteractionListener mListener;
 
@@ -54,19 +57,31 @@ public class BasicNoteItemFragment extends BasicCommonNoteFragment {
     };
 
     protected void performAddAction(final BasicNoteItemA item) {
-        BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity(), mBasicNoteData);
+        BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity().getApplicationContext(), mBasicNoteData);
         executor.addAction(getString(R.string.caption_processing), new BasicNoteDataItemAddAction(mBasicNoteData, item));
         executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData));
         executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
             @Override
             public void onExecutionCompleted(BasicNoteDataA basicNoteData, boolean result) {
+                mExecutorHost.onExecutionCompleted();
+                View v = getView();
+                View contentView = v.findViewById(R.id.content_layout);
+                View progressView = v.findViewById(R.id.progress_layout);
+                contentView.setVisibility(View.VISIBLE);
+                progressView.setVisibility(View.GONE);
+
                 if (result) {
-                    afterExecutionCompleted();
                     mRecyclerView.scrollToPosition(mBasicNoteData.getNote().getItems().size() - 1);
                 }
             }
         });
-        executor.execute();
+        View v = getView();
+        View contentView = v.findViewById(R.id.content_layout);
+        View progressView = v.findViewById(R.id.progress_layout);
+        contentView.setVisibility(View.GONE);
+        progressView.setVisibility(View.VISIBLE);
+        mExecutorHost.execute(executor);
+        //executor.execute();
     }
 
     protected void performDeleteAction(final ActionMode mode, final List<? extends BasicEntityNoteA> items) {

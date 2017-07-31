@@ -22,6 +22,7 @@ public class CategoryActivity extends PassDataPasswordActivity implements PassDa
     protected void refreshFragment() {
         //leave Progress if it is active
         if (!getProgress()) {
+            removeProgressFragment();
             Fragment fragment = CategoryFragment.newInstance(mPassDataA);
             removeFragment().beginTransaction().add(getFragmentContainerId(), fragment).commit();
         }
@@ -42,15 +43,21 @@ public class CategoryActivity extends PassDataPasswordActivity implements PassDa
 
     @Override
     public void onPassDataLoaded(PassDataA passDataA, String errorText) {
-        setProgress(false);
-        removeProgressFragment();
         mPasswordProvider = passDataA;
         mPassDataA = passDataA;
-        if (errorText != null)
-            setLoadErrorFragment();
-        else {
-            refreshFragment();
-            PassDataPasswordActivity.getPasswordValidityChecker().startPeriod();
+        setProgress(false);
+
+        try {
+            removeProgressFragment();
+            if (errorText != null)
+                setLoadErrorFragment();
+            else {
+                refreshFragment();
+                PassDataPasswordActivity.getPasswordValidityChecker().startPeriod();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            requirePassword();
         }
     }
 

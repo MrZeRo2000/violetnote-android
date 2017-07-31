@@ -225,4 +225,8 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
         mIsProgress = true;
         mPasswordRequired = false;
     }
+
+    protected void requirePassword() {
+        mPasswordRequired = true;
+    }
 }
