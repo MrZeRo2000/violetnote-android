@@ -109,16 +109,8 @@ public class BasicNoteDataActionExecutor {
 
         @Override
         protected void onPostExecute(Boolean result) {
-            try {
-                if (progressDialog != null)
-                    progressDialog.dismiss();
-
-                if (mListener != null)
-                    mListener.onExecutionCompleted(mBasicNoteData, result);
-            } catch (Exception e) {
-                progressDialog = null;
-                return;
-            }
+            if (mListener != null)
+                mListener.onExecutionCompleted(mBasicNoteData, result);
         }
     }
 

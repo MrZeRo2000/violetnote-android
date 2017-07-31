@@ -22,14 +22,19 @@ public abstract class BasicNoteDataPasswordActivity extends PasswordActivity imp
     @Override
     public void onBasicNoteDataLoaded(BasicNoteDataA basicNoteData, boolean result) {
         setProgress(false);
-        removeProgressFragment();
-        if (result) {
-            mBasicNoteData = basicNoteData;
-            refreshFragment();
-            PassDataPasswordActivity.getPasswordValidityChecker().startPeriod();
+        mBasicNoteData = basicNoteData;
+
+        // fragment related can fail
+        try {
+            removeProgressFragment();
+            if (result) {
+                refreshFragment();
+                PassDataPasswordActivity.getPasswordValidityChecker().startPeriod();
+            } else
+                setLoadErrorFragment();
+        } catch (Exception e) {
+            requirePassword();
         }
-        else
-            setLoadErrorFragment();
     }
 
     @Override
