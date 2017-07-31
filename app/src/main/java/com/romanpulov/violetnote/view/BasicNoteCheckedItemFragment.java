@@ -105,12 +105,12 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                     // finish anyway
                     mode.finish();
 
-                    BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity());
+                    BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity(), mBasicNoteData);
                     executor.addAction(getString(R.string.caption_processing), new BasicNoteDataItemEditNameValueAction(mBasicNoteData, item));
                     executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData));
                     executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
                         @Override
-                        public void onExecutionCompleted(boolean result) {
+                        public void onExecutionCompleted(BasicNoteDataA basicNoteData, boolean result) {
                             //clear editor reference
                             mEditorDialog.dismiss();
                             mEditorDialog = null;
@@ -282,14 +282,14 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
     }
 
     public void performUpdateChecked(boolean checked) {
-        BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity());
+        BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity(), mBasicNoteData);
 
         executor.addAction(getString(R.string.caption_processing), new BasicNoteDataItemUpdateCheckedAction(mBasicNoteData, checked));
         executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData));
 
         executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
             @Override
-            public void onExecutionCompleted(boolean result) {
+            public void onExecutionCompleted(BasicNoteDataA basicNoteData, boolean result) {
                 afterExecutionCompleted();
                 mRecyclerView.getAdapter().notifyDataSetChanged();
             }
@@ -299,14 +299,14 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
     }
 
     public void performCheckOutAction() {
-        BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity());
+        BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity(), mBasicNoteData);
 
         executor.addAction(getString(R.string.caption_processing), new BasicNoteDataItemCheckOutAction(mBasicNoteData));
         executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData).requireValues());
 
         executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
             @Override
-            public void onExecutionCompleted(boolean result) {
+            public void onExecutionCompleted(BasicNoteDataA basicNoteData, boolean result) {
                 afterExecutionCompleted();
                 mRecyclerView.getAdapter().notifyDataSetChanged();
 

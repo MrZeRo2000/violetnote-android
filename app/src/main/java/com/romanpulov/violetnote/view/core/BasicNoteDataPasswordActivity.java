@@ -12,23 +12,16 @@ import com.romanpulov.violetnote.view.action.BasicNoteDataRefreshAction;
 /**
  * Created by romanpulov on 02.09.2016.
  */
-public abstract class BasicNoteDataPasswordActivity extends PasswordActivity implements BasicNoteDataActionExecutor.OnDialogCreatedListener {
+public abstract class BasicNoteDataPasswordActivity extends PasswordActivity {
     protected BasicNoteDataA mBasicNoteData;
-    protected Dialog mProgressDialog;
-
-    @Override
-    public void onDialogCreated(Dialog dialog) {
-        mProgressDialog = dialog;
-    }
 
     @Override
     protected void updatePassword(final String password) {
-        BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(this);
+        BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(this, mBasicNoteData);
         executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData, password));
         executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
             @Override
-            public void onExecutionCompleted(boolean result) {
-                mProgressDialog = null;
+            public void onExecutionCompleted(BasicNoteDataA basicNoteData, boolean result) {
                 if (result) {
                     mBasicNoteData.setPassword(password);
                     refreshFragment();
@@ -37,7 +30,6 @@ public abstract class BasicNoteDataPasswordActivity extends PasswordActivity imp
                 else
                     setLoadErrorFragment();
             }
-
         });
 
         //executor.execute(mBasicNoteData.getNote().getItems().size() > 0);
@@ -56,10 +48,6 @@ public abstract class BasicNoteDataPasswordActivity extends PasswordActivity imp
 
     @Override
     protected void onPause() {
-        if (mProgressDialog != null) {
-            mProgressDialog.dismiss();
-            mProgressDialog = null;
-        }
         super.onPause();
     }
 }

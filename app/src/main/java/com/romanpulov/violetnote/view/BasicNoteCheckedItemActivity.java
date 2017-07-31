@@ -13,8 +13,6 @@ import com.romanpulov.violetnote.view.core.BasicNoteDataPasswordActivity;
 
 public class BasicNoteCheckedItemActivity extends BasicNoteDataPasswordActivity {
 
-    private BasicNoteCheckedItemFragment mFragment;
-
     @Override
     protected int getFragmentContainerId() {
         return R.id.fragment_id;
@@ -22,17 +20,9 @@ public class BasicNoteCheckedItemActivity extends BasicNoteDataPasswordActivity 
 
     @Override
     protected void refreshFragment() {
-        /*
-        mFragment = BasicNoteCheckedItemFragment.newInstance(mBasicNoteData);
-        removeFragment().beginTransaction().add(getFragmentContainerId(), mFragment).commit();
-        */
-
-        FragmentManager fm = getSupportFragmentManager();
-
-        mFragment = (BasicNoteCheckedItemFragment)fm.findFragmentById(getFragmentContainerId());
-        if (mFragment == null) {
-            mFragment = BasicNoteCheckedItemFragment.newInstance(mBasicNoteData);
-            fm.beginTransaction().replace(getFragmentContainerId(), mFragment).commit();
+        if (!getProgress()) {
+            Fragment fragment = BasicNoteCheckedItemFragment.newInstance(mBasicNoteData);
+            removeFragment().beginTransaction().add(getFragmentContainerId(), fragment).commit();
         }
     }
 

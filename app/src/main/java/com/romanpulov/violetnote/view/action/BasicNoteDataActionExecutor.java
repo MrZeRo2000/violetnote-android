@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBNoteManager;
+import com.romanpulov.violetnote.model.BasicNoteDataA;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -18,9 +19,9 @@ import java.util.Map;
  */
 public class BasicNoteDataActionExecutor {
     private final Context mContext;
+    private final BasicNoteDataA mBasicNoteData;
     private List<Map.Entry<String, BasicNoteDataAction>> mActionList = new ArrayList<>();
     private OnExecutionCompletedListener mListener;
-    private OnDialogCreatedListener mDialogCreatedListener;
 
     private long mNoteId = 0;
 
@@ -28,10 +29,9 @@ public class BasicNoteDataActionExecutor {
         mNoteId = value;
     }
 
-    public BasicNoteDataActionExecutor(Context context) {
+    public BasicNoteDataActionExecutor(Context context, BasicNoteDataA basicNoteData) {
         mContext = context;
-        if (context instanceof OnDialogCreatedListener)
-            mDialogCreatedListener = (OnDialogCreatedListener)context;
+        mBasicNoteData = basicNoteData;
     }
 
     public void addAction(String description, BasicNoteDataAction action) {
@@ -40,10 +40,6 @@ public class BasicNoteDataActionExecutor {
 
     public void setOnExecutionCompletedListener(OnExecutionCompletedListener listener) {
         mListener = listener;
-    }
-
-    public void setOnDialogCreatedListener(OnDialogCreatedListener listener) {
-        mDialogCreatedListener = listener;
     }
 
     private DBNoteManager createNoteManager() {
@@ -70,7 +66,7 @@ public class BasicNoteDataActionExecutor {
             boolean executionResult = internalExecute();
 
             if (mListener != null)
-                mListener.onExecutionCompleted(executionResult);
+                mListener.onExecutionCompleted(mBasicNoteData, executionResult);
         }
     }
 
@@ -79,11 +75,6 @@ public class BasicNoteDataActionExecutor {
 
         @Override
         protected void onPreExecute() {
-            progressDialog = new ProgressDialog(mContext, R.style.DialogTheme);
-            progressDialog.setTitle(R.string.caption_processing);
-            progressDialog.show();
-            if (mDialogCreatedListener != null)
-                mDialogCreatedListener.onDialogCreated(progressDialog);
         }
 
         @Override
@@ -123,7 +114,7 @@ public class BasicNoteDataActionExecutor {
                     progressDialog.dismiss();
 
                 if (mListener != null)
-                    mListener.onExecutionCompleted(result);
+                    mListener.onExecutionCompleted(mBasicNoteData, result);
             } catch (Exception e) {
                 progressDialog = null;
                 return;
@@ -132,10 +123,7 @@ public class BasicNoteDataActionExecutor {
     }
 
     public interface OnExecutionCompletedListener {
-        void onExecutionCompleted(boolean result);
+        void onExecutionCompleted(BasicNoteDataA basicNoteData, boolean result);
     }
 
-    public interface OnDialogCreatedListener {
-        void onDialogCreated(Dialog dialog);
-    }
 }
