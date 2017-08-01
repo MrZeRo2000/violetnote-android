@@ -38,6 +38,10 @@ public class BasicNoteDataActionExecutor {
         mActionList.add(new AbstractMap.SimpleEntry<>(description, action));
     }
 
+    public OnExecutionCompletedListener getOnExecutionCompletedListener() {
+        return mListener;
+    }
+
     public void setOnExecutionCompletedListener(OnExecutionCompletedListener listener) {
         mListener = listener;
     }

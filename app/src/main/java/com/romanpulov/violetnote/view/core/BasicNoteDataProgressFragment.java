@@ -17,11 +17,14 @@ public class BasicNoteDataProgressFragment extends ProgressFragment {
     }
 
     public void execute(BasicNoteDataActionExecutor executor) {
+        final BasicNoteDataActionExecutor.OnExecutionCompletedListener oldListener = executor.getOnExecutionCompletedListener();
         executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
             @Override
             public void onExecutionCompleted(BasicNoteDataA basicNoteData, boolean result) {
                 if (mListener != null)
                     mListener.onBasicNoteDataLoaded(basicNoteData, result);
+                if (oldListener != null)
+                    oldListener.onExecutionCompleted(basicNoteData, result);
             }
         });
         executor.execute();

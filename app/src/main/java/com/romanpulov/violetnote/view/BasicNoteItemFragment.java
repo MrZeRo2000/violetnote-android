@@ -63,12 +63,19 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
         executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
             @Override
             public void onExecutionCompleted(BasicNoteDataA basicNoteData, boolean result) {
+                mBasicNoteData = basicNoteData;
                 mExecutorHost.onExecutionCompleted();
+
                 View v = getView();
-                View contentView = v.findViewById(R.id.content_layout);
-                View progressView = v.findViewById(R.id.progress_layout);
-                contentView.setVisibility(View.VISIBLE);
-                progressView.setVisibility(View.GONE);
+                if (v != null) {
+                    View contentView = v.findViewById(R.id.content_layout);
+                    View progressView = v.findViewById(R.id.progress_layout);
+
+                    if ((contentView != null) && (progressView != null)) {
+                        contentView.setVisibility(View.VISIBLE);
+                        progressView.setVisibility(View.GONE);
+                    }
+                }
 
                 if (result) {
                     mRecyclerView.scrollToPosition(mBasicNoteData.getNote().getItems().size() - 1);
@@ -80,8 +87,8 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
         View progressView = v.findViewById(R.id.progress_layout);
         contentView.setVisibility(View.GONE);
         progressView.setVisibility(View.VISIBLE);
-        mExecutorHost.execute(executor);
-        //executor.execute();
+        //mExecutorHost.execute(executor);
+        executor.execute();
     }
 
     protected void performDeleteAction(final ActionMode mode, final List<? extends BasicEntityNoteA> items) {
