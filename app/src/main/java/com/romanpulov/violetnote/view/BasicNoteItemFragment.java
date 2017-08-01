@@ -1,9 +1,11 @@
 package com.romanpulov.violetnote.view;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.view.ActionMode;
+import android.util.Log;
 import android.view.View;
 
 import com.romanpulov.violetnote.R;
@@ -22,6 +24,7 @@ import com.romanpulov.violetnote.view.action.BasicNoteDataRefreshAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveAction;
 import com.romanpulov.violetnote.view.core.AlertOkCancelSupportDialogFragment;
 import com.romanpulov.violetnote.view.core.BasicCommonNoteFragment;
+import com.romanpulov.violetnote.view.core.BasicNoteDataProgressFragment;
 import com.romanpulov.violetnote.view.core.PasswordActivity;
 
 import java.util.List;
@@ -37,6 +40,9 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
     protected BasicNoteDataActionExecutorHost mExecutorHost;
 
     protected OnBasicNoteItemFragmentInteractionListener mListener;
+    private BasicNoteDataProgressFragment.OnBasicNoteDataFragmentInteractionListener mProgressListener;
+
+    private boolean mIsProgress = false;
 
     public BasicNoteDataA getBasicNoteData() {
         return mBasicNoteData;
@@ -52,9 +58,29 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
         noteManager.queryNoteDataItems(mBasicNoteData.getNote());
     }
 
+    public BasicNoteItemFragment() {
+        super();
+        setRetainInstance(true);
+    }
+
     protected void afterExecutionCompleted() {
 
     };
+
+    @Override
+    public void onAttach(Activity activity) {
+        Log.d("BasicNoteItemFragment", "onAttach");
+        super.onAttach(activity);
+        if (activity instanceof BasicNoteDataProgressFragment.OnBasicNoteDataFragmentInteractionListener) {
+            mProgressListener = (BasicNoteDataProgressFragment.OnBasicNoteDataFragmentInteractionListener) activity;
+            mProgressListener.onBasicNoteDataFragmentAttached(mIsProgress);
+        }
+        else
+            throw new RuntimeException(activity.toString()
+                    + " must implement OnBasicNoteDataFragmentInteractionListener");
+
+    }
+
 
     protected void performAddAction(final BasicNoteItemA item) {
         BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity().getApplicationContext(), mBasicNoteData);
@@ -65,6 +91,8 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
             public void onExecutionCompleted(BasicNoteDataA basicNoteData, boolean result) {
                 mBasicNoteData = basicNoteData;
                 mExecutorHost.onExecutionCompleted();
+
+                mIsProgress = false;
 
                 View v = getView();
                 if (v != null) {
@@ -88,6 +116,8 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
         contentView.setVisibility(View.GONE);
         progressView.setVisibility(View.VISIBLE);
         //mExecutorHost.execute(executor);
+
+        mIsProgress = true;
         executor.execute();
     }
 
@@ -150,6 +180,7 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Log.d("BasicNoteItemFragment", "onCreate");
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
@@ -164,8 +195,10 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
 
     @Override
     public void onDetach() {
+        Log.d("BasicNoteItemFragment", "onDetach");
         super.onDetach();
         mListener = null;
+        mProgressListener = null;
     }
 
     @Override

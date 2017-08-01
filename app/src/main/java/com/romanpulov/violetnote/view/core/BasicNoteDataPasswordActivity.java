@@ -15,8 +15,9 @@ public abstract class BasicNoteDataPasswordActivity extends PasswordActivity imp
     protected BasicNoteDataA mBasicNoteData;
 
     @Override
-    public void onBasicNoteDataFragmentAttached() {
-        onProgressAttached();
+    public void onBasicNoteDataFragmentAttached(boolean isProgress) {
+        if (isProgress)
+            onProgressAttached();
     }
 
     @Override

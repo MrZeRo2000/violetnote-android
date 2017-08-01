@@ -35,7 +35,7 @@ public class BasicNoteDataProgressFragment extends ProgressFragment {
         super.onAttach(activity);
         if (activity instanceof OnBasicNoteDataFragmentInteractionListener) {
             mListener = (OnBasicNoteDataFragmentInteractionListener) activity;
-            mListener.onBasicNoteDataFragmentAttached();
+            mListener.onBasicNoteDataFragmentAttached(true);
         }
         else
             throw new RuntimeException(activity.toString()
@@ -49,7 +49,7 @@ public class BasicNoteDataProgressFragment extends ProgressFragment {
     }
 
     public interface OnBasicNoteDataFragmentInteractionListener {
-        void onBasicNoteDataFragmentAttached();
+        void onBasicNoteDataFragmentAttached(boolean isProgress);
         void onBasicNoteDataLoaded(BasicNoteDataA basicNoteData, boolean result);
     }
 }
