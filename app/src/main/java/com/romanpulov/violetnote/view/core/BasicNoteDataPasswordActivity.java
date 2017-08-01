@@ -93,6 +93,11 @@ public abstract class BasicNoteDataPasswordActivity extends PasswordActivity imp
     }
 
     @Override
+    public void onExecutionStarted() {
+        setProgress(true);
+    }
+
+    @Override
     public void onExecutionCompleted() {
         setProgress(false);
     }

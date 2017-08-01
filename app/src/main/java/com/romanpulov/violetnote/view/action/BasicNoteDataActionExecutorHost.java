@@ -6,5 +6,6 @@ package com.romanpulov.violetnote.view.action;
 
 public interface BasicNoteDataActionExecutorHost {
     void execute(BasicNoteDataActionExecutor executor);
+    void onExecutionStarted();
     void onExecutionCompleted();
 }

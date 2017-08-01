@@ -94,6 +94,7 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
 
                 mIsProgress = false;
 
+                /*
                 View v = getView();
                 if (v != null) {
                     View contentView = v.findViewById(R.id.content_layout);
@@ -104,21 +105,31 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
                         progressView.setVisibility(View.GONE);
                     }
                 }
+                */
 
                 if (result) {
                     mRecyclerView.scrollToPosition(mBasicNoteData.getNote().getItems().size() - 1);
                 }
             }
         });
+        /*
         View v = getView();
         View contentView = v.findViewById(R.id.content_layout);
         View progressView = v.findViewById(R.id.progress_layout);
         contentView.setVisibility(View.GONE);
         progressView.setVisibility(View.VISIBLE);
+        */
+        if (mBasicNoteData.getNote().isEncrypted())
+            mExecutorHost.execute(executor);
+        else
+            executor.execute();
+
         //mExecutorHost.execute(executor);
 
+        //mExecutorHost.onExecutionStarted();
+
         mIsProgress = true;
-        executor.execute();
+        //executor.execute();
     }
 
     protected void performDeleteAction(final ActionMode mode, final List<? extends BasicEntityNoteA> items) {
