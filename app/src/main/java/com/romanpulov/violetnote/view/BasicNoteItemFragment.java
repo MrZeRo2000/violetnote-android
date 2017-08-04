@@ -1,12 +1,10 @@
 package com.romanpulov.violetnote.view;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.view.ActionMode;
 import android.util.Log;
-import android.view.View;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBBasicNoteOpenHelper;
@@ -24,7 +22,6 @@ import com.romanpulov.violetnote.view.action.BasicNoteDataRefreshAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveAction;
 import com.romanpulov.violetnote.view.core.AlertOkCancelSupportDialogFragment;
 import com.romanpulov.violetnote.view.core.BasicCommonNoteFragment;
-import com.romanpulov.violetnote.view.core.BasicNoteDataProgressFragment;
 import com.romanpulov.violetnote.view.core.PasswordActivity;
 
 import java.util.List;
@@ -37,12 +34,14 @@ import java.util.List;
 public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
     protected BasicNoteDataA mBasicNoteData;
     protected DialogInterface mEditorDialog;
-    protected BasicNoteDataActionExecutorHost mExecutorHost;
+
+    private BasicNoteDataActionExecutorHost mExecutorHost;
+
+    protected void setExecutorHost(BasicNoteDataActionExecutorHost value) {
+        mExecutorHost = value;
+    }
 
     protected OnBasicNoteItemFragmentInteractionListener mListener;
-    private BasicNoteDataProgressFragment.OnBasicNoteDataFragmentInteractionListener mProgressListener;
-
-    private boolean mIsProgress = false;
 
     public BasicNoteDataA getBasicNoteData() {
         return mBasicNoteData;
@@ -58,29 +57,20 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
         noteManager.queryNoteDataItems(mBasicNoteData.getNote());
     }
 
-    public BasicNoteItemFragment() {
-        super();
-        setRetainInstance(true);
-    }
-
     protected void afterExecutionCompleted() {
-
+        //some action after execution
     };
 
-    @Override
-    public void onAttach(Activity activity) {
-        Log.d("BasicNoteItemFragment", "onAttach");
-        super.onAttach(activity);
-        if (activity instanceof BasicNoteDataProgressFragment.OnBasicNoteDataFragmentInteractionListener) {
-            mProgressListener = (BasicNoteDataProgressFragment.OnBasicNoteDataFragmentInteractionListener) activity;
-            mProgressListener.onBasicNoteDataFragmentAttached(mIsProgress);
-        }
+    /**
+     * Common logic to execute sync or async action
+     * @param executor actions to execute
+     */
+    protected void executeActions(BasicNoteDataActionExecutor executor) {
+        if (mBasicNoteData.getNote().isEncrypted())
+            mExecutorHost.execute(executor);
         else
-            throw new RuntimeException(activity.toString()
-                    + " must implement OnBasicNoteDataFragmentInteractionListener");
-
+            executor.execute();
     }
-
 
     protected void performAddAction(final BasicNoteItemA item) {
         BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity().getApplicationContext(), mBasicNoteData);
@@ -90,46 +80,13 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
             @Override
             public void onExecutionCompleted(BasicNoteDataA basicNoteData, boolean result) {
                 mBasicNoteData = basicNoteData;
-                mExecutorHost.onExecutionCompleted();
 
-                mIsProgress = false;
-
-                /*
-                View v = getView();
-                if (v != null) {
-                    View contentView = v.findViewById(R.id.content_layout);
-                    View progressView = v.findViewById(R.id.progress_layout);
-
-                    if ((contentView != null) && (progressView != null)) {
-                        contentView.setVisibility(View.VISIBLE);
-                        progressView.setVisibility(View.GONE);
-                    }
-                }
-                */
-
-                if (result) {
+                if (result)
                     mRecyclerView.scrollToPosition(mBasicNoteData.getNote().getItems().size() - 1);
-                }
             }
         });
-        /*
-        View v = getView();
-        View contentView = v.findViewById(R.id.content_layout);
-        View progressView = v.findViewById(R.id.progress_layout);
-        contentView.setVisibility(View.GONE);
-        progressView.setVisibility(View.VISIBLE);
-        */
-        if (mBasicNoteData.getNote().isEncrypted())
-            mExecutorHost.execute(executor);
-        else
-            executor.execute();
 
-        //mExecutorHost.execute(executor);
-
-        //mExecutorHost.onExecutionStarted();
-
-        mIsProgress = true;
-        //executor.execute();
+        executeActions(executor);
     }
 
     protected void performDeleteAction(final ActionMode mode, final List<? extends BasicEntityNoteA> items) {
@@ -202,14 +159,6 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
                 noteManager.queryNoteDataValues(mBasicNoteData.getNote());
             }
         }
-    }
-
-    @Override
-    public void onDetach() {
-        Log.d("BasicNoteItemFragment", "onDetach");
-        super.onDetach();
-        mListener = null;
-        mProgressListener = null;
     }
 
     @Override

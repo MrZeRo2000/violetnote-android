@@ -73,7 +73,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         BasicNoteCheckedItemFragment fragment = new BasicNoteCheckedItemFragment();
         Bundle args = new Bundle();
         args.putParcelable(PasswordActivity.PASS_DATA, basicNoteDataA);
-        fragment.mExecutorHost = host;
+        fragment.setExecutorHost(host);
         fragment.setArguments(args);
         return fragment;
     }
