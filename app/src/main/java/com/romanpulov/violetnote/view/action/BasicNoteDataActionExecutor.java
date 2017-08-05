@@ -19,7 +19,22 @@ public class BasicNoteDataActionExecutor {
     private final Context mContext;
     private final BasicNoteDataA mBasicNoteData;
     private List<Map.Entry<String, BasicNoteDataAction>> mActionList = new ArrayList<>();
+
     private OnExecutionCompletedListener mListener;
+
+    public OnExecutionCompletedListener getOnExecutionCompletedListener() {
+        return mListener;
+    }
+
+    public void setOnExecutionCompletedListener(OnExecutionCompletedListener listener) {
+        mListener = listener;
+    }
+
+    private OnExecutionProgressListener mProgressListener;
+
+    public void setOnExecutionProgressListener(OnExecutionProgressListener progressListener) {
+        mProgressListener = progressListener;
+    }
 
     private long mNoteId = 0;
 
@@ -34,14 +49,6 @@ public class BasicNoteDataActionExecutor {
 
     public void addAction(String description, BasicNoteDataAction action) {
         mActionList.add(new AbstractMap.SimpleEntry<>(description, action));
-    }
-
-    public OnExecutionCompletedListener getOnExecutionCompletedListener() {
-        return mListener;
-    }
-
-    public void setOnExecutionCompletedListener(OnExecutionCompletedListener listener) {
-        mListener = listener;
     }
 
     private DBNoteManager createNoteManager() {
@@ -87,6 +94,7 @@ public class BasicNoteDataActionExecutor {
                 String caption = entry.getKey();
                 if ((caption == null) || caption.isEmpty())
                     caption = mContext.getString(R.string.caption_processing);
+
                 //update caption
                 publishProgress(caption);
 
@@ -101,6 +109,8 @@ public class BasicNoteDataActionExecutor {
         @Override
         protected void onProgressUpdate(String... values) {
             //values[0] - value to update
+            if (mProgressListener != null)
+                mProgressListener.onExecutionProgress(values[0]);
         }
 
         @Override
@@ -112,6 +122,10 @@ public class BasicNoteDataActionExecutor {
 
     public interface OnExecutionCompletedListener {
         void onExecutionCompleted(BasicNoteDataA basicNoteData, boolean result);
+    }
+
+    public interface OnExecutionProgressListener {
+        void onExecutionProgress(String progressInfo);
     }
 
 }
