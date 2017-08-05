@@ -17,6 +17,7 @@ import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.model.BasicEntityNoteSelectionPosA;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
+import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutorHost;
 import com.romanpulov.violetnote.view.helper.DisplayTitleBuilder;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutor;
 import com.romanpulov.violetnote.view.action.BasicNoteDataItemEditNameValueAction;
@@ -44,10 +45,11 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
     public BasicNoteNamedItemFragment() {
     }
 
-    public static BasicNoteNamedItemFragment newInstance(BasicNoteDataA basicNoteDataA) {
+    public static BasicNoteNamedItemFragment newInstance(BasicNoteDataA basicNoteDataA, BasicNoteDataActionExecutorHost host) {
         BasicNoteNamedItemFragment fragment = new BasicNoteNamedItemFragment();
         Bundle args = new Bundle();
         args.putParcelable(PasswordActivity.PASS_DATA, basicNoteDataA);
+        fragment.setExecutorHost(host);
         fragment.setArguments(args);
         return fragment;
     }
@@ -96,12 +98,16 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
                     executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
                         @Override
                         public void onExecutionCompleted(BasicNoteDataA basicNoteData, boolean result) {
+                            mBasicNoteData = basicNoteData;
+
                             //clear editor reference
-                            mEditorDialog.dismiss();
-                            mEditorDialog = null;
+                            if (mEditorDialog != null) {
+                                mEditorDialog.dismiss();
+                                mEditorDialog = null;
+                            }
                         }
                     });
-                    executor.execute();
+                    executeActions(executor);
                 }
             }
         });
@@ -127,14 +133,19 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
                     executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
                         @Override
                         public void onExecutionCompleted(BasicNoteDataA basicNoteData, boolean result) {
+                            mBasicNoteData = basicNoteData;
+
                             // finish anyway
                             mode.finish();
+
                             //clear editor reference
-                            mEditorDialog.dismiss();
-                            mEditorDialog = null;
+                            if (mEditorDialog != null) {
+                                mEditorDialog.dismiss();
+                                mEditorDialog = null;
+                            }
                         }
                     });
-                    executor.execute();
+                    executeActions(executor);
                 }
                 // finish anyway
                 mode.finish();

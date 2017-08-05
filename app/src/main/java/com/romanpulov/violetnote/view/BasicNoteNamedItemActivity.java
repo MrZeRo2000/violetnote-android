@@ -8,12 +8,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.romanpulov.violetnote.R;
-import com.romanpulov.violetnote.db.DBNoteManager;
 import com.romanpulov.violetnote.view.core.BasicNoteDataPasswordActivity;
 
 public class BasicNoteNamedItemActivity extends BasicNoteDataPasswordActivity {
-
-    private BasicNoteNamedItemFragment mFragment;
 
     @Override
     protected int getFragmentContainerId() {
@@ -22,17 +19,15 @@ public class BasicNoteNamedItemActivity extends BasicNoteDataPasswordActivity {
 
     @Override
     protected void refreshFragment() {
-        /*
-        Fragment fragment = BasicNoteNamedItemFragment.newInstance(mBasicNoteData);
-        removeFragment().beginTransaction().add(getFragmentContainerId(), fragment).commit();
-        */
+        if (!getProgress()) {
+            FragmentManager fm = getSupportFragmentManager();
 
-        FragmentManager fm = getSupportFragmentManager();
-
-        mFragment = (BasicNoteNamedItemFragment)fm.findFragmentById(getFragmentContainerId());
-        if (mFragment == null) {
-            mFragment = BasicNoteNamedItemFragment.newInstance(mBasicNoteData);
-            fm.beginTransaction().replace(getFragmentContainerId(), mFragment).commit();
+            Fragment fragment = fm.findFragmentById(getFragmentContainerId());
+            //BasicNoteCheckedItemFragment fragment = (BasicNoteCheckedItemFragment) fm.findFragmentById(getFragmentContainerId());
+            if((fragment == null) || (!(fragment instanceof BasicNoteCheckedItemFragment))) {
+                Fragment newFragment = BasicNoteNamedItemFragment.newInstance(mBasicNoteData, this);
+                removeFragment().beginTransaction().add(getFragmentContainerId(), newFragment).commit();
+            }
         }
     }
 
