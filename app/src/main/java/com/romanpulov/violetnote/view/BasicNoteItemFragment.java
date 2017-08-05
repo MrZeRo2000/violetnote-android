@@ -72,6 +72,10 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
             executor.execute();
     }
 
+    /**
+     * Common logic for Add action
+     * @param item item to add
+     */
     protected void performAddAction(final BasicNoteItemA item) {
         BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity().getApplicationContext(), mBasicNoteData);
         executor.addAction(getString(R.string.caption_processing), new BasicNoteDataItemAddAction(mBasicNoteData, item));
@@ -79,6 +83,9 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
         executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
             @Override
             public void onExecutionCompleted(BasicNoteDataA basicNoteData, boolean result) {
+                if (result)
+                    afterExecutionCompleted();
+
                 mBasicNoteData = basicNoteData;
 
                 if (result)
@@ -89,6 +96,11 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
         executeActions(executor);
     }
 
+    /**
+     * Common logic for Delete action
+     * @param mode ActionMode
+     * @param items items to delete
+     */
     protected void performDeleteAction(final ActionMode mode, final List<? extends BasicEntityNoteA> items) {
         AlertOkCancelSupportDialogFragment dialog = AlertOkCancelSupportDialogFragment.newAlertOkCancelDialog(getString(R.string.ui_question_are_you_sure));
         dialog.setOkButtonClickListener(new AlertOkCancelSupportDialogFragment.OnClickListener() {
@@ -104,11 +116,16 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
                             afterExecutionCompleted();
                             mode.finish();
                         }
-                        mDialogFragment.dismiss();
-                        mDialogFragment = null;
+
+                        mBasicNoteData = basicNoteData;
+
+                        if (mDialogFragment != null) {
+                            mDialogFragment.dismiss();
+                            mDialogFragment = null;
+                        }
                     }
                 });
-                executor.execute();
+                executeActions(executor);
             }
         });
 
@@ -116,6 +133,11 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
         mDialogFragment = dialog;
     }
 
+    /**
+     * Common logic for Move action
+     * @param action movement type action
+     * @param items items to move
+     */
     protected void performMoveAction(final BasicNoteMoveAction<BasicNoteItemA> action, final List<BasicNoteItemA> items) {
         //executor
         BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity(), mBasicNoteData);
@@ -132,6 +154,8 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
                 if (result)
                     afterExecutionCompleted();
 
+                mBasicNoteData = basicNoteData;
+
                 BasicEntityNoteSelectionPosA selectionPos = new BasicEntityNoteSelectionPosA(mBasicNoteData.getNote().getItems(), items);
                 int selectionScrollPos = selectionPos.getDirectionPos(action.getDirection());
 
@@ -143,7 +167,7 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
         });
 
         //execute
-        executor.execute();
+        executeActions(executor);
     }
 
     @Override
