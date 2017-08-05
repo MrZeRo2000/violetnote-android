@@ -35,6 +35,7 @@ public abstract class HrChooserFragment extends Fragment {
     private TextView mHeader;
     private RecyclerView.Adapter mAdapter;
     private List<ChooseItem> mChooseItemList;
+    private String mHeaderText;
     private int mFillMode;
 
     private OnChooserInteractionListener mListener;
@@ -112,9 +113,27 @@ public abstract class HrChooserFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
+
+        if (getArguments() != null)
             mInitialPath = getArguments().getString(HR_CHOOSER_INITIAL_PATH);
-        }
+
+        mChooseItemList = new ArrayList<>();
+
+        mAdapter = new ChooserAdapter(mChooseItemList, new OnChooserInteractionListener() {
+            @Override
+            public void onChooserInteraction(ChooseItem item) {
+                switch (item.getItemType()) {
+                    case ChooseItem.ITEM_FILE:
+                        if (mListener != null)
+                            mListener.onChooserInteraction(item);
+                        break;
+                    case ChooseItem.ITEM_DIRECTORY:
+                    case ChooseItem.ITEM_PARENT:
+                        chooseItemChanged(item);
+                        break;
+                }
+            }
+        });
     }
 
     protected abstract ChooseItem getChooseItem();
@@ -139,13 +158,19 @@ public abstract class HrChooserFragment extends Fragment {
      * @param item Item to reflect changes
      */
     private void updateChooseItem(ChooseItem item) {
+        //header text
         if (item.getFillItemsError() != null) {
-            mHeader.setText(getText(R.string.error_load).toString());
+            mHeaderText = getText(R.string.error_load).toString();
             Toast.makeText(getActivity(), item.getFillItemsError(), Toast.LENGTH_SHORT).show();
         } else {
-            mHeader.setText(item.getDisplayItemPath());
+            mHeaderText = item.getDisplayItemPath();
         }
+
+        //prepare display items
         Collections.sort(item.getItems(), new ChooseItemComparator());
+
+        //update controls
+        mHeader.setText(mHeaderText);
         mChooseItemList.clear();
         mChooseItemList.addAll(item.getItems());
         mAdapter.notifyDataSetChanged();
@@ -192,33 +217,19 @@ public abstract class HrChooserFragment extends Fragment {
 
         //UI components
         mHeader = (TextView) (v.findViewById(R.id.chooser_header));
+        mHeader.setText(mHeaderText);
+
         RecyclerView recyclerView = (RecyclerView) (v.findViewById(R.id.chooser_list));
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         // add decoration
         recyclerView.addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(getActivity(), RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_gray_solid));
 
-        // reserve for incoming data
-        mChooseItemList = new ArrayList<>();
-
-        mAdapter = new ChooserAdapter(mChooseItemList, new OnChooserInteractionListener() {
-            @Override
-            public void onChooserInteraction(ChooseItem item) {
-                switch (item.getItemType()) {
-                    case ChooseItem.ITEM_FILE:
-                        if (mListener != null)
-                            mListener.onChooserInteraction(item);
-                        break;
-                    case ChooseItem.ITEM_DIRECTORY:
-                    case ChooseItem.ITEM_PARENT:
-                        chooseItemChanged(item);
-                        break;
-                }
-            }
-        });
         recyclerView.setAdapter(mAdapter);
 
-        chooseItemChanged(null);
+        //update for first run
+        if (savedInstanceState == null)
+            chooseItemChanged(null);
 
         return v;
     }

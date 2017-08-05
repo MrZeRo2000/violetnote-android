@@ -3,6 +3,7 @@ package com.romanpulov.violetnote.filechooser;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 
 import com.romanpulov.violetnote.view.core.ActionBarCompatActivity;
 import com.romanpulov.violetnote.chooser.ChooseItem;
@@ -15,12 +16,15 @@ public class FileChooserActivity extends ActionBarCompatActivity implements File
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_fragment_hr_chooser);
 
-        String initialPath = getIntent().getStringExtra(CHOOSER_INITIAL_PATH);
+        FragmentManager fm = getSupportFragmentManager();
 
-        Fragment fragment = FileChooserFragment.newInstance(initialPath);
-        getSupportFragmentManager().beginTransaction().add(android.R.id.content, fragment).commit();
+        Fragment fragment = fm.findFragmentById(android.R.id.content);
+        if (fragment == null) {
+            String initialPath = getIntent().getStringExtra(CHOOSER_INITIAL_PATH);
+            fragment = FileChooserFragment.newInstance(initialPath);
+            fm.beginTransaction().add(android.R.id.content, fragment).commit();
+        }
     }
 
     @Override

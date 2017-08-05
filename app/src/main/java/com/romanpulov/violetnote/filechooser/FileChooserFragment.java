@@ -23,9 +23,14 @@ public class FileChooserFragment extends HrChooserFragment {
         return new FileChooseItem(file);
     }
 
+    public FileChooserFragment() {
+        super();
+        setRetainInstance(true);
+        setFillMode(HR_MODE_SYNC);
+    }
+
     public static HrChooserFragment newInstance(String initialPath) {
         HrChooserFragment fragment = new FileChooserFragment();
-        fragment.setFillMode(HR_MODE_SYNC);
         Bundle args = new Bundle();
         args.putString(HR_CHOOSER_INITIAL_PATH, initialPath);
         fragment.setArguments(args);

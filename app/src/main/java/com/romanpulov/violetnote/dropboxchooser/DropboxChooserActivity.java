@@ -9,6 +9,8 @@ import android.os.Bundle;
 
 import com.romanpulov.violetnote.view.core.ActionBarCompatActivity;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+
 import com.romanpulov.violetnote.chooser.ChooseItem;
 
 
@@ -20,12 +22,15 @@ public class DropboxChooserActivity extends ActionBarCompatActivity implements D
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_fragment_hr_chooser);
 
-        String initialPath = getIntent().getStringExtra(CHOOSER_INITIAL_PATH);
+        FragmentManager fm = getSupportFragmentManager();
 
-        Fragment fragment = DropboxChooserFragment.newInstance(initialPath);
-        getSupportFragmentManager().beginTransaction().add(android.R.id.content, fragment).commit();
+        Fragment fragment = fm.findFragmentById(android.R.id.content);
+        if (fragment == null) {
+            String initialPath = getIntent().getStringExtra(CHOOSER_INITIAL_PATH);
+            fragment = DropboxChooserFragment.newInstance(initialPath);
+            fm.beginTransaction().add(android.R.id.content, fragment).commit();
+        }
     }
 
     @Override
