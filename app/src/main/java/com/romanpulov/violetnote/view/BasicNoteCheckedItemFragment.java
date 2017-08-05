@@ -113,12 +113,16 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                     executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
                         @Override
                         public void onExecutionCompleted(BasicNoteDataA basicNoteData, boolean result) {
+                            mBasicNoteData = basicNoteData;
+
                             //clear editor reference
-                            mEditorDialog.dismiss();
-                            mEditorDialog = null;
+                            if (mEditorDialog != null) {
+                                mEditorDialog.dismiss();
+                                mEditorDialog = null;
+                            }
                         }
                     });
-                    executor.execute();
+                    executeActions(executor);
                 }
             }
         });
@@ -297,7 +301,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
             }
         });
 
-        executor.execute();
+        executeActions(executor);
     }
 
     public void performCheckOutAction() {
@@ -318,7 +322,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
             }
         });
 
-        executor.execute();
+        executeActions(executor);
     }
 
     public void checkOut() {
