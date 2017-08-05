@@ -8,7 +8,6 @@ import android.content.DialogInterface;
  */
 
 public interface IFragmentDialogCallbacks {
-
-    public void onCancel(DialogFragment df, DialogInterface di);
-    public void onDissmiss(DialogFragment df, DialogInterface di);
+    void onCancel(DialogFragment df, DialogInterface di);
+    void onDissmiss(DialogFragment df, DialogInterface di);
 }

@@ -5,12 +5,12 @@ import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import com.romanpulov.violetnote.R;
 
 /**
- *
+ * Progress Dialog Fragment
+ * Not used anymore
  * Created by romanpulov on 24.01.2017.
  */
 

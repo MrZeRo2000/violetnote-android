@@ -3,6 +3,7 @@ package com.romanpulov.violetnote.view.core;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 
@@ -44,6 +45,7 @@ public class AlertOkCancelSupportDialogFragment extends DialogFragment {
     }
 
     @Override
+    @NonNull
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         if (null != savedInstanceState)
             mMessage = savedInstanceState.getString(AlertOkCancelSupportDialogFragment.STRING_MESSAGE);

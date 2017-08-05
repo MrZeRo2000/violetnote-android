@@ -4,13 +4,13 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.view.ActionMode;
-import android.util.Log;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBBasicNoteOpenHelper;
 import com.romanpulov.violetnote.db.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicEntityNoteA;
 import com.romanpulov.violetnote.model.BasicEntityNoteSelectionPosA;
+import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutor;
@@ -59,7 +59,7 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
 
     protected void afterExecutionCompleted() {
         //some action after execution
-    };
+    }
 
     /**
      * Common logic to execute sync or async action
@@ -172,15 +172,19 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.d("BasicNoteItemFragment", "onCreate");
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
             mBasicNoteData = getArguments().getParcelable(PasswordActivity.PASS_DATA);
-            if ((mBasicNoteData.getNote() != null) && (!mBasicNoteData.getNote().isEncrypted())) {
-                DBNoteManager noteManager = new DBNoteManager(getActivity());
-                noteManager.queryNoteDataItems(mBasicNoteData.getNote());
-                noteManager.queryNoteDataValues(mBasicNoteData.getNote());
+
+            if (mBasicNoteData != null) {
+                BasicNoteA note = mBasicNoteData.getNote();
+
+                if ((note != null) && (!note.isEncrypted())) {
+                    DBNoteManager noteManager = new DBNoteManager(getActivity());
+                    noteManager.queryNoteDataItems(note);
+                    noteManager.queryNoteDataValues(note);
+                }
             }
         }
     }

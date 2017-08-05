@@ -2,7 +2,6 @@ package com.romanpulov.violetnote.view;
 
 import android.app.Fragment;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import com.romanpulov.violetnote.view.core.ActionBarCompatActivity;
 

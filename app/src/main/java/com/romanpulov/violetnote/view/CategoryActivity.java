@@ -3,7 +3,6 @@ package com.romanpulov.violetnote.view;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -138,14 +137,12 @@ public class CategoryActivity extends PassDataPasswordActivity implements PassDa
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(PASS_DATA, mPassDataA);
-        Log.d("CategoryActivity", "OnSaveInstanceState");
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         mPassDataA = savedInstanceState.getParcelable(PASS_DATA);
-        Log.d("CategoryActivity", "OnRestoreInstanceState");
     }
 
 }

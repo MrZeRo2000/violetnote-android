@@ -1,21 +1,15 @@
 package com.romanpulov.violetnote.view.helper;
 
-import android.app.Activity;
-import android.content.Context;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.romanpulov.violetnote.R;
-import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 
 import java.util.Collection;
 

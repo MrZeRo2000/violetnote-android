@@ -27,7 +27,10 @@ public class BasicNoteDataA implements Parcelable, PasswordProvider {
     }
 
     public BasicNoteA getNote() {
-        return mNoteList.get(0);
+        if ((mNoteList != null) && (mNoteList.size() > 0))
+            return mNoteList.get(0);
+        else
+            return null;
     }
 
     public boolean isPasswordRequired() {

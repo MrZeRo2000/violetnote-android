@@ -17,7 +17,6 @@ import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBBasicNoteOpenHelper;
 import com.romanpulov.violetnote.db.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicEntityNoteSelectionPosA;
-import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.model.BasicNoteValueA;
 import com.romanpulov.violetnote.model.BasicNoteValueDataA;
 import com.romanpulov.violetnote.view.helper.DisplayTitleBuilder;
@@ -199,7 +198,7 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
                 if (newItemPos > -1)
                     mRecyclerView.scrollToPosition(newItemPos);
             }
-            ;
+
         } catch (Exception e) {
             //catch possible unique index violation
             refreshList(mNoteManager);

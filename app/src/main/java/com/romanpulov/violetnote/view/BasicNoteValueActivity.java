@@ -1,6 +1,5 @@
 package com.romanpulov.violetnote.view;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.view.Menu;
@@ -10,9 +9,6 @@ import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicNoteValueDataA;
 import com.romanpulov.violetnote.view.core.ActionBarCompatActivity;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class BasicNoteValueActivity extends ActionBarCompatActivity {
     private BasicNoteValueFragment mFragment;

@@ -1,7 +1,5 @@
 package com.romanpulov.violetnote.view.action;
 
-import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 
@@ -75,7 +73,6 @@ public class BasicNoteDataActionExecutor {
     }
 
     private class ExecuteAsyncTask extends AsyncTask<Void, String, Boolean> {
-        ProgressDialog progressDialog;
 
         @Override
         protected void onPreExecute() {
@@ -103,12 +100,7 @@ public class BasicNoteDataActionExecutor {
 
         @Override
         protected void onProgressUpdate(String... values) {
-            try {
-                if (progressDialog != null)
-                    progressDialog.setTitle(values[0]);
-            } catch (Exception e) {
-                progressDialog = null;
-            }
+            //values[0] - value to update
         }
 
         @Override
