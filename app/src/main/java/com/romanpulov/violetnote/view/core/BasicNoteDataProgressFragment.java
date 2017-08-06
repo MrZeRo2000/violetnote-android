@@ -27,6 +27,12 @@ public class BasicNoteDataProgressFragment extends ProgressFragment {
                     oldListener.onExecutionCompleted(basicNoteData, result);
             }
         });
+        executor.setOnExecutionProgressListener(new BasicNoteDataActionExecutor.OnExecutionProgressListener() {
+            @Override
+            public void onExecutionProgress(String progressText) {
+                setProgressText(progressText);
+            }
+        });
         executor.execute();
     }
 

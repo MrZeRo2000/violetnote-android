@@ -3,6 +3,10 @@ package com.romanpulov.violetnote.view.core;
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.model.Document;
@@ -29,6 +33,7 @@ public class PassDataProgressFragment extends ProgressFragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+
         if (activity instanceof OnPassDataFragmentInteractionListener) {
             mListener = (OnPassDataFragmentInteractionListener) activity;
             mListener.onPassDataFragmentAttached();
@@ -36,6 +41,13 @@ public class PassDataProgressFragment extends ProgressFragment {
         else
             throw new RuntimeException(activity.toString()
                     + " must implement OnPassDataFragmentInteractionListener");
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View v = super.onCreateView(inflater, container, savedInstanceState);
+        setProgressText(mContext.getString(R.string.caption_loading));
+        return v;
     }
 
     @Override

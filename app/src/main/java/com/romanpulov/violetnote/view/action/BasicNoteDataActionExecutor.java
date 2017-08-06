@@ -125,7 +125,7 @@ public class BasicNoteDataActionExecutor {
     }
 
     public interface OnExecutionProgressListener {
-        void onExecutionProgress(String progressInfo);
+        void onExecutionProgress(String progressText);
     }
 
 }
