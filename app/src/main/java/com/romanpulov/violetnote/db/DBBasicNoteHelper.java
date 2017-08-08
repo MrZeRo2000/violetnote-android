@@ -57,14 +57,24 @@ public class DBBasicNoteHelper {
         }
     }
 
-    private String getNoteIdSelection(long noteId) {
+    /**
+     * Selection string with conditions
+     * @param noteId 0 for notes, note_id value for note items
+     * @return selection string
+     */
+    private static String getNoteIdSelection(long noteId) {
         if (noteId == 0)
             return null;
         else
             return DBBasicNoteOpenHelper.NOTE_ID_SELECTION_STRING;
     }
 
-    private String[] getNoteIdSelectionArgs(long noteId) {
+    /**
+     * Selection args
+     * @param noteId 0 for notes, note_id value for note items
+     * @return selection args
+     */
+    private static String[] getNoteIdSelectionArgs(long noteId) {
         if (noteId == 0)
             return null;
         else
