@@ -1,0 +1,1 @@
+%LOCALAPPDATA%\Android\sdk\platform-tools\adb.exe push basic_note_v1.db data/data/com.romanpulov.violetnote/databases/basic_note.db
