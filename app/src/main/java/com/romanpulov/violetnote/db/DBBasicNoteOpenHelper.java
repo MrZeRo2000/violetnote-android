@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class DBBasicNoteOpenHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "basic_note.db";
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
 
     //common column names
     public static final String ID_COLUMN_NAME = "_id";
@@ -50,7 +50,8 @@ public class DBBasicNoteOpenHelper extends SQLiteOpenHelper {
             NOTE_ID_COLUMN_NAME,
             "name",
             VALUE_COLUMN_NAME,
-            "checked"
+            "checked",
+            "priority"
     };
     private static final String NOTE_ITEMS_TABLE_CREATE =
             "CREATE TABLE " + NOTE_ITEMS_TABLE_NAME + " (" +
@@ -61,6 +62,7 @@ public class DBBasicNoteOpenHelper extends SQLiteOpenHelper {
                     NOTE_ITEMS_TABLE_COLS[4] + " TEXT," +
                     NOTE_ITEMS_TABLE_COLS[5] + " TEXT," +
                     NOTE_ITEMS_TABLE_COLS[6] + " INTEGER," +
+                    NOTE_ITEMS_TABLE_COLS[7] + " INTEGER NOT NULL DEFAULT 0," +
                     " FOREIGN KEY (" + NOTE_ITEMS_TABLE_COLS[3] + ") REFERENCES " + NOTES_TABLE_NAME + "(" + NOTES_TABLE_COLS[0] + ")" +
                     ");";
     private static final String NOTE_ITEMS_FK_INDEX_CREATE =
@@ -148,8 +150,11 @@ public class DBBasicNoteOpenHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int i, int i1) {
-
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        switch(oldVersion) {
+            case 1:
+                db.execSQL("ALTER TABLE " + NOTE_ITEMS_TABLE_NAME + " ADD priority INTEGER NOT NULL DEFAULT 0;");
+        }
     }
 
     @Override
