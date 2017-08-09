@@ -81,6 +81,11 @@ public class DBBasicNoteHelper {
             return new String[] {String.valueOf(noteId)};
     }
 
+    public long getMaxOrderId(String tableName, String selection, String[] selectionArgs) {
+        return getAggregateColumn(tableName, DBBasicNoteOpenHelper.ORDER_COLUMN_NAME, MAX_AGGREGATE_FUNCTION_NAME,
+                selection, selectionArgs);
+    }
+
     public long getMaxOrderId(String tableName, long noteId) {
         return getAggregateColumn(tableName, DBBasicNoteOpenHelper.ORDER_COLUMN_NAME, MAX_AGGREGATE_FUNCTION_NAME,
                 getNoteIdSelection(noteId), getNoteIdSelectionArgs(noteId));
@@ -89,6 +94,11 @@ public class DBBasicNoteHelper {
     public long getMinOrderId(String tableName, long noteId) {
         return getAggregateColumn(tableName, DBBasicNoteOpenHelper.ORDER_COLUMN_NAME, MIN_AGGREGATE_FUNCTION_NAME,
                 getNoteIdSelection(noteId), getNoteIdSelectionArgs(noteId));
+    }
+
+    public long getMinOrderId(String tableName, String selection, String[] selectionArgs) {
+        return getAggregateColumn(tableName, DBBasicNoteOpenHelper.ORDER_COLUMN_NAME, MIN_AGGREGATE_FUNCTION_NAME,
+                selection, selectionArgs);
     }
 
     public long getMaxId(String tableName, long noteId) {
@@ -183,6 +193,19 @@ public class DBBasicNoteHelper {
         mDB.execSQL(sql);
     }
 
+    public void moveOrderIdTop(String tableName, String selectionString, long orderId, long minOrderId) {
+        String sql = "UPDATE " + tableName + " SET " + DBBasicNoteOpenHelper.ORDER_COLUMN_NAME + " = " +
+                " CASE" +
+                " WHEN " + DBBasicNoteOpenHelper.ORDER_COLUMN_NAME + " = " + orderId + " THEN " + minOrderId +
+                " WHEN " + DBBasicNoteOpenHelper.ORDER_COLUMN_NAME + " < " + orderId + " THEN " + DBBasicNoteOpenHelper.ORDER_COLUMN_NAME + " + 1" +
+                " END " +
+                " WHERE " + DBBasicNoteOpenHelper.ORDER_COLUMN_NAME + " <= " + orderId;
+        if (selectionString != null)
+            sql = sql + " AND " + selectionString;
+        mDB.execSQL(sql);
+    }
+
+
     public void moveOrderIdTop(String tableName, long noteId, long orderId) {
         long minOrderId = getMinOrderId(tableName, noteId);
         String sql = "UPDATE " + tableName + " SET " + DBBasicNoteOpenHelper.ORDER_COLUMN_NAME + " = " +
@@ -193,6 +216,18 @@ public class DBBasicNoteHelper {
                 " WHERE " + DBBasicNoteOpenHelper.ORDER_COLUMN_NAME + " <= " + orderId;
         if (noteId > 0)
             sql = sql + " AND " + DBBasicNoteOpenHelper.NOTE_ID_COLUMN_NAME + " = " + String.valueOf(noteId);
+        mDB.execSQL(sql);
+    }
+
+    public void moveOrderIdBottom(String tableName, String selectionString, long orderId, long maxOrderId) {
+        String sql = "UPDATE " + tableName + " SET " + DBBasicNoteOpenHelper.ORDER_COLUMN_NAME + " = " +
+                " CASE" +
+                " WHEN " + DBBasicNoteOpenHelper.ORDER_COLUMN_NAME + " = " + orderId + " THEN " + maxOrderId +
+                " WHEN " + DBBasicNoteOpenHelper.ORDER_COLUMN_NAME + " > " + orderId + " THEN " + DBBasicNoteOpenHelper.ORDER_COLUMN_NAME + " - 1" +
+                " END " +
+                " WHERE " + DBBasicNoteOpenHelper.ORDER_COLUMN_NAME + " >= " + orderId;
+        if (selectionString != null)
+            sql = sql + " AND " + selectionString;
         mDB.execSQL(sql);
     }
 
@@ -209,10 +244,16 @@ public class DBBasicNoteHelper {
         mDB.execSQL(sql);
     }
 
-    public long getOrderId(String tableName, long noteId) {
+    /**
+     * Get order by id
+     * @param tableName Ordered table
+     * @param id Row id
+     * @return OrderId
+     */
+    public long getOrderId(String tableName, long id) {
         Cursor c = null;
         try {
-            c = mDB.query(tableName, new String[]{DBBasicNoteOpenHelper.ORDER_COLUMN_NAME}, DBBasicNoteOpenHelper.ID_COLUMN_NAME + " = ?", new String[] {String.valueOf(noteId)}, null, null, null);
+            c = mDB.query(tableName, new String[]{DBBasicNoteOpenHelper.ORDER_COLUMN_NAME}, DBBasicNoteOpenHelper.ID_COLUMN_NAME + " = ?", new String[] {String.valueOf(id)}, null, null, null);
             c.moveToFirst();
             return c.isNull(0) ? 0 : c.getLong(0);
         } finally {

@@ -19,7 +19,7 @@ public class BasicNoteMoveBottomAction <T extends BasicCommonNoteA> extends Basi
 
     @Override
     public boolean execute(DBNoteManager noteManager, T item) {
-        return noteManager.moveBottom(mDBDataProvider.getDBTableName(), item);
+        return noteManager.moveBottom(item);
     }
 
     @Override
@@ -28,7 +28,7 @@ public class BasicNoteMoveBottomAction <T extends BasicCommonNoteA> extends Basi
         BasicOrderedEntityNoteA.sortAsc(items);
 
         for (T item : items) {
-            if (noteManager.moveBottom(mDBDataProvider.getDBTableName(), item)) {
+            if (noteManager.moveBottom(item)) {
                 result = true;
             }
         }

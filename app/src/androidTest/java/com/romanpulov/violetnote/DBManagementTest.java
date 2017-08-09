@@ -129,7 +129,7 @@ public class DBManagementTest extends ApplicationTestCase<Application> {
         note3 = mDBNoteManager.get(note3id);
         Assert.assertEquals(note3.getOrderId(), 1);
 
-        //note 2 move down - no action
+        //note 2 move down - no action : 2, 4, 1
         mDBNoteManager.moveDown(note2);
         note1 = mDBNoteManager.get(note1id);
         Assert.assertEquals(note1.getOrderId(), 2);
@@ -137,6 +137,44 @@ public class DBManagementTest extends ApplicationTestCase<Application> {
         Assert.assertEquals(note2.getOrderId(), 4);
         note3 = mDBNoteManager.get(note3id);
         Assert.assertEquals(note3.getOrderId(), 1);
+
+        //note 2 move top
+        mDBNoteManager.moveTop(note2);
+        note1 = mDBNoteManager.get(note1id);
+        Assert.assertEquals(note1.getOrderId(), 3);
+        note2 = mDBNoteManager.get(note2id);
+        Assert.assertEquals(note2.getOrderId(), 1);
+        note3 = mDBNoteManager.get(note3id);
+        Assert.assertEquals(note3.getOrderId(), 2);
+
+        //note 2 move top - no action
+        mDBNoteManager.moveTop(note2);
+        note1 = mDBNoteManager.get(note1id);
+        Assert.assertEquals(note1.getOrderId(), 3);
+        note2 = mDBNoteManager.get(note2id);
+        Assert.assertEquals(note2.getOrderId(), 1);
+        note3 = mDBNoteManager.get(note3id);
+        Assert.assertEquals(note3.getOrderId(), 2);
+
+        //note 2 move bottom
+        mDBNoteManager.moveBottom(note2);
+        note1 = mDBNoteManager.get(note1id);
+        Assert.assertEquals(note1.getOrderId(), 2);
+        note2 = mDBNoteManager.get(note2id);
+        Assert.assertEquals(note2.getOrderId(), 3);
+        note3 = mDBNoteManager.get(note3id);
+        Assert.assertEquals(note3.getOrderId(), 1);
+
+        //note 2 move bottom - no action
+        mDBNoteManager.moveBottom(note2);
+        note1 = mDBNoteManager.get(note1id);
+        Assert.assertEquals(note1.getOrderId(), 2);
+        note2 = mDBNoteManager.get(note2id);
+        Assert.assertEquals(note2.getOrderId(), 3);
+        note3 = mDBNoteManager.get(note3id);
+        Assert.assertEquals(note3.getOrderId(), 1);
+
+
 
         clearNotesTestData();
     }

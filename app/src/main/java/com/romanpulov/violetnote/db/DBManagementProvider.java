@@ -33,5 +33,17 @@ public interface DBManagementProvider {
      *
      * @return OrderId selection string for exchanging order
      */
+    String getOrderIdSelectionString();
+
+    /**
+     *
+     * @return OrderId selection
+     */
     String getOrderIdSelection();
+
+    /**
+     *
+     * @return OrderId selection args
+     */
+    String[] getOrderIdSelectionArgs();
 }

@@ -34,7 +34,17 @@ public class BasicNoteDBManagementProvider implements DBManagementProvider {
     }
 
     @Override
+    public String getOrderIdSelectionString() {
+        return null;
+    }
+
+    @Override
     public String getOrderIdSelection() {
+        return null;
+    }
+
+    @Override
+    public String[] getOrderIdSelectionArgs() {
         return null;
     }
 }
