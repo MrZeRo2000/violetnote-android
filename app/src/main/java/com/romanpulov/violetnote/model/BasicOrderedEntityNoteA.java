@@ -12,14 +12,30 @@ import java.util.List;
  */
 
 public class BasicOrderedEntityNoteA extends BasicModifiableEntityNoteA{
+    public static final long PRIORITY_HIGH = 1;
+    public static final long PRIORITY_NORMAL = 0;
+    public static final long PRIORITY_LOW = -1;
+
     private long mOrderId;
 
     public long getOrderId() {
         return mOrderId;
     }
 
-    public void setOrderId(long mOrderId) {
-        this.mOrderId = mOrderId;
+    public void setOrderId(long orderId) {
+        this.mOrderId = orderId;
+    }
+
+    private long mPriority;
+
+    public long getPriority() {
+        return mPriority;
+    }
+
+    public void setPriority(long priority) {
+        if ((priority > PRIORITY_HIGH) || (priority < PRIORITY_LOW))
+            throw new RuntimeException("invalid priority value : " + String.valueOf(priority));
+        mPriority = priority;
     }
 
     @Override
@@ -36,19 +52,25 @@ public class BasicOrderedEntityNoteA extends BasicModifiableEntityNoteA{
             return false;
 
         BasicOrderedEntityNoteA object = (BasicOrderedEntityNoteA) o;
-        return this.mOrderId == object.mOrderId;
+        return (this.mOrderId == object.mOrderId) && (this.mPriority == object.mPriority);
     }
 
     public int compareTo(@NonNull BasicOrderedEntityNoteA another) {
         if (this == another)
             return 0;
 
-        if (this.mOrderId > another.mOrderId)
+        if (this.mPriority > another.mPriority)
             return 1;
-        else if (this.mOrderId < another.mOrderId)
+        else if (this.mPriority < another.mPriority)
             return -1;
-        else
-            return 0;
+        else {
+            if (this.mOrderId > another.mOrderId)
+                return 1;
+            else if (this.mOrderId < another.mOrderId)
+                return -1;
+            else
+                return 0;
+        }
     }
 
     /**
@@ -76,12 +98,18 @@ public class BasicOrderedEntityNoteA extends BasicModifiableEntityNoteA{
             if (lhs == rhs)
                 return 0;
 
-            if (lhs.mOrderId > rhs.mOrderId)
+            if (lhs.mPriority > rhs.mPriority)
                 return 1;
-            else if (lhs.mOrderId < rhs.mOrderId)
+            else if (lhs.mPriority < rhs.mPriority)
                 return -1;
-            else
-                return 0;
+            else {
+                if (lhs.mOrderId > rhs.mOrderId)
+                    return 1;
+                else if (lhs.mOrderId < rhs.mOrderId)
+                    return -1;
+                else
+                    return 0;
+            }
         }
     }
 
@@ -94,12 +122,18 @@ public class BasicOrderedEntityNoteA extends BasicModifiableEntityNoteA{
             if (lhs == rhs)
                 return 0;
 
-            if (lhs.mOrderId > rhs.mOrderId)
+            if (lhs.mPriority > rhs.mPriority)
                 return -1;
-            else if (lhs.mOrderId < rhs.mOrderId)
+            else if (lhs.mPriority < rhs.mPriority)
                 return 1;
-            else
-                return 0;
+            else {
+                if (lhs.mOrderId > rhs.mOrderId)
+                    return -1;
+                else if (lhs.mOrderId < rhs.mOrderId)
+                    return 1;
+                else
+                    return 0;
+            }
         }
     }
 }
