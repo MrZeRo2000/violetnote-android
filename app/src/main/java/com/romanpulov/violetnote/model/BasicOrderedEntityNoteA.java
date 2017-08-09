@@ -26,7 +26,7 @@ public class BasicOrderedEntityNoteA extends BasicModifiableEntityNoteA{
         this.mOrderId = orderId;
     }
 
-    private long mPriority;
+    private long mPriority = PRIORITY_NORMAL;
 
     public long getPriority() {
         return mPriority;
