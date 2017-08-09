@@ -19,7 +19,7 @@ public class BasicNoteMoveDownAction<T extends BasicCommonNoteA> extends BasicNo
 
     @Override
     public boolean execute(DBNoteManager noteManager, T item) {
-        return noteManager.moveDown(mDBDataProvider.getDBTableName(), item);
+        return noteManager.moveDown(item);
     }
 
     @Override
@@ -28,7 +28,7 @@ public class BasicNoteMoveDownAction<T extends BasicCommonNoteA> extends BasicNo
         BasicOrderedEntityNoteA.sortDesc(items);
 
         for (T item : items) {
-            if (noteManager.moveDown(mDBDataProvider.getDBTableName(), item)) {
+            if (noteManager.moveDown(item)) {
                 result = true;
             } else
                 break;

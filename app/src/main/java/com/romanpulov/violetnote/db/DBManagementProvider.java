@@ -13,9 +13,15 @@ public interface DBManagementProvider {
 
     /**
      *
-     * @return Selection for ordering operation
+     * @return Selection for previous order
      */
-    String getOrderSelection();
+    String getPrevOrderSelection();
+
+    /**
+     *
+     * @return Selection for next order
+     */
+    String getNextOrderSelection();
 
     /**
      *

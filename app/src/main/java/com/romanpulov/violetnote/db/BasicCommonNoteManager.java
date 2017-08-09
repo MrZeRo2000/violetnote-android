@@ -29,7 +29,7 @@ public class BasicCommonNoteManager {
 
     public boolean moveUp(BasicCommonNoteA note) {
         DBManagementProvider dbManagementProvider = note.getDBManagementProvider();
-        long prevOrderId = mDBHelper.getPrevOrderId(dbManagementProvider.getTableName(), dbManagementProvider.getOrderSelection(), dbManagementProvider.getOrderSelectionArgs());
+        long prevOrderId = mDBHelper.getPrevOrderId(dbManagementProvider.getTableName(), dbManagementProvider.getPrevOrderSelection(), dbManagementProvider.getOrderSelectionArgs());
         if (prevOrderId > 0) {
             mDBHelper.exchangeOrderId(dbManagementProvider.getTableName(), dbManagementProvider.getOrderIdSelection(), note.getOrderId(), prevOrderId);
             return true;
@@ -37,10 +37,11 @@ public class BasicCommonNoteManager {
             return false;
     }
 
-    public boolean moveDown(String tableName, BasicCommonNoteA note) {
-        long nextOrderId = mDBHelper.getNextOrderId(tableName, mNoteId, note.getOrderId());
+    public boolean moveDown(BasicCommonNoteA note) {
+        DBManagementProvider dbManagementProvider = note.getDBManagementProvider();
+        long nextOrderId = mDBHelper.getNextOrderId(dbManagementProvider.getTableName(), dbManagementProvider.getNextOrderSelection(), dbManagementProvider.getOrderSelectionArgs());
         if (nextOrderId > 0) {
-            mDBHelper.exchangeOrderId(tableName, mNoteId, note.getOrderId(), nextOrderId);
+            mDBHelper.exchangeOrderId(dbManagementProvider.getTableName(), dbManagementProvider.getOrderIdSelection(), note.getOrderId(), nextOrderId);
             return true;
         } else
             return false;
