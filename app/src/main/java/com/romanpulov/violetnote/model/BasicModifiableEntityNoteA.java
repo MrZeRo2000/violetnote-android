@@ -4,9 +4,9 @@ package com.romanpulov.violetnote.model;
  * Created by rpulov on 22.09.2016.
  */
 
-public class BasicModifiableEntityNoteA extends BasicEntityNoteA {
-    protected long mLastModified;
-    protected String mLastModifiedString;
+public abstract class BasicModifiableEntityNoteA extends BasicEntityNoteA {
+    private long mLastModified;
+    private String mLastModifiedString;
 
     public long getLastModified() {
         return mLastModified;
@@ -18,6 +18,10 @@ public class BasicModifiableEntityNoteA extends BasicEntityNoteA {
 
     public String getLastModifiedString() {
         return mLastModifiedString;
+    }
+
+    public void setLastModifiedString(String value) {
+        mLastModifiedString = value;
     }
 
 }

@@ -12,7 +12,7 @@ import java.util.List;
  */
 
 public class BasicOrderedEntityNoteA extends BasicModifiableEntityNoteA{
-    protected long mOrderId;
+    private long mOrderId;
 
     public long getOrderId() {
         return mOrderId;
