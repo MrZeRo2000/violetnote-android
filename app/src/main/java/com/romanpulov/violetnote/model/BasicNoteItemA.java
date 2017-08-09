@@ -53,13 +53,14 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
 
     }
 
-    public static BasicNoteItemA newInstance(long id, long lastModified, String lastModifiedString, long orderId, String name, String value, boolean checked) {
+    public static BasicNoteItemA newInstance(long id, long lastModified, String lastModifiedString, long orderId, long priority, String name, String value, boolean checked) {
         BasicNoteItemA instance = new BasicNoteItemA();
 
         instance.setId(id);
         instance.setLastModified(lastModified);
         instance.setLastModifiedString(lastModifiedString);
         instance.setOrderId(orderId);
+        instance.setPriority(priority);
         instance.mName = name;
         instance.mValue = value;
         instance.mChecked = checked;
@@ -91,6 +92,7 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
         dest.writeLong(getLastModified());
         dest.writeString(getLastModifiedString());
         dest.writeLong(getOrderId());
+        dest.writeLong(getPriority());
         dest.writeString(mName);
         dest.writeString(mValue);
         dest.writeInt(BooleanUtils.toInt(mChecked));
@@ -101,6 +103,7 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
         setLastModified(in.readLong());
         setLastModifiedString(in.readString());
         setOrderId(in.readLong());
+        setPriority(in.readLong());
         mName = in.readString();
         mValue = in.readString();
         mChecked = BooleanUtils.fromInt(in.readInt());

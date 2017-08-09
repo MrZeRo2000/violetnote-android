@@ -64,6 +64,7 @@ public class DBNoteManager extends BasicCommonNoteManager {
                 c.getLong(1),
                 dtf.formatDateTimeDelimited(new Date(c.getLong(1)), "\n"),
                 c.getLong(2),
+                c.getLong(7),
                 c.getString(4),
                 c.getString(5),
                 BooleanUtils.fromInt(c.getInt(6))
@@ -393,6 +394,7 @@ public class DBNoteManager extends BasicCommonNoteManager {
         cv.put(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_COLS[4], item.getName());
         cv.put(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_COLS[5], item.getValue());
         cv.put(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_COLS[6], item.isChecked());
+        cv.put(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_COLS[7], item.getPriority());
 
         return mDB.insert(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME, null, cv);
     }
