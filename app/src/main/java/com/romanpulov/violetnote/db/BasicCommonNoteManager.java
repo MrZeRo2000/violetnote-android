@@ -27,10 +27,11 @@ public class BasicCommonNoteManager {
         mDTF = new DateTimeFormatter(context);
     }
 
-    public boolean moveUp(String tableName, BasicCommonNoteA note) {
-        long prevOrderId = mDBHelper.getPrevOrderId(tableName, mNoteId, note.getOrderId());
+    public boolean moveUp(BasicCommonNoteA note) {
+        DBManagementProvider dbManagementProvider = note.getDBManagementProvider();
+        long prevOrderId = mDBHelper.getPrevOrderId(dbManagementProvider.getTableName(), dbManagementProvider.getOrderSelection(), dbManagementProvider.getOrderSelectionArgs());
         if (prevOrderId > 0) {
-            mDBHelper.exchangeOrderId(tableName, mNoteId, note.getOrderId(), prevOrderId);
+            mDBHelper.exchangeOrderId(dbManagementProvider.getTableName(), dbManagementProvider.getOrderIdSelection(), note.getOrderId(), prevOrderId);
             return true;
         } else
             return false;

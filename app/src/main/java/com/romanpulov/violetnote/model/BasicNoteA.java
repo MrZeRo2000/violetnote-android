@@ -3,6 +3,8 @@ package com.romanpulov.violetnote.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.romanpulov.violetnote.db.BasicNoteDBManagementProvider;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -37,6 +39,8 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
     public void setNoteType(int mNoteType) {
         this.mNoteType = mNoteType;
     }
+
+    //DisplayTitleProvider
 
     @Override
     public String getDisplayTitle() {
@@ -127,7 +131,7 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
     }
 
     private BasicNoteA() {
-
+        setDBManagementProvider(new BasicNoteDBManagementProvider(this));
     }
 
     /**
