@@ -59,9 +59,9 @@ public class BasicOrderedEntityNoteA extends BasicModifiableEntityNoteA{
         if (this == another)
             return 0;
 
-        if (this.mPriority > another.mPriority)
+        if (this.mPriority < another.mPriority)
             return 1;
-        else if (this.mPriority < another.mPriority)
+        else if (this.mPriority > another.mPriority)
             return -1;
         else {
             if (this.mOrderId > another.mOrderId)
@@ -98,9 +98,9 @@ public class BasicOrderedEntityNoteA extends BasicModifiableEntityNoteA{
             if (lhs == rhs)
                 return 0;
 
-            if (lhs.mPriority > rhs.mPriority)
+            if (lhs.mPriority < rhs.mPriority)
                 return 1;
-            else if (lhs.mPriority < rhs.mPriority)
+            else if (lhs.mPriority > rhs.mPriority)
                 return -1;
             else {
                 if (lhs.mOrderId > rhs.mOrderId)
@@ -122,9 +122,9 @@ public class BasicOrderedEntityNoteA extends BasicModifiableEntityNoteA{
             if (lhs == rhs)
                 return 0;
 
-            if (lhs.mPriority > rhs.mPriority)
+            if (lhs.mPriority < rhs.mPriority)
                 return -1;
-            else if (lhs.mPriority < rhs.mPriority)
+            else if (lhs.mPriority > rhs.mPriority)
                 return 1;
             else {
                 if (lhs.mOrderId > rhs.mOrderId)
