@@ -101,6 +101,16 @@ public class DBBasicNoteHelper {
                 getNoteIdSelection(noteId), getNoteIdSelectionArgs(noteId));
     }
 
+    public long getPrevOrderId(String tableName, String selection, String[] selectionArgs) {
+        return getAggregateColumn(
+                tableName,
+                DBBasicNoteOpenHelper.ORDER_COLUMN_NAME,
+                DBBasicNoteHelper.MAX_AGGREGATE_FUNCTION_NAME,
+                selection,
+                selectionArgs
+        );
+    }
+
     public long getPrevOrderId(String tableName, long noteId, long orderId) {
         if (noteId == 0)
             return getAggregateColumn(
@@ -137,6 +147,18 @@ public class DBBasicNoteHelper {
                     DBBasicNoteOpenHelper.NOTE_ID_SELECTION_STRING + " AND "  + DBBasicNoteOpenHelper.ORDER_COLUMN_NAME + " > ?",
                     new String[] {String.valueOf(noteId), String.valueOf(orderId)}
             );
+    }
+
+    public void exchangeOrderId(String tableName, String selectionString, long orderId1, long orderId2) {
+        String sql = "UPDATE " + tableName + " SET " + DBBasicNoteOpenHelper.ORDER_COLUMN_NAME + " = " +
+                " CASE" +
+                " WHEN " + DBBasicNoteOpenHelper.ORDER_COLUMN_NAME + " = " + orderId1 + " THEN " + orderId2 +
+                " WHEN " + DBBasicNoteOpenHelper.ORDER_COLUMN_NAME + " = " + orderId2 + " THEN " + orderId1 +
+                " END " +
+                " WHERE " + DBBasicNoteOpenHelper.ORDER_COLUMN_NAME + " IN (" + orderId1 + ", " + orderId2 + ")";
+        if (selectionString != null)
+            sql = sql + " AND " + selectionString;
+        mDB.execSQL(sql);
     }
 
     public void exchangeOrderId(String tableName, long noteId, long orderId1, long orderId2) {
