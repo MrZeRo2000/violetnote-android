@@ -45,8 +45,8 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
 
     public void updateChecked(BasicNoteItemA item) {
         this.mChecked = item.mChecked;
-        this.mLastModified = item.mLastModified;
-        this.mLastModifiedString = item.mLastModifiedString;
+        this.setLastModified(item.getLastModified());
+        this.setLastModifiedString(item.getLastModifiedString());
     }
 
     private BasicNoteItemA() {
@@ -56,10 +56,10 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
     public static BasicNoteItemA newInstance(long id, long lastModified, String lastModifiedString, long orderId, String name, String value, boolean checked) {
         BasicNoteItemA instance = new BasicNoteItemA();
 
-        instance.mId = id;
-        instance.mLastModified = lastModified;
-        instance.mLastModifiedString = lastModifiedString;
-        instance.mOrderId = orderId;
+        instance.setId(id);
+        instance.setLastModified(lastModified);
+        instance.setLastModifiedString(lastModifiedString);
+        instance.setOrderId(orderId);
         instance.mName = name;
         instance.mValue = value;
         instance.mChecked = checked;
@@ -87,20 +87,20 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int i) {
-        dest.writeLong(mId);
-        dest.writeLong(mLastModified);
-        dest.writeString(mLastModifiedString);
-        dest.writeLong(mOrderId);
+        dest.writeLong(getId());
+        dest.writeLong(getLastModified());
+        dest.writeString(getLastModifiedString());
+        dest.writeLong(getOrderId());
         dest.writeString(mName);
         dest.writeString(mValue);
         dest.writeInt(BooleanUtils.toInt(mChecked));
     }
 
     private BasicNoteItemA(Parcel in) {
-        mId = in.readLong();
-        mLastModified = in.readLong();
-        mLastModifiedString = in.readString();
-        mOrderId = in.readLong();
+        setId(in.readLong());
+        setLastModified(in.readLong());
+        setLastModifiedString(in.readString());
+        setOrderId(in.readLong());
         mName = in.readString();
         mValue = in.readString();
         mChecked = BooleanUtils.fromInt(in.readInt());

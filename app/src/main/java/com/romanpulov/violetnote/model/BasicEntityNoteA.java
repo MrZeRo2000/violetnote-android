@@ -5,8 +5,8 @@ import java.util.List;
 /**
  * Created by rpulov on 07.09.2016.
  */
-public class BasicEntityNoteA {
-    protected long mId;
+public abstract class BasicEntityNoteA {
+    private long mId;
 
     public long getId() {
         return mId;

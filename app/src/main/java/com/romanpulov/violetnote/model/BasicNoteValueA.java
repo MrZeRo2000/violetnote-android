@@ -25,7 +25,7 @@ public class BasicNoteValueA extends BasicEntityNoteA implements Parcelable, Dis
     public static BasicNoteValueA newInstance(long id, String value) {
         BasicNoteValueA instance = new BasicNoteValueA();
 
-        instance.mId = id;
+        instance.setId(id);
         instance.mValue = value;
 
         return instance;
@@ -46,12 +46,12 @@ public class BasicNoteValueA extends BasicEntityNoteA implements Parcelable, Dis
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(mId);
+        dest.writeLong(getId());
         dest.writeString(mValue);
     }
 
     private BasicNoteValueA(Parcel in) {
-        mId = in.readLong();
+        setId(in.readLong());
         mValue = in.readString();
     }
 

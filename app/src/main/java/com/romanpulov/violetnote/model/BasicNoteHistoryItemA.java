@@ -21,9 +21,9 @@ public class BasicNoteHistoryItemA extends BasicModifiableEntityNoteA implements
     public static BasicNoteHistoryItemA newInstance(long id, long lastModified, String lastModifiedString, String value) {
         BasicNoteHistoryItemA instance = new BasicNoteHistoryItemA();
 
-        instance.mId = id;
-        instance.mLastModified = lastModified;
-        instance.mLastModifiedString = lastModifiedString;
+        instance.setId(id);
+        instance.setLastModified(lastModified);
+        instance.setLastModifiedString(lastModifiedString);
         instance.mValue = value;
 
         return instance;
@@ -44,16 +44,16 @@ public class BasicNoteHistoryItemA extends BasicModifiableEntityNoteA implements
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(mId);
-        dest.writeLong(mLastModified);
-        dest.writeString(mLastModifiedString);
+        dest.writeLong(getId());
+        dest.writeLong(getLastModified());
+        dest.writeString(getLastModifiedString());
         dest.writeString(mValue);
     }
 
     private BasicNoteHistoryItemA(Parcel in) {
-        mId = in.readLong();
-        mLastModified = in.readLong();
-        mLastModifiedString = in.readString();
+        setId(in.readLong());
+        setLastModified(in.readLong());
+        setLastModifiedString(in.readString());
         mValue = in.readString();
     }
 

@@ -145,10 +145,10 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
     public static BasicNoteA newInstance(long id, long lastModified, String lastModifiedString, long orderId, int noteType, String title, boolean encrypted, String encryptedString) {
         BasicNoteA instance = new BasicNoteA();
 
-        instance.mId = id;
-        instance.mLastModified = lastModified;
-        instance.mLastModifiedString = lastModifiedString;
-        instance.mOrderId = orderId;
+        instance.setId(id);
+        instance.setLastModified(lastModified);
+        instance.setLastModifiedString(lastModifiedString);
+        instance.setOrderId(orderId);
         instance.mNoteType = noteType;
         instance.mTitle = title;
         instance.mEncrypted = encrypted;
@@ -174,10 +174,10 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
     public static BasicNoteA newInstanceWithTotals(long id, long lastModified, String lastModifiedString, long orderId, int noteType, String title, boolean encrypted, String encryptedString, int itemCount, int checkedItemCount) {
         BasicNoteA instance = new BasicNoteA();
 
-        instance.mId = id;
-        instance.mLastModified = lastModified;
-        instance.mLastModifiedString = lastModifiedString;
-        instance.mOrderId = orderId;
+        instance.setId(id);
+        instance.setLastModified(lastModified);
+        instance.setLastModifiedString(lastModifiedString);
+        instance.setOrderId(orderId);
         instance.mNoteType = noteType;
         instance.mTitle = title;
         instance.mEncrypted = encrypted;
@@ -212,9 +212,9 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
     @Override
     public String toString() {
         return "{" +
-                "[id=" + mId + "]," +
-                "[lastModified=" + mLastModified + "]," +
-                "[orderId=" + mOrderId + "]," +
+                "[id=" + getId() + "]," +
+                "[lastModified=" + getLastModified() + "]," +
+                "[orderId=" + getOrderId() + "]," +
                 "[noteType=" + mNoteType + "]," +
                 "[title=" + mTitle + "]," +
                 "[encrypted=" + mEncrypted + "]," +
@@ -225,10 +225,10 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
     }
 
     private BasicNoteA(Parcel in) {
-        mId = in.readLong();
-        mLastModified = in.readLong();
-        mLastModifiedString = in.readString();
-        mOrderId = in.readLong();
+        setId(in.readLong());
+        setLastModified(in.readLong());
+        setLastModifiedString(in.readString());
+        setOrderId(in.readLong());
         mNoteType = in.readInt();
         mTitle = in.readString();
         mEncrypted = BooleanUtils.fromInt(in.readInt());
@@ -250,10 +250,10 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(mId);
-        dest.writeLong(mLastModified);
-        dest.writeString(mLastModifiedString);
-        dest.writeLong(mOrderId);
+        dest.writeLong(getId());
+        dest.writeLong(getLastModified());
+        dest.writeString(getLastModifiedString());
+        dest.writeLong(getOrderId());
         dest.writeInt(mNoteType);
         dest.writeString(mTitle);
         dest.writeInt(BooleanUtils.toInt(mEncrypted));
