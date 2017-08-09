@@ -130,6 +130,16 @@ public class DBBasicNoteHelper {
             );
     }
 
+    public long getNextOrderId(String tableName, String selection, String[] selectionArgs) {
+        return getAggregateColumn(
+                tableName,
+                DBBasicNoteOpenHelper.ORDER_COLUMN_NAME,
+                DBBasicNoteHelper.MIN_AGGREGATE_FUNCTION_NAME,
+                selection,
+                selectionArgs
+        );
+    }
+
     public long getNextOrderId(String tableName, long noteId, long orderId) {
         if (noteId == 0)
             return getAggregateColumn(

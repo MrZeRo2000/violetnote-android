@@ -82,7 +82,7 @@ public class DBManagementTest extends ApplicationTestCase<Application> {
         }
     }
 
-    public void testMovePrev() {
+    public void testMove() {
         createNotesTestData();
 
         long note1id = mDBHelper.getAggregateColumn(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, DBBasicNoteOpenHelper.ID_COLUMN_NAME, "MAX", "title = ?", new String[]{mTestNoteNames.get(0)});
@@ -95,34 +95,48 @@ public class DBManagementTest extends ApplicationTestCase<Application> {
 
         //note 2 -> prev order = 1
         DBManagementProvider dbManagementProvider = note2.getDBManagementProvider();
-        long prevOrderId = mDBHelper.getPrevOrderId(dbManagementProvider.getTableName(), dbManagementProvider.getOrderSelection(), dbManagementProvider.getOrderSelectionArgs());
+        long prevOrderId = mDBHelper.getPrevOrderId(dbManagementProvider.getTableName(), dbManagementProvider.getPrevOrderSelection(), dbManagementProvider.getOrderSelectionArgs());
         Assert.assertEquals(prevOrderId, 1);
 
         //note 1 -> prev order = 0
         dbManagementProvider = note1.getDBManagementProvider();
-        prevOrderId = mDBHelper.getPrevOrderId(dbManagementProvider.getTableName(), dbManagementProvider.getOrderSelection(), dbManagementProvider.getOrderSelectionArgs());
+        prevOrderId = mDBHelper.getPrevOrderId(dbManagementProvider.getTableName(), dbManagementProvider.getPrevOrderSelection(), dbManagementProvider.getOrderSelectionArgs());
         Assert.assertEquals(prevOrderId, 0);
 
         //note 3 -> prev order = 2
         dbManagementProvider = note3.getDBManagementProvider();
-        prevOrderId = mDBHelper.getPrevOrderId(dbManagementProvider.getTableName(), dbManagementProvider.getOrderSelection(), dbManagementProvider.getOrderSelectionArgs());
+        prevOrderId = mDBHelper.getPrevOrderId(dbManagementProvider.getTableName(), dbManagementProvider.getPrevOrderSelection(), dbManagementProvider.getOrderSelectionArgs());
         Assert.assertEquals(prevOrderId, 2);
 
-        //note 1 move up - no action
-        dbManagementProvider = note1.getDBManagementProvider();
-        mDBNoteManager.moveUp(dbManagementProvider.getTableName(), note1);
+        //note 1 move up - no action : 1, 2, 4
+        mDBNoteManager.moveUp(note1);
         note1 = mDBNoteManager.get(note1id);
         Assert.assertEquals(note1.getOrderId(), 1);
 
-        //note 3 move up - order exchange
-        dbManagementProvider = note3.getDBManagementProvider();
-        mDBNoteManager.moveUp(dbManagementProvider.getTableName(), note3);
+        //note 3 move up - order exchange : 1, 4, 2
+        mDBNoteManager.moveUp(note3);
         note3 = mDBNoteManager.get(note3id);
         Assert.assertEquals(note3.getOrderId(), 2);
         note2 = mDBNoteManager.get(note2id);
         Assert.assertEquals(note2.getOrderId(), 4);
 
+        //note 1 move down - order exchange : 2, 4, 1
+        mDBNoteManager.moveDown(note1);
+        note1 = mDBNoteManager.get(note1id);
+        Assert.assertEquals(note1.getOrderId(), 2);
+        note2 = mDBNoteManager.get(note2id);
+        Assert.assertEquals(note2.getOrderId(), 4);
+        note3 = mDBNoteManager.get(note3id);
+        Assert.assertEquals(note3.getOrderId(), 1);
 
+        //note 2 move down - no action
+        mDBNoteManager.moveDown(note2);
+        note1 = mDBNoteManager.get(note1id);
+        Assert.assertEquals(note1.getOrderId(), 2);
+        note2 = mDBNoteManager.get(note2id);
+        Assert.assertEquals(note2.getOrderId(), 4);
+        note3 = mDBNoteManager.get(note3id);
+        Assert.assertEquals(note3.getOrderId(), 1);
 
         clearNotesTestData();
     }

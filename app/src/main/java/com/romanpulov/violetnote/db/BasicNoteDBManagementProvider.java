@@ -19,8 +19,13 @@ public class BasicNoteDBManagementProvider implements DBManagementProvider {
     }
 
     @Override
-    public String getOrderSelection() {
+    public String getPrevOrderSelection() {
         return DBBasicNoteOpenHelper.ORDER_COLUMN_NAME + " < ?";
+    }
+
+    @Override
+    public String getNextOrderSelection() {
+        return DBBasicNoteOpenHelper.ORDER_COLUMN_NAME + " > ?";
     }
 
     @Override
