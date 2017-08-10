@@ -3,6 +3,8 @@ package com.romanpulov.violetnote.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.romanpulov.violetnote.db.BasicNoteItemDBManagementProvider;
+
 /**
  * Created by rpulov on 11.08.2016.
  */
@@ -50,7 +52,7 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
     }
 
     private BasicNoteItemA() {
-
+        setDBManagementProvider(new BasicNoteItemDBManagementProvider(this));
     }
 
     public static BasicNoteItemA newInstance(long id, long lastModified, String lastModifiedString, long orderId, long priority, String name, String value, boolean checked) {
