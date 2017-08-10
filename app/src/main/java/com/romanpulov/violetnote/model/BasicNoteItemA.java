@@ -9,9 +9,18 @@ import com.romanpulov.violetnote.db.BasicNoteItemDBManagementProvider;
  * Created by rpulov on 11.08.2016.
  */
 public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
+    private long mNoteId;
     private String mName;
     private String mValue;
     private boolean mChecked;
+
+    public long getNoteId() {
+        return mNoteId;
+    }
+
+    public void setNoteId(long value) {
+        mNoteId = value;
+    }
 
     public String getName() {
         return mName;
@@ -55,12 +64,13 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
         setDBManagementProvider(new BasicNoteItemDBManagementProvider(this));
     }
 
-    public static BasicNoteItemA newInstance(long id, long lastModified, String lastModifiedString, long orderId, long priority, String name, String value, boolean checked) {
+    public static BasicNoteItemA newInstance(long id, long lastModified, String lastModifiedString, long noteId, long orderId, long priority, String name, String value, boolean checked) {
         BasicNoteItemA instance = new BasicNoteItemA();
 
         instance.setId(id);
         instance.setLastModified(lastModified);
         instance.setLastModifiedString(lastModifiedString);
+        instance.setNoteId(noteId);
         instance.setOrderId(orderId);
         instance.setPriority(priority);
         instance.mName = name;
@@ -95,6 +105,7 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
         dest.writeString(getLastModifiedString());
         dest.writeLong(getOrderId());
         dest.writeLong(getPriority());
+        dest.writeLong(mNoteId);
         dest.writeString(mName);
         dest.writeString(mValue);
         dest.writeInt(BooleanUtils.toInt(mChecked));
@@ -106,6 +117,7 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
         setLastModifiedString(in.readString());
         setOrderId(in.readLong());
         setPriority(in.readLong());
+        mNoteId = in.readLong();
         mName = in.readString();
         mValue = in.readString();
         mChecked = BooleanUtils.fromInt(in.readInt());

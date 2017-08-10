@@ -21,31 +21,31 @@ public class BasicNoteItemDBManagementProvider implements DBManagementProvider {
 
     @Override
     public String getPrevOrderSelection() {
-        return DBBasicNoteOpenHelper.PRIORITY_COLUMN_NAME + " = ? AND " + DBBasicNoteOpenHelper.ORDER_COLUMN_NAME + " < ?";
+        return DBBasicNoteOpenHelper.NOTE_ID_COLUMN_NAME + " = ? AND " + DBBasicNoteOpenHelper.PRIORITY_COLUMN_NAME + " = ? AND " + DBBasicNoteOpenHelper.ORDER_COLUMN_NAME + " < ?";
     }
 
     @Override
     public String getNextOrderSelection() {
-        return DBBasicNoteOpenHelper.PRIORITY_COLUMN_NAME + " = ? AND " + DBBasicNoteOpenHelper.ORDER_COLUMN_NAME + " > ?";
+        return DBBasicNoteOpenHelper.NOTE_ID_COLUMN_NAME + " = ? AND " + DBBasicNoteOpenHelper.PRIORITY_COLUMN_NAME + " = ? AND " + DBBasicNoteOpenHelper.ORDER_COLUMN_NAME + " > ?";
     }
 
     @Override
     public String[] getOrderSelectionArgs() {
-        return new String[] {String.valueOf(mBasicNoteItem.getPriority()), String.valueOf(mBasicNoteItem.getOrderId())};
+        return new String[] {String.valueOf(mBasicNoteItem.getNoteId()),String.valueOf(mBasicNoteItem.getPriority()), String.valueOf(mBasicNoteItem.getOrderId())};
     }
 
     @Override
     public String getOrderIdSelectionString() {
-        return DBBasicNoteOpenHelper.PRIORITY_COLUMN_NAME + " = " + String.valueOf(mBasicNoteItem.getPriority());
+        return DBBasicNoteOpenHelper.NOTE_ID_COLUMN_NAME + " = " + String.valueOf(mBasicNoteItem.getNoteId()) + " AND " + DBBasicNoteOpenHelper.PRIORITY_COLUMN_NAME + " = " + String.valueOf(mBasicNoteItem.getPriority());
     }
 
     @Override
     public String getOrderIdSelection() {
-        return DBBasicNoteOpenHelper.PRIORITY_COLUMN_NAME + " = ?";
+        return DBBasicNoteOpenHelper.NOTE_ID_COLUMN_NAME + " = ? AND " + DBBasicNoteOpenHelper.PRIORITY_COLUMN_NAME + " = ?";
     }
 
     @Override
     public String[] getOrderIdSelectionArgs() {
-        return new String[] {String.valueOf(mBasicNoteItem.getPriority())};
+        return new String[] {String.valueOf(mBasicNoteItem.getNoteId()),String.valueOf(mBasicNoteItem.getPriority())};
     }
 }
