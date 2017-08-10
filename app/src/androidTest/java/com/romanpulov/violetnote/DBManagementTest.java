@@ -44,14 +44,18 @@ public class DBManagementTest extends ApplicationTestCase<Application> {
         super(Application.class);
     }
 
-    private void initDB() {
-        if (mDBHelper == null) {
-            getContext().deleteDatabase(DBBasicNoteOpenHelper.DATABASE_NAME);
+    public void clearData() {
+    }
 
-            mDBHelper = DBBasicNoteHelper.getInstance(getContext());
-            mDB = mDBHelper.getDB();
-            mDBNoteManager = new DBNoteManager(getContext());
-        }
+    private void initDB() {
+        mDBHelper = DBBasicNoteHelper.getInstance(getContext());
+        mDBHelper.closeDB();
+
+        getContext().deleteDatabase(DBBasicNoteOpenHelper.DATABASE_NAME);
+
+        mDBHelper.openDB();
+        mDB = mDBHelper.getDB();
+        mDBNoteManager = new DBNoteManager(getContext());
     }
 
     public void createNotesTestData() {
@@ -74,45 +78,45 @@ public class DBManagementTest extends ApplicationTestCase<Application> {
 
         //note items with zero priority
 
-        //1
+        //0
         String insertSQL = "insert into " + DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME +
                 "(last_modified, order_id, note_id, name, value, checked, priority) VALUES (?, ?, ?, ?, ?, ?, ?)";
         String[] insertArgs = new String[] {"0", "3", "1", "Note item 1", "Note item 1 value", "0", "0"};
         mDB.execSQL(insertSQL, insertArgs);
 
-        //2
+        //1
         insertSQL = "insert into " + DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME +
                 "(last_modified, order_id, note_id, name, value, checked, priority) VALUES (?, ?, ?, ?, ?, ?, ?)";
         insertArgs = new String[] {"0", "5", "1", "Note item 2", "Note item 2 value", "0", "0"};
         mDB.execSQL(insertSQL, insertArgs);
 
-        //3
+        //2
         insertSQL = "insert into " + DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME +
                 "(last_modified, order_id, note_id, name, value, checked, priority) VALUES (?, ?, ?, ?, ?, ?, ?)";
         insertArgs = new String[] {"0", "6", "1", "Note item 3", "Note item 3 value", "0", "0"};
         mDB.execSQL(insertSQL, insertArgs);
 
         //note items with high priority
-        //4
+        //3
         insertSQL = "insert into " + DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME +
                 "(last_modified, order_id, note_id, name, value, checked, priority) VALUES (?, ?, ?, ?, ?, ?, ?)";
         insertArgs = new String[] {"0", "1", "1", "Note item 11", "Note item 11 value", "0", "1"};
         mDB.execSQL(insertSQL, insertArgs);
 
-        //5
+        //4
         insertSQL = "insert into " + DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME +
                 "(last_modified, order_id, note_id, name, value, checked, priority) VALUES (?, ?, ?, ?, ?, ?, ?)";
         insertArgs = new String[] {"0", "2", "1", "Note item 12", "Note item 12 value", "0", "1"};
         mDB.execSQL(insertSQL, insertArgs);
 
         //note items with low priority
-        //6
+        //5
         insertSQL = "insert into " + DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME +
                 "(last_modified, order_id, note_id, name, value, checked, priority) VALUES (?, ?, ?, ?, ?, ?, ?)";
         insertArgs = new String[] {"0", "1", "1", "Note item 21", "Note item 11 value", "0", "-1"};
         mDB.execSQL(insertSQL, insertArgs);
 
-        //7
+        //6
         insertSQL = "insert into " + DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME +
                 "(last_modified, order_id, note_id, name, value, checked, priority) VALUES (?, ?, ?, ?, ?, ?, ?)";
         insertArgs = new String[] {"0", "2", "1", "Note item 22", "Note item 12 value", "0", "-1"};
@@ -120,19 +124,19 @@ public class DBManagementTest extends ApplicationTestCase<Application> {
 
 
         //note items with zero priority in another note item
-        //8
+        //7
         insertSQL = "insert into " + DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME +
                 "(last_modified, order_id, note_id, name, value, checked, priority) VALUES (?, ?, ?, ?, ?, ?, ?)";
         insertArgs = new String[] {"0", "1", "2", "Note item 201", "Note item 201 value", "0", "0"};
         mDB.execSQL(insertSQL, insertArgs);
 
-        //9
+        //8
         insertSQL = "insert into " + DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME +
                 "(last_modified, order_id, note_id, name, value, checked, priority) VALUES (?, ?, ?, ?, ?, ?, ?)";
         insertArgs = new String[] {"0", "3", "2", "Note item 202", "Note item 202 value", "0", "0"};
         mDB.execSQL(insertSQL, insertArgs);
 
-        //10
+        //9
         insertSQL = "insert into " + DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME +
                 "(last_modified, order_id, note_id, name, value, checked, priority) VALUES (?, ?, ?, ?, ?, ?, ?)";
         insertArgs = new String[] {"0", "2", "2", "Note item 202", "Note item 202 value", "0", "0"};
@@ -152,19 +156,65 @@ public class DBManagementTest extends ApplicationTestCase<Application> {
         }
     }
 
-    public void testNoteItemMove() {
-        createNoteItemTestData();
+    BasicNoteItemA[] items = new BasicNoteItemA[10];
+    DBManagementProvider[] providers = new DBManagementProvider[10];
 
-        BasicNoteItemA[] items = new BasicNoteItemA[10];
-        DBManagementProvider[] providers = new DBManagementProvider[10];
-
+    private void loadNoteItems() {
         for (int i = 0; i < items.length; i++) {
             items[i] = mDBNoteManager.getNoteItem(i + 1);
             providers[i] = items[i].getDBManagementProvider();
         }
     }
 
-    public void disable_testNoteMove() {
+    public void testMove() {
+        internalTestNoteMove();
+        internalTestNoteItemMove();
+    }
+
+    public void internalTestNoteItemMove() {
+        createNoteItemTestData();
+
+        loadNoteItems();
+
+        //note 1 prev order
+        DBManagementProvider provider = providers[1];
+        long prevOrderId = mDBHelper.getPrevOrderId(provider.getTableName(), provider.getPrevOrderSelection(), provider.getOrderSelectionArgs());
+        Assert.assertEquals(3, prevOrderId);
+
+        //note 4 prev order (high priority)
+        provider = providers[4];
+        prevOrderId = mDBHelper.getPrevOrderId(provider.getTableName(), provider.getPrevOrderSelection(), provider.getOrderSelectionArgs());
+        Assert.assertEquals(1, prevOrderId);
+
+        //note 2 move top
+        mDBNoteManager.moveTop(items[2]);
+        loadNoteItems();
+        Assert.assertEquals(3, items[2].getOrderId());
+
+        //note 2 move top - remains the same
+        mDBNoteManager.moveTop(items[2]);
+        loadNoteItems();
+        Assert.assertEquals(3, items[2].getOrderId());
+
+        //note 2 move bottom
+        mDBNoteManager.moveBottom(items[2]);
+        loadNoteItems();
+        Assert.assertEquals(6, items[2].getOrderId());
+
+        //high prio item move bottom
+        mDBNoteManager.moveBottom(items[3]);
+        loadNoteItems();
+        Assert.assertEquals(2, items[3].getOrderId());
+        Assert.assertEquals(1, items[4].getOrderId());
+
+        //other note items remain the same
+        Assert.assertEquals(2, items[9].getOrderId());
+        Assert.assertEquals(3, items[8].getOrderId());
+
+        clearData();
+    }
+
+    public void internalTestNoteMove() {
         createNotesTestData();
 
         long note1id = mDBHelper.getAggregateColumn(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, DBBasicNoteOpenHelper.ID_COLUMN_NAME, "MAX", "title = ?", new String[]{mTestNoteNames.get(0)});
@@ -256,9 +306,7 @@ public class DBManagementTest extends ApplicationTestCase<Application> {
         note3 = mDBNoteManager.get(note3id);
         Assert.assertEquals(note3.getOrderId(), 1);
 
-
-
-        clearNotesTestData();
+        clearData();
     }
 
 }
