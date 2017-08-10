@@ -167,8 +167,48 @@ public class DBManagementTest extends ApplicationTestCase<Application> {
     }
 
     public void testMove() {
-        internalTestNoteMove();
-        internalTestNoteItemMove();
+        internalTestPriorityMove();
+        //internalTestNoteMove();
+        //internalTestNoteItemMove();
+    }
+
+    public void internalTestPriorityMove() {
+        createNoteItemTestData();
+
+        loadNoteItems();
+
+        DBManagementProvider provider = providers[3];
+        long maxOrderId = mDBHelper.getMaxOrderId(provider.getTableName(), provider.getOrderIdSelection(), provider.getOrderIdSelectionArgs());
+        Assert.assertEquals(2, maxOrderId);
+
+        provider = providers[0];
+        maxOrderId = mDBHelper.getMaxOrderId(provider.getTableName(), provider.getOrderIdSelection(), provider.getOrderIdSelectionArgs());
+        Assert.assertEquals(6, maxOrderId);
+
+        provider = providers[2];
+        maxOrderId = mDBHelper.getMaxOrderId(provider.getTableName(), provider.getOrderIdSelection(), provider.getOrderIdSelectionArgs());
+        Assert.assertEquals(6, items[2].getOrderId());
+
+        mDBNoteManager.priorityUp(items[0]);
+        loadNoteItems();
+        Assert.assertEquals(1, items[0].getPriority());
+        assertEquals(3, items[0].getOrderId());
+
+        provider = providers[2];
+        Assert.assertEquals(6, items[2].getOrderId());
+
+        provider = providers[1];
+        maxOrderId = mDBHelper.getMaxOrderId(provider.getTableName(), provider.getOrderIdSelection(), provider.getOrderIdSelectionArgs());
+        Assert.assertEquals(6, maxOrderId);
+
+        mDBNoteManager.priorityDown(items[0]);
+        loadNoteItems();
+        Assert.assertEquals(0, items[0].getPriority());
+
+        provider = providers[2];
+        Assert.assertEquals(6, items[2].getOrderId());
+
+        assertEquals(7, items[0].getOrderId());
     }
 
     public void internalTestNoteItemMove() {

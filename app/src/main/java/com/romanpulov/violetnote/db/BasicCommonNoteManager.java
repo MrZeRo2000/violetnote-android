@@ -5,6 +5,9 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.romanpulov.violetnote.model.BasicCommonNoteA;
 
+import static com.romanpulov.violetnote.model.BasicOrderedEntityNoteA.PRIORITY_HIGH;
+import static com.romanpulov.violetnote.model.BasicOrderedEntityNoteA.PRIORITY_LOW;
+
 /**
  * Created by romanpulov on 29.08.2016.
  */
@@ -75,5 +78,45 @@ public class BasicCommonNoteManager {
             return true;
         } else
             return false;
+    }
+
+    public boolean priorityUp(BasicCommonNoteA note) {
+        long priority = note.getPriority();
+        if (priority == PRIORITY_HIGH)
+            return false;
+
+        priority ++;
+
+        return updatePriority(note, priority);
+    }
+
+    public boolean priorityDown(BasicCommonNoteA note) {
+        long priority = note.getPriority();
+        if (priority == PRIORITY_LOW)
+            return false;
+
+        priority --;
+
+        return updatePriority(note, priority);
+    }
+
+    private boolean updatePriority(BasicCommonNoteA note, long priority) {
+        DBManagementProvider dbManagementProvider = note.getDBManagementProvider();
+
+        note.setPriority(priority);
+
+        long maxOrderId = mDBHelper.getMaxOrderId(dbManagementProvider.getTableName(), dbManagementProvider.getOrderIdSelection(), dbManagementProvider.getOrderIdSelectionArgs());
+
+        int result = mDBHelper.updatePriority(dbManagementProvider.getTableName(), note.getId(), priority);
+        if (result == 0)
+            return false;
+
+        result = mDBHelper.updateOrderId(dbManagementProvider.getTableName(), note.getId(), maxOrderId + 1);
+        if (result == 0)
+            return false;
+
+        note.setOrderId(maxOrderId + 1);
+
+        return true;
     }
 }

@@ -1,5 +1,6 @@
 package com.romanpulov.violetnote.db;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -242,6 +243,22 @@ public class DBBasicNoteHelper {
         if (noteId > 0)
             sql = sql + " AND " + DBBasicNoteOpenHelper.NOTE_ID_COLUMN_NAME + " = " + String.valueOf(noteId);
         mDB.execSQL(sql);
+    }
+
+    public int updatePriority(String tableName, long id, long priority) {
+        ContentValues cv = new ContentValues();
+
+        cv.put(DBBasicNoteOpenHelper.PRIORITY_COLUMN_NAME, priority);
+
+        return mDB.update(tableName, cv, DBBasicNoteOpenHelper.ID_COLUMN_NAME + " = ?" , new String[] {String.valueOf(id)});
+    }
+
+    public int updateOrderId(String tableName, long id, long orderId) {
+        ContentValues cv = new ContentValues();
+
+        cv.put(DBBasicNoteOpenHelper.ORDER_COLUMN_NAME, orderId);
+
+        return mDB.update(tableName, cv, DBBasicNoteOpenHelper.ID_COLUMN_NAME + " = ?" , new String[] {String.valueOf(id)});
     }
 
     /**
