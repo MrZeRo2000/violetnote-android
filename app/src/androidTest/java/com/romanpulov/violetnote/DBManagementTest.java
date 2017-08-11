@@ -32,19 +32,8 @@ public class DBManagementTest extends ApplicationTestCase<Application> {
     private SQLiteDatabase mDB;
     private DBNoteManager mDBNoteManager;
 
-    private List<String> mTestNoteNames = new ArrayList<>();
-    {
-        mTestNoteNames.add("Instrumentation test note 1");
-        mTestNoteNames.add("Instrumentation test note 2");
-        mTestNoteNames.add("Instrumentation test note 3");
-    }
-
-
     public DBManagementTest() {
         super(Application.class);
-    }
-
-    public void clearData() {
     }
 
     private void initDB() {
@@ -58,7 +47,14 @@ public class DBManagementTest extends ApplicationTestCase<Application> {
         mDBNoteManager = new DBNoteManager(getContext());
     }
 
-    public void createNotesTestData() {
+    private List<String> mTestNoteNames = new ArrayList<>();
+    {
+        mTestNoteNames.add("Instrumentation test note 1");
+        mTestNoteNames.add("Instrumentation test note 2");
+        mTestNoteNames.add("Instrumentation test note 3");
+    }
+
+    private void createNotesTestData() {
         initDB();
 
         String insertNotesSql = "insert into " + DBBasicNoteOpenHelper.NOTES_TABLE_NAME + " (last_modified, order_id, note_type, title, is_encrypted) VALUES (?, ?, ?, ?, ?)";
@@ -73,7 +69,7 @@ public class DBManagementTest extends ApplicationTestCase<Application> {
         mDB.execSQL(insertNotesSql, insertNotesArgs);
     }
 
-    public void createNoteItemTestData() {
+    private void createNoteItemTestData() {
         createNotesTestData();
 
         //note items with zero priority
@@ -143,21 +139,14 @@ public class DBManagementTest extends ApplicationTestCase<Application> {
         mDB.execSQL(insertSQL, insertArgs);
     }
 
-    public void clearNotesTestData() {
-        initDB();
-
-        String[] deleteNoteArgs = new String [1];
-        String deleteNoteSQL = "DELETE FROM " + DBBasicNoteOpenHelper.NOTES_TABLE_NAME + " WHERE title = ?";
-
-        for (String s: mTestNoteNames) {
-            log("deleting note " + s);
-            deleteNoteArgs[0] = s;
-            mDB.execSQL(deleteNoteSQL, deleteNoteArgs);
-        }
+    public void testMove() {
+        internalTestPriorityMove();
+        internalTestNoteMove();
+        internalTestNoteItemMove();
     }
 
-    BasicNoteItemA[] items = new BasicNoteItemA[10];
-    DBManagementProvider[] providers = new DBManagementProvider[10];
+    private BasicNoteItemA[] items = new BasicNoteItemA[10];
+    private DBManagementProvider[] providers = new DBManagementProvider[10];
 
     private void loadNoteItems() {
         for (int i = 0; i < items.length; i++) {
@@ -166,13 +155,7 @@ public class DBManagementTest extends ApplicationTestCase<Application> {
         }
     }
 
-    public void testMove() {
-        internalTestPriorityMove();
-        //internalTestNoteMove();
-        //internalTestNoteItemMove();
-    }
-
-    public void internalTestPriorityMove() {
+    private void internalTestPriorityMove() {
         createNoteItemTestData();
 
         loadNoteItems();
@@ -186,7 +169,6 @@ public class DBManagementTest extends ApplicationTestCase<Application> {
         Assert.assertEquals(6, maxOrderId);
 
         provider = providers[2];
-        maxOrderId = mDBHelper.getMaxOrderId(provider.getTableName(), provider.getOrderIdSelection(), provider.getOrderIdSelectionArgs());
         Assert.assertEquals(6, items[2].getOrderId());
 
         mDBNoteManager.priorityUp(items[0]);
@@ -194,7 +176,6 @@ public class DBManagementTest extends ApplicationTestCase<Application> {
         Assert.assertEquals(1, items[0].getPriority());
         assertEquals(3, items[0].getOrderId());
 
-        provider = providers[2];
         Assert.assertEquals(6, items[2].getOrderId());
 
         provider = providers[1];
@@ -205,7 +186,6 @@ public class DBManagementTest extends ApplicationTestCase<Application> {
         loadNoteItems();
         Assert.assertEquals(0, items[0].getPriority());
 
-        provider = providers[2];
         Assert.assertEquals(6, items[2].getOrderId());
 
         assertEquals(7, items[0].getOrderId());
@@ -250,11 +230,9 @@ public class DBManagementTest extends ApplicationTestCase<Application> {
         //other note items remain the same
         Assert.assertEquals(2, items[9].getOrderId());
         Assert.assertEquals(3, items[8].getOrderId());
-
-        clearData();
     }
 
-    public void internalTestNoteMove() {
+    private void internalTestNoteMove() {
         createNotesTestData();
 
         long note1id = mDBHelper.getAggregateColumn(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, DBBasicNoteOpenHelper.ID_COLUMN_NAME, "MAX", "title = ?", new String[]{mTestNoteNames.get(0)});
@@ -345,8 +323,6 @@ public class DBManagementTest extends ApplicationTestCase<Application> {
         Assert.assertEquals(note2.getOrderId(), 3);
         note3 = mDBNoteManager.get(note3id);
         Assert.assertEquals(note3.getOrderId(), 1);
-
-        clearData();
     }
 
 }
