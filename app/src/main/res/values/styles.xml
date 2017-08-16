@@ -88,11 +88,11 @@
     </style>
 
     <!-- For list in PopupMenu -->
-    <style name="ListViewStyle" parent="@android:style/Widget.ListView">
+    <style name="ListViewStyle" parent="@android:style/Widget.ListView.DropDown">
         <item name="android:listSelector">@drawable/list_lighter_selector</item>
         <item name="android:divider">@color/dimTextColor</item>
-        <item name="android:dividerHeight">1dip</item>
-        <item name="android:padding">1dip</item>
+        <item name="android:dividerHeight">1px</item>
+        <item name="android:padding">1px</item>
         <item name="android:background">@drawable/white_border_shape</item>
     </style>
 
@@ -109,9 +109,11 @@
     </style>
 
     <!-- Action bar popup theme for hardware options menu -->
-    <style name="ActionBarPopupTheme" parent="RootTheme">
+    <style name="ActionBarPopupTheme" parent="@android:style/Widget.ListView.DropDown">
+        <item name="android:listSelector">@drawable/list_lighter_selector</item>
+        <item name="android:textColor">@color/brightTextColor</item>
         <item name="android:textColorSecondary">@color/brightTextColor</item>
-        <item name="android:padding">1dip</item>
+        <item name="android:padding">1px</item>
     </style>
 
     <!-- Main activity theme -->
