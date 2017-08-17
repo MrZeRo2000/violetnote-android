@@ -27,21 +27,35 @@
         <item name="buttonStyle">@style/ButtonStyle</item>
         <item name="android:spinnerItemStyle">@style/SpinnerItem</item>
         <item name="android:spinnerDropDownItemStyle">@style/spinnerDropDownItemStyle</item>
-        <item name="android:popupMenuStyle">@style/PopupMenuStyle</item>
-        <item name="popupMenuStyle">@style/PopupMenuStyle</item>
+
         <item name="textAppearanceLargePopupMenu">@style/PopupMenuLargeTextAppearanceStyle</item>
         <item name="textAppearanceSmallPopupMenu">@style/PopupMenuSmallTextAppearanceStyle</item>
+
         <item name="android:dropDownListViewStyle">@style/ListViewStyle</item>
         <item name="dropDownListViewStyle">@style/ListViewStyle</item>
+
         <item name="android:dropDownItemStyle">@style/DropDownItemStyle</item>
         <!-- For background in overflow menu -->
+
         <item name="android:itemBackground">@drawable/list_lighter_selector</item>
+
         <!-- For correct ToolBar hiding in Overlay mode -->
         <item name="windowActionModeOverlay">true</item>
         <!-- Activity animation -->
         <item name="android:windowAnimationStyle">@style/AnimationStyle</item>
         <!-- Hardware Options menu -->
         <item name="actionBarPopupTheme">@style/ActionBarPopupTheme</item>
+    </style>
+
+    <style name="ActionBarPopupTheme" parent="@style/ThemeOverlay.AppCompat.Light">
+        <item name="android:divider">@color/dimTextColor</item>
+        <item name="android:colorBackground">@color/brightTextColor</item>
+        <item name="android:colorBackgroundCacheHint">@color/brightTextColor</item>
+</style>
+
+    <!-- For list in PopupMenu -->
+    <style name="ListViewStyle" parent="@android:style/Widget.ListView.DropDown">
+        <item name="android:dividerHeight">1px</item>
     </style>
 
     <style name="ToolBarTheme" parent="AppTheme">
@@ -75,25 +89,12 @@
         <item name="android:gravity">center</item>
     </style>
 
-    <style name="PopupMenuStyle" parent="Widget.AppCompat.PopupMenu">
-        <item name="android:popupBackground">@drawable/white_border_shape</item>
-    </style>
-
     <style name="PopupMenuLargeTextAppearanceStyle" parent="TextAppearance.AppCompat.Light.Widget.PopupMenu.Large">
         <item name="android:textColor">@color/brightTextColor</item>
     </style>
 
     <style name="PopupMenuSmallTextAppearanceStyle" parent="TextAppearance.AppCompat.Light.Widget.PopupMenu.Small">
         <item name="android:textColor">@color/brightTextColor</item>
-    </style>
-
-    <!-- For list in PopupMenu -->
-    <style name="ListViewStyle" parent="@android:style/Widget.ListView.DropDown">
-        <item name="android:listSelector">@drawable/list_lighter_selector</item>
-        <item name="android:divider">@color/dimTextColor</item>
-        <item name="android:dividerHeight">1px</item>
-        <item name="android:padding">1px</item>
-        <item name="android:background">@drawable/white_border_shape</item>
     </style>
 
     <style name="DropDownItemStyle" parent="@android:style/Widget.DropDownItem">
@@ -106,14 +107,6 @@
         <item name="android:activityOpenExitAnimation">@android:anim/slide_out_right</item>
         <item name="android:activityCloseEnterAnimation">@android:anim/slide_in_left</item>
         <item name="android:activityCloseExitAnimation">@android:anim/slide_out_right</item>
-    </style>
-
-    <!-- Action bar popup theme for hardware options menu -->
-    <style name="ActionBarPopupTheme" parent="@android:style/Widget.ListView.DropDown">
-        <item name="android:listSelector">@drawable/list_lighter_selector</item>
-        <item name="android:textColor">@color/brightTextColor</item>
-        <item name="android:textColorSecondary">@color/brightTextColor</item>
-        <item name="android:padding">1px</item>
     </style>
 
     <!-- Main activity theme -->
