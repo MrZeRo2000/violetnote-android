@@ -48,14 +48,15 @@
     </style>
 
     <style name="ActionBarPopupTheme" parent="@style/ThemeOverlay.AppCompat.Light">
-        <item name="android:divider">@color/dimTextColor</item>
         <item name="android:colorBackground">@color/brightTextColor</item>
         <item name="android:colorBackgroundCacheHint">@color/brightTextColor</item>
 </style>
 
     <!-- For list in PopupMenu -->
     <style name="ListViewStyle" parent="@android:style/Widget.ListView.DropDown">
+        <item name="android:paddingLeft">1px</item>
         <item name="android:dividerHeight">1px</item>
+        <item name="android:divider">@color/dimTextColor</item>
     </style>
 
     <style name="ToolBarTheme" parent="AppTheme">
