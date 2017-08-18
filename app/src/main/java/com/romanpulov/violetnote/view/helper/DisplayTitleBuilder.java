@@ -16,6 +16,13 @@ import java.util.Locale;
 
 public class DisplayTitleBuilder {
 
+    /**
+     * Builds display title from collection of items
+     * @param context context to retrieve resource strings
+     * @param items full items list
+     * @param selectedItems items to show title
+     * @return string with title
+     */
     public static String buildItemsDisplayTitle(Context context, List<? extends DisplayTitleProvider> items, Collection<Integer> selectedItems) {
         String title = "";
 
