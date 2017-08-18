@@ -13,6 +13,7 @@ import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.model.BasicOrderedEntityNoteA;
 import com.romanpulov.violetnote.view.helper.DisplayTitleBuilder;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
+import com.romanpulov.violetnote.view.helper.PriorityDisplayHelper;
 
 import java.util.Collection;
 import java.util.List;
@@ -48,16 +49,7 @@ public class BasicNoteNamedItemRecyclerViewAdapter extends RecyclerView.Adapter<
         holder.mLastModifiedView.setText(holder.mItem.getLastModifiedString());
 
         // priority display
-        if (holder.mItem.getPriority() == BasicOrderedEntityNoteA.PRIORITY_HIGH) {
-            holder.mPriorityView.setVisibility(View.VISIBLE);
-            holder.mPriorityView.setImageResource(R.drawable.ic_up);
-        } else if (holder.mItem.getPriority() == BasicOrderedEntityNoteA.PRIORITY_LOW) {
-            holder.mPriorityView.setVisibility(View.VISIBLE);
-            holder.mPriorityView.setImageResource(R.drawable.ic_down);
-        } else {
-            holder.mPriorityView.setVisibility(View.GONE);
-            holder.mPriorityView.setImageResource(android.R.color.transparent);
-        }
+        PriorityDisplayHelper.updateImageViewPriority(holder.mPriorityView, holder.mItem.getPriority());
 
         // background
         holder.updateBackground();
