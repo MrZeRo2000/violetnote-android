@@ -30,16 +30,11 @@ public class BasicNotePriorityDownAction<T extends BasicCommonNoteA> extends Bas
 
     @Override
     public boolean execute(DBNoteManager noteManager, List<T> items) {
-        boolean result = false;
         BasicOrderedEntityNoteA.sortDesc(items);
 
-        for (T item : items) {
-            if (noteManager.priorityDown(item)) {
-                result = true;
-            } else
-                break;
-        }
+        for (T item : items)
+            noteManager.priorityDown(item);
 
-        return result;
+        return true;
     }
 }

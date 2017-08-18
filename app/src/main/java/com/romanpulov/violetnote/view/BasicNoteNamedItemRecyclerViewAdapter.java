@@ -5,10 +5,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
+import com.romanpulov.violetnote.model.BasicOrderedEntityNoteA;
 import com.romanpulov.violetnote.view.helper.DisplayTitleBuilder;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 
@@ -44,6 +46,19 @@ public class BasicNoteNamedItemRecyclerViewAdapter extends RecyclerView.Adapter<
         holder.mNameView.setText(mItems.get(position).getName());
         holder.mValueView.setText(mItems.get(position).getValue());
         holder.mLastModifiedView.setText(holder.mItem.getLastModifiedString());
+
+        // priority display
+        if (holder.mItem.getPriority() == BasicOrderedEntityNoteA.PRIORITY_HIGH) {
+            holder.mPriorityView.setVisibility(View.VISIBLE);
+            holder.mPriorityView.setImageResource(R.drawable.ic_up);
+        } else if (holder.mItem.getPriority() == BasicOrderedEntityNoteA.PRIORITY_LOW) {
+            holder.mPriorityView.setVisibility(View.VISIBLE);
+            holder.mPriorityView.setImageResource(R.drawable.ic_down);
+        } else {
+            holder.mPriorityView.setVisibility(View.GONE);
+            holder.mPriorityView.setImageResource(android.R.color.transparent);
+        }
+
         // background
         holder.updateBackground();
     }
@@ -53,12 +68,13 @@ public class BasicNoteNamedItemRecyclerViewAdapter extends RecyclerView.Adapter<
         return mItems.size();
     }
 
-    public class ViewHolder extends RecyclerViewHelper.SelectableViewHolder {
-        public final View mView;
-        public final TextView mNameView;
-        public final TextView mValueView;
-        public final TextView mLastModifiedView;
-        public BasicNoteItemA mItem;
+    class ViewHolder extends RecyclerViewHelper.SelectableViewHolder {
+        private final View mView;
+        private final TextView mNameView;
+        private final TextView mValueView;
+        private final TextView mLastModifiedView;
+        private final ImageView mPriorityView;
+        private BasicNoteItemA mItem;
 
         public ViewHolder(View view, RecyclerViewHelper.RecyclerViewSelector viewSelector) {
             super(view, viewSelector);
@@ -66,6 +82,7 @@ public class BasicNoteNamedItemRecyclerViewAdapter extends RecyclerView.Adapter<
             mNameView = (TextView) view.findViewById(R.id.name);
             mValueView = (TextView) view.findViewById(R.id.value);
             mLastModifiedView = (TextView) view.findViewById(R.id.last_modified);
+            mPriorityView = (ImageView) view.findViewById(R.id.priority);
         }
 
         @Override

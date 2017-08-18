@@ -8,6 +8,7 @@ import android.support.v7.view.ActionMode;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBBasicNoteOpenHelper;
 import com.romanpulov.violetnote.db.DBNoteManager;
+import com.romanpulov.violetnote.model.BasicCommonNoteA;
 import com.romanpulov.violetnote.model.BasicEntityNoteA;
 import com.romanpulov.violetnote.model.BasicEntityNoteSelectionPosA;
 import com.romanpulov.violetnote.model.BasicNoteA;
@@ -101,7 +102,7 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
      * @param mode ActionMode
      * @param items items to delete
      */
-    protected void performDeleteAction(final ActionMode mode, final List<? extends BasicEntityNoteA> items) {
+    protected void performDeleteAction(final ActionMode mode, final List<? extends BasicCommonNoteA> items) {
         AlertOkCancelSupportDialogFragment dialog = AlertOkCancelSupportDialogFragment.newAlertOkCancelDialog(getString(R.string.ui_question_are_you_sure));
         dialog.setOkButtonClickListener(new AlertOkCancelSupportDialogFragment.OnClickListener() {
             @Override
