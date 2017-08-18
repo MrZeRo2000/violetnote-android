@@ -23,6 +23,8 @@ import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.model.BasicNoteValueA;
 import com.romanpulov.violetnote.model.BasicNoteValueDataA;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutorHost;
+import com.romanpulov.violetnote.view.action.BasicNotePriorityDownAction;
+import com.romanpulov.violetnote.view.action.BasicNotePriorityUpAction;
 import com.romanpulov.violetnote.view.helper.DisplayTitleBuilder;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutor;
 import com.romanpulov.violetnote.view.action.BasicNoteDataItemCheckOutAction;
@@ -162,6 +164,12 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                         break;
                     case R.id.move_bottom:
                         performMoveAction(new BasicNoteMoveBottomAction<BasicNoteItemA>(BasicNoteCheckedItemFragment.this), selectedNoteItems);
+                        break;
+                    case R.id.priority_up:
+                        performMoveAction(new BasicNotePriorityUpAction<BasicNoteItemA>(BasicNoteCheckedItemFragment.this), selectedNoteItems);
+                        break;
+                    case R.id.priority_down:
+                        performMoveAction(new BasicNotePriorityDownAction<BasicNoteItemA>(BasicNoteCheckedItemFragment.this), selectedNoteItems);
                         break;
                 }
             }
