@@ -9,11 +9,22 @@
     android:paddingRight="@dimen/text_margin_half"
     >
 
+    <ImageView
+        android:layout_width="@dimen/priority_image_size"
+        android:layout_height="@dimen/priority_image_size"
+        android:id="@+id/priority"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:contentDescription="@string/content_description_priority"
+        android:visibility="gone"
+        />
+
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/checked"
-        android:layout_alignParentLeft="true"
+        android:layout_toRightOf="@+id/priority"
+        android:layout_centerVertical="true"
         android:clickable="false"
         android:background="@null"
         android:theme="@style/EditTheme"
