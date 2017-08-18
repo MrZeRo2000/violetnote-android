@@ -1,4 +1,4 @@
-package com.romanpulov.violetnote.view.helper;
+package com.romanpulov.violetnote.view;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
