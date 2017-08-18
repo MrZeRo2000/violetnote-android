@@ -12,6 +12,7 @@
     <ImageView
         android:layout_width="@dimen/priority_image_size"
         android:layout_height="@dimen/priority_image_size"
+        android:paddingRight="@dimen/text_margin_half"
         android:id="@+id/priority"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"

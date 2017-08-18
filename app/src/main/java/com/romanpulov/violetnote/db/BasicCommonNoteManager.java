@@ -30,6 +30,13 @@ public class BasicCommonNoteManager {
         mDTF = new DateTimeFormatter(context);
     }
 
+    public boolean delete(BasicCommonNoteA note) {
+        DBManagementProvider dbManagementProvider = note.getDBManagementProvider();
+
+        DBNoteManager noteManager = new DBNoteManager(mContext);
+        return noteManager.deleteEntityNote(dbManagementProvider.getTableName(), note) == 1;
+    }
+
     public boolean moveUp(BasicCommonNoteA note) {
         DBManagementProvider dbManagementProvider = note.getDBManagementProvider();
 

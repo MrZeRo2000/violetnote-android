@@ -9,26 +9,41 @@
     android:paddingRight="@dimen/text_margin_half"
     >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/name"
+    <ImageView
+        android:layout_width="@dimen/priority_image_size"
+        android:layout_height="@dimen/priority_image_size"
+        android:paddingRight="@dimen/text_margin_half"
+        android:id="@+id/priority"
         android:layout_alignParentLeft="true"
-        android:layout_toLeftOf="@+id/last_modified"
-        android:textAppearance="@style/Text2"
-        android:maxLines="1"
+        android:layout_centerVertical="true"
+        android:contentDescription="@string/content_description_priority"
+        android:visibility="gone"
         />
 
-
-    <TextView
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/value"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/name"
+        android:layout_toRightOf="@+id/priority"
         android:layout_toLeftOf="@+id/last_modified"
-        android:textAppearance="@style/Text3"
-        />
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/name"
+            android:textAppearance="@style/Text2"
+            android:maxLines="1"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/value"
+            android:layout_below="@+id/name"
+            android:textAppearance="@style/Text3"
+            />
+
+    </RelativeLayout>
 
     <TextView
         android:layout_width="wrap_content"
