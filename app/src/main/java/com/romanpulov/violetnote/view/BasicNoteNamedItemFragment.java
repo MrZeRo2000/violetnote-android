@@ -18,8 +18,8 @@ import com.romanpulov.violetnote.model.BasicEntityNoteSelectionPosA;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutorHost;
-import com.romanpulov.violetnote.view.action.BasicNotePriorityDownAction;
-import com.romanpulov.violetnote.view.action.BasicNotePriorityUpAction;
+import com.romanpulov.violetnote.view.action.BasicNoteMovePriorityDownAction;
+import com.romanpulov.violetnote.view.action.BasicNoteMovePriorityUpAction;
 import com.romanpulov.violetnote.view.helper.DisplayTitleBuilder;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutor;
 import com.romanpulov.violetnote.view.action.BasicNoteDataItemEditNameValueAction;
@@ -188,10 +188,10 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
                         performMoveAction(new BasicNoteMoveBottomAction<BasicNoteItemA>(BasicNoteNamedItemFragment.this), selectedNoteItems);
                         break;
                     case R.id.priority_up:
-                        performMoveAction(new BasicNotePriorityUpAction<BasicNoteItemA>(BasicNoteNamedItemFragment.this), selectedNoteItems);
+                        performMoveAction(new BasicNoteMovePriorityUpAction<BasicNoteItemA>(BasicNoteNamedItemFragment.this), selectedNoteItems);
                         break;
                     case R.id.priority_down:
-                        performMoveAction(new BasicNotePriorityDownAction<BasicNoteItemA>(BasicNoteNamedItemFragment.this), selectedNoteItems);
+                        performMoveAction(new BasicNoteMovePriorityDownAction<BasicNoteItemA>(BasicNoteNamedItemFragment.this), selectedNoteItems);
                         break;
                 }
             }
