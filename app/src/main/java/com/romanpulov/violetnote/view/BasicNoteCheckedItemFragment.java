@@ -23,8 +23,8 @@ import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.model.BasicNoteValueA;
 import com.romanpulov.violetnote.model.BasicNoteValueDataA;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutorHost;
-import com.romanpulov.violetnote.view.action.BasicNotePriorityDownAction;
-import com.romanpulov.violetnote.view.action.BasicNotePriorityUpAction;
+import com.romanpulov.violetnote.view.action.BasicNoteMovePriorityDownAction;
+import com.romanpulov.violetnote.view.action.BasicNoteMovePriorityUpAction;
 import com.romanpulov.violetnote.view.helper.DisplayTitleBuilder;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutor;
 import com.romanpulov.violetnote.view.action.BasicNoteDataItemCheckOutAction;
@@ -166,10 +166,10 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                         performMoveAction(new BasicNoteMoveBottomAction<BasicNoteItemA>(BasicNoteCheckedItemFragment.this), selectedNoteItems);
                         break;
                     case R.id.priority_up:
-                        performMoveAction(new BasicNotePriorityUpAction<BasicNoteItemA>(BasicNoteCheckedItemFragment.this), selectedNoteItems);
+                        performMoveAction(new BasicNoteMovePriorityUpAction<BasicNoteItemA>(BasicNoteCheckedItemFragment.this), selectedNoteItems);
                         break;
                     case R.id.priority_down:
-                        performMoveAction(new BasicNotePriorityDownAction<BasicNoteItemA>(BasicNoteCheckedItemFragment.this), selectedNoteItems);
+                        performMoveAction(new BasicNoteMovePriorityDownAction<BasicNoteItemA>(BasicNoteCheckedItemFragment.this), selectedNoteItems);
                         break;
                 }
             }
