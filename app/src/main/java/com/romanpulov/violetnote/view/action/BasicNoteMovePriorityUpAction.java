@@ -33,7 +33,7 @@ public class BasicNoteMovePriorityUpAction<T extends BasicCommonNoteA> extends B
         BasicOrderedEntityNoteA.sortAsc(items);
 
         for (T item : items)
-            noteManager.priorityUp(item);
+            execute(noteManager, item);
 
         return true;
     }

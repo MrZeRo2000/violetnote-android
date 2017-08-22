@@ -28,7 +28,7 @@ public class BasicNoteMoveUpAction<T extends BasicCommonNoteA> extends BasicNote
         BasicOrderedEntityNoteA.sortAsc(items);
 
         for (T item : items) {
-            if (noteManager.moveUp(item)) {
+            if (execute(noteManager, item)) {
                 result = true;
             } else
                 break;

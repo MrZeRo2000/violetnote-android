@@ -28,7 +28,7 @@ public class BasicNoteMoveBottomAction <T extends BasicCommonNoteA> extends Basi
         BasicOrderedEntityNoteA.sortAsc(items);
 
         for (T item : items) {
-            if (noteManager.moveBottom(item)) {
+            if (execute(noteManager, item)) {
                 result = true;
             }
         }
