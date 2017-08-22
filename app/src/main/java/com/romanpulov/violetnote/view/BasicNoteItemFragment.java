@@ -16,10 +16,12 @@ import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutor;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutorHost;
+import com.romanpulov.violetnote.view.action.BasicNoteDataCommonNoteAction;
 import com.romanpulov.violetnote.view.action.BasicNoteDataDeleteEntityAction;
 import com.romanpulov.violetnote.view.action.BasicNoteDataItemAddAction;
 import com.romanpulov.violetnote.view.action.BasicNoteDataNoteItemAction;
 import com.romanpulov.violetnote.view.action.BasicNoteDataRefreshAction;
+import com.romanpulov.violetnote.view.action.BasicNoteDeleteAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveAction;
 import com.romanpulov.violetnote.view.core.AlertOkCancelSupportDialogFragment;
 import com.romanpulov.violetnote.view.core.BasicCommonNoteFragment;
@@ -108,7 +110,8 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
             @Override
             public void OnClick(DialogFragment dialog) {
                 BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity(), mBasicNoteData);
-                executor.addAction(getString(R.string.caption_processing), new BasicNoteDataDeleteEntityAction(mBasicNoteData, getDBTableName(), items));
+                //executor.addAction(getString(R.string.caption_processing), new BasicNoteDataDeleteEntityAction(mBasicNoteData, getDBTableName(), items));
+                executor.addAction(getString(R.string.caption_processing), new BasicNoteDataCommonNoteAction(mBasicNoteData, new BasicNoteDeleteAction<>(null), items));
                 executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData));
                 executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
                     @Override
