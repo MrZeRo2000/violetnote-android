@@ -176,22 +176,22 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
                         performEditAction(mode, selectedNoteItems.get(0));
                         break;
                     case R.id.move_up:
-                        performMoveAction(new BasicNoteMoveUpAction<BasicNoteItemA>(BasicNoteNamedItemFragment.this), selectedNoteItems);
+                        performMoveAction(new BasicNoteMoveUpAction<BasicNoteItemA>(), selectedNoteItems);
                         break;
                     case R.id.move_top:
-                        performMoveAction(new BasicNoteMoveTopAction<BasicNoteItemA>(BasicNoteNamedItemFragment.this), selectedNoteItems);
+                        performMoveAction(new BasicNoteMoveTopAction<BasicNoteItemA>(), selectedNoteItems);
                         break;
                     case R.id.move_down:
-                        performMoveAction(new BasicNoteMoveDownAction<BasicNoteItemA>(BasicNoteNamedItemFragment.this), selectedNoteItems);
+                        performMoveAction(new BasicNoteMoveDownAction<BasicNoteItemA>(), selectedNoteItems);
                         break;
                     case R.id.move_bottom:
-                        performMoveAction(new BasicNoteMoveBottomAction<BasicNoteItemA>(BasicNoteNamedItemFragment.this), selectedNoteItems);
+                        performMoveAction(new BasicNoteMoveBottomAction<BasicNoteItemA>(), selectedNoteItems);
                         break;
                     case R.id.priority_up:
-                        performMoveAction(new BasicNoteMovePriorityUpAction<BasicNoteItemA>(BasicNoteNamedItemFragment.this), selectedNoteItems);
+                        performMoveAction(new BasicNoteMovePriorityUpAction<BasicNoteItemA>(), selectedNoteItems);
                         break;
                     case R.id.priority_down:
-                        performMoveAction(new BasicNoteMovePriorityDownAction<BasicNoteItemA>(BasicNoteNamedItemFragment.this), selectedNoteItems);
+                        performMoveAction(new BasicNoteMovePriorityDownAction<BasicNoteItemA>(), selectedNoteItems);
                         break;
                 }
             }

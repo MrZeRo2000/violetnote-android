@@ -14,10 +14,6 @@ import java.util.List;
 
 public class BasicNoteMovePriorityDownAction<T extends BasicCommonNoteA> extends BasicNoteMoveAction<T> {
 
-    public BasicNoteMovePriorityDownAction(BasicCommonNoteFragment fragment) {
-        super(fragment);
-    }
-
     @Override
     public int getDirection() {
         return MovementDirection.DIRECTION_DOWN;

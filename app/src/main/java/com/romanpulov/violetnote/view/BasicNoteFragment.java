@@ -57,11 +57,6 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
     }
 
     @Override
-    public String getDBTableName() {
-        return DBBasicNoteOpenHelper.NOTES_TABLE_NAME;
-    }
-
-    @Override
     public void refreshList(DBNoteManager noteManager) {
         noteManager.refreshNotes(mNoteList);
         if (mRecyclerView != null)
@@ -156,16 +151,16 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
                         performEditAction(mode, selectedNoteItems.get(0));
                         break;
                     case R.id.move_up:
-                        performMoveAction(new BasicNoteMoveUpAction<BasicNoteA>(BasicNoteFragment.this), selectedNoteItems);
+                        performMoveAction(new BasicNoteMoveUpAction<BasicNoteA>(), selectedNoteItems);
                         break;
                     case R.id.move_top:
-                        performMoveAction(new BasicNoteMoveTopAction<BasicNoteA>(BasicNoteFragment.this), selectedNoteItems);
+                        performMoveAction(new BasicNoteMoveTopAction<BasicNoteA>(), selectedNoteItems);
                         break;
                     case R.id.move_down:
-                        performMoveAction(new BasicNoteMoveDownAction<BasicNoteA>(BasicNoteFragment.this), selectedNoteItems);
+                        performMoveAction(new BasicNoteMoveDownAction<BasicNoteA>(), selectedNoteItems);
                         break;
                     case R.id.move_bottom:
-                        performMoveAction(new BasicNoteMoveBottomAction<BasicNoteA>(BasicNoteFragment.this), selectedNoteItems);
+                        performMoveAction(new BasicNoteMoveBottomAction<BasicNoteA>(), selectedNoteItems);
                         break;
                 }
             }

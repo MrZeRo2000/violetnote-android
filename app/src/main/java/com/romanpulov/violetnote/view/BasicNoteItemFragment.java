@@ -8,20 +8,16 @@ import android.support.v7.view.ActionMode;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBBasicNoteOpenHelper;
 import com.romanpulov.violetnote.db.DBNoteManager;
-import com.romanpulov.violetnote.model.BasicCommonNoteA;
-import com.romanpulov.violetnote.model.BasicEntityNoteA;
 import com.romanpulov.violetnote.model.BasicEntityNoteSelectionPosA;
 import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutor;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutorHost;
-import com.romanpulov.violetnote.view.action.BasicNoteDataCommonNoteAction;
-import com.romanpulov.violetnote.view.action.BasicNoteDataDeleteEntityAction;
 import com.romanpulov.violetnote.view.action.BasicNoteDataItemAddAction;
 import com.romanpulov.violetnote.view.action.BasicNoteDataNoteItemAction;
 import com.romanpulov.violetnote.view.action.BasicNoteDataRefreshAction;
-import com.romanpulov.violetnote.view.action.BasicNoteDeleteAction;
+import com.romanpulov.violetnote.view.action.BasicNoteDataItemDeleteAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveAction;
 import com.romanpulov.violetnote.view.core.AlertOkCancelSupportDialogFragment;
 import com.romanpulov.violetnote.view.core.BasicCommonNoteFragment;
@@ -48,11 +44,6 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
 
     public BasicNoteDataA getBasicNoteData() {
         return mBasicNoteData;
-    }
-
-    @Override
-    public String getDBTableName() {
-        return DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME;
     }
 
     @Override
@@ -104,14 +95,14 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
      * @param mode ActionMode
      * @param items items to delete
      */
-    protected void performDeleteAction(final ActionMode mode, final List<? extends BasicCommonNoteA> items) {
+    protected void performDeleteAction(final ActionMode mode, final List<BasicNoteItemA> items) {
         AlertOkCancelSupportDialogFragment dialog = AlertOkCancelSupportDialogFragment.newAlertOkCancelDialog(getString(R.string.ui_question_are_you_sure));
         dialog.setOkButtonClickListener(new AlertOkCancelSupportDialogFragment.OnClickListener() {
             @Override
             public void OnClick(DialogFragment dialog) {
                 BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity(), mBasicNoteData);
                 //executor.addAction(getString(R.string.caption_processing), new BasicNoteDataDeleteEntityAction(mBasicNoteData, getDBTableName(), items));
-                executor.addAction(getString(R.string.caption_processing), new BasicNoteDataCommonNoteAction(mBasicNoteData, new BasicNoteDeleteAction<>(null), items));
+                executor.addAction(getString(R.string.caption_processing), new BasicNoteDataNoteItemAction(mBasicNoteData, new BasicNoteDataItemDeleteAction<>(), items));
                 executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData));
                 executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
                     @Override

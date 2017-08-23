@@ -1,6 +1,5 @@
 package com.romanpulov.violetnote.view.action;
 
-import com.romanpulov.violetnote.db.DBDataProvider;
 import com.romanpulov.violetnote.model.BasicEntityNoteA;
 
 /**
@@ -9,9 +8,6 @@ import com.romanpulov.violetnote.model.BasicEntityNoteA;
  */
 
 public abstract class BasicNoteMoveAction <T extends BasicEntityNoteA> extends BasicNoteAction<T>  {
-    public BasicNoteMoveAction(DBDataProvider dbDataProvider) {
-        super(dbDataProvider);
-    }
 
     public abstract int getDirection();
 }

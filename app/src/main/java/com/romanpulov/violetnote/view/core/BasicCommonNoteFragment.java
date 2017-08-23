@@ -7,7 +7,6 @@ import android.support.v7.view.ActionMode;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.romanpulov.violetnote.db.DBDataProvider;
 import com.romanpulov.violetnote.db.DBNoteManager;
 
 import java.util.Collection;
@@ -15,7 +14,7 @@ import java.util.Collection;
 /**
  * Created by rpulov on 07.09.2016.
  */
-public abstract class BasicCommonNoteFragment extends Fragment implements DBDataProvider {
+public abstract class BasicCommonNoteFragment extends Fragment {
     protected static String KEY_SELECTED_ITEMS_ARRAY = "selected items array";
     protected static String KEY_SELECTION_TITLE = "selection title";
     protected DialogFragment mDialogFragment;

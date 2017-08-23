@@ -45,11 +45,6 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
         noteManager.queryNoteDataValuesOrdered(mBasicNoteValueData.getNote(), mBasicNoteValueData.getValues());
     }
 
-    @Override
-    public String getDBTableName() {
-        return null;
-    }
-
     private OnNoteValueFragmentInteractionListener mListener;
 
     /**

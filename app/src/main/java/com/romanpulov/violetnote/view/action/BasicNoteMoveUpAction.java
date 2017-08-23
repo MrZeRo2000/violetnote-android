@@ -13,10 +13,6 @@ import java.util.List;
  */
 public class BasicNoteMoveUpAction<T extends BasicCommonNoteA> extends BasicNoteMoveAction<T> {
 
-    public BasicNoteMoveUpAction(BasicCommonNoteFragment fragment) {
-        super(fragment);
-    }
-
     @Override
     public boolean execute(DBNoteManager noteManager, T item) {
         return noteManager.moveUp(item);
