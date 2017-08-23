@@ -1,6 +1,5 @@
 package com.romanpulov.violetnote.db;
 
-import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 
 /**

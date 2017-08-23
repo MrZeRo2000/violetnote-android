@@ -6,7 +6,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.view.ActionMode;
 
 import com.romanpulov.violetnote.R;
-import com.romanpulov.violetnote.db.DBBasicNoteOpenHelper;
 import com.romanpulov.violetnote.db.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicEntityNoteSelectionPosA;
 import com.romanpulov.violetnote.model.BasicNoteA;
