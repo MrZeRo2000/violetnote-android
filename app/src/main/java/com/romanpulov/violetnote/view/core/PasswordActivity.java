@@ -7,9 +7,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 
 import com.romanpulov.violetnote.model.PasswordProvider;
+import com.romanpulov.violetnote.view.helper.InputManagerHelper;
 
 /**
  * Created by rpulov on 30.05.2016.
@@ -145,11 +145,7 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
             public void onTextInput(String text) {
                 // hide input
                 View focusedView = passwordInputDialog.getAlertDialog().getCurrentFocus();
-                if (focusedView != null) {
-                    InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(INPUT_METHOD_SERVICE);
-                    if (imm.isAcceptingText())
-                        imm.hideSoftInputFromWindow(focusedView.getWindowToken(), 0);
-                }
+                InputManagerHelper.hideInput(focusedView);
 
                 //dismiss dialog
                 mDialog.dismiss();

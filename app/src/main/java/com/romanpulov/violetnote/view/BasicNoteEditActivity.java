@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -12,6 +11,7 @@ import android.widget.RadioButton;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.view.core.ActionBarCompatActivity;
+import com.romanpulov.violetnote.view.helper.InputManagerHelper;
 
 public class BasicNoteEditActivity extends ActionBarCompatActivity {
     private final static int PASSWORD_SET_TAG = 0;
@@ -32,18 +32,13 @@ public class BasicNoteEditActivity extends ActionBarCompatActivity {
         super.onResume();
 
         mViewHolder.mTitle.requestFocus();
-        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+        InputManagerHelper.toggleInputForced(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-
-        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-        if (imm.isAcceptingText())
-            imm.hideSoftInputFromWindow(mViewHolder.mTitle.getWindowToken(), 0);
-
+        InputManagerHelper.hideInput(mViewHolder.mTitle);
     }
 
     private static class ViewHolder {

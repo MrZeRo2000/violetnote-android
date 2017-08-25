@@ -1,5 +1,6 @@
 package com.romanpulov.violetnote.view.helper;
 
+import android.content.Context;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
@@ -22,5 +23,25 @@ public class InputManagerHelper {
             if (inputMethodManager.isAcceptingText())
                 inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
         }
+    }
+
+    /**
+     * Show input from view
+     * @param v View
+     */
+    public static void showInput(View v) {
+        if (v != null) {
+            InputMethodManager inputMethodManager = (InputMethodManager) v.getContext().getSystemService(INPUT_METHOD_SERVICE);
+            inputMethodManager.showSoftInput(v, 0);
+        }
+    }
+
+    /**
+     * Toggle force input
+     * @param context Context
+     */
+    public static void toggleInputForced(Context context) {
+        InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(INPUT_METHOD_SERVICE);
+        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
     }
 }

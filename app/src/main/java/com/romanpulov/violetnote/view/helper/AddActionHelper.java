@@ -3,7 +3,6 @@ package com.romanpulov.violetnote.view.helper;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
@@ -109,17 +108,12 @@ public class AddActionHelper implements AutoCompleteArrayAdapter.OnAutoCompleteT
 
     public void showLayout() {
         mActionView.setVisibility(View.VISIBLE);
-        if (mActionView.findViewById(R.id.add_edit_text).requestFocus()) {
-            InputMethodManager imm = (InputMethodManager) mActionView.getContext().getSystemService(INPUT_METHOD_SERVICE);
-            imm.showSoftInput(mAddEditText, 0);
-        }
+        if (mActionView.findViewById(R.id.add_edit_text).requestFocus())
+            InputManagerHelper.showInput(mAddEditText);
     }
 
     public void hideLayout() {
-        InputMethodManager imm = (InputMethodManager) mActionView.getContext().getSystemService(INPUT_METHOD_SERVICE);
-        if (imm.isAcceptingText())
-            imm.hideSoftInputFromWindow(mActionView.getWindowToken(), 0);
-
+        InputManagerHelper.hideInput(mActionView);
         mActionView.setVisibility(View.GONE);
     }
 

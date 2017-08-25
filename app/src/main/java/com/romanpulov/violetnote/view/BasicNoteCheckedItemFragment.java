@@ -13,7 +13,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBNoteManager;
@@ -42,6 +41,7 @@ import com.romanpulov.violetnote.view.core.TextInputDialog;
 import com.romanpulov.violetnote.view.helper.AddActionHelper;
 import com.romanpulov.violetnote.view.core.TextEditDialogBuilder;
 import com.romanpulov.violetnote.view.helper.CheckoutProgressHelper;
+import com.romanpulov.violetnote.view.helper.InputManagerHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,11 +97,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                 if (!text.equals(item.getValue())) {
                     //hide editor
                     View focusedView = alertDialog.getCurrentFocus();
-                    if (focusedView != null) {
-                        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(INPUT_METHOD_SERVICE);
-                        if (imm.isAcceptingText())
-                            imm.hideSoftInputFromWindow(focusedView.getWindowToken(), 0);
-                    }
+                    InputManagerHelper.hideInput(focusedView);
 
                     //change
                     item.setValue(text);

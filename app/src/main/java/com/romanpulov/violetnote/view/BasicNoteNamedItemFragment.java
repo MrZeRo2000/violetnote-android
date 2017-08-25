@@ -11,7 +11,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.model.BasicEntityNoteSelectionPosA;
@@ -33,6 +32,7 @@ import com.romanpulov.violetnote.view.core.PasswordActivity;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 import com.romanpulov.violetnote.view.core.TextEditDialogBuilder;
 import com.romanpulov.violetnote.view.core.TextInputDialog;
+import com.romanpulov.violetnote.view.helper.InputManagerHelper;
 
 import java.util.List;
 
@@ -82,11 +82,7 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
                 if (!text.equals(item.getValue())) {
                     //hide editor
                     View focusedView = alertDialog.getCurrentFocus();
-                    if (focusedView != null) {
-                        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(INPUT_METHOD_SERVICE);
-                        if (imm.isAcceptingText())
-                            imm.hideSoftInputFromWindow(focusedView.getWindowToken(), 0);
-                    }
+                    InputManagerHelper.hideInput(focusedView);
 
                     //change
                     item.setValue(text);

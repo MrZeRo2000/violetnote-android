@@ -3,7 +3,6 @@ package com.romanpulov.violetnote.view.helper;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.CheckBox;
@@ -103,17 +102,12 @@ public class SearchActionHelper implements CompoundButton.OnCheckedChangeListene
             mSearchView.findViewById(R.id.search_user_check).setVisibility(View.GONE);
         }
         mSearchView.setVisibility(View.VISIBLE);
-        if (mSearchEditText.requestFocus()) {
-            InputMethodManager imm = (InputMethodManager) mSearchEditText.getContext().getSystemService(INPUT_METHOD_SERVICE);
-            imm.showSoftInput(mSearchEditText, 0);
-        }
+        if (mSearchEditText.requestFocus())
+            InputManagerHelper.showInput(mSearchEditText);
     }
 
     public void hideLayout() {
-        InputMethodManager imm = (InputMethodManager) mSearchEditText.getContext().getSystemService(INPUT_METHOD_SERVICE);
-        if (imm.isAcceptingText())
-            imm.hideSoftInputFromWindow(mSearchEditText.getWindowToken(), 0);
-
+        InputManagerHelper.hideInput(mSearchEditText);
         mSearchView.setVisibility(View.GONE);
     }
 
