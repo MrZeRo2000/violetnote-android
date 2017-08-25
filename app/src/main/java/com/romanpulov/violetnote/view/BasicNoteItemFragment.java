@@ -11,6 +11,7 @@ import com.romanpulov.violetnote.model.BasicEntityNoteSelectionPosA;
 import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
+import com.romanpulov.violetnote.model.BasicOrderedEntityNoteA;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutor;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutorHost;
 import com.romanpulov.violetnote.view.action.BasicNoteDataItemAddAction;
@@ -76,13 +77,17 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
         executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
             @Override
             public void onExecutionCompleted(BasicNoteDataA basicNoteData, boolean result) {
-                if (result)
+                if (result) {
                     afterExecutionCompleted();
 
-                mBasicNoteData = basicNoteData;
+                    mBasicNoteData = basicNoteData;
 
-                if (result)
-                    mRecyclerView.scrollToPosition(mBasicNoteData.getNote().getItems().size() - 1);
+                    mRecyclerView.getAdapter().notifyDataSetChanged();
+                    int position = mBasicNoteData.getNote().getLastNoteItemPriorityPosition(item.getPriority());
+
+                    if (position > -1)
+                        mRecyclerView.scrollToPosition(position);
+                }
             }
         });
 

@@ -130,6 +130,35 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
         return mHistoryItems;
     }
 
+    /**
+     * Returns last note item position with given priority
+     * @param priority Priority
+     * @return Item
+     */
+    public int getLastNoteItemPriorityPosition(long priority) {
+        int result = -1;
+
+        BasicNoteItemA noteItem = null;
+
+        for (BasicNoteItemA item : mItems) {
+            result ++;
+
+            // first found with required priority
+            if ((noteItem == null) && (item.getPriority() == priority)) {
+                noteItem = item;
+                continue;
+            }
+
+            if ((noteItem != null) && (item.getPriority() != priority))
+                break;
+        }
+
+        if (noteItem == null)
+            return -1;
+        else
+            return result;
+    }
+
     private BasicNoteA() {
         setDBManagementProvider(new BasicNoteDBManagementProvider(this));
     }
