@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBNoteManager;
@@ -167,6 +168,9 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                     case R.id.priority_down:
                         performMoveAction(new BasicNoteMovePriorityDownAction<BasicNoteItemA>(), selectedNoteItems);
                         break;
+                    case R.id.select_all:
+                        performSelectAll();
+                        break;
                 }
             }
             return false;
@@ -188,7 +192,9 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
 
         @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            return false;
+            updateActionMenu(menu);
+            mode.setTitle(DisplayTitleBuilder.buildItemsDisplayTitle(getActivity(), mBasicNoteData.getNote().getItems(), mRecyclerViewSelector.getSelectedItems()));
+            return true;
         }
     }
 

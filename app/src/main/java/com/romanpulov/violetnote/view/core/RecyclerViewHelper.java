@@ -135,28 +135,15 @@ public class RecyclerViewHelper {
             mView.setOnClickListener(this);
         }
 
-        protected abstract String getSelectedTitle(Collection<Integer> selectedItems);
-
-        private void updateSelectedTitle() {
-            ActionMode actionMode = mViewSelector.getActionMode();
-            if ((actionMode != null) && (mViewSelector.getSelectedItems().size() > 0)) {
-                String selectedTitle = getSelectedTitle(mViewSelector.getSelectedItems());
-                if (selectedTitle != null)
-                    actionMode.setTitle(selectedTitle);
-            }
-        }
-
         @Override
         public boolean onLongClick(View v) {
             mViewSelector.startActionMode(v, getAdapterPosition());
-            updateSelectedTitle();
             return true;
         }
 
         @Override
         public void onClick(View v) {
             mViewSelector.setSelectedView(v, getAdapterPosition());
-            updateSelectedTitle();
         }
 
         public void updateBackground() {

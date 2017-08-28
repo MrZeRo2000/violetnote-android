@@ -190,6 +190,7 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
             if (menuItem != null) {
                 menuItem.setVisible(mRecyclerViewSelector.isSelectedSingle());
             }
+            mode.setTitle(DisplayTitleBuilder.buildItemsDisplayTitle(getActivity(), mNoteList, mRecyclerViewSelector.getSelectedItems()));
             return false;
         }
     }

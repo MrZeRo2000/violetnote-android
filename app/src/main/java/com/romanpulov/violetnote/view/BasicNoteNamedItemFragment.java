@@ -189,6 +189,9 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
                     case R.id.priority_down:
                         performMoveAction(new BasicNoteMovePriorityDownAction<BasicNoteItemA>(), selectedNoteItems);
                         break;
+                    case R.id.select_all:
+                        performSelectAll();
+                        break;
                 }
             }
             return false;
@@ -210,7 +213,8 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
 
         @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            return false;
+            updateActionMenu(menu);
+            return true;
         }
     }
 

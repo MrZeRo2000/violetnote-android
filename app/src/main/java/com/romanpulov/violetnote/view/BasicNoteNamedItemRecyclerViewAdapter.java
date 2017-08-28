@@ -77,11 +77,6 @@ public class BasicNoteNamedItemRecyclerViewAdapter extends RecyclerView.Adapter<
         }
 
         @Override
-        protected String getSelectedTitle(Collection<Integer> selectedItems) {
-            return DisplayTitleBuilder.buildItemsDisplayTitle(mView.getContext(), mItems, selectedItems);
-        }
-
-        @Override
         public void onClick(View v) {
             super.onClick(v);
             if ((!mRecyclerViewSelector.isSelected()) && (mListener != null) && (getAdapterPosition() != -1))
