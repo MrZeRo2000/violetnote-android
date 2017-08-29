@@ -15,8 +15,6 @@ import com.romanpulov.violetnote.view.OnSearchInteractionListener;
 
 import java.util.Collection;
 
-import static android.content.Context.INPUT_METHOD_SERVICE;
-
 /**
  * Created by romanpulov on 08.08.2016.
  */

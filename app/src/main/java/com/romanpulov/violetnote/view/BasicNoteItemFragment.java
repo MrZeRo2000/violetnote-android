@@ -13,7 +13,6 @@ import com.romanpulov.violetnote.model.BasicEntityNoteSelectionPosA;
 import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
-import com.romanpulov.violetnote.model.BasicOrderedEntityNoteA;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutor;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutorHost;
 import com.romanpulov.violetnote.view.action.BasicNoteDataItemAddAction;

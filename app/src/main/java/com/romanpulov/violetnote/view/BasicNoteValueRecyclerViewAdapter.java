@@ -9,10 +9,8 @@ import android.widget.TextView;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.model.BasicNoteValueA;
-import com.romanpulov.violetnote.view.helper.DisplayTitleBuilder;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 
-import java.util.Collection;
 import java.util.List;
 
 public class BasicNoteValueRecyclerViewAdapter extends RecyclerView.Adapter<BasicNoteValueRecyclerViewAdapter.ViewHolder> {

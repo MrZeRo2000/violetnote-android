@@ -13,8 +13,6 @@ import com.romanpulov.violetnote.view.AutoCompleteArrayAdapter;
 
 import java.util.Collection;
 
-import static android.content.Context.INPUT_METHOD_SERVICE;
-
 /**
  * Created by romanpulov on 06.09.2016.
  */

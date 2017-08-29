@@ -11,8 +11,6 @@ import android.widget.EditText;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.view.helper.InputManagerHelper;
 
-import static android.content.Context.INPUT_METHOD_SERVICE;
-
 /**
  * Created by romanpulov on 09.09.2016.
  */

@@ -36,8 +36,6 @@ import com.romanpulov.violetnote.view.helper.InputManagerHelper;
 
 import java.util.List;
 
-import static android.content.Context.INPUT_METHOD_SERVICE;
-
 public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
 
     /**
