@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.view.ActionMode;
 import android.view.Menu;
-import android.view.MenuItem;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBNoteManager;
@@ -23,6 +22,7 @@ import com.romanpulov.violetnote.view.action.BasicNoteMoveAction;
 import com.romanpulov.violetnote.view.core.AlertOkCancelSupportDialogFragment;
 import com.romanpulov.violetnote.view.core.BasicCommonNoteFragment;
 import com.romanpulov.violetnote.view.core.PasswordActivity;
+import com.romanpulov.violetnote.view.helper.ActionHelper;
 
 import java.util.List;
 
@@ -72,29 +72,7 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
      * @param menu Menu to update
      */
     protected void updateActionMenu(Menu menu) {
-        for (int menuIndex = 0; menuIndex < menu.size(); menuIndex ++) {
-            MenuItem menuItem = menu.getItem(menuIndex);
-
-            if (menuItem != null) {
-                switch (menuItem.getItemId()) {
-                    case R.id.select_all:
-                        menuItem.setVisible(!((mRecyclerViewSelector != null) && (mRecyclerViewSelector.getSelectedItems().size() == mBasicNoteData.getNote().getItemCount())));
-                        break;
-                    case R.id.edit_value:
-                    case R.id.edit:
-                        menuItem.setVisible(mRecyclerViewSelector.getSelectedItems().size() == 1);
-                        break;
-                    case R.id.move_up:
-                    case R.id.move_down:
-                    case R.id.move_top:
-                    case R.id.move_bottom:
-                    case R.id.priority_up:
-                    case R.id.priority_down:
-                        menuItem.setVisible(mRecyclerViewSelector.getSelectedItems().size() != mBasicNoteData.getNote().getItemCount());
-                        break;
-                }
-            }
-        }
+        ActionHelper.updateActionMenu(menu, mRecyclerViewSelector.getSelectedItems().size(), mBasicNoteData.getNote().getItemCount());
     }
 
 
@@ -102,12 +80,8 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
      * Common logic to select all items
      */
     protected void performSelectAll() {
-        Integer[] selectedItems = new Integer[mBasicNoteData.getNote().getItemCount()];
-
-        for (int i = 0; i < mBasicNoteData.getNote().getItemCount(); i ++)
-            selectedItems[i] = i;
-
-        mRecyclerViewSelector.setSelectedItems(selectedItems);
+        if (mBasicNoteData.getNote().getItemCount() > 0)
+            mRecyclerViewSelector.setSelectedItems(ActionHelper.createSelectAllItems(mBasicNoteData.getNote().getItemCount()));
     }
 
 

@@ -19,6 +19,7 @@ import com.romanpulov.violetnote.db.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicEntityNoteSelectionPosA;
 import com.romanpulov.violetnote.model.BasicNoteValueA;
 import com.romanpulov.violetnote.model.BasicNoteValueDataA;
+import com.romanpulov.violetnote.view.helper.ActionHelper;
 import com.romanpulov.violetnote.view.helper.DisplayTitleBuilder;
 import com.romanpulov.violetnote.view.core.AlertOkCancelSupportDialogFragment;
 import com.romanpulov.violetnote.view.core.BasicCommonNoteFragment;
@@ -142,10 +143,8 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
 
         @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            MenuItem menuItem = menu.findItem(R.id.edit);
-            if (menuItem != null) {
-                menuItem.setVisible(mRecyclerViewSelector.isSelectedSingle());
-            }
+            ActionHelper.updateActionMenu(menu, mRecyclerViewSelector.getSelectedItems().size(), mBasicNoteValueData.getValues().size());
+            mode.setTitle(DisplayTitleBuilder.buildItemsDisplayTitle(getActivity(), mBasicNoteValueData.getValues(), mRecyclerViewSelector.getSelectedItems()));
             return false;
         }
 
@@ -155,6 +154,9 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
 
             if (selectedNoteItems.size() > 0) {
                 switch (item.getItemId()) {
+                    case R.id.select_all:
+                        performSelectAll();
+                        break;
                     case R.id.delete:
                         performDeleteAction(mode, selectedNoteItems);
                         break;
@@ -171,6 +173,10 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
             if (mRecyclerViewSelector != null)
                 mRecyclerViewSelector.destroyActionMode();
         }
+    }
+
+    private void performSelectAll() {
+        mRecyclerViewSelector.setSelectedItems(ActionHelper.createSelectAllItems(mBasicNoteValueData.getValues().size()));
     }
 
     private void performAddAction(BasicNoteValueA value) {

@@ -187,9 +187,8 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
             log("onPrepareActionMode");
             //menu.getItem(R.menu.)
             MenuItem menuItem = menu.findItem(R.id.edit);
-            if (menuItem != null) {
+            if (menuItem != null)
                 menuItem.setVisible(mRecyclerViewSelector.isSelectedSingle());
-            }
             mode.setTitle(DisplayTitleBuilder.buildItemsDisplayTitle(getActivity(), mNoteList, mRecyclerViewSelector.getSelectedItems()));
             return false;
         }
