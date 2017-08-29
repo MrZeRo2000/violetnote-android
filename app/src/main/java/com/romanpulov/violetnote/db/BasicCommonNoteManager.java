@@ -17,12 +17,6 @@ public class BasicCommonNoteManager {
     protected final SQLiteDatabase mDB;
     protected final DateTimeFormatter mDTF;
 
-    private long mNoteId = 0;
-
-    public void setNoteId(long value) {
-        mNoteId = value;
-    }
-
     public BasicCommonNoteManager(Context context) {
         mContext = context;
         mDBHelper = DBBasicNoteHelper.getInstance(mContext);

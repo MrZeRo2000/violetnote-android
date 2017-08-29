@@ -92,8 +92,7 @@
         <item name="android:listSelector">@drawable/list_lighter_selector</item>
         <item name="android:divider">@color/dimTextColor</item>
         <item name="android:dividerHeight">1px</item>
-        <item name="android:paddingTop">1px</item>
-        <item name="android:paddingLeft">1px</item>
+        <item name="android:padding">1px</item>
         <item name="android:background">@drawable/white_border_shape</item>
     </style>
 

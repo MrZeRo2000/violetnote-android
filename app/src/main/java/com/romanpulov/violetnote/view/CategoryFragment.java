@@ -62,7 +62,7 @@ public class CategoryFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         final PassDataA passDataA = this.getArguments().getParcelable(PasswordActivity.PASS_DATA);
         if ((passDataA != null) && (passDataA.getPassCategoryData() != null))
-            recyclerView.setAdapter(new CategoryRecyclerViewAdapter(getActivity(), passDataA.getPassCategoryData(), mListener));
+            recyclerView.setAdapter(new CategoryRecyclerViewAdapter(passDataA.getPassCategoryData(), mListener));
 
         // add decoration
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_white_black_gradient));

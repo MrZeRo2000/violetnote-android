@@ -15,12 +15,10 @@ import java.util.List;
 
 public class CategoryRecyclerViewAdapter extends RecyclerView.Adapter<CategoryRecyclerViewAdapter.ViewHolder> {
 
-    private final Context mContext;
     private final List<PassCategoryA> mValues;
     private final OnPassCategoryInteractionListener mListener;
 
-    public CategoryRecyclerViewAdapter(Context context, List<PassCategoryA> items, OnPassCategoryInteractionListener listener) {
-        mContext = context;
+    public CategoryRecyclerViewAdapter(List<PassCategoryA> items, OnPassCategoryInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }

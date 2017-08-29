@@ -22,7 +22,6 @@ import java.util.List;
 public class PassDataProgressFragment extends ProgressFragment {
     private OnPassDataFragmentInteractionListener mListener;
     private Context mContext;
-    private LoadPassDataAsyncTask mTask;
 
     public static PassDataProgressFragment newInstance(Context context) {
         PassDataProgressFragment fragment = new PassDataProgressFragment();
@@ -57,8 +56,8 @@ public class PassDataProgressFragment extends ProgressFragment {
     }
 
     public void loadPassData(String password) {
-        mTask = new LoadPassDataAsyncTask(mContext, password);
-        mTask.execute();
+        LoadPassDataAsyncTask task = new LoadPassDataAsyncTask(mContext, password);
+        task.execute();
     }
 
     public interface OnPassDataFragmentInteractionListener {

@@ -52,9 +52,7 @@ public class BasicNoteDataActionExecutor {
     }
 
     private DBNoteManager createNoteManager() {
-        DBNoteManager noteManager = new DBNoteManager(mContext);
-        noteManager.setNoteId(mNoteId);
-        return noteManager;
+        return new DBNoteManager(mContext);
     }
 
     private boolean internalExecute() {
