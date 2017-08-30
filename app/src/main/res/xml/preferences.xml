@@ -18,7 +18,7 @@
             />
     </PreferenceCategory>
     <PreferenceCategory
-        android:title="@string/pref_title_basic_note_data"
+        android:title="@string/pref_title_local_backup"
         android:layout="@layout/preferences_category"
         >
         <Preference
@@ -30,6 +30,26 @@
             android:key="pref_basic_note_local_restore"
             android:title="@string/pref_title_basic_note_restore"
             android:summary="@string/pref_summary_basic_note_restore"
+            />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/pref_title_cloud_backup"
+        android:layout="@layout/preferences_category"
+        >
+        <Preference
+            android:key="pref_basic_note_cloud_storage"
+            android:title="@string/pref_title_basic_note_cloud_storage"
+            android:summary="@string/pref_summary_basic_note_cloud_storage"
+            />
+        <Preference
+            android:key="pref_basic_note_cloud_backup"
+            android:title="@string/pref_title_basic_note_cloud_backup"
+            android:summary="@string/pref_summary_basic_note_cloud_backup"
+            />
+        <Preference
+            android:key="pref_basic_note_cloud_restore"
+            android:title="@string/pref_title_basic_note_cloud_restore"
+            android:summary="@string/pref_summary_basic_note_cloud_restore"
             />
     </PreferenceCategory>
     <PreferenceCategory

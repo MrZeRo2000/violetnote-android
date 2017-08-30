@@ -38,10 +38,18 @@
     <!-- Preferences -->
     <string name="pref_title_pass_note_data">Password Notes Data</string>
     <string name="pref_title_basic_note_data">Basic Notes Data</string>
+    <string name="pref_title_local_backup">Local backup</string>
     <string name="pref_title_basic_note_backup">Backup</string>
     <string name="pref_summary_basic_note_backup">Backup to local storage</string>
     <string name="pref_title_basic_note_restore">Restore</string>
     <string name="pref_summary_basic_note_restore">Restore from local storage</string>
+    <string name="pref_title_cloud_backup">Cloud backup</string>
+    <string name="pref_title_basic_note_cloud_storage">Cloud storage</string>
+    <string name="pref_summary_basic_note_cloud_storage">Type of cloud storage</string>
+    <string name="pref_title_basic_note_cloud_backup">Backup</string>
+    <string name="pref_summary_basic_note_cloud_backup">Backup to cloud</string>
+    <string name="pref_title_basic_note_cloud_restore">Restore</string>
+    <string name="pref_summary_basic_note_cloud_restore">Restore from cloud</string>
     <string name="pref_title_account">Account</string>
     <string name="pref_title_account_dropbox">Dropbox</string>
     <string name="pref_title_interface">Interface</string>
