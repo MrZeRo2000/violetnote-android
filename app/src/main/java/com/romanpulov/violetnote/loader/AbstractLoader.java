@@ -14,8 +14,6 @@ public abstract class AbstractLoader {
 
     final Context mContext;
     int mLoadAppearance = LOAD_APPEARANCE_SYNC;
-    final String mSourcePath;
-    final String mDestPath;
 
     public int getLoadAppearance() {
         return mLoadAppearance;
@@ -30,13 +28,7 @@ public abstract class AbstractLoader {
 
     AbstractLoader(Context context) {
         mContext = context;
-        mSourcePath = getSourcePath();
-        mDestPath = getDestPath();
     }
-
-    protected abstract String getSourcePath();
-
-    protected abstract String getDestPath();
 
     public void setOnLoadedListener(AbstractLoader.OnLoadedListener listener) {
         mListener = listener;
