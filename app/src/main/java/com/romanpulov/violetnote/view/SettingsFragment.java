@@ -34,15 +34,15 @@ public class SettingsFragment extends PreferenceFragment {
 
     public static final int SOURCE_TYPE_FILE = 0;
     public static final int SOURCE_TYPE_DROPBOX = 1;
-    private static final int DEFAULT_SOURCE_TYPE = SOURCE_TYPE_FILE;
+    public static final int DEFAULT_SOURCE_TYPE = SOURCE_TYPE_FILE;
 
     public static final String PREF_KEY_SOURCE_PATH = "pref_source_path";
-    private static final String PREF_KEY_SOURCE_TYPE = "pref_source_type";
-    private static final String PREF_KEY_LOAD = "pref_load";
-    private static final String PREF_KEY_LAST_LOADED = "pref_last_loaded";
-    private static final String PREF_KEY_ACCOUNT_DROPBOX = "pref_account_dropbox";
-    private static final String PREF_KEY_BASIC_NOTE_LOCAL_BACKUP = "pref_basic_note_local_backup";
-    private static final String PREF_KEY_BASIC_NOTE_LOCAL_RESTORE = "pref_basic_note_local_restore";
+    public static final String PREF_KEY_SOURCE_TYPE = "pref_source_type";
+    public static final String PREF_KEY_LOAD = "pref_load";
+    public static final String PREF_KEY_LAST_LOADED = "pref_last_loaded";
+    public static final String PREF_KEY_ACCOUNT_DROPBOX = "pref_account_dropbox";
+    public static final String PREF_KEY_BASIC_NOTE_LOCAL_BACKUP = "pref_basic_note_local_backup";
+    public static final String PREF_KEY_BASIC_NOTE_LOCAL_RESTORE = "pref_basic_note_local_restore";
 
     private DocumentLoader mDocumentLoader;
 
