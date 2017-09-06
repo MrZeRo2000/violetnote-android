@@ -18,8 +18,8 @@ import android.widget.Toast;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBBasicNoteHelper;
 import com.romanpulov.violetnote.db.DBStorageManager;
-import com.romanpulov.violetnote.document.DocumentLoader;
-import com.romanpulov.violetnote.document.DocumentLoaderFactory;
+import com.romanpulov.violetnote.loader.DocumentLoader;
+import com.romanpulov.violetnote.loader.DocumentLoaderFactory;
 import com.romanpulov.violetnote.dropboxchooser.DropboxChooserActivity;
 import com.romanpulov.violetnote.filechooser.FileChooserActivity;
 import com.romanpulov.violetnote.dropbox.DropBoxHelper;
@@ -46,9 +46,9 @@ public class SettingsFragment extends PreferenceFragment {
 
     private DocumentLoader mDocumentLoader;
 
-    private final DocumentLoader.OnDocumentLoadedListener mDocumentLoaderListener = new DocumentLoader.OnDocumentLoadedListener() {
+    private final DocumentLoader.OnLoadedListener mDocumentLoaderListener = new DocumentLoader.OnLoadedListener() {
         @Override
-        public void onDocumentLoaded(String result) {
+        public void onLoaded(String result) {
             Preference prefLoad = findPreference(PREF_KEY_LOAD);
 
             if (result == null) {
@@ -241,7 +241,7 @@ public class SettingsFragment extends PreferenceFragment {
                 if (mDocumentLoader == null) {
                     mDocumentLoader = DocumentLoaderFactory.fromType(getActivity(), type);
                     if (mDocumentLoader != null) {
-                        mDocumentLoader.setOnDocumentLoadedListener(mDocumentLoaderListener);
+                        mDocumentLoader.setOnLoadedListener(mDocumentLoaderListener);
                         mDocumentLoader.execute();
                     }
                 } else

@@ -1,4 +1,4 @@
-package com.romanpulov.violetnote.document;
+package com.romanpulov.violetnote.loader;
 
 import android.content.Context;
 import com.dropbox.core.v2.DbxClientV2;
@@ -7,6 +7,7 @@ import com.dropbox.core.v2.files.Metadata;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.dropbox.DropBoxHelper;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -31,6 +32,7 @@ public class DocumentDropboxLoader extends DocumentLoader {
 
         FileMetadata fm = (FileMetadata) m;
 
+        File mDestFile = new File(mDestPath);
         OutputStream outputStream = new FileOutputStream(mDestFile);
         try {
             mClient.files().download(fm.getPathLower(), fm.getRev()).download(outputStream);

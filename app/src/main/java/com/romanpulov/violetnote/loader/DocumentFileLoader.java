@@ -1,6 +1,8 @@
-package com.romanpulov.violetnote.document;
+package com.romanpulov.violetnote.loader;
 
 import android.content.Context;
+
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -15,7 +17,7 @@ public class DocumentFileLoader extends DocumentLoader {
     @Override
     protected void load() throws Exception {
         InputStream inputStream = new FileInputStream(mSourcePath);
-        OutputStream outputStream = new FileOutputStream(mDestFile);
+        OutputStream outputStream = new FileOutputStream(new File(mDestPath));
         try {
             byte[] buf = new byte[1024];
             int len;

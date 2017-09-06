@@ -1,0 +1,74 @@
+package com.romanpulov.violetnote.loader;
+
+import android.content.Context;
+import android.os.AsyncTask;
+
+/**
+ * Common loader class for sync and async load
+ * Created by romanpulov on 06.09.2017.
+ */
+
+public abstract class AbstractLoader {
+    public static final int LOAD_APPEARANCE_SYNC = 0;
+    public static final int LOAD_APPEARANCE_ASYNC = 1;
+
+    final Context mContext;
+    int mLoadAppearance = LOAD_APPEARANCE_SYNC;
+    final String mSourcePath;
+    final String mDestPath;
+
+    public int getLoadAppearance() {
+        return mLoadAppearance;
+    }
+
+    public interface OnLoadedListener {
+        void onLoaded(String result);
+        void onPreExecute();
+    }
+
+    private AbstractLoader.OnLoadedListener mListener;
+
+    AbstractLoader(Context context) {
+        mContext = context;
+        mSourcePath = getSourcePath();
+        mDestPath = getDestPath();
+    }
+
+    protected abstract String getSourcePath();
+
+    protected abstract String getDestPath();
+
+    public void setOnLoadedListener(AbstractLoader.OnLoadedListener listener) {
+        mListener = listener;
+    }
+
+    private class LoadAsyncTask extends AsyncTask<Void, Void, String> {
+        @Override
+        protected void onPreExecute() {
+            if (mListener != null)
+                mListener.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            try {
+                load();
+            } catch (Exception e) {
+                return e.getMessage();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            if (mListener != null)
+                mListener.onLoaded(result);
+        }
+    }
+
+    protected abstract void load() throws Exception;
+
+    public void execute() {
+        new AbstractLoader.LoadAsyncTask().execute();
+    }
+}
