@@ -20,6 +20,9 @@ public class PreferenceRepository {
     public static final int SOURCE_TYPE_DROPBOX = 1;
     public static final int DEFAULT_SOURCE_TYPE = SOURCE_TYPE_FILE;
 
+    public static final long PREF_LOAD_NEVER = 0;
+    public static final long PREF_LOAD_LOADING = 1;
+
     public static final String PREF_KEY_SOURCE_PATH = "pref_source_path";
     public static final String PREF_KEY_SOURCE_TYPE = "pref_source_type";
     public static final String PREF_KEY_LOAD = "pref_load";
@@ -54,9 +57,9 @@ public class PreferenceRepository {
     public static void updateLoadPreferenceSummary(PreferenceFragment preferenceFragment, long value) {
         Preference prefLoad = preferenceFragment.findPreference(PREF_KEY_LOAD);
 
-        if (value == 0)
+        if (value == PREF_LOAD_NEVER)
             prefLoad.setSummary(R.string.pref_message_last_loaded_never);
-        else if (value == 1)
+        else if (value == PREF_LOAD_LOADING)
             prefLoad.setSummary(R.string.caption_loading);
         else
             prefLoad.setSummary(String.format(

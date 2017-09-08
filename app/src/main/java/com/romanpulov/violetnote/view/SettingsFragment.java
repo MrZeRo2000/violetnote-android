@@ -38,7 +38,7 @@ public class SettingsFragment extends PreferenceFragment {
                 PreferenceRepository.displayMessage(getActivity(), result);
             }
 
-            PreferenceRepository.updateLoadPreferenceSummary(SettingsFragment.this, prefLoad.getPreferenceManager().getSharedPreferences().getLong(PreferenceRepository.PREF_KEY_LAST_LOADED, 0L));
+            PreferenceRepository.updateLoadPreferenceSummary(SettingsFragment.this, prefLoad.getPreferenceManager().getSharedPreferences().getLong(PreferenceRepository.PREF_KEY_LAST_LOADED, PreferenceRepository.PREF_LOAD_NEVER));
 
             mDocumentLoader = null;
         }
@@ -46,7 +46,7 @@ public class SettingsFragment extends PreferenceFragment {
         @Override
         public void onPreExecute() {
             if (mDocumentLoader.getLoadAppearance() == DocumentLoader.LOAD_APPEARANCE_ASYNC)
-                PreferenceRepository.updateLoadPreferenceSummary(SettingsFragment.this, 1);
+                PreferenceRepository.updateLoadPreferenceSummary(SettingsFragment.this, PreferenceRepository.PREF_LOAD_LOADING);
         }
     };
 
@@ -74,7 +74,7 @@ public class SettingsFragment extends PreferenceFragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         if (mDocumentLoader != null)
-            PreferenceRepository.updateLoadPreferenceSummary(this, 1);
+            PreferenceRepository.updateLoadPreferenceSummary(this, PreferenceRepository.PREF_LOAD_LOADING);
     }
 
     @Override
@@ -87,7 +87,7 @@ public class SettingsFragment extends PreferenceFragment {
 
     private void setupPrefLoad() {
         Preference prefLoad = findPreference(PreferenceRepository.PREF_KEY_LOAD);
-        PreferenceRepository.updateLoadPreferenceSummary(this, prefLoad.getPreferenceManager().getSharedPreferences().getLong(PreferenceRepository.PREF_KEY_LAST_LOADED, 0L));
+        PreferenceRepository.updateLoadPreferenceSummary(this, prefLoad.getPreferenceManager().getSharedPreferences().getLong(PreferenceRepository.PREF_KEY_LAST_LOADED, PreferenceRepository.PREF_LOAD_NEVER));
 
         prefLoad.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
