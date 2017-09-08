@@ -30,6 +30,7 @@ public class PreferenceRepository {
     public static final String PREF_KEY_ACCOUNT_DROPBOX = "pref_account_dropbox";
     public static final String PREF_KEY_BASIC_NOTE_LOCAL_BACKUP = "pref_basic_note_local_backup";
     public static final String PREF_KEY_BASIC_NOTE_LOCAL_RESTORE = "pref_basic_note_local_restore";
+    public static final String PREF_KEY_BASIC_NOTE_CLOUD_STORAGE =  "pref_basic_note_cloud_storage";
 
     /**
      * Sets and commits Source Path Preference value

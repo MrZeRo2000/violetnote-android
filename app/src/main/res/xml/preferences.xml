@@ -38,8 +38,8 @@
         >
         <Preference
             android:key="pref_basic_note_cloud_storage"
-            android:title="@string/pref_title_basic_note_cloud_storage"
-            android:summary="@string/pref_summary_basic_note_cloud_storage"
+            android:title="@string/pref_title_basic_note_cloud_storage_type"
+            android:summary="@string/pref_summary_basic_note_cloud_storage_type"
             />
         <Preference
             android:key="pref_basic_note_cloud_backup"

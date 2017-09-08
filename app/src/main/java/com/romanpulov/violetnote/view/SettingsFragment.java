@@ -16,6 +16,7 @@ import com.romanpulov.violetnote.loader.DocumentLoaderFactory;
 import com.romanpulov.violetnote.filechooser.FileChooserActivity;
 import com.romanpulov.violetnote.dropbox.DropBoxHelper;
 import com.romanpulov.violetnote.view.preference.AccountDropboxPreferenceSetup;
+import com.romanpulov.violetnote.view.preference.CloudStorageTypePreferenceSetup;
 import com.romanpulov.violetnote.view.preference.LocalBackupPreferenceSetup;
 import com.romanpulov.violetnote.view.preference.LocalRestorePreferenceSetup;
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
@@ -68,6 +69,7 @@ public class SettingsFragment extends PreferenceFragment {
         new AccountDropboxPreferenceSetup(this).execute();
         new LocalBackupPreferenceSetup(this).execute();
         new LocalRestorePreferenceSetup(this).execute();
+        new CloudStorageTypePreferenceSetup(this).execute();
     }
 
     @Override
