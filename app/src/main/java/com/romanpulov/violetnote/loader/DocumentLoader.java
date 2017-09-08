@@ -1,11 +1,11 @@
 package com.romanpulov.violetnote.loader;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 
-import com.romanpulov.violetnote.view.SettingsFragment;
 import com.romanpulov.violetnote.model.Document;
+import com.romanpulov.violetnote.view.preference.PreferenceRepository;
+
 
 /**
  * Base class for DocumentLoader
@@ -22,7 +22,7 @@ public abstract class DocumentLoader extends AbstractLoader {
     }
 
     protected String getSourcePath() {
-        return PreferenceManager.getDefaultSharedPreferences(mContext).getString(SettingsFragment.PREF_KEY_SOURCE_PATH, null);
+        return PreferenceManager.getDefaultSharedPreferences(mContext).getString(PreferenceRepository.PREF_KEY_SOURCE_PATH, null);
     }
 
     protected String getDestPath() {

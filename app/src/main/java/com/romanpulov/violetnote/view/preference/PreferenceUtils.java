@@ -5,7 +5,4 @@ package com.romanpulov.violetnote.view.preference;
  */
 
 public class PreferenceUtils {
-    public static void setSourcePathPreferenceValue(String value) {
-
-    }
 }

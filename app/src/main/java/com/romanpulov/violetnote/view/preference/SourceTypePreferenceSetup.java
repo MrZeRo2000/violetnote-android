@@ -2,9 +2,13 @@ package com.romanpulov.violetnote.view.preference;
 
 import android.content.DialogInterface;
 import android.preference.Preference;
+import android.preference.PreferenceFragment;
 import android.support.v7.app.AlertDialog;
 
 import com.romanpulov.violetnote.R;
+
+import static com.romanpulov.violetnote.view.preference.PreferenceRepository.DEFAULT_SOURCE_TYPE;
+import static com.romanpulov.violetnote.view.preference.PreferenceRepository.PREF_KEY_SOURCE_TYPE;
 
 /**
  * Created by romanpulov on 06.09.2017.
@@ -13,9 +17,9 @@ import com.romanpulov.violetnote.R;
 public class SourceTypePreferenceSetup extends PreferenceSetup {
     private final int mDefaultValue;
 
-    public SourceTypePreferenceSetup(Preference preference, int defaultValue) {
-        super(preference);
-        mDefaultValue = defaultValue;
+    public SourceTypePreferenceSetup(PreferenceFragment preferenceFragment) {
+        super(preferenceFragment, PREF_KEY_SOURCE_TYPE);
+        mDefaultValue = DEFAULT_SOURCE_TYPE;
     }
 
     @Override
@@ -57,7 +61,7 @@ public class SourceTypePreferenceSetup extends PreferenceSetup {
                                 if (oldSourceType != newSourceType) {
                                     preference.getPreferenceManager().getSharedPreferences().edit().putInt(preference.getKey(), newSourceType).commit();
                                     preference.setSummary(prefSourceTypeEntries[preference.getPreferenceManager().getSharedPreferences().getInt(preference.getKey(), mDefaultValue)]);
-                                    setSourcePathPreferenceValue(null);
+                                    PreferenceRepository.setSourcePathPreferenceValue(mPreferenceFragment, null);
                                 }
                             }
                         })
