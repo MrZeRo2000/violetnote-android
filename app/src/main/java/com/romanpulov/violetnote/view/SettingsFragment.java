@@ -11,14 +11,13 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.romanpulov.violetnote.R;
-import com.romanpulov.violetnote.loader.DocumentLoader;
-import com.romanpulov.violetnote.loader.DocumentLoaderFactory;
 import com.romanpulov.violetnote.filechooser.FileChooserActivity;
 import com.romanpulov.violetnote.dropbox.DropBoxHelper;
 import com.romanpulov.violetnote.view.preference.AccountDropboxPreferenceSetup;
 import com.romanpulov.violetnote.view.preference.CloudStorageTypePreferenceSetup;
 import com.romanpulov.violetnote.view.preference.LocalBackupPreferenceSetup;
 import com.romanpulov.violetnote.view.preference.LocalRestorePreferenceSetup;
+import com.romanpulov.violetnote.view.preference.PreferenceLoaderProcessor;
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 import com.romanpulov.violetnote.view.preference.SourcePathPreferenceSetup;
 import com.romanpulov.violetnote.view.preference.SourceTypePreferenceSetup;
@@ -26,30 +25,7 @@ import com.romanpulov.violetnote.view.preference.SourceTypePreferenceSetup;
 public class SettingsFragment extends PreferenceFragment {
     public static final String TAG = "SettingsFragment";
 
-    private DocumentLoader mDocumentLoader;
-
-    private final DocumentLoader.OnLoadedListener mDocumentLoaderListener = new DocumentLoader.OnLoadedListener() {
-        @Override
-        public void onLoaded(String result) {
-            Preference prefLoad = findPreference(PreferenceRepository.PREF_KEY_LOAD);
-
-            if (result == null) {
-                prefLoad.getPreferenceManager().getSharedPreferences().edit().putLong(PreferenceRepository.PREF_KEY_LAST_LOADED, System.currentTimeMillis()).commit();
-            } else {
-                PreferenceRepository.displayMessage(getActivity(), result);
-            }
-
-            PreferenceRepository.updateLoadPreferenceSummary(SettingsFragment.this, prefLoad.getPreferenceManager().getSharedPreferences().getLong(PreferenceRepository.PREF_KEY_LAST_LOADED, PreferenceRepository.PREF_LOAD_NEVER));
-
-            mDocumentLoader = null;
-        }
-
-        @Override
-        public void onPreExecute() {
-            if (mDocumentLoader.getLoadAppearance() == DocumentLoader.LOAD_APPEARANCE_ASYNC)
-                PreferenceRepository.updateLoadPreferenceSummary(SettingsFragment.this, PreferenceRepository.PREF_LOAD_LOADING);
-        }
-    };
+    private PreferenceLoaderProcessor mPreferenceLoaderProcessor;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -62,6 +38,8 @@ public class SettingsFragment extends PreferenceFragment {
 
         addPreferencesFromResource(R.xml.preferences);
 
+        mPreferenceLoaderProcessor = new PreferenceLoaderProcessor(this);
+
         setupPrefLoad();
 
         new SourceTypePreferenceSetup(this).execute();
@@ -72,11 +50,31 @@ public class SettingsFragment extends PreferenceFragment {
         new CloudStorageTypePreferenceSetup(this).execute();
     }
 
+    private void setupPrefLoad() {
+        Preference prefLoad = findPreference(PreferenceRepository.PREF_KEY_LOAD);
+        PreferenceRepository.updateLoadPreferenceSummary(this, PreferenceRepository.PREF_LOAD_CURRENT_VALUE);
+
+        prefLoad.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                final Preference prefSourceType = findPreference(PreferenceRepository.PREF_KEY_SOURCE_TYPE);
+                int type = prefSourceType.getPreferenceManager().getSharedPreferences().getInt(prefSourceType.getKey(), PreferenceRepository.DEFAULT_SOURCE_TYPE);
+
+                if (mPreferenceLoaderProcessor.getDocumentLoader() == null)
+                    mPreferenceLoaderProcessor.executeDocumentLoader(type);
+                else
+                    PreferenceRepository.displayMessage(getActivity(), getText(R.string.error_load_process_running));
+
+                return true;
+            }
+        });
+    }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        if (mDocumentLoader != null)
-            PreferenceRepository.updateLoadPreferenceSummary(this, PreferenceRepository.PREF_LOAD_LOADING);
+        if (mPreferenceLoaderProcessor != null)
+            mPreferenceLoaderProcessor.updateLoadPreferenceStatus();
     }
 
     @Override
@@ -85,30 +83,6 @@ public class SettingsFragment extends PreferenceFragment {
             String resultPath = data.getStringExtra(FileChooserActivity.CHOOSER_RESULT_PATH);
             PreferenceRepository.setSourcePathPreferenceValue(this, resultPath);
         }
-    }
-
-    private void setupPrefLoad() {
-        Preference prefLoad = findPreference(PreferenceRepository.PREF_KEY_LOAD);
-        PreferenceRepository.updateLoadPreferenceSummary(this, prefLoad.getPreferenceManager().getSharedPreferences().getLong(PreferenceRepository.PREF_KEY_LAST_LOADED, PreferenceRepository.PREF_LOAD_NEVER));
-
-        prefLoad.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                final Preference prefSourceType = findPreference(PreferenceRepository.PREF_KEY_SOURCE_TYPE);
-                int type = prefSourceType.getPreferenceManager().getSharedPreferences().getInt(prefSourceType.getKey(), PreferenceRepository.DEFAULT_SOURCE_TYPE);
-
-                if (mDocumentLoader == null) {
-                    mDocumentLoader = DocumentLoaderFactory.fromType(getActivity(), type);
-                    if (mDocumentLoader != null) {
-                        mDocumentLoader.setOnLoadedListener(mDocumentLoaderListener);
-                        mDocumentLoader.execute();
-                    }
-                } else
-                    PreferenceRepository.displayMessage(getActivity(), getText(R.string.error_load_process_running));
-
-                return true;
-            }
-        });
     }
 
     @Override

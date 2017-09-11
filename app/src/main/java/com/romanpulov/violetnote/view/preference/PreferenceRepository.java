@@ -22,6 +22,7 @@ public class PreferenceRepository {
 
     public static final long PREF_LOAD_NEVER = 0;
     public static final long PREF_LOAD_LOADING = 1;
+    public static final long PREF_LOAD_CURRENT_VALUE = 2;
 
     public static final String PREF_KEY_SOURCE_PATH = "pref_source_path";
     public static final String PREF_KEY_SOURCE_TYPE = "pref_source_type";
@@ -58,13 +59,16 @@ public class PreferenceRepository {
     public static void updateLoadPreferenceSummary(PreferenceFragment preferenceFragment, long value) {
         Preference prefLoad = preferenceFragment.findPreference(PREF_KEY_LOAD);
 
-        if (value == PREF_LOAD_NEVER)
-            prefLoad.setSummary(R.string.pref_message_last_loaded_never);
-        else if (value == PREF_LOAD_LOADING)
+        if (value == PREF_LOAD_LOADING)
             prefLoad.setSummary(R.string.caption_loading);
-        else
-            prefLoad.setSummary(String.format(
-                    prefLoad.getContext().getResources().getString(R.string.pref_message_last_loaded_format),
-                    DateFormat.getDateTimeInstance().format(new Date(value))));
+        else {
+            long displayValue = prefLoad.getPreferenceManager().getSharedPreferences().getLong(PreferenceRepository.PREF_KEY_LAST_LOADED, PreferenceRepository.PREF_LOAD_NEVER);
+            if (displayValue == PREF_LOAD_NEVER)
+                prefLoad.setSummary(R.string.pref_message_last_loaded_never);
+            else
+                prefLoad.setSummary(String.format(
+                        prefLoad.getContext().getResources().getString(R.string.pref_message_last_loaded_format),
+                        DateFormat.getDateTimeInstance().format(new Date(displayValue))));
+        }
     }
 }
