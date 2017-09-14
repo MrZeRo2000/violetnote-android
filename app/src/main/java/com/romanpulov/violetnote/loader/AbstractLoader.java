@@ -12,8 +12,9 @@ public abstract class AbstractLoader {
     public static final int LOAD_APPEARANCE_SYNC = 0;
     public static final int LOAD_APPEARANCE_ASYNC = 1;
 
-    final Context mContext;
-    int mLoadAppearance = LOAD_APPEARANCE_SYNC;
+    protected final Context mContext;
+    protected int mLoadAppearance = LOAD_APPEARANCE_SYNC;
+    protected AsyncTask mTask;
 
     public int getLoadAppearance() {
         return mLoadAppearance;
@@ -44,6 +45,7 @@ public abstract class AbstractLoader {
         @Override
         protected String doInBackground(Void... voids) {
             try {
+                Thread.sleep(3000);
                 load();
             } catch (Exception e) {
                 return e.getMessage();
@@ -61,6 +63,10 @@ public abstract class AbstractLoader {
     protected abstract void load() throws Exception;
 
     public void execute() {
-        new AbstractLoader.LoadAsyncTask().execute();
+        mTask = new AbstractLoader.LoadAsyncTask().execute();
+    }
+
+    public boolean isTaskRunning() {
+        return (mTask != null) && (mTask.getStatus() != AsyncTask.Status.FINISHED);
     }
 }
