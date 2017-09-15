@@ -18,24 +18,22 @@ public class PreferenceDocumentLoaderProcessor extends PreferenceLoaderProcessor
         super(preferenceFragment);
     }
 
-    public AbstractLoader createDocumentLoader(int type) {
+    private AbstractLoader createDocumentLoader(int type) {
         mLoader = DocumentLoaderFactory.fromType(mPreferenceFragment.getActivity(), type);
         if (mLoader != null) {
             mLoader.setOnLoadedListener(new AbstractLoader.OnLoadedListener() {
                 @Override
                 public void onLoaded(String result) {
-                    Preference prefLoad = mPreferenceFragment.findPreference(PreferenceRepository.PREF_KEY_LOAD);
+                    Preference pref = mPreferenceFragment.findPreference(PreferenceRepository.PREF_KEY_LOAD);
 
                     if (result == null) {
                         long loadedTime = System.currentTimeMillis();
-                        prefLoad.getPreferenceManager().getSharedPreferences().edit().putLong(PreferenceRepository.PREF_KEY_LAST_LOADED, loadedTime).apply();
+                        pref.getPreferenceManager().getSharedPreferences().edit().putLong(PreferenceRepository.PREF_KEY_LAST_LOADED, loadedTime).apply();
                         PreferenceRepository.updateLoadPreferenceSummary(mPreferenceFragment, loadedTime);
                     } else {
                         PreferenceRepository.displayMessage(mPreferenceFragment.getActivity(), result);
                         PreferenceRepository.updateLoadPreferenceSummary(mPreferenceFragment, PreferenceRepository.PREF_LOAD_CURRENT_VALUE);
                     }
-
-                    //mLoader = null;
                 }
 
                 @Override
@@ -60,8 +58,7 @@ public class PreferenceDocumentLoaderProcessor extends PreferenceLoaderProcessor
         if (mLoader == null)
             createDocumentLoader(type);
 
-        if ((mLoader != null) && !mLoader.isTaskRunning())
-            mLoader.execute();
+        executeLoader(mLoader);
 
         return mLoader;
     }

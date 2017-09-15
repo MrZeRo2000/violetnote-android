@@ -18,6 +18,7 @@ import com.romanpulov.violetnote.view.preference.AccountDropboxPreferenceSetup;
 import com.romanpulov.violetnote.view.preference.CloudStorageTypePreferenceSetup;
 import com.romanpulov.violetnote.view.preference.LocalBackupPreferenceSetup;
 import com.romanpulov.violetnote.view.preference.LocalRestorePreferenceSetup;
+import com.romanpulov.violetnote.view.preference.PreferenceBackupDropboxProcessor;
 import com.romanpulov.violetnote.view.preference.PreferenceDocumentLoaderProcessor;
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 import com.romanpulov.violetnote.view.preference.SourcePathPreferenceSetup;
@@ -27,6 +28,7 @@ public class SettingsFragment extends PreferenceFragment {
     public static final String TAG = "SettingsFragment";
 
     private PreferenceDocumentLoaderProcessor mPreferenceDocumentLoaderProcessor;
+    private PreferenceBackupDropboxProcessor mPreferenceBackupDropboxProcessor;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -40,8 +42,10 @@ public class SettingsFragment extends PreferenceFragment {
         addPreferencesFromResource(R.xml.preferences);
 
         mPreferenceDocumentLoaderProcessor = new PreferenceDocumentLoaderProcessor(this);
-
         setupPrefDocumentLoad();
+
+        mPreferenceBackupDropboxProcessor = new PreferenceBackupDropboxProcessor(this);
+        setupPrefDropboxBackupLoad();
 
         new SourceTypePreferenceSetup(this).execute();
         new SourcePathPreferenceSetup(this).execute();
@@ -52,10 +56,27 @@ public class SettingsFragment extends PreferenceFragment {
     }
 
     private void setupPrefDocumentLoad() {
-        Preference prefLoad = findPreference(PreferenceRepository.PREF_KEY_LOAD);
         PreferenceRepository.updateLoadPreferenceSummary(this, PreferenceRepository.PREF_LOAD_CURRENT_VALUE);
 
-        prefLoad.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        Preference pref = findPreference(PreferenceRepository.PREF_KEY_LOAD);
+        pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                if (mPreferenceDocumentLoaderProcessor.isTaskRunning())
+                    PreferenceRepository.displayMessage(getActivity(), getText(R.string.error_load_process_running));
+                else
+                    mPreferenceBackupDropboxProcessor.executeLoader();
+
+                return true;
+            }
+        });
+    }
+
+    private void setupPrefDropboxBackupLoad() {
+        PreferenceRepository.updateLoadPreferenceSummary(this, PreferenceRepository.PREF_LOAD_CURRENT_VALUE);
+
+        Preference pref = findPreference(PreferenceRepository.PREF_KEY_BASIC_NOTE_CLOUD_BACKUP);
+        pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 if (mPreferenceDocumentLoaderProcessor.isTaskRunning())
@@ -71,6 +92,7 @@ public class SettingsFragment extends PreferenceFragment {
             }
         });
     }
+
 
     @Override
     public void onAttach(Activity activity) {

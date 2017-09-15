@@ -26,15 +26,20 @@ public class PreferenceRepository {
 
     public static final String PREF_KEY_SOURCE_PATH = "pref_source_path";
     public static final String PREF_KEY_SOURCE_TYPE = "pref_source_type";
+
     public static final String PREF_KEY_LOAD = "pref_load";
     public static final String PREF_KEY_LAST_LOADED = "pref_last_loaded";
+
     public static final String PREF_KEY_ACCOUNT_DROPBOX = "pref_account_dropbox";
 
     public static final String PREF_KEY_BASIC_NOTE_LOCAL_BACKUP = "pref_basic_note_local_backup";
     public static final String PREF_KEY_BASIC_NOTE_LOCAL_RESTORE = "pref_basic_note_local_restore";
 
     public static final String PREF_KEY_BASIC_NOTE_CLOUD_STORAGE =  "pref_basic_note_cloud_storage";
+
     public static final String PREF_KEY_BASIC_NOTE_CLOUD_BACKUP =  "pref_basic_note_cloud_backup";
+    public static final String PREF_KEY_BASIC_NOTE_CLOUD_BACKUP_LAST_LOADED =  "pref_basic_note_cloud_backup_last_loaded";
+
     public static final String PREF_KEY_BASIC_NOTE_CLOUD_RESTORE =  "pref_basic_note_cloud_restore";
 
     /**
@@ -56,17 +61,29 @@ public class PreferenceRepository {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 
-    /**
-     * Updates summary for preference after update
-     * @param value new value
-     */
     public static void updateLoadPreferenceSummary(PreferenceFragment preferenceFragment, long value) {
-        Preference prefLoad = preferenceFragment.findPreference(PREF_KEY_LOAD);
+        updateLoadPreferenceSummary(preferenceFragment, PREF_KEY_LOAD, PREF_KEY_LAST_LOADED, value);
+    }
+
+    public static void updateDropboxBackupPreferenceSummary(PreferenceFragment preferenceFragment, long value) {
+        updateLoadPreferenceSummary(preferenceFragment, PREF_KEY_BASIC_NOTE_CLOUD_BACKUP, PREF_KEY_BASIC_NOTE_CLOUD_BACKUP_LAST_LOADED, value);
+    }
+
+
+    /**
+     * Updated preference summary
+     * @param preferenceFragment Fragment
+     * @param preferenceKey preference name
+     * @param preferenceLastLoadedKey preference last loaded time
+     * @param value value to update
+     */
+    public static void updateLoadPreferenceSummary(PreferenceFragment preferenceFragment, String preferenceKey, String preferenceLastLoadedKey, long value) {
+        Preference prefLoad = preferenceFragment.findPreference(preferenceKey);
 
         if (value == PREF_LOAD_LOADING)
             prefLoad.setSummary(R.string.caption_loading);
         else {
-            long displayValue = prefLoad.getPreferenceManager().getSharedPreferences().getLong(PreferenceRepository.PREF_KEY_LAST_LOADED, PreferenceRepository.PREF_LOAD_NEVER);
+            long displayValue = prefLoad.getPreferenceManager().getSharedPreferences().getLong(preferenceLastLoadedKey, PreferenceRepository.PREF_LOAD_NEVER);
             if (displayValue == PREF_LOAD_NEVER)
                 prefLoad.setSummary(R.string.pref_message_last_loaded_never);
             else
@@ -75,4 +92,5 @@ public class PreferenceRepository {
                         DateFormat.getDateTimeInstance().format(new Date(displayValue))));
         }
     }
+
 }
