@@ -54,4 +54,9 @@ public class BackupDropboxUploader extends AbstractLoader {
             }
         }
     }
+
+    @Override
+    public boolean isInternetRequired() {
+        return true;
+    }
 }

@@ -46,6 +46,11 @@ public class DocumentDropboxLoader extends DocumentLoader {
         }
     }
 
+    @Override
+    public boolean isInternetRequired() {
+        return true;
+    }
+
     public DocumentDropboxLoader(Context context) {
         super(context);
         mLoadAppearance = LOAD_APPEARANCE_ASYNC;

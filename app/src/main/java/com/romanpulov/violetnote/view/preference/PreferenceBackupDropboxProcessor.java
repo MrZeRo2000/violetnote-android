@@ -43,12 +43,14 @@ public class PreferenceBackupDropboxProcessor extends PreferenceLoaderProcessor{
         return mLoader;
     }
 
-    public AbstractLoader executeLoader() {
+    /**
+     * Gets or creates BackupDropboxUploader
+     * @return
+     */
+    public AbstractLoader getBackupDropboxUploader() {
         if (mLoader == null)
-            createBackupDropboxUploader();
-
-        PreferenceLoaderProcessor.executeLoader(mLoader);
-
-        return mLoader;
+            return createBackupDropboxUploader();
+        else
+            return mLoader;
     }
 }

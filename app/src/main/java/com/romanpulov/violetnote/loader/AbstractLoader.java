@@ -62,6 +62,8 @@ public abstract class AbstractLoader {
 
     protected abstract void load() throws Exception;
 
+    public abstract boolean isInternetRequired();
+
     public void execute() {
         mTask = new AbstractLoader.LoadAsyncTask().execute();
     }

@@ -34,6 +34,11 @@ public class DocumentFileLoader extends DocumentLoader {
         }
     }
 
+    @Override
+    public boolean isInternetRequired() {
+        return false;
+    }
+
     public DocumentFileLoader(Context context) {
         super(context);
     }

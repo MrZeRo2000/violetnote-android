@@ -48,19 +48,17 @@ public class PreferenceDocumentLoaderProcessor extends PreferenceLoaderProcessor
         return mLoader;
     }
 
+
     /**
-     * Creates and executes DocumentLoader
-     * @param type Document Type
-     * @return DocumentLoader instance
+     * Gets or creates a document loader
+     * @param type document loader type
+     * @return loader
      */
-    public AbstractLoader executeDocumentLoader(int type) {
-        // create loader if not exists
+    public AbstractLoader getDocumentLoader(int type) {
         if (mLoader == null)
-            createDocumentLoader(type);
-
-        executeLoader(mLoader);
-
-        return mLoader;
+            return createDocumentLoader(type);
+        else
+            return mLoader;
     }
 
     /**

@@ -9,6 +9,7 @@ import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.dropbox.DropBoxHelper;
 import com.romanpulov.violetnote.dropboxchooser.DropboxChooserActivity;
 import com.romanpulov.violetnote.filechooser.FileChooserActivity;
+import com.romanpulov.violetnote.network.NetworkUtils;
 
 import static com.romanpulov.violetnote.view.preference.PreferenceRepository.DEFAULT_SOURCE_TYPE;
 import static com.romanpulov.violetnote.view.preference.PreferenceRepository.PREF_KEY_SOURCE_PATH;
@@ -44,17 +45,21 @@ public class SourcePathPreferenceSetup extends PreferenceSetup {
                         mPreferenceFragment.startActivityForResult(intent, 0);
                         return true;
                     case SOURCE_TYPE_DROPBOX:
-                        try {
-                            DropBoxHelper.getInstance(mActivity.getApplication()).validateDropBox();
+                        if (!NetworkUtils.isNetworkAvailable(mContext))
+                            PreferenceRepository.displayMessage(mActivity,mActivity.getResources().getString(R.string.error_internet_not_available));
+                        else {
+                            try {
+                                DropBoxHelper.getInstance(mActivity.getApplication()).validateDropBox();
 
-                            intent = new Intent(mActivity, DropboxChooserActivity.class);
-                            intent.putExtra(DropboxChooserActivity.CHOOSER_INITIAL_PATH, mPreferenceFragment.getPreferenceManager().getSharedPreferences().getString(PREF_KEY_SOURCE_PATH, Environment.getRootDirectory().getAbsolutePath()));
-                            mPreferenceFragment.startActivityForResult(intent, 0);
-                            return true;
-                        } catch (DropBoxHelper.DBHNoAccessTokenException e) {
-                            PreferenceRepository.displayMessage(mActivity, mActivity.getResources().getString(R.string.error_dropbox_auth));
-                        } catch (DropBoxHelper.DBHException e) {
-                            PreferenceRepository.displayMessage(mActivity, String.format(mActivity.getResources().getString(R.string.error_dropbox_other), e.getMessage()));
+                                intent = new Intent(mActivity, DropboxChooserActivity.class);
+                                intent.putExtra(DropboxChooserActivity.CHOOSER_INITIAL_PATH, mPreferenceFragment.getPreferenceManager().getSharedPreferences().getString(PREF_KEY_SOURCE_PATH, Environment.getRootDirectory().getAbsolutePath()));
+                                mPreferenceFragment.startActivityForResult(intent, 0);
+                                return true;
+                            } catch (DropBoxHelper.DBHNoAccessTokenException e) {
+                                PreferenceRepository.displayMessage(mActivity, mActivity.getResources().getString(R.string.error_dropbox_auth));
+                            } catch (DropBoxHelper.DBHException e) {
+                                PreferenceRepository.displayMessage(mActivity, String.format(mActivity.getResources().getString(R.string.error_dropbox_other), e.getMessage()));
+                            }
                         }
 
                     default:

@@ -83,6 +83,7 @@
     <string name="error_backup">Error creating backup</string>
     <string name="error_restore">Error restoring backup</string>
     <string name="error_load_process_running">Load process is running</string>
+    <string name="error_internet_not_available">Internet connection is not available</string>
 
     <!-- Messages -->
     <string name="message_backup_created">Successfully created backup %s</string>
