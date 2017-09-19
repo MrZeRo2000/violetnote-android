@@ -67,6 +67,5 @@ public class SourcePathPreferenceSetup extends PreferenceSetup {
                 }
             }
         });
-
     }
 }
