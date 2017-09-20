@@ -1,64 +1,29 @@
 package com.romanpulov.violetnote.loader;
 
 import android.content.Context;
-import com.dropbox.core.v2.DbxClientV2;
-import com.dropbox.core.v2.files.FileMetadata;
-import com.dropbox.core.v2.files.Metadata;
-import com.romanpulov.violetnote.R;
-import com.romanpulov.violetnote.dropbox.DropBoxHelper;
+import android.preference.PreferenceManager;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import com.romanpulov.violetnote.model.Document;
+import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 
 /**
- * DropBox file loader
- * Created by romanpulov on 01.07.2016. *
+ * Document file loader for DropBox
+ * Created by romanpulov on 20.09.2017.
  */
-public class DocumentDropboxFileLoader extends DocumentLoader {
-    private final DbxClientV2 mClient;
-    private final DropBoxHelper mDropBoxHelper;
 
-    @Override
-    protected void load() throws Exception {
-        String accessToken = mDropBoxHelper.getAccessToken();
-        if (accessToken == null)
-            throw new Exception(mContext.getResources().getString(R.string.error_dropbox_auth));
+public class DocumentDropboxFileLoader extends DropboxFileLoader {
 
-        Metadata m = mClient.files().getMetadata(mSourcePath);
-        if ((m == null) || !(m instanceof FileMetadata))
-            throw new Exception(String.format(mContext.getText(R.string.error_dropbox_load_file_data).toString(), mSourcePath));
-
-        FileMetadata fm = (FileMetadata) m;
-
-        File mDestFile = new File(mDestPath);
-        OutputStream outputStream = new FileOutputStream(mDestFile);
-        try {
-            mClient.files().download(fm.getPathLower(), fm.getRev()).download(outputStream);
-        } finally {
-            try {
-                outputStream.flush();
-                outputStream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    @Override
-    public boolean isInternetRequired() {
-        return true;
-    }
-
-    public DocumentDropboxFileLoader(Context context) {
+    DocumentDropboxFileLoader(Context context) {
         super(context);
-        //appearance
-        mLoadAppearance = LOAD_APPEARANCE_ASYNC;
+    }
 
-        //dropbox
-        mDropBoxHelper = DropBoxHelper.getInstance(context.getApplicationContext());
-        mClient = mDropBoxHelper.getClient();
+    @Override
+    protected String getSourcePath() {
+        return PreferenceManager.getDefaultSharedPreferences(mContext).getString(PreferenceRepository.PREF_KEY_SOURCE_PATH, null);
+    }
 
+    @Override
+    protected String getDestPath() {
+        return mContext.getCacheDir() + Document.DOCUMENT_FILE_NAME;
     }
 }
