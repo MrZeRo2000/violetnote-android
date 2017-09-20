@@ -41,6 +41,7 @@ public class PreferenceRepository {
     public static final String PREF_KEY_BASIC_NOTE_CLOUD_BACKUP_LAST_LOADED =  "pref_basic_note_cloud_backup_last_loaded";
 
     public static final String PREF_KEY_BASIC_NOTE_CLOUD_RESTORE =  "pref_basic_note_cloud_restore";
+    public static final String PREF_KEY_BASIC_NOTE_CLOUD_RESTORE_LAST_LOADED =  "pref_basic_note_cloud_restore_last_loaded";
 
     /**
      * Sets and commits Source Path Preference value
@@ -69,6 +70,14 @@ public class PreferenceRepository {
         updateLoadPreferenceSummary(preferenceFragment, PREF_KEY_BASIC_NOTE_CLOUD_BACKUP, PREF_KEY_BASIC_NOTE_CLOUD_BACKUP_LAST_LOADED, value);
     }
 
+    public static void updateDropboxRestorePreferenceSummary(PreferenceFragment preferenceFragment, long value) {
+        updateLoadPreferenceSummary(preferenceFragment, PREF_KEY_BASIC_NOTE_CLOUD_RESTORE, PREF_KEY_BASIC_NOTE_CLOUD_RESTORE_LAST_LOADED, value);
+    }
+
+    public static void setDropboxRestoreDefaultPreferenceSummary(PreferenceFragment preferenceFragment) {
+        Preference pref = preferenceFragment.findPreference(PREF_KEY_BASIC_NOTE_CLOUD_RESTORE);
+        pref.setSummary(R.string.pref_summary_basic_note_cloud_restore);
+    }
 
     /**
      * Updated preference summary

@@ -2,6 +2,7 @@ package com.romanpulov.violetnote.db;
 
 import android.content.Context;
 
+import com.romanpulov.library.common.io.ZipFileUtils;
 import com.romanpulov.library.common.storage.BackupUtils;
 
 import java.io.File;
@@ -43,5 +44,13 @@ public class DBStorageManager {
      */
     public String restoreLocalBackup() {
         return mBackupUtils.restoreLocalBackup();
+    }
+
+    /**
+     * Returns local backup Zip file name
+     * @return Zip file name
+     */
+    public static String getLocalBackupZipFileName() {
+        return ZipFileUtils.getZipFileName(LOCAL_BACKUP_FILE_NAME);
     }
 }

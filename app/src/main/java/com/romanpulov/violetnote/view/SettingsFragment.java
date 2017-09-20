@@ -1,16 +1,19 @@
 package com.romanpulov.violetnote.view;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.db.DBBasicNoteHelper;
 import com.romanpulov.violetnote.db.DBStorageManager;
 import com.romanpulov.violetnote.filechooser.FileChooserActivity;
 import com.romanpulov.violetnote.dropbox.DropBoxHelper;
@@ -25,6 +28,7 @@ import com.romanpulov.violetnote.view.preference.PreferenceBackupDropboxProcesso
 import com.romanpulov.violetnote.view.preference.PreferenceDocumentLoaderProcessor;
 import com.romanpulov.violetnote.view.preference.PreferenceLoaderProcessor;
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
+import com.romanpulov.violetnote.view.preference.PreferenceRestoreDropboxProcessor;
 import com.romanpulov.violetnote.view.preference.SourcePathPreferenceSetup;
 import com.romanpulov.violetnote.view.preference.SourceTypePreferenceSetup;
 
@@ -35,6 +39,7 @@ public class SettingsFragment extends PreferenceFragment {
 
     private PreferenceDocumentLoaderProcessor mPreferenceDocumentLoaderProcessor;
     private PreferenceBackupDropboxProcessor mPreferenceBackupDropboxProcessor;
+    private PreferenceRestoreDropboxProcessor mPreferenceRestoreDropboxProcessor;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -52,6 +57,9 @@ public class SettingsFragment extends PreferenceFragment {
 
         mPreferenceBackupDropboxProcessor = new PreferenceBackupDropboxProcessor(this);
         setupPrefDropboxBackupLoad();
+
+        mPreferenceRestoreDropboxProcessor = new PreferenceRestoreDropboxProcessor(this);
+        setupPrefDropboxRestoreLoad();
 
         new SourceTypePreferenceSetup(this).execute();
         new SourcePathPreferenceSetup(this).execute();
@@ -95,6 +103,9 @@ public class SettingsFragment extends PreferenceFragment {
         });
     }
 
+    /**
+     * Dropbox backup
+     */
     private void setupPrefDropboxBackupLoad() {
         PreferenceRepository.updateDropboxBackupPreferenceSummary(this, PreferenceRepository.PREF_LOAD_CURRENT_VALUE);
 
@@ -106,18 +117,80 @@ public class SettingsFragment extends PreferenceFragment {
                 if (!checkInternetConnection())
                     return true;
 
-                // create local backup first
-                DBStorageManager storageManager = new DBStorageManager(getActivity());
-                String backupResult = storageManager.createRollingLocalBackup();
-
-                if (backupResult == null)
-                    PreferenceRepository.displayMessage(getActivity(), getString(R.string.error_backup));
+                if ((mPreferenceRestoreDropboxProcessor.isTaskRunning()) || mPreferenceBackupDropboxProcessor.isTaskRunning())
+                    PreferenceRepository.displayMessage(getActivity(), getText(R.string.error_load_process_running));
                 else {
-                    // create remote backup
-                    if (mPreferenceBackupDropboxProcessor.isTaskRunning())
-                        PreferenceRepository.displayMessage(getActivity(), getText(R.string.error_load_process_running));
-                    else
-                        PreferenceLoaderProcessor.executeLoader(mPreferenceBackupDropboxProcessor.getBackupDropboxUploader());
+
+                    // create local backup first
+                    DBStorageManager storageManager = new DBStorageManager(getActivity());
+                    String backupResult = storageManager.createRollingLocalBackup();
+
+                    if (backupResult == null)
+                        PreferenceRepository.displayMessage(getActivity(), getString(R.string.error_backup));
+                    else {
+                        // create remote backup
+                        if (mPreferenceBackupDropboxProcessor.isTaskRunning())
+                            PreferenceRepository.displayMessage(getActivity(), getText(R.string.error_load_process_running));
+                        else
+                            PreferenceLoaderProcessor.executeLoader(mPreferenceBackupDropboxProcessor.getBackupDropboxUploader());
+                    }
+                }
+
+                return true;
+            }
+        });
+    }
+
+    /**
+     * Dropbox restore
+     */
+    private void setupPrefDropboxRestoreLoad() {
+        Preference pref = findPreference(PreferenceRepository.PREF_KEY_BASIC_NOTE_CLOUD_RESTORE);
+        pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                //check if internet is available
+                if (!checkInternetConnection())
+                    return true;
+
+                if ((mPreferenceRestoreDropboxProcessor.isTaskRunning()) || mPreferenceBackupDropboxProcessor.isTaskRunning())
+                    PreferenceRepository.displayMessage(getActivity(), getText(R.string.error_load_process_running));
+                else {
+                    final AlertDialog.Builder alert = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
+                    alert
+                            .setTitle(R.string.ui_question_are_you_sure)
+                            .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                    PreferenceRepository.displayMessage(getActivity(), "Restore stub");
+
+                                    AbstractLoader loader  = mPreferenceRestoreDropboxProcessor.getRestoreDropboxLoader();
+                                    PreferenceLoaderProcessor.executeLoader(loader);
+
+                                    /*
+
+                                    DBBasicNoteHelper.getInstance(getActivity()).closeDB();
+
+                                    DBStorageManager storageManager = new DBStorageManager(getActivity());
+                                    String restoreResult = storageManager.restoreLocalBackup();
+
+                                    String restoreMessage;
+
+                                    if (restoreResult == null)
+                                        restoreMessage = mContext.getString(R.string.error_restore);
+                                    else
+                                        restoreMessage = String.format(Locale.getDefault(), mContext.getString(R.string.message_backup_restored), restoreResult);
+
+                                    DBBasicNoteHelper.getInstance(getActivity()).openDB();
+
+                                    PreferenceRepository.displayMessage(getActivity(), restoreMessage);
+                                    */
+                                }
+                            })
+                            .setNegativeButton(R.string.cancel, null)
+                            .show();
+
                 }
 
                 return true;

@@ -6,6 +6,8 @@ import android.preference.PreferenceManager;
 import com.romanpulov.violetnote.model.Document;
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 
+import java.io.File;
+
 /**
  * Document file loader for DropBox
  * Created by romanpulov on 20.09.2017.
@@ -24,6 +26,6 @@ public class DocumentDropboxFileLoader extends DropboxFileLoader {
 
     @Override
     protected String getDestPath() {
-        return mContext.getCacheDir() + Document.DOCUMENT_FILE_NAME;
+        return mContext.getCacheDir() + File.separator + Document.DOCUMENT_FILE_NAME;
     }
 }
