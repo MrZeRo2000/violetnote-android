@@ -18,12 +18,12 @@ public class RestoreDropboxFileLoader extends DropboxFileLoader {
     }
 
     @Override
-    protected String getSourcePath() {
+    public String getSourcePath() {
         return RESTORE_PATH + DBStorageManager.getLocalBackupZipFileName();
     }
 
     @Override
-    protected String getDestPath() {
+    public String getDestPath() {
         return mContext.getCacheDir() + File.separator + DBStorageManager.getLocalBackupZipFileName();
     }
 }

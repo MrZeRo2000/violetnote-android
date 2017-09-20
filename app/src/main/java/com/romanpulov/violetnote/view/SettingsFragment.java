@@ -163,8 +163,6 @@ public class SettingsFragment extends PreferenceFragment {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
 
-                                    PreferenceRepository.displayMessage(getActivity(), "Restore stub");
-
                                     AbstractLoader loader  = mPreferenceRestoreDropboxProcessor.getRestoreDropboxLoader();
                                     PreferenceLoaderProcessor.executeLoader(loader);
 

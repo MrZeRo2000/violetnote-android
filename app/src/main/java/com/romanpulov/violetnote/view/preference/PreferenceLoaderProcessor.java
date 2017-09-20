@@ -9,9 +9,9 @@ import com.romanpulov.violetnote.loader.AbstractLoader;
  * Created by romanpulov on 14.09.2017.
  */
 
-public abstract class PreferenceLoaderProcessor {
+public abstract class PreferenceLoaderProcessor<T extends AbstractLoader> {
     protected final PreferenceFragment mPreferenceFragment;
-    protected AbstractLoader mLoader;
+    protected T mLoader;
 
     public PreferenceLoaderProcessor(PreferenceFragment preferenceFragment) {
         mPreferenceFragment = preferenceFragment;

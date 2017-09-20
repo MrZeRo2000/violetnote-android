@@ -18,12 +18,12 @@ public abstract class DocumentLoader extends FileLoader {
     }
 
     @Override
-    protected String getSourcePath() {
+    public String getSourcePath() {
         return PreferenceManager.getDefaultSharedPreferences(mContext).getString(PreferenceRepository.PREF_KEY_SOURCE_PATH, null);
     }
 
     @Override
-    protected String getDestPath() {
+    public String getDestPath() {
         return mContext.getCacheDir() + Document.DOCUMENT_FILE_NAME;
     }
 }

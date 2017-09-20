@@ -20,12 +20,12 @@ public class DocumentDropboxFileLoader extends DropboxFileLoader {
     }
 
     @Override
-    protected String getSourcePath() {
+    public String getSourcePath() {
         return PreferenceManager.getDefaultSharedPreferences(mContext).getString(PreferenceRepository.PREF_KEY_SOURCE_PATH, null);
     }
 
     @Override
-    protected String getDestPath() {
+    public String getDestPath() {
         return mContext.getCacheDir() + File.separator + Document.DOCUMENT_FILE_NAME;
     }
 }

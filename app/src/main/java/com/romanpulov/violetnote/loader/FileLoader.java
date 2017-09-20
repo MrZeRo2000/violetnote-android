@@ -12,8 +12,8 @@ public abstract class FileLoader extends AbstractLoader {
     final String mSourcePath;
     final String mDestPath;
 
-    protected abstract String getSourcePath();
-    protected abstract String getDestPath();
+    public abstract String getSourcePath();
+    public abstract String getDestPath();
 
     FileLoader(Context context) {
         super(context);
