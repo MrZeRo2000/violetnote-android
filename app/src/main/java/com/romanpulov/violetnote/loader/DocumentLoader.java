@@ -11,20 +11,18 @@ import com.romanpulov.violetnote.view.preference.PreferenceRepository;
  * Base class for DocumentLoader
  * Created by romanpulov on 09.06.2016.
  */
-public abstract class DocumentLoader extends AbstractLoader {
-    final String mSourcePath;
-    final String mDestPath;
+public abstract class DocumentLoader extends FileLoader {
 
     DocumentLoader(Context context) {
         super(context);
-        mSourcePath = getSourcePath();
-        mDestPath = getDestPath();
     }
 
+    @Override
     protected String getSourcePath() {
         return PreferenceManager.getDefaultSharedPreferences(mContext).getString(PreferenceRepository.PREF_KEY_SOURCE_PATH, null);
     }
 
+    @Override
     protected String getDestPath() {
         return mContext.getCacheDir() + Document.DOCUMENT_FILE_NAME;
     }

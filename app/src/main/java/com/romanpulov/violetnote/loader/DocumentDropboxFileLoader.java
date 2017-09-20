@@ -13,10 +13,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * DropBox document loader
+ * DropBox file loader
  * Created by romanpulov on 01.07.2016. *
  */
-public class DocumentDropboxLoader extends DocumentLoader {
+public class DocumentDropboxFileLoader extends DocumentLoader {
     private final DbxClientV2 mClient;
     private final DropBoxHelper mDropBoxHelper;
 
@@ -51,10 +51,14 @@ public class DocumentDropboxLoader extends DocumentLoader {
         return true;
     }
 
-    public DocumentDropboxLoader(Context context) {
+    public DocumentDropboxFileLoader(Context context) {
         super(context);
+        //appearance
         mLoadAppearance = LOAD_APPEARANCE_ASYNC;
+
+        //dropbox
         mDropBoxHelper = DropBoxHelper.getInstance(context.getApplicationContext());
         mClient = mDropBoxHelper.getClient();
+
     }
 }

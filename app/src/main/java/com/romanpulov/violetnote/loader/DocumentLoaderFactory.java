@@ -2,10 +2,10 @@ package com.romanpulov.violetnote.loader;
 
 import android.content.Context;
 
-import com.romanpulov.violetnote.view.SettingsFragment;
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 
 /**
+ * Factory for DocumentLoader creation
  * Created by romanpulov on 16.06.2016.
  */
 public class DocumentLoaderFactory {
@@ -14,7 +14,7 @@ public class DocumentLoaderFactory {
             case PreferenceRepository.SOURCE_TYPE_FILE:
                 return new DocumentFileLoader(context);
             case PreferenceRepository.SOURCE_TYPE_DROPBOX:
-                return new DocumentDropboxLoader(context);
+                return new DocumentDropboxFileLoader(context);
             default:
                 return null;
         }
