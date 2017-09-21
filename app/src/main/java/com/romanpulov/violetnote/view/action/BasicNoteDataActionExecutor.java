@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * BasicNoteDataA action executor
  * Created by romanpulov on 13.09.2016.
  */
 public class BasicNoteDataActionExecutor {
