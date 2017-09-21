@@ -120,6 +120,7 @@
     <string name="ui_name_value_title">Name and value</string>
     <string name="ui_question_are_you_sure">Are you sure?</string>
     <string name="ui_question_are_you_sure_checkout_items">Are you sure to checkout %d items?</string>
+    <string name="ui_error_empty_password">Password should not be empty</string>
 
     <!-- Content description for images -->
     <string name="content_description_priority">Priority</string>

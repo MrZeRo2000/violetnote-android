@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.View;
 
+import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.model.PasswordProvider;
 import com.romanpulov.violetnote.view.helper.InputManagerHelper;
 
@@ -72,6 +73,7 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
     protected PasswordProvider mPasswordProvider;
 
     private boolean mPasswordRequired = true;
+    private boolean mCanceled = false;
 
     private String getPassword() {
         if (mPasswordProvider != null)
@@ -140,6 +142,7 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
 
     protected void requestPassword() {
         final PasswordInputDialog passwordInputDialog = new PasswordInputDialog(this);
+        passwordInputDialog.setNonEmptyErrorMessage(getString(R.string.ui_error_empty_password));
         passwordInputDialog.setOnTextInputListener(new TextInputDialog.OnTextInputListener() {
             @Override
             public void onTextInput(String text) {
@@ -185,6 +188,7 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         Log.d("PasswordActivity", "OnActivityResult:" + resultCode);
         mPasswordRequired = resultCode != RESULT_OK;
+        mCanceled = resultCode == RESULT_CANCELED;
     }
 
     @Override
@@ -204,14 +208,18 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
     protected void onResume() {
         super.onResume();
         if (mIsPasswordProtected) {
-            if (mPasswordRequired) {
-                Log.d("PasswordActivity", "OnResume: password required");
-                removeFragment();
-                requestPassword();
-            } else {
-                Log.d("PasswordActivity", "OnResume: password not required");
-                refreshFragment();
-                mPasswordRequired = true;
+            if (mCanceled)
+                setLoadErrorFragment();
+            else {
+                if (mPasswordRequired) {
+                    Log.d("PasswordActivity", "OnResume: password required");
+                    removeFragment();
+                    requestPassword();
+                } else {
+                    Log.d("PasswordActivity", "OnResume: password not required");
+                    refreshFragment();
+                    mPasswordRequired = true;
+                }
             }
         }
     }
