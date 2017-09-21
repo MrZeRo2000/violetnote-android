@@ -13,6 +13,7 @@ import java.util.Locale;
 import java.util.Set;
 
 /**
+ * BasicNote data class
  * Created by rpulov on 11.08.2016.
  */
 public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {

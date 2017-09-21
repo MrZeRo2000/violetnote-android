@@ -8,6 +8,7 @@ import com.romanpulov.violetnote.model.PassNoteItemJSONCryptService;
 import java.util.ArrayList;
 
 /**
+ * BasicNoteItemA add actopm
  * Created by romanpulov on 13.09.2016.
  */
 public class BasicNoteDataItemAddAction extends BasicNoteDataItemAction {

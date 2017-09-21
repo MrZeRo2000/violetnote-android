@@ -1,6 +1,7 @@
 package com.romanpulov.violetnote.provider;
 
 /**
+ * BasicNote provider metadata class
  * Created by romanpulov on 16.08.2016.
  */
 

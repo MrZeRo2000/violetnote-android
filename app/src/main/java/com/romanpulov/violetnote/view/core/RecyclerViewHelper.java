@@ -22,6 +22,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
+ * RecyclerView helper class
  * Created by rpulov on 15.05.2016.
  */
 public class RecyclerViewHelper {

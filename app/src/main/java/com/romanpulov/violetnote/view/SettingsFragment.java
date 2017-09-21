@@ -13,12 +13,10 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.romanpulov.violetnote.R;
-import com.romanpulov.violetnote.db.DBBasicNoteHelper;
 import com.romanpulov.violetnote.db.DBStorageManager;
 import com.romanpulov.violetnote.filechooser.FileChooserActivity;
 import com.romanpulov.violetnote.dropbox.DropBoxHelper;
 import com.romanpulov.violetnote.loader.AbstractLoader;
-import com.romanpulov.violetnote.loader.DocumentLoader;
 import com.romanpulov.violetnote.network.NetworkUtils;
 import com.romanpulov.violetnote.view.preference.AccountDropboxPreferenceSetup;
 import com.romanpulov.violetnote.view.preference.CloudStorageTypePreferenceSetup;
@@ -31,8 +29,6 @@ import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 import com.romanpulov.violetnote.view.preference.PreferenceRestoreDropboxProcessor;
 import com.romanpulov.violetnote.view.preference.SourcePathPreferenceSetup;
 import com.romanpulov.violetnote.view.preference.SourceTypePreferenceSetup;
-
-import java.util.Locale;
 
 public class SettingsFragment extends PreferenceFragment {
     public static final String TAG = "SettingsFragment";

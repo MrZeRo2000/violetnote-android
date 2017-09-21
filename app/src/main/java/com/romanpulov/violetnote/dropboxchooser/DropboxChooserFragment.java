@@ -7,6 +7,7 @@ import com.romanpulov.violetnote.chooser.HrChooserFragment;
 import com.romanpulov.violetnote.dropbox.DropBoxHelper;
 
 /**
+ * Fragment for shoosing file from Dropbox
  * Created by romanpulov on 02.07.2016.
  */
 public class DropboxChooserFragment extends HrChooserFragment {

@@ -9,6 +9,7 @@ import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutorHost;
 import com.romanpulov.violetnote.view.action.BasicNoteDataRefreshAction;
 
 /**
+ * Base class containing BasicNoteDataA with password protection support
  * Created by romanpulov on 02.09.2016.
  */
 public abstract class BasicNoteDataPasswordActivity extends PasswordActivity implements BasicNoteDataProgressFragment.OnBasicNoteDataFragmentInteractionListener, BasicNoteDataActionExecutorHost {

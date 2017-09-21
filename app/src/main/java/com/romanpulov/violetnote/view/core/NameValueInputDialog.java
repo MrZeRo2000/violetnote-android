@@ -12,6 +12,7 @@ import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.view.helper.InputManagerHelper;
 
 /**
+ * Input dialog for name and value
  * Created by romanpulov on 09.09.2016.
  */
 public class NameValueInputDialog extends AlertInputDialog {

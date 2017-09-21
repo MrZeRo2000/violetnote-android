@@ -8,6 +8,7 @@ import com.romanpulov.violetnote.model.MovementDirection;
 import java.util.List;
 
 /**
+ * BasicCommonNoteA move priority down action
  * Created by romanpulov on 18.08.2017.
  */
 

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * ChooseItem implementation for choosing file on device
  * Created by romanpulov on 27.05.2016.
  */
 public class FileChooseItem implements ChooseItem {

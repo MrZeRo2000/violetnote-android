@@ -6,6 +6,7 @@ import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutor;
 
 /**
+ * ProgressFragment with BasicNoteDataActionExecutor execute support
  * Created by romanpulov on 31.07.2017.
  */
 

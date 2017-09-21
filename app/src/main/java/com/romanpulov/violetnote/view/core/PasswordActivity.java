@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
+
 import android.view.View;
 
 import com.romanpulov.violetnote.R;
@@ -13,6 +13,7 @@ import com.romanpulov.violetnote.model.PasswordProvider;
 import com.romanpulov.violetnote.view.helper.InputManagerHelper;
 
 /**
+ * Base password protected activity class
  * Created by rpulov on 30.05.2016.
  */
 public abstract class PasswordActivity extends ActionBarCompatActivity {
@@ -22,8 +23,7 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
     private static final int PASSWORD_VALIDITY_PERIOD = 10000;
 
     /**
-     * Checks validity period for user actions
-     *
+     * Checks validity period for user actions     *
      */
     public static class ValidityPeriodChecker {
         private final long mValidityPeriod;
@@ -186,7 +186,6 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d("PasswordActivity", "OnActivityResult:" + resultCode);
         mPasswordRequired = resultCode != RESULT_OK;
         mCanceled = resultCode == RESULT_CANCELED;
     }
@@ -212,11 +211,9 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
                 setLoadErrorFragment();
             else {
                 if (mPasswordRequired) {
-                    Log.d("PasswordActivity", "OnResume: password required");
                     removeFragment();
                     requestPassword();
                 } else {
-                    Log.d("PasswordActivity", "OnResume: password not required");
                     refreshFragment();
                     mPasswordRequired = true;
                 }

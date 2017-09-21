@@ -14,6 +14,7 @@ import com.romanpulov.violetnote.view.AutoCompleteArrayAdapter;
 import java.util.Collection;
 
 /**
+ * Helper class for add action
  * Created by romanpulov on 06.09.2016.
  */
 public class AddActionHelper implements AutoCompleteArrayAdapter.OnAutoCompleteTextListener {

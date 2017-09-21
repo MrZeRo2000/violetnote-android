@@ -3,6 +3,7 @@ package com.romanpulov.violetnote.model;
 import java.util.List;
 
 /**
+ * Base class for BasicEntityNote
  * Created by rpulov on 07.09.2016.
  */
 public abstract class BasicEntityNoteA {

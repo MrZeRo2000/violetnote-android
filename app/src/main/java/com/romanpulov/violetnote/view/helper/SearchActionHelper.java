@@ -16,6 +16,7 @@ import com.romanpulov.violetnote.view.OnSearchInteractionListener;
 import java.util.Collection;
 
 /**
+ * Search action helper class
  * Created by romanpulov on 08.08.2016.
  */
 public class SearchActionHelper implements CompoundButton.OnCheckedChangeListener {

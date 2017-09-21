@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * PassNote data class
  * Created by rpulov on 26.04.2016.
  */
 public class PassNoteA implements Parcelable {

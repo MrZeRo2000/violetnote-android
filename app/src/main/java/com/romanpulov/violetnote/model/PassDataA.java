@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
+ * PassData class
  * Created by rpulov on 26.04.2016.
  */
 public class PassDataA implements Parcelable, PasswordProvider {

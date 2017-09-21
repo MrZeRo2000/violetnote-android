@@ -1,6 +1,7 @@
 package com.romanpulov.violetnote.model;
 
 /**
+ * Base class for modifiable BasicEntityNote
  * Created by rpulov on 22.09.2016.
  */
 

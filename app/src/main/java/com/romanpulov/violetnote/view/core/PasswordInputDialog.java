@@ -6,6 +6,7 @@ import android.text.InputType;
 import com.romanpulov.violetnote.R;
 
 /**
+ * Password input dialog
  * Created by rpulov on 27.03.2016.
  */
 public class PasswordInputDialog extends TextInputDialog {

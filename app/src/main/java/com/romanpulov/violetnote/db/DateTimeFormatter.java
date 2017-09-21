@@ -6,6 +6,7 @@ import android.text.format.DateFormat;
 import java.util.Date;
 
 /**
+ * Utility date/time formatter class
  * Created by rpulov on 25.08.2016.
  */
 public class DateTimeFormatter {

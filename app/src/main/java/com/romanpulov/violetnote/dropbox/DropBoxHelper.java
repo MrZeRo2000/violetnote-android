@@ -7,6 +7,7 @@ import com.dropbox.core.android.Auth;
 import com.dropbox.core.v2.DbxClientV2;
 
 /**
+ * Dropbox helper class
  * Created by romanpulov on 30.06.2016.
  */
 public class DropBoxHelper {

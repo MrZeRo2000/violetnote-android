@@ -3,6 +3,7 @@ package com.romanpulov.violetnote.db;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 
 /**
+ * BasicNoteItemA database management
  * Created by romanpulov on 10.08.2017.
  */
 

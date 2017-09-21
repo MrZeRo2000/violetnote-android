@@ -8,6 +8,7 @@ import com.romanpulov.violetnote.model.PassNoteItemJSONCryptService;
 import java.util.ArrayList;
 
 /**
+ * BasicNoteItemA edit name and value action
  * Created by rpulov on 16.09.2016.
  */
 public class BasicNoteDataItemEditNameValueAction extends BasicNoteDataItemAction  {

@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import java.util.ArrayList;
 
 /**
+ * BasicNote data class
  * Created by rpulov on 21.08.2016.
  */
 public class BasicNoteDataA implements Parcelable, PasswordProvider {

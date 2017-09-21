@@ -5,7 +5,6 @@ import android.net.ConnectivityManager;
 
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 
 /**
  * Network related utility routines

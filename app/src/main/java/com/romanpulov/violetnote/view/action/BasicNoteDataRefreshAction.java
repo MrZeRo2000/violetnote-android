@@ -6,6 +6,7 @@ import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.model.PassNoteItemJSONCryptService;
 
 /**
+ * BasicNoteDataA refresh action
  * Created by romanpulov on 13.09.2016.
  */
 public class BasicNoteDataRefreshAction extends BasicNoteDataAction {

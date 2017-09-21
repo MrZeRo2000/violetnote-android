@@ -1,6 +1,7 @@
 package com.romanpulov.violetnote.dropboxchooser;
 
 /**
+ * Activity for choosing file from Dropbox
  * Created by romanpulov on 02.07.2016.
  */
 

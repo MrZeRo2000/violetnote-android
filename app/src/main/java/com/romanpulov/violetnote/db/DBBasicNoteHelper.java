@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 /**
+ * Database BasicNote operations helper class
  * Created by romanpulov on 16.08.2016.
  */
 public class DBBasicNoteHelper {

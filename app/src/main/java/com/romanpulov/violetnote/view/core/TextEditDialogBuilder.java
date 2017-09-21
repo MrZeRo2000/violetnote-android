@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.app.AlertDialog;
 
 /**
+ * Text editor dialog builder class
  * Created by romanpulov on 08.09.2016.
  */
 public class TextEditDialogBuilder {

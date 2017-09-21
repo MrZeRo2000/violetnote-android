@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
+ * BasicNoteA database operations
  * Created by romanpulov on 17.08.2016.
  */
 public class DBNoteManager extends BasicCommonNoteManager {

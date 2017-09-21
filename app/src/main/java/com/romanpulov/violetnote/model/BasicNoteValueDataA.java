@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * BasicNote value data
  * Created by rpulov on 22.09.2016.
  */
 

@@ -5,6 +5,7 @@ import com.romanpulov.violetnotecore.AESCrypt.AESCryptService;
 import org.json.JSONObject;
 
 /**
+ * BasicNoteItemA encrypt and decrypt
  * Created by rpulov on 17.10.2016.
  */
 

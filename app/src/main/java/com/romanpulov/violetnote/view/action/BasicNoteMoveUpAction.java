@@ -8,6 +8,7 @@ import com.romanpulov.violetnote.model.MovementDirection;
 import java.util.List;
 
 /**
+ * BasicCommonNoteA move up action
  * Created by rpulov on 07.09.2016.
  */
 public class BasicNoteMoveUpAction<T extends BasicCommonNoteA> extends BasicNoteMoveAction<T> {

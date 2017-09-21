@@ -16,6 +16,7 @@ import java.io.File;
 import java.util.List;
 
 /**
+ * PassData load progress fragment
  * Created by rpulov on 29.07.2017.
  */
 

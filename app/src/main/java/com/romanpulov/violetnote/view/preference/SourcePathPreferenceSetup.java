@@ -18,6 +18,7 @@ import static com.romanpulov.violetnote.view.preference.PreferenceRepository.SOU
 import static com.romanpulov.violetnote.view.preference.PreferenceRepository.SOURCE_TYPE_FILE;
 
 /**
+ * Source path preference setup
  * Created by romanpulov on 08.09.2017.
  */
 

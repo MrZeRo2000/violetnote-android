@@ -10,6 +10,7 @@ import android.widget.Button;
 import com.romanpulov.violetnote.R;
 
 /**
+ * Fragment displaying load error in password protected activity
  * Created by rpulov on 13.09.2016.
  */
 public class LoadErrorFragment extends Fragment {

@@ -10,6 +10,7 @@ import android.support.v7.app.AlertDialog;
 import com.romanpulov.violetnote.R;
 
 /**
+ * Dialog fragment with OkCancel support
  * Created by romanpulov on 26.08.2016.
  */
 public class AlertOkCancelSupportDialogFragment extends DialogFragment {

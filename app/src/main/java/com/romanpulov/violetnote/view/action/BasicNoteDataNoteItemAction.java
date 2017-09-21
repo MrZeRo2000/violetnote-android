@@ -7,6 +7,7 @@ import com.romanpulov.violetnote.model.BasicNoteItemA;
 import java.util.List;
 
 /**
+ * BasicNoteItemA action
  * Created by rpulov on 18.09.2016.
  */
 public class BasicNoteDataNoteItemAction extends BasicNoteDataItemAction {

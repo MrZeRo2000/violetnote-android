@@ -1,7 +1,5 @@
 package com.romanpulov.violetnote.model;
 
-import com.romanpulov.violetnote.model.PassCategoryA;
-import com.romanpulov.violetnote.model.PassNoteA;
 import com.romanpulov.violetnotecore.Model.PassCategory;
 import com.romanpulov.violetnotecore.Model.PassData;
 import com.romanpulov.violetnotecore.Model.PassNote;
@@ -12,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * PassDataA reader from PassData
  * Created by rpulov on 25.04.2016.
  */
 public class PassDataReader {

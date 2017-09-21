@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
+ * BasicNote history item data
  * Created by rpulov on 22.09.2016.
  */
 

@@ -15,6 +15,7 @@ import com.romanpulov.violetnote.R;
 import org.xmlpull.v1.XmlPullParser;
 
 /**
+ * Text input dialog - interface to AlertInputDialog
  * Created by romanpulov on 26.08.2016.
  */
 

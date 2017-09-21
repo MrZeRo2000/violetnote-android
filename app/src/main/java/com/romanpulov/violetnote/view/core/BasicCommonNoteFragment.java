@@ -12,6 +12,7 @@ import com.romanpulov.violetnote.db.DBNoteManager;
 import java.util.Collection;
 
 /**
+ * Base class for Basic common note fragment
  * Created by rpulov on 07.09.2016.
  */
 public abstract class BasicCommonNoteFragment extends Fragment {

@@ -8,6 +8,7 @@ import com.romanpulov.violetnote.model.MovementDirection;
 import java.util.List;
 
 /**
+ * BasicCommonNoteA move down action
  * Created by rpulov on 07.09.2016.
  */
 public class BasicNoteMoveDownAction<T extends BasicCommonNoteA> extends BasicNoteMoveAction<T>  {

@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import com.romanpulov.violetnotecore.Model.PassCategory;
 
 /**
+ * PassCategory data
  * Created by rpulov on 25.04.2016.
  */
 public class PassCategoryA implements Parcelable {

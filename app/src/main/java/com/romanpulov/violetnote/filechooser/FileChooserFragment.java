@@ -8,6 +8,7 @@ import com.romanpulov.violetnote.chooser.HrChooserFragment;
 import java.io.File;
 
 /**
+ * Fragment for choosing file from device
  * Created by romanpulov on 07.06.2016.
  */
 public class FileChooserFragment extends HrChooserFragment {

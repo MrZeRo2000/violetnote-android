@@ -3,6 +3,7 @@ package com.romanpulov.violetnote.view.core;
 import android.support.v7.app.AlertDialog;
 
 /**
+ * Input dialog base class
  * Created by rpulov on 12.09.2016.
  */
 public class AlertInputDialog {

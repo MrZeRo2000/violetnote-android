@@ -6,6 +6,7 @@ import com.romanpulov.violetnote.model.BasicCommonNoteA;
 import java.util.List;
 
 /**
+ * BasicCommonNoteA delete action
  * Created by romanpulov on 22.08.2017.
  */
 

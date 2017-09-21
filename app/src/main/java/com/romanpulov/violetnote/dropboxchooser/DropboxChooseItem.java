@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * ChooseItem implementation for DropBox
  * Created by romanpulov on 01.07.2016.
  */
 public class DropboxChooseItem implements ChooseItem {

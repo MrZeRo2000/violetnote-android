@@ -4,6 +4,7 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 
 /**
+ * DialogFragment interaction interface
  * Created by romanpulov on 24.01.2017.
  */
 

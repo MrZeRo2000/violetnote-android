@@ -4,6 +4,7 @@ import com.romanpulov.violetnote.db.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 
 /**
+ * BasicNoteDataA update checked action
  * Created by rpulov on 18.09.2016.
  */
 public class BasicNoteDataItemUpdateCheckedAction extends BasicNoteDataItemAction  {

@@ -11,6 +11,7 @@ import static com.romanpulov.violetnote.view.preference.PreferenceRepository.DEF
 import static com.romanpulov.violetnote.view.preference.PreferenceRepository.PREF_KEY_SOURCE_TYPE;
 
 /**
+ * Source type preference setup
  * Created by romanpulov on 06.09.2017.
  */
 

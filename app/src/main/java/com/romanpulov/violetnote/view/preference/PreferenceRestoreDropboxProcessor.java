@@ -10,7 +10,6 @@ import com.romanpulov.violetnote.loader.FileLoader;
 import com.romanpulov.violetnote.loader.RestoreDropboxFileLoader;
 
 import java.io.File;
-import java.util.Locale;
 
 /**
  * Restore from DropBox processor

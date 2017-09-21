@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * PassData reader class
  * Created by rpulov on 04.04.2016.
  */
 public class PassDataExp {

@@ -9,6 +9,7 @@ import com.romanpulov.violetnote.R;
 import java.util.Locale;
 
 /**
+ * Checkout progress display helper class
  * Created by rpulov on 07.12.2016.
  */
 

@@ -9,6 +9,7 @@ import static com.romanpulov.violetnote.model.BasicOrderedEntityNoteA.PRIORITY_H
 import static com.romanpulov.violetnote.model.BasicOrderedEntityNoteA.PRIORITY_LOW;
 
 /**
+ * BasicCommonNoteA operations support class
  * Created by romanpulov on 29.08.2016.
  */
 public class BasicCommonNoteManager {

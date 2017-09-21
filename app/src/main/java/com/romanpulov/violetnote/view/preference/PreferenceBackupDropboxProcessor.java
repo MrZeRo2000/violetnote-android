@@ -7,6 +7,7 @@ import com.romanpulov.violetnote.loader.AbstractLoader;
 import com.romanpulov.violetnote.loader.BackupDropboxUploader;
 
 /**
+ * Preference backup to Dropbox processor
  * Created by romanpulov on 14.09.2017.
  */
 

@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 /**
+ * BasicNote database open helper
  * Created by romanpulov on 16.08.2016.
  */
 public class DBBasicNoteOpenHelper extends SQLiteOpenHelper {

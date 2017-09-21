@@ -18,6 +18,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
+ * BasicNoteA recycler view adapter
  * Created by romanpulov on 18.08.2016.
  */
 public class BasicNoteRecycleViewAdapter extends RecyclerView.Adapter<BasicNoteRecycleViewAdapter.ViewHolder> {

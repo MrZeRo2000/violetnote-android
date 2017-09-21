@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import com.romanpulov.violetnote.db.BasicNoteItemDBManagementProvider;
 
 /**
+ * BasicNote item data
  * Created by rpulov on 11.08.2016.
  */
 public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {

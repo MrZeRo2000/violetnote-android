@@ -7,6 +7,7 @@ import com.romanpulov.violetnote.db.DBStorageManager;
 import java.io.File;
 
 /**
+ * Restore from Dropbox file loader
  * Created by romanpulov on 20.09.2017.
  */
 
