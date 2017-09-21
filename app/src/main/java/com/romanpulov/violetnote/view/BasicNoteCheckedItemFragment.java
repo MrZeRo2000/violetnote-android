@@ -126,14 +126,6 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         mEditorDialog = alertDialog;
     }
 
-    @Override
-    public void onPause() {
-        //hide editors
-        //mAddActionHelper.hideLayout();
-
-        super.onPause();
-    }
-
     public class ActionBarCallBack implements ActionMode.Callback {
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {

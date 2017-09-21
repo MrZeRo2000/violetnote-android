@@ -81,11 +81,6 @@ public abstract class BasicNoteDataPasswordActivity extends PasswordActivity imp
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    @Override
     public void execute(BasicNoteDataActionExecutor executor) {
         BasicNoteDataProgressFragment basicNoteDataProgressFragment = BasicNoteDataProgressFragment.newInstance();
         removeFragment().beginTransaction().add(getFragmentContainerId(), basicNoteDataProgressFragment).commit();
