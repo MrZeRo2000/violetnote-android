@@ -207,20 +207,6 @@ public class DBBasicNoteHelper {
         mDB.execSQL(sql);
     }
 
-
-    public void moveOrderIdTop(String tableName, long noteId, long orderId) {
-        long minOrderId = getMinOrderId(tableName, noteId);
-        String sql = "UPDATE " + tableName + " SET " + DBBasicNoteOpenHelper.ORDER_COLUMN_NAME + " = " +
-                " CASE" +
-                " WHEN " + DBBasicNoteOpenHelper.ORDER_COLUMN_NAME + " = " + orderId + " THEN " + minOrderId +
-                " WHEN " + DBBasicNoteOpenHelper.ORDER_COLUMN_NAME + " < " + orderId + " THEN " + DBBasicNoteOpenHelper.ORDER_COLUMN_NAME + " + 1" +
-                " END " +
-                " WHERE " + DBBasicNoteOpenHelper.ORDER_COLUMN_NAME + " <= " + orderId;
-        if (noteId > 0)
-            sql = sql + " AND " + DBBasicNoteOpenHelper.NOTE_ID_COLUMN_NAME + " = " + String.valueOf(noteId);
-        mDB.execSQL(sql);
-    }
-
     public void moveOrderIdBottom(String tableName, String selectionString, long orderId, long maxOrderId) {
         String sql = "UPDATE " + tableName + " SET " + DBBasicNoteOpenHelper.ORDER_COLUMN_NAME + " = " +
                 " CASE" +
@@ -230,19 +216,6 @@ public class DBBasicNoteHelper {
                 " WHERE " + DBBasicNoteOpenHelper.ORDER_COLUMN_NAME + " >= " + orderId;
         if (selectionString != null)
             sql = sql + " AND " + selectionString;
-        mDB.execSQL(sql);
-    }
-
-    public void moveOrderIdBottom(String tableName, long noteId, long orderId) {
-        long maxOrderId = getMaxOrderId(tableName, noteId);
-        String sql = "UPDATE " + tableName + " SET " + DBBasicNoteOpenHelper.ORDER_COLUMN_NAME + " = " +
-                " CASE" +
-                " WHEN " + DBBasicNoteOpenHelper.ORDER_COLUMN_NAME + " = " + orderId + " THEN " + maxOrderId +
-                " WHEN " + DBBasicNoteOpenHelper.ORDER_COLUMN_NAME + " > " + orderId + " THEN " + DBBasicNoteOpenHelper.ORDER_COLUMN_NAME + " - 1" +
-                " END " +
-                " WHERE " + DBBasicNoteOpenHelper.ORDER_COLUMN_NAME + " >= " + orderId;
-        if (noteId > 0)
-            sql = sql + " AND " + DBBasicNoteOpenHelper.NOTE_ID_COLUMN_NAME + " = " + String.valueOf(noteId);
         mDB.execSQL(sql);
     }
 

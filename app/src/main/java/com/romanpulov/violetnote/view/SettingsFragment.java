@@ -31,7 +31,6 @@ import com.romanpulov.violetnote.view.preference.SourcePathPreferenceSetup;
 import com.romanpulov.violetnote.view.preference.SourceTypePreferenceSetup;
 
 public class SettingsFragment extends PreferenceFragment {
-    public static final String TAG = "SettingsFragment";
 
     private PreferenceDocumentLoaderProcessor mPreferenceDocumentLoaderProcessor;
     private PreferenceBackupDropboxProcessor mPreferenceBackupDropboxProcessor;

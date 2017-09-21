@@ -51,10 +51,6 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
         return mChecked;
     }
 
-    public void setChecked(boolean value) {
-        mChecked = value;
-    }
-
     public void updateChecked(BasicNoteItemA item) {
         this.mChecked = item.mChecked;
         this.setLastModified(item.getLastModified());

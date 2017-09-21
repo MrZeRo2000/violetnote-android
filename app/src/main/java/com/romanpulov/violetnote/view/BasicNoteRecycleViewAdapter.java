@@ -81,10 +81,6 @@ public class BasicNoteRecycleViewAdapter extends RecyclerView.Adapter<BasicNoteR
             mEncryptedImage = (ImageView) view.findViewById(R.id.encrypted_image);
         }
 
-        protected String getSelectedTitle(Collection<Integer> selectedItems) {
-            return DisplayTitleBuilder.buildItemsDisplayTitle(mView.getContext(), mItems, selectedItems);
-        }
-
         @Override
         public void onClick(View v) {
             super.onClick(v);

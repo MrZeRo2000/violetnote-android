@@ -20,7 +20,6 @@ import java.util.Collection;
  * Created by romanpulov on 08.08.2016.
  */
 public class SearchActionHelper implements CompoundButton.OnCheckedChangeListener {
-    public final static int DISPLAY_TYPE_NONE = 0;
     public final static int DISPLAY_TYPE_SYSTEM_USER = 1;
 
     private final View mSearchView;

@@ -58,7 +58,6 @@ public class BasicNoteNamedItemRecyclerViewAdapter extends RecyclerView.Adapter<
     }
 
     class ViewHolder extends RecyclerViewHelper.SelectableViewHolder {
-        private final View mView;
         private final TextView mNameView;
         private final TextView mValueView;
         private final TextView mLastModifiedView;
@@ -67,7 +66,6 @@ public class BasicNoteNamedItemRecyclerViewAdapter extends RecyclerView.Adapter<
 
         public ViewHolder(View view, RecyclerViewHelper.RecyclerViewSelector viewSelector) {
             super(view, viewSelector);
-            mView = view;
             mNameView = (TextView) view.findViewById(R.id.name);
             mValueView = (TextView) view.findViewById(R.id.value);
             mLastModifiedView = (TextView) view.findViewById(R.id.last_modified);

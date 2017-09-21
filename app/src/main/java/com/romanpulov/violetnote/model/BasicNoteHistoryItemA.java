@@ -11,10 +11,6 @@ import android.os.Parcelable;
 public class BasicNoteHistoryItemA extends BasicModifiableEntityNoteA implements Parcelable {
     protected String mValue;
 
-    public String getValue() {
-        return mValue;
-    }
-
     private BasicNoteHistoryItemA() {
 
     }
@@ -25,14 +21,6 @@ public class BasicNoteHistoryItemA extends BasicModifiableEntityNoteA implements
         instance.setId(id);
         instance.setLastModified(lastModified);
         instance.setLastModifiedString(lastModifiedString);
-        instance.mValue = value;
-
-        return instance;
-    }
-
-    public static BasicNoteHistoryItemA newEditInstance(String value) {
-        BasicNoteHistoryItemA instance = new BasicNoteHistoryItemA();
-
         instance.mValue = value;
 
         return instance;

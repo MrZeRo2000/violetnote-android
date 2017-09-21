@@ -122,10 +122,6 @@ public class RecyclerViewHelper {
         protected final View mView;
         protected final RecyclerViewSelector mViewSelector;
 
-        public RecyclerViewSelector getViewSelector() {
-            return  mViewSelector;
-        }
-
         public SelectableViewHolder(View view, RecyclerViewSelector viewSelector) {
             super(view);
             mView = view;
@@ -173,10 +169,6 @@ public class RecyclerViewHelper {
 
         public boolean isSelectedSingle() {
             return mSelectedItems.size() == 1;
-        }
-
-        public boolean isSelectedMultiple() {
-            return mSelectedItems.size() > 1;
         }
 
         public boolean isSelected() {

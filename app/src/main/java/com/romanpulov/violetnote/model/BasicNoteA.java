@@ -37,10 +37,6 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
         return mNoteType;
     }
 
-    public void setNoteType(int mNoteType) {
-        this.mNoteType = mNoteType;
-    }
-
     //DisplayTitleProvider
 
     @Override
@@ -60,16 +56,8 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
         return mEncrypted;
     }
 
-    public void setIsEncrypted(boolean encrypted) {
-        this.mEncrypted = encrypted;
-    }
-
     public String getEncryptedString() {
         return mEncryptedString;
-    }
-
-    public void setEncryptedString(String mEncryptedString) {
-        this.mEncryptedString = mEncryptedString;
     }
 
     public int getItemCount() {

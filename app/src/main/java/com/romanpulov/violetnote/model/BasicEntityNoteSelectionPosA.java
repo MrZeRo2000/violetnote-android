@@ -13,14 +13,6 @@ public final class BasicEntityNoteSelectionPosA {
     private final int mMinPos;
     private final int mMaxPos;
 
-    public int getMinPos() {
-        return mMinPos;
-    }
-
-    public int getMaxPos() {
-        return mMaxPos;
-    }
-
     private final Integer[] mSelectedItemsPositions;
 
     public Integer[] getSelectedItemsPositions() {

@@ -8,5 +8,4 @@ package com.romanpulov.violetnote.model;
 public class MovementDirection {
     public static final int DIRECTION_UP = -1;
     public static final int DIRECTION_DOWN = 1;
-    public static final int NO_MOVEMENT = 0;
 }

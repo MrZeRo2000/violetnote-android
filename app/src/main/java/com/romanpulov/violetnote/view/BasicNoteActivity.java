@@ -14,8 +14,6 @@ import com.romanpulov.violetnote.view.core.ActionBarCompatActivity;
 import com.romanpulov.violetnote.view.core.PasswordActivity;
 
 public class BasicNoteActivity extends ActionBarCompatActivity implements BasicNoteFragment.OnBasicNoteFragmentInteractionListener {
-    public static final String BASIC_NOTE_DATA = "BasicNoteData";
-    public static final String NOTE_LIST = "NoteList";
     public static final String NOTE = "Note";
 
     private BasicNoteFragment mFragment;

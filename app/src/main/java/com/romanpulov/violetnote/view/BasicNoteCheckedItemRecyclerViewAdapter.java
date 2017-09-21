@@ -67,7 +67,6 @@ public class BasicNoteCheckedItemRecyclerViewAdapter extends RecyclerView.Adapte
     }
 
     class ViewHolder extends RecyclerViewHelper.SelectableViewHolder {
-        private final View mView;
         private final CheckBox mCheckedView;
         private final TextView mValueView;
         private final TextView mLastModifiedView;
@@ -76,7 +75,6 @@ public class BasicNoteCheckedItemRecyclerViewAdapter extends RecyclerView.Adapte
 
         public ViewHolder(View view, RecyclerViewHelper.RecyclerViewSelector viewSelector) {
             super(view, viewSelector);
-            mView = view;
             mCheckedView = (CheckBox) view.findViewById(R.id.checked);
             mValueView = (TextView) view.findViewById(R.id.value);
             mLastModifiedView = (TextView) view.findViewById(R.id.last_modified);

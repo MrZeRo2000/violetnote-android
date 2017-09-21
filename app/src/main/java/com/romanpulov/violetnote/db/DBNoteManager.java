@@ -91,33 +91,6 @@ public class DBNoteManager extends BasicCommonNoteManager {
     }
 
     /**
-     * Returns notes from flat table, without totals
-     * @return Note List
-     */
-    public ArrayList<BasicNoteA> queryNotesFlat() {
-        ArrayList<BasicNoteA> result = new ArrayList<>();
-
-        Cursor c = null;
-        try {
-            c = mDB.query(
-                    DBBasicNoteOpenHelper.NOTES_TABLE_NAME, DBBasicNoteOpenHelper.NOTES_TABLE_COLS,
-                    null, null, null, null, DBBasicNoteOpenHelper.ORDER_COLUMN_NAME
-            );
-
-            for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
-                BasicNoteA newNote = noteFromCursor(c, mDTF);
-                result.add(newNote);
-            }
-
-        } finally {
-            if ((c !=null) && !c.isClosed())
-                c.close();
-        }
-
-        return result;
-    }
-
-    /**
      * Returns notes from raw query, with totals
      * @return Note List
      */
@@ -138,55 +111,6 @@ public class DBNoteManager extends BasicCommonNoteManager {
         }
 
         return result;
-    }
-
-    /**
-     * Updates notes with totals
-     * @param note to calculate totals
-     */
-    public void queryNoteTotals(BasicNoteA note) {
-        Cursor c = null;
-        try {
-            c = mDB.query(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME, new String[]{"checked"},
-                    DBBasicNoteOpenHelper.NOTE_ID_COLUMN_NAME + " = ?", new String[]{String.valueOf(note.getId())}, null, null, null);
-
-            int itemCount = 0;
-            int checkedItemCount = 0;
-
-            for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
-                itemCount ++;
-                checkedItemCount += c.getInt(0);
-            }
-
-            note.setItemCount(itemCount);
-            note.setCheckedItemCount(checkedItemCount);
-
-        } finally {
-            if ((c !=null) && !c.isClosed())
-                c.close();
-        }
-    }
-
-    public Collection<String> queryNoteValues(BasicNoteA note) {
-        Set<String> values = new HashSet<>();
-
-        Cursor c = null;
-        try {
-            c = mDB.query(
-                    DBBasicNoteOpenHelper.NOTE_VALUES_TABLE_NAME, new String[] {DBBasicNoteOpenHelper.NOTE_VALUES_TABLE_COLS[2]},
-                    DBBasicNoteOpenHelper.NOTE_ID_COLUMN_NAME + " = ?", new String[] {String.valueOf(note.getId())}, null, null, null
-            );
-
-            for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
-                values.add(c.getString(0));
-            }
-
-        } finally {
-            if ((c !=null) && !c.isClosed())
-                c.close();
-        }
-
-        return values;
     }
 
     public BasicNoteDataA fromNoteData(BasicNoteA note) {
@@ -275,29 +199,6 @@ public class DBNoteManager extends BasicCommonNoteManager {
             for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
                 values.add(BasicNoteValueA.newInstance(c.getLong(0), c.getString(1)));
 
-            }
-
-        } finally {
-            if ((c != null) && !c.isClosed())
-                c.close();
-        }
-    }
-
-    public void queryNoteHistoryItems(BasicNoteA note) {
-        //clear values
-        note.getHistoryItems().clear();
-
-        Cursor c = null;
-        try {
-            c = mDB.query(
-                    DBBasicNoteOpenHelper.NOTE_ITEMS_HISTORY_TABLE_NAME,
-                    new String[] {DBBasicNoteOpenHelper.NOTE_ITEMS_HISTORY_TABLE_COLS[1], DBBasicNoteOpenHelper.NOTE_ITEMS_HISTORY_TABLE_COLS[3]},
-                    DBBasicNoteOpenHelper.NOTE_ID_COLUMN_NAME + " = ?", new String[] {String.valueOf(note.getId())}, null, null,
-                    DBBasicNoteOpenHelper.ORDER_COLUMN_NAME + " DESC"
-            );
-
-            for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
-                note.getHistoryItems().add(noteHistoryItemFromCursor(c, mDTF));
             }
 
         } finally {

@@ -43,10 +43,6 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
 
     protected OnBasicNoteItemFragmentInteractionListener mListener;
 
-    public BasicNoteDataA getBasicNoteData() {
-        return mBasicNoteData;
-    }
-
     @Override
     public void refreshList(DBNoteManager noteManager) {
         noteManager.queryNoteDataItems(mBasicNoteData.getNote());

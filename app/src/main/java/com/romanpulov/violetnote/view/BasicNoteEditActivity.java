@@ -14,8 +14,6 @@ import com.romanpulov.violetnote.view.core.ActionBarCompatActivity;
 import com.romanpulov.violetnote.view.helper.InputManagerHelper;
 
 public class BasicNoteEditActivity extends ActionBarCompatActivity {
-    private final static int PASSWORD_SET_TAG = 0;
-    private final static int PASSWORD_CLEAR_TAG = 255;
 
     private ViewHolder mViewHolder;
 
@@ -45,14 +43,12 @@ public class BasicNoteEditActivity extends ActionBarCompatActivity {
         final Context mContext;
         final EditText mTitle;
         final RadioButton mNoteTypeChecked;
-        final RadioButton mNoteTypeNamed;
         final CheckBox mIsEncrypted;
 
         ViewHolder(Activity activity) {
             mContext = activity;
             mTitle = (EditText)activity.findViewById(R.id.title_edit_text);
             mNoteTypeChecked = (RadioButton)activity.findViewById(R.id.note_type_checked);
-            mNoteTypeNamed = (RadioButton)activity.findViewById(R.id.note_type_named);
             mIsEncrypted = (CheckBox)activity.findViewById(R.id.is_encrypted_check_box);
         }
 
