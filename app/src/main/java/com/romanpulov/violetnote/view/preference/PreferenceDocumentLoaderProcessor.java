@@ -31,7 +31,7 @@ public class PreferenceDocumentLoaderProcessor extends PreferenceLoaderProcessor
                         pref.getPreferenceManager().getSharedPreferences().edit().putLong(PreferenceRepository.PREF_KEY_LAST_LOADED, loadedTime).apply();
                         PreferenceRepository.updateLoadPreferenceSummary(mPreferenceFragment, loadedTime);
                     } else {
-                        PreferenceRepository.displayMessage(mPreferenceFragment.getActivity(), result);
+                        PreferenceRepository.displayMessage(mContext, result);
                         PreferenceRepository.updateLoadPreferenceSummary(mPreferenceFragment, PreferenceRepository.PREF_LOAD_CURRENT_VALUE);
                     }
                 }

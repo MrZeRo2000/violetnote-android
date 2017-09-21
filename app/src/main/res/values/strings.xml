@@ -88,6 +88,7 @@
     <!-- Messages -->
     <string name="message_backup_created">Successfully created backup %s</string>
     <string name="message_backup_restored">Successfully restored backup from %s</string>
+    <string name="message_backup_cloud_restored">Successfully restored backup from cloud</string>
 
     <!-- UI Text -->
     <string name="ui_text_search_system">System</string>

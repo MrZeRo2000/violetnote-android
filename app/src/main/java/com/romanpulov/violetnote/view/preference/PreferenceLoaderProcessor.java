@@ -1,5 +1,6 @@
 package com.romanpulov.violetnote.view.preference;
 
+import android.content.Context;
 import android.preference.PreferenceFragment;
 
 import com.romanpulov.violetnote.loader.AbstractLoader;
@@ -11,10 +12,12 @@ import com.romanpulov.violetnote.loader.AbstractLoader;
 
 public abstract class PreferenceLoaderProcessor<T extends AbstractLoader> {
     protected final PreferenceFragment mPreferenceFragment;
+    protected final Context mContext;
     protected T mLoader;
 
     public PreferenceLoaderProcessor(PreferenceFragment preferenceFragment) {
         mPreferenceFragment = preferenceFragment;
+        mContext = preferenceFragment.getActivity();
     }
 
     /**

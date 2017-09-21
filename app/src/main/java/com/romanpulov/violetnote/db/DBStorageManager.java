@@ -1,6 +1,7 @@
 package com.romanpulov.violetnote.db;
 
 import android.content.Context;
+import android.os.Environment;
 
 import com.romanpulov.library.common.io.ZipFileUtils;
 import com.romanpulov.library.common.storage.BackupUtils;
@@ -12,14 +13,18 @@ import java.io.File;
  * Created by romanpulov on 19.12.2016.
  */
 
-public class DBStorageManager {
+public final class DBStorageManager {
     private static final String LOCAL_BACKUP_FOLDER_NAME = "VioletNoteBackup";
-    private static final String LOCAL_BACKUP_FILE_NAME = "violetnotedb_" + DBBasicNoteOpenHelper.DATABASE_VERSION;
+    private static final String BACKUP_FILE_NAME = "violetnotedb_" + DBBasicNoteOpenHelper.DATABASE_VERSION;
 
     private final BackupUtils mBackupUtils;
 
+    public DBStorageManager(Context context, String backupFolderName) {
+        mBackupUtils = new BackupUtils(context.getDatabasePath(DBBasicNoteOpenHelper.DATABASE_NAME).toString(), backupFolderName, BACKUP_FILE_NAME);
+    }
+
     public DBStorageManager(Context context) {
-        mBackupUtils = new BackupUtils(context.getDatabasePath(DBBasicNoteOpenHelper.DATABASE_NAME).toString(), LOCAL_BACKUP_FOLDER_NAME, LOCAL_BACKUP_FILE_NAME);
+        this(context, Environment.getExternalStorageDirectory() + File.separator + LOCAL_BACKUP_FOLDER_NAME);
     }
 
     /**
@@ -27,7 +32,7 @@ public class DBStorageManager {
      * @return Files
      */
     public File[] getLocalBackupFiles() {
-        return mBackupUtils.getLocalBackupFiles();
+        return mBackupUtils.getBackupFiles();
     }
 
     /**
@@ -43,14 +48,14 @@ public class DBStorageManager {
      * @return Restored file name if successful
      */
     public String restoreLocalBackup() {
-        return mBackupUtils.restoreLocalBackup();
+        return mBackupUtils.restoreBackup();
     }
 
     /**
      * Returns local backup Zip file name
      * @return Zip file name
      */
-    public static String getLocalBackupZipFileName() {
-        return ZipFileUtils.getZipFileName(LOCAL_BACKUP_FILE_NAME);
+    public static String getBackupZipFileName() {
+        return ZipFileUtils.getZipFileName(BACKUP_FILE_NAME);
     }
 }

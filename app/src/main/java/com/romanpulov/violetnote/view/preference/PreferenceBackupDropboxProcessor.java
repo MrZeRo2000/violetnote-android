@@ -29,7 +29,7 @@ public class PreferenceBackupDropboxProcessor extends PreferenceLoaderProcessor{
                     pref.getPreferenceManager().getSharedPreferences().edit().putLong(PreferenceRepository.PREF_KEY_BASIC_NOTE_CLOUD_BACKUP_LAST_LOADED, loadedTime).apply();
                     PreferenceRepository.updateDropboxBackupPreferenceSummary(mPreferenceFragment, loadedTime);
                 } else {
-                    PreferenceRepository.displayMessage(mPreferenceFragment.getActivity(), result);
+                    PreferenceRepository.displayMessage(mContext, result);
                     PreferenceRepository.updateDropboxBackupPreferenceSummary(mPreferenceFragment, PreferenceRepository.PREF_LOAD_CURRENT_VALUE);
                 }
             }

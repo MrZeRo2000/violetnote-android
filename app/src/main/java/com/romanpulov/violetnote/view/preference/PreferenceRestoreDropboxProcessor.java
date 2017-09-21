@@ -3,11 +3,14 @@ package com.romanpulov.violetnote.view.preference;
 import android.preference.PreferenceFragment;
 
 import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.db.DBBasicNoteHelper;
+import com.romanpulov.violetnote.db.DBStorageManager;
 import com.romanpulov.violetnote.loader.AbstractLoader;
 import com.romanpulov.violetnote.loader.FileLoader;
 import com.romanpulov.violetnote.loader.RestoreDropboxFileLoader;
 
 import java.io.File;
+import java.util.Locale;
 
 /**
  * Restore from DropBox processor
@@ -21,7 +24,7 @@ public class PreferenceRestoreDropboxProcessor extends PreferenceLoaderProcessor
     }
 
     private FileLoader createRestoreDropboxLoader() {
-        mLoader = new RestoreDropboxFileLoader(mPreferenceFragment.getActivity());
+        mLoader = new RestoreDropboxFileLoader(mContext);
 
         mLoader.setOnLoadedListener(new AbstractLoader.OnLoadedListener() {
             @Override
@@ -29,14 +32,28 @@ public class PreferenceRestoreDropboxProcessor extends PreferenceLoaderProcessor
                 PreferenceRepository.setDropboxRestoreDefaultPreferenceSummary(mPreferenceFragment);
 
                 if (result != null)
-                    PreferenceRepository.displayMessage(mPreferenceFragment.getActivity(), result);
+                    PreferenceRepository.displayMessage(mContext, result);
                 else {
                     FileLoader fileLoader = PreferenceRestoreDropboxProcessor.this.getRestoreDropboxLoader();
                     File file = new File(fileLoader.getDestPath());
                     if (file.exists()) {
-                        
+                        DBBasicNoteHelper.getInstance(mContext).closeDB();
+
+                        DBStorageManager storageManager = new DBStorageManager(mContext, file.getParent());
+                        String restoreResult = storageManager.restoreLocalBackup();
+
+                        String restoreMessage;
+                        if (restoreResult == null)
+                            restoreMessage = mContext.getString(R.string.error_restore);
+                        else
+                            restoreMessage = mContext.getString(R.string.message_backup_cloud_restored);
+
+                        DBBasicNoteHelper.getInstance(mContext).openDB();
+
+                        PreferenceRepository.displayMessage(mContext, restoreMessage);
+
                     } else
-                        PreferenceRepository.displayMessage(mPreferenceFragment.getActivity(), mPreferenceFragment.getString(R.string.error_restore));
+                        PreferenceRepository.displayMessage(mContext, mPreferenceFragment.getString(R.string.error_restore));
                 }
             }
 
