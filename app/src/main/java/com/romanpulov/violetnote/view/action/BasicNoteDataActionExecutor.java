@@ -19,7 +19,7 @@ import java.util.Map;
 public class BasicNoteDataActionExecutor {
     private final Context mContext;
     private final BasicNoteDataA mBasicNoteData;
-    private List<Map.Entry<String, BasicNoteDataAction>> mActionList = new ArrayList<>();
+    private final List<Map.Entry<String, BasicNoteDataAction>> mActionList = new ArrayList<>();
 
     private OnExecutionCompletedListener mListener;
 

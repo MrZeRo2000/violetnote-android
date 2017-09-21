@@ -46,7 +46,7 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
         }
     }
 
-    private static ValidityPeriodChecker mPasswordValidityChecker = new ValidityPeriodChecker(PASSWORD_VALIDITY_PERIOD);
+    private static final ValidityPeriodChecker mPasswordValidityChecker = new ValidityPeriodChecker(PASSWORD_VALIDITY_PERIOD);
 
     public static ValidityPeriodChecker getPasswordValidityChecker() {
         return mPasswordValidityChecker;

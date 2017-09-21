@@ -165,7 +165,7 @@ public class RecyclerViewHelper {
 
     public static class RecyclerViewSelector {
         //private int mSelectedItemPos = -1;
-        private Set<Integer> mSelectedItems = new HashSet<>();
+        private final Set<Integer> mSelectedItems = new HashSet<>();
 
         public Collection<Integer> getSelectedItems() {
             return mSelectedItems;

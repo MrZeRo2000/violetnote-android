@@ -14,7 +14,7 @@ public abstract class AbstractLoader {
 
     protected final Context mContext;
     protected int mLoadAppearance = LOAD_APPEARANCE_SYNC;
-    protected AsyncTask mTask;
+    private AsyncTask mTask;
 
     public int getLoadAppearance() {
         return mLoadAppearance;

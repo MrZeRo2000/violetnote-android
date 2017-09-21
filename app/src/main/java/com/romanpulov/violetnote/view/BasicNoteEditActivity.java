@@ -42,11 +42,11 @@ public class BasicNoteEditActivity extends ActionBarCompatActivity {
     }
 
     private static class ViewHolder {
-        Context mContext;
-        EditText mTitle;
-        RadioButton mNoteTypeChecked;
-        RadioButton mNoteTypeNamed;
-        CheckBox mIsEncrypted;
+        final Context mContext;
+        final EditText mTitle;
+        final RadioButton mNoteTypeChecked;
+        final RadioButton mNoteTypeNamed;
+        final CheckBox mIsEncrypted;
 
         ViewHolder(Activity activity) {
             mContext = activity;

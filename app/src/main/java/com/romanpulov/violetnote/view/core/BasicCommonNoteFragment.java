@@ -16,8 +16,8 @@ import java.util.Collection;
  * Created by rpulov on 07.09.2016.
  */
 public abstract class BasicCommonNoteFragment extends Fragment {
-    protected static String KEY_SELECTED_ITEMS_ARRAY = "selected items array";
-    protected static String KEY_SELECTION_TITLE = "selection title";
+    protected static final String KEY_SELECTED_ITEMS_ARRAY = "selected items array";
+    protected static final String KEY_SELECTION_TITLE = "selection title";
     protected DialogFragment mDialogFragment;
 
     protected RecyclerView mRecyclerView;

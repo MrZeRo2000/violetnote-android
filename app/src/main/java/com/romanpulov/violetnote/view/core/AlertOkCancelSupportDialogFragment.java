@@ -35,7 +35,7 @@ public class AlertOkCancelSupportDialogFragment extends DialogFragment {
         return newDialog;
     }
 
-    public void setMessage(String  message) {
+    private void setMessage(String  message) {
         mMessage = message;
     }
 

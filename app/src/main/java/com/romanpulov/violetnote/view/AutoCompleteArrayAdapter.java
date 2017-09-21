@@ -32,8 +32,8 @@ public class AutoCompleteArrayAdapter extends ArrayAdapter<String> {
     }
 
     private class ViewHolder implements View.OnClickListener {
-        TextView mTextView;
-        ImageButton mButton;
+        final TextView mTextView;
+        final ImageButton mButton;
 
         ViewHolder(View view) {
             mTextView = (TextView) view.findViewById(android.R.id.text1);

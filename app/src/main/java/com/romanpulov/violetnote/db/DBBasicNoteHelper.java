@@ -10,8 +10,8 @@ import android.database.sqlite.SQLiteDatabase;
  * Created by romanpulov on 16.08.2016.
  */
 public class DBBasicNoteHelper {
-    public static String MAX_AGGREGATE_FUNCTION_NAME = "MAX";
-    public static String MIN_AGGREGATE_FUNCTION_NAME = "MIN";
+    public static final String MAX_AGGREGATE_FUNCTION_NAME = "MAX";
+    public static final String MIN_AGGREGATE_FUNCTION_NAME = "MIN";
 
     private static DBBasicNoteHelper mInstance;
 
@@ -22,7 +22,7 @@ public class DBBasicNoteHelper {
     }
 
     //private final Context mContext;
-    private DBBasicNoteOpenHelper mDBOpenHelper;
+    private final DBBasicNoteOpenHelper mDBOpenHelper;
     private SQLiteDatabase mDB;
 
     private DBBasicNoteHelper(Context context) {

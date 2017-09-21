@@ -44,7 +44,7 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
 
     private OnBasicNoteFragmentInteractionListener mListener;
 
-    private ArrayList<BasicNoteA> mNoteList = new ArrayList<>();
+    private final ArrayList<BasicNoteA> mNoteList = new ArrayList<>();
 
     public static BasicNoteFragment newInstance(DBNoteManager noteManager) {
         BasicNoteFragment fragment = new BasicNoteFragment();
