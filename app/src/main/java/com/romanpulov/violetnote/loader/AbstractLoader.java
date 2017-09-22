@@ -45,7 +45,6 @@ public abstract class AbstractLoader {
         @Override
         protected String doInBackground(Void... voids) {
             try {
-                Thread.sleep(3000);
                 load();
             } catch (Exception e) {
                 return e.getMessage();
