@@ -8,7 +8,7 @@ import android.view.MenuItem;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.view.core.PassDataPasswordActivity;
-import com.romanpulov.violetnote.model.Document;
+import com.romanpulov.violetnote.loader.DocumentPassDataLoader;
 import com.romanpulov.violetnote.model.PassCategoryA;
 import com.romanpulov.violetnote.model.PassDataA;
 import com.romanpulov.violetnote.view.core.PassDataProgressFragment;
@@ -94,7 +94,7 @@ public class CategoryActivity extends PassDataPasswordActivity implements PassDa
     @Override
     protected void onResume() {
         if ((mSampleData) && (mPassDataA == null)) {
-            mPassDataA = Document.loadSamplePassData();
+            mPassDataA = DocumentPassDataLoader.loadSamplePassData();
             refreshFragment();
         } else {
             super.onResume();

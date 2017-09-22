@@ -5,7 +5,7 @@ import android.os.Parcel;
 import android.test.ApplicationTestCase;
 import android.util.Log;
 
-import com.romanpulov.violetnote.model.Document;
+import com.romanpulov.violetnote.loader.DocumentPassDataLoader;
 import com.romanpulov.violetnote.model.PassDataA;
 
 /**
@@ -29,7 +29,7 @@ public class ParcelableTest extends ApplicationTestCase<Application> {
     }
 
     public void testParcelable() {
-        PassDataA data = Document.loadSamplePassData();
+        PassDataA data = DocumentPassDataLoader.loadSamplePassData();
 
         Parcel parcel = Parcel.obtain();
         data.writeToParcel(parcel, 0);

@@ -1,8 +1,9 @@
-package com.romanpulov.violetnote.model;
+package com.romanpulov.violetnote.loader;
 
 import android.content.Context;
 
 import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.model.PassDataA;
 import com.romanpulov.violetnotecore.AESCrypt.AESCryptException;
 import com.romanpulov.violetnotecore.AESCrypt.AESCryptService;
 import com.romanpulov.violetnotecore.Model.PassCategory;
@@ -21,13 +22,17 @@ import java.util.List;
 
 /**
  * Created by rpulov on 03.04.2016.
- * Document data model class
+ * Document PassData loader loader class
  */
-public class Document {
+public class DocumentPassDataLoader {
     public static final String DOCUMENT_FILE_NAME = "document.vnf";
 
-    public static Document newInstance(Context context) {
-        return new Document(context.getApplicationContext());
+    public static String getDocumentFileName(Context context) {
+        return context.getCacheDir() + File.separator + DOCUMENT_FILE_NAME;
+    }
+
+    public static DocumentPassDataLoader newInstance(Context context) {
+        return new DocumentPassDataLoader(context.getApplicationContext());
     }
 
     private final Context mContext;
@@ -36,10 +41,6 @@ public class Document {
 
     public List<String> getLoadErrorList() {
         return mLoadErrorList;
-    }
-
-    public String getFileName() {
-        return mContext.getCacheDir() + DOCUMENT_FILE_NAME;
     }
 
     public PassDataA loadPassDataA(String fileName, String masterPass) {
@@ -105,7 +106,7 @@ public class Document {
         return PassDataA.newInstance(null, pd);
     }
 
-    private Document(Context context) {
+    private DocumentPassDataLoader(Context context) {
         mContext = context;
     }
 }

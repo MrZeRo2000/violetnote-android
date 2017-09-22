@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.romanpulov.violetnote.R;
-import com.romanpulov.violetnote.model.Document;
+import com.romanpulov.violetnote.loader.DocumentPassDataLoader;
 import com.romanpulov.violetnote.model.PassDataA;
 
 import java.io.File;
@@ -80,13 +80,13 @@ public class PassDataProgressFragment extends ProgressFragment {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            File file = new File(Document.newInstance(mContext).getFileName());
+            File file = new File(DocumentPassDataLoader.getDocumentFileName(mContext));
 
-            List<String> loadErrorList;
             if (file.exists()) {
-                Document document = Document.newInstance(mContext);
-                mPassDataA = document.loadPassDataA(document.getFileName(), mPassword);
-                loadErrorList = document.getLoadErrorList();
+                List<String> loadErrorList;
+                DocumentPassDataLoader documentPassDataLoader = DocumentPassDataLoader.newInstance(mContext);
+                mPassDataA = documentPassDataLoader.loadPassDataA(file.getAbsolutePath(), mPassword);
+                loadErrorList = documentPassDataLoader.getLoadErrorList();
                 if (loadErrorList.size() > 0)
                     mErrorText = loadErrorList.get(0);
             } else {

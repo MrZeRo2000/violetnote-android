@@ -3,13 +3,10 @@ package com.romanpulov.violetnote.loader;
 import android.content.Context;
 import android.preference.PreferenceManager;
 
-import com.romanpulov.violetnote.model.Document;
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 
-import java.io.File;
-
 /**
- * Load path for Document
+ * Load path for DocumentPassDataLoader
  * Created by romanpulov on 22.09.2017.
  */
 
@@ -22,7 +19,7 @@ public class DocumentLoadPathProvider extends ContextLoadPathProvider {
 
     @Override
     public String getDestPath() {
-        return getContext().getCacheDir() + File.separator + Document.DOCUMENT_FILE_NAME;
+        return DocumentPassDataLoader.getDocumentFileName(getContext());
     }
 
     public DocumentLoadPathProvider(Context context) {
