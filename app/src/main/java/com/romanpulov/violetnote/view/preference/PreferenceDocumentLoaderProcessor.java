@@ -4,7 +4,6 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 
 import com.romanpulov.violetnote.loader.AbstractLoader;
-import com.romanpulov.violetnote.loader.DocumentLoader;
 import com.romanpulov.violetnote.loader.DocumentLoaderFactory;
 
 /**
@@ -38,7 +37,7 @@ public class PreferenceDocumentLoaderProcessor extends PreferenceLoaderProcessor
 
                 @Override
                 public void onPreExecute() {
-                    if (mLoader.getLoadAppearance() == DocumentLoader.LOAD_APPEARANCE_ASYNC)
+                    if (mLoader.getLoadAppearance() == AbstractLoader.LOAD_APPEARANCE_ASYNC)
                         PreferenceRepository.updateLoadPreferenceSummary(mPreferenceFragment, PreferenceRepository.PREF_LOAD_LOADING);
 
                 }

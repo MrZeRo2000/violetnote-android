@@ -8,17 +8,14 @@ import android.content.Context;
  */
 
 public abstract class FileLoader extends AbstractLoader {
+    private final LoadPathProvider mLoadPathProvider;
 
-    final String mSourcePath;
-    final String mDestPath;
+    public LoadPathProvider getLoadPathProvider() {
+        return mLoadPathProvider;
+    }
 
-    public abstract String getSourcePath();
-    public abstract String getDestPath();
-
-    FileLoader(Context context) {
+    FileLoader(Context context, LoadPathProvider loadPathProvider) {
         super(context);
-        //file path
-        mSourcePath = getSourcePath();
-        mDestPath = getDestPath();
+        mLoadPathProvider = loadPathProvider;
     }
 }

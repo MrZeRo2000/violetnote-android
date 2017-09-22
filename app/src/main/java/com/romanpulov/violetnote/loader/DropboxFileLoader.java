@@ -16,7 +16,7 @@ import java.io.OutputStream;
  * DropBox file loader
  * Created by romanpulov on 01.07.2016. *
  */
-public abstract class DropboxFileLoader extends FileLoader {
+public class DropboxFileLoader extends FileLoader {
     private final DbxClientV2 mClient;
     private final DropBoxHelper mDropBoxHelper;
 
@@ -26,13 +26,13 @@ public abstract class DropboxFileLoader extends FileLoader {
         if (accessToken == null)
             throw new Exception(mContext.getResources().getString(R.string.error_dropbox_auth));
 
-        Metadata m = mClient.files().getMetadata(mSourcePath);
+        Metadata m = mClient.files().getMetadata(getLoadPathProvider().getSourcePath());
         if ((m == null) || !(m instanceof FileMetadata))
-            throw new Exception(String.format(mContext.getText(R.string.error_dropbox_load_file_data).toString(), mSourcePath));
+            throw new Exception(String.format(mContext.getText(R.string.error_dropbox_load_file_data).toString(), getLoadPathProvider().getSourcePath()));
 
         FileMetadata fm = (FileMetadata) m;
 
-        File mDestFile = new File(mDestPath);
+        File mDestFile = new File(getLoadPathProvider().getDestPath());
         OutputStream outputStream = new FileOutputStream(mDestFile);
         try {
             mClient.files().download(fm.getPathLower(), fm.getRev()).download(outputStream);
@@ -51,8 +51,8 @@ public abstract class DropboxFileLoader extends FileLoader {
         return true;
     }
 
-    public DropboxFileLoader(Context context) {
-        super(context);
+    public DropboxFileLoader(Context context, LoadPathProvider loadPathProvider) {
+        super(context, loadPathProvider);
         //appearance
         mLoadAppearance = LOAD_APPEARANCE_ASYNC;
 

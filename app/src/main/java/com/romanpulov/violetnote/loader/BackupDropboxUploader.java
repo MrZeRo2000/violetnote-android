@@ -19,7 +19,6 @@ import java.io.InputStream;
  */
 
 public class BackupDropboxUploader extends AbstractLoader {
-    private static final String BACKUP_PATH = "/AndroidBackup/";
 
     private final DbxClientV2 mClient;
     private final DropBoxHelper mDropBoxHelper;
@@ -44,7 +43,7 @@ public class BackupDropboxUploader extends AbstractLoader {
             String remoteFileName = f.getName();
             InputStream inputStream = new FileInputStream(f);
             try {
-                mClient.files().uploadBuilder(BACKUP_PATH + remoteFileName).withMode(WriteMode.OVERWRITE).uploadAndFinish(inputStream);
+                mClient.files().uploadBuilder(DropboxLoaderRepository.REMOTE_PATH + remoteFileName).withMode(WriteMode.OVERWRITE).uploadAndFinish(inputStream);
             } finally {
                 try {
                     inputStream.close();
