@@ -113,19 +113,40 @@ public class DBNoteManager extends BasicCommonNoteManager {
         return result;
     }
 
+    public ArrayList<BasicNoteA> queryRelatedNotes(BasicNoteA note) {
+        ArrayList<BasicNoteA> result = new ArrayList<>();
+
+        Cursor c = null;
+        try {
+
+            c = mDB.query(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, DBBasicNoteOpenHelper.NOTES_TABLE_COLS,
+                    DBBasicNoteOpenHelper.ID_COLUMN_NAME + " != ? AND " +
+                    DBBasicNoteOpenHelper.NOTE_TYPE_COLUMN_NAME + " = ? AND " +
+                    DBBasicNoteOpenHelper.IS_ENCRYPTED_COLUMN_NAME + " = ?", new String[]{String.valueOf(note.getId()), String.valueOf(note.getNoteType()), String.valueOf(BooleanUtils.toInt(note.isEncrypted()))},
+                    null, null, DBBasicNoteOpenHelper.TITLE_COLUMN_NAME
+            );
+
+            for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
+                BasicNoteA newNote = noteFromCursor(c, mDTF);
+                result.add(newNote);
+            }
+
+        } finally {
+            if ((c !=null) && !c.isClosed())
+                c.close();
+        }
+
+        return result;
+    }
+
     public BasicNoteDataA fromNoteData(BasicNoteA note) {
         ArrayList<BasicNoteA> notes = new ArrayList<>();
+        ArrayList<BasicNoteA> relatedNotes = queryRelatedNotes(note);
 
         //get note
         notes.add(note);
-        /*
-        //get items
-        queryNoteDataItems(note);
 
-        //get values
-        queryNoteDataValues(note);
-        */
-        return BasicNoteDataA.newInstance(null, notes);
+        return BasicNoteDataA.newInstance(null, notes, relatedNotes);
     }
 
     public void queryNoteDataItems(BasicNoteA note) {

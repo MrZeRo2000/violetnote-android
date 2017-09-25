@@ -11,12 +11,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicEntityNoteSelectionPosA;
+import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.model.BasicNoteValueA;
@@ -168,6 +170,19 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             mode.getMenuInflater().inflate(R.menu.menu_listitem_checked_actions, menu);
+
+            SubMenu subMenu = null;
+            ArrayList<BasicNoteA> relatedNotes = mBasicNoteData.getRelatedNoteList();
+            for (BasicNoteA relatedNote : relatedNotes) {
+                if (subMenu == null)
+                    subMenu  = menu.addSubMenu("Sub-Menu");
+                subMenu.addSubMenu(relatedNote.getTitle());
+            }
+            /*
+            SubMenu subMenu  = menu.addSubMenu("Sub-Menu");
+            subMenu.addSubMenu("Sub menu 1");
+            */
+
             if (mRecyclerViewSelector.isSelectedSingle())
                 mode.setTitle(DisplayTitleBuilder.buildItemsDisplayTitle(getActivity(), mBasicNoteData.getNote().getItems(), mRecyclerViewSelector.getSelectedItems()));
             return true;

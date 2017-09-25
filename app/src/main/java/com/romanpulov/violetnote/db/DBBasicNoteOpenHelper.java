@@ -22,13 +22,16 @@ public class DBBasicNoteOpenHelper extends SQLiteOpenHelper {
 
     //notes
     public static final String NOTES_TABLE_NAME = "notes";
+    public static final String NOTE_TYPE_COLUMN_NAME = "note_type";
+    public static final String IS_ENCRYPTED_COLUMN_NAME = "is_encrypted";
+    public static final String TITLE_COLUMN_NAME = "title";
     public static final String[] NOTES_TABLE_COLS = new String[] {
         ID_COLUMN_NAME,
         LAST_MODIFIED_COLUMN_NAME,
         ORDER_COLUMN_NAME,
-        "note_type",
-        "title",
-        "is_encrypted",
+        NOTE_TYPE_COLUMN_NAME,
+        TITLE_COLUMN_NAME,
+        IS_ENCRYPTED_COLUMN_NAME,
         "encrypted_string"
     };
     private static final String NOTES_TABLE_CREATE =

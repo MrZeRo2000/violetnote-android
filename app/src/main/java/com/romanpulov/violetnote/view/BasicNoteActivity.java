@@ -74,6 +74,7 @@ public class BasicNoteActivity extends ActionBarCompatActivity implements BasicN
     public void onBasicNoteFragmentInteraction(BasicNoteA item) {
         DBNoteManager noteManager = new DBNoteManager(this);
         BasicNoteDataA noteData = noteManager.fromNoteData(item);
+
         Intent intent = null;
 
         //select intent
