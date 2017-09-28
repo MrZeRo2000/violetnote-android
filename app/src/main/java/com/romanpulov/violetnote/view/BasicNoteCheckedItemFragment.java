@@ -171,16 +171,16 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             mode.getMenuInflater().inflate(R.menu.menu_listitem_checked_actions, menu);
 
+            //move to other note submenu
+            /*
             SubMenu subMenu = null;
             ArrayList<BasicNoteA> relatedNotes = mBasicNoteData.getRelatedNoteList();
+            int order = 1;
             for (BasicNoteA relatedNote : relatedNotes) {
                 if (subMenu == null)
-                    subMenu  = menu.addSubMenu("Sub-Menu");
+                    subMenu  = menu.addSubMenu(Menu.NONE, Menu.FIRST + (int)relatedNote.getId(), order++, getString(R.string.action_move_other));
                 subMenu.addSubMenu(relatedNote.getTitle());
             }
-            /*
-            SubMenu subMenu  = menu.addSubMenu("Sub-Menu");
-            subMenu.addSubMenu("Sub menu 1");
             */
 
             if (mRecyclerViewSelector.isSelectedSingle())

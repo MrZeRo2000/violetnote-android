@@ -372,7 +372,27 @@ public class DBNoteManager extends BasicCommonNoteManager {
         }
     }
 
-    public long insertNoteValue(BasicNoteA note, BasicNoteValueA value) {
+    public int moveNoteItemOther(BasicNoteItemA noteItem, BasicNoteA otherNote) {
+        long maxOrderId = mDBHelper.getMaxOrderId(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME, otherNote.getId());
+        return updateNoteItemOther(noteItem, otherNote.getId(), maxOrderId + 1);
+    }
+
+    /**
+     * Updates NoteItem to another note
+     * @param note NoteItem
+     * @param otherNoteId noteId to move
+     * @param otherOrderId orderId to set
+     */
+    public int updateNoteItemOther(BasicEntityNoteA note, long otherNoteId, long otherOrderId) {
+        ContentValues cv = new ContentValues();
+
+        cv.put(DBBasicNoteOpenHelper.NOTE_ID_COLUMN_NAME, otherNoteId);
+        cv.put(DBBasicNoteOpenHelper.ORDER_COLUMN_NAME, otherOrderId);
+
+        return mDB.update(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME, cv, DBBasicNoteOpenHelper.ID_COLUMN_NAME + " = ?" , new String[] {String.valueOf(note.getId())});
+    }
+
+    public long insertNoteValue(BasicEntityNoteA note, BasicNoteValueA value) {
         ContentValues cv = new ContentValues();
 
         cv.put(DBBasicNoteOpenHelper.NOTE_VALUES_TABLE_COLS[1], note.getId());

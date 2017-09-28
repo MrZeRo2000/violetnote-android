@@ -10,6 +10,7 @@ import com.romanpulov.violetnote.db.DBBasicNoteOpenHelper;
 import com.romanpulov.violetnote.db.DBManagementProvider;
 import com.romanpulov.violetnote.db.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicNoteA;
+import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 
 import junit.framework.Assert;
@@ -47,26 +48,36 @@ public class DBManagementTest extends ApplicationTestCase<Application> {
         mDBNoteManager = new DBNoteManager(getContext());
     }
 
-    private List<String> mTestNoteNames = new ArrayList<>();
+    private final List<String> mTestNoteNames = new ArrayList<>();
+
     {
-        mTestNoteNames.add("Instrumentation test note 1");
-        mTestNoteNames.add("Instrumentation test note 2");
-        mTestNoteNames.add("Instrumentation test note 3");
+        for (int i = 1; i < 100; i++)
+            mTestNoteNames.add("Instrumentation test note " + String.valueOf(i));
     }
 
     private void createNotesTestData() {
         initDB();
 
+        int notePos = 0;
+
         String insertNotesSql = "insert into " + DBBasicNoteOpenHelper.NOTES_TABLE_NAME + " (last_modified, order_id, note_type, title, is_encrypted) VALUES (?, ?, ?, ?, ?)";
 
-        String[] insertNotesArgs = new String[] {"0", "1", "0", mTestNoteNames.get(0), "0"};
+        // checked item 1
+        String[] insertNotesArgs = new String[] {"0", "1", "0", mTestNoteNames.get(notePos++), "0"};
         mDB.execSQL(insertNotesSql, insertNotesArgs);
 
-        insertNotesArgs = new String[] {"0", "2", "0", mTestNoteNames.get(1), "0"};
+        // checked item 2
+        insertNotesArgs = new String[] {"0", "2", "0", mTestNoteNames.get(notePos++), "0"};
         mDB.execSQL(insertNotesSql, insertNotesArgs);
 
-        insertNotesArgs = new String[] {"0", "4", "0", mTestNoteNames.get(2), "0"};
+        // checked item 3
+        insertNotesArgs = new String[] {"0", "4", "0", mTestNoteNames.get(notePos++), "0"};
         mDB.execSQL(insertNotesSql, insertNotesArgs);
+
+        // name value item 1
+        insertNotesArgs = new String[] {"0", "5", "1", mTestNoteNames.get(notePos), "0"};
+        mDB.execSQL(insertNotesSql, insertNotesArgs);
+
     }
 
     private void createNoteItemTestData() {
@@ -137,9 +148,13 @@ public class DBManagementTest extends ApplicationTestCase<Application> {
                 "(last_modified, order_id, note_id, name, value, checked, priority) VALUES (?, ?, ?, ?, ?, ?, ?)";
         insertArgs = new String[] {"0", "2", "2", "Note item 202", "Note item 202 value", "0", "0"};
         mDB.execSQL(insertSQL, insertArgs);
+
+        //10
+        insertArgs = new String[] {"0", "1", "3", "Note item 301", "Note item 301 value", "0", "0"};
+        mDB.execSQL(insertSQL, insertArgs);
     }
 
-    public void testMove() {
+    public void blocked_testMove() {
         internalTestPriorityMove();
         internalTestNoteMove();
         internalTestNoteItemMove();
@@ -323,6 +338,25 @@ public class DBManagementTest extends ApplicationTestCase<Application> {
         Assert.assertEquals(note2.getOrderId(), 3);
         note3 = mDBNoteManager.get(note3id);
         Assert.assertEquals(note3.getOrderId(), 1);
+    }
+
+    public void testRelatedNoteList() {
+        createNoteItemTestData();
+
+        long note1id = mDBHelper.getAggregateColumn(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, DBBasicNoteOpenHelper.ID_COLUMN_NAME, "MAX", "title = ?", new String[]{mTestNoteNames.get(0)});
+        long note2id = mDBHelper.getAggregateColumn(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, DBBasicNoteOpenHelper.ID_COLUMN_NAME, "MAX", "title = ?", new String[]{mTestNoteNames.get(1)});
+
+        long note4id = mDBHelper.getAggregateColumn(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, DBBasicNoteOpenHelper.ID_COLUMN_NAME, "MAX", "title = ?", new String[]{mTestNoteNames.get(3)});
+
+        BasicNoteA note1 = mDBNoteManager.get(note1id);
+        BasicNoteA note2 = mDBNoteManager.get(note2id);
+        BasicNoteA note4 = mDBNoteManager.get(note4id);
+
+        BasicNoteDataA noteData2 = mDBNoteManager.fromNoteData(note2);
+        Assert.assertEquals(noteData2.getRelatedNoteList().size(), 2);
+
+        BasicNoteDataA noteData4 = mDBNoteManager.fromNoteData(note4);
+        Assert.assertEquals(noteData4.getRelatedNoteList().size(), 0);
     }
 
 }
