@@ -154,7 +154,7 @@ public class DBManagementTest extends ApplicationTestCase<Application> {
         mDB.execSQL(insertSQL, insertArgs);
     }
 
-    public void blocked_testMove() {
+    public void testMove() {
         internalTestPriorityMove();
         internalTestNoteMove();
         internalTestNoteItemMove();
@@ -340,7 +340,7 @@ public class DBManagementTest extends ApplicationTestCase<Application> {
         Assert.assertEquals(note3.getOrderId(), 1);
     }
 
-    public void testRelatedNoteList() {
+    public void block_testRelatedNoteList() {
         createNoteItemTestData();
 
         long note1id = mDBHelper.getAggregateColumn(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, DBBasicNoteOpenHelper.ID_COLUMN_NAME, "MAX", "title = ?", new String[]{mTestNoteNames.get(0)});
@@ -357,6 +357,26 @@ public class DBManagementTest extends ApplicationTestCase<Application> {
 
         BasicNoteDataA noteData4 = mDBNoteManager.fromNoteData(note4);
         Assert.assertEquals(noteData4.getRelatedNoteList().size(), 0);
-    }
 
+        mDBNoteManager.queryNoteDataItems(note1);
+        mDBNoteManager.queryNoteDataItems(note2);
+        mDBNoteManager.queryNoteDataItems(note4);
+
+        int note1ItemCount = note1.getItemCount();
+        int note2ItemCount = note2.getItemCount();
+
+        loadNoteItems();
+
+        BasicNoteItemA itemToMove = items[7];
+        BasicNoteA noteToMoveTo = note1;
+
+        mDBNoteManager.moveNoteItemOther(itemToMove, noteToMoveTo);
+
+        mDBNoteManager.queryNoteDataItems(note1);
+        mDBNoteManager.queryNoteDataItems(note2);
+        mDBNoteManager.queryNoteDataItems(note4);
+
+        Assert.assertEquals(note1.getItemCount(), note1ItemCount + 1);
+        Assert.assertEquals(note2.getItemCount(), note2ItemCount - 1);
+    }
 }
