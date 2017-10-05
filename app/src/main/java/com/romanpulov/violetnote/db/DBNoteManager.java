@@ -373,7 +373,8 @@ public class DBNoteManager extends BasicCommonNoteManager {
     }
 
     public int moveNoteItemOther(BasicNoteItemA noteItem, BasicNoteA otherNote) {
-        long maxOrderId = mDBHelper.getMaxOrderId(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME, otherNote.getId());
+        DBManagementProvider dbManagementProvider = noteItem.getDBManagementProvider();
+        long maxOrderId = mDBHelper.getMaxOrderId(dbManagementProvider.getTableName(), dbManagementProvider.getOrderIdSelection(), dbManagementProvider.getOrderIdSelectionArgs());
         return updateNoteItemOther(noteItem, otherNote.getId(), maxOrderId + 1);
     }
 

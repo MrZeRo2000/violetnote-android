@@ -131,6 +131,11 @@ public class DBBasicNoteOpenHelper extends SQLiteOpenHelper {
     //note_id selection
     public static final String NOTE_ID_SELECTION_STRING = NOTE_ID_COLUMN_NAME + " = ?";
 
+    //priority selection
+    public static final String PRIORITY_SELECTION_STRING = PRIORITY_COLUMN_NAME + " = ?";
+
+    public static final String AND_STRING = " AND ";
+
     public DBBasicNoteOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }

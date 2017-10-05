@@ -59,6 +59,10 @@ public class DBBasicNoteHelper {
         }
     }
 
+    private static String getNoteIdPrioritySelection(long noteId, long priority) {
+        return DBBasicNoteOpenHelper.NOTE_ID_SELECTION_STRING + DBBasicNoteOpenHelper.AND_STRING + DBBasicNoteOpenHelper.PRIORITY_SELECTION_STRING;
+    }
+
     /**
      * Selection string with conditions
      * @param noteId 0 for notes, note_id value for note items
@@ -70,6 +74,11 @@ public class DBBasicNoteHelper {
         else
             return DBBasicNoteOpenHelper.NOTE_ID_SELECTION_STRING;
     }
+
+    private static String[] getNoteIdPrioritySelectionArgs(long noteId, long priority) {
+        return new String[] {String.valueOf(noteId), String.valueOf(priority)};
+    }
+
 
     /**
      * Selection args

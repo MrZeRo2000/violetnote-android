@@ -154,10 +154,11 @@ public class DBManagementTest extends ApplicationTestCase<Application> {
         mDB.execSQL(insertSQL, insertArgs);
     }
 
-    public void testMove() {
+    public void testMain() {
         internalTestPriorityMove();
         internalTestNoteMove();
         internalTestNoteItemMove();
+        internalTestRelatedNoteList();
     }
 
     private BasicNoteItemA[] items = new BasicNoteItemA[10];
@@ -272,6 +273,11 @@ public class DBManagementTest extends ApplicationTestCase<Application> {
         return result;
     }
 
+    private void queryNoteDataItems(BasicNoteA[] notes) {
+        for (BasicNoteA note : notes)
+            mDBNoteManager.queryNoteDataItems(note);
+    }
+
 
     private void internalTestNoteMove() {
         createNotesTestData();
@@ -282,11 +288,6 @@ public class DBManagementTest extends ApplicationTestCase<Application> {
         long note4id = mDBHelper.getAggregateColumn(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, DBBasicNoteOpenHelper.ID_COLUMN_NAME, "MAX", "title = ?", new String[]{mTestNoteNames.get(3)});
 
         long[] noteIdList = {note1id, note2id, note3id, note4id};
-
-        BasicNoteA note1 = mDBNoteManager.get(note1id);
-        BasicNoteA note2 = mDBNoteManager.get(note2id);
-        BasicNoteA note3 = mDBNoteManager.get(note3id);
-        BasicNoteA note4 = mDBNoteManager.get(note4id);
 
         BasicNoteA[] notes = getNotes(noteIdList);
 
@@ -308,12 +309,12 @@ public class DBManagementTest extends ApplicationTestCase<Application> {
         Assert.assertEquals("1,2,4,5", getNotesOrder(noteIdList)) ;
 
         //note 1 move up - no action : 1, 2, 4, 5
-        mDBNoteManager.moveUp(note1);
+        mDBNoteManager.moveUp(notes[0]);
         notes = getNotes(noteIdList);
         Assert.assertEquals("1,2,4,5", getNotesOrder(noteIdList)) ;
 
         //note 3 move up - order exchange : 1, 4, 2, 5
-        mDBNoteManager.moveUp(note3);
+        mDBNoteManager.moveUp(notes[2]);
         notes = getNotes(noteIdList);
         Assert.assertEquals("1,4,2,5", getNotesOrder(noteIdList)) ;
 
@@ -348,43 +349,39 @@ public class DBManagementTest extends ApplicationTestCase<Application> {
         Assert.assertEquals("1,5,2,4", getNotesOrder(noteIdList)) ;
     }
 
-    public void block_testRelatedNoteList() {
+    public void internalTestRelatedNoteList() {
         createNoteItemTestData();
 
         long note1id = mDBHelper.getAggregateColumn(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, DBBasicNoteOpenHelper.ID_COLUMN_NAME, "MAX", "title = ?", new String[]{mTestNoteNames.get(0)});
         long note2id = mDBHelper.getAggregateColumn(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, DBBasicNoteOpenHelper.ID_COLUMN_NAME, "MAX", "title = ?", new String[]{mTestNoteNames.get(1)});
-
+        long note3id = mDBHelper.getAggregateColumn(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, DBBasicNoteOpenHelper.ID_COLUMN_NAME, "MAX", "title = ?", new String[]{mTestNoteNames.get(2)});
         long note4id = mDBHelper.getAggregateColumn(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, DBBasicNoteOpenHelper.ID_COLUMN_NAME, "MAX", "title = ?", new String[]{mTestNoteNames.get(3)});
 
-        BasicNoteA note1 = mDBNoteManager.get(note1id);
-        BasicNoteA note2 = mDBNoteManager.get(note2id);
-        BasicNoteA note4 = mDBNoteManager.get(note4id);
+        long[] noteIdList = {note1id, note2id, note3id, note4id};
 
-        BasicNoteDataA noteData2 = mDBNoteManager.fromNoteData(note2);
+        BasicNoteA[] notes = getNotes(noteIdList);
+
+        BasicNoteDataA noteData2 = mDBNoteManager.fromNoteData(notes[1]);
         Assert.assertEquals(noteData2.getRelatedNoteList().size(), 2);
 
-        BasicNoteDataA noteData4 = mDBNoteManager.fromNoteData(note4);
+        BasicNoteDataA noteData4 = mDBNoteManager.fromNoteData(notes[3]);
         Assert.assertEquals(noteData4.getRelatedNoteList().size(), 0);
 
-        mDBNoteManager.queryNoteDataItems(note1);
-        mDBNoteManager.queryNoteDataItems(note2);
-        mDBNoteManager.queryNoteDataItems(note4);
+        queryNoteDataItems(notes);
 
-        int note1ItemCount = note1.getItemCount();
-        int note2ItemCount = note2.getItemCount();
+        int note1ItemCount = notes[0].getItemCount();
+        int note2ItemCount = notes[1].getItemCount();
 
         loadNoteItems();
 
         BasicNoteItemA itemToMove = items[7];
-        BasicNoteA noteToMoveTo = note1;
+        BasicNoteA noteToMoveTo = notes[0];
 
         mDBNoteManager.moveNoteItemOther(itemToMove, noteToMoveTo);
 
-        mDBNoteManager.queryNoteDataItems(note1);
-        mDBNoteManager.queryNoteDataItems(note2);
-        mDBNoteManager.queryNoteDataItems(note4);
+        queryNoteDataItems(notes);;
 
-        Assert.assertEquals(note1.getItemCount(), note1ItemCount + 1);
-        Assert.assertEquals(note2.getItemCount(), note2ItemCount - 1);
+        Assert.assertEquals(notes[0].getItemCount(), note1ItemCount + 1);
+        Assert.assertEquals(notes[1].getItemCount(), note2ItemCount - 1);
     }
 }
