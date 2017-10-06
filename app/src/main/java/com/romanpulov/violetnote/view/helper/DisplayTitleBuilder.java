@@ -7,7 +7,6 @@ import com.romanpulov.violetnote.model.DisplayTitleProvider;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Display title builder class
@@ -32,7 +31,7 @@ public class DisplayTitleBuilder {
                 if (title.isEmpty())
                     title = item.getDisplayTitle();
                 else {
-                    title = String.format(Locale.getDefault(), context.getString(R.string.title_multiple_items_selected), selectedItems.size());
+                    title = context.getString(R.string.title_multiple_items_selected, selectedItems.size());
                     break;
                 }
             }

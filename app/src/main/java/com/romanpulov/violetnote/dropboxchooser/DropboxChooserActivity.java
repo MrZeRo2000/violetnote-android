@@ -1,10 +1,5 @@
 package com.romanpulov.violetnote.dropboxchooser;
 
-/**
- * Activity for choosing file from Dropbox
- * Created by romanpulov on 02.07.2016.
- */
-
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -14,7 +9,10 @@ import android.support.v4.app.FragmentManager;
 
 import com.romanpulov.violetnote.chooser.ChooseItem;
 
-
+/**
+ * Activity for choosing file from Dropbox
+ * Created by romanpulov on 02.07.2016.
+ */
 public class DropboxChooserActivity extends ActionBarCompatActivity implements DropboxChooserFragment.OnChooserInteractionListener {
     public static final String CHOOSER_INITIAL_PATH = "ChooserInitialPath";
     private static final String CHOOSER_RESULT_PATH = "ChooserResultPath";

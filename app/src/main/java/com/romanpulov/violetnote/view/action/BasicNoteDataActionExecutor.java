@@ -37,12 +37,6 @@ public class BasicNoteDataActionExecutor {
         mProgressListener = progressListener;
     }
 
-    private long mNoteId = 0;
-
-    public void setNoteId(long value) {
-        mNoteId = value;
-    }
-
     public BasicNoteDataActionExecutor(Context context, BasicNoteDataA basicNoteData) {
         mContext = context;
         mBasicNoteData = basicNoteData;

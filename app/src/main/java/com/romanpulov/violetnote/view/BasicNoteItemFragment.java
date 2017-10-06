@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.view.ActionMode;
 import android.view.Menu;
+import android.view.MenuItem;
+import android.view.SubMenu;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBNoteManager;
@@ -25,8 +27,8 @@ import com.romanpulov.violetnote.view.core.BasicCommonNoteFragment;
 import com.romanpulov.violetnote.view.core.PasswordActivity;
 import com.romanpulov.violetnote.view.helper.ActionHelper;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Base class for BasicNoteXXXItemFragment classes
@@ -34,7 +36,11 @@ import java.util.Locale;
  * Created by romanpulov on 09.09.2016.
  */
 public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
+    protected final static int MENU_GROUP_OTHER_ITEMS = Menu.FIRST + 1;
+
     protected BasicNoteDataA mBasicNoteData;
+    protected ArrayList<BasicNoteA> mRelatedNotes;
+
     protected DialogInterface mEditorDialog;
 
     private BasicNoteDataActionExecutorHost mExecutorHost;
@@ -82,6 +88,24 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
             mRecyclerViewSelector.setSelectedItems(ActionHelper.createSelectAllItems(mBasicNoteData.getNote().getItemCount()));
     }
 
+    /**
+     * Common logic for creation of related menu for movement to other note
+     * @param menu Menu to add sub-menu
+     */
+    protected void buildMoveToOtherNotesSubMenu(Menu menu) {
+        SubMenu subMenu = null;
+        mRelatedNotes = mBasicNoteData.getRelatedNoteList();
+        int order = 1;
+        int relatedNoteIndex = 0;
+        for (BasicNoteA relatedNote : mRelatedNotes) {
+            if (subMenu == null) {
+                subMenu = menu.addSubMenu(Menu.NONE, Menu.NONE, order++, getString(R.string.action_move_other));
+                subMenu.getItem().setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+            }
+            subMenu.addSubMenu(MENU_GROUP_OTHER_ITEMS, relatedNoteIndex ++, Menu.NONE, relatedNote.getTitle());
+        }
+    }
+
 
     /**
      * Common logic for Add action
@@ -112,7 +136,7 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
     }
 
     protected void performMoveToOtherNoteAction(final ActionMode mode, final List<BasicNoteItemA> items, final BasicNoteA otherNote) {
-        String confirmationQuestion = String.format(Locale.getDefault(), getString(R.string.ui_question_selected_notes_move_to_other_note), items.size(), otherNote.getTitle());
+        String confirmationQuestion = getString(R.string.ui_question_selected_notes_move_to_other_note, items.size(), otherNote.getTitle());
         AlertOkCancelSupportDialogFragment dialog = AlertOkCancelSupportDialogFragment.newAlertOkCancelDialog(confirmationQuestion);
         dialog.setOkButtonClickListener(new AlertOkCancelSupportDialogFragment.OnClickListener() {
             @Override
@@ -189,7 +213,6 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
     protected void performMoveAction(final BasicNoteMoveAction<BasicNoteItemA> action, final List<BasicNoteItemA> items) {
         //executor
         BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity(), mBasicNoteData);
-        executor.setNoteId(mBasicNoteData.getNote().getId());
 
         //actions
         executor.addAction(getString(R.string.caption_processing), new BasicNoteDataNoteItemAction(mBasicNoteData, action, items));

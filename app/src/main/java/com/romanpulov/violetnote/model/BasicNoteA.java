@@ -154,14 +154,14 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
 
     /**
      * Creates notes without totals
-     * @param id
-     * @param lastModified
-     * @param lastModifiedString
-     * @param orderId
-     * @param noteType
-     * @param title
-     * @param encrypted
-     * @param encryptedString
+     * @param id note id
+     * @param lastModified last modified date
+     * @param lastModifiedString last modified date as string
+     * @param orderId order id
+     * @param noteType note type
+     * @param title note title
+     * @param encrypted flag if a not is encrypted
+     * @param encryptedString not used
      * @return new instance
      */
     public static BasicNoteA newInstance(long id, long lastModified, String lastModifiedString, long orderId, int noteType, String title, boolean encrypted, String encryptedString) {
@@ -181,16 +181,16 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
 
     /**
      * Creates notes with calculated fields
-     * @param id
-     * @param lastModified
-     * @param lastModifiedString
-     * @param orderId
-     * @param noteType
-     * @param title
-     * @param encrypted
-     * @param encryptedString
-     * @param itemCount
-     * @param checkedItemCount
+     * @param id note id
+     * @param lastModified last modified date
+     * @param lastModifiedString last modified date as string
+     * @param orderId order id
+     * @param noteType note type
+     * @param title note title
+     * @param encrypted flag if a not is encrypted
+     * @param encryptedString not used
+     * @param itemCount number of items
+     * @param checkedItemCount number of checked items
      * @return new instance
      */
     public static BasicNoteA newInstanceWithTotals(long id, long lastModified, String lastModifiedString, long orderId, int noteType, String title, boolean encrypted, String encryptedString, int itemCount, int checkedItemCount) {
@@ -214,10 +214,10 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
     /**
      * Creates notes for editor
      * most fields are empty
-     * @param noteType
-     * @param title
-     * @param encrypted
-     * @param encryptedString
+     * @param noteType note type
+     * @param title note title
+     * @param encrypted flag if a not is encrypted
+     * @param encryptedString not used
      * @return new instance
      */
     public static BasicNoteA newEditInstance(int noteType, String title, boolean encrypted, String encryptedString) {

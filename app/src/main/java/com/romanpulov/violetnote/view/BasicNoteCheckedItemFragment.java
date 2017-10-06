@@ -11,10 +11,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBNoteManager;
@@ -50,10 +48,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
-
-    private final static int MENU_GROUP_OTHER_ITEMS = Menu.FIRST + 1;
-
-    private ArrayList<BasicNoteA> mRelatedNotes;
 
     private AddActionHelper mAddActionHelper;
     private CheckoutProgressHelper mCheckoutProgressHelper;
@@ -143,7 +137,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                     // move to other items
                     BasicNoteA otherNote = mRelatedNotes.get(item.getItemId());
                     performMoveToOtherNoteAction(mode, selectedNoteItems, otherNote);
-                } else {
+                } else
                     // regular menu
                     switch (item.getItemId()) {
                         case R.id.delete:
@@ -174,7 +168,6 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                             performSelectAll();
                             break;
                     }
-                }
             }
             return false;
         }
@@ -183,18 +176,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             mode.getMenuInflater().inflate(R.menu.menu_listitem_checked_actions, menu);
 
-            //move to other note submenu
-            SubMenu subMenu = null;
-            mRelatedNotes = mBasicNoteData.getRelatedNoteList();
-            int order = 1;
-            int relatedNoteIndex = 0;
-            for (BasicNoteA relatedNote : mRelatedNotes) {
-                if (subMenu == null) {
-                    subMenu = menu.addSubMenu(Menu.NONE, Menu.NONE, order++, getString(R.string.action_move_other));
-                    subMenu.getItem().setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-                }
-                subMenu.addSubMenu(MENU_GROUP_OTHER_ITEMS, relatedNoteIndex ++, Menu.NONE, relatedNote.getTitle());
-            }
+            buildMoveToOtherNotesSubMenu(menu);
 
             if (mRecyclerViewSelector.isSelectedSingle())
                 mode.setTitle(DisplayTitleBuilder.buildItemsDisplayTitle(getActivity(), mBasicNoteData.getNote().getItems(), mRecyclerViewSelector.getSelectedItems()));
@@ -355,7 +337,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
     public void checkOut() {
         int checkedCount = mBasicNoteData.getCheckedCount();
         if (checkedCount > 0) {
-            String queryString = String.format(getString(R.string.ui_question_are_you_sure_checkout_items), checkedCount);
+            String queryString = getString(R.string.ui_question_are_you_sure_checkout_items, checkedCount);
             AlertOkCancelSupportDialogFragment dialog = AlertOkCancelSupportDialogFragment.newAlertOkCancelDialog(queryString);
             dialog.setOkButtonClickListener(new AlertOkCancelSupportDialogFragment.OnClickListener() {
                 @Override

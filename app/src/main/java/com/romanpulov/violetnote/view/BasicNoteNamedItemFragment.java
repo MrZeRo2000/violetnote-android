@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.model.BasicEntityNoteSelectionPosA;
+import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutorHost;
@@ -159,7 +160,13 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
             List<BasicNoteItemA> selectedNoteItems = BasicEntityNoteSelectionPosA.getItemsByPositions(mBasicNoteData.getNote().getItems(), mRecyclerViewSelector.getSelectedItems());
 
             if (selectedNoteItems.size() > 0) {
-                switch (item.getItemId()) {
+                if ((item.getGroupId() == MENU_GROUP_OTHER_ITEMS) && (mRelatedNotes != null)) {
+                    // move to other items
+                    BasicNoteA otherNote = mRelatedNotes.get(item.getItemId());
+                    performMoveToOtherNoteAction(mode, selectedNoteItems, otherNote);
+                } else
+                    // regular menu
+                    switch (item.getItemId()) {
                     case R.id.delete:
                         performDeleteAction(mode, selectedNoteItems);
                         break;
@@ -198,6 +205,9 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             mode.getMenuInflater().inflate(R.menu.menu_listitem_namevalue_actions, menu);
+
+            buildMoveToOtherNotesSubMenu(menu);
+
             if (mRecyclerViewSelector.isSelected())
                 mode.setTitle(DisplayTitleBuilder.buildItemsDisplayTitle(getActivity(), mBasicNoteData.getNote().getItems(), mRecyclerViewSelector.getSelectedItems()));
             return true;

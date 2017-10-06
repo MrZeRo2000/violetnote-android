@@ -1,13 +1,13 @@
 package com.romanpulov.violetnote.provider;
 
-/**
- * BasicNote provider metadata class
- * Created by romanpulov on 16.08.2016.
- */
 
 import android.net.Uri;
 import android.provider.BaseColumns;
 
+/**
+ * BasicNote provider metadata class
+ * Created by romanpulov on 16.08.2016.
+ */
 public class BasicNoteProviderMetaData {
     public static final String AUTHORITY = "com.romanpulov.violetnote.provider.BasicNoteProvider";
     public static final String DATABASE_NAME = "basicnote.db";
