@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBNoteManager;
@@ -49,6 +50,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
+
+    private final static int MENU_GROUP_OTHER_ITEMS = Menu.FIRST + 1;
+
+    private ArrayList<BasicNoteA> mRelatedNotes;
 
     private AddActionHelper mAddActionHelper;
     private CheckoutProgressHelper mCheckoutProgressHelper;
@@ -134,34 +139,41 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
             List<BasicNoteItemA> selectedNoteItems = BasicEntityNoteSelectionPosA.getItemsByPositions(mBasicNoteData.getNote().getItems(), mRecyclerViewSelector.getSelectedItems());
 
             if (selectedNoteItems.size() > 0) {
-                switch (item.getItemId()) {
-                    case R.id.delete:
-                        performDeleteAction(mode, selectedNoteItems);
-                        break;
-                    case R.id.edit_value:
-                        performEditValueAction(mode, selectedNoteItems.get(0));
-                        break;
-                    case R.id.move_up:
-                        performMoveAction(new BasicNoteMoveUpAction<BasicNoteItemA>(), selectedNoteItems);
-                        break;
-                    case R.id.move_top:
-                        performMoveAction(new BasicNoteMoveTopAction<BasicNoteItemA>(), selectedNoteItems);
-                        break;
-                    case R.id.move_down:
-                        performMoveAction(new BasicNoteMoveDownAction<BasicNoteItemA>(), selectedNoteItems);
-                        break;
-                    case R.id.move_bottom:
-                        performMoveAction(new BasicNoteMoveBottomAction<BasicNoteItemA>(), selectedNoteItems);
-                        break;
-                    case R.id.priority_up:
-                        performMoveAction(new BasicNoteMovePriorityUpAction<BasicNoteItemA>(), selectedNoteItems);
-                        break;
-                    case R.id.priority_down:
-                        performMoveAction(new BasicNoteMovePriorityDownAction<BasicNoteItemA>(), selectedNoteItems);
-                        break;
-                    case R.id.select_all:
-                        performSelectAll();
-                        break;
+                if ((item.getGroupId() == MENU_GROUP_OTHER_ITEMS) && (mRelatedNotes != null)) {
+                    // move to other items
+                    BasicNoteA otherNote = mRelatedNotes.get(item.getItemId());
+                    performMoveToOtherNoteAction(mode, selectedNoteItems, otherNote);
+                } else {
+                    // regular menu
+                    switch (item.getItemId()) {
+                        case R.id.delete:
+                            performDeleteAction(mode, selectedNoteItems);
+                            break;
+                        case R.id.edit_value:
+                            performEditValueAction(mode, selectedNoteItems.get(0));
+                            break;
+                        case R.id.move_up:
+                            performMoveAction(new BasicNoteMoveUpAction<BasicNoteItemA>(), selectedNoteItems);
+                            break;
+                        case R.id.move_top:
+                            performMoveAction(new BasicNoteMoveTopAction<BasicNoteItemA>(), selectedNoteItems);
+                            break;
+                        case R.id.move_down:
+                            performMoveAction(new BasicNoteMoveDownAction<BasicNoteItemA>(), selectedNoteItems);
+                            break;
+                        case R.id.move_bottom:
+                            performMoveAction(new BasicNoteMoveBottomAction<BasicNoteItemA>(), selectedNoteItems);
+                            break;
+                        case R.id.priority_up:
+                            performMoveAction(new BasicNoteMovePriorityUpAction<BasicNoteItemA>(), selectedNoteItems);
+                            break;
+                        case R.id.priority_down:
+                            performMoveAction(new BasicNoteMovePriorityDownAction<BasicNoteItemA>(), selectedNoteItems);
+                            break;
+                        case R.id.select_all:
+                            performSelectAll();
+                            break;
+                    }
                 }
             }
             return false;
@@ -172,16 +184,17 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
             mode.getMenuInflater().inflate(R.menu.menu_listitem_checked_actions, menu);
 
             //move to other note submenu
-            /*
             SubMenu subMenu = null;
-            ArrayList<BasicNoteA> relatedNotes = mBasicNoteData.getRelatedNoteList();
+            mRelatedNotes = mBasicNoteData.getRelatedNoteList();
             int order = 1;
-            for (BasicNoteA relatedNote : relatedNotes) {
-                if (subMenu == null)
-                    subMenu  = menu.addSubMenu(Menu.NONE, Menu.FIRST + (int)relatedNote.getId(), order++, getString(R.string.action_move_other));
-                subMenu.addSubMenu(relatedNote.getTitle());
+            int relatedNoteIndex = 0;
+            for (BasicNoteA relatedNote : mRelatedNotes) {
+                if (subMenu == null) {
+                    subMenu = menu.addSubMenu(Menu.NONE, Menu.NONE, order++, getString(R.string.action_move_other));
+                    subMenu.getItem().setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+                }
+                subMenu.addSubMenu(MENU_GROUP_OTHER_ITEMS, relatedNoteIndex ++, Menu.NONE, relatedNote.getTitle());
             }
-            */
 
             if (mRecyclerViewSelector.isSelectedSingle())
                 mode.setTitle(DisplayTitleBuilder.buildItemsDisplayTitle(getActivity(), mBasicNoteData.getNote().getItems(), mRecyclerViewSelector.getSelectedItems()));

@@ -8,15 +8,15 @@
         app:showAsAction="ifRoom"
         />
     <item
-        android:id="@+id/edit_value"
-        android:title="@string/action_edit_value"
-        android:icon="@drawable/ic_action_tag"
-        app:showAsAction="ifRoom"
-        />
-    <item
         android:id="@+id/delete"
         android:title="@string/action_delete"
         android:icon="@drawable/ic_action_trash"
+        app:showAsAction="ifRoom"
+        />
+    <item
+        android:id="@+id/edit_value"
+        android:title="@string/action_edit_value"
+        android:icon="@drawable/ic_action_tag"
         app:showAsAction="ifRoom"
         />
     <item

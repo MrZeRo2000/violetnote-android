@@ -19,12 +19,14 @@ import com.romanpulov.violetnote.view.action.BasicNoteDataNoteItemAction;
 import com.romanpulov.violetnote.view.action.BasicNoteDataRefreshAction;
 import com.romanpulov.violetnote.view.action.BasicNoteDeleteAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveAction;
+import com.romanpulov.violetnote.view.action.BasicNoteMoveToOtherNoteAction;
 import com.romanpulov.violetnote.view.core.AlertOkCancelSupportDialogFragment;
 import com.romanpulov.violetnote.view.core.BasicCommonNoteFragment;
 import com.romanpulov.violetnote.view.core.PasswordActivity;
 import com.romanpulov.violetnote.view.helper.ActionHelper;
 
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Base class for BasicNoteXXXItemFragment classes
@@ -107,6 +109,39 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
         });
 
         executeActions(executor);
+    }
+
+    protected void performMoveToOtherNoteAction(final ActionMode mode, final List<BasicNoteItemA> items, final BasicNoteA otherNote) {
+        String confirmationQuestion = String.format(Locale.getDefault(), getString(R.string.ui_question_selected_notes_move_to_other_note), items.size(), otherNote.getTitle());
+        AlertOkCancelSupportDialogFragment dialog = AlertOkCancelSupportDialogFragment.newAlertOkCancelDialog(confirmationQuestion);
+        dialog.setOkButtonClickListener(new AlertOkCancelSupportDialogFragment.OnClickListener() {
+            @Override
+            public void OnClick(DialogFragment dialog) {
+                BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity(), mBasicNoteData);
+                executor.addAction(getString(R.string.caption_processing), new BasicNoteDataNoteItemAction(mBasicNoteData, new BasicNoteMoveToOtherNoteAction<>(otherNote), items));
+                executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData));
+                executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
+                    @Override
+                    public void onExecutionCompleted(BasicNoteDataA basicNoteData, boolean result) {
+                        if (result) {
+                            afterExecutionCompleted();
+                            mode.finish();
+                        }
+
+                        mBasicNoteData = basicNoteData;
+
+                        if (mDialogFragment != null) {
+                            mDialogFragment.dismiss();
+                            mDialogFragment = null;
+                        }
+                    }
+                });
+                executeActions(executor);
+            }
+        });
+
+        dialog.show(getFragmentManager(), null);
+        mDialogFragment = dialog;
     }
 
     /**
