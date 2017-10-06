@@ -63,6 +63,10 @@ public class DBBasicNoteHelper {
         return DBBasicNoteOpenHelper.NOTE_ID_SELECTION_STRING + DBBasicNoteOpenHelper.AND_STRING + DBBasicNoteOpenHelper.PRIORITY_SELECTION_STRING;
     }
 
+    private static String[] getNoteIdPrioritySelectionArgs(long noteId, long priority) {
+        return new String[] {String.valueOf(noteId), String.valueOf(priority)};
+    }
+
     /**
      * Selection string with conditions
      * @param noteId 0 for notes, note_id value for note items
@@ -74,11 +78,6 @@ public class DBBasicNoteHelper {
         else
             return DBBasicNoteOpenHelper.NOTE_ID_SELECTION_STRING;
     }
-
-    private static String[] getNoteIdPrioritySelectionArgs(long noteId, long priority) {
-        return new String[] {String.valueOf(noteId), String.valueOf(priority)};
-    }
-
 
     /**
      * Selection args
@@ -100,6 +99,17 @@ public class DBBasicNoteHelper {
     public long getMaxOrderId(String tableName, long noteId) {
         return getAggregateColumn(tableName, DBBasicNoteOpenHelper.ORDER_COLUMN_NAME, MAX_AGGREGATE_FUNCTION_NAME,
                 getNoteIdSelection(noteId), getNoteIdSelectionArgs(noteId));
+    }
+
+    /**
+     * Returns max orderId for note with given priority
+     * @param noteId note
+     * @param priority proproty
+     * @return orderId
+     */
+    public long getNoteMaxOrderId(long noteId, long priority) {
+        return getAggregateColumn(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME, DBBasicNoteOpenHelper.ORDER_COLUMN_NAME, MAX_AGGREGATE_FUNCTION_NAME,
+                getNoteIdPrioritySelection(noteId, priority), getNoteIdPrioritySelectionArgs(noteId, priority));
     }
 
     public long getMinOrderId(String tableName, long noteId) {

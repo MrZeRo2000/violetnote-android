@@ -294,17 +294,17 @@ public class DBManagementTest extends ApplicationTestCase<Application> {
         //note 2 -> prev order = 1
         DBManagementProvider dbManagementProvider = notes[1].getDBManagementProvider();
         long prevOrderId = mDBHelper.getPrevOrderId(dbManagementProvider.getTableName(), dbManagementProvider.getPrevOrderSelection(), dbManagementProvider.getOrderSelectionArgs());
-        Assert.assertEquals(prevOrderId, 1);
+        Assert.assertEquals(1, prevOrderId);
 
         //note 1 -> prev order = 0
         dbManagementProvider = notes[0].getDBManagementProvider();
         prevOrderId = mDBHelper.getPrevOrderId(dbManagementProvider.getTableName(), dbManagementProvider.getPrevOrderSelection(), dbManagementProvider.getOrderSelectionArgs());
-        Assert.assertEquals(prevOrderId, 0);
+        Assert.assertEquals(0, prevOrderId);
 
         //note 3 -> prev order = 2
         dbManagementProvider = notes[2].getDBManagementProvider();
         prevOrderId = mDBHelper.getPrevOrderId(dbManagementProvider.getTableName(), dbManagementProvider.getPrevOrderSelection(), dbManagementProvider.getOrderSelectionArgs());
-        Assert.assertEquals(prevOrderId, 2);
+        Assert.assertEquals(2, prevOrderId);
 
         Assert.assertEquals("1,2,4,5", getNotesOrder(noteIdList)) ;
 
@@ -361,27 +361,35 @@ public class DBManagementTest extends ApplicationTestCase<Application> {
 
         BasicNoteA[] notes = getNotes(noteIdList);
 
+        //related notes
         BasicNoteDataA noteData2 = mDBNoteManager.fromNoteData(notes[1]);
-        Assert.assertEquals(noteData2.getRelatedNoteList().size(), 2);
+        Assert.assertEquals(2, noteData2.getRelatedNoteList().size());
 
         BasicNoteDataA noteData4 = mDBNoteManager.fromNoteData(notes[3]);
-        Assert.assertEquals(noteData4.getRelatedNoteList().size(), 0);
+        Assert.assertEquals(0, noteData4.getRelatedNoteList().size());
 
+        //notes priority
+        Assert.assertEquals(6, mDBHelper.getNoteMaxOrderId(1, 0));
+        Assert.assertEquals(2, mDBHelper.getNoteMaxOrderId(1, 1));
+        Assert.assertEquals(2, mDBHelper.getNoteMaxOrderId(1, -1));
+
+        //notes movement
         queryNoteDataItems(notes);
 
         int note1ItemCount = notes[0].getItemCount();
         int note2ItemCount = notes[1].getItemCount();
 
-        loadNoteItems();
-
-        BasicNoteItemA itemToMove = items[7];
-        BasicNoteA noteToMoveTo = notes[0];
+        BasicNoteItemA itemToMove = notes[0].getItems().get(6);
+        BasicNoteA noteToMoveTo = notes[1];
 
         mDBNoteManager.moveNoteItemOther(itemToMove, noteToMoveTo);
 
-        queryNoteDataItems(notes);;
+        queryNoteDataItems(notes);
 
-        Assert.assertEquals(notes[0].getItemCount(), note1ItemCount + 1);
-        Assert.assertEquals(notes[1].getItemCount(), note2ItemCount - 1);
+        Assert.assertEquals(note1ItemCount - 1, notes[0].getItemCount());
+        Assert.assertEquals(note2ItemCount + 1, notes[1].getItemCount());
+
+        Assert.assertEquals(-1, notes[1].getItems().get(notes[1].getItemCount()-1).getPriority());
+        Assert.assertEquals(1, notes[1].getItems().get(notes[1].getItemCount()-1).getOrderId());
     }
 }
