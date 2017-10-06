@@ -48,6 +48,16 @@ public class DBManagementTest extends ApplicationTestCase<Application> {
         mDBNoteManager = new DBNoteManager(getContext());
     }
 
+    /**
+     * Main test procedure
+     */
+    public void testMain() {
+        internalTestPriorityMove();
+        internalTestNoteMove();
+        internalTestNoteItemMove();
+        internalTestRelatedNoteListAndMovement();
+    }
+
     private final List<String> mTestNoteNames = new ArrayList<>();
 
     {
@@ -152,13 +162,6 @@ public class DBManagementTest extends ApplicationTestCase<Application> {
         //10
         insertArgs = new String[] {"0", "1", "3", "Note item 301", "Note item 301 value", "0", "0"};
         mDB.execSQL(insertSQL, insertArgs);
-    }
-
-    public void testMain() {
-        internalTestPriorityMove();
-        internalTestNoteMove();
-        internalTestNoteItemMove();
-        internalTestRelatedNoteList();
     }
 
     private BasicNoteItemA[] items = new BasicNoteItemA[10];
@@ -349,7 +352,7 @@ public class DBManagementTest extends ApplicationTestCase<Application> {
         Assert.assertEquals("1,5,2,4", getNotesOrder(noteIdList)) ;
     }
 
-    public void internalTestRelatedNoteList() {
+    public void internalTestRelatedNoteListAndMovement() {
         createNoteItemTestData();
 
         long note1id = mDBHelper.getAggregateColumn(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, DBBasicNoteOpenHelper.ID_COLUMN_NAME, "MAX", "title = ?", new String[]{mTestNoteNames.get(0)});
