@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.support.v7.app.AlertDialog;
@@ -18,6 +20,7 @@ import com.romanpulov.violetnote.filechooser.FileChooserActivity;
 import com.romanpulov.violetnote.dropbox.DropBoxHelper;
 import com.romanpulov.violetnote.loader.AbstractLoader;
 import com.romanpulov.violetnote.network.NetworkUtils;
+import com.romanpulov.violetnote.service.LoaderServiceManager;
 import com.romanpulov.violetnote.view.preference.AccountDropboxPreferenceSetup;
 import com.romanpulov.violetnote.view.preference.CloudStorageTypePreferenceSetup;
 import com.romanpulov.violetnote.view.preference.LocalBackupPreferenceSetup;
@@ -36,6 +39,21 @@ public class SettingsFragment extends PreferenceFragment {
     private PreferenceBackupDropboxProcessor mPreferenceBackupDropboxProcessor;
     private PreferenceRestoreDropboxProcessor mPreferenceRestoreDropboxProcessor;
 
+    private LoaderServiceManager mLoaderServiceManager;
+
+    private static class IncomingHandler extends Handler {
+        private SettingsFragment mHostReference;
+
+        IncomingHandler(SettingsFragment hostReference) {
+            mHostReference = hostReference;
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+        }
+    }
+
     public SettingsFragment() {
         // Required empty public constructor
     }
@@ -48,7 +66,8 @@ public class SettingsFragment extends PreferenceFragment {
         addPreferencesFromResource(R.xml.preferences);
 
         mPreferenceDocumentLoaderProcessor = new PreferenceDocumentLoaderProcessor(this);
-        setupPrefDocumentLoad();
+        //setupPrefDocumentLoad();
+        setupPrefDocumentLoadService();
 
         mPreferenceBackupDropboxProcessor = new PreferenceBackupDropboxProcessor(this);
         setupPrefDropboxBackupLoad();
@@ -91,6 +110,36 @@ public class SettingsFragment extends PreferenceFragment {
                         return true;
                     else
                         PreferenceLoaderProcessor.executeLoader(loader);
+                }
+
+                return true;
+            }
+        });
+    }
+
+    private void setupPrefDocumentLoadService() {
+        if (mLoaderServiceManager == null)
+            mLoaderServiceManager = new LoaderServiceManager(this.getActivity(), new IncomingHandler(this));
+
+
+        PreferenceRepository.updateLoadPreferenceSummary(this, PreferenceRepository.PREF_LOAD_CURRENT_VALUE);
+
+        Preference pref = findPreference(PreferenceRepository.PREF_KEY_LOAD);
+        pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                if (mPreferenceDocumentLoaderProcessor.isTaskRunning())
+                    PreferenceRepository.displayMessage(getActivity(), getText(R.string.error_load_process_running));
+                else {
+                    final Preference prefSourceType = findPreference(PreferenceRepository.PREF_KEY_SOURCE_TYPE);
+                    int type = prefSourceType.getPreferenceManager().getSharedPreferences().getInt(prefSourceType.getKey(), PreferenceRepository.DEFAULT_SOURCE_TYPE);
+
+                    AbstractLoader loader = mPreferenceDocumentLoaderProcessor.getDocumentLoader(type);
+                    if (loader.isInternetRequired() && !checkInternetConnection())
+                        return true;
+                    else
+                        //PreferenceLoaderProcessor.executeLoader(loader);
+                        mLoaderServiceManager.startLoader(loader);
                 }
 
                 return true;

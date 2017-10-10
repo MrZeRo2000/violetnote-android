@@ -33,7 +33,8 @@ public abstract class PreferenceLoaderProcessor<T extends AbstractLoader> {
      * @param loader loader to execute
      */
     public static void executeLoader(AbstractLoader loader) {
-        if ((loader != null) && !loader.isTaskRunning())
+        if ((loader != null) && !loader.isTaskRunning()) {
             loader.execute();
+        }
     }
 }
