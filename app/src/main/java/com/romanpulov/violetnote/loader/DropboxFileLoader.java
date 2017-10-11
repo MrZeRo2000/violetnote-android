@@ -13,10 +13,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * DropBox file loader
+ * Base class for DropBox file loader
  * Created by romanpulov on 01.07.2016. *
  */
-public class DropboxFileLoader extends FileLoader {
+public abstract class DropboxFileLoader extends FileLoader {
     private final DbxClientV2 mClient;
     private final DropBoxHelper mDropBoxHelper;
 

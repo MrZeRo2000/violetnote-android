@@ -1,14 +1,19 @@
 package com.romanpulov.violetnote.view;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +25,7 @@ import com.romanpulov.violetnote.filechooser.FileChooserActivity;
 import com.romanpulov.violetnote.dropbox.DropBoxHelper;
 import com.romanpulov.violetnote.loader.AbstractLoader;
 import com.romanpulov.violetnote.network.NetworkUtils;
+import com.romanpulov.violetnote.service.LoaderService;
 import com.romanpulov.violetnote.service.LoaderServiceManager;
 import com.romanpulov.violetnote.view.preference.AccountDropboxPreferenceSetup;
 import com.romanpulov.violetnote.view.preference.CloudStorageTypePreferenceSetup;
@@ -34,12 +40,23 @@ import com.romanpulov.violetnote.view.preference.SourcePathPreferenceSetup;
 import com.romanpulov.violetnote.view.preference.SourceTypePreferenceSetup;
 
 public class SettingsFragment extends PreferenceFragment {
+    private static void log(String message) {
+        Log.d("SettingsFragment", message);
+    }
 
     private PreferenceDocumentLoaderProcessor mPreferenceDocumentLoaderProcessor;
     private PreferenceBackupDropboxProcessor mPreferenceBackupDropboxProcessor;
     private PreferenceRestoreDropboxProcessor mPreferenceRestoreDropboxProcessor;
 
     private LoaderServiceManager mLoaderServiceManager;
+    private BroadcastReceiver mLoaderServiceBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            log("Receiving from " + context);
+            String loaderClassName = intent.getStringExtra(LoaderService.SERVICE_RESULT_LOADER_NAME);
+            log("Loader class name: " + loaderClassName);
+        }
+    };
 
     private static class IncomingHandler extends Handler {
         private SettingsFragment mHostReference;
@@ -139,7 +156,7 @@ public class SettingsFragment extends PreferenceFragment {
                         return true;
                     else
                         //PreferenceLoaderProcessor.executeLoader(loader);
-                        mLoaderServiceManager.startLoader(loader);
+                        mLoaderServiceManager.startLoader(loader.getClass());
                 }
 
                 return true;
@@ -246,6 +263,13 @@ public class SettingsFragment extends PreferenceFragment {
         super.onAttach(activity);
         if (mPreferenceDocumentLoaderProcessor != null)
             mPreferenceDocumentLoaderProcessor.updateLoadPreferenceStatus();
+        LocalBroadcastManager.getInstance(activity).registerReceiver(mLoaderServiceBroadcastReceiver, new IntentFilter(LoaderService.SERVICE_RESULT_INTENT_NAME));
+    }
+
+    @Override
+    public void onDetach() {
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mLoaderServiceBroadcastReceiver);
+        super.onDetach();
     }
 
     @Override

@@ -14,7 +14,7 @@ import java.io.OutputStream;
  * Created by romanpulov on 22.09.2017.
  */
 
-public class LocalFileLoader extends FileLoader {
+public abstract class LocalFileLoader extends FileLoader {
 
     public LocalFileLoader(Context context, LoadPathProvider loadPathProvider) {
         super(context, loadPathProvider);

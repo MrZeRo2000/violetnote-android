@@ -2,7 +2,13 @@ package com.romanpulov.violetnote.loader;
 
 import android.content.Context;
 
+import com.dropbox.core.DbxWebAuth;
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Factory for DocumentLoader creation
@@ -13,12 +19,37 @@ public class DocumentLoaderFactory {
         switch(type) {
             case PreferenceRepository.SOURCE_TYPE_FILE:
                 //return new DocumentFileLoader(context);
-                return new LocalFileLoader(context, new DocumentLoadPathProvider(context));
+                return new DocumentLocalFileLoader(context);
             case PreferenceRepository.SOURCE_TYPE_DROPBOX:
                 //return new DocumentDropboxFileLoader(context);
-                return new DropboxFileLoader(context, new DocumentLoadPathProvider(context));
+                return new DocumentDropboxFileLoader(context);
             default:
                 return null;
+        }
+    }
+
+    public static AbstractLoader fromClassName(Context context, String className) {
+        Class<?> clazz;
+        try {
+            clazz = Class.forName(className);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        Constructor<?> contextConstructor;
+        try {
+            contextConstructor = clazz.getConstructor(Context.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        try {
+            return (AbstractLoader) contextConstructor.newInstance(context);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }

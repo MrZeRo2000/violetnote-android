@@ -34,29 +34,15 @@ public class LoaderServiceManager {
         mMessenger = new Messenger(messageHandler);
     }
 
-    private final ServiceConnection mConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            LoaderServiceManager.log("Service connected");
-            mServiceBound = true;
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            LoaderServiceManager.log("Service disconnected");
-            mServiceBound = false;
-        }
-    };
-
-    public boolean startLoader(AbstractLoader loader) {
+    public boolean startLoader(Class<? extends AbstractLoader> loaderClass) {
         if (isLoaderServiceRunning() || mServiceBound) {
             log("the loader service is running");
             return false;
         }
         else {
             Intent serviceIntent = new Intent(mContext, LoaderService.class);
+            serviceIntent.putExtra(LoaderService.SERVICE_PARAM_LOADER_NAME, loaderClass.getName());
             mContext.startService(serviceIntent);
-            mContext.bindService(serviceIntent, mConnection, Context.BIND_IMPORTANT);
             return true;
         }
     }

@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Backup to Dropbox loader
+ * Loader to backup to Dropbox
  * Created by romanpulov on 06.09.2017.
  */
 

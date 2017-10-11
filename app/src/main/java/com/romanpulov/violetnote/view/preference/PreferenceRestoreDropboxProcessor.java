@@ -8,6 +8,7 @@ import com.romanpulov.violetnote.db.DBStorageManager;
 import com.romanpulov.violetnote.loader.AbstractLoader;
 import com.romanpulov.violetnote.loader.DropboxFileLoader;
 import com.romanpulov.violetnote.loader.FileLoader;
+import com.romanpulov.violetnote.loader.RestoreDropboxFileLoader;
 import com.romanpulov.violetnote.loader.RestoreDropboxLoadPathProvider;
 
 import java.io.File;
@@ -25,7 +26,7 @@ public class PreferenceRestoreDropboxProcessor extends PreferenceLoaderProcessor
 
     private FileLoader createRestoreDropboxLoader() {
         //mLoader = new RestoreDropboxFileLoader(mContext);
-        mLoader = new DropboxFileLoader(mContext, new RestoreDropboxLoadPathProvider(mContext));
+        mLoader = new RestoreDropboxFileLoader(mContext);
 
         mLoader.setOnLoadedListener(new AbstractLoader.OnLoadedListener() {
             @Override
