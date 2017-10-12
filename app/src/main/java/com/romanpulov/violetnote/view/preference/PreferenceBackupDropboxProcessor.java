@@ -17,6 +17,24 @@ public class PreferenceBackupDropboxProcessor extends PreferenceLoaderProcessor{
         super(preferenceFragment);
     }
 
+    @Override
+    public void loaderPreExecute() {
+        PreferenceRepository.updateDropboxBackupPreferenceSummary(mPreferenceFragment, PreferenceRepository.PREF_LOAD_LOADING);
+    }
+
+    @Override
+    public void loaderPostExecute(String result) {
+        if (result == null) {
+            long loadedTime = System.currentTimeMillis();
+            Preference pref = mPreferenceFragment.findPreference(PreferenceRepository.PREF_KEY_BASIC_NOTE_CLOUD_BACKUP);
+            pref.getPreferenceManager().getSharedPreferences().edit().putLong(PreferenceRepository.PREF_KEY_BASIC_NOTE_CLOUD_BACKUP_LAST_LOADED, loadedTime).apply();
+            PreferenceRepository.updateDropboxBackupPreferenceSummary(mPreferenceFragment, loadedTime);
+        } else {
+            PreferenceRepository.displayMessage(mContext, result);
+            PreferenceRepository.updateDropboxBackupPreferenceSummary(mPreferenceFragment, PreferenceRepository.PREF_LOAD_CURRENT_VALUE);
+        }
+    }
+
     private AbstractLoader createBackupDropboxUploader() {
         mLoader = new BackupDropboxUploader(mPreferenceFragment.getActivity());
 

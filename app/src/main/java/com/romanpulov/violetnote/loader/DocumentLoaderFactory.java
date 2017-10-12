@@ -28,6 +28,17 @@ public class DocumentLoaderFactory {
         }
     }
 
+    public static Class<? extends AbstractLoader> classFromType(int type) {
+        switch (type) {
+            case PreferenceRepository.SOURCE_TYPE_FILE:
+                return DocumentLocalFileLoader.class;
+            case PreferenceRepository.SOURCE_TYPE_DROPBOX:
+                return DocumentDropboxFileLoader.class;
+            default:
+                return null;
+        }
+    }
+
     public static AbstractLoader fromClassName(Context context, String className) {
         Class<?> clazz;
         try {

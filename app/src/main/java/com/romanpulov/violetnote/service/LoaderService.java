@@ -21,6 +21,7 @@ public class LoaderService extends IntentService {
     public static final String SERVICE_PARAM_LOADER_NAME = "LoaderService.LoaderName";
     public static final String SERVICE_RESULT_INTENT_NAME = "LoaderServiceResult";
     public static final String SERVICE_RESULT_LOADER_NAME = "LoaderServiceResult.LoaderName";
+    public static final String SERVICE_RESULT_ERROR_MESSAGE = "LoaderServiceResult.ErrorMessage";
 
     private static void log(String message) {
         Log.d("LoaderService", message);
@@ -48,6 +49,7 @@ public class LoaderService extends IntentService {
         if (intent != null) {
             LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(this);
             String loaderClassName = intent.getStringExtra(SERVICE_PARAM_LOADER_NAME);
+            String errorMessage = "";
             log("onHandleEvent : " + loaderClassName);
             try {
                 AbstractLoader loader = DocumentLoaderFactory.fromClassName(this, loaderClassName);
@@ -56,11 +58,12 @@ public class LoaderService extends IntentService {
                 Thread.sleep(5000);
                 //mLoader.execute();
             } catch (Exception e) {
-                Thread.currentThread().interrupt();
+                errorMessage = e.getMessage();
             }
             log("onHandleEvent completed");
             Intent resultIntent = new Intent(SERVICE_RESULT_INTENT_NAME);
             resultIntent.putExtra(SERVICE_RESULT_LOADER_NAME, loaderClassName);
+            resultIntent.putExtra(SERVICE_RESULT_ERROR_MESSAGE, errorMessage);
             broadcastManager.sendBroadcast(resultIntent);
         }
         stopSelf();

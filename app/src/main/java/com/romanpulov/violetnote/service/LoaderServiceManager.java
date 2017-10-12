@@ -1,13 +1,8 @@
 package com.romanpulov.violetnote.service;
 
 import android.app.ActivityManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
-import android.os.Handler;
-import android.os.IBinder;
-import android.os.Messenger;
 import android.util.Log;
 
 import com.romanpulov.violetnote.loader.AbstractLoader;
@@ -24,18 +19,14 @@ public class LoaderServiceManager {
         Log.d("LoaderServiceManager", message);
     }
 
-    private final Messenger mMessenger;
     private final Context mContext;
 
-    private boolean mServiceBound = false;
-
-    public LoaderServiceManager(Context context, Handler messageHandler) {
+    public LoaderServiceManager(Context context) {
         mContext = context;
-        mMessenger = new Messenger(messageHandler);
     }
 
     public boolean startLoader(Class<? extends AbstractLoader> loaderClass) {
-        if (isLoaderServiceRunning() || mServiceBound) {
+        if (isLoaderServiceRunning()) {
             log("the loader service is running");
             return false;
         }

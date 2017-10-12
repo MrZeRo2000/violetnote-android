@@ -22,8 +22,10 @@ public abstract class LocalFileLoader extends FileLoader {
 
     @Override
     public boolean isInternetRequired() {
-        return false;
+        return isLoaderInternetRequired();
     }
+
+    public static boolean isLoaderInternetRequired() {return false;}
 
     @Override
     protected void load() throws Exception {

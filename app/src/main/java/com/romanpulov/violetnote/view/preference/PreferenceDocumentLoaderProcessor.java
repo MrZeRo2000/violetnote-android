@@ -17,6 +17,25 @@ public class PreferenceDocumentLoaderProcessor extends PreferenceLoaderProcessor
         super(preferenceFragment);
     }
 
+    @Override
+    public void loaderPreExecute() {
+        PreferenceRepository.updateLoadPreferenceSummary(mPreferenceFragment, PreferenceRepository.PREF_LOAD_LOADING);
+    }
+
+    @Override
+    public void loaderPostExecute(String result) {
+        Preference pref = mPreferenceFragment.findPreference(PreferenceRepository.PREF_KEY_LOAD);
+
+        if (result == null) {
+            long loadedTime = System.currentTimeMillis();
+            pref.getPreferenceManager().getSharedPreferences().edit().putLong(PreferenceRepository.PREF_KEY_LAST_LOADED, loadedTime).apply();
+            PreferenceRepository.updateLoadPreferenceSummary(mPreferenceFragment, loadedTime);
+        } else {
+            PreferenceRepository.displayMessage(mContext, result);
+            PreferenceRepository.updateLoadPreferenceSummary(mPreferenceFragment, PreferenceRepository.PREF_LOAD_CURRENT_VALUE);
+        }
+    }
+
     private AbstractLoader createDocumentLoader(int type) {
         mLoader = DocumentLoaderFactory.fromType(mPreferenceFragment.getActivity(), type);
         if (mLoader != null) {

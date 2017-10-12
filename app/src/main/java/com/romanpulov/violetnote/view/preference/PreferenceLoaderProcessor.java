@@ -37,4 +37,15 @@ public abstract class PreferenceLoaderProcessor<T extends AbstractLoader> {
             loader.execute();
         }
     }
+
+    /**
+     * Loader pre execute method template
+     */
+    public abstract void loaderPreExecute();
+
+    /**
+     * Loader post execute method template
+     * @param result load result, null if successful
+     */
+    public abstract void loaderPostExecute(String result);
 }

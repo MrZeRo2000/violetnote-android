@@ -24,6 +24,41 @@ public class PreferenceRestoreDropboxProcessor extends PreferenceLoaderProcessor
         super(preferenceFragment);
     }
 
+    @Override
+    public void loaderPreExecute() {
+        PreferenceRepository.updateDropboxRestorePreferenceSummary(mPreferenceFragment, PreferenceRepository.PREF_LOAD_LOADING);
+    }
+
+    @Override
+    public void loaderPostExecute(String result) {
+        PreferenceRepository.setDropboxRestoreDefaultPreferenceSummary(mPreferenceFragment);
+
+        if (result != null)
+            PreferenceRepository.displayMessage(mContext, result);
+        else {
+            FileLoader fileLoader = PreferenceRestoreDropboxProcessor.this.getRestoreDropboxLoader();
+            File file = new File(fileLoader.getLoadPathProvider().getDestPath());
+            if (file.exists()) {
+                DBBasicNoteHelper.getInstance(mContext).closeDB();
+
+                DBStorageManager storageManager = new DBStorageManager(mContext, file.getParent());
+                String restoreResult = storageManager.restoreLocalBackup();
+
+                String restoreMessage;
+                if (restoreResult == null)
+                    restoreMessage = mContext.getString(R.string.error_restore);
+                else
+                    restoreMessage = mContext.getString(R.string.message_backup_cloud_restored);
+
+                DBBasicNoteHelper.getInstance(mContext).openDB();
+
+                PreferenceRepository.displayMessage(mContext, restoreMessage);
+
+            } else
+                PreferenceRepository.displayMessage(mContext, mPreferenceFragment.getString(R.string.error_restore));
+        }
+    }
+
     private FileLoader createRestoreDropboxLoader() {
         //mLoader = new RestoreDropboxFileLoader(mContext);
         mLoader = new RestoreDropboxFileLoader(mContext);

@@ -48,8 +48,10 @@ public abstract class DropboxFileLoader extends FileLoader {
 
     @Override
     public boolean isInternetRequired() {
-        return true;
+        return isLoaderInternetRequired();
     }
+
+    public static boolean isLoaderInternetRequired() {return true;}
 
     public DropboxFileLoader(Context context, LoadPathProvider loadPathProvider) {
         super(context, loadPathProvider);

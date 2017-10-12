@@ -24,6 +24,8 @@ import com.romanpulov.violetnote.db.DBStorageManager;
 import com.romanpulov.violetnote.filechooser.FileChooserActivity;
 import com.romanpulov.violetnote.dropbox.DropBoxHelper;
 import com.romanpulov.violetnote.loader.AbstractLoader;
+import com.romanpulov.violetnote.loader.DocumentDropboxFileLoader;
+import com.romanpulov.violetnote.loader.DocumentLocalFileLoader;
 import com.romanpulov.violetnote.network.NetworkUtils;
 import com.romanpulov.violetnote.service.LoaderService;
 import com.romanpulov.violetnote.service.LoaderServiceManager;
@@ -39,6 +41,11 @@ import com.romanpulov.violetnote.view.preference.PreferenceRestoreDropboxProcess
 import com.romanpulov.violetnote.view.preference.SourcePathPreferenceSetup;
 import com.romanpulov.violetnote.view.preference.SourceTypePreferenceSetup;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
+
 public class SettingsFragment extends PreferenceFragment {
     private static void log(String message) {
         Log.d("SettingsFragment", message);
@@ -48,28 +55,27 @@ public class SettingsFragment extends PreferenceFragment {
     private PreferenceBackupDropboxProcessor mPreferenceBackupDropboxProcessor;
     private PreferenceRestoreDropboxProcessor mPreferenceRestoreDropboxProcessor;
 
+    private Map<String, PreferenceLoaderProcessor> mPreferenceLoadProcessors = new HashMap<>();
+
     private LoaderServiceManager mLoaderServiceManager;
     private BroadcastReceiver mLoaderServiceBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             log("Receiving from " + context);
             String loaderClassName = intent.getStringExtra(LoaderService.SERVICE_RESULT_LOADER_NAME);
+            String errorMessage = intent.getStringExtra(LoaderService.SERVICE_RESULT_ERROR_MESSAGE);
             log("Loader class name: " + loaderClassName);
+            if (errorMessage.isEmpty())
+                log("No errors");
+            else
+                log("Error:" + errorMessage);
+
+            PreferenceLoaderProcessor preferenceLoaderProcessor = mPreferenceLoadProcessors.get(loaderClassName);
+            log("Found load processor:" + preferenceLoaderProcessor);
+            if (preferenceLoaderProcessor != null)
+                preferenceLoaderProcessor.loaderPostExecute(errorMessage);
         }
     };
-
-    private static class IncomingHandler extends Handler {
-        private SettingsFragment mHostReference;
-
-        IncomingHandler(SettingsFragment hostReference) {
-            mHostReference = hostReference;
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-        }
-    }
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -83,6 +89,9 @@ public class SettingsFragment extends PreferenceFragment {
         addPreferencesFromResource(R.xml.preferences);
 
         mPreferenceDocumentLoaderProcessor = new PreferenceDocumentLoaderProcessor(this);
+        mPreferenceLoadProcessors.put(DocumentLocalFileLoader.class.getName(), mPreferenceDocumentLoaderProcessor);
+        mPreferenceLoadProcessors.put(DocumentDropboxFileLoader.class.getName(), mPreferenceDocumentLoaderProcessor);
+
         //setupPrefDocumentLoad();
         setupPrefDocumentLoadService();
 
@@ -136,8 +145,7 @@ public class SettingsFragment extends PreferenceFragment {
 
     private void setupPrefDocumentLoadService() {
         if (mLoaderServiceManager == null)
-            mLoaderServiceManager = new LoaderServiceManager(this.getActivity(), new IncomingHandler(this));
-
+            mLoaderServiceManager = new LoaderServiceManager(this.getActivity());
 
         PreferenceRepository.updateLoadPreferenceSummary(this, PreferenceRepository.PREF_LOAD_CURRENT_VALUE);
 
@@ -145,18 +153,30 @@ public class SettingsFragment extends PreferenceFragment {
         pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                if (mPreferenceDocumentLoaderProcessor.isTaskRunning())
+                if (mLoaderServiceManager.isLoaderServiceRunning())
                     PreferenceRepository.displayMessage(getActivity(), getText(R.string.error_load_process_running));
                 else {
                     final Preference prefSourceType = findPreference(PreferenceRepository.PREF_KEY_SOURCE_TYPE);
                     int type = prefSourceType.getPreferenceManager().getSharedPreferences().getInt(prefSourceType.getKey(), PreferenceRepository.DEFAULT_SOURCE_TYPE);
 
                     AbstractLoader loader = mPreferenceDocumentLoaderProcessor.getDocumentLoader(type);
-                    if (loader.isInternetRequired() && !checkInternetConnection())
+                    Class<? extends AbstractLoader> loaderClass = loader.getClass();
+
+                    boolean loaderInternetConnectionRequired = false;
+                    try {
+                        Method loaderInternetRequiredMethod = loaderClass.getMethod("isLoaderInternetRequired");
+                        loaderInternetConnectionRequired = (Boolean) loaderInternetRequiredMethod.invoke(null);
+                        log("Result from InternetRequiredMethod: " + loaderInternetConnectionRequired);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    if (loaderInternetConnectionRequired && !checkInternetConnection())
                         return true;
-                    else
-                        //PreferenceLoaderProcessor.executeLoader(loader);
+                    else {
+                        mPreferenceDocumentLoaderProcessor.loaderPreExecute();
                         mLoaderServiceManager.startLoader(loader.getClass());
+                    }
                 }
 
                 return true;
