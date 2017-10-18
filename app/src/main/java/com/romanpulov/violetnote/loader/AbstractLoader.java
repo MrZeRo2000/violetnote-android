@@ -3,6 +3,8 @@ package com.romanpulov.violetnote.loader;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import java.lang.reflect.Method;
+
 /**
  * Common loader class for sync and async load
  * Created by romanpulov on 06.09.2017.
@@ -69,5 +71,17 @@ public abstract class AbstractLoader {
 
     public boolean isTaskRunning() {
         return (mTask != null) && (mTask.getStatus() != AsyncTask.Status.FINISHED);
+    }
+
+    public static boolean isLoaderInternetConnectionRequired(Class<? extends AbstractLoader> loaderClass) {
+        boolean result = false;
+        try {
+            Method loaderInternetRequiredMethod = loaderClass.getMethod("isLoaderInternetRequired");
+            result = (Boolean) loaderInternetRequiredMethod.invoke(null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result;
     }
 }

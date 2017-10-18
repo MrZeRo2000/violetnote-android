@@ -2,6 +2,7 @@ package com.romanpulov.violetnote.service;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Messenger;
@@ -9,11 +10,11 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
-import com.dropbox.core.DbxWebAuth;
 import com.romanpulov.violetnote.loader.AbstractLoader;
 import com.romanpulov.violetnote.loader.DocumentLoaderFactory;
 
 /**
+ * Loader service
  * Created by romanpulov on 10.10.2017.
  */
 
@@ -27,17 +28,7 @@ public class LoaderService extends IntentService {
         Log.d("LoaderService", message);
     }
 
-    private AbstractLoader mLoader;
-
-    final Messenger mMessenger = new Messenger(new IncomingHandler(this));
-
-    private static class IncomingHandler extends Handler {
-        private final LoaderService mHostReference;
-
-        IncomingHandler(LoaderService host) {
-            mHostReference = host;
-        }
-    }
+    private String mLoaderClassName;
 
     public LoaderService() {
         super("Loader service");
@@ -48,25 +39,40 @@ public class LoaderService extends IntentService {
     protected void onHandleIntent(@Nullable Intent intent) {
         if (intent != null) {
             LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(this);
-            String loaderClassName = intent.getStringExtra(SERVICE_PARAM_LOADER_NAME);
-            String errorMessage = "";
-            log("onHandleEvent : " + loaderClassName);
+            mLoaderClassName = intent.getStringExtra(SERVICE_PARAM_LOADER_NAME);
+            String errorMessage = null;
+            log("onHandleEvent : " + mLoaderClassName);
             try {
-                AbstractLoader loader = DocumentLoaderFactory.fromClassName(this, loaderClassName);
+                AbstractLoader loader = DocumentLoaderFactory.fromClassName(this, mLoaderClassName);
                 if (loader != null)
-                    log("created loader : " + loaderClassName);
+                    log("created loader : " + mLoaderClassName);
                 Thread.sleep(5000);
+                //throw new Exception("Test exception");
                 //mLoader.execute();
             } catch (Exception e) {
                 errorMessage = e.getMessage();
             }
             log("onHandleEvent completed");
             Intent resultIntent = new Intent(SERVICE_RESULT_INTENT_NAME);
-            resultIntent.putExtra(SERVICE_RESULT_LOADER_NAME, loaderClassName);
-            resultIntent.putExtra(SERVICE_RESULT_ERROR_MESSAGE, errorMessage);
+            resultIntent.putExtra(SERVICE_RESULT_LOADER_NAME, mLoaderClassName);
+
+            if (errorMessage != null)
+                resultIntent.putExtra(SERVICE_RESULT_ERROR_MESSAGE, errorMessage);
+
             broadcastManager.sendBroadcast(resultIntent);
         }
-        stopSelf();
+    }
+
+    @Override
+    public void onStart(@Nullable Intent intent, int startId) {
+        log("onStart service");
+        super.onStart(intent, startId);
+    }
+
+    @Override
+    public void onCreate() {
+        log("onCreate service");
+        super.onCreate();
     }
 
     @Override
@@ -75,14 +81,21 @@ public class LoaderService extends IntentService {
         super.onDestroy();
     }
 
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
-        return mMessenger.getBinder();
+    public class LoaderBinder extends Binder {
+        public LoaderService getService() {
+            return LoaderService.this;
+        }
     }
 
+    private final IBinder mBinder = new LoaderBinder();
+
     @Override
-    public boolean onUnbind(Intent intent) {
-        return super.onUnbind(intent);
+    public IBinder onBind(Intent intent) {
+        log("onBind service");
+        return mBinder;
+    }
+
+    public String getLoaderClassName() {
+        return mLoaderClassName;
     }
 }

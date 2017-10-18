@@ -2,13 +2,14 @@ package com.romanpulov.violetnote.view;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
+import android.os.IBinder;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.support.v4.content.LocalBroadcastManager;
@@ -25,6 +26,7 @@ import com.romanpulov.violetnote.filechooser.FileChooserActivity;
 import com.romanpulov.violetnote.dropbox.DropBoxHelper;
 import com.romanpulov.violetnote.loader.AbstractLoader;
 import com.romanpulov.violetnote.loader.DocumentDropboxFileLoader;
+import com.romanpulov.violetnote.loader.DocumentLoaderFactory;
 import com.romanpulov.violetnote.loader.DocumentLocalFileLoader;
 import com.romanpulov.violetnote.network.NetworkUtils;
 import com.romanpulov.violetnote.service.LoaderService;
@@ -65,7 +67,7 @@ public class SettingsFragment extends PreferenceFragment {
             String loaderClassName = intent.getStringExtra(LoaderService.SERVICE_RESULT_LOADER_NAME);
             String errorMessage = intent.getStringExtra(LoaderService.SERVICE_RESULT_ERROR_MESSAGE);
             log("Loader class name: " + loaderClassName);
-            if (errorMessage.isEmpty())
+            if (errorMessage == null)
                 log("No errors");
             else
                 log("Error:" + errorMessage);
@@ -144,42 +146,34 @@ public class SettingsFragment extends PreferenceFragment {
     }
 
     private void setupPrefDocumentLoadService() {
-        if (mLoaderServiceManager == null)
-            mLoaderServiceManager = new LoaderServiceManager(this.getActivity());
-
         PreferenceRepository.updateLoadPreferenceSummary(this, PreferenceRepository.PREF_LOAD_CURRENT_VALUE);
 
         Preference pref = findPreference(PreferenceRepository.PREF_KEY_LOAD);
         pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                if (mLoaderServiceManager.isLoaderServiceRunning())
-                    PreferenceRepository.displayMessage(getActivity(), getText(R.string.error_load_process_running));
+                if (mLoaderServiceManager == null)
+                    return true;
                 else {
-                    final Preference prefSourceType = findPreference(PreferenceRepository.PREF_KEY_SOURCE_TYPE);
-                    int type = prefSourceType.getPreferenceManager().getSharedPreferences().getInt(prefSourceType.getKey(), PreferenceRepository.DEFAULT_SOURCE_TYPE);
-
-                    AbstractLoader loader = mPreferenceDocumentLoaderProcessor.getDocumentLoader(type);
-                    Class<? extends AbstractLoader> loaderClass = loader.getClass();
-
-                    boolean loaderInternetConnectionRequired = false;
-                    try {
-                        Method loaderInternetRequiredMethod = loaderClass.getMethod("isLoaderInternetRequired");
-                        loaderInternetConnectionRequired = (Boolean) loaderInternetRequiredMethod.invoke(null);
-                        log("Result from InternetRequiredMethod: " + loaderInternetConnectionRequired);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                    if (loaderInternetConnectionRequired && !checkInternetConnection())
-                        return true;
+                    if (mLoaderServiceManager.isLoaderServiceRunning())
+                        PreferenceRepository.displayMessage(getActivity(), getText(R.string.error_load_process_running));
                     else {
-                        mPreferenceDocumentLoaderProcessor.loaderPreExecute();
-                        mLoaderServiceManager.startLoader(loader.getClass());
-                    }
-                }
+                        final Preference prefSourceType = findPreference(PreferenceRepository.PREF_KEY_SOURCE_TYPE);
+                        int type = prefSourceType.getPreferenceManager().getSharedPreferences().getInt(prefSourceType.getKey(), PreferenceRepository.DEFAULT_SOURCE_TYPE);
 
-                return true;
+                        Class<? extends AbstractLoader> loaderClass = DocumentLoaderFactory.classFromType(type);
+                        if (loaderClass != null) {
+                            if (AbstractLoader.isLoaderInternetConnectionRequired(loaderClass) && !checkInternetConnection())
+                                return true;
+                            else {
+                                mPreferenceDocumentLoaderProcessor.loaderPreExecute();
+                                mLoaderServiceManager.startLoader(loaderClass);
+                            }
+                        }
+                    }
+
+                    return true;
+                }
             }
         });
     }
@@ -277,6 +271,53 @@ public class SettingsFragment extends PreferenceFragment {
         });
     }
 
+    private LoaderService mBoundService;
+    private boolean mIsBound;
+
+    private ServiceConnection mConnection = new ServiceConnection() {
+        public void onServiceConnected(ComponentName className, IBinder service) {
+            // This is called when the connection with the service has been
+            // established, giving us the service object we can use to
+            // interact with the service.  Because we have bound to a explicit
+            // service that we know is running in our own process, we can
+            // cast its IBinder to a concrete class and directly access it.
+            mBoundService = ((LoaderService.LoaderBinder)service).getService();
+
+            // Tell the user about this for our demo.
+            log("Service connected, loader class name = " + mBoundService.getLoaderClassName());
+
+            PreferenceLoaderProcessor preferenceLoaderProcessor = mPreferenceLoadProcessors.get(mBoundService.getLoaderClassName());
+            if (preferenceLoaderProcessor != null)
+                preferenceLoaderProcessor.loaderPreExecute();
+        }
+
+        public void onServiceDisconnected(ComponentName className) {
+            // This is called when the connection with the service has been
+            // unexpectedly disconnected -- that is, its process crashed.
+            // Because it is running in our same process, we should never
+            // see this happen.
+            mBoundService = null;
+            log("Service disconnected");
+        }
+    };
+
+    void doBindService(Activity activity) {
+        // Establish a connection with the service.  We use an explicit
+        // class name because we want a specific service implementation that
+        // we know will be running in our own process (and thus won't be
+        // supporting component replacement by other applications).
+        mIsBound = activity.bindService(new Intent(activity,
+                LoaderService.class), mConnection, 0);
+    }
+
+    void doUnbindService() {
+        if (mIsBound) {
+            // Detach our existing connection.
+            getActivity().unbindService(mConnection);
+            mIsBound = false;
+        }
+    }
+
 
     @Override
     public void onAttach(Activity activity) {
@@ -284,11 +325,18 @@ public class SettingsFragment extends PreferenceFragment {
         if (mPreferenceDocumentLoaderProcessor != null)
             mPreferenceDocumentLoaderProcessor.updateLoadPreferenceStatus();
         LocalBroadcastManager.getInstance(activity).registerReceiver(mLoaderServiceBroadcastReceiver, new IntentFilter(LoaderService.SERVICE_RESULT_INTENT_NAME));
+        mLoaderServiceManager = new LoaderServiceManager(activity);
+        doBindService(activity);
+        /*
+        if (mLoaderServiceManager.isLoaderServiceRunning())
+            doBindService(activity);
+            */
     }
 
     @Override
     public void onDetach() {
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mLoaderServiceBroadcastReceiver);
+        doUnbindService();
         super.onDetach();
     }
 

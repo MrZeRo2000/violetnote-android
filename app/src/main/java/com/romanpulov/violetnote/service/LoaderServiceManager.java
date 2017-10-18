@@ -47,7 +47,7 @@ public class LoaderServiceManager {
         final List<ActivityManager.RunningServiceInfo> services = activityManager.getRunningServices(Integer.MAX_VALUE);
 
         for (ActivityManager.RunningServiceInfo runningServiceInfo : services) {
-            if (runningServiceInfo.service.getClassName().equals(serviceClassName)) {
+            if ((runningServiceInfo.service.getClassName().equals(serviceClassName)) && (runningServiceInfo.started)) {
                 return true;
             }
         }
