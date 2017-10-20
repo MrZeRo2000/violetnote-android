@@ -72,4 +72,8 @@ public class PreferenceBackupDropboxProcessor extends PreferenceLoaderProcessor{
         else
             return mLoader;
     }
+
+    public static Class<? extends AbstractLoader> getLoaderClass() {
+        return BackupDropboxUploader.class;
+    }
 }

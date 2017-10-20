@@ -25,9 +25,11 @@ import com.romanpulov.violetnote.db.DBStorageManager;
 import com.romanpulov.violetnote.filechooser.FileChooserActivity;
 import com.romanpulov.violetnote.dropbox.DropBoxHelper;
 import com.romanpulov.violetnote.loader.AbstractLoader;
+import com.romanpulov.violetnote.loader.BackupDropboxUploader;
 import com.romanpulov.violetnote.loader.DocumentDropboxFileLoader;
 import com.romanpulov.violetnote.loader.DocumentLoaderFactory;
 import com.romanpulov.violetnote.loader.DocumentLocalFileLoader;
+import com.romanpulov.violetnote.loader.RestoreDropboxFileLoader;
 import com.romanpulov.violetnote.network.NetworkUtils;
 import com.romanpulov.violetnote.service.LoaderService;
 import com.romanpulov.violetnote.service.LoaderServiceManager;
@@ -94,11 +96,14 @@ public class SettingsFragment extends PreferenceFragment {
         mPreferenceLoadProcessors.put(DocumentLocalFileLoader.class.getName(), mPreferenceDocumentLoaderProcessor);
         mPreferenceLoadProcessors.put(DocumentDropboxFileLoader.class.getName(), mPreferenceDocumentLoaderProcessor);
 
+
         //setupPrefDocumentLoad();
         setupPrefDocumentLoadService();
 
         mPreferenceBackupDropboxProcessor = new PreferenceBackupDropboxProcessor(this);
-        setupPrefDropboxBackupLoad();
+        mPreferenceLoadProcessors.put(BackupDropboxUploader.class.getName(), mPreferenceBackupDropboxProcessor);
+        //setupPrefDropboxBackupLoad();
+        setupPrefDropboxBackupLoadService();
 
         mPreferenceRestoreDropboxProcessor = new PreferenceRestoreDropboxProcessor(this);
         setupPrefDropboxRestoreLoad();
@@ -145,6 +150,9 @@ public class SettingsFragment extends PreferenceFragment {
         });
     }
 
+    /**
+     * Load document using service
+     */
     private void setupPrefDocumentLoadService() {
         PreferenceRepository.updateLoadPreferenceSummary(this, PreferenceRepository.PREF_LOAD_CURRENT_VALUE);
 
@@ -217,6 +225,46 @@ public class SettingsFragment extends PreferenceFragment {
     }
 
     /**
+     * Dropbox backup using service
+     */
+    private void setupPrefDropboxBackupLoadService() {
+        PreferenceRepository.updateDropboxBackupPreferenceSummary(this, PreferenceRepository.PREF_LOAD_CURRENT_VALUE);
+
+        Preference pref = findPreference(PreferenceRepository.PREF_KEY_BASIC_NOTE_CLOUD_BACKUP);
+        pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                //check if internet is available
+                if (!checkInternetConnection())
+                    return true;
+
+                if (mLoaderServiceManager == null)
+                    return true;
+                else {
+                    if (mLoaderServiceManager.isLoaderServiceRunning())
+                        PreferenceRepository.displayMessage(getActivity(), getText(R.string.error_load_process_running));
+                    else {
+
+                        // create local backup first
+                        DBStorageManager storageManager = new DBStorageManager(getActivity());
+                        String backupResult = storageManager.createRollingLocalBackup();
+
+                        if (backupResult == null)
+                            PreferenceRepository.displayMessage(getActivity(), getString(R.string.error_backup));
+                        else {
+                            mPreferenceBackupDropboxProcessor.loaderPreExecute();
+                            mLoaderServiceManager.startLoader(PreferenceBackupDropboxProcessor.getLoaderClass());
+                        }
+                    }
+
+                    return true;
+                }
+            }
+        });
+    }
+
+
+    /**
      * Dropbox restore
      */
     private void setupPrefDropboxRestoreLoad() {
@@ -264,6 +312,67 @@ public class SettingsFragment extends PreferenceFragment {
                             .setNegativeButton(R.string.cancel, null)
                             .show();
 
+                }
+
+                return true;
+            }
+        });
+    }
+
+    /**
+     * Dropbox restore using service
+     */
+    private void setupPrefDropboxRestoreLoadService() {
+        Preference pref = findPreference(PreferenceRepository.PREF_KEY_BASIC_NOTE_CLOUD_RESTORE);
+
+        pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                //check if internet is available
+                if (!checkInternetConnection())
+                    return true;
+
+                if (mLoaderServiceManager == null)
+                    return true;
+                else {
+
+                    if ((mPreferenceRestoreDropboxProcessor.isTaskRunning()) || mPreferenceBackupDropboxProcessor.isTaskRunning())
+                        PreferenceRepository.displayMessage(getActivity(), getText(R.string.error_load_process_running));
+                    else {
+                        final AlertDialog.Builder alert = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
+                        alert
+                                .setTitle(R.string.ui_question_are_you_sure)
+                                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                        AbstractLoader loader = mPreferenceRestoreDropboxProcessor.getRestoreDropboxLoader();
+                                        PreferenceLoaderProcessor.executeLoader(loader);
+
+                                    /*
+
+                                    DBBasicNoteHelper.getInstance(getActivity()).closeDB();
+
+                                    DBStorageManager storageManager = new DBStorageManager(getActivity());
+                                    String restoreResult = storageManager.restoreLocalBackup();
+
+                                    String restoreMessage;
+
+                                    if (restoreResult == null)
+                                        restoreMessage = mContext.getString(R.string.error_restore);
+                                    else
+                                        restoreMessage = String.format(Locale.getDefault(), mContext.getString(R.string.message_backup_restored), restoreResult);
+
+                                    DBBasicNoteHelper.getInstance(getActivity()).openDB();
+
+                                    PreferenceRepository.displayMessage(getActivity(), restoreMessage);
+                                    */
+                                    }
+                                })
+                                .setNegativeButton(R.string.cancel, null)
+                                .show();
+
+                    }
                 }
 
                 return true;
