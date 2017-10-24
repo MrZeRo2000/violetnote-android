@@ -1,6 +1,7 @@
 package com.romanpulov.violetnote.loader;
 
 import android.content.Context;
+import android.preference.PreferenceManager;
 
 import com.dropbox.core.v2.DbxClientV2;
 import com.dropbox.core.v2.files.WriteMode;
@@ -33,7 +34,7 @@ public class BackupDropboxUploader extends AbstractLoader {
     }
 
     @Override
-    protected void load() throws Exception {
+    public void load() throws Exception {
         String accessToken = mDropBoxHelper.getAccessToken();
         if (accessToken == null)
             throw new Exception(mContext.getResources().getString(R.string.error_dropbox_auth));
@@ -52,6 +53,9 @@ public class BackupDropboxUploader extends AbstractLoader {
                 }
             }
         }
+
+        long loadedTime = System.currentTimeMillis();
+        PreferenceManager.getDefaultSharedPreferences(mContext).edit().putLong(DropboxLoaderRepository.LAST_LOADED_PREF_KEY, loadedTime).apply();
     }
 
     @Override

@@ -28,7 +28,7 @@ public abstract class LocalFileLoader extends FileLoader {
     public static boolean isLoaderInternetRequired() {return false;}
 
     @Override
-    protected void load() throws Exception {
+    public void load() throws Exception {
         InputStream inputStream = new FileInputStream(getLoadPathProvider().getSourcePath());
         OutputStream outputStream = new FileOutputStream(new File(getLoadPathProvider().getDestPath()));
         try {

@@ -61,7 +61,7 @@ public abstract class AbstractLoader {
         }
     }
 
-    protected abstract void load() throws Exception;
+    public abstract void load() throws Exception;
 
     public abstract boolean isInternetRequired();
 

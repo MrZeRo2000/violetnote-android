@@ -106,7 +106,9 @@ public class SettingsFragment extends PreferenceFragment {
         setupPrefDropboxBackupLoadService();
 
         mPreferenceRestoreDropboxProcessor = new PreferenceRestoreDropboxProcessor(this);
-        setupPrefDropboxRestoreLoad();
+        mPreferenceLoadProcessors.put(RestoreDropboxFileLoader.class.getName(), mPreferenceRestoreDropboxProcessor);
+        //setupPrefDropboxRestoreLoad();
+        setupPrefDropboxRestoreLoadService();
 
         new SourceTypePreferenceSetup(this).execute();
         new SourcePathPreferenceSetup(this).execute();
@@ -336,7 +338,7 @@ public class SettingsFragment extends PreferenceFragment {
                     return true;
                 else {
 
-                    if ((mPreferenceRestoreDropboxProcessor.isTaskRunning()) || mPreferenceBackupDropboxProcessor.isTaskRunning())
+                    if (mLoaderServiceManager.isLoaderServiceRunning())
                         PreferenceRepository.displayMessage(getActivity(), getText(R.string.error_load_process_running));
                     else {
                         final AlertDialog.Builder alert = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
@@ -345,33 +347,12 @@ public class SettingsFragment extends PreferenceFragment {
                                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-
-                                        AbstractLoader loader = mPreferenceRestoreDropboxProcessor.getRestoreDropboxLoader();
-                                        PreferenceLoaderProcessor.executeLoader(loader);
-
-                                    /*
-
-                                    DBBasicNoteHelper.getInstance(getActivity()).closeDB();
-
-                                    DBStorageManager storageManager = new DBStorageManager(getActivity());
-                                    String restoreResult = storageManager.restoreLocalBackup();
-
-                                    String restoreMessage;
-
-                                    if (restoreResult == null)
-                                        restoreMessage = mContext.getString(R.string.error_restore);
-                                    else
-                                        restoreMessage = String.format(Locale.getDefault(), mContext.getString(R.string.message_backup_restored), restoreResult);
-
-                                    DBBasicNoteHelper.getInstance(getActivity()).openDB();
-
-                                    PreferenceRepository.displayMessage(getActivity(), restoreMessage);
-                                    */
+                                        mPreferenceRestoreDropboxProcessor.loaderPreExecute();
+                                        mLoaderServiceManager.startLoader(PreferenceRestoreDropboxProcessor.getLoaderClass());
                                     }
                                 })
                                 .setNegativeButton(R.string.cancel, null)
                                 .show();
-
                     }
                 }
 

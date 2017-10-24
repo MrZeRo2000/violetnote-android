@@ -6,6 +6,7 @@ import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBBasicNoteHelper;
 import com.romanpulov.violetnote.db.DBStorageManager;
 import com.romanpulov.violetnote.loader.AbstractLoader;
+import com.romanpulov.violetnote.loader.BackupDropboxUploader;
 import com.romanpulov.violetnote.loader.DropboxFileLoader;
 import com.romanpulov.violetnote.loader.FileLoader;
 import com.romanpulov.violetnote.loader.RestoreDropboxFileLoader;
@@ -108,5 +109,9 @@ public class PreferenceRestoreDropboxProcessor extends PreferenceLoaderProcessor
             mLoader = createRestoreDropboxLoader();
 
         return mLoader;
+    }
+
+    public static Class<? extends AbstractLoader> getLoaderClass() {
+        return RestoreDropboxFileLoader.class;
     }
 }

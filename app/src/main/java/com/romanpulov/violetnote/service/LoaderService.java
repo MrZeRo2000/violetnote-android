@@ -3,9 +3,7 @@ package com.romanpulov.violetnote.service;
 import android.app.IntentService;
 import android.content.Intent;
 import android.os.Binder;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Messenger;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -24,8 +22,11 @@ public class LoaderService extends IntentService {
     public static final String SERVICE_RESULT_LOADER_NAME = "LoaderServiceResult.LoaderName";
     public static final String SERVICE_RESULT_ERROR_MESSAGE = "LoaderServiceResult.ErrorMessage";
 
+    private static final boolean DEBUGGING = false;
+
     private static void log(String message) {
-        Log.d("LoaderService", message);
+        if (DEBUGGING)
+            Log.d("LoaderService", message);
     }
 
     private String mLoaderClassName;
@@ -44,11 +45,12 @@ public class LoaderService extends IntentService {
             log("onHandleEvent : " + mLoaderClassName);
             try {
                 AbstractLoader loader = DocumentLoaderFactory.fromClassName(this, mLoaderClassName);
-                if (loader != null)
+                if (loader != null) {
                     log("created loader : " + mLoaderClassName);
-                Thread.sleep(5000);
-                //throw new Exception("Test exception");
-                //mLoader.execute();
+                    //Thread.sleep(5000);
+                    loader.load();
+                } else
+                    errorMessage = "Failed to create loader : " + mLoaderClassName;
             } catch (Exception e) {
                 errorMessage = e.getMessage();
             }

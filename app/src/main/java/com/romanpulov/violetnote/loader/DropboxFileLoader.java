@@ -21,7 +21,7 @@ public abstract class DropboxFileLoader extends FileLoader {
     private final DropBoxHelper mDropBoxHelper;
 
     @Override
-    protected void load() throws Exception {
+    public void load() throws Exception {
         String accessToken = mDropBoxHelper.getAccessToken();
         if (accessToken == null)
             throw new Exception(mContext.getResources().getString(R.string.error_dropbox_auth));
