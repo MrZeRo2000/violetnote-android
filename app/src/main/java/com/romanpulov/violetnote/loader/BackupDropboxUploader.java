@@ -27,7 +27,6 @@ public class BackupDropboxUploader extends AbstractLoader {
 
     public BackupDropboxUploader(Context context) {
         super(context);
-        mLoadAppearance = LOAD_APPEARANCE_ASYNC;
         mDropBoxHelper = DropBoxHelper.getInstance(context.getApplicationContext());
         mClient = mDropBoxHelper.getClient();
         mDBStorageManager = new DBStorageManager(context);
@@ -56,10 +55,5 @@ public class BackupDropboxUploader extends AbstractLoader {
 
         long loadedTime = System.currentTimeMillis();
         PreferenceManager.getDefaultSharedPreferences(mContext).edit().putLong(DropboxLoaderRepository.LAST_LOADED_PREF_KEY, loadedTime).apply();
-    }
-
-    @Override
-    public boolean isInternetRequired() {
-        return true;
     }
 }

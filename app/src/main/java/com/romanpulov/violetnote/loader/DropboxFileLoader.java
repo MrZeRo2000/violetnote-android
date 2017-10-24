@@ -46,17 +46,11 @@ public abstract class DropboxFileLoader extends FileLoader {
         }
     }
 
-    @Override
-    public boolean isInternetRequired() {
-        return isLoaderInternetRequired();
-    }
-
+    @SuppressWarnings("unused")
     public static boolean isLoaderInternetRequired() {return true;}
 
     public DropboxFileLoader(Context context, LoadPathProvider loadPathProvider) {
         super(context, loadPathProvider);
-        //appearance
-        mLoadAppearance = LOAD_APPEARANCE_ASYNC;
 
         //dropbox
         mDropBoxHelper = DropBoxHelper.getInstance(context.getApplicationContext());

@@ -1,4 +1,4 @@
-package com.romanpulov.violetnote.view.preference;
+package com.romanpulov.violetnote.view.preference.processor;
 
 import android.content.Context;
 import android.preference.PreferenceFragment;

@@ -14,7 +14,6 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,23 +36,18 @@ import com.romanpulov.violetnote.view.preference.AccountDropboxPreferenceSetup;
 import com.romanpulov.violetnote.view.preference.CloudStorageTypePreferenceSetup;
 import com.romanpulov.violetnote.view.preference.LocalBackupPreferenceSetup;
 import com.romanpulov.violetnote.view.preference.LocalRestorePreferenceSetup;
-import com.romanpulov.violetnote.view.preference.PreferenceBackupDropboxProcessor;
-import com.romanpulov.violetnote.view.preference.PreferenceDocumentLoaderProcessor;
-import com.romanpulov.violetnote.view.preference.PreferenceLoaderProcessor;
+import com.romanpulov.violetnote.view.preference.processor.PreferenceBackupDropboxProcessor;
+import com.romanpulov.violetnote.view.preference.processor.PreferenceDocumentLoaderProcessor;
+import com.romanpulov.violetnote.view.preference.processor.PreferenceLoaderProcessor;
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
-import com.romanpulov.violetnote.view.preference.PreferenceRestoreDropboxProcessor;
+import com.romanpulov.violetnote.view.preference.processor.PreferenceRestoreDropboxProcessor;
 import com.romanpulov.violetnote.view.preference.SourcePathPreferenceSetup;
 import com.romanpulov.violetnote.view.preference.SourceTypePreferenceSetup;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
 public class SettingsFragment extends PreferenceFragment {
-    private static void log(String message) {
-        Log.d("SettingsFragment", message);
-    }
 
     private PreferenceDocumentLoaderProcessor mPreferenceDocumentLoaderProcessor;
     private PreferenceBackupDropboxProcessor mPreferenceBackupDropboxProcessor;
@@ -65,17 +59,10 @@ public class SettingsFragment extends PreferenceFragment {
     private BroadcastReceiver mLoaderServiceBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            log("Receiving from " + context);
             String loaderClassName = intent.getStringExtra(LoaderService.SERVICE_RESULT_LOADER_NAME);
             String errorMessage = intent.getStringExtra(LoaderService.SERVICE_RESULT_ERROR_MESSAGE);
-            log("Loader class name: " + loaderClassName);
-            if (errorMessage == null)
-                log("No errors");
-            else
-                log("Error:" + errorMessage);
 
             PreferenceLoaderProcessor preferenceLoaderProcessor = mPreferenceLoadProcessors.get(loaderClassName);
-            log("Found load processor:" + preferenceLoaderProcessor);
             if (preferenceLoaderProcessor != null)
                 preferenceLoaderProcessor.loaderPostExecute(errorMessage);
         }
@@ -95,19 +82,14 @@ public class SettingsFragment extends PreferenceFragment {
         mPreferenceDocumentLoaderProcessor = new PreferenceDocumentLoaderProcessor(this);
         mPreferenceLoadProcessors.put(DocumentLocalFileLoader.class.getName(), mPreferenceDocumentLoaderProcessor);
         mPreferenceLoadProcessors.put(DocumentDropboxFileLoader.class.getName(), mPreferenceDocumentLoaderProcessor);
-
-
-        //setupPrefDocumentLoad();
         setupPrefDocumentLoadService();
 
         mPreferenceBackupDropboxProcessor = new PreferenceBackupDropboxProcessor(this);
         mPreferenceLoadProcessors.put(BackupDropboxUploader.class.getName(), mPreferenceBackupDropboxProcessor);
-        //setupPrefDropboxBackupLoad();
         setupPrefDropboxBackupLoadService();
 
         mPreferenceRestoreDropboxProcessor = new PreferenceRestoreDropboxProcessor(this);
         mPreferenceLoadProcessors.put(RestoreDropboxFileLoader.class.getName(), mPreferenceRestoreDropboxProcessor);
-        //setupPrefDropboxRestoreLoad();
         setupPrefDropboxRestoreLoadService();
 
         new SourceTypePreferenceSetup(this).execute();
@@ -125,31 +107,6 @@ public class SettingsFragment extends PreferenceFragment {
             PreferenceRepository.displayMessage(getActivity(), getString(R.string.error_internet_not_available));
             return false;
         }
-    }
-
-    private void setupPrefDocumentLoad() {
-        PreferenceRepository.updateLoadPreferenceSummary(this, PreferenceRepository.PREF_LOAD_CURRENT_VALUE);
-
-        Preference pref = findPreference(PreferenceRepository.PREF_KEY_LOAD);
-        pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                if (mPreferenceDocumentLoaderProcessor.isTaskRunning())
-                    PreferenceRepository.displayMessage(getActivity(), getText(R.string.error_load_process_running));
-                else {
-                    final Preference prefSourceType = findPreference(PreferenceRepository.PREF_KEY_SOURCE_TYPE);
-                    int type = prefSourceType.getPreferenceManager().getSharedPreferences().getInt(prefSourceType.getKey(), PreferenceRepository.DEFAULT_SOURCE_TYPE);
-
-                    AbstractLoader loader = mPreferenceDocumentLoaderProcessor.getDocumentLoader(type);
-                    if (loader.isInternetRequired() && !checkInternetConnection())
-                        return true;
-                    else
-                        PreferenceLoaderProcessor.executeLoader(loader);
-                }
-
-                return true;
-            }
-        });
     }
 
     /**
@@ -189,44 +146,6 @@ public class SettingsFragment extends PreferenceFragment {
     }
 
     /**
-     * Dropbox backup
-     */
-    private void setupPrefDropboxBackupLoad() {
-        PreferenceRepository.updateDropboxBackupPreferenceSummary(this, PreferenceRepository.PREF_LOAD_CURRENT_VALUE);
-
-        Preference pref = findPreference(PreferenceRepository.PREF_KEY_BASIC_NOTE_CLOUD_BACKUP);
-        pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                //check if internet is available
-                if (!checkInternetConnection())
-                    return true;
-
-                if ((mPreferenceRestoreDropboxProcessor.isTaskRunning()) || mPreferenceBackupDropboxProcessor.isTaskRunning())
-                    PreferenceRepository.displayMessage(getActivity(), getText(R.string.error_load_process_running));
-                else {
-
-                    // create local backup first
-                    DBStorageManager storageManager = new DBStorageManager(getActivity());
-                    String backupResult = storageManager.createRollingLocalBackup();
-
-                    if (backupResult == null)
-                        PreferenceRepository.displayMessage(getActivity(), getString(R.string.error_backup));
-                    else {
-                        // create remote backup
-                        if (mPreferenceBackupDropboxProcessor.isTaskRunning())
-                            PreferenceRepository.displayMessage(getActivity(), getText(R.string.error_load_process_running));
-                        else
-                            PreferenceLoaderProcessor.executeLoader(mPreferenceBackupDropboxProcessor.getBackupDropboxUploader());
-                    }
-                }
-
-                return true;
-            }
-        });
-    }
-
-    /**
      * Dropbox backup using service
      */
     private void setupPrefDropboxBackupLoadService() {
@@ -261,62 +180,6 @@ public class SettingsFragment extends PreferenceFragment {
 
                     return true;
                 }
-            }
-        });
-    }
-
-
-    /**
-     * Dropbox restore
-     */
-    private void setupPrefDropboxRestoreLoad() {
-        Preference pref = findPreference(PreferenceRepository.PREF_KEY_BASIC_NOTE_CLOUD_RESTORE);
-        pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                //check if internet is available
-                if (!checkInternetConnection())
-                    return true;
-
-                if ((mPreferenceRestoreDropboxProcessor.isTaskRunning()) || mPreferenceBackupDropboxProcessor.isTaskRunning())
-                    PreferenceRepository.displayMessage(getActivity(), getText(R.string.error_load_process_running));
-                else {
-                    final AlertDialog.Builder alert = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
-                    alert
-                            .setTitle(R.string.ui_question_are_you_sure)
-                            .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-
-                                    AbstractLoader loader  = mPreferenceRestoreDropboxProcessor.getRestoreDropboxLoader();
-                                    PreferenceLoaderProcessor.executeLoader(loader);
-
-                                    /*
-
-                                    DBBasicNoteHelper.getInstance(getActivity()).closeDB();
-
-                                    DBStorageManager storageManager = new DBStorageManager(getActivity());
-                                    String restoreResult = storageManager.restoreLocalBackup();
-
-                                    String restoreMessage;
-
-                                    if (restoreResult == null)
-                                        restoreMessage = mContext.getString(R.string.error_restore);
-                                    else
-                                        restoreMessage = String.format(Locale.getDefault(), mContext.getString(R.string.message_backup_restored), restoreResult);
-
-                                    DBBasicNoteHelper.getInstance(getActivity()).openDB();
-
-                                    PreferenceRepository.displayMessage(getActivity(), restoreMessage);
-                                    */
-                                }
-                            })
-                            .setNegativeButton(R.string.cancel, null)
-                            .show();
-
-                }
-
-                return true;
             }
         });
     }
@@ -373,9 +236,6 @@ public class SettingsFragment extends PreferenceFragment {
             // cast its IBinder to a concrete class and directly access it.
             mBoundService = ((LoaderService.LoaderBinder)service).getService();
 
-            // Tell the user about this for our demo.
-            log("Service connected, loader class name = " + mBoundService.getLoaderClassName());
-
             PreferenceLoaderProcessor preferenceLoaderProcessor = mPreferenceLoadProcessors.get(mBoundService.getLoaderClassName());
             if (preferenceLoaderProcessor != null)
                 preferenceLoaderProcessor.loaderPreExecute();
@@ -387,7 +247,6 @@ public class SettingsFragment extends PreferenceFragment {
             // Because it is running in our same process, we should never
             // see this happen.
             mBoundService = null;
-            log("Service disconnected");
         }
     };
 

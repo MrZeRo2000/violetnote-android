@@ -11,16 +11,9 @@ import java.lang.reflect.Method;
  */
 
 public abstract class AbstractLoader {
-    public static final int LOAD_APPEARANCE_SYNC = 0;
-    public static final int LOAD_APPEARANCE_ASYNC = 1;
 
     protected final Context mContext;
-    protected int mLoadAppearance = LOAD_APPEARANCE_SYNC;
     private AsyncTask mTask;
-
-    public int getLoadAppearance() {
-        return mLoadAppearance;
-    }
 
     public interface OnLoadedListener {
         void onLoaded(String result);
@@ -31,10 +24,6 @@ public abstract class AbstractLoader {
 
     AbstractLoader(Context context) {
         mContext = context;
-    }
-
-    public void setOnLoadedListener(AbstractLoader.OnLoadedListener listener) {
-        mListener = listener;
     }
 
     private class LoadAsyncTask extends AsyncTask<Void, Void, String> {
@@ -62,8 +51,6 @@ public abstract class AbstractLoader {
     }
 
     public abstract void load() throws Exception;
-
-    public abstract boolean isInternetRequired();
 
     public void execute() {
         mTask = new AbstractLoader.LoadAsyncTask().execute();

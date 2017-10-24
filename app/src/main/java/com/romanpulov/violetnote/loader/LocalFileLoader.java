@@ -14,18 +14,11 @@ import java.io.OutputStream;
  * Created by romanpulov on 22.09.2017.
  */
 
-public abstract class LocalFileLoader extends FileLoader {
+abstract class LocalFileLoader extends FileLoader {
 
-    public LocalFileLoader(Context context, LoadPathProvider loadPathProvider) {
+    LocalFileLoader(Context context, LoadPathProvider loadPathProvider) {
         super(context, loadPathProvider);
     }
-
-    @Override
-    public boolean isInternetRequired() {
-        return isLoaderInternetRequired();
-    }
-
-    public static boolean isLoaderInternetRequired() {return false;}
 
     @Override
     public void load() throws Exception {
@@ -46,4 +39,7 @@ public abstract class LocalFileLoader extends FileLoader {
             }
         }
     }
+
+    @SuppressWarnings("unused")
+    public static boolean isLoaderInternetRequired() {return false;}
 }

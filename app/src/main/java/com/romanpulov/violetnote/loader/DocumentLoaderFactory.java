@@ -2,13 +2,9 @@ package com.romanpulov.violetnote.loader;
 
 import android.content.Context;
 
-import com.dropbox.core.DbxWebAuth;
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Factory for DocumentLoader creation
