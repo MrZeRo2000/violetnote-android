@@ -3,6 +3,7 @@ package com.romanpulov.violetnote.view.preference;
 import android.content.Context;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
 import android.widget.Toast;
 
 import com.romanpulov.violetnote.R;
@@ -102,4 +103,43 @@ public class PreferenceRepository {
         }
     }
 
+    private static void setPreferenceLong(Context context, String key, long value) {
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putLong(key, value).apply();
+    }
+
+    /**
+     * Sets last loaded document time
+     * @param context Context for preferences
+     * @param loadedTime last loaded time
+     */
+    public static void setDocumentLastLoadedTime(Context context, long loadedTime) {
+        setPreferenceLong(context, PreferenceRepository.PREF_KEY_LAST_LOADED, loadedTime);
+    }
+
+    /**
+     * Sets last loaded document time to current time
+     * @param context Context for preferences
+     */
+    public static void setDocumentLastLoadedCurrentTime(Context context) {
+        long loadedTime = System.currentTimeMillis();
+        setDocumentLastLoadedTime(context, loadedTime);
+    }
+
+    /**
+     * Sets last loaded backup time
+     * @param context Context for preferences
+     * @param loadedTime last loaded time
+     */
+    public static void setCloudBackupLastLoadedTime(Context context, long loadedTime) {
+        setPreferenceLong(context, PreferenceRepository.PREF_KEY_BASIC_NOTE_CLOUD_BACKUP_LAST_LOADED, loadedTime);
+    }
+
+    /**
+     * Sets last loaded backup time to current time
+     * @param context Context for preferences
+     */
+    public static void setCloudBackupLastLoadedCurrentTime(Context context) {
+        long loadedTime = System.currentTimeMillis();
+        setCloudBackupLastLoadedTime(context, loadedTime);
+    }
 }

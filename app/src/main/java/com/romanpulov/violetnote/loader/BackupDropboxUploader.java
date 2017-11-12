@@ -8,6 +8,7 @@ import com.dropbox.core.v2.files.WriteMode;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBStorageManager;
 import com.romanpulov.violetnote.dropbox.DropBoxHelper;
+import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -53,7 +54,6 @@ public class BackupDropboxUploader extends AbstractLoader {
             }
         }
 
-        long loadedTime = System.currentTimeMillis();
-        PreferenceManager.getDefaultSharedPreferences(mContext).edit().putLong(DropboxLoaderRepository.LAST_LOADED_PREF_KEY, loadedTime).apply();
+        PreferenceRepository.setCloudBackupLastLoadedCurrentTime(mContext);
     }
 }

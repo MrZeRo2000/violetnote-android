@@ -25,11 +25,8 @@ public class PreferenceDocumentLoaderProcessor extends PreferenceLoaderProcessor
 
     @Override
     public void loaderPostExecute(String result) {
-        Preference pref = mPreferenceFragment.findPreference(PreferenceRepository.PREF_KEY_LOAD);
-
         if (result == null) {
             long loadedTime = System.currentTimeMillis();
-            pref.getPreferenceManager().getSharedPreferences().edit().putLong(PreferenceRepository.PREF_KEY_LAST_LOADED, loadedTime).apply();
             PreferenceRepository.updateLoadPreferenceSummary(mPreferenceFragment, loadedTime);
         } else {
             PreferenceRepository.displayMessage(mContext, result);
