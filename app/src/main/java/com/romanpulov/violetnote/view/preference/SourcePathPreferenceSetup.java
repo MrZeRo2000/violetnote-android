@@ -6,7 +6,7 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 
 import com.romanpulov.violetnote.R;
-import com.romanpulov.violetnote.dropbox.DropBoxHelper;
+import com.romanpulov.library.dropbox.DropboxHelper;
 import com.romanpulov.violetnote.dropboxchooser.DropboxChooserActivity;
 import com.romanpulov.violetnote.filechooser.FileChooserActivity;
 import com.romanpulov.violetnote.network.NetworkUtils;
@@ -50,15 +50,15 @@ public class SourcePathPreferenceSetup extends PreferenceSetup {
                             PreferenceRepository.displayMessage(mActivity,mActivity.getResources().getString(R.string.error_internet_not_available));
                         else {
                             try {
-                                DropBoxHelper.getInstance(mActivity.getApplication()).validateDropBox();
+                                DropboxHelper.getInstance(mActivity.getApplication()).validateDropBox();
 
                                 intent = new Intent(mActivity, DropboxChooserActivity.class);
                                 intent.putExtra(DropboxChooserActivity.CHOOSER_INITIAL_PATH, mPreferenceFragment.getPreferenceManager().getSharedPreferences().getString(PREF_KEY_SOURCE_PATH, Environment.getRootDirectory().getAbsolutePath()));
                                 mPreferenceFragment.startActivityForResult(intent, 0);
                                 return true;
-                            } catch (DropBoxHelper.DBHNoAccessTokenException e) {
+                            } catch (DropboxHelper.DBHNoAccessTokenException e) {
                                 PreferenceRepository.displayMessage(mActivity, mActivity.getResources().getString(R.string.error_dropbox_auth));
-                            } catch (DropBoxHelper.DBHException e) {
+                            } catch (DropboxHelper.DBHException e) {
                                 PreferenceRepository.displayMessage(mActivity, String.format(mActivity.getResources().getString(R.string.error_dropbox_other), e.getMessage()));
                             }
                         }

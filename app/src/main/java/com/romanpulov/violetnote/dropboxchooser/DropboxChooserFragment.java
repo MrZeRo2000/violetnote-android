@@ -4,7 +4,7 @@ import android.os.Bundle;
 
 import com.romanpulov.violetnote.chooser.ChooseItem;
 import com.romanpulov.violetnote.chooser.HrChooserFragment;
-import com.romanpulov.violetnote.dropbox.DropBoxHelper;
+import com.romanpulov.library.dropbox.DropboxHelper;
 
 /**
  * Fragment for shoosing file from Dropbox
@@ -14,7 +14,7 @@ public class DropboxChooserFragment extends HrChooserFragment {
 
     @Override
     protected ChooseItem getChooseItem() {
-        DropBoxHelper dropBoxHelper = DropBoxHelper.getInstance(getActivity().getApplication());
+        DropboxHelper dropBoxHelper = DropboxHelper.getInstance(getActivity().getApplication());
         return DropboxChooseItem.fromPath(dropBoxHelper.getClient(), DropboxChooseItem.getParentItemPath(mInitialPath));
     }
 

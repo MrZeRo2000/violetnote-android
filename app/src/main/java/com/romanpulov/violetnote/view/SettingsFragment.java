@@ -22,7 +22,7 @@ import android.widget.ListView;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBStorageManager;
 import com.romanpulov.violetnote.filechooser.FileChooserActivity;
-import com.romanpulov.violetnote.dropbox.DropBoxHelper;
+import com.romanpulov.library.dropbox.DropboxHelper;
 import com.romanpulov.violetnote.loader.AbstractLoader;
 import com.romanpulov.violetnote.loader.BackupDropboxUploader;
 import com.romanpulov.violetnote.loader.DocumentDropboxFileLoader;
@@ -300,7 +300,7 @@ public class SettingsFragment extends PreferenceFragment {
     @Override
     public void onResume() {
         super.onResume();
-        DropBoxHelper.getInstance(getActivity().getApplicationContext()).refreshAccessToken();
+        DropboxHelper.getInstance(getActivity().getApplicationContext()).refreshAccessToken();
     }
 
     @Override

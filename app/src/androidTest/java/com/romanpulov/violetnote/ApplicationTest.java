@@ -7,7 +7,7 @@ import android.util.Log;
 import com.romanpulov.violetnote.db.DBBasicNoteHelper;
 import com.romanpulov.violetnote.db.DBBasicNoteOpenHelper;
 import com.romanpulov.violetnote.db.DBNoteManager;
-import com.romanpulov.violetnote.dropbox.DropBoxHelper;
+import com.romanpulov.library.dropbox.DropboxHelper;
 import com.romanpulov.violetnote.model.BasicNoteA;
 
 import java.util.List;
@@ -32,7 +32,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
     }
 
     public void test2() {
-        DropBoxHelper dh = DropBoxHelper.getInstance(getContext());
+        DropboxHelper dh = DropboxHelper.getInstance(getContext());
         log("Token: " + dh.getAccessToken());
     }
 

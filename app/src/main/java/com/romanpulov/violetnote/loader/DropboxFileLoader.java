@@ -5,7 +5,7 @@ import com.dropbox.core.v2.DbxClientV2;
 import com.dropbox.core.v2.files.FileMetadata;
 import com.dropbox.core.v2.files.Metadata;
 import com.romanpulov.violetnote.R;
-import com.romanpulov.violetnote.dropbox.DropBoxHelper;
+import com.romanpulov.library.dropbox.DropboxHelper;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -17,16 +17,17 @@ import java.io.OutputStream;
  * Created by romanpulov on 01.07.2016. *
  */
 public abstract class DropboxFileLoader extends FileLoader {
-    private final DbxClientV2 mClient;
-    private final DropBoxHelper mDropBoxHelper;
+    private final DropboxHelper mDropboxHelper;
 
     @Override
     public void load() throws Exception {
-        String accessToken = mDropBoxHelper.getAccessToken();
+        String accessToken = mDropboxHelper.getAccessToken();
         if (accessToken == null)
             throw new Exception(mContext.getResources().getString(R.string.error_dropbox_auth));
 
-        Metadata m = mClient.files().getMetadata(getLoadPathProvider().getSourcePath());
+        DbxClientV2 dbxClient = mDropboxHelper.getClient();
+
+        Metadata m = dbxClient.files().getMetadata(getLoadPathProvider().getSourcePath());
         if ((m == null) || !(m instanceof FileMetadata))
             throw new Exception(String.format(mContext.getText(R.string.error_dropbox_load_file_data).toString(), getLoadPathProvider().getSourcePath()));
 
@@ -35,7 +36,7 @@ public abstract class DropboxFileLoader extends FileLoader {
         File mDestFile = new File(getLoadPathProvider().getDestPath());
         OutputStream outputStream = new FileOutputStream(mDestFile);
         try {
-            mClient.files().download(fm.getPathLower(), fm.getRev()).download(outputStream);
+            dbxClient.files().download(fm.getPathLower(), fm.getRev()).download(outputStream);
         } finally {
             try {
                 outputStream.flush();
@@ -53,7 +54,6 @@ public abstract class DropboxFileLoader extends FileLoader {
         super(context, loadPathProvider);
 
         //dropbox
-        mDropBoxHelper = DropBoxHelper.getInstance(context.getApplicationContext());
-        mClient = mDropBoxHelper.getClient();
+        mDropboxHelper = DropboxHelper.getInstance(context.getApplicationContext());
     }
 }

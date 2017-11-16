@@ -4,7 +4,7 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 
 import com.romanpulov.violetnote.R;
-import com.romanpulov.violetnote.dropbox.DropBoxHelper;
+import com.romanpulov.library.dropbox.DropboxHelper;
 
 /**
  * Dropbox account configuration
@@ -22,7 +22,7 @@ public class AccountDropboxPreferenceSetup extends PreferenceSetup {
         mPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                DropBoxHelper.getInstance(mActivity.getApplicationContext()).invokeAuthActivity(mActivity.getResources().getString(R.string.app_key));
+                DropboxHelper.getInstance(mActivity.getApplicationContext()).invokeAuthActivity(mActivity.getResources().getString(R.string.app_key));
                 return true;
             }
         });
