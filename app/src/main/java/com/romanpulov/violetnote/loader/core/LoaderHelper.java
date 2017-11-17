@@ -8,10 +8,12 @@ import java.lang.reflect.Method;
  */
 
 public class LoaderHelper {
+    public static final String LOADER_INTERNET_REQUIRED_METHOD_NAME = "isLoaderInternetRequired";
+
     public static boolean isLoaderInternetConnectionRequired(Class<? extends AbstractLoader> loaderClass) {
         boolean result = false;
         try {
-            Method loaderInternetRequiredMethod = loaderClass.getMethod("isLoaderInternetRequired");
+            Method loaderInternetRequiredMethod = loaderClass.getMethod(LOADER_INTERNET_REQUIRED_METHOD_NAME);
             result = (Boolean) loaderInternetRequiredMethod.invoke(null);
         } catch (Exception e) {
             e.printStackTrace();
