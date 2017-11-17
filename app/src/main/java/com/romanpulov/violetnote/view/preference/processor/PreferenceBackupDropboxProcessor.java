@@ -2,7 +2,7 @@ package com.romanpulov.violetnote.view.preference.processor;
 
 import android.preference.PreferenceFragment;
 
-import com.romanpulov.violetnote.loader.AbstractLoader;
+import com.romanpulov.violetnote.loader.core.AbstractLoader;
 import com.romanpulov.violetnote.loader.BackupDropboxUploader;
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 

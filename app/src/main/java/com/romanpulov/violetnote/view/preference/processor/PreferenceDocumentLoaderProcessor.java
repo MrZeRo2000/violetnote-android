@@ -1,10 +1,7 @@
 package com.romanpulov.violetnote.view.preference.processor;
 
-import android.preference.Preference;
 import android.preference.PreferenceFragment;
 
-import com.romanpulov.violetnote.loader.AbstractLoader;
-import com.romanpulov.violetnote.loader.DocumentLoaderFactory;
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 
 /**
@@ -32,13 +29,5 @@ public class PreferenceDocumentLoaderProcessor extends PreferenceLoaderProcessor
             PreferenceRepository.displayMessage(mContext, result);
             PreferenceRepository.updateLoadPreferenceSummary(mPreferenceFragment, PreferenceRepository.PREF_LOAD_CURRENT_VALUE);
         }
-    }
-
-    /**
-     * Updates preference with load status when running
-     */
-    public void updateLoadPreferenceStatus() {
-        if (isTaskRunning())
-            PreferenceRepository.updateLoadPreferenceSummary(mPreferenceFragment, PreferenceRepository.PREF_LOAD_LOADING);
     }
 }

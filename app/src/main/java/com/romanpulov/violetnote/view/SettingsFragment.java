@@ -23,12 +23,13 @@ import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBStorageManager;
 import com.romanpulov.violetnote.filechooser.FileChooserActivity;
 import com.romanpulov.library.dropbox.DropboxHelper;
-import com.romanpulov.violetnote.loader.AbstractLoader;
+import com.romanpulov.violetnote.loader.core.AbstractLoader;
 import com.romanpulov.violetnote.loader.BackupDropboxUploader;
 import com.romanpulov.violetnote.loader.DocumentDropboxFileLoader;
 import com.romanpulov.violetnote.loader.DocumentLoaderFactory;
 import com.romanpulov.violetnote.loader.DocumentLocalFileLoader;
 import com.romanpulov.violetnote.loader.RestoreDropboxFileLoader;
+import com.romanpulov.violetnote.loader.core.LoaderHelper;
 import com.romanpulov.violetnote.network.NetworkUtils;
 import com.romanpulov.violetnote.service.LoaderService;
 import com.romanpulov.violetnote.service.LoaderServiceManager;
@@ -130,11 +131,11 @@ public class SettingsFragment extends PreferenceFragment {
 
                         Class<? extends AbstractLoader> loaderClass = DocumentLoaderFactory.classFromType(type);
                         if (loaderClass != null) {
-                            if (AbstractLoader.isLoaderInternetConnectionRequired(loaderClass) && !checkInternetConnection())
+                            if (LoaderHelper.isLoaderInternetConnectionRequired(loaderClass) && !checkInternetConnection())
                                 return true;
                             else {
                                 mPreferenceDocumentLoaderProcessor.loaderPreExecute();
-                                mLoaderServiceManager.startLoader(loaderClass);
+                                mLoaderServiceManager.startLoader(loaderClass.getName());
                             }
                         }
                     }
@@ -174,7 +175,7 @@ public class SettingsFragment extends PreferenceFragment {
                             PreferenceRepository.displayMessage(getActivity(), getString(R.string.error_backup));
                         else {
                             mPreferenceBackupDropboxProcessor.loaderPreExecute();
-                            mLoaderServiceManager.startLoader(PreferenceBackupDropboxProcessor.getLoaderClass());
+                            mLoaderServiceManager.startLoader(PreferenceBackupDropboxProcessor.getLoaderClass().getName());
                         }
                     }
 
@@ -211,7 +212,7 @@ public class SettingsFragment extends PreferenceFragment {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         mPreferenceRestoreDropboxProcessor.loaderPreExecute();
-                                        mLoaderServiceManager.startLoader(PreferenceRestoreDropboxProcessor.getLoaderClass());
+                                        mLoaderServiceManager.startLoader(PreferenceRestoreDropboxProcessor.getLoaderClass().getName());
                                     }
                                 })
                                 .setNegativeButton(R.string.cancel, null)
@@ -271,8 +272,6 @@ public class SettingsFragment extends PreferenceFragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        if (mPreferenceDocumentLoaderProcessor != null)
-            mPreferenceDocumentLoaderProcessor.updateLoadPreferenceStatus();
         LocalBroadcastManager.getInstance(activity).registerReceiver(mLoaderServiceBroadcastReceiver, new IntentFilter(LoaderService.SERVICE_RESULT_INTENT_NAME));
         mLoaderServiceManager = new LoaderServiceManager(activity);
         doBindService(activity);

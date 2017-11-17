@@ -1,0 +1,22 @@
+package com.romanpulov.violetnote.loader.core;
+
+import java.lang.reflect.Method;
+
+/**
+ * Loader helper class
+ * Created by romanpulov on 17.11.2017.
+ */
+
+public class LoaderHelper {
+    public static boolean isLoaderInternetConnectionRequired(Class<? extends AbstractLoader> loaderClass) {
+        boolean result = false;
+        try {
+            Method loaderInternetRequiredMethod = loaderClass.getMethod("isLoaderInternetRequired");
+            result = (Boolean) loaderInternetRequiredMethod.invoke(null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+}

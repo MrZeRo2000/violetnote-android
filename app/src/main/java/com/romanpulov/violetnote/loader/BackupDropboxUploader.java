@@ -7,6 +7,7 @@ import com.dropbox.core.v2.files.WriteMode;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBStorageManager;
 import com.romanpulov.library.dropbox.DropboxHelper;
+import com.romanpulov.violetnote.loader.core.AbstractLoader;
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 
 import java.io.File;

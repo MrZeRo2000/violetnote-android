@@ -8,8 +8,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
-import com.romanpulov.violetnote.loader.AbstractLoader;
-import com.romanpulov.violetnote.loader.DocumentLoaderFactory;
+import com.romanpulov.violetnote.loader.core.Loader;
+import com.romanpulov.violetnote.loader.core.LoaderFactory;
 
 /**
  * Loader service
@@ -44,7 +44,7 @@ public class LoaderService extends IntentService {
             String errorMessage = null;
             log("onHandleEvent : " + mLoaderClassName);
             try {
-                AbstractLoader loader = DocumentLoaderFactory.fromClassName(this, mLoaderClassName);
+                Loader loader = LoaderFactory.fromClassName(this, mLoaderClassName);
                 if (loader != null) {
                     log("created loader : " + mLoaderClassName);
                     //Thread.sleep(5000);

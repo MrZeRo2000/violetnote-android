@@ -5,7 +5,7 @@ import android.preference.PreferenceFragment;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBBasicNoteHelper;
 import com.romanpulov.violetnote.db.DBStorageManager;
-import com.romanpulov.violetnote.loader.AbstractLoader;
+import com.romanpulov.violetnote.loader.core.AbstractLoader;
 import com.romanpulov.violetnote.loader.FileLoader;
 import com.romanpulov.violetnote.loader.RestoreDropboxFileLoader;
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
@@ -16,7 +16,7 @@ import java.io.File;
  * Restore from DropBox processor
  * Created by romanpulov on 20.09.2017.
  */
-public class PreferenceRestoreDropboxProcessor extends PreferenceLoaderProcessor<FileLoader> {
+public class PreferenceRestoreDropboxProcessor extends PreferenceLoaderProcessor {
 
     public PreferenceRestoreDropboxProcessor(PreferenceFragment preferenceFragment) {
         super(preferenceFragment);

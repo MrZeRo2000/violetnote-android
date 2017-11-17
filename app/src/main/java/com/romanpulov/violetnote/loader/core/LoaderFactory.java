@@ -1,8 +1,6 @@
-package com.romanpulov.violetnote.loader;
+package com.romanpulov.violetnote.loader.core;
 
 import android.content.Context;
-
-import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 
 import java.lang.reflect.Constructor;
 
@@ -10,20 +8,9 @@ import java.lang.reflect.Constructor;
  * Factory for DocumentLoader creation
  * Created by romanpulov on 16.06.2016.
  */
-public class DocumentLoaderFactory {
+public class LoaderFactory {
 
-    public static Class<? extends AbstractLoader> classFromType(int type) {
-        switch (type) {
-            case PreferenceRepository.SOURCE_TYPE_FILE:
-                return DocumentLocalFileLoader.class;
-            case PreferenceRepository.SOURCE_TYPE_DROPBOX:
-                return DocumentDropboxFileLoader.class;
-            default:
-                return null;
-        }
-    }
-
-    public static AbstractLoader fromClassName(Context context, String className) {
+    public static Loader fromClassName(Context context, String className) {
         Class<?> clazz;
         try {
             clazz = Class.forName(className);
@@ -41,7 +28,7 @@ public class DocumentLoaderFactory {
         }
 
         try {
-            return (AbstractLoader) contextConstructor.newInstance(context);
+            return (Loader) contextConstructor.newInstance(context);
         } catch (Exception e) {
             e.printStackTrace();
             return null;

@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.romanpulov.violetnote.loader.AbstractLoader;
-
 import java.util.List;
 
 /**
@@ -25,14 +23,14 @@ public class LoaderServiceManager {
         mContext = context;
     }
 
-    public boolean startLoader(Class<? extends AbstractLoader> loaderClass) {
+    public boolean startLoader(String loaderClassName) {
         if (isLoaderServiceRunning()) {
             log("the loader service is running");
             return false;
         }
         else {
             Intent serviceIntent = new Intent(mContext, LoaderService.class);
-            serviceIntent.putExtra(LoaderService.SERVICE_PARAM_LOADER_NAME, loaderClass.getName());
+            serviceIntent.putExtra(LoaderService.SERVICE_PARAM_LOADER_NAME, loaderClassName);
             mContext.startService(serviceIntent);
             return true;
         }
@@ -44,13 +42,16 @@ public class LoaderServiceManager {
 
     private static boolean isServiceRunning(Context context, String serviceClassName) {
         final ActivityManager activityManager = (ActivityManager) context.getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
-        final List<ActivityManager.RunningServiceInfo> services = activityManager.getRunningServices(Integer.MAX_VALUE);
+        if (activityManager != null) {
+            final List<ActivityManager.RunningServiceInfo> services = activityManager.getRunningServices(Integer.MAX_VALUE);
 
-        for (ActivityManager.RunningServiceInfo runningServiceInfo : services) {
-            if ((runningServiceInfo.service.getClassName().equals(serviceClassName)) && (runningServiceInfo.started)) {
-                return true;
+            for (ActivityManager.RunningServiceInfo runningServiceInfo : services) {
+                if ((runningServiceInfo.service.getClassName().equals(serviceClassName)) && (runningServiceInfo.started)) {
+                    return true;
+                }
             }
         }
+
         return false;
     }
 }
