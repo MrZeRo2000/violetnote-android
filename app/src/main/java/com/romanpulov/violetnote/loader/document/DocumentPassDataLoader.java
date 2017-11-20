@@ -1,4 +1,4 @@
-package com.romanpulov.violetnote.loader;
+package com.romanpulov.violetnote.loader.document;
 
 import android.content.Context;
 

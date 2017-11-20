@@ -1,4 +1,4 @@
-package com.romanpulov.violetnote.loader;
+package com.romanpulov.violetnote.loader.dropbox;
 
 import android.content.Context;
 import com.dropbox.core.v2.DbxClientV2;
@@ -6,6 +6,8 @@ import com.dropbox.core.v2.files.FileMetadata;
 import com.dropbox.core.v2.files.Metadata;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.library.dropbox.DropboxHelper;
+import com.romanpulov.violetnote.loader.core.LoadPathProvider;
+import com.romanpulov.violetnote.loader.file.FileLoader;
 
 import java.io.File;
 import java.io.FileOutputStream;

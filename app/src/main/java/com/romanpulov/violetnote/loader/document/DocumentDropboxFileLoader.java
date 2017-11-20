@@ -1,8 +1,8 @@
-package com.romanpulov.violetnote.loader;
+package com.romanpulov.violetnote.loader.document;
 
 import android.content.Context;
-import android.preference.PreferenceManager;
 
+import com.romanpulov.violetnote.loader.dropbox.DropboxFileLoader;
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 
 /**

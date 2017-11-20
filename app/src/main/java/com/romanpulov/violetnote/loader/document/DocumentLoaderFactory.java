@@ -1,4 +1,4 @@
-package com.romanpulov.violetnote.loader;
+package com.romanpulov.violetnote.loader.document;
 
 import com.romanpulov.violetnote.loader.core.AbstractLoader;
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;

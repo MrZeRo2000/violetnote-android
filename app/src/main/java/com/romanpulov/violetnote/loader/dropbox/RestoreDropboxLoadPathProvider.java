@@ -1,8 +1,9 @@
-package com.romanpulov.violetnote.loader;
+package com.romanpulov.violetnote.loader.dropbox;
 
 import android.content.Context;
 
 import com.romanpulov.violetnote.db.DBStorageManager;
+import com.romanpulov.violetnote.loader.core.ContextLoadPathProvider;
 
 import java.io.File;
 

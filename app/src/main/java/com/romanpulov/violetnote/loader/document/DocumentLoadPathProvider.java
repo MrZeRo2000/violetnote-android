@@ -1,8 +1,9 @@
-package com.romanpulov.violetnote.loader;
+package com.romanpulov.violetnote.loader.document;
 
 import android.content.Context;
 import android.preference.PreferenceManager;
 
+import com.romanpulov.violetnote.loader.core.ContextLoadPathProvider;
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 
 /**

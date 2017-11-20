@@ -1,4 +1,4 @@
-package com.romanpulov.violetnote.loader;
+package com.romanpulov.violetnote.loader.core;
 
 /**
  * Load source and destination path provider

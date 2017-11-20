@@ -1,8 +1,9 @@
-package com.romanpulov.violetnote.loader;
+package com.romanpulov.violetnote.loader.file;
 
 import android.content.Context;
 
 import com.romanpulov.violetnote.loader.core.AbstractLoader;
+import com.romanpulov.violetnote.loader.core.LoadPathProvider;
 
 /**
  * Abstract class for file loader
@@ -16,7 +17,7 @@ public abstract class FileLoader extends AbstractLoader {
         return mLoadPathProvider;
     }
 
-    FileLoader(Context context, LoadPathProvider loadPathProvider) {
+    public FileLoader(Context context, LoadPathProvider loadPathProvider) {
         super(context);
         mLoadPathProvider = loadPathProvider;
     }

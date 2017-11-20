@@ -5,7 +5,7 @@ import android.os.Parcel;
 import android.test.ApplicationTestCase;
 import android.util.Log;
 
-import com.romanpulov.violetnote.loader.DocumentPassDataLoader;
+import com.romanpulov.violetnote.loader.document.DocumentPassDataLoader;
 import com.romanpulov.violetnote.model.PassDataA;
 
 /**

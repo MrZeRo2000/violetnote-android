@@ -1,6 +1,8 @@
-package com.romanpulov.violetnote.loader;
+package com.romanpulov.violetnote.loader.core;
 
 import android.content.Context;
+
+import com.romanpulov.violetnote.loader.core.LoadPathProvider;
 
 /**
  * Base class for context dependent load path provider

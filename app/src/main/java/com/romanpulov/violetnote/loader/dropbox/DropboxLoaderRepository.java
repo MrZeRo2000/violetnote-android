@@ -1,4 +1,4 @@
-package com.romanpulov.violetnote.loader;
+package com.romanpulov.violetnote.loader.dropbox;
 
 /**
  * Common data for Dropbox

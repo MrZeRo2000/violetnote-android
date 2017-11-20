@@ -1,6 +1,8 @@
-package com.romanpulov.violetnote.loader;
+package com.romanpulov.violetnote.loader.file;
 
 import android.content.Context;
+
+import com.romanpulov.violetnote.loader.core.LoadPathProvider;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,9 +16,9 @@ import java.io.OutputStream;
  * Created by romanpulov on 22.09.2017.
  */
 
-abstract class LocalFileLoader extends FileLoader {
+public abstract class LocalFileLoader extends FileLoader {
 
-    LocalFileLoader(Context context, LoadPathProvider loadPathProvider) {
+    public LocalFileLoader(Context context, LoadPathProvider loadPathProvider) {
         super(context, loadPathProvider);
     }
 

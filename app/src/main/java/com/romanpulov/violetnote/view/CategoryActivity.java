@@ -8,7 +8,7 @@ import android.view.MenuItem;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.view.core.PassDataPasswordActivity;
-import com.romanpulov.violetnote.loader.DocumentPassDataLoader;
+import com.romanpulov.violetnote.loader.document.DocumentPassDataLoader;
 import com.romanpulov.violetnote.model.PassCategoryA;
 import com.romanpulov.violetnote.model.PassDataA;
 import com.romanpulov.violetnote.view.core.PassDataProgressFragment;
