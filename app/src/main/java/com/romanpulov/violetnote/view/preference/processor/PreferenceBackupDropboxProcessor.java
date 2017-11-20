@@ -2,7 +2,7 @@ package com.romanpulov.violetnote.view.preference.processor;
 
 import android.preference.PreferenceFragment;
 
-import com.romanpulov.violetnote.loader.core.AbstractLoader;
+import com.romanpulov.library.common.loader.core.AbstractContextLoader;
 import com.romanpulov.violetnote.loader.dropbox.BackupDropboxUploader;
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 
@@ -32,7 +32,7 @@ public class PreferenceBackupDropboxProcessor extends PreferenceLoaderProcessor{
         }
     }
 
-    public static Class<? extends AbstractLoader> getLoaderClass() {
+    public static Class<? extends AbstractContextLoader> getLoaderClass() {
         return BackupDropboxUploader.class;
     }
 }

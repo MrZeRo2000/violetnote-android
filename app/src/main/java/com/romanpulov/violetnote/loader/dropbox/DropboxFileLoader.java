@@ -6,8 +6,8 @@ import com.dropbox.core.v2.files.FileMetadata;
 import com.dropbox.core.v2.files.Metadata;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.library.dropbox.DropboxHelper;
-import com.romanpulov.violetnote.loader.core.LoadPathProvider;
-import com.romanpulov.violetnote.loader.file.FileLoader;
+import com.romanpulov.library.common.loader.core.LoadPathProvider;
+import com.romanpulov.library.common.loader.file.FileLoader;
 
 import java.io.File;
 import java.io.FileOutputStream;

@@ -8,8 +8,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
-import com.romanpulov.violetnote.loader.core.Loader;
-import com.romanpulov.violetnote.loader.core.LoaderFactory;
+import com.romanpulov.library.common.loader.core.Loader;
+import com.romanpulov.library.common.loader.core.LoaderFactory;
 
 /**
  * Loader service

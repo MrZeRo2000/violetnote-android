@@ -1,6 +1,6 @@
 package com.romanpulov.violetnote.loader.document;
 
-import com.romanpulov.violetnote.loader.core.AbstractLoader;
+import com.romanpulov.library.common.loader.core.AbstractContextLoader;
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 
 /**
@@ -8,7 +8,7 @@ import com.romanpulov.violetnote.view.preference.PreferenceRepository;
  */
 
 public class DocumentLoaderFactory {
-    public static Class<? extends AbstractLoader> classFromType(int type) {
+    public static Class<? extends AbstractContextLoader> classFromType(int type) {
         switch (type) {
             case PreferenceRepository.SOURCE_TYPE_FILE:
                 return DocumentLocalFileLoader.class;

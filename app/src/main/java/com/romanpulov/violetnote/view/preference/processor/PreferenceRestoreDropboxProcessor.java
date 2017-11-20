@@ -5,8 +5,8 @@ import android.preference.PreferenceFragment;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBBasicNoteHelper;
 import com.romanpulov.violetnote.db.DBStorageManager;
-import com.romanpulov.violetnote.loader.core.AbstractLoader;
-import com.romanpulov.violetnote.loader.file.FileLoader;
+import com.romanpulov.library.common.loader.core.AbstractContextLoader;
+import com.romanpulov.library.common.loader.file.FileLoader;
 import com.romanpulov.violetnote.loader.dropbox.RestoreDropboxFileLoader;
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 
@@ -57,7 +57,7 @@ public class PreferenceRestoreDropboxProcessor extends PreferenceLoaderProcessor
         }
     }
 
-    public static Class<? extends AbstractLoader> getLoaderClass() {
+    public static Class<? extends AbstractContextLoader> getLoaderClass() {
         return RestoreDropboxFileLoader.class;
     }
 }

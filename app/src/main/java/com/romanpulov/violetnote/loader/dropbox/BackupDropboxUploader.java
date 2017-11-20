@@ -7,7 +7,7 @@ import com.dropbox.core.v2.files.WriteMode;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBStorageManager;
 import com.romanpulov.library.dropbox.DropboxHelper;
-import com.romanpulov.violetnote.loader.core.AbstractLoader;
+import com.romanpulov.library.common.loader.core.AbstractContextLoader;
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 
 import java.io.File;
@@ -20,7 +20,7 @@ import java.io.InputStream;
  * Created by romanpulov on 06.09.2017.
  */
 
-public class BackupDropboxUploader extends AbstractLoader {
+public class BackupDropboxUploader extends AbstractContextLoader {
 
     private final DbxClientV2 mClient;
     private final DropboxHelper mDropboxHelper;

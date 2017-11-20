@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.romanpulov.library.common.service.ServiceUtils;
+
 /**
  * Utility class for interation with Service
  * Created by romanpulov on 10.10.2017.
@@ -34,6 +36,6 @@ public class LoaderServiceManager {
     }
 
     public boolean isLoaderServiceRunning() {
-        return ServiceHelper.isServiceRunning(mContext, LoaderService.class.getName());
+        return ServiceUtils.isServiceRunning(mContext, LoaderService.class.getName());
     }
 }

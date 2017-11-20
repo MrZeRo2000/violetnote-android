@@ -24,13 +24,13 @@ import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBStorageManager;
 import com.romanpulov.violetnote.filechooser.FileChooserActivity;
 import com.romanpulov.library.dropbox.DropboxHelper;
-import com.romanpulov.violetnote.loader.core.AbstractLoader;
+import com.romanpulov.library.common.loader.core.AbstractContextLoader;
 import com.romanpulov.violetnote.loader.dropbox.BackupDropboxUploader;
 import com.romanpulov.violetnote.loader.document.DocumentDropboxFileLoader;
 import com.romanpulov.violetnote.loader.document.DocumentLoaderFactory;
 import com.romanpulov.violetnote.loader.document.DocumentLocalFileLoader;
 import com.romanpulov.violetnote.loader.dropbox.RestoreDropboxFileLoader;
-import com.romanpulov.violetnote.loader.core.LoaderHelper;
+import com.romanpulov.library.common.loader.core.LoaderHelper;
 import com.romanpulov.violetnote.service.LoaderService;
 import com.romanpulov.violetnote.service.LoaderServiceManager;
 import com.romanpulov.violetnote.view.preference.AccountDropboxPreferenceSetup;
@@ -129,7 +129,7 @@ public class SettingsFragment extends PreferenceFragment {
                         final Preference prefSourceType = findPreference(PreferenceRepository.PREF_KEY_SOURCE_TYPE);
                         int type = prefSourceType.getPreferenceManager().getSharedPreferences().getInt(prefSourceType.getKey(), PreferenceRepository.DEFAULT_SOURCE_TYPE);
 
-                        Class<? extends AbstractLoader> loaderClass = DocumentLoaderFactory.classFromType(type);
+                        Class<? extends AbstractContextLoader> loaderClass = DocumentLoaderFactory.classFromType(type);
                         if (loaderClass != null) {
                             if (LoaderHelper.isLoaderInternetConnectionRequired(loaderClass) && !checkInternetConnection())
                                 return true;
