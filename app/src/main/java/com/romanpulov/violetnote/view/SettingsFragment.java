@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.romanpulov.library.common.network.NetworkUtils;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBStorageManager;
 import com.romanpulov.violetnote.filechooser.FileChooserActivity;
@@ -30,7 +31,6 @@ import com.romanpulov.violetnote.loader.document.DocumentLoaderFactory;
 import com.romanpulov.violetnote.loader.document.DocumentLocalFileLoader;
 import com.romanpulov.violetnote.loader.dropbox.RestoreDropboxFileLoader;
 import com.romanpulov.violetnote.loader.core.LoaderHelper;
-import com.romanpulov.violetnote.network.NetworkUtils;
 import com.romanpulov.violetnote.service.LoaderService;
 import com.romanpulov.violetnote.service.LoaderServiceManager;
 import com.romanpulov.violetnote.view.preference.AccountDropboxPreferenceSetup;
