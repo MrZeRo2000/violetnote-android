@@ -22,14 +22,13 @@ import java.io.InputStream;
 
 public class BackupDropboxUploader extends AbstractContextLoader {
 
-    private final DbxClientV2 mClient;
     private final DropboxHelper mDropboxHelper;
     private final DBStorageManager mDBStorageManager;
 
     public BackupDropboxUploader(Context context) {
         super(context);
         mDropboxHelper = DropboxHelper.getInstance(context.getApplicationContext());
-        mClient = mDropboxHelper.getClient();
+
         mDBStorageManager = new DBStorageManager(context);
     }
 
@@ -39,12 +38,14 @@ public class BackupDropboxUploader extends AbstractContextLoader {
         if (accessToken == null)
             throw new Exception(mContext.getResources().getString(R.string.error_dropbox_auth));
 
+        DbxClientV2 client = mDropboxHelper.getClient();
+
         File[] files = mDBStorageManager.getLocalBackupFiles();
         for (File f : files) {
             String remoteFileName = f.getName();
             InputStream inputStream = new FileInputStream(f);
             try {
-                mClient.files().uploadBuilder(DropboxLoaderRepository.REMOTE_PATH + remoteFileName).withMode(WriteMode.OVERWRITE).uploadAndFinish(inputStream);
+                client.files().uploadBuilder(DropboxLoaderRepository.REMOTE_PATH + remoteFileName).withMode(WriteMode.OVERWRITE).uploadAndFinish(inputStream);
             } finally {
                 try {
                     inputStream.close();
