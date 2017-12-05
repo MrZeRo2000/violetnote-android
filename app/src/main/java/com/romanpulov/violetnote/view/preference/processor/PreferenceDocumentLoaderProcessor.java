@@ -11,23 +11,25 @@ import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 
 public class PreferenceDocumentLoaderProcessor extends PreferenceLoaderProcessor{
 
+    private static final String PREF_KEY_NAME = PreferenceRepository.PREF_KEY_DOCUMENT_LOAD;
+
     public PreferenceDocumentLoaderProcessor(PreferenceFragment preferenceFragment) {
         super(preferenceFragment);
     }
 
     @Override
     public void loaderPreExecute() {
-        PreferenceRepository.updateLoadPreferenceSummary(mPreferenceFragment, PreferenceRepository.PREF_LOAD_LOADING);
+        PreferenceRepository.updatePreferenceKeySummary(mPreferenceFragment, PREF_KEY_NAME, PreferenceRepository.PREF_LOAD_LOADING);
     }
 
     @Override
     public void loaderPostExecute(String result) {
         if (result == null) {
             long loadedTime = System.currentTimeMillis();
-            PreferenceRepository.updateLoadPreferenceSummary(mPreferenceFragment, loadedTime);
+            PreferenceRepository.updatePreferenceKeySummary(mPreferenceFragment, PREF_KEY_NAME, loadedTime);
         } else {
             PreferenceRepository.displayMessage(mContext, result);
-            PreferenceRepository.updateLoadPreferenceSummary(mPreferenceFragment, PreferenceRepository.PREF_LOAD_CURRENT_VALUE);
+            PreferenceRepository.updatePreferenceKeySummary(mPreferenceFragment, PREF_KEY_NAME, PreferenceRepository.PREF_LOAD_CURRENT_VALUE);
         }
     }
 }

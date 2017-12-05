@@ -114,9 +114,9 @@ public class SettingsFragment extends PreferenceFragment {
      * Load document using service
      */
     private void setupPrefDocumentLoadService() {
-        PreferenceRepository.updateLoadPreferenceSummary(this, PreferenceRepository.PREF_LOAD_CURRENT_VALUE);
+        PreferenceRepository.updatePreferenceKeySummary(this, PreferenceRepository.PREF_KEY_DOCUMENT_LOAD, PreferenceRepository.PREF_LOAD_CURRENT_VALUE);
 
-        Preference pref = findPreference(PreferenceRepository.PREF_KEY_LOAD);
+        Preference pref = findPreference(PreferenceRepository.PREF_KEY_DOCUMENT_LOAD);
         pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
@@ -150,7 +150,7 @@ public class SettingsFragment extends PreferenceFragment {
      * Dropbox backup using service
      */
     private void setupPrefDropboxBackupLoadService() {
-        PreferenceRepository.updateDropboxBackupPreferenceSummary(this, PreferenceRepository.PREF_LOAD_CURRENT_VALUE);
+        PreferenceRepository.updatePreferenceKeySummary(this, PreferenceRepository.PREF_KEY_BASIC_NOTE_CLOUD_BACKUP, PreferenceRepository.PREF_LOAD_CURRENT_VALUE);
 
         Preference pref = findPreference(PreferenceRepository.PREF_KEY_BASIC_NOTE_CLOUD_BACKUP);
         pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -189,6 +189,8 @@ public class SettingsFragment extends PreferenceFragment {
      * Dropbox restore using service
      */
     private void setupPrefDropboxRestoreLoadService() {
+        PreferenceRepository.updatePreferenceKeySummary(this, PreferenceRepository.PREF_KEY_BASIC_NOTE_CLOUD_RESTORE, PreferenceRepository.PREF_LOAD_CURRENT_VALUE);
+
         Preference pref = findPreference(PreferenceRepository.PREF_KEY_BASIC_NOTE_CLOUD_RESTORE);
 
         pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {

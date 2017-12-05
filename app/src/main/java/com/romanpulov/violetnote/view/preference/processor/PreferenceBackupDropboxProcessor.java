@@ -12,23 +12,25 @@ import com.romanpulov.violetnote.view.preference.PreferenceRepository;
  */
 public class PreferenceBackupDropboxProcessor extends PreferenceLoaderProcessor{
 
+    private static final String PREF_KEY_NAME = PreferenceRepository.PREF_KEY_BASIC_NOTE_CLOUD_BACKUP;
+
     public PreferenceBackupDropboxProcessor(PreferenceFragment preferenceFragment) {
         super(preferenceFragment);
     }
 
     @Override
     public void loaderPreExecute() {
-        PreferenceRepository.updateDropboxBackupPreferenceSummary(mPreferenceFragment, PreferenceRepository.PREF_LOAD_LOADING);
+        PreferenceRepository.updatePreferenceKeySummary(mPreferenceFragment, PREF_KEY_NAME, PreferenceRepository.PREF_LOAD_LOADING);
     }
 
     @Override
     public void loaderPostExecute(String result) {
         if (result == null) {
             long loadedTime = System.currentTimeMillis();
-            PreferenceRepository.updateDropboxBackupPreferenceSummary(mPreferenceFragment, loadedTime);
+            PreferenceRepository.updatePreferenceKeySummary(mPreferenceFragment, PREF_KEY_NAME, loadedTime);
         } else {
             PreferenceRepository.displayMessage(mContext, result);
-            PreferenceRepository.updateDropboxBackupPreferenceSummary(mPreferenceFragment, PreferenceRepository.PREF_LOAD_CURRENT_VALUE);
+            PreferenceRepository.updatePreferenceKeySummary(mPreferenceFragment, PREF_KEY_NAME, PreferenceRepository.PREF_LOAD_CURRENT_VALUE);
         }
     }
 

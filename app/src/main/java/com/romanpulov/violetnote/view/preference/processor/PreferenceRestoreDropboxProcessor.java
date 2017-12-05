@@ -18,21 +18,24 @@ import java.io.File;
  */
 public class PreferenceRestoreDropboxProcessor extends PreferenceLoaderProcessor {
 
+    private static final String PREF_KEY_NAME = PreferenceRepository.PREF_KEY_BASIC_NOTE_CLOUD_RESTORE;
+
     public PreferenceRestoreDropboxProcessor(PreferenceFragment preferenceFragment) {
         super(preferenceFragment);
     }
 
     @Override
     public void loaderPreExecute() {
-        PreferenceRepository.updateDropboxRestorePreferenceSummary(mPreferenceFragment, PreferenceRepository.PREF_LOAD_LOADING);
+        PreferenceRepository.updatePreferenceKeySummary(mPreferenceFragment, PREF_KEY_NAME, PreferenceRepository.PREF_LOAD_LOADING);
     }
 
     @Override
     public void loaderPostExecute(String result) {
-        PreferenceRepository.setDropboxRestoreDefaultPreferenceSummary(mPreferenceFragment);
 
-        if (result != null)
+        if (result != null) {
             PreferenceRepository.displayMessage(mContext, result);
+            PreferenceRepository.updatePreferenceKeySummary(mPreferenceFragment, PREF_KEY_NAME, PreferenceRepository.PREF_LOAD_CURRENT_VALUE);
+        }
         else {
             FileLoader fileLoader = new RestoreDropboxFileLoader(mContext);;
             File file = new File(fileLoader.getLoadPathProvider().getDestPath());
@@ -43,17 +46,24 @@ public class PreferenceRestoreDropboxProcessor extends PreferenceLoaderProcessor
                 String restoreResult = storageManager.restoreLocalBackup();
 
                 String restoreMessage;
-                if (restoreResult == null)
+                if (restoreResult == null) {
                     restoreMessage = mContext.getString(R.string.error_restore);
-                else
+                    PreferenceRepository.updatePreferenceKeySummary(mPreferenceFragment, PREF_KEY_NAME, PreferenceRepository.PREF_LOAD_CURRENT_VALUE);
+                }
+                else {
                     restoreMessage = mContext.getString(R.string.message_backup_cloud_restored);
+                    long loadedTime = System.currentTimeMillis();
+                    PreferenceRepository.updatePreferenceKeySummary(mPreferenceFragment, PREF_KEY_NAME, loadedTime);
+                }
 
                 DBBasicNoteHelper.getInstance(mContext).openDB();
 
                 PreferenceRepository.displayMessage(mContext, restoreMessage);
 
-            } else
+            } else {
+                PreferenceRepository.updatePreferenceKeySummary(mPreferenceFragment, PREF_KEY_NAME, PreferenceRepository.PREF_LOAD_CURRENT_VALUE);
                 PreferenceRepository.displayMessage(mContext, mPreferenceFragment.getString(R.string.error_restore));
+            }
         }
     }
 

@@ -19,6 +19,6 @@ public class DocumentDropboxFileLoader extends DropboxFileLoader {
     @Override
     public void load() throws Exception {
         super.load();
-        PreferenceRepository.setDocumentLastLoadedCurrentTime(mContext);
+        PreferenceRepository.setPreferenceKeyLastLoadedCurrentTime(mContext, PreferenceRepository.PREF_KEY_DOCUMENT_LOAD);
     }
 }
