@@ -31,13 +31,14 @@ import com.romanpulov.violetnote.loader.document.DocumentLoaderFactory;
 import com.romanpulov.violetnote.loader.document.DocumentLocalFileLoader;
 import com.romanpulov.violetnote.loader.dropbox.RestoreDropboxFileLoader;
 import com.romanpulov.library.common.loader.core.LoaderHelper;
+import com.romanpulov.violetnote.loader.local.BackupLocalLoader;
 import com.romanpulov.violetnote.service.LoaderService;
 import com.romanpulov.violetnote.service.LoaderServiceManager;
 import com.romanpulov.violetnote.view.preference.AccountDropboxPreferenceSetup;
 import com.romanpulov.violetnote.view.preference.CloudStorageTypePreferenceSetup;
-import com.romanpulov.violetnote.view.preference.LocalBackupPreferenceSetup;
 import com.romanpulov.violetnote.view.preference.LocalRestorePreferenceSetup;
 import com.romanpulov.violetnote.view.preference.processor.PreferenceBackupDropboxProcessor;
+import com.romanpulov.violetnote.view.preference.processor.PreferenceBackupLocalProcessor;
 import com.romanpulov.violetnote.view.preference.processor.PreferenceDocumentLoaderProcessor;
 import com.romanpulov.violetnote.view.preference.processor.PreferenceLoaderProcessor;
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
@@ -53,6 +54,7 @@ public class SettingsFragment extends PreferenceFragment {
     private PreferenceDocumentLoaderProcessor mPreferenceDocumentLoaderProcessor;
     private PreferenceBackupDropboxProcessor mPreferenceBackupDropboxProcessor;
     private PreferenceRestoreDropboxProcessor mPreferenceRestoreDropboxProcessor;
+    private PreferenceBackupLocalProcessor mPreferenceBackupLocalProcessor;
 
     private Map<String, PreferenceLoaderProcessor> mPreferenceLoadProcessors = new HashMap<>();
 
@@ -93,10 +95,13 @@ public class SettingsFragment extends PreferenceFragment {
         mPreferenceLoadProcessors.put(RestoreDropboxFileLoader.class.getName(), mPreferenceRestoreDropboxProcessor);
         setupPrefDropboxRestoreLoadService();
 
+        mPreferenceBackupLocalProcessor = new PreferenceBackupLocalProcessor(this);
+        mPreferenceLoadProcessors.put(PreferenceBackupLocalProcessor.getLoaderClass().getName(), mPreferenceBackupLocalProcessor);
+        setupPrefLocalBackupLoadService();
+
         new SourceTypePreferenceSetup(this).execute();
         new SourcePathPreferenceSetup(this).execute();
         new AccountDropboxPreferenceSetup(this).execute();
-        new LocalBackupPreferenceSetup(this).execute();
         new LocalRestorePreferenceSetup(this).execute();
         new CloudStorageTypePreferenceSetup(this).execute();
     }
@@ -223,6 +228,29 @@ public class SettingsFragment extends PreferenceFragment {
                 }
 
                 return true;
+            }
+        });
+    }
+
+    private void setupPrefLocalBackupLoadService() {
+        PreferenceRepository.updatePreferenceKeySummary(this, PreferenceRepository.PREF_KEY_BASIC_NOTE_LOCAL_BACKUP, PreferenceRepository.PREF_LOAD_CURRENT_VALUE);
+
+        Preference pref = findPreference(PreferenceRepository.PREF_KEY_BASIC_NOTE_LOCAL_BACKUP);
+        pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                if (mLoaderServiceManager == null)
+                    return true;
+                else {
+                    if (mLoaderServiceManager.isLoaderServiceRunning())
+                        PreferenceRepository.displayMessage(getActivity(), getText(R.string.error_load_process_running));
+                    else {
+                        mPreferenceBackupLocalProcessor.loaderPreExecute();
+                        mLoaderServiceManager.startLoader(PreferenceBackupLocalProcessor.getLoaderClass().getName());
+                    }
+
+                    return true;
+                }
             }
         });
     }

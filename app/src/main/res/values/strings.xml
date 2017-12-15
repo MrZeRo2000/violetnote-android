@@ -87,7 +87,7 @@
     <string name="error_internet_not_available">Internet connection is not available</string>
 
     <!-- Messages -->
-    <string name="message_backup_created">Successfully created backup %s</string>
+    <string name="message_backup_created">Successfully created backup at %s</string>
     <string name="message_backup_restored">Successfully restored backup from %s</string>
     <string name="message_backup_cloud_restored">Successfully restored backup from cloud</string>
 

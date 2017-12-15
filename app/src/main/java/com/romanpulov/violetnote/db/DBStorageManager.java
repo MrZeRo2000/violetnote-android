@@ -18,8 +18,10 @@ public final class DBStorageManager {
     private static final String BACKUP_FILE_NAME = "violetnotedb_" + DBBasicNoteOpenHelper.DATABASE_VERSION;
 
     private final BackupUtils mBackupUtils;
+    private final String mBackupFolderName;
 
     public DBStorageManager(Context context, String backupFolderName) {
+        mBackupFolderName = backupFolderName;
         mBackupUtils = new BackupUtils(context.getDatabasePath(DBBasicNoteOpenHelper.DATABASE_NAME).toString(), backupFolderName, BACKUP_FILE_NAME);
     }
 
@@ -57,5 +59,13 @@ public final class DBStorageManager {
      */
     public static String getBackupZipFileName() {
         return ZipFileUtils.getZipFileName(BACKUP_FILE_NAME);
+    }
+
+    /**
+     * Returns backup folder name
+     * @return backup folder name
+     */
+    public String getBackupFolderName() {
+        return mBackupFolderName;
     }
 }
