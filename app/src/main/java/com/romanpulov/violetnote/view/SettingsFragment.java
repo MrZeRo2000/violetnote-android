@@ -31,7 +31,6 @@ import com.romanpulov.violetnote.loader.document.DocumentLoaderFactory;
 import com.romanpulov.violetnote.loader.document.DocumentLocalFileLoader;
 import com.romanpulov.violetnote.loader.dropbox.RestoreDropboxFileLoader;
 import com.romanpulov.library.common.loader.core.LoaderHelper;
-import com.romanpulov.violetnote.loader.local.BackupLocalLoader;
 import com.romanpulov.violetnote.service.LoaderService;
 import com.romanpulov.violetnote.service.LoaderServiceManager;
 import com.romanpulov.violetnote.view.preference.AccountDropboxPreferenceSetup;
