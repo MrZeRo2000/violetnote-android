@@ -37,7 +37,7 @@ public class PreferenceRestoreDropboxProcessor extends PreferenceLoaderProcessor
             PreferenceRepository.updatePreferenceKeySummary(mPreferenceFragment, PREF_KEY_NAME, PreferenceRepository.PREF_LOAD_CURRENT_VALUE);
         }
         else {
-            FileLoader fileLoader = new RestoreDropboxFileLoader(mContext);;
+            FileLoader fileLoader = new RestoreDropboxFileLoader(mContext);
             File file = new File(fileLoader.getLoadPathProvider().getDestPath());
             if (file.exists()) {
                 DBBasicNoteHelper.getInstance(mContext).closeDB();

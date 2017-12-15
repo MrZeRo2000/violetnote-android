@@ -20,7 +20,7 @@ public class InputManagerHelper {
     public static void hideInput(View v) {
         if (v != null) {
             InputMethodManager inputMethodManager = (InputMethodManager) v.getContext().getSystemService(INPUT_METHOD_SERVICE);
-            if (inputMethodManager.isAcceptingText())
+            if ((inputMethodManager != null) && (inputMethodManager.isAcceptingText()))
                 inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
         }
     }
@@ -32,7 +32,8 @@ public class InputManagerHelper {
     public static void showInput(View v) {
         if (v != null) {
             InputMethodManager inputMethodManager = (InputMethodManager) v.getContext().getSystemService(INPUT_METHOD_SERVICE);
-            inputMethodManager.showSoftInput(v, 0);
+            if (inputMethodManager != null)
+                inputMethodManager.showSoftInput(v, 0);
         }
     }
 
@@ -42,6 +43,7 @@ public class InputManagerHelper {
      */
     public static void toggleInputForced(Context context) {
         InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(INPUT_METHOD_SERVICE);
-        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+        if (inputMethodManager != null)
+            inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
     }
 }

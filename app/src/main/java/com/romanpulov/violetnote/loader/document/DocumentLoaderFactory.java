@@ -4,6 +4,7 @@ import com.romanpulov.library.common.loader.core.AbstractContextLoader;
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 
 /**
+ * Document loader factory class
  * Created by romanpulov on 17.11.2017.
  */
 
