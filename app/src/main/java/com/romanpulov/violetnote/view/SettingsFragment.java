@@ -35,7 +35,6 @@ import com.romanpulov.violetnote.service.LoaderService;
 import com.romanpulov.violetnote.service.LoaderServiceManager;
 import com.romanpulov.violetnote.view.preference.AccountDropboxPreferenceSetup;
 import com.romanpulov.violetnote.view.preference.CloudStorageTypePreferenceSetup;
-import com.romanpulov.violetnote.view.preference.LocalRestorePreferenceSetup;
 import com.romanpulov.violetnote.view.preference.processor.PreferenceBackupDropboxProcessor;
 import com.romanpulov.violetnote.view.preference.processor.PreferenceBackupLocalProcessor;
 import com.romanpulov.violetnote.view.preference.processor.PreferenceDocumentLoaderProcessor;
@@ -44,6 +43,7 @@ import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 import com.romanpulov.violetnote.view.preference.processor.PreferenceRestoreDropboxProcessor;
 import com.romanpulov.violetnote.view.preference.SourcePathPreferenceSetup;
 import com.romanpulov.violetnote.view.preference.SourceTypePreferenceSetup;
+import com.romanpulov.violetnote.view.preference.processor.PreferenceRestoreLocalProcessor;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -54,6 +54,7 @@ public class SettingsFragment extends PreferenceFragment {
     private PreferenceBackupDropboxProcessor mPreferenceBackupDropboxProcessor;
     private PreferenceRestoreDropboxProcessor mPreferenceRestoreDropboxProcessor;
     private PreferenceBackupLocalProcessor mPreferenceBackupLocalProcessor;
+    private PreferenceRestoreLocalProcessor mPreferenceRestoreLocalProcessor;
 
     private Map<String, PreferenceLoaderProcessor> mPreferenceLoadProcessors = new HashMap<>();
 
@@ -98,10 +99,13 @@ public class SettingsFragment extends PreferenceFragment {
         mPreferenceLoadProcessors.put(PreferenceBackupLocalProcessor.getLoaderClass().getName(), mPreferenceBackupLocalProcessor);
         setupPrefLocalBackupLoadService();
 
+        mPreferenceRestoreLocalProcessor = new PreferenceRestoreLocalProcessor(this);
+        mPreferenceLoadProcessors.put(PreferenceRestoreLocalProcessor.getLoaderClass().getName(), mPreferenceRestoreLocalProcessor);
+        setupPrefLocalRestoreLoadService();
+
         new SourceTypePreferenceSetup(this).execute();
         new SourcePathPreferenceSetup(this).execute();
         new AccountDropboxPreferenceSetup(this).execute();
-        new LocalRestorePreferenceSetup(this).execute();
         new CloudStorageTypePreferenceSetup(this).execute();
     }
 
@@ -247,12 +251,45 @@ public class SettingsFragment extends PreferenceFragment {
                         mPreferenceBackupLocalProcessor.loaderPreExecute();
                         mLoaderServiceManager.startLoader(PreferenceBackupLocalProcessor.getLoaderClass().getName());
                     }
-
                     return true;
                 }
             }
         });
     }
+
+    private void setupPrefLocalRestoreLoadService() {
+        PreferenceRepository.updatePreferenceKeySummary(this, PreferenceRepository.PREF_KEY_BASIC_NOTE_LOCAL_RESTORE, PreferenceRepository.PREF_LOAD_CURRENT_VALUE);
+
+        Preference pref = findPreference(PreferenceRepository.PREF_KEY_BASIC_NOTE_LOCAL_RESTORE);
+        pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                if (mLoaderServiceManager == null)
+                    return true;
+                else {
+                    if (mLoaderServiceManager.isLoaderServiceRunning())
+                        PreferenceRepository.displayMessage(getActivity(), getText(R.string.error_load_process_running));
+                    else {
+
+                        final AlertDialog.Builder alert = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
+                        alert
+                                .setTitle(R.string.ui_question_are_you_sure)
+                                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        mPreferenceRestoreLocalProcessor.loaderPreExecute();
+                                        mLoaderServiceManager.startLoader(PreferenceRestoreLocalProcessor.getLoaderClass().getName());
+                                    }
+                                })
+                                .setNegativeButton(R.string.cancel, null)
+                                .show();
+                    }
+                    return true;
+                }
+            }
+        });
+    }
+
 
     private LoaderService mBoundService;
     private boolean mIsBound;

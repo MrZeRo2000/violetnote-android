@@ -6,6 +6,7 @@ import com.romanpulov.library.common.loader.core.AbstractContextLoader;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBBasicNoteHelper;
 import com.romanpulov.violetnote.db.DBStorageManager;
+import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 
 /**
  * Local restore loader
@@ -20,6 +21,7 @@ public class RestoreLocalLoader extends AbstractContextLoader {
 
     @Override
     public void load() throws Exception {
+
         DBBasicNoteHelper.getInstance(mContext).closeDB();
 
         DBStorageManager storageManager = new DBStorageManager(mContext);
@@ -29,5 +31,7 @@ public class RestoreLocalLoader extends AbstractContextLoader {
 
         if (restoreResult == null)
             throw new Exception(mContext.getString(R.string.error_restore));
+
+        PreferenceRepository.setPreferenceKeyLastLoadedCurrentTime(mContext, PreferenceRepository.PREF_KEY_BASIC_NOTE_LOCAL_RESTORE);
     }
 }
