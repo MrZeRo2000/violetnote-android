@@ -57,7 +57,7 @@ public class PassDataProgressFragment extends ProgressFragment {
     }
 
     public void loadPassData(String password) {
-        LoadPassDataAsyncTask task = new LoadPassDataAsyncTask(mContext, password);
+        LoadPassDataAsyncTask task = new LoadPassDataAsyncTask(this, password);
         task.execute();
     }
 
@@ -66,31 +66,31 @@ public class PassDataProgressFragment extends ProgressFragment {
         void onPassDataLoaded(PassDataA passDataA, String errorText);
     }
 
-    private class LoadPassDataAsyncTask extends AsyncTask<Void, Void, Boolean> {
+    private static class LoadPassDataAsyncTask extends AsyncTask<Void, Void, Boolean> {
         private final String mPassword;
-        private final Context mContext;
+        private final PassDataProgressFragment mHost;
 
         private PassDataA mPassDataA;
         private String mErrorText;
 
-        public LoadPassDataAsyncTask(Context context, String password) {
-            mContext = context;
+        LoadPassDataAsyncTask(PassDataProgressFragment host, String password) {
+            mHost = host;
             mPassword = password;
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            File file = new File(DocumentPassDataLoader.getDocumentFileName(mContext));
+            File file = new File(DocumentPassDataLoader.getDocumentFileName(mHost.mContext));
 
             if (file.exists()) {
                 List<String> loadErrorList;
-                DocumentPassDataLoader documentPassDataLoader = DocumentPassDataLoader.newInstance(mContext);
+                DocumentPassDataLoader documentPassDataLoader = DocumentPassDataLoader.newInstance(mHost.mContext);
                 mPassDataA = documentPassDataLoader.loadPassDataA(file.getAbsolutePath(), mPassword);
                 loadErrorList = documentPassDataLoader.getLoadErrorList();
                 if (loadErrorList.size() > 0)
                     mErrorText = loadErrorList.get(0);
             } else {
-                mErrorText = mContext.getString(R.string.error_file_not_found);
+                mErrorText = mHost.mContext.getString(R.string.error_file_not_found);
             }
 
             return mPassDataA != null;
@@ -98,8 +98,8 @@ public class PassDataProgressFragment extends ProgressFragment {
 
         @Override
         protected void onPostExecute(Boolean aBoolean) {
-            if (mListener != null)
-                mListener.onPassDataLoaded(mPassDataA, mErrorText);
+            if (mHost.mListener != null)
+                mHost.mListener.onPassDataLoaded(mPassDataA, mErrorText);
         }
     }
 }

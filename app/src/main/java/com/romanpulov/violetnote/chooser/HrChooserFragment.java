@@ -37,6 +37,7 @@ public abstract class HrChooserFragment extends Fragment {
     private List<ChooseItem> mChooseItemList;
     private String mHeaderText;
     private int mFillMode;
+    private ChooseItemUpdaterTask mTask;
 
     private OnChooserInteractionListener mListener;
 
@@ -185,26 +186,36 @@ public abstract class HrChooserFragment extends Fragment {
             case HR_MODE_SYNC:
                 updateChooseItem(fillChooseItem(item));
                 break;
-            case HR_MODE_ASYNC:
-                new ChooseItemUpdaterTask().execute(item);
+            case HR_MODE_ASYNC: {
+                if (mTask == null)
+                    mTask = new ChooseItemUpdaterTask(this);
+                mTask.execute(item);
+            }
         }
     }
 
-    private class ChooseItemUpdaterTask extends AsyncTask<ChooseItem, Void, ChooseItem> {
+    private static class ChooseItemUpdaterTask extends AsyncTask<ChooseItem, Void, ChooseItem> {
+
+        private final HrChooserFragment mHost;
+
+        ChooseItemUpdaterTask(HrChooserFragment host) {
+            mHost = host;
+        }
+
         @Override
         protected void onPreExecute() {
-            mHeader.setText(getActivity().getText(R.string.caption_loading));
+            mHost.mHeader.setText(mHost.getActivity().getText(R.string.caption_loading));
         }
 
         @Override
         protected ChooseItem doInBackground(ChooseItem... params) {
-            return fillChooseItem(params[0]);
+            return mHost.fillChooseItem(params[0]);
         }
 
         @Override
         protected void onPostExecute(ChooseItem chooseItem) {
-            if (isAdded()) {
-                updateChooseItem(chooseItem);
+            if (mHost.isAdded()) {
+                mHost.updateChooseItem(chooseItem);
             }
         }
     }
@@ -217,7 +228,11 @@ public abstract class HrChooserFragment extends Fragment {
 
         //UI components
         mHeader = (TextView) (v.findViewById(R.id.chooser_header));
-        mHeader.setText(mHeaderText);
+        if ((mTask != null) && (mTask.getStatus() == AsyncTask.Status.RUNNING)) {
+            mHeader.setText(R.string.caption_loading);
+        } else {
+            mHeader.setText(mHeaderText);
+        }
 
         RecyclerView recyclerView = (RecyclerView) (v.findViewById(R.id.chooser_list));
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));

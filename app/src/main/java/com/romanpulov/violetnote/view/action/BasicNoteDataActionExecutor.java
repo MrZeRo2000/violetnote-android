@@ -7,6 +7,7 @@ import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 
+import java.lang.ref.WeakReference;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,7 +64,7 @@ public class BasicNoteDataActionExecutor {
 
     public void execute() {
         if (mBasicNoteData.getNote().isEncrypted())
-            new ExecuteAsyncTask().execute();
+            new ExecuteAsyncTask(this).execute();
         else {
             boolean executionResult = internalExecute();
 
@@ -72,21 +73,23 @@ public class BasicNoteDataActionExecutor {
         }
     }
 
-    private class ExecuteAsyncTask extends AsyncTask<Void, String, Boolean> {
+    private static class ExecuteAsyncTask extends AsyncTask<Void, String, Boolean> {
 
-        @Override
-        protected void onPreExecute() {
+        private final BasicNoteDataActionExecutor mHost;
+
+        ExecuteAsyncTask(BasicNoteDataActionExecutor host) {
+            mHost = host;
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            DBNoteManager noteManager = createNoteManager();
+            DBNoteManager noteManager = mHost.createNoteManager();
 
-            for (Map.Entry<String, BasicNoteDataAction> entry : mActionList) {
+            for (Map.Entry<String, BasicNoteDataAction> entry : mHost.mActionList) {
                 //get caption, default if no caption
                 String caption = entry.getKey();
                 if ((caption == null) || caption.isEmpty())
-                    caption = mContext.getString(R.string.caption_processing);
+                    caption = mHost.mContext.getString(R.string.caption_processing);
 
                 //update caption
                 publishProgress(caption);
@@ -102,14 +105,14 @@ public class BasicNoteDataActionExecutor {
         @Override
         protected void onProgressUpdate(String... values) {
             //values[0] - value to update
-            if (mProgressListener != null)
-                mProgressListener.onExecutionProgress(values[0]);
+            if (mHost.mProgressListener != null)
+                mHost.mProgressListener.onExecutionProgress(values[0]);
         }
 
         @Override
         protected void onPostExecute(Boolean result) {
-            if (mListener != null)
-                mListener.onExecutionCompleted(mBasicNoteData, result);
+            if (mHost.mListener != null)
+                mHost.mListener.onExecutionCompleted(mHost.mBasicNoteData, result);
         }
     }
 
