@@ -96,9 +96,7 @@ public class PassDataA implements Parcelable, PasswordProvider {
         List<PassCategoryA> categoryList = null;
         if (noteList != null) {
             categoryList = new ArrayList<>();
-            for (PassCategoryA category : categorySet) {
-                categoryList.add(category);
-            }
+            categoryList.addAll(categorySet);
         }
 
         PassDataA searchInstance = new PassDataA(source.mPassword);
