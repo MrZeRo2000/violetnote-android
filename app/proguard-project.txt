@@ -30,3 +30,4 @@
 -dontwarn javax.servlet.**
 
 -keepclassmembers class com.romanpulov.violetnote.loader.** { *; }
+-keep public class android.support.v7.widget.LinearLayoutManager { *; }
