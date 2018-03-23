@@ -27,9 +27,7 @@ public class PreferenceDocumentLoaderProcessor extends PreferenceLoaderProcessor
         if (result == null) {
             long loadedTime = System.currentTimeMillis();
             PreferenceRepository.updatePreferenceKeySummary(mPreferenceFragment, PREF_KEY_NAME, loadedTime);
-        } else {
-            PreferenceRepository.displayMessage(mContext, result);
+        } else
             PreferenceRepository.updatePreferenceKeySummary(mPreferenceFragment, PREF_KEY_NAME, PreferenceRepository.PREF_LOAD_CURRENT_VALUE);
-        }
     }
 }

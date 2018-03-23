@@ -10,6 +10,9 @@ import android.util.Log;
 
 import com.romanpulov.library.common.loader.core.Loader;
 import com.romanpulov.library.common.loader.core.LoaderFactory;
+import com.romanpulov.violetnote.loader.helper.LoaderNotificationHelper;
+
+import static com.romanpulov.violetnote.common.NotificationRepository.NOTIFICATION_ID_LOADER;
 
 /**
  * Loader service
@@ -58,8 +61,10 @@ public class LoaderService extends IntentService {
             Intent resultIntent = new Intent(SERVICE_RESULT_INTENT_NAME);
             resultIntent.putExtra(SERVICE_RESULT_LOADER_NAME, mLoaderClassName);
 
-            if (errorMessage != null)
+            if (errorMessage != null) {
                 resultIntent.putExtra(SERVICE_RESULT_ERROR_MESSAGE, errorMessage);
+                LoaderNotificationHelper.notify(this, errorMessage, NOTIFICATION_ID_LOADER);
+            }
 
             broadcastManager.sendBroadcast(resultIntent);
         }

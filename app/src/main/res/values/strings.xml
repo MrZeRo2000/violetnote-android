@@ -91,6 +91,11 @@
     <string name="message_backup_restored">Successfully restored backup from %s</string>
     <string name="message_backup_cloud_restored">Successfully restored backup from cloud</string>
 
+    <!-- Notifications -->
+    <string name="notification_dropbox_backup_completed">Dropbox backup has been completed</string>
+    <string name="notification_password_notes_data_load_completed">Password notes data has been successfully loaded</string>
+    <string name="notification_load_operation_error">Load operation error : %s</string>
+
     <!-- UI Text -->
     <string name="ui_text_search_system">System</string>
     <string name="ui_text_search_user">User</string>
