@@ -63,7 +63,7 @@ public class LoaderService extends IntentService {
 
             if (errorMessage != null) {
                 resultIntent.putExtra(SERVICE_RESULT_ERROR_MESSAGE, errorMessage);
-                LoaderNotificationHelper.notify(this, errorMessage, NOTIFICATION_ID_LOADER);
+                LoaderNotificationHelper.notify(this, errorMessage, NOTIFICATION_ID_LOADER, LoaderNotificationHelper.NOTIFICATION_TYPE_FAILURE);
             }
 
             broadcastManager.sendBroadcast(resultIntent);

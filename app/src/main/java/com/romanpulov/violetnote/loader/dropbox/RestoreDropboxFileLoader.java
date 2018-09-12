@@ -27,7 +27,7 @@ public class RestoreDropboxFileLoader extends DropboxFileLoader {
     public void load() throws Exception {
         super.load();
 
-        String restoreMessage;
+        boolean isRestoreSuccess;
 
         File file = new File(getLoadPathProvider().getDestPath());
 
@@ -37,18 +37,17 @@ public class RestoreDropboxFileLoader extends DropboxFileLoader {
             DBStorageManager storageManager = new DBStorageManager(mContext, file.getParent());
             String restoreResult = storageManager.restoreLocalBackup();
 
-            if (restoreResult == null) {
-                restoreMessage = mContext.getString(R.string.error_restore);
-            }
-            else
-                restoreMessage = mContext.getString(R.string.message_backup_cloud_restored);
+            isRestoreSuccess = restoreResult != null;
 
             DBBasicNoteHelper.getInstance(mContext).openDB();
         } else {
-            restoreMessage = mContext.getString(R.string.error_restore);
+            isRestoreSuccess = false;
         }
 
+        String restoreMessage = mContext.getString(isRestoreSuccess ? R.string.message_backup_cloud_restored : R.string.error_restore);
+
         PreferenceRepository.setPreferenceKeyLastLoadedCurrentTime(mContext, PreferenceRepository.PREF_KEY_BASIC_NOTE_CLOUD_RESTORE);
-        LoaderNotificationHelper.notify(mContext, restoreMessage, NOTIFICATION_ID_LOADER);
+        LoaderNotificationHelper.notify(mContext, restoreMessage, NOTIFICATION_ID_LOADER,
+                isRestoreSuccess ? LoaderNotificationHelper.NOTIFICATION_TYPE_SUCCESS : LoaderNotificationHelper.NOTIFICATION_TYPE_FAILURE);
     }
 }

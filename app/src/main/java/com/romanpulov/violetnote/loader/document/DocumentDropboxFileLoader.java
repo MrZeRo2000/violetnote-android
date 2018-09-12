@@ -24,6 +24,7 @@ public class DocumentDropboxFileLoader extends DropboxFileLoader {
     public void load() throws Exception {
         super.load();
         PreferenceRepository.setPreferenceKeyLastLoadedCurrentTime(mContext, PreferenceRepository.PREF_KEY_DOCUMENT_LOAD);
-        LoaderNotificationHelper.notify(mContext, mContext.getString(R.string.notification_password_notes_data_load_completed), NOTIFICATION_ID_LOADER);
+        LoaderNotificationHelper.notify(mContext, mContext.getString(R.string.notification_password_notes_data_load_completed), NOTIFICATION_ID_LOADER,
+                LoaderNotificationHelper.NOTIFICATION_TYPE_SUCCESS);
 }
 }

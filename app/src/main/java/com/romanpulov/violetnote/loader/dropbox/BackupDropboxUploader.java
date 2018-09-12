@@ -59,6 +59,7 @@ public class BackupDropboxUploader extends AbstractContextLoader {
         }
 
         PreferenceRepository.setPreferenceKeyLastLoadedCurrentTime(mContext, PreferenceRepository.PREF_KEY_BASIC_NOTE_CLOUD_BACKUP);
-        LoaderNotificationHelper.notify(mContext, mContext.getString(R.string.notification_dropbox_backup_completed), NOTIFICATION_ID_LOADER);
+        LoaderNotificationHelper.notify(mContext, mContext.getString(R.string.notification_dropbox_backup_completed), NOTIFICATION_ID_LOADER,
+                LoaderNotificationHelper.NOTIFICATION_TYPE_SUCCESS);
     }
 }
