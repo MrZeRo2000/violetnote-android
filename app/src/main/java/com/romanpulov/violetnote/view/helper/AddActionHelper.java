@@ -98,7 +98,7 @@ public class AddActionHelper implements AutoCompleteArrayAdapter.OnAutoCompleteT
     }
 
     private void acceptText(String text) {
-        if (mAddListener != null)
+        if ((mAddListener != null) && (text != null) && (text.trim().length() > 0))
             mAddListener.onAddFragmentInteraction(text);
         //clear search text for future
         mAddEditText.setText(null);
