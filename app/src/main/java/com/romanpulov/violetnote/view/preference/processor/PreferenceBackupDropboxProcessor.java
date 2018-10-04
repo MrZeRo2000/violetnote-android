@@ -21,10 +21,12 @@ public class PreferenceBackupDropboxProcessor extends PreferenceLoaderProcessor{
     @Override
     public void loaderPreExecute() {
         PreferenceRepository.updatePreferenceKeySummary(mPreferenceFragment, PREF_KEY_NAME, PreferenceRepository.PREF_LOAD_LOADING);
+        PreferenceRepository.setProgressPreferenceVisibility(mPreferenceFragment, PREF_KEY_NAME, true);
     }
 
     @Override
     public void loaderPostExecute(String result) {
+        PreferenceRepository.setProgressPreferenceVisibility(mPreferenceFragment, PREF_KEY_NAME, false);
         if (result == null) {
             long loadedTime = System.currentTimeMillis();
             PreferenceRepository.updatePreferenceKeySummary(mPreferenceFragment, PREF_KEY_NAME, loadedTime);

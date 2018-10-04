@@ -7,6 +7,7 @@ import android.preference.PreferenceManager;
 import android.widget.Toast;
 
 import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.view.core.ProgressPreference;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -139,5 +140,19 @@ public class PreferenceRepository {
     public static void setPreferenceKeyLastLoadedCurrentTime(Context context, String preferenceKey) {
         long loadedTime = System.currentTimeMillis();
         setPreferenceKeyLastLoadedTime(context, preferenceKey, loadedTime);
+    }
+
+    /**
+     * Set progress preference progress bar visibility
+     * @param preferenceFragment PreferenceFragment
+     * @param preferenceKey preference key
+     * @param v visibility value
+     */
+    public static void setProgressPreferenceVisibility(PreferenceFragment preferenceFragment, String preferenceKey, boolean v) {
+        Preference preference = preferenceFragment.findPreference(preferenceKey);
+        if (preference instanceof ProgressPreference) {
+            ProgressPreference progressPreference = (ProgressPreference) preference;
+            progressPreference.setProgressVisibility(v);
+        }
     }
 }
