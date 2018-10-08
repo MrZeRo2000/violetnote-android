@@ -177,11 +177,14 @@
         <item name="android:textColor">@color/brightTextColor</item>
         <item name="android:textColorSecondary">@color/brightTextColor</item>
         <item name="android:listViewStyle">@style/PreferencesListViewStyle</item>
+        <!-- For SDK >= 28 -->
+        <item name="android:listDivider">@drawable/divider_white_black_gradient</item>
     </style>
 
     <!-- For list in Preferences -->
     <style name="PreferencesListViewStyle" parent="@android:style/Widget.ListView">
         <item name="android:listSelector">@drawable/list_selector</item>
+        <!-- For SDK <= 22 -->
         <item name="android:divider">@drawable/divider_white_black_gradient</item>
     </style>
 
