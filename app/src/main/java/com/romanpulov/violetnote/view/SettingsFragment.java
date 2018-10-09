@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.Preference;
@@ -124,18 +125,23 @@ public class SettingsFragment extends PreferenceFragment {
     private void setupPrefDocumentLoadService() {
         PreferenceRepository.updatePreferenceKeySummary(this, PreferenceRepository.PREF_KEY_DOCUMENT_LOAD, PreferenceRepository.PREF_LOAD_CURRENT_VALUE);
 
-        Preference pref = findPreference(PreferenceRepository.PREF_KEY_DOCUMENT_LOAD);
+        final Preference pref = findPreference(PreferenceRepository.PREF_KEY_DOCUMENT_LOAD);
+        final SharedPreferences sharedPref = pref.getSharedPreferences();
         pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                if (mLoaderServiceManager == null)
+                if (mLoaderServiceManager == null) {
                     return true;
+                } else if (!sharedPref.contains(PreferenceRepository.PREF_KEY_SOURCE_PATH)) {
+                    PreferenceRepository.displayMessage(getActivity(), getText(R.string.error_load_remote_path_empty));
+                    return true;
+                }
                 else {
                     if (mLoaderServiceManager.isLoaderServiceRunning())
                         PreferenceRepository.displayMessage(getActivity(), getText(R.string.error_load_process_running));
                     else {
                         final Preference prefSourceType = findPreference(PreferenceRepository.PREF_KEY_SOURCE_TYPE);
-                        int type = prefSourceType.getPreferenceManager().getSharedPreferences().getInt(prefSourceType.getKey(), PreferenceRepository.DEFAULT_SOURCE_TYPE);
+                        int type = sharedPref.getInt(prefSourceType.getKey(), PreferenceRepository.DEFAULT_SOURCE_TYPE);
 
                         Class<? extends AbstractContextLoader> loaderClass = DocumentLoaderFactory.classFromType(type);
                         if (loaderClass != null) {

@@ -77,6 +77,7 @@
     <string name="error_crypt">Cryptography error</string>
     <string name="error_read">Data read error</string>
     <string name="error_load">Load error</string>
+    <string name="error_load_remote_path_empty">Remote path is empty</string>
     <string name="error_dropbox_auth">Invalid access token. Please, authenticate</string>
     <string name="error_dropbox_other">Dropbox error: %s</string>
     <string name="error_dropbox_load_file_data">No information for file : %s</string>
