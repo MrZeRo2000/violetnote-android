@@ -96,6 +96,11 @@
     <string name="notification_dropbox_backup_completed">Dropbox backup has been completed</string>
     <string name="notification_password_notes_data_load_completed">Password notes data has been successfully loaded</string>
     <string name="notification_load_operation_error">Load operation error : %s</string>
+    <string name="notification_success_channel_name">Load process</string>
+    <string name="notification_success_channel_description">Violet Note load process</string>
+    <string name="notification_failure_channel_name">Load process failure</string>
+    <string name="notification_failure_channel_description">Violet Note load process failure</string>
+
 
     <!-- UI Text -->
     <string name="ui_text_search_system">System</string>

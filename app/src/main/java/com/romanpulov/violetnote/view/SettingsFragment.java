@@ -1,5 +1,6 @@
 package com.romanpulov.violetnote.view;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -9,10 +10,13 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -34,6 +38,7 @@ import com.romanpulov.violetnote.loader.dropbox.RestoreDropboxFileLoader;
 import com.romanpulov.library.common.loader.core.LoaderHelper;
 import com.romanpulov.violetnote.service.LoaderService;
 import com.romanpulov.violetnote.service.LoaderServiceManager;
+import com.romanpulov.violetnote.view.helper.PermissionRequestHelper;
 import com.romanpulov.violetnote.view.preference.AccountDropboxPreferenceSetup;
 import com.romanpulov.violetnote.view.preference.CloudStorageTypePreferenceSetup;
 import com.romanpulov.violetnote.view.preference.processor.PreferenceBackupDropboxProcessor;
@@ -56,6 +61,8 @@ public class SettingsFragment extends PreferenceFragment {
     private PreferenceRestoreDropboxProcessor mPreferenceRestoreDropboxProcessor;
     private PreferenceBackupLocalProcessor mPreferenceBackupLocalProcessor;
     private PreferenceRestoreLocalProcessor mPreferenceRestoreLocalProcessor;
+
+    private PermissionRequestHelper mWriteStorageRequestHelper;
 
     private Map<String, PreferenceLoaderProcessor> mPreferenceLoadProcessors = new HashMap<>();
 
@@ -82,6 +89,8 @@ public class SettingsFragment extends PreferenceFragment {
         setRetainInstance(true);
 
         addPreferencesFromResource(R.xml.preferences);
+
+        mWriteStorageRequestHelper = new PermissionRequestHelper(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
         mPreferenceDocumentLoaderProcessor = new PreferenceDocumentLoaderProcessor(this);
         mPreferenceLoadProcessors.put(DocumentLocalFileLoader.class.getName(), mPreferenceDocumentLoaderProcessor);
@@ -119,6 +128,20 @@ public class SettingsFragment extends PreferenceFragment {
         }
     }
 
+    void executeDocumentLoad() {
+        final Preference prefSourceType = findPreference(PreferenceRepository.PREF_KEY_SOURCE_TYPE);
+        final SharedPreferences sharedPref = prefSourceType.getSharedPreferences();
+        int type = sharedPref.getInt(prefSourceType.getKey(), PreferenceRepository.DEFAULT_SOURCE_TYPE);
+
+        Class<? extends AbstractContextLoader> loaderClass = DocumentLoaderFactory.classFromType(type);
+        if (loaderClass != null) {
+            if (!LoaderHelper.isLoaderInternetConnectionRequired(loaderClass) || checkInternetConnection()) {
+                mPreferenceDocumentLoaderProcessor.loaderPreExecute();
+                mLoaderServiceManager.startLoader(loaderClass.getName());
+            }
+        }
+    }
+
     /**
      * Load document using service
      */
@@ -140,24 +163,21 @@ public class SettingsFragment extends PreferenceFragment {
                     if (mLoaderServiceManager.isLoaderServiceRunning())
                         PreferenceRepository.displayMessage(getActivity(), getText(R.string.error_load_process_running));
                     else {
-                        final Preference prefSourceType = findPreference(PreferenceRepository.PREF_KEY_SOURCE_TYPE);
-                        int type = sharedPref.getInt(prefSourceType.getKey(), PreferenceRepository.DEFAULT_SOURCE_TYPE);
-
-                        Class<? extends AbstractContextLoader> loaderClass = DocumentLoaderFactory.classFromType(type);
-                        if (loaderClass != null) {
-                            if (LoaderHelper.isLoaderInternetConnectionRequired(loaderClass) && !checkInternetConnection())
-                                return true;
-                            else {
-                                mPreferenceDocumentLoaderProcessor.loaderPreExecute();
-                                mLoaderServiceManager.startLoader(loaderClass.getName());
-                            }
-                        }
+                        if (mWriteStorageRequestHelper.isPermissionGranted())
+                            executeDocumentLoad();
+                        else
+                            mWriteStorageRequestHelper.requestPermission(SettingsActivity.PERMISSION_REQUEST_DOCUMENT_LOAD);
                     }
 
                     return true;
                 }
             }
         });
+    }
+
+    void executeDropboxBackup() {
+        mPreferenceBackupDropboxProcessor.loaderPreExecute();
+        mLoaderServiceManager.startLoader(PreferenceBackupDropboxProcessor.getLoaderClass().getName());
     }
 
     /**
@@ -188,8 +208,10 @@ public class SettingsFragment extends PreferenceFragment {
                         if (backupResult == null)
                             PreferenceRepository.displayMessage(getActivity(), getString(R.string.error_backup));
                         else {
-                            mPreferenceBackupDropboxProcessor.loaderPreExecute();
-                            mLoaderServiceManager.startLoader(PreferenceBackupDropboxProcessor.getLoaderClass().getName());
+                            if (mWriteStorageRequestHelper.isPermissionGranted())
+                                executeDropboxBackup();
+                            else
+                                mWriteStorageRequestHelper.requestPermission(SettingsActivity.PERMISSION_REQUEST_DROPBOX_BACKUP);
                         }
                     }
 
@@ -197,6 +219,11 @@ public class SettingsFragment extends PreferenceFragment {
                 }
             }
         });
+    }
+
+    void executeDropboxRestore() {
+        mPreferenceRestoreDropboxProcessor.loaderPreExecute();
+        mLoaderServiceManager.startLoader(PreferenceRestoreDropboxProcessor.getLoaderClass().getName());
     }
 
     /**
@@ -227,8 +254,10 @@ public class SettingsFragment extends PreferenceFragment {
                                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        mPreferenceRestoreDropboxProcessor.loaderPreExecute();
-                                        mLoaderServiceManager.startLoader(PreferenceRestoreDropboxProcessor.getLoaderClass().getName());
+                                        if (mWriteStorageRequestHelper.isPermissionGranted())
+                                            executeDropboxRestore();
+                                        else
+                                            mWriteStorageRequestHelper.requestPermission(SettingsActivity.PERMISSION_REQUEST_DROPBOX_RESTORE);
                                     }
                                 })
                                 .setNegativeButton(R.string.cancel, null)
@@ -239,6 +268,11 @@ public class SettingsFragment extends PreferenceFragment {
                 return true;
             }
         });
+    }
+
+    void executeLocalBackup() {
+        mPreferenceBackupLocalProcessor.loaderPreExecute();
+        mLoaderServiceManager.startLoader(PreferenceBackupLocalProcessor.getLoaderClass().getName());
     }
 
     private void setupPrefLocalBackupLoadService() {
@@ -254,13 +288,20 @@ public class SettingsFragment extends PreferenceFragment {
                     if (mLoaderServiceManager.isLoaderServiceRunning())
                         PreferenceRepository.displayMessage(getActivity(), getText(R.string.error_load_process_running));
                     else {
-                        mPreferenceBackupLocalProcessor.loaderPreExecute();
-                        mLoaderServiceManager.startLoader(PreferenceBackupLocalProcessor.getLoaderClass().getName());
+                        if (mWriteStorageRequestHelper.isPermissionGranted())
+                            executeLocalBackup();
+                        else
+                            mWriteStorageRequestHelper.requestPermission(SettingsActivity.PERMISSION_REQUEST_LOCAL_BACKUP);
                     }
                     return true;
                 }
             }
         });
+    }
+
+    public void executeLocalRestore() {
+        mPreferenceRestoreLocalProcessor.loaderPreExecute();
+        mLoaderServiceManager.startLoader(PreferenceRestoreLocalProcessor.getLoaderClass().getName());
     }
 
     private void setupPrefLocalRestoreLoadService() {
@@ -283,8 +324,10 @@ public class SettingsFragment extends PreferenceFragment {
                                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        mPreferenceRestoreLocalProcessor.loaderPreExecute();
-                                        mLoaderServiceManager.startLoader(PreferenceRestoreLocalProcessor.getLoaderClass().getName());
+                                        if (mWriteStorageRequestHelper.isPermissionGranted())
+                                            executeLocalRestore();
+                                        else
+                                            mWriteStorageRequestHelper.requestPermission(SettingsActivity.PERMISSION_REQUEST_LOCAL_RESTORE);
                                     }
                                 })
                                 .setNegativeButton(R.string.cancel, null)
