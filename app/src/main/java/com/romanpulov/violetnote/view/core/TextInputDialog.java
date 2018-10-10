@@ -7,10 +7,12 @@ import android.text.InputType;
 import android.util.AttributeSet;
 import android.util.Xml;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.view.helper.InputManagerHelper;
 
 import org.xmlpull.v1.XmlPullParser;
 
@@ -30,6 +32,7 @@ public class TextInputDialog extends AlertInputDialog {
     protected String mText;
     protected int mInputType;
     private String mNonEmptyErrorMessage;
+    protected View mInputView;
 
     public void setText(String value) {
         mText = value;
@@ -74,6 +77,7 @@ public class TextInputDialog extends AlertInputDialog {
         } while(state != XmlPullParser.END_DOCUMENT);
 
         final EditText input = new EditText(mContext, editTextCursorAttributeSet);
+        mInputView = input;
         //final EditText input = new EditText(mContext);
 
         input.setInputType(mInputType);
