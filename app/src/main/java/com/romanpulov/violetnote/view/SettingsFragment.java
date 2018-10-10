@@ -176,8 +176,15 @@ public class SettingsFragment extends PreferenceFragment {
     }
 
     void executeDropboxBackup() {
-        mPreferenceBackupDropboxProcessor.loaderPreExecute();
-        mLoaderServiceManager.startLoader(PreferenceBackupDropboxProcessor.getLoaderClass().getName());
+        DBStorageManager storageManager = new DBStorageManager(getActivity());
+        String backupResult = storageManager.createRollingLocalBackup();
+
+        if (backupResult == null)
+            PreferenceRepository.displayMessage(getActivity(), getString(R.string.error_backup));
+        else {
+            mPreferenceBackupDropboxProcessor.loaderPreExecute();
+            mLoaderServiceManager.startLoader(PreferenceBackupDropboxProcessor.getLoaderClass().getName());
+        }
     }
 
     /**
@@ -200,21 +207,12 @@ public class SettingsFragment extends PreferenceFragment {
                     if (mLoaderServiceManager.isLoaderServiceRunning())
                         PreferenceRepository.displayMessage(getActivity(), getText(R.string.error_load_process_running));
                     else {
-
-                        // create local backup first
-                        DBStorageManager storageManager = new DBStorageManager(getActivity());
-                        String backupResult = storageManager.createRollingLocalBackup();
-
-                        if (backupResult == null)
-                            PreferenceRepository.displayMessage(getActivity(), getString(R.string.error_backup));
-                        else {
-                            if (mWriteStorageRequestHelper.isPermissionGranted())
-                                executeDropboxBackup();
-                            else
-                                mWriteStorageRequestHelper.requestPermission(SettingsActivity.PERMISSION_REQUEST_DROPBOX_BACKUP);
-                        }
+                        if (mWriteStorageRequestHelper.isPermissionGranted())
+                            executeDropboxBackup();
+                        else
+                            mWriteStorageRequestHelper.requestPermission(SettingsActivity.PERMISSION_REQUEST_DROPBOX_BACKUP);
                     }
-
+                    
                     return true;
                 }
             }
