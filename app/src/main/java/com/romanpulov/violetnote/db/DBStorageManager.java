@@ -19,8 +19,10 @@ public final class DBStorageManager {
 
     private final BackupUtils mBackupUtils;
     private final String mBackupFolderName;
+    private final Context mContext;
 
     public DBStorageManager(Context context, String backupFolderName) {
+        mContext = context;
         mBackupFolderName = backupFolderName;
         mBackupUtils = new BackupUtils(context.getDatabasePath(DBBasicNoteOpenHelper.DATABASE_NAME).toString(), backupFolderName, BACKUP_FILE_NAME);
     }
@@ -42,7 +44,11 @@ public final class DBStorageManager {
      * @return Backup file if successful
      */
     public String createRollingLocalBackup() {
-        return mBackupUtils.createRollingLocalBackup();
+        DBBasicNoteHelper.getInstance(mContext).closeDB();
+        String result = mBackupUtils.createRollingLocalBackup();
+        DBBasicNoteHelper.getInstance(mContext).openDB();
+
+        return result;
     }
 
     /**
@@ -50,7 +56,11 @@ public final class DBStorageManager {
      * @return Restored file name if successful
      */
     public String restoreLocalBackup() {
-        return mBackupUtils.restoreBackup();
+        DBBasicNoteHelper.getInstance(mContext).closeDB();
+        String result = mBackupUtils.restoreBackup();
+        DBBasicNoteHelper.getInstance(mContext).openDB();
+
+        return result;
     }
 
     /**
