@@ -212,7 +212,7 @@ public class SettingsFragment extends PreferenceFragment {
                         else
                             mWriteStorageRequestHelper.requestPermission(SettingsActivity.PERMISSION_REQUEST_DROPBOX_BACKUP);
                     }
-                    
+
                     return true;
                 }
             }
