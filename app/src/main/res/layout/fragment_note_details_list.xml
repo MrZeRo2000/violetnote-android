@@ -6,6 +6,6 @@
     android:name="com.romanpulov.violetnote.NoteDetailsFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layoutManager="LinearLayoutManager"
+    app:layoutManager="android.support.v7.widget.LinearLayoutManager"
     tools:context=".view.NoteDetailsFragment"
     tools:listitem="@layout/fragment_note_details" />

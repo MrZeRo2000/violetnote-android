@@ -16,7 +16,7 @@
         android:layout_marginLeft="0dp"
         android:layout_marginRight="0dp"
         android:layout_weight="1"
-        app:layoutManager="LinearLayoutManager"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
         tools:listitem="@layout/fragment_basic_note_checked_item" />
 
     <include layout="@layout/checkout_progress_panel"

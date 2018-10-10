@@ -15,7 +15,7 @@
         android:layout_marginLeft="0dp"
         android:layout_marginRight="0dp"
         android:layout_above="@+id/add_panel_include"
-        app:layoutManager="LinearLayoutManager"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
         tools:listitem="@layout/fragment_basic_note_value" />
 
     <include layout="@layout/add_panel"

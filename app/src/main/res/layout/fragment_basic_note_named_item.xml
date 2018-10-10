@@ -12,8 +12,11 @@
     <ImageView
         android:layout_width="@dimen/priority_image_size"
         android:layout_height="@dimen/priority_image_size"
+        android:paddingStart="@dimen/text_margin_half"
+        android:paddingEnd="@dimen/text_margin_half"
         android:paddingRight="@dimen/text_margin_half"
         android:id="@+id/priority"
+        android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         android:contentDescription="@string/content_description_priority"
@@ -23,7 +26,9 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/priority"
         android:layout_toRightOf="@+id/priority"
+        android:layout_toStartOf="@+id/last_modified"
         android:layout_toLeftOf="@+id/last_modified"
         >
 
@@ -49,7 +54,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/last_modified"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
+        android:layout_marginStart="@dimen/text_margin_half"
         android:layout_marginLeft="@dimen/text_margin_half"
         android:layout_centerVertical="true"
         android:gravity="center_horizontal"

@@ -8,6 +8,6 @@
     android:layout_height="match_parent"
     android:layout_marginLeft="0px"
     android:layout_marginRight="0px"
-    app:layoutManager="LinearLayoutManager"
+    app:layoutManager="android.support.v7.widget.LinearLayoutManager"
     tools:context="com.romanpulov.violetnote.view.BasicNoteNamedItemFragment"
     tools:listitem="@layout/fragment_basic_note_named_item" />

@@ -22,7 +22,7 @@
     <ImageButton
         android:layout_width="?android:attr/listPreferredItemHeight"
         android:layout_height="match_parent"
-        android:layout_gravity="right"
+        android:layout_gravity="end"
         android:layout_weight="0"
         android:background="@drawable/list_selector"
         android:id="@android:id/button1"

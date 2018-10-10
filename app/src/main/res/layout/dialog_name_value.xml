@@ -15,6 +15,7 @@
         android:inputType="text"
         android:maxLines="1"
         android:hint="@string/hint_name"
+        android:importantForAutofill="no"
         />
 
     <EditText
@@ -23,6 +24,7 @@
         android:id="@+id/value"
         android:inputType="textMultiLine"
         android:hint="@string/hint_value"
+        android:importantForAutofill="no"
         />
 
 </LinearLayout>
