@@ -1,8 +1,10 @@
 package com.romanpulov.violetnote.chooser;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -49,19 +51,20 @@ public abstract class HrChooserFragment extends Fragment {
         private final List<ChooseItem> mItems;
         private final OnChooserInteractionListener mListener;
 
-        public ChooserAdapter(List<ChooseItem> items, OnChooserInteractionListener listener) {
+        ChooserAdapter(List<ChooseItem> items, OnChooserInteractionListener listener) {
             mItems = items;
             mListener = listener;
         }
 
         @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        @NonNull
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.hr_chooser_list_item, parent, false);
             return new ViewHolder(v);
         }
 
         @Override
-        public void onBindViewHolder(final ViewHolder holder, final int position) {
+        public void onBindViewHolder(final @NonNull ViewHolder holder, final int position) {
             switch (mItems.get(position).getItemType()) {
                 case ChooseItem.ITEM_PARENT:
                     holder.mTextView.setText(null);
@@ -96,8 +99,8 @@ public abstract class HrChooserFragment extends Fragment {
         }
 
         public static class ViewHolder extends RecyclerView.ViewHolder {
-            public final TextView mTextView;
-            public final View mView;
+            final TextView mTextView;
+            final View mView;
 
             public ViewHolder(View v) {
                 super(v);
@@ -187,8 +190,7 @@ public abstract class HrChooserFragment extends Fragment {
                 updateChooseItem(fillChooseItem(item));
                 break;
             case HR_MODE_ASYNC: {
-                if (mTask == null)
-                    mTask = new ChooseItemUpdaterTask(this);
+                mTask = new ChooseItemUpdaterTask(this);
                 mTask.execute(item);
             }
         }
@@ -221,7 +223,7 @@ public abstract class HrChooserFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_hr_chooser, container, false);
@@ -238,7 +240,10 @@ public abstract class HrChooserFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         // add decoration
-        recyclerView.addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(getActivity(), RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_gray_solid));
+        Context context = getActivity();
+        if (context != null)
+            recyclerView.addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(context,
+                    RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_gray_solid));
 
         recyclerView.setAdapter(mAdapter);
 
@@ -250,7 +255,7 @@ public abstract class HrChooserFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(Activity context) {
+    public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnChooserInteractionListener) {
             mListener = (OnChooserInteractionListener) context;
