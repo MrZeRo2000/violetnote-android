@@ -1,44 +1,43 @@
 package com.romanpulov.violetnote;
 
-import android.app.Application;
-import android.test.ApplicationTestCase;
 import android.util.Log;
+
+import android.support.test.filters.SmallTest;
+import org.junit.*;
+import static android.support.test.InstrumentationRegistry.getTargetContext;
+import static org.junit.Assert.*;
 
 import com.romanpulov.violetnote.db.DBBasicNoteHelper;
 import com.romanpulov.violetnote.db.DBStorageManager;
-
-//import java.nio.file.StandardCopyOption;
 
 
 /**
  * Created by romanpulov on 29.09.2016.
  */
-
-public class DBBackupTest extends ApplicationTestCase<Application> {
+@SmallTest
+public class DBBackupTest {
     private final static String TAG = "DBBackupTest";
 
     private static void log(String message) {
         Log.d(TAG, message);
     }
 
-    public DBBackupTest() {
-        super(Application.class);
-    }
-
+    @Test
     public void test1() {
         log("Test message");
         assertEquals(1, 1);
     }
 
+    @Test
     public void testLocalBackup() {
-        DBBasicNoteHelper.getInstance(getContext()).closeDB();
+        DBBasicNoteHelper.getInstance(getTargetContext()).closeDB();
 
-        DBStorageManager storageManager = new DBStorageManager(getContext());
+        DBStorageManager storageManager = new DBStorageManager(getTargetContext());
 
         //assertNotNull(storageManager.createLocalBackup());
         assertNotNull(storageManager.createRollingLocalBackup());
 
-        DBBasicNoteHelper.getInstance(getContext()).openDB();
+        DBBasicNoteHelper.getInstance(getTargetContext()).openDB();
     }
 
 }

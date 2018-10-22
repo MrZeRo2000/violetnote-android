@@ -1,9 +1,14 @@
 package com.romanpulov.violetnote;
 
-import android.app.Application;
 import android.database.sqlite.SQLiteDatabase;
-import android.test.ApplicationTestCase;
 import android.util.Log;
+import java.util.ArrayList;
+import java.util.List;
+
+import android.support.test.filters.SmallTest;
+import org.junit.*;
+import static android.support.test.InstrumentationRegistry.getTargetContext;
+import static org.junit.Assert.*;
 
 import com.romanpulov.violetnote.db.DBBasicNoteHelper;
 import com.romanpulov.violetnote.db.DBBasicNoteOpenHelper;
@@ -13,16 +18,11 @@ import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 
-import junit.framework.Assert;
-
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by rpulov on 09.08.2017.
  */
-
-public class DBManagementTest extends ApplicationTestCase<Application> {
+@SmallTest
+public class DBManagementTest {
     private final static String TAG = "DBManagementTest";
 
     private static void log(String message) {
@@ -33,24 +33,21 @@ public class DBManagementTest extends ApplicationTestCase<Application> {
     private SQLiteDatabase mDB;
     private DBNoteManager mDBNoteManager;
 
-    public DBManagementTest() {
-        super(Application.class);
-    }
-
     private void initDB() {
-        mDBHelper = DBBasicNoteHelper.getInstance(getContext());
+        mDBHelper = DBBasicNoteHelper.getInstance(getTargetContext());
         mDBHelper.closeDB();
 
-        getContext().deleteDatabase(DBBasicNoteOpenHelper.DATABASE_NAME);
+        getTargetContext().deleteDatabase(DBBasicNoteOpenHelper.DATABASE_NAME);
 
         mDBHelper.openDB();
         mDB = mDBHelper.getDB();
-        mDBNoteManager = new DBNoteManager(getContext());
+        mDBNoteManager = new DBNoteManager(getTargetContext());
     }
 
     /**
      * Main test procedure
      */
+    @Test
     public void testMain() {
         internalTestPriorityMove();
         internalTestNoteMove();

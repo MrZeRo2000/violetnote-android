@@ -1,9 +1,15 @@
 package com.romanpulov.violetnote;
 
-import android.app.Application;
-import android.test.ApplicationTestCase;
 import android.util.Log;
+import java.util.List;
+import java.util.Locale;
 
+import android.support.test.filters.SmallTest;
+import org.junit.*;
+import static android.support.test.InstrumentationRegistry.getTargetContext;
+import static org.junit.Assert.*;
+
+import com.romanpulov.violetnote.db.DBBasicNoteHelper;
 import com.romanpulov.violetnote.db.DBBasicNoteOpenHelper;
 import com.romanpulov.violetnote.db.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicNoteA;
@@ -11,13 +17,8 @@ import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.model.BasicNoteValueA;
 
-import java.util.List;
-import java.util.Locale;
-
-/**
- * Created by rpulov on 20.08.2016.
- */
-public class DataGeneratorTest extends ApplicationTestCase<Application> {
+@SmallTest
+public class DataGeneratorTest {
     private final static String TAG = "DataGeneratorTest";
     public final static int MAX_NOTES = 30;
     public final static int MAX_NOTE_ITEMS = 20;
@@ -28,24 +29,22 @@ public class DataGeneratorTest extends ApplicationTestCase<Application> {
         Log.d(TAG, message);
     }
 
-    public DataGeneratorTest() {
-        super(Application.class);
-    }
-
+    @Test
     public void test1() {
         log("Data Generator test message");
         assertEquals(1, 1);
     }
 
+    @Test
     public void testGenerateData() {
 
         log("************ Data Generator start");
 
         log("Delete database");
-        getContext().deleteDatabase(DBBasicNoteOpenHelper.DATABASE_NAME);
+        getTargetContext().deleteDatabase(DBBasicNoteOpenHelper.DATABASE_NAME);
 
         log("Create notes");
-        DBNoteManager noteManager = new DBNoteManager(getContext());
+        DBNoteManager noteManager = new DBNoteManager(getTargetContext());
         for (int i = 1; i <= MAX_NOTES; i++) {
             String titleFormat = "Note %2d";
             if (i == 3)
@@ -118,5 +117,7 @@ public class DataGeneratorTest extends ApplicationTestCase<Application> {
         List<BasicNoteA> noteList = noteManager.queryNotes();
         assertEquals(noteList.size(), MAX_NOTES);
         log("Created " + MAX_NOTES + " notes");
+
+        DBBasicNoteHelper.getInstance(getTargetContext()).closeDB();
     }
 }

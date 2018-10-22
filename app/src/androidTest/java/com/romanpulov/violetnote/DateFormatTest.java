@@ -1,33 +1,33 @@
 package com.romanpulov.violetnote;
 
-import android.app.Application;
 import android.provider.Settings;
-import android.test.ApplicationTestCase;
 import android.text.format.DateFormat;
 import android.util.Log;
-
 import java.util.Date;
+
+import android.support.test.filters.SmallTest;
+import org.junit.*;
+import static android.support.test.InstrumentationRegistry.getTargetContext;
+import static android.support.test.InstrumentationRegistry.getContext;
+import static org.junit.Assert.*;
 
 /**
  * Created by romanpulov on 25.08.2016.
  */
-public class DateFormatTest extends ApplicationTestCase<Application> {
+@SmallTest
+public class DateFormatTest {
     private final static String TAG = "DateFormatTest";
     private static void log(String message) {
         Log.d(TAG, message);
     }
 
-    public DateFormatTest() {
-        super(Application.class);
-    }
-
+    @Test
     public void test1() {
         log("Test message");
 
         Date dt = new Date();
 
-        log(DateFormat.getDateFormat(getContext()).format(dt));
-        log(DateFormat.getTimeFormat(getContext()).format(dt));
-        log(Settings.System.getString(getContext().getContentResolver(), Settings.System.DATE_FORMAT));
+        log(DateFormat.getDateFormat(getTargetContext()).format(dt));
+        log(DateFormat.getTimeFormat(getTargetContext()).format(dt));
     }
 }

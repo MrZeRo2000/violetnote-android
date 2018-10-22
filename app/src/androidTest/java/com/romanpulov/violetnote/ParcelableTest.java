@@ -2,8 +2,12 @@ package com.romanpulov.violetnote;
 
 import android.app.Application;
 import android.os.Parcel;
-import android.test.ApplicationTestCase;
 import android.util.Log;
+
+import android.support.test.filters.SmallTest;
+import org.junit.*;
+import static android.support.test.InstrumentationRegistry.getTargetContext;
+import static org.junit.Assert.*;
 
 import com.romanpulov.violetnote.loader.document.DocumentPassDataLoader;
 import com.romanpulov.violetnote.model.PassDataA;
@@ -11,23 +15,20 @@ import com.romanpulov.violetnote.model.PassDataA;
 /**
  * Created by romanpulov on 01.12.2016.
  */
-
-public class ParcelableTest extends ApplicationTestCase<Application> {
+@SmallTest
+public class ParcelableTest {
     private final static String TAG = "ParcelableTest";
     private static void log(String message) {
         Log.d(TAG, message);
     }
 
-    public ParcelableTest() {
-        super(Application.class);
-    }
-
-
+    @Test
     public void test1() {
         log("Test message");
         assertEquals(1, 1);
     }
 
+    @Test
     public void testParcelable() {
         PassDataA data = DocumentPassDataLoader.loadSamplePassData();
 
