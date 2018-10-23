@@ -23,7 +23,7 @@ public class ProgressPreference extends Preference {
     @Override
     protected void onBindView(View view) {
         super.onBindView(view);
-        mProgressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
+        mProgressBar = view.findViewById(R.id.progress_bar);
         setProgressVisibility(mIsVisible);
     }
 

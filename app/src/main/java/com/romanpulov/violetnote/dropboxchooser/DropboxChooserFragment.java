@@ -1,5 +1,6 @@
 package com.romanpulov.violetnote.dropboxchooser;
 
+import android.app.Activity;
 import android.os.Bundle;
 
 import com.romanpulov.violetnote.chooser.ChooseItem;
@@ -14,7 +15,10 @@ public class DropboxChooserFragment extends HrChooserFragment {
 
     @Override
     protected ChooseItem getChooseItem() {
-        DropboxHelper dropBoxHelper = DropboxHelper.getInstance(getActivity().getApplication());
+        Activity activity = getActivity();
+        if (activity == null)
+            throw new RuntimeException("No context for " + this);
+        DropboxHelper dropBoxHelper = DropboxHelper.getInstance(activity.getApplication());
         return DropboxChooseItem.fromPath(dropBoxHelper.getClient(), DropboxChooseItem.getParentItemPath(mInitialPath));
     }
 

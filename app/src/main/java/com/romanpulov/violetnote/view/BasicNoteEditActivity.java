@@ -47,9 +47,9 @@ public class BasicNoteEditActivity extends ActionBarCompatActivity {
 
         ViewHolder(Activity activity) {
             mContext = activity;
-            mTitle = (EditText)activity.findViewById(R.id.title_edit_text);
-            mNoteTypeChecked = (RadioButton)activity.findViewById(R.id.note_type_checked);
-            mIsEncrypted = (CheckBox)activity.findViewById(R.id.is_encrypted_check_box);
+            mTitle = activity.findViewById(R.id.title_edit_text);
+            mNoteTypeChecked = activity.findViewById(R.id.note_type_checked);
+            mIsEncrypted = activity.findViewById(R.id.is_encrypted_check_box);
         }
 
         boolean validateInput() {

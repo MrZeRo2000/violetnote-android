@@ -21,8 +21,8 @@ public class CheckoutProgressHelper {
 
     public CheckoutProgressHelper(View hostView) {
         mHostView = hostView;
-        mProgressTextView = (TextView) mHostView.findViewById(R.id.progress_text_view);
-        mProgressbar = (ProgressBar) hostView.findViewById(R.id.progress_bar);
+        mProgressTextView = mHostView.findViewById(R.id.progress_text_view);
+        mProgressbar = hostView.findViewById(R.id.progress_bar);
     }
 
     public void setProgressData(int checkedItemCount, int itemCount) {

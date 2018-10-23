@@ -36,8 +36,8 @@ public class AutoCompleteArrayAdapter extends ArrayAdapter<String> {
         final ImageButton mButton;
 
         ViewHolder(View view) {
-            mTextView = (TextView) view.findViewById(android.R.id.text1);
-            mButton = (ImageButton) view.findViewById(android.R.id.button1);
+            mTextView = view.findViewById(android.R.id.text1);
+            mButton = view.findViewById(android.R.id.button1);
 
             mButton.setTag(mTextView);
 

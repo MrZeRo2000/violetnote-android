@@ -42,9 +42,9 @@ public class AddActionHelper implements AutoCompleteArrayAdapter.OnAutoCompleteT
     public AddActionHelper(View actionView) {
         mActionView = actionView;
 
-        mListButton = (ImageButton) mActionView.findViewById(R.id.list_button);
-        mCancelButton = (ImageButton) mActionView.findViewById(R.id.cancel_button);
-        mAddEditText = (AutoCompleteTextView)mActionView.findViewById(R.id.add_edit_text);
+        mListButton = mActionView.findViewById(R.id.list_button);
+        mCancelButton = mActionView.findViewById(R.id.cancel_button);
+        mAddEditText = mActionView.findViewById(R.id.add_edit_text);
 
         setupListButton();
         setupCancelButton();

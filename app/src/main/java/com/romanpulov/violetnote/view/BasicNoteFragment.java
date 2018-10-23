@@ -2,10 +2,11 @@ package com.romanpulov.violetnote.view;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -58,7 +59,7 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
     public void refreshList(DBNoteManager noteManager) {
         noteManager.refreshNotes(mNoteList);
         if (mRecyclerView != null)
-            mRecyclerView.getAdapter().notifyDataSetChanged();
+            RecyclerViewHelper.adapterNotifyDataSetChanged(mRecyclerView);
     }
 
     public void performAddAction(final BasicNoteA item) {
@@ -91,7 +92,9 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
             }
         });
 
-        dialog.show(getFragmentManager(), null);
+        FragmentManager fragmentManager = getFragmentManager();
+        if (fragmentManager != null)
+            dialog.show(fragmentManager, null);
     }
 
     private void performEditAction(final ActionMode mode, final BasicNoteA item) {
@@ -195,10 +198,10 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_basic_note_list, container, false);
-        mRecyclerView = (RecyclerView)view.findViewById(R.id.list);
+        mRecyclerView = view.findViewById(R.id.list);
 
         // Set the adapter
         Context context = view.getContext();

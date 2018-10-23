@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
@@ -28,6 +29,12 @@ public class RecyclerViewHelper {
         Log.d("RecyclerViewHelper", message);
     }
 
+    public static void adapterNotifyDataSetChanged(@NonNull RecyclerView recyclerView) {
+        RecyclerView.Adapter adapter = recyclerView.getAdapter();
+        if (adapter != null)
+            adapter.notifyDataSetChanged();
+    }
+
     /**
      * Taken from
      * \Android\sdk\extras\android\support\samples\Support7Demos\src\com\example\android\supportv7\widget\decorator\
@@ -44,7 +51,7 @@ public class RecyclerViewHelper {
 
         public static final int VERTICAL_LIST = LinearLayoutManager.VERTICAL;
 
-        private Drawable mDivider;
+        private final Drawable mDivider;
 
         private int mOrientation;
 
@@ -64,7 +71,7 @@ public class RecyclerViewHelper {
         }
 
         @Override
-        public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
+        public void onDraw(@NonNull Canvas c, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
             if (mOrientation == VERTICAL_LIST) {
                 drawVertical(c, parent);
             } else {
@@ -107,7 +114,7 @@ public class RecyclerViewHelper {
         }
 
         @Override
-        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+        public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
             if (mOrientation == VERTICAL_LIST) {
                 outRect.set(0, 0, 0, mDivider.getIntrinsicHeight());
             } else {

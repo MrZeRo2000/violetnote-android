@@ -50,8 +50,8 @@ public class NameValueInputDialog extends AlertInputDialog {
 
         //content view
         View contentView = View.inflate(mContext, R.layout.dialog_name_value, null);
-        final EditText nameEditText = (EditText) contentView.findViewById(R.id.name);
-        final EditText valueEditText = (EditText) contentView.findViewById(R.id.value);
+        final EditText nameEditText = contentView.findViewById(R.id.name);
+        final EditText valueEditText = contentView.findViewById(R.id.value);
         alert.setView(contentView);
 
         //initial data

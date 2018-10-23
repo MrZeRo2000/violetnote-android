@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
 
 import com.romanpulov.violetnote.R;
@@ -39,8 +40,16 @@ public class AlertOkCancelSupportDialogFragment extends DialogFragment {
         mMessage = message;
     }
 
+    protected FragmentActivity getActivityNonNull() {
+        if (super.getActivity() != null) {
+            return super.getActivity();
+        } else {
+            throw new RuntimeException("null returned from getActivity()");
+        }
+    }
+
     @Override
-    public void onSaveInstanceState(Bundle data) {
+    public void onSaveInstanceState(@NonNull Bundle data) {
         data.putString(AlertOkCancelSupportDialogFragment.STRING_MESSAGE, mMessage);
         super.onSaveInstanceState(data);
     }
@@ -51,7 +60,7 @@ public class AlertOkCancelSupportDialogFragment extends DialogFragment {
         if (null != savedInstanceState)
             mMessage = savedInstanceState.getString(AlertOkCancelSupportDialogFragment.STRING_MESSAGE);
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivityNonNull(), R.style.AlertDialogTheme);
         dialogBuilder
                 .setMessage(mMessage)
                 .setPositiveButton(R.string.ok,

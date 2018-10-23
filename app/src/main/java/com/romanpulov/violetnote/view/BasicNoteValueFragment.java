@@ -2,10 +2,11 @@ package com.romanpulov.violetnote.view;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -97,7 +98,9 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
             }
         });
 
-        dialog.show(getFragmentManager(), null);
+        FragmentManager fragmentManager = getFragmentManager();
+        if (fragmentManager != null)
+            dialog.show(fragmentManager, null);
 
     }
 
@@ -184,8 +187,7 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
             if (mNoteManager.insertNoteValue(mBasicNoteValueData.getNote(), value) != -1) {
                 // refresh list
                 refreshList(mNoteManager);
-
-                mRecyclerView.getAdapter().notifyDataSetChanged();
+                RecyclerViewHelper.adapterNotifyDataSetChanged(mRecyclerView);
 
                 //ensure added element is visible
                 int newItemPos = -1;
@@ -207,12 +209,12 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_basic_note_value_list, container, false);
 
         Context context = view.getContext();
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.list);
+        mRecyclerView = view.findViewById(R.id.list);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
 

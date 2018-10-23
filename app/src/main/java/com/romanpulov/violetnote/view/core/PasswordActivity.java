@@ -120,7 +120,7 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
     protected FragmentManager removeProgressFragment() {
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(getFragmentContainerId());
-        if ((fragment != null) && (fragment instanceof ProgressFragment)) {
+        if (fragment instanceof ProgressFragment) {
             fm.beginTransaction().remove(fragment).commit();
         }
         return fm;

@@ -3,11 +3,12 @@ package com.romanpulov.violetnote.view;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -199,12 +200,12 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_basic_note_checked_item_list, container, false);
 
         Context context = view.getContext();
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.list);
+        mRecyclerView = view.findViewById(R.id.list);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
 
@@ -223,7 +224,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                         mBasicNoteData.getNote().addCheckedItemCount(item.isChecked() ? 1 : - 1);
                         updateCheckoutProgress();
 
-                        mRecyclerView.getAdapter().notifyItemChanged(position);
+                        RecyclerViewHelper.adapterNotifyDataSetChanged(mRecyclerView);
                     }
                 }
         );
@@ -306,7 +307,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
             @Override
             public void onExecutionCompleted(BasicNoteDataA basicNoteData, boolean result) {
                 afterExecutionCompleted();
-                mRecyclerView.getAdapter().notifyDataSetChanged();
+                RecyclerViewHelper.adapterNotifyDataSetChanged(mRecyclerView);
             }
         });
 
@@ -323,7 +324,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
             @Override
             public void onExecutionCompleted(BasicNoteDataA basicNoteData, boolean result) {
                 afterExecutionCompleted();
-                mRecyclerView.getAdapter().notifyDataSetChanged();
+                RecyclerViewHelper.adapterNotifyDataSetChanged(mRecyclerView);
 
                 //update autocomplete
                 if ((mAddActionHelper != null) && (!mBasicNoteData.getNote().isEncrypted()))
@@ -345,7 +346,10 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                     performCheckOutAction();
                 }
             });
-            dialog.show(getFragmentManager(), null);
+
+            FragmentManager fragmentManager = getFragmentManager();
+            if (fragmentManager != null)
+                dialog.show(fragmentManager, null);
         }
     }
 }

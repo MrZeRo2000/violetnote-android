@@ -3,6 +3,8 @@ package com.romanpulov.violetnote.view;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,6 +27,7 @@ import com.romanpulov.violetnote.view.action.BasicNoteMoveToOtherNoteAction;
 import com.romanpulov.violetnote.view.core.AlertOkCancelSupportDialogFragment;
 import com.romanpulov.violetnote.view.core.BasicCommonNoteFragment;
 import com.romanpulov.violetnote.view.core.PasswordActivity;
+import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 import com.romanpulov.violetnote.view.helper.ActionHelper;
 
 import java.util.ArrayList;
@@ -112,7 +115,11 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
      * @param item item to add
      */
     protected void performAddAction(final BasicNoteItemA item) {
-        BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity().getApplicationContext(), mBasicNoteData);
+        FragmentActivity activity = getActivity();
+        if (activity == null)
+            throw new RuntimeException("Null activity for " + this);
+
+        BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(activity.getApplicationContext(), mBasicNoteData);
         executor.addAction(getString(R.string.caption_processing), new BasicNoteDataItemAddAction(mBasicNoteData, item));
         executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData));
         executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
@@ -123,7 +130,7 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
 
                     mBasicNoteData = basicNoteData;
 
-                    mRecyclerView.getAdapter().notifyDataSetChanged();
+                    RecyclerViewHelper.adapterNotifyDataSetChanged(mRecyclerView);
                     int position = mBasicNoteData.getNote().getLastNoteItemPriorityPosition(item.getPriority());
 
                     if (position > -1)
@@ -164,7 +171,10 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
             }
         });
 
-        dialog.show(getFragmentManager(), null);
+        FragmentManager fragmentManager = getFragmentManager();
+        if (fragmentManager != null)
+            dialog.show(fragmentManager, null);
+
         mDialogFragment = dialog;
     }
 
@@ -201,7 +211,10 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
             }
         });
 
-        dialog.show(getFragmentManager(), null);
+        FragmentManager fragmentManager = getFragmentManager();
+        if (fragmentManager != null)
+            dialog.show(fragmentManager, null);
+
         mDialogFragment = dialog;
     }
 

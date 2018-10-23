@@ -1,5 +1,6 @@
 package com.romanpulov.violetnote.view;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,15 +23,16 @@ public class CategoryRecyclerViewAdapter extends RecyclerView.Adapter<CategoryRe
         mListener = listener;
     }
 
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_category, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         holder.mCategoryName.setText(mValues.get(position).getCategoryName());
         holder.mCategoryDescription.setText(String.valueOf(mValues.get(position).getNotesCount()));
@@ -61,8 +63,8 @@ public class CategoryRecyclerViewAdapter extends RecyclerView.Adapter<CategoryRe
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mCategoryName = (TextView) view.findViewById(R.id.category_name);
-            mCategoryDescription = (TextView) view.findViewById(R.id.category_description);
+            mCategoryName = view.findViewById(R.id.category_name);
+            mCategoryDescription = view.findViewById(R.id.category_description);
         }
 
         @Override

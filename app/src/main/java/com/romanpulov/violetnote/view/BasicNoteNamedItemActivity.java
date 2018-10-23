@@ -24,7 +24,7 @@ public class BasicNoteNamedItemActivity extends BasicNoteDataPasswordActivity {
 
             Fragment fragment = fm.findFragmentById(getFragmentContainerId());
             //BasicNoteCheckedItemFragment fragment = (BasicNoteCheckedItemFragment) fm.findFragmentById(getFragmentContainerId());
-            if((fragment == null) || (!(fragment instanceof BasicNoteCheckedItemFragment))) {
+            if(!(fragment instanceof BasicNoteCheckedItemFragment)) {
                 Fragment newFragment = BasicNoteNamedItemFragment.newInstance(mBasicNoteData, this);
                 removeFragment().beginTransaction().add(getFragmentContainerId(), newFragment).commit();
             }
@@ -39,7 +39,7 @@ public class BasicNoteNamedItemActivity extends BasicNoteDataPasswordActivity {
         setContentView(R.layout.activity_basic_note_named_item);
 
         //setup ToolBar instead of ActionBar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(mBasicNoteData.getNote().getTitle());
         setSupportActionBar(toolbar);
         setupActionBar();

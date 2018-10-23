@@ -23,7 +23,7 @@ public class DashboardActivity extends ActionBarCompatActivity {
         setContentView(R.layout.activity_dashboard);
 
 
-        Button passNoteButton = (Button)findViewById(R.id.pass_note_button);
+        Button passNoteButton = findViewById(R.id.pass_note_button);
         passNoteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -31,7 +31,7 @@ public class DashboardActivity extends ActionBarCompatActivity {
             }
         });
 
-        Button basicNoteButton = (Button)findViewById(R.id.basic_note_button);
+        Button basicNoteButton = findViewById(R.id.basic_note_button);
         basicNoteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

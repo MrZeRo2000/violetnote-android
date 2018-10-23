@@ -61,7 +61,7 @@ public class SettingsFragment extends PreferenceFragment {
 
     private PermissionRequestHelper mWriteStorageRequestHelper;
 
-    private Map<String, PreferenceLoaderProcessor> mPreferenceLoadProcessors = new HashMap<>();
+    private final Map<String, PreferenceLoaderProcessor> mPreferenceLoadProcessors = new HashMap<>();
 
     private LoaderServiceManager mLoaderServiceManager;
     private BroadcastReceiver mLoaderServiceBroadcastReceiver = new BroadcastReceiver() {
@@ -417,7 +417,7 @@ public class SettingsFragment extends PreferenceFragment {
                              Bundle savedInstanceState) {
         View v = super.onCreateView(inflater, container, savedInstanceState);
         if(v != null) {
-            ListView lv = (ListView) v.findViewById(android.R.id.list);
+            ListView lv = v.findViewById(android.R.id.list);
             if (lv != null)
                 lv.setPadding(0, 0, 0, 0);
         }

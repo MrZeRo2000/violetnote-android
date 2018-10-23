@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -104,7 +105,7 @@ public abstract class HrChooserFragment extends Fragment {
             public ViewHolder(View v) {
                 super(v);
                 mView = v;
-                mTextView = (TextView) (v.findViewById(R.id.hr_chooser_text));
+                mTextView = v.findViewById(R.id.hr_chooser_text);
             }
         }
     }
@@ -205,7 +206,9 @@ public abstract class HrChooserFragment extends Fragment {
 
         @Override
         protected void onPreExecute() {
-            mHost.mHeader.setText(mHost.getActivity().getText(R.string.caption_loading));
+            FragmentActivity activity = mHost.getActivity();
+            if (activity != null)
+                mHost.mHeader.setText(activity.getText(R.string.caption_loading));
         }
 
         @Override
@@ -228,14 +231,14 @@ public abstract class HrChooserFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_hr_chooser, container, false);
 
         //UI components
-        mHeader = (TextView) (v.findViewById(R.id.chooser_header));
+        mHeader = v.findViewById(R.id.chooser_header);
         if ((mTask != null) && (mTask.getStatus() == AsyncTask.Status.RUNNING)) {
             mHeader.setText(R.string.caption_loading);
         } else {
             mHeader.setText(mHeaderText);
         }
 
-        RecyclerView recyclerView = (RecyclerView) (v.findViewById(R.id.chooser_list));
+        RecyclerView recyclerView = v.findViewById(R.id.chooser_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         // add decoration

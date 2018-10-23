@@ -30,7 +30,7 @@ public abstract class DropboxFileLoader extends FileLoader {
         DbxClientV2 dbxClient = mDropboxHelper.getClient();
 
         Metadata m = dbxClient.files().getMetadata(getLoadPathProvider().getSourcePath());
-        if ((m == null) || !(m instanceof FileMetadata))
+        if (!(m instanceof FileMetadata))
             throw new Exception(String.format(mContext.getText(R.string.error_dropbox_load_file_data).toString(), getLoadPathProvider().getSourcePath()));
 
         FileMetadata fm = (FileMetadata) m;

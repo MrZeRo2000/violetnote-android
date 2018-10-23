@@ -1,5 +1,6 @@
 package com.romanpulov.violetnote.view;
 
+import android.support.annotation.NonNull;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -29,15 +30,16 @@ public class BasicNoteValueRecyclerViewAdapter extends RecyclerView.Adapter<Basi
         mListener = listener;
     }
 
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_basic_note_value, parent, false);
         return new ViewHolder(view, mRecyclerViewSelector);
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         holder.mItem = mItems.get(position);
         holder.mValueView.setText(mItems.get(position).getValue());
 
@@ -56,7 +58,7 @@ public class BasicNoteValueRecyclerViewAdapter extends RecyclerView.Adapter<Basi
 
         public ViewHolder(View view, RecyclerViewHelper.RecyclerViewSelector viewSelector) {
             super(view, viewSelector);
-            mValueView = (TextView) view.findViewById(R.id.value);
+            mValueView = view.findViewById(R.id.value);
         }
 
         @Override

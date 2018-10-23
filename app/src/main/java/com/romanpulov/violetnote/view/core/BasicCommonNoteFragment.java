@@ -1,6 +1,7 @@
 package com.romanpulov.violetnote.view.core;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.view.ActionMode;
@@ -26,7 +27,7 @@ public abstract class BasicCommonNoteFragment extends Fragment {
     public abstract void refreshList(DBNoteManager noteManager);
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         if (mRecyclerViewSelector != null) {
             Collection<Integer> selectedItems = mRecyclerViewSelector.getSelectedItems();
             if (selectedItems.size() > 0) {

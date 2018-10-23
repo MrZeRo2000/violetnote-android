@@ -40,9 +40,9 @@ public class SearchActionHelper implements CompoundButton.OnCheckedChangeListene
 
     public SearchActionHelper(View rootView, int displayType) {
         mSearchView = rootView.findViewById(R.id.search_layout_include);
-        mSearchEditText =  (AutoCompleteTextView)mSearchView.findViewById(R.id.search_edit_text);
-        mSearchSystemCheckBox = (CheckBox) mSearchView.findViewById(R.id.search_system_check);
-        mSearchUserCheckBox = (CheckBox) mSearchView.findViewById(R.id.search_user_check);
+        mSearchEditText = mSearchView.findViewById(R.id.search_edit_text);
+        mSearchSystemCheckBox = mSearchView.findViewById(R.id.search_system_check);
+        mSearchUserCheckBox = mSearchView.findViewById(R.id.search_user_check);
         mDisplayType = displayType;
 
         setupCancelButton();
@@ -51,7 +51,7 @@ public class SearchActionHelper implements CompoundButton.OnCheckedChangeListene
     }
 
     private void setupCancelButton() {
-        ImageButton searchCancelButton = (ImageButton)mSearchView.findViewById(R.id.cancel_button);
+        ImageButton searchCancelButton = mSearchView.findViewById(R.id.cancel_button);
         searchCancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

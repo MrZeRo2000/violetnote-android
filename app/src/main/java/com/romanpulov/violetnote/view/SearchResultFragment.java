@@ -2,6 +2,7 @@ package com.romanpulov.violetnote.view;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -59,17 +60,17 @@ public class SearchResultFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         //return inflater.inflate(R.layout.fragment_search_result, container, false);
 
         View view = inflater.inflate(R.layout.fragment_note_list, container, false);
 
-        TextView headerTextView = (TextView)view.findViewById(R.id.headerTextView);
+        TextView headerTextView = view.findViewById(R.id.headerTextView);
         headerTextView.setText(getDisplaySearchText());
         headerTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_search ,0, 0, 0);
-        RecyclerView recyclerView = (RecyclerView)view.findViewById(R.id.list);
+        RecyclerView recyclerView = view.findViewById(R.id.list);
         // Set the adapter
         Context context = view.getContext();
         recyclerView.setLayoutManager(new LinearLayoutManager(context));

@@ -1,5 +1,6 @@
 package com.romanpulov.violetnote.view;
 
+import android.support.annotation.NonNull;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -38,8 +39,9 @@ public class BasicNoteRecycleViewAdapter extends RecyclerView.Adapter<BasicNoteR
         mListener = listener;
     }
 
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_basic_note, parent, false);
 
@@ -47,7 +49,7 @@ public class BasicNoteRecycleViewAdapter extends RecyclerView.Adapter<BasicNoteR
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         // title
         holder.mTitle.setText(mItems.get(position).getTitle());
         // item count
@@ -73,10 +75,10 @@ public class BasicNoteRecycleViewAdapter extends RecyclerView.Adapter<BasicNoteR
 
         public ViewHolder(View view, RecyclerViewHelper.RecyclerViewSelector viewSelector) {
             super(view, viewSelector);
-            mTitle = (TextView) view.findViewById(R.id.title);
-            mItemCount = (TextView) view.findViewById(R.id.item_count);
-            mLastModified = (TextView) view.findViewById(R.id.last_modified);
-            mEncryptedImage = (ImageView) view.findViewById(R.id.encrypted_image);
+            mTitle = view.findViewById(R.id.title);
+            mItemCount = view.findViewById(R.id.item_count);
+            mLastModified = view.findViewById(R.id.last_modified);
+            mEncryptedImage = view.findViewById(R.id.encrypted_image);
         }
 
         @Override

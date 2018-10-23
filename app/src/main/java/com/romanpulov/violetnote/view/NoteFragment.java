@@ -3,6 +3,7 @@ package com.romanpulov.violetnote.view;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -65,15 +66,15 @@ public class NoteFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         log("onCreateView arguments=" + getArguments());
 
         View view = inflater.inflate(R.layout.fragment_note_list, container, false);
 
-        TextView headerTextView = (TextView)view.findViewById(R.id.headerTextView);
+        TextView headerTextView = view.findViewById(R.id.headerTextView);
         headerTextView.setText(mPassDataA.getPassCategoryData().get(0).getCategoryName());
-        RecyclerView recyclerView = (RecyclerView)view.findViewById(R.id.list);
+        RecyclerView recyclerView = view.findViewById(R.id.list);
         // Set the adapter
         Context context = view.getContext();
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
