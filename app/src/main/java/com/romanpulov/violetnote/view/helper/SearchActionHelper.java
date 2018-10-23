@@ -89,7 +89,7 @@ public class SearchActionHelper implements CompoundButton.OnCheckedChangeListene
     }
 
     public void setAutoCompleteList(Collection<String> autoCompleteList) {
-        ArrayAdapter<?> adapter = new ArrayAdapter<>(mSearchEditText.getContext(), android.R.layout.simple_dropdown_item_1line, autoCompleteList.toArray(new String[autoCompleteList.size()]));
+        ArrayAdapter<?> adapter = new ArrayAdapter<>(mSearchEditText.getContext(), android.R.layout.simple_dropdown_item_1line, autoCompleteList.toArray(new String[0]));
         mSearchEditText.setAdapter(adapter);
     }
 

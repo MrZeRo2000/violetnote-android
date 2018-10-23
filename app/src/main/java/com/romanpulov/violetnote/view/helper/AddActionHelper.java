@@ -53,7 +53,7 @@ public class AddActionHelper implements AutoCompleteArrayAdapter.OnAutoCompleteT
 
     public void setAutoCompleteList(Collection<String> autoCompleteList) {
         //ArrayAdapter<?> adapter = new ArrayAdapter<>(mAddEditText.getContext(), android.R.layout.simple_dropdown_item_1line, autoCompleteList.toArray(new String[autoCompleteList.size()]));
-        ArrayAdapter<?> adapter = new AutoCompleteArrayAdapter(mAddEditText.getContext(), R.layout.dropdown_button_item, autoCompleteList.toArray(new String[autoCompleteList.size()]), this);
+        ArrayAdapter<?> adapter = new AutoCompleteArrayAdapter(mAddEditText.getContext(), R.layout.dropdown_button_item, autoCompleteList.toArray(new String[0]), this);
         //ArrayAdapter<?> adapter = new AutoCompleteArrayAdapter(mAddEditText.getContext(), android.R.layout.simple_dropdown_item_1line, autoCompleteList.toArray(new String[autoCompleteList.size()]));
         mAddEditText.setAdapter(adapter);
     }

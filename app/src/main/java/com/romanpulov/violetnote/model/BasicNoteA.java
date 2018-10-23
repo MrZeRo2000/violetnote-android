@@ -283,7 +283,7 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
         dest.writeInt(mItemCount);
         dest.writeInt(mCheckedItemCount);
         dest.writeTypedList(mItems);
-        dest.writeStringArray(mValues.toArray(new String[mValues.size()]));
+        dest.writeStringArray(mValues.toArray(new String[0]));
         dest.writeTypedList(mHistoryItems);
     }
 
