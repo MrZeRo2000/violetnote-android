@@ -1,6 +1,6 @@
 package com.romanpulov.violetnote.view.core;
 
-import android.app.Activity;
+import android.content.Context;
 
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutor;
@@ -38,14 +38,14 @@ public class BasicNoteDataProgressFragment extends ProgressFragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        if (activity instanceof OnBasicNoteDataFragmentInteractionListener) {
-            mListener = (OnBasicNoteDataFragmentInteractionListener) activity;
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnBasicNoteDataFragmentInteractionListener) {
+            mListener = (OnBasicNoteDataFragmentInteractionListener) context;
             mListener.onBasicNoteDataFragmentAttached(true);
         }
         else
-            throw new RuntimeException(activity.toString()
+            throw new RuntimeException(context.toString()
                     + " must implement OnBasicNoteDataFragmentInteractionListener");
     }
 

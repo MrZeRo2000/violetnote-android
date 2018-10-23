@@ -1,6 +1,5 @@
 package com.romanpulov.violetnote.view;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -83,7 +82,7 @@ public class SearchResultFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(Activity context) {
+    public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnPassNoteItemInteractionListener) {
             mListener = (OnPassNoteItemInteractionListener) context;

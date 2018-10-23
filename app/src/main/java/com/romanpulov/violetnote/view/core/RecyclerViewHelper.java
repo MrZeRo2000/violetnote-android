@@ -1,12 +1,10 @@
 package com.romanpulov.violetnote.view.core;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
@@ -35,6 +33,7 @@ public class RecyclerViewHelper {
      * \Android\sdk\extras\android\support\samples\Support7Demos\src\com\example\android\supportv7\widget\decorator\
 
      */
+
     public static class DividerItemDecoration extends RecyclerView.ItemDecoration {
 
         private static final int[] ATTRS = new int[]{
@@ -50,11 +49,10 @@ public class RecyclerViewHelper {
         private int mOrientation;
 
         public DividerItemDecoration(Context context, int orientation, int drawableId) {
-            final TypedArray a = context.obtainStyledAttributes(ATTRS);
-            mDivider = a.getDrawable(0);
-            a.recycle();
+            //final TypedArray a = context.obtainStyledAttributes(ATTRS);
+            //mDivider = a.getDrawable(0);
+            //a.recycle();
             setOrientation(orientation);
-            //R.drawable.divider_white_black_gradient
             mDivider = ContextCompat.getDrawable(context, drawableId);
         }
 
@@ -84,7 +82,7 @@ public class RecyclerViewHelper {
                 final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child
                         .getLayoutParams();
                 final int top = child.getBottom() + params.bottomMargin +
-                        Math.round(ViewCompat.getTranslationY(child));
+                        Math.round(child.getTranslationY());
                 final int bottom = top + mDivider.getIntrinsicHeight();
                 mDivider.setBounds(left, top, right, bottom);
                 mDivider.draw(c);
@@ -101,7 +99,7 @@ public class RecyclerViewHelper {
                 final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child
                         .getLayoutParams();
                 final int left = child.getRight() + params.rightMargin +
-                        Math.round(ViewCompat.getTranslationX(child));
+                        Math.round(child.getTranslationX());
                 final int right = left + mDivider.getIntrinsicHeight();
                 mDivider.setBounds(left, top, right, bottom);
                 mDivider.draw(c);

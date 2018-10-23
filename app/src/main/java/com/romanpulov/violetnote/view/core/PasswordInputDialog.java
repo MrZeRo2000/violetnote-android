@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.WindowManager;
 
 import com.romanpulov.violetnote.R;
-import com.romanpulov.violetnote.view.helper.InputManagerHelper;
 
 /**
  * Password input dialog

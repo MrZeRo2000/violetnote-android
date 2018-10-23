@@ -107,7 +107,7 @@ public class NoteFragment extends Fragment {
 
 
     @Override
-    public void onAttach(android.app.Activity context) {
+    public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnPassNoteItemInteractionListener) {
             mListener = (OnPassNoteItemInteractionListener) context;

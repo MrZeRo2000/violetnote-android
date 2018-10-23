@@ -17,7 +17,7 @@
         android:maxLines="1"
         android:inputType="textCapSentences"
         android:hint="@string/hint_title"
-        />
+        android:importantForAutofill="no"/>
 
     <RadioGroup
         android:layout_width="match_parent"

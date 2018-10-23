@@ -1,6 +1,5 @@
 package com.romanpulov.violetnote.view.core;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -31,15 +30,15 @@ public class PassDataProgressFragment extends ProgressFragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    public void onAttach(Context context) {
+        super.onAttach(context);
 
-        if (activity instanceof OnPassDataFragmentInteractionListener) {
-            mListener = (OnPassDataFragmentInteractionListener) activity;
+        if (context instanceof OnPassDataFragmentInteractionListener) {
+            mListener = (OnPassDataFragmentInteractionListener) context;
             mListener.onPassDataFragmentAttached();
         }
         else
-            throw new RuntimeException(activity.toString()
+            throw new RuntimeException(context.toString()
                     + " must implement OnPassDataFragmentInteractionListener");
     }
 

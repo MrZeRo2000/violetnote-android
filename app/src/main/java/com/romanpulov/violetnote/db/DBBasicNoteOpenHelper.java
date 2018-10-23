@@ -13,19 +13,19 @@ public class DBBasicNoteOpenHelper extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 2;
 
     //common column names
-    public static final String ID_COLUMN_NAME = "_id";
-    public static final String NOTE_ID_COLUMN_NAME = "note_id";
-    public static final String LAST_MODIFIED_COLUMN_NAME = "last_modified";
-    public static final String ORDER_COLUMN_NAME = "order_id";
-    public static final String VALUE_COLUMN_NAME = "value";
-    public static final String PRIORITY_COLUMN_NAME = "priority";
+    static final String ID_COLUMN_NAME = "_id";
+    static final String NOTE_ID_COLUMN_NAME = "note_id";
+    static final String LAST_MODIFIED_COLUMN_NAME = "last_modified";
+    static final String ORDER_COLUMN_NAME = "order_id";
+    static final String VALUE_COLUMN_NAME = "value";
+    static final String PRIORITY_COLUMN_NAME = "priority";
 
     //notes
-    public static final String NOTES_TABLE_NAME = "notes";
-    public static final String NOTE_TYPE_COLUMN_NAME = "note_type";
-    public static final String IS_ENCRYPTED_COLUMN_NAME = "is_encrypted";
-    public static final String TITLE_COLUMN_NAME = "title";
-    public static final String[] NOTES_TABLE_COLS = new String[] {
+    static final String NOTES_TABLE_NAME = "notes";
+    static final String NOTE_TYPE_COLUMN_NAME = "note_type";
+    static final String IS_ENCRYPTED_COLUMN_NAME = "is_encrypted";
+    static final String TITLE_COLUMN_NAME = "title";
+    static final String[] NOTES_TABLE_COLS = new String[] {
         ID_COLUMN_NAME,
         LAST_MODIFIED_COLUMN_NAME,
         ORDER_COLUMN_NAME,

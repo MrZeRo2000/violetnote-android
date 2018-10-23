@@ -1,6 +1,5 @@
 package com.romanpulov.violetnote.view;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -219,13 +218,13 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        if (activity instanceof OnBasicNoteFragmentInteractionListener) {
-            mListener = (OnBasicNoteFragmentInteractionListener) activity;
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnBasicNoteFragmentInteractionListener) {
+            mListener = (OnBasicNoteFragmentInteractionListener) context;
         }
         else {
-            throw new RuntimeException(activity.toString()
+            throw new RuntimeException(context.toString()
                     + " must implement OnBasicNoteFragmentInteractionListener");
         }
     }

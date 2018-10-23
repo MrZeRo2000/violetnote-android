@@ -91,7 +91,7 @@ public class CategoryFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(android.app.Activity context) {
+    public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnPassCategoryInteractionListener) {
             mListener = (OnPassCategoryInteractionListener) context;
