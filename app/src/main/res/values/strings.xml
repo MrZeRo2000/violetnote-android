@@ -54,6 +54,7 @@
     <string name="pref_title_account">Account</string>
     <string name="pref_title_account_dropbox">Dropbox</string>
     <string name="pref_title_interface">Interface</string>
+    <string name="pref_title_interface_checked_last">Display checked items last</string>
 
     <!-- Source type -->
     <string name="pref_title_source_type">Source type</string>

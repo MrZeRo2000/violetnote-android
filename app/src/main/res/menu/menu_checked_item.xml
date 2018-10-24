@@ -24,4 +24,9 @@
         android:title="@string/action_uncheck_all"
         compat:showAsAction="never"
         />
+    <item
+        android:id="@+id/action_refresh"
+        android:title="@string/action_refresh"
+        compat:showAsAction="never"
+        />
 </menu>

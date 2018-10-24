@@ -3,6 +3,8 @@ package com.romanpulov.violetnote.db;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.romanpulov.violetnote.model.BasicCommonNoteA;
 import com.romanpulov.violetnote.model.BasicEntityNoteA;
@@ -22,6 +24,9 @@ import java.util.List;
  * Created by romanpulov on 17.08.2016.
  */
 public class DBNoteManager extends BasicCommonNoteManager {
+    private static void log(String message) {
+        Log.d("DBNoteManager", message);
+    }
 
     public DBNoteManager(Context context) {
         super(context);
@@ -147,6 +152,11 @@ public class DBNoteManager extends BasicCommonNoteManager {
     }
 
     public void queryNoteDataItems(BasicNoteA note) {
+
+        String orderString = DBBasicNoteOpenHelper.PRIORITY_COLUMN_NAME + " DESC, " + DBBasicNoteOpenHelper.ORDER_COLUMN_NAME;
+        if (PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("pref_interface_checked_last", false))
+            orderString = DBBasicNoteOpenHelper.CHECKED_COLUMN_NAME + " ASC, " + orderString;
+
         //clear items
         note.getItems().clear();
 
@@ -156,7 +166,7 @@ public class DBNoteManager extends BasicCommonNoteManager {
             c = mDB.query(
                     DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME, DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_COLS,
                     DBBasicNoteOpenHelper.NOTE_ID_COLUMN_NAME + " = ?", new String[] {String.valueOf(note.getId())}, null, null,
-                    DBBasicNoteOpenHelper.PRIORITY_COLUMN_NAME + " DESC, " + DBBasicNoteOpenHelper.ORDER_COLUMN_NAME
+                    orderString
             );
 
             int itemCount = 0;

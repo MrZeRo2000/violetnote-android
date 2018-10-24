@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory
+        android:title="@string/pref_title_interface"
+        android:layout="@layout/preferences_category"
+        >
+        <CheckBoxPreference
+            android:key="pref_interface_checked_last"
+            android:title="@string/pref_title_interface_checked_last"
+            android:defaultValue="false"
+            />
+    </PreferenceCategory>
+    <PreferenceCategory
         android:title="@string/pref_title_pass_note_data"
         android:layout="@layout/preferences_category"
         >

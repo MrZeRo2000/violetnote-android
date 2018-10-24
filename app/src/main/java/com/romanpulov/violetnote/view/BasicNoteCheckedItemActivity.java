@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.db.DBNoteManager;
 import com.romanpulov.violetnote.view.core.BasicNoteDataPasswordActivity;
 
 public class BasicNoteCheckedItemActivity extends BasicNoteDataPasswordActivity {
@@ -78,6 +79,9 @@ public class BasicNoteCheckedItemActivity extends BasicNoteDataPasswordActivity 
                     return true;
                 case R.id.action_checkout:
                     ((BasicNoteCheckedItemFragment) fragment).checkOut();
+                    return true;
+                case R.id.action_refresh:
+                    ((BasicNoteCheckedItemFragment) fragment).refreshListWithView();
                     return true;
                 default:
                     return super.onOptionsItemSelected(item);

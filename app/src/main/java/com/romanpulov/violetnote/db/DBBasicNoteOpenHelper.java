@@ -18,6 +18,7 @@ public class DBBasicNoteOpenHelper extends SQLiteOpenHelper {
     static final String LAST_MODIFIED_COLUMN_NAME = "last_modified";
     static final String ORDER_COLUMN_NAME = "order_id";
     static final String VALUE_COLUMN_NAME = "value";
+    static final String CHECKED_COLUMN_NAME = "checked";
     static final String PRIORITY_COLUMN_NAME = "priority";
 
     //notes
@@ -55,7 +56,7 @@ public class DBBasicNoteOpenHelper extends SQLiteOpenHelper {
             NOTE_ID_COLUMN_NAME,
             "name",
             VALUE_COLUMN_NAME,
-            "checked",
+            CHECKED_COLUMN_NAME,
             PRIORITY_COLUMN_NAME
     };
     private static final String NOTE_ITEMS_TABLE_CREATE =
