@@ -104,11 +104,11 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
             if (subMenu == null) {
                 subMenu = menu.addSubMenu(Menu.NONE, Menu.NONE, order++, getString(R.string.action_move_other));
                 subMenu.getItem().setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+                subMenu.clearHeader();
             }
-            subMenu.addSubMenu(MENU_GROUP_OTHER_ITEMS, relatedNoteIndex ++, Menu.NONE, relatedNote.getTitle());
+            subMenu.add(MENU_GROUP_OTHER_ITEMS, relatedNoteIndex ++, Menu.NONE, relatedNote.getTitle());
         }
     }
-
 
     /**
      * Common logic for Add action
