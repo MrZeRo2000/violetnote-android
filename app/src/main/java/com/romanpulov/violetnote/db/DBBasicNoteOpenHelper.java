@@ -211,12 +211,18 @@ public class DBBasicNoteOpenHelper extends SQLiteOpenHelper {
                     NOTE_ITEM_PARAMS_TABLE_COLS[2] + " INTEGER NOT NULL," +
                     NOTE_ITEM_PARAMS_TABLE_COLS[3] + " INTEGER," +
                     NOTE_ITEM_PARAMS_TABLE_COLS[4] + " TEXT," +
-                    " FOREIGN KEY (" + NOTE_ITEM_PARAMS_TABLE_COLS[1] + ") REFERENCES " + NOTE_ITEMS_TABLE_NAME + "(" + NOTE_ITEMS_TABLE_COLS[0] + ")" +
+                    " FOREIGN KEY (" + NOTE_ITEM_PARAMS_TABLE_COLS[1] + ") REFERENCES " + NOTE_ITEMS_TABLE_NAME + "(" + NOTE_ITEMS_TABLE_COLS[0] + ")," +
+                    " FOREIGN KEY (" + NOTE_ITEM_PARAMS_TABLE_COLS[2] + ") REFERENCES " + NOTE_ITEM_PARAM_TYPES_TABLE_NAME + "(" + NOTE_ITEM_PARAM_TYPES_TABLE_COLS[0] + ")" +
                     ")";
     private static final String NOTE_ITEM_PARAMS_FK_INDEX_CREATE =
             "CREATE INDEX fk_" + NOTE_ITEM_PARAMS_TABLE_NAME +
                     " ON " + NOTE_ITEM_PARAMS_TABLE_NAME + "(" +
                     NOTE_ITEM_ID_COLUMN_NAME + ")";
+    private static final String NOTE_ITEM_PARAMS_FK_TYPE_INDEX_CREATE =
+            "CREATE INDEX fk_" + NOTE_ITEM_PARAMS_TABLE_NAME + "_type" +
+                    " ON " + NOTE_ITEM_PARAMS_TABLE_NAME + "(" +
+                    NOTE_ITEM_PARAM_TYPE_ID_COLUMN_NAME + ")";
+
 
     //note_id selection
     public static final String NOTE_ID_SELECTION_STRING = NOTE_ID_COLUMN_NAME + " = ?";
@@ -260,6 +266,7 @@ public class DBBasicNoteOpenHelper extends SQLiteOpenHelper {
 
         db.execSQL(NOTE_ITEM_PARAMS_TABLE_CREATE);
         db.execSQL(NOTE_ITEM_PARAMS_FK_INDEX_CREATE);
+        db.execSQL(NOTE_ITEM_PARAMS_FK_TYPE_INDEX_CREATE);
     }
 
     @Override
@@ -276,6 +283,7 @@ public class DBBasicNoteOpenHelper extends SQLiteOpenHelper {
 
                 db.execSQL(NOTE_ITEM_PARAMS_TABLE_CREATE);
                 db.execSQL(NOTE_ITEM_PARAMS_FK_INDEX_CREATE);
+                db.execSQL(NOTE_ITEM_PARAMS_FK_TYPE_INDEX_CREATE);
 
                 db.execSQL(NOTES_TABLE_ADD_GROUP_ID);
                 db.execSQL("INSERT INTO " + NOTE_GROUPS_TABLE_NAME + "(" +
