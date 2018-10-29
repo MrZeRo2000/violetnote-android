@@ -37,11 +37,12 @@ public class DBNoteManager extends BasicCommonNoteManager {
                 c.getLong(0),
                 c.getLong(1),
                 dtf.formatDateTimeDelimited(new Date(c.getLong(1)), "\n"),
-                c.getLong(2),
-                c.getInt(3),
-                c.getString(4),
-                BooleanUtils.fromInt(c.getInt(5)),
-                c.getString(6)
+                c.getLong(3),
+                c.getInt(4),
+                c.getInt(4),
+                c.getString(5),
+                BooleanUtils.fromInt(c.getInt(6)),
+                c.getString(7)
         );
     }
 
@@ -52,11 +53,12 @@ public class DBNoteManager extends BasicCommonNoteManager {
                 dtf.formatDateTimeDelimited(new Date(c.getLong(1)), "\n"),
                 c.getLong(2),
                 c.getInt(3),
-                c.getString(4),
-                BooleanUtils.fromInt(c.getInt(5)),
-                c.getString(6),
-                c.getInt(7),
-                c.getInt(8)
+                c.getInt(4),
+                c.getString(5),
+                BooleanUtils.fromInt(c.getInt(6)),
+                c.getString(7),
+                c.getInt(8),
+                c.getInt(9)
         );
     }
 
@@ -276,10 +278,11 @@ public class DBNoteManager extends BasicCommonNoteManager {
 
         cv.put(DBBasicNoteOpenHelper.NOTES_TABLE_COLS[1], System.currentTimeMillis());
         cv.put(DBBasicNoteOpenHelper.NOTES_TABLE_COLS[2], DBBasicNoteHelper.getInstance(mContext).getMaxOrderId(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, 0) + 1);
-        cv.put(DBBasicNoteOpenHelper.NOTES_TABLE_COLS[3], note.getNoteType());
-        cv.put(DBBasicNoteOpenHelper.NOTES_TABLE_COLS[4], note.getTitle());
-        cv.put(DBBasicNoteOpenHelper.NOTES_TABLE_COLS[5], BooleanUtils.toInt(note.isEncrypted()));
-        cv.put(DBBasicNoteOpenHelper.NOTES_TABLE_COLS[6], note.getEncryptedString());
+        cv.put(DBBasicNoteOpenHelper.NOTES_TABLE_COLS[3], note.getNoteGroupId());
+        cv.put(DBBasicNoteOpenHelper.NOTES_TABLE_COLS[4], note.getNoteType());
+        cv.put(DBBasicNoteOpenHelper.NOTES_TABLE_COLS[5], note.getTitle());
+        cv.put(DBBasicNoteOpenHelper.NOTES_TABLE_COLS[6], BooleanUtils.toInt(note.isEncrypted()));
+        cv.put(DBBasicNoteOpenHelper.NOTES_TABLE_COLS[7], note.getEncryptedString());
 
         return mDB.insert(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, null, cv);
     }

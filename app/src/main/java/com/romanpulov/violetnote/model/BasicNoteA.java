@@ -23,6 +23,7 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
     private static final String CHECKED_ITEM_COUNT_TITLE_FORMAT = "%d/%d";
     private static final String NAMED_ITEM_COUNT_TITLE_FORMAT = "%d";
 
+    private int mGroupId;
     private int mNoteType;
     private String mTitle;
     private boolean mEncrypted;
@@ -32,6 +33,10 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
     private int mItemCount;
     private int mCheckedItemCount;
     private String mItemCountTitle;
+
+    public int getNoteGroupId() {
+        return mGroupId;
+    }
 
     public int getNoteType() {
         return mNoteType;
@@ -158,19 +163,21 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
      * @param lastModified last modified date
      * @param lastModifiedString last modified date as string
      * @param orderId order id
+     * @param groupId group id
      * @param noteType note type
      * @param title note title
      * @param encrypted flag if a not is encrypted
      * @param encryptedString not used
      * @return new instance
      */
-    public static BasicNoteA newInstance(long id, long lastModified, String lastModifiedString, long orderId, int noteType, String title, boolean encrypted, String encryptedString) {
+    public static BasicNoteA newInstance(long id, long lastModified, String lastModifiedString, long orderId, int groupId, int noteType, String title, boolean encrypted, String encryptedString) {
         BasicNoteA instance = new BasicNoteA();
 
         instance.setId(id);
         instance.setLastModified(lastModified);
         instance.setLastModifiedString(lastModifiedString);
         instance.setOrderId(orderId);
+        instance.mGroupId = groupId;
         instance.mNoteType = noteType;
         instance.mTitle = title;
         instance.mEncrypted = encrypted;
@@ -185,6 +192,7 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
      * @param lastModified last modified date
      * @param lastModifiedString last modified date as string
      * @param orderId order id
+     * @param groupId group id
      * @param noteType note type
      * @param title note title
      * @param encrypted flag if a not is encrypted
@@ -193,13 +201,14 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
      * @param checkedItemCount number of checked items
      * @return new instance
      */
-    public static BasicNoteA newInstanceWithTotals(long id, long lastModified, String lastModifiedString, long orderId, int noteType, String title, boolean encrypted, String encryptedString, int itemCount, int checkedItemCount) {
+    public static BasicNoteA newInstanceWithTotals(long id, long lastModified, String lastModifiedString, long orderId, int groupId, int noteType, String title, boolean encrypted, String encryptedString, int itemCount, int checkedItemCount) {
         BasicNoteA instance = new BasicNoteA();
 
         instance.setId(id);
         instance.setLastModified(lastModified);
         instance.setLastModifiedString(lastModifiedString);
         instance.setOrderId(orderId);
+        instance.mGroupId = groupId;
         instance.mNoteType = noteType;
         instance.mTitle = title;
         instance.mEncrypted = encrypted;
@@ -215,14 +224,16 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
      * Creates notes for editor
      * most fields are empty
      * @param noteType note type
+     * @param groupId group id
      * @param title note title
      * @param encrypted flag if a not is encrypted
      * @param encryptedString not used
      * @return new instance
      */
-    public static BasicNoteA newEditInstance(int noteType, String title, boolean encrypted, String encryptedString) {
+    public static BasicNoteA newEditInstance(int groupId, int noteType, String title, boolean encrypted, String encryptedString) {
         BasicNoteA instance = new BasicNoteA();
 
+        instance.mGroupId = groupId;
         instance.mNoteType = noteType;
         instance.mTitle = title;
         instance.mEncrypted = encrypted;
@@ -235,6 +246,7 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
     public String toString() {
         return "{" +
                 "[id=" + getId() + "]," +
+                "[groupId=" + mGroupId + "]," +
                 "[lastModified=" + getLastModified() + "]," +
                 "[orderId=" + getOrderId() + "]," +
                 "[noteType=" + mNoteType + "]," +
@@ -251,6 +263,7 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
         setLastModified(in.readLong());
         setLastModifiedString(in.readString());
         setOrderId(in.readLong());
+        mGroupId = in.readInt();
         mNoteType = in.readInt();
         mTitle = in.readString();
         mEncrypted = BooleanUtils.fromInt(in.readInt());
@@ -276,6 +289,7 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
         dest.writeLong(getLastModified());
         dest.writeString(getLastModifiedString());
         dest.writeLong(getOrderId());
+        dest.writeInt(mGroupId);
         dest.writeInt(mNoteType);
         dest.writeString(mTitle);
         dest.writeInt(BooleanUtils.toInt(mEncrypted));

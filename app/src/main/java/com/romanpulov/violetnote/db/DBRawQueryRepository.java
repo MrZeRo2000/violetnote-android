@@ -12,6 +12,7 @@ public class DBRawQueryRepository {
         "n._id, " +
         "n.last_modified," +
         "n.order_id," +
+        "n.group_id," +
         "n.note_type," +
         "n.title," +
         "n.is_encrypted," +

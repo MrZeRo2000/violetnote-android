@@ -12,6 +12,7 @@ import com.romanpulov.violetnote.db.DBBasicNoteOpenHelper;
 import com.romanpulov.violetnote.db.DBNoteManager;
 import com.romanpulov.library.dropbox.DropboxHelper;
 import com.romanpulov.violetnote.model.BasicNoteA;
+import com.romanpulov.violetnote.model.NoteGroupA;
 
 @SmallTest
 public class ApplicationTest {
@@ -43,7 +44,7 @@ public class ApplicationTest {
 
         log("Create note");
         DBNoteManager noteManager = new DBNoteManager(getTargetContext());
-        noteManager.insertNote(BasicNoteA.newEditInstance(1, "New Note", false, null));
+        noteManager.insertNote(BasicNoteA.newEditInstance(NoteGroupA.DEFAULT_NOTE_GROUP_ID, 1,"New Note", false, null));
         List<BasicNoteA> noteList = noteManager.queryNotes();
         assertEquals(noteList.size(), 1);
 

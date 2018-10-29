@@ -25,11 +25,13 @@ public class DBBasicNoteOpenHelper extends SQLiteOpenHelper {
 
     //note groups
     public static final String NOTE_GROUPS_TABLE_NAME = "note_groups";
+    public static final String NOTE_GROUP_TYPE_COLUMN_NAME = "note_group_type";
     public static final String NOTE_GROUP_NAME_COLUMN_NAME = "note_group_name";
     public static final String NOTE_GROUP_ICON_COLUMN_NAME = "note_group_icon";
 
     public static final String[] NOTE_GROUPS_TABLE_COLS = new String[] {
             ID_COLUMN_NAME,
+            NOTE_GROUP_TYPE_COLUMN_NAME,
             NOTE_GROUP_NAME_COLUMN_NAME,
             NOTE_GROUP_ICON_COLUMN_NAME,
             ORDER_COLUMN_NAME
@@ -38,9 +40,10 @@ public class DBBasicNoteOpenHelper extends SQLiteOpenHelper {
     private static final String NOTE_GROUPS_TABLE_CREATE =
             "CREATE TABLE " + NOTE_GROUPS_TABLE_NAME + "(" +
                     NOTE_GROUPS_TABLE_COLS[0] + " INTEGER PRIMARY KEY," +
-                    NOTE_GROUPS_TABLE_COLS[1] + " TEXT NOT NULL," +
-                    NOTE_GROUPS_TABLE_COLS[2] + " INTEGER NOT NULL," +
-                    NOTE_GROUPS_TABLE_COLS[3] + " INTEGER NOT NULL" +
+                    NOTE_GROUPS_TABLE_COLS[1] + " INTEGER NOT NULL," +
+                    NOTE_GROUPS_TABLE_COLS[2] + " TEXT NOT NULL," +
+                    NOTE_GROUPS_TABLE_COLS[3] + " INTEGER NOT NULL," +
+                    NOTE_GROUPS_TABLE_COLS[4] + " INTEGER NOT NULL" +
                     ");";
 
     private static final String NOTE_GROUPS_U_INDEX_CREATE =
@@ -48,6 +51,16 @@ public class DBBasicNoteOpenHelper extends SQLiteOpenHelper {
                     NOTE_GROUPS_TABLE_NAME + " (" +
                     NOTE_GROUPS_TABLE_COLS[1] +
                     ");";
+
+    private static final String NOTE_GROUPS_TABLE_INITIAL_LOAD =
+            "INSERT INTO " + NOTE_GROUPS_TABLE_NAME + "(" +
+            NOTE_GROUP_TYPE_COLUMN_NAME + ", " +
+            NOTE_GROUP_NAME_COLUMN_NAME + ", " +
+            NOTE_GROUP_ICON_COLUMN_NAME + ", " +
+            ORDER_COLUMN_NAME + ") " +
+            "SELECT 1, 'Password Notes', 0, 1 " +
+            "UNION ALL " +
+            "SELECT 10, 'Basic Notes', 0, 2;";
 
     //note item param types
     public static final String NOTE_ITEM_PARAM_TYPES_TABLE_NAME = "note_item_param_types";
@@ -81,23 +94,23 @@ public class DBBasicNoteOpenHelper extends SQLiteOpenHelper {
             ID_COLUMN_NAME,
             LAST_MODIFIED_COLUMN_NAME,
             ORDER_COLUMN_NAME,
+            GROUP_ID_COLUMN_NAME,
             NOTE_TYPE_COLUMN_NAME,
             TITLE_COLUMN_NAME,
             IS_ENCRYPTED_COLUMN_NAME,
-            ENCRYPTED_STRING_COLUMN_NAME,
-            GROUP_ID_COLUMN_NAME
+            ENCRYPTED_STRING_COLUMN_NAME
     };
     private static final String NOTES_TABLE_CREATE =
             "CREATE TABLE " + NOTES_TABLE_NAME + " (" +
                     NOTES_TABLE_COLS[0] + " INTEGER PRIMARY KEY," +
                     NOTES_TABLE_COLS[1] + " INTEGER NOT NULL," +
                     NOTES_TABLE_COLS[2] + " INTEGER NOT NULL," +
-                    NOTES_TABLE_COLS[3] + " INTEGER NOT NULL," +
-                    NOTES_TABLE_COLS[4] + " TEXT NOT NULL," +
-                    NOTES_TABLE_COLS[5] + " INTEGER," +
-                    NOTES_TABLE_COLS[6] + " TEXT," +
-                    NOTES_TABLE_COLS[7] + " INTEGER, " +
-                    " FOREIGN KEY (" + NOTES_TABLE_COLS[7] + ") REFERENCES " + NOTE_GROUPS_TABLE_NAME + "(" + NOTE_GROUPS_TABLE_COLS[0] + ")" +
+                    NOTES_TABLE_COLS[3] + " INTEGER NOT NULL, " +
+                    NOTES_TABLE_COLS[4] + " INTEGER NOT NULL," +
+                    NOTES_TABLE_COLS[5] + " TEXT NOT NULL," +
+                    NOTES_TABLE_COLS[6] + " INTEGER," +
+                    NOTES_TABLE_COLS[7] + " TEXT," +
+                    " FOREIGN KEY (" + NOTES_TABLE_COLS[3] + ") REFERENCES " + NOTE_GROUPS_TABLE_NAME + "(" + NOTE_GROUPS_TABLE_COLS[0] + ")" +
                     ");";
     private static final String NOTES_TABLE_ADD_GROUP_ID =
             "ALTER TABLE " + NOTES_TABLE_NAME + " ADD " +
@@ -246,6 +259,7 @@ public class DBBasicNoteOpenHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(NOTE_GROUPS_TABLE_CREATE);
         db.execSQL(NOTE_GROUPS_U_INDEX_CREATE);
+        db.execSQL(NOTE_GROUPS_TABLE_INITIAL_LOAD);
 
         db.execSQL(NOTES_TABLE_CREATE);
         db.execSQL(NOTES_FK_INDEX_CREATE);
@@ -292,9 +306,7 @@ public class DBBasicNoteOpenHelper extends SQLiteOpenHelper {
                         ORDER_COLUMN_NAME + ") VALUES (" +
                         "'Basic Notes', 0, 1)"
                 );
-                db.execSQL("UPDATE " + NOTES_TABLE_NAME + " SET " + NOTES_TABLE_COLS[7] + " = (" +
-                        "SELECT MAX(_id) FROM " + NOTE_GROUPS_TABLE_NAME + ")"
-                );
+                db.execSQL(NOTE_GROUPS_TABLE_INITIAL_LOAD);
                 db.execSQL(NOTES_FK_INDEX_CREATE);
 
             case 100:

@@ -16,6 +16,7 @@ import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.model.BasicNoteValueA;
+import com.romanpulov.violetnote.model.NoteGroupA;
 
 @SmallTest
 public class DataGeneratorTest {
@@ -50,7 +51,7 @@ public class DataGeneratorTest {
             if (i == 3)
                 titleFormat = "This is a very very very very very very long note with number %2d";
 
-            BasicNoteA newNote = BasicNoteA.newEditInstance(i % 2, String.format(Locale.getDefault(), titleFormat, i), (i % 5) == 0 , null);
+            BasicNoteA newNote = BasicNoteA.newEditInstance(NoteGroupA.DEFAULT_NOTE_GROUP_ID, i % 2, String.format(Locale.getDefault(), titleFormat, i), (i % 5) == 0 , null);
             assertFalse(-1 == noteManager.insertNote(newNote));
 
             newNote.setId(i);
