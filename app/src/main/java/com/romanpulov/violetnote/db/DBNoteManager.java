@@ -304,10 +304,10 @@ public class DBNoteManager extends BasicCommonNoteManager {
     public long updateNote(BasicNoteA note) {
         ContentValues cv = new ContentValues();
         cv.put(DBBasicNoteOpenHelper.NOTES_TABLE_COLS[1], System.currentTimeMillis());
-        cv.put(DBBasicNoteOpenHelper.NOTES_TABLE_COLS[3], note.getNoteType());
-        cv.put(DBBasicNoteOpenHelper.NOTES_TABLE_COLS[4], note.getTitle());
-        cv.put(DBBasicNoteOpenHelper.NOTES_TABLE_COLS[5], BooleanUtils.toInt(note.isEncrypted()));
-        cv.put(DBBasicNoteOpenHelper.NOTES_TABLE_COLS[6], note.getEncryptedString());
+        cv.put(DBBasicNoteOpenHelper.NOTES_TABLE_COLS[4], note.getNoteType());
+        cv.put(DBBasicNoteOpenHelper.NOTES_TABLE_COLS[5], note.getTitle());
+        cv.put(DBBasicNoteOpenHelper.NOTES_TABLE_COLS[6], BooleanUtils.toInt(note.isEncrypted()));
+        cv.put(DBBasicNoteOpenHelper.NOTES_TABLE_COLS[7], note.getEncryptedString());
 
         return mDB.update(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, cv, DBBasicNoteOpenHelper.NOTES_TABLE_COLS[0] + "=" + note.getId(), null);
     }
