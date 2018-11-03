@@ -70,6 +70,7 @@ public class DBBasicNoteOpenHelper extends SQLiteOpenHelper {
             PARAM_TYPE_NAME_COLUMN_NAME,
             ORDER_COLUMN_NAME
     };
+    public static final String NOTE_ITEM_PARAM_TYPE_NAME_PRICE = "Price";
 
     private static final String NOTE_ITEM_PARAM_TYPES_TABLE_CREATE =
             "CREATE TABLE " + NOTE_ITEM_PARAM_TYPES_TABLE_NAME + "(" +
@@ -83,6 +84,12 @@ public class DBBasicNoteOpenHelper extends SQLiteOpenHelper {
                     NOTE_ITEM_PARAM_TYPES_TABLE_NAME + " (" +
                     NOTE_ITEM_PARAM_TYPES_TABLE_COLS[1] +
                     ");";
+
+    private static final String NOTE_ITEM_PARAM_TYPES_INITIAL_LOAD =
+            "INSERT INTO " + NOTE_ITEM_PARAM_TYPES_TABLE_NAME + "(" +
+                    PARAM_TYPE_NAME_COLUMN_NAME + ", " +
+                    ORDER_COLUMN_NAME + ") " +
+                    "SELECT '" + NOTE_ITEM_PARAM_TYPE_NAME_PRICE + "', 1;";
 
     //notes
     public static final String NOTES_TABLE_NAME = "notes";
@@ -277,6 +284,7 @@ public class DBBasicNoteOpenHelper extends SQLiteOpenHelper {
 
         db.execSQL(NOTE_ITEM_PARAM_TYPES_TABLE_CREATE);
         db.execSQL(NOTE_ITEM_PARAM_TYPES_U_INDEX_CREATE);
+        db.execSQL(NOTE_ITEM_PARAM_TYPES_INITIAL_LOAD);
 
         db.execSQL(NOTE_ITEM_PARAMS_TABLE_CREATE);
         db.execSQL(NOTE_ITEM_PARAMS_FK_INDEX_CREATE);
@@ -294,18 +302,13 @@ public class DBBasicNoteOpenHelper extends SQLiteOpenHelper {
 
                 db.execSQL(NOTE_ITEM_PARAM_TYPES_TABLE_CREATE);
                 db.execSQL(NOTE_ITEM_PARAM_TYPES_U_INDEX_CREATE);
+                db.execSQL(NOTE_ITEM_PARAM_TYPES_INITIAL_LOAD);
 
                 db.execSQL(NOTE_ITEM_PARAMS_TABLE_CREATE);
                 db.execSQL(NOTE_ITEM_PARAMS_FK_INDEX_CREATE);
                 db.execSQL(NOTE_ITEM_PARAMS_FK_TYPE_INDEX_CREATE);
 
                 db.execSQL(NOTES_TABLE_ADD_GROUP_ID);
-                db.execSQL("INSERT INTO " + NOTE_GROUPS_TABLE_NAME + "(" +
-                        NOTE_GROUP_NAME_COLUMN_NAME + ", " +
-                        NOTE_GROUP_ICON_COLUMN_NAME + ", " +
-                        ORDER_COLUMN_NAME + ") VALUES (" +
-                        "'Basic Notes', 0, 1)"
-                );
                 db.execSQL(NOTE_GROUPS_TABLE_INITIAL_LOAD);
                 db.execSQL(NOTES_FK_INDEX_CREATE);
 
