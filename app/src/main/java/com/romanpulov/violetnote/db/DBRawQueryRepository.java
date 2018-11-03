@@ -21,4 +21,14 @@ public class DBRawQueryRepository {
         "(SELECT SUM(ni.checked) FROM note_items ni WHERE ni.note_id = n._id) AS count_checked " +
         "FROM notes n " +
         "ORDER BY n.order_id";
+
+    public static final String NOTE_ITEMS_PARAMS  =
+        "SELECT " +
+        "ni._id, " +
+        "nip.note_item_param_type_id, " +
+        "nip.v_int AS param_v_int, " +
+        "nip.v_text AS param_v_text " +
+        "FROM note_items ni " +
+        "LEFT OUTER JOIN note_item_params nip ON ni._id = nip.note_item_id " +
+        "WHERE ni.note_id = ? " ;
 }

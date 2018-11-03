@@ -21,12 +21,23 @@ public class DBBasicNoteHelper {
         return mInstance;
     }
 
-    //private final Context mContext;
+    private final Context mContext;
     private final DBBasicNoteOpenHelper mDBOpenHelper;
     private SQLiteDatabase mDB;
 
+    private DBDictionaryCache mDBDictionaryCache;
+
+    public DBDictionaryCache getDBDictionaryCache() {
+        if (mDBDictionaryCache == null)
+            mDBDictionaryCache = new DBDictionaryCache();
+        if (!mDBDictionaryCache.isLoaded())
+            mDBDictionaryCache.load(mContext);
+
+        return mDBDictionaryCache;
+    }
+
     private DBBasicNoteHelper(Context context) {
-        //mContext = context;
+        mContext = context;
         mDBOpenHelper = new DBBasicNoteOpenHelper(context);
         openDB();
     }
@@ -40,6 +51,9 @@ public class DBBasicNoteHelper {
         if (mDB != null) {
             mDB.close();
             mDB = null;
+            if (mDBDictionaryCache != null) {
+                mDBDictionaryCache.invalidate();
+            }
         }
     }
 

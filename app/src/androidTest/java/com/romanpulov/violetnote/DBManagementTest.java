@@ -67,7 +67,7 @@ public class DBManagementTest {
 
         int notePos = 0;
 
-        String insertNotesSql = "insert into " + DBBasicNoteOpenHelper.NOTES_TABLE_NAME + " (last_modified, order_id, note_type, title, is_encrypted) VALUES (?, ?, ?, ?, ?)";
+        String insertNotesSql = "insert into " + DBBasicNoteOpenHelper.NOTES_TABLE_NAME + " (last_modified, order_id, group_id, note_type, title, is_encrypted) VALUES (?, ?, 1, ?, ?, ?)";
 
         // checked item 1
         String[] insertNotesArgs = new String[] {"0", "1", "0", mTestNoteNames.get(notePos++), "0"};

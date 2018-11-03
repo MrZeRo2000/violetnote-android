@@ -36,6 +36,9 @@ public class DataManagementTest {
 
     @Test
     public void testMovePrev() {
+        DBBasicNoteHelper dbHelper = DBBasicNoteHelper.getInstance(getTargetContext());
+        dbHelper.openDB();
+
         DBNoteManager noteManager = new DBNoteManager(getTargetContext());
         List<BasicNoteA> noteList = noteManager.queryNotes();
 
@@ -101,6 +104,8 @@ public class DataManagementTest {
         //order id
         long orderId = dbBasicNoteHelper.getOrderId(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, note1.getId());
         assertEquals(orderId, note1.getOrderId());
+
+        dbHelper.closeDB();
     }
 
 
@@ -139,6 +144,7 @@ public class DataManagementTest {
     @Test
     public void testCheckCountQuery() {
         DBBasicNoteHelper dbHelper = DBBasicNoteHelper.getInstance(getTargetContext());
+        dbHelper.openDB();
         SQLiteDatabase db = dbHelper.getDB();
 
         long startTime = System.nanoTime();
@@ -160,6 +166,7 @@ public class DataManagementTest {
         long endTime = System.nanoTime();
 
         log ("testCheckCountQuery time: " + (endTime - startTime));
+        dbHelper.closeDB();
 
     }
 
@@ -176,17 +183,18 @@ public class DataManagementTest {
         "n._id, " +
                 "n.last_modified," +
                 "n.order_id," +
+                "n.group_id," +
                 "n.note_type," +
                 "n.title," +
                 "n.is_encrypted," +
                 "n.encrypted_string," +
                 "(SELECT COUNT(ni._id) FROM note_items ni WHERE ni.note_id = n._id) AS count_total, " +
-                //"(SELECT COUNT(CASE WHEN ni.checked = 1 THEN 1 END) FROM note_items ni WHERE ni.note_id = n._id) AS count_checked " +
                 "(SELECT SUM(ni.checked) FROM note_items ni WHERE ni.note_id = n._id) AS count_checked " +
         "FROM notes n " +
         "ORDER BY n.order_id";
 
         DBBasicNoteHelper dbHelper = DBBasicNoteHelper.getInstance(getTargetContext());
+        dbHelper.openDB();
         SQLiteDatabase db = dbHelper.getDB();
 
         Cursor c = null;
@@ -208,6 +216,21 @@ public class DataManagementTest {
 
         log ("testCheckQueryTotalsRaw time: " + (endTime - startTime) + ", size = " + noteList.size());
         log ("testCheckQueryTotalsRaw List: " + noteList.toString());
+
+        dbHelper.closeDB();
+    }
+
+    @Test
+    public void testPriceParams() {
+        DBBasicNoteHelper dbHelper = DBBasicNoteHelper.getInstance(getTargetContext());
+        dbHelper.openDB();
+
+        DBNoteManager noteManager = new DBNoteManager(getTargetContext());
+        BasicNoteA note = noteManager.queryById(4);
+        noteManager.queryNoteDataItems(note);
+        assertNotEquals(0, note.getItems().get(0).getParamPrice());
+
+        dbHelper.closeDB();
     }
 
 }

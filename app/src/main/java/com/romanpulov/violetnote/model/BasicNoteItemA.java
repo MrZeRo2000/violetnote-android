@@ -14,6 +14,7 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
     private String mName;
     private String mValue;
     private boolean mChecked;
+    private long mParamPrice;
 
     public long getNoteId() {
         return mNoteId;
@@ -37,6 +38,14 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
 
     public void setValue(String value) {
         mValue = value;
+    }
+
+    public long getParamPrice() {
+        return mParamPrice;
+    }
+
+    public void setParamPrice(long price) {
+        mParamPrice = price;
     }
 
     @Override
@@ -106,6 +115,7 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
         dest.writeString(mName);
         dest.writeString(mValue);
         dest.writeInt(BooleanUtils.toInt(mChecked));
+        dest.writeLong(mParamPrice);
     }
 
     private BasicNoteItemA(Parcel in) {
@@ -118,6 +128,7 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
         mName = in.readString();
         mValue = in.readString();
         mChecked = BooleanUtils.fromInt(in.readInt());
+        mParamPrice = in.readLong();
     }
 
     public static final Parcelable.Creator<BasicNoteItemA> CREATOR = new Parcelable.Creator<BasicNoteItemA>() {

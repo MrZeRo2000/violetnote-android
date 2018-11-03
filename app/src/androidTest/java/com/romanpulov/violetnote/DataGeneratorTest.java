@@ -67,6 +67,8 @@ public class DataGeneratorTest {
                             itemValueFormat = "This is a very very very very very very long note item %2d for note %2d";
 
                         BasicNoteItemA newNoteItem = BasicNoteItemA.newCheckedEditInstance(String.format(Locale.getDefault(), itemValueFormat, j, i));
+                        if (i == 4)
+                            newNoteItem.setParamPrice(i * j);
                         assertFalse(-1 == noteManager.insertNoteItem(newNote, newNoteItem));
                     }
 

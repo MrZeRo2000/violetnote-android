@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.util.LongSparseArray;
+import android.util.SparseIntArray;
 
 import com.romanpulov.violetnote.model.BasicCommonNoteA;
 import com.romanpulov.violetnote.model.BasicEntityNoteA;
@@ -12,12 +14,15 @@ import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteHistoryItemA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
+import com.romanpulov.violetnote.model.BasicNoteItemParamTypeA;
 import com.romanpulov.violetnote.model.BasicNoteValueA;
 import com.romanpulov.violetnote.model.BooleanUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * BasicNoteA database operations
@@ -37,8 +42,8 @@ public class DBNoteManager extends BasicCommonNoteManager {
                 c.getLong(0),
                 c.getLong(1),
                 dtf.formatDateTimeDelimited(new Date(c.getLong(1)), "\n"),
-                c.getLong(3),
-                c.getInt(4),
+                c.getLong(2),
+                c.getInt(3),
                 c.getInt(4),
                 c.getString(5),
                 BooleanUtils.fromInt(c.getInt(6)),
@@ -153,6 +158,26 @@ public class DBNoteManager extends BasicCommonNoteManager {
         return BasicNoteDataA.newInstance(null, notes, relatedNotes);
     }
 
+    private LongSparseArray<LongSparseArray<Long>> queryNoteDataItemLongParams(BasicNoteA note) {
+        LongSparseArray<LongSparseArray<Long>> result = new LongSparseArray<>();
+
+        Cursor c = null;
+        try {
+            c = mDB.rawQuery(DBRawQueryRepository.NOTE_ITEMS_PARAMS, new String[]{String.valueOf(note.getId())});
+            for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
+                LongSparseArray<Long> la = new LongSparseArray<>();
+                la.append(c.getLong(1), c.getLong(2));
+                result.append(c.getLong(0), la);
+            }
+
+        } finally {
+            if ((c !=null) && !c.isClosed())
+                c.close();
+        }
+
+        return result;
+    }
+
     public void queryNoteDataItems(BasicNoteA note) {
 
         String orderString = DBBasicNoteOpenHelper.PRIORITY_COLUMN_NAME + " DESC, " + DBBasicNoteOpenHelper.ORDER_COLUMN_NAME;
@@ -161,6 +186,8 @@ public class DBNoteManager extends BasicCommonNoteManager {
 
         //clear items
         note.getItems().clear();
+        LongSparseArray<LongSparseArray<Long>> params = queryNoteDataItemLongParams(note);
+        long priceNoteParamTypeId = getPriceNoteParamTypeId();
 
         //get items
         Cursor c = null;
@@ -176,6 +203,14 @@ public class DBNoteManager extends BasicCommonNoteManager {
 
             for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
                 BasicNoteItemA newItem = noteItemFromCursor(c, mDTF);
+
+                LongSparseArray<Long> lParam = params.get(newItem.getId());
+                if (lParam != null) {
+                    Long paramPrice = lParam.get(priceNoteParamTypeId);
+                    if (paramPrice != null)
+                        newItem.setParamPrice(paramPrice);
+                }
+
                 if (newItem.isChecked())
                     checkedItemCount ++;
                 itemCount ++;
@@ -331,7 +366,19 @@ public class DBNoteManager extends BasicCommonNoteManager {
         cv.put(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_COLS[6], item.isChecked());
         cv.put(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_COLS[7], item.getPriority());
 
-        return mDB.insert(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME, null, cv);
+        long newRowId = mDB.insert(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME, null, cv);
+
+        if ((newRowId > 0) && (item.getParamPrice() > 0)) {
+            ContentValues pcv = new ContentValues();
+            long priceNoteParamTypeId = getPriceNoteParamTypeId();
+            pcv.put(DBBasicNoteOpenHelper.NOTE_ITEM_ID_COLUMN_NAME, newRowId);
+            pcv.put(DBBasicNoteOpenHelper.NOTE_ITEM_PARAM_TYPE_ID_COLUMN_NAME, priceNoteParamTypeId);
+            pcv.put(DBBasicNoteOpenHelper.V_INT_COLUMN_NAME, item.getParamPrice());
+
+            mDB.insert(DBBasicNoteOpenHelper.NOTE_ITEM_PARAMS_TABLE_NAME, null, pcv);
+        }
+
+        return newRowId;
     }
 
     public long deleteNoteItem(BasicNoteItemA item) {
@@ -458,5 +505,32 @@ public class DBNoteManager extends BasicCommonNoteManager {
             if ((c !=null) && !c.isClosed())
                 c.close();
         }
+    }
+
+    public List<BasicNoteItemParamTypeA> getNoteParamTypes() {
+        ArrayList<BasicNoteItemParamTypeA> noteParamTypes = new ArrayList<>();
+        Cursor c = null;
+        try {
+            c = mDB.query(
+                    DBBasicNoteOpenHelper.NOTE_ITEM_PARAM_TYPES_TABLE_NAME, DBBasicNoteOpenHelper.NOTE_ITEM_PARAM_TYPES_TABLE_COLS,
+                    null, null, null, null, null
+            );
+            for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
+                BasicNoteItemParamTypeA newNoteParamType = BasicNoteItemParamTypeA.newInstance(
+                        c.getLong(0),
+                        c.getString(1)
+                );
+                noteParamTypes.add(newNoteParamType);
+            }
+        } finally {
+            if ((c !=null) && !c.isClosed())
+                c.close();
+        }
+
+        return noteParamTypes;
+    }
+
+    private long getPriceNoteParamTypeId() {
+        return DBBasicNoteHelper.getInstance(mContext).getDBDictionaryCache().getPriceNoteParamTypeId();
     }
 }
