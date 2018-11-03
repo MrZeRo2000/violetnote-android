@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.util.LongSparseArray;
-import android.util.SparseIntArray;
 
 import com.romanpulov.violetnote.model.BasicCommonNoteA;
 import com.romanpulov.violetnote.model.BasicEntityNoteA;
@@ -20,17 +19,16 @@ import com.romanpulov.violetnote.model.BooleanUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * BasicNoteA database operations
  * Created by romanpulov on 17.08.2016.
  */
 public class DBNoteManager extends BasicCommonNoteManager {
+    private static String TAG = "DBNoteManager";
     private static void log(String message) {
-        Log.d("DBNoteManager", message);
+        Log.d(TAG, message);
     }
 
     public DBNoteManager(Context context) {
