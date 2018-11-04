@@ -1,5 +1,6 @@
 package com.romanpulov.violetnote.model;
 
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -11,14 +12,19 @@ public class InputParser {
             return mText;
         }
 
-        private Double mFloatValue;
+        private Integer mIntValue;
 
-        public Double getFloatValue() {
-            return mFloatValue;
+        public Integer getIntValue() {
+            return mIntValue;
         }
 
         public FloatParamsResult(String text) {
             mText = text;
+        }
+
+        @Override
+        public String toString() {
+            return String.format(Locale.ENGLISH, "{Text=%s, FloatValue=%d}", mText, mIntValue );
         }
     }
 
@@ -33,8 +39,7 @@ public class InputParser {
             result.mText = matcher.group(1);
             String floatString = matcher.group(2).replace(',', '.');
             double floatValue = Double.parseDouble(floatString);
-            double floatValueRounded = Math.round(floatValue * 100d) / 100d;
-            result.mFloatValue = floatValueRounded;
+            result.mIntValue = (int)Math.round(floatValue * 100d);
         }
 
         return result;
