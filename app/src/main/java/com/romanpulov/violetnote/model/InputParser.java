@@ -29,9 +29,12 @@ public class InputParser {
         FloatParamsResult result = new FloatParamsResult(inputString);
 
         Matcher matcher = FLOAT_PARAMS_PATTERN.matcher(inputString);
-        if (matcher.find() && (matcher.groupCount() > 2)) {
+        if (matcher.matches() && (matcher.groupCount() > 2)) {
             result.mText = matcher.group(1);
-            result.mFloatValue = Double.valueOf(matcher.group(2).replace(',', '.'));
+            String floatString = matcher.group(2).replace(',', '.');
+            double floatValue = Double.parseDouble(floatString);
+            double floatValueRounded = Math.round(floatValue * 100d) / 100d;
+            result.mFloatValue = floatValueRounded;
         }
 
         return result;
