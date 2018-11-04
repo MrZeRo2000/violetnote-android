@@ -28,7 +28,7 @@ public class InputParser {
         }
     }
 
-    private static final String FLOAT_PARAMS_REGEXP = "(.+)\\s(([0-9]+[\\.|\\,]?[0-9]*)|([0-9]*[\\.|\\,]?[0-9]+))";
+    private static final String FLOAT_PARAMS_REGEXP = "(.+)\\s(([0-9]+[.|,]?[0-9]*)|([0-9]*[.|,]?[0-9]+))";
     private static final Pattern FLOAT_PARAMS_PATTERN = Pattern.compile(FLOAT_PARAMS_REGEXP);
 
     public static FloatParamsResult parseFloatParams(String inputString) {

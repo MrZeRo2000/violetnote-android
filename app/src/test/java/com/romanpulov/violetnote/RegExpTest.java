@@ -66,6 +66,12 @@ public class RegExpTest {
         Assert.assertEquals((Integer)8815, result8.getIntValue());
         Assert.assertEquals("String with different numbers: 12, 33.44", result8.getText());
         System.out.println("Result 8:" + result8);
+
+        String test9 = "Simple dot should not go .";
+        InputParser.FloatParamsResult result9 = InputParser.parseFloatParams(test9);
+        Assert.assertNull(result9.getIntValue());
+        Assert.assertEquals(test9, result9.getText());
+
     }
 
 }
