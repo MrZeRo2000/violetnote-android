@@ -52,7 +52,7 @@ public class DataGeneratorTest {
                 titleFormat = "This is a very very very very very very long note with number %2d";
 
             BasicNoteA newNote = BasicNoteA.newEditInstance(NoteGroupA.DEFAULT_NOTE_GROUP_ID, i % 2, String.format(Locale.getDefault(), titleFormat, i), (i % 5) == 0 , null);
-            assertFalse(-1 == noteManager.insertNote(newNote));
+            assertNotEquals(-1, noteManager.insertNote(newNote));
 
             newNote.setId(i);
             //items are for not encrypted only
@@ -62,14 +62,18 @@ public class DataGeneratorTest {
                     //checked items
 
                     for (int j = 1; j <= MAX_NOTE_ITEMS; j++) {
-                        String itemValueFormat = "Note item %2d for note %2d";
+                        String itemValueFormat = "Note item %2d for note %2d name";
                         if (j == 4)
-                            itemValueFormat = "This is a very very very very very very long note item %2d for note %2d";
+                            itemValueFormat = "This is a very very very very very very long note item %2d for note %2d name";
+
+                        if (j == 5)
+                            itemValueFormat = "Note item %2d for note %2d name with value 12.44";
 
                         BasicNoteItemA newNoteItem = BasicNoteItemA.newCheckedEditInstance(String.format(Locale.getDefault(), itemValueFormat, j, i));
-                        if (i == 4)
-                            newNoteItem.setParamPrice(i * j);
-                        assertFalse(-1 == noteManager.insertNoteItem(newNote, newNoteItem));
+                        assertNotEquals(-1, noteManager.insertNoteItem(newNote, newNoteItem));
+
+                        if (j == 5)
+                            assertEquals(1244L, newNoteItem.getParamPrice());
                     }
 
 
@@ -80,7 +84,7 @@ public class DataGeneratorTest {
                             valueFormat = "This is a very very very very very very long value %2d";
 
                         String newValue = String.format(Locale.getDefault(), valueFormat, j);
-                        assertFalse(-1 == noteManager.insertNoteValue(newNote, BasicNoteValueA.newEditInstance(newValue)));
+                        assertNotEquals(-1, noteManager.insertNoteValue(newNote, BasicNoteValueA.newEditInstance(newValue)));
                     }
 
                     //history for checked items
@@ -90,7 +94,7 @@ public class DataGeneratorTest {
                             historyValueFormat = "This is a very very very very very very long history value %2d";
 
                         String newHistoryValue = String.format(Locale.getDefault(), historyValueFormat, j);
-                        assertFalse(-1 == noteManager.insertNoteHistory(newNote, newHistoryValue));
+                        assertNotEquals(-1, noteManager.insertNoteHistory(newNote, newHistoryValue));
 
                         //assertFalse(-1 == noteManager.insertNoteValue(newNote, newHistoryValue));
                     }
@@ -111,7 +115,7 @@ public class DataGeneratorTest {
                                 String.format(Locale.getDefault(), itemNameFormat, j, i),
                                 String.format(Locale.getDefault(), itemValueFormat, j, i)
                         );
-                        assertFalse(-1 == noteManager.insertNoteItem(newNote, newNoteItem));
+                        assertNotEquals(-1, noteManager.insertNoteItem(newNote, newNoteItem));
                     }
                 }
             }

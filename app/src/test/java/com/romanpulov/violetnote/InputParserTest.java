@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class RegExpTest {
+public class InputParserTest {
 
     @Test
     public void test1() {
@@ -74,4 +74,16 @@ public class RegExpTest {
 
     }
 
+    @Test
+    public void testInputComposer() {
+        String test1 = InputParser.composeFloatParams("Some text", 1255);
+        Assert.assertEquals("Some text 12.55", test1);
+
+        String test2 = InputParser.composeFloatParams("Some text", 1500);
+        Assert.assertEquals("Some text 15.00", test2);
+
+        String test3 = InputParser.composeFloatParams("Some text", 0);
+        Assert.assertEquals("Some text", test3);
+
+    }
 }

@@ -1,10 +1,17 @@
 package com.romanpulov.violetnote.model;
 
+import android.support.annotation.NonNull;
+
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class InputParser {
+
+    private static final String FLOAT_PARAMS_REGEXP = "(.+)\\s(([0-9]+[.|,]?[0-9]*)|([0-9]*[.|,]?[0-9]+))";
+    private static final Pattern FLOAT_PARAMS_PATTERN = Pattern.compile(FLOAT_PARAMS_REGEXP);
+    private static final String FLOAT_PARAMS_FORMAT = "%s %.2f";
+
     public static class FloatParamsResult {
         private String mText;
 
@@ -18,18 +25,41 @@ public class InputParser {
             return mIntValue;
         }
 
-        public FloatParamsResult(String text) {
+        public boolean hasValue() {
+            return mIntValue != null;
+        }
+
+        private FloatParamsResult(String text) {
             mText = text;
+        }
+
+        private static FloatParamsResult fromText(String text) {
+            return new FloatParamsResult(text);
+        }
+
+        public static FloatParamsResult fromTextAndValue(String text, int value) {
+            FloatParamsResult instance = fromText(text);
+            if (value != 0)
+                instance.mIntValue = value;
+            return instance;
         }
 
         @Override
         public String toString() {
             return String.format(Locale.ENGLISH, "{Text=%s, FloatValue=%d}", mText, mIntValue );
         }
-    }
 
-    private static final String FLOAT_PARAMS_REGEXP = "(.+)\\s(([0-9]+[.|,]?[0-9]*)|([0-9]*[.|,]?[0-9]+))";
-    private static final Pattern FLOAT_PARAMS_PATTERN = Pattern.compile(FLOAT_PARAMS_REGEXP);
+        public String compose() {
+            String result = null;
+            if (hasValue()) {
+                result = String.format(Locale.ENGLISH, FLOAT_PARAMS_FORMAT, mText, (double)mIntValue / 100d);
+            } else {
+                result = mText;
+            }
+
+            return result;
+        }
+    }
 
     public static FloatParamsResult parseFloatParams(String inputString) {
         FloatParamsResult result = new FloatParamsResult(inputString);
@@ -39,7 +69,22 @@ public class InputParser {
             result.mText = matcher.group(1);
             String floatString = matcher.group(2).replace(',', '.');
             double floatValue = Double.parseDouble(floatString);
-            result.mIntValue = (int)Math.round(floatValue * 100d);
+            int intValue = (int)Math.round(floatValue * 100d);
+            if (intValue > 0) {
+                result.mIntValue = intValue;
+            }
+        }
+
+        return result;
+    }
+
+    public static String composeFloatParams(String text, long value) {
+        FloatParamsResult floatParamsResult = FloatParamsResult.fromTextAndValue(text, (int) value);
+        String result = null;
+        if (floatParamsResult.hasValue()) {
+            result = String.format(Locale.ENGLISH, FLOAT_PARAMS_FORMAT, floatParamsResult.mText, (double)floatParamsResult.mIntValue / 100d);
+        } else {
+            result = floatParamsResult.mText;
         }
 
         return result;

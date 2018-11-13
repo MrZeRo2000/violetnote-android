@@ -86,8 +86,9 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
     }
 
     private void performEditValueAction(final ActionMode mode, final BasicNoteItemA item) {
-        TextEditDialogBuilder textEditDialogBuilder = (new TextEditDialogBuilder(getActivity(), getString(R.string.ui_note_value), item.getValue()))
-                .setNonEmptyErrorMessage(getString(R.string.error_field_not_empty));
+        TextEditDialogBuilder textEditDialogBuilder = (new TextEditDialogBuilder(getActivity(), getString(R.string.ui_note_value), item.getValueWithParams()))
+                .setNonEmptyErrorMessage(getString(R.string.error_field_not_empty))
+                .setSelectEnd(true);
 
         final AlertDialog alertDialog = textEditDialogBuilder.execute();
 
@@ -100,7 +101,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                     InputManagerHelper.hideInput(focusedView);
 
                     //change
-                    item.setValue(text);
+                    item.setValueWithParams(text);
 
                     // finish anyway
                     mode.finish();

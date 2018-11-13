@@ -2,6 +2,7 @@ package com.romanpulov.violetnote.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import com.romanpulov.violetnote.db.BasicNoteItemDBManagementProvider;
 
@@ -36,8 +37,22 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
         return mValue;
     }
 
+    public String getValueWithParams() {
+        return InputParser.composeFloatParams(mValue, mParamPrice);
+    }
+
     public void setValue(String value) {
         mValue = value;
+    }
+
+    private void setFloatParams(InputParser.FloatParamsResult floatParams) {
+        mValue = floatParams.getText();
+        if (floatParams.hasValue())
+            mParamPrice = floatParams.getIntValue();
+    }
+
+    public void setValueWithParams(String value) {
+        setFloatParams(InputParser.parseFloatParams(value));
     }
 
     public long getParamPrice() {
@@ -70,7 +85,7 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
         setDBManagementProvider(new BasicNoteItemDBManagementProvider(this));
     }
 
-    public static BasicNoteItemA newInstance(long id, long lastModified, String lastModifiedString, long noteId, long orderId, long priority, String name, String value, boolean checked) {
+    public static @NonNull BasicNoteItemA newInstance(long id, long lastModified, String lastModifiedString, long noteId, long orderId, long priority, String name, String value, boolean checked) {
         BasicNoteItemA instance = new BasicNoteItemA();
 
         instance.setId(id);
@@ -86,13 +101,18 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
         return  instance;
     }
 
-    public static BasicNoteItemA newCheckedEditInstance(String value) {
+    private static @NonNull BasicNoteItemA fromFloatParams(@NonNull InputParser.FloatParamsResult floatParamsResult) {
         BasicNoteItemA instance = new BasicNoteItemA();
-        instance.mValue = value;
+        instance.setFloatParams(floatParamsResult);
         return instance;
     }
 
-    public static BasicNoteItemA newNamedEditInstance(String name, String value) {
+    public static @NonNull BasicNoteItemA newCheckedEditInstance(String value) {
+        InputParser.FloatParamsResult floatParamsResult = InputParser.parseFloatParams(value);
+        return fromFloatParams(floatParamsResult);
+    }
+
+    public static @NonNull BasicNoteItemA newNamedEditInstance(String name, String value) {
         BasicNoteItemA instance = new BasicNoteItemA();
         instance.mName = name;
         instance.mValue = value;

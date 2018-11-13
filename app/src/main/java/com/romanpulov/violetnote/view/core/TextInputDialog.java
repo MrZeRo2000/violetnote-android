@@ -9,6 +9,7 @@ import android.util.Xml;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Scroller;
 
 import com.romanpulov.violetnote.R;
 
@@ -29,11 +30,16 @@ public class TextInputDialog extends AlertInputDialog {
     private final String mTitle;
     protected String mText;
     protected int mInputType;
+    protected boolean mSelectEnd;
     private String mNonEmptyErrorMessage;
     protected View mInputView;
 
     public void setText(String value) {
         mText = value;
+    }
+
+    public void setSelectEnd(boolean value) {
+        mSelectEnd = value;
     }
 
     private OnTextInputListener mOnTextInputListener;
@@ -45,7 +51,7 @@ public class TextInputDialog extends AlertInputDialog {
     public TextInputDialog(Context context, String title) {
         mContext = context;
         mTitle = title;
-        mInputType = InputType.TYPE_CLASS_TEXT;
+        mInputType = InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_FLAG_MULTI_LINE;
     }
 
     public void setNonEmptyErrorMessage(String message) {
@@ -81,6 +87,8 @@ public class TextInputDialog extends AlertInputDialog {
         input.setInputType(mInputType);
         input.setTextColor(mContext.getResources().getColor(R.color.brightTextColor));
         input.setText(mText);
+        if (mSelectEnd)
+            input.setSelection(mText.length());
 
         alert.setView(input);
         alert.setTitle(mTitle);
