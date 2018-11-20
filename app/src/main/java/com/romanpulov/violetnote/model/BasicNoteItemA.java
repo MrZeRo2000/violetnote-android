@@ -41,6 +41,10 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
         return InputParser.composeFloatParams(mValue, mParamPrice);
     }
 
+    public String getParamPriceDisplayValue() {
+        return InputParser.getFloatDisplayValue(mParamPrice);
+    }
+
     public void setValue(String value) {
         mValue = value;
     }
@@ -48,7 +52,7 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
     private void setFloatParams(InputParser.FloatParamsResult floatParams) {
         mValue = floatParams.getText();
         if (floatParams.hasValue())
-            mParamPrice = floatParams.getIntValue();
+            mParamPrice = floatParams.getLongValue();
     }
 
     public void setValueWithParams(String value) {

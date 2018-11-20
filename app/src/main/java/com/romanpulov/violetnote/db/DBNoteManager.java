@@ -367,19 +367,34 @@ public class DBNoteManager extends BasicCommonNoteManager {
         long newRowId = mDB.insert(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME, null, cv);
 
         if ((newRowId > 0) && (item.getParamPrice() > 0)) {
-            ContentValues pcv = new ContentValues();
-            long priceNoteParamTypeId = getPriceNoteParamTypeId();
-            pcv.put(DBBasicNoteOpenHelper.NOTE_ITEM_ID_COLUMN_NAME, newRowId);
-            pcv.put(DBBasicNoteOpenHelper.NOTE_ITEM_PARAM_TYPE_ID_COLUMN_NAME, priceNoteParamTypeId);
-            pcv.put(DBBasicNoteOpenHelper.V_INT_COLUMN_NAME, item.getParamPrice());
-
-            mDB.insert(DBBasicNoteOpenHelper.NOTE_ITEM_PARAMS_TABLE_NAME, null, pcv);
+            insertNoteItemParam(newRowId, getPriceNoteParamTypeId(), item.getParamPrice(), null);
         }
 
         return newRowId;
     }
 
+    public long insertNoteItemParam(long noteItemId, long paramTypeId, Long v_int, String v_text) {
+        if ((v_int == null) && ((v_text == null) || (v_text.isEmpty())))
+            return 0;
+
+        ContentValues cv = new ContentValues();
+
+        cv.put(DBBasicNoteOpenHelper.NOTE_ITEM_ID_COLUMN_NAME, noteItemId);
+        cv.put(DBBasicNoteOpenHelper.NOTE_ITEM_PARAM_TYPE_ID_COLUMN_NAME, paramTypeId);
+        if (v_int != null)
+            cv.put(DBBasicNoteOpenHelper.V_INT_COLUMN_NAME, v_int);
+        if ((v_text != null) && (!v_text.isEmpty()))
+            cv.put(DBBasicNoteOpenHelper.V_TEXT_COLUMN_NAME, v_text);
+
+        return mDB.insert(DBBasicNoteOpenHelper.NOTE_ITEM_PARAMS_TABLE_NAME, null, cv);
+    }
+
+    public long deleteNoteItemParam(BasicNoteItemA item) {
+        return mDB.delete(DBBasicNoteOpenHelper.NOTE_ITEM_PARAMS_TABLE_NAME, DBBasicNoteOpenHelper.NOTE_ITEM_ID_COLUMN_NAME + "=?", new String[] {String.valueOf(item.getId())});
+    }
+
     public long deleteNoteItem(BasicNoteItemA item) {
+        deleteNoteItemParam(item);
         return mDB.delete(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME, DBBasicNoteOpenHelper.ID_COLUMN_NAME + "=?", new String[] {String.valueOf(item.getId())});
     }
 

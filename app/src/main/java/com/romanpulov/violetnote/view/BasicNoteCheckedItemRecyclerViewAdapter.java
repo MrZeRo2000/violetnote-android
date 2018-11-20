@@ -54,7 +54,7 @@ public class BasicNoteCheckedItemRecyclerViewAdapter extends RecyclerView.Adapte
         else
             holder.mValueView.setPaintFlags(holder.mValueView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
 
-        holder.mLastModifiedView.setText(holder.mItem.getLastModifiedString());
+        holder.mPriceView.setText(holder.mItem.getParamPriceDisplayValue());
 
         // priority display
         PriorityDisplayHelper.updateImageViewPriority(holder.mPriorityView, holder.mItem.getPriority());
@@ -71,7 +71,7 @@ public class BasicNoteCheckedItemRecyclerViewAdapter extends RecyclerView.Adapte
     class ViewHolder extends RecyclerViewHelper.SelectableViewHolder {
         private final CheckBox mCheckedView;
         private final TextView mValueView;
-        private final TextView mLastModifiedView;
+        private final TextView mPriceView;
         private final ImageView mPriorityView;
         private BasicNoteItemA mItem;
 
@@ -79,7 +79,7 @@ public class BasicNoteCheckedItemRecyclerViewAdapter extends RecyclerView.Adapte
             super(view, viewSelector);
             mCheckedView = view.findViewById(R.id.checked);
             mValueView = view.findViewById(R.id.value);
-            mLastModifiedView = view.findViewById(R.id.last_modified);
+            mPriceView = view.findViewById(R.id.price);
             mPriorityView = view.findViewById(R.id.priority);
         }
 

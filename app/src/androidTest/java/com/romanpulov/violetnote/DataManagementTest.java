@@ -228,7 +228,7 @@ public class DataManagementTest {
         DBNoteManager noteManager = new DBNoteManager(getTargetContext());
         BasicNoteA note = noteManager.queryById(4);
         noteManager.queryNoteDataItems(note);
-        assertNotEquals(0, note.getItems().get(0).getParamPrice());
+        assertNotEquals(0, note.getItems().get(4).getParamPrice());
 
         dbHelper.closeDB();
     }

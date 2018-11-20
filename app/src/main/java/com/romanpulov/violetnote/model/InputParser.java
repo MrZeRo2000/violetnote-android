@@ -11,6 +11,7 @@ public class InputParser {
     private static final String FLOAT_PARAMS_REGEXP = "(.+)\\s(([0-9]+[.|,]?[0-9]*)|([0-9]*[.|,]?[0-9]+))";
     private static final Pattern FLOAT_PARAMS_PATTERN = Pattern.compile(FLOAT_PARAMS_REGEXP);
     private static final String FLOAT_PARAMS_FORMAT = "%s %.2f";
+    private static final String FLOAT_VALUE_FORMAT = "%.2f";
 
     public static class FloatParamsResult {
         private String mText;
@@ -19,14 +20,14 @@ public class InputParser {
             return mText;
         }
 
-        private Integer mIntValue;
+        private Long mLongValue;
 
-        public Integer getIntValue() {
-            return mIntValue;
+        public Long getLongValue() {
+            return mLongValue;
         }
 
         public boolean hasValue() {
-            return mIntValue != null;
+            return mLongValue != null;
         }
 
         private FloatParamsResult(String text) {
@@ -37,22 +38,22 @@ public class InputParser {
             return new FloatParamsResult(text);
         }
 
-        public static FloatParamsResult fromTextAndValue(String text, int value) {
+        public static FloatParamsResult fromTextAndValue(String text, long value) {
             FloatParamsResult instance = fromText(text);
             if (value != 0)
-                instance.mIntValue = value;
+                instance.mLongValue = value;
             return instance;
         }
 
         @Override
         public String toString() {
-            return String.format(Locale.ENGLISH, "{Text=%s, FloatValue=%d}", mText, mIntValue );
+            return String.format(Locale.ENGLISH, "{Text=%s, FloatValue=%d}", mText, mLongValue );
         }
 
         public String compose() {
             String result = null;
             if (hasValue()) {
-                result = String.format(Locale.ENGLISH, FLOAT_PARAMS_FORMAT, mText, (double)mIntValue / 100d);
+                result = String.format(Locale.ENGLISH, FLOAT_PARAMS_FORMAT, mText, (double)mLongValue / 100d);
             } else {
                 result = mText;
             }
@@ -69,20 +70,24 @@ public class InputParser {
             result.mText = matcher.group(1);
             String floatString = matcher.group(2).replace(',', '.');
             double floatValue = Double.parseDouble(floatString);
-            int intValue = (int)Math.round(floatValue * 100d);
-            if (intValue > 0) {
-                result.mIntValue = intValue;
+            long longValue = (long)Math.round(floatValue * 100d);
+            if (longValue > 0) {
+                result.mLongValue = longValue;
             }
         }
 
         return result;
     }
 
+    public static String getFloatDisplayValue(long value) {
+        return String.format(Locale.ENGLISH, FLOAT_VALUE_FORMAT, (double)value / 100d);
+    }
+
     public static String composeFloatParams(String text, long value) {
         FloatParamsResult floatParamsResult = FloatParamsResult.fromTextAndValue(text, (int) value);
         String result = null;
         if (floatParamsResult.hasValue()) {
-            result = String.format(Locale.ENGLISH, FLOAT_PARAMS_FORMAT, floatParamsResult.mText, (double)floatParamsResult.mIntValue / 100d);
+            result = String.format(Locale.ENGLISH, FLOAT_PARAMS_FORMAT, floatParamsResult.mText, (double)floatParamsResult.mLongValue / 100d);
         } else {
             result = floatParamsResult.mText;
         }
