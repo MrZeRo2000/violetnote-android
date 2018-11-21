@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.support.test.filters.SmallTest;
+import android.util.LongSparseArray;
+
 import org.junit.*;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static org.junit.Assert.*;
@@ -17,6 +19,7 @@ import com.romanpulov.violetnote.db.DBBasicNoteOpenHelper;
 import com.romanpulov.violetnote.db.DBNoteManager;
 import com.romanpulov.violetnote.db.DateTimeFormatter;
 import com.romanpulov.violetnote.model.BasicNoteA;
+import com.romanpulov.violetnote.model.BasicNoteItemA;
 
 /**
  * Created by rpulov on 28.08.2016.
@@ -228,7 +231,14 @@ public class DataManagementTest {
         DBNoteManager noteManager = new DBNoteManager(getTargetContext());
         BasicNoteA note = noteManager.queryById(4);
         noteManager.queryNoteDataItems(note);
-        assertNotEquals(0, note.getItems().get(4).getParamPrice());
+
+        BasicNoteItemA noteItem = note.getItems().get(4);
+        assertNotEquals(0, noteItem.getParamPrice());
+
+        LongSparseArray<Long> longItemsParams = noteManager.queryNoteDataItemLongParams(noteItem);
+        long priceNoteParamTypeId = DBBasicNoteHelper.getInstance(getTargetContext()).getDBDictionaryCache().getPriceNoteParamTypeId();
+        Long priceParam = longItemsParams.get(priceNoteParamTypeId);
+        assertEquals((Long)noteItem.getParamPrice(), priceParam);
 
         dbHelper.closeDB();
     }

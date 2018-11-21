@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
@@ -22,13 +23,13 @@ public class BasicNoteCheckedItemRecyclerViewAdapter extends RecyclerView.Adapte
 
     private final List<BasicNoteItemA> mItems;
     private final RecyclerViewHelper.RecyclerViewSelector mRecyclerViewSelector;
-    private final BasicNoteCheckedItemFragment.OnBasicNoteItemFragmentInteractionListener mListener;
+    private final BasicNoteCheckedItemFragment.OnBasicNoteCheckedItemFragmentInteractionListener mListener;
 
     public RecyclerViewHelper.RecyclerViewSelector getRecyclerViewSelector() {
         return mRecyclerViewSelector;
     }
 
-    public BasicNoteCheckedItemRecyclerViewAdapter(List<BasicNoteItemA> items, ActionMode.Callback actionModeCallback, BasicNoteCheckedItemFragment.OnBasicNoteItemFragmentInteractionListener listener) {
+    public BasicNoteCheckedItemRecyclerViewAdapter(List<BasicNoteItemA> items, ActionMode.Callback actionModeCallback, BasicNoteCheckedItemFragment.OnBasicNoteCheckedItemFragmentInteractionListener listener) {
         mItems = items;
         mRecyclerViewSelector = new RecyclerViewHelper.RecyclerViewSelector(this, actionModeCallback);
         mListener = listener;
@@ -81,6 +82,13 @@ public class BasicNoteCheckedItemRecyclerViewAdapter extends RecyclerView.Adapte
             mValueView = view.findViewById(R.id.value);
             mPriceView = view.findViewById(R.id.price);
             mPriorityView = view.findViewById(R.id.priority);
+            mPriceView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if ((!mRecyclerViewSelector.isSelected()) && (mListener != null) && (getAdapterPosition() != -1))
+                        mListener.onBasicNoteItemPriceClick(mItems.get(getAdapterPosition()));
+                }
+            });
         }
 
         @Override

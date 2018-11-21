@@ -156,7 +156,7 @@ public class DBNoteManager extends BasicCommonNoteManager {
         return BasicNoteDataA.newInstance(null, notes, relatedNotes);
     }
 
-    private LongSparseArray<LongSparseArray<Long>> queryNoteDataItemLongParams(BasicNoteA note) {
+    private LongSparseArray<LongSparseArray<Long>> queryNoteDataLongParams(BasicNoteA note) {
         LongSparseArray<LongSparseArray<Long>> result = new LongSparseArray<>();
 
         Cursor c = null;
@@ -176,6 +176,32 @@ public class DBNoteManager extends BasicCommonNoteManager {
         return result;
     }
 
+    public LongSparseArray<Long> queryNoteDataItemLongParams(BasicNoteItemA noteItem) {
+        LongSparseArray<LongSparseArray<Long>> result = new LongSparseArray<>();
+
+        Cursor c = null;
+        try {
+            c = mDB.query(
+                    DBBasicNoteOpenHelper.NOTE_ITEM_PARAMS_TABLE_NAME,
+                    DBBasicNoteOpenHelper.NOTE_ITEM_PARAMS_TABLE_COLS,
+                    DBBasicNoteOpenHelper.NOTE_ITEM_ID_COLUMN_NAME + " = ?",
+                    new String[]{String.valueOf(noteItem.getId())},
+                    null, null, null
+                    );
+            c.moveToFirst();
+            if (!c.isAfterLast()) {
+                LongSparseArray<Long> la = new LongSparseArray<>();
+                la.append(c.getLong(2), c.getLong(3));
+                return la;
+            } else
+                return null;
+
+        } finally {
+            if ((c !=null) && !c.isClosed())
+                c.close();
+        }
+    }
+
     public void queryNoteDataItems(BasicNoteA note) {
 
         String orderString = DBBasicNoteOpenHelper.PRIORITY_COLUMN_NAME + " DESC, " + DBBasicNoteOpenHelper.ORDER_COLUMN_NAME;
@@ -184,7 +210,7 @@ public class DBNoteManager extends BasicCommonNoteManager {
 
         //clear items
         note.getItems().clear();
-        LongSparseArray<LongSparseArray<Long>> params = queryNoteDataItemLongParams(note);
+        LongSparseArray<LongSparseArray<Long>> params = queryNoteDataLongParams(note);
         long priceNoteParamTypeId = getPriceNoteParamTypeId();
 
         //get items
@@ -418,6 +444,10 @@ public class DBNoteManager extends BasicCommonNoteManager {
         if (item.getName() != null)
             cv.put(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_COLS[4], item.getName());
         cv.put(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_COLS[5], item.getValue());
+
+        deleteNoteItemParam(item);
+        if (item.getParamPrice() > 0)
+            insertNoteItemParam(item.getId(), getPriceNoteParamTypeId(), item.getParamPrice(), null);
 
         return mDB.update(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME, cv, DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_COLS[0] + " = ?" , new String[] {String.valueOf(item.getId())});
     }

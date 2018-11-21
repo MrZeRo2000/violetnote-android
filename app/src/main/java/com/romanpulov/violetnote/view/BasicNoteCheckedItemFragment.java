@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBNoteManager;
@@ -211,7 +212,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
 
         BasicNoteCheckedItemRecyclerViewAdapter recyclerViewAdapter = new BasicNoteCheckedItemRecyclerViewAdapter(mBasicNoteData.getNote().getItems(), new ActionBarCallBack(),
-                new OnBasicNoteItemFragmentInteractionListener() {
+                new OnBasicNoteCheckedItemFragmentInteractionListener() {
                     @Override
                     public void onBasicNoteItemFragmentInteraction(BasicNoteItemA item, int position) {
                         DBNoteManager manager = new DBNoteManager(getActivity());
@@ -226,6 +227,11 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                         updateCheckoutProgress();
 
                         RecyclerViewHelper.adapterNotifyDataSetChanged(mRecyclerView);
+                    }
+
+                    @Override
+                    public void onBasicNoteItemPriceClick(BasicNoteItemA item) {
+                        Toast.makeText(getContext(), "Clicked price : " + item.getParamPrice(), Toast.LENGTH_SHORT).show();
                     }
                 }
         );
@@ -353,4 +359,9 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                 dialog.show(fragmentManager, null);
         }
     }
+
+    public interface OnBasicNoteCheckedItemFragmentInteractionListener extends OnBasicNoteItemFragmentInteractionListener {
+        void onBasicNoteItemPriceClick(BasicNoteItemA item);
+    }
+
 }
