@@ -83,7 +83,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
 
     private void updateCheckoutProgress() {
         if (mCheckoutProgressHelper != null)
-            mCheckoutProgressHelper.setProgressData(mBasicNoteData.getNote().getCheckedItemCount(), mBasicNoteData.getNote().getItemCount());
+            mCheckoutProgressHelper.setProgressData(mBasicNoteData.getNote().getCheckedItemCount(), mBasicNoteData.getNote().getItemCount(), mBasicNoteData.getCheckedPrice(), mBasicNoteData.getTotalPrice());
     }
 
     private void performEditValueAction(final ActionMode mode, final BasicNoteItemA item) {

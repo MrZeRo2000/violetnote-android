@@ -213,6 +213,7 @@ public class DBNoteManager extends BasicCommonNoteManager {
         LongSparseArray<LongSparseArray<Long>> params = queryNoteDataLongParams(note);
         long priceNoteParamTypeId = getPriceNoteParamTypeId();
 
+        long totalPrice = 0L;
         //get items
         Cursor c = null;
         try {
@@ -231,8 +232,10 @@ public class DBNoteManager extends BasicCommonNoteManager {
                 LongSparseArray<Long> lParam = params.get(newItem.getId());
                 if (lParam != null) {
                     Long paramPrice = lParam.get(priceNoteParamTypeId);
-                    if (paramPrice != null)
+                    if (paramPrice != null) {
+                        totalPrice += paramPrice;
                         newItem.setParamPrice(paramPrice);
+                    }
                 }
 
                 if (newItem.isChecked())
@@ -243,6 +246,7 @@ public class DBNoteManager extends BasicCommonNoteManager {
 
             note.setItemCount(itemCount);
             note.setCheckedItemCount(checkedItemCount);
+            note.setTotalPrice(totalPrice);
 
         } finally {
             if ((c !=null) && !c.isClosed())

@@ -24,4 +24,14 @@
         android:layout_weight="1"
         />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/text_margin_half"
+        android:gravity="center_vertical"
+        android:id="@+id/price_view"
+        android:layout_weight="0"
+        android:textAppearance="@style/Header2Text"
+        />
+
 </LinearLayout>

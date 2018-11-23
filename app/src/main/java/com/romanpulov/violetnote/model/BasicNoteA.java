@@ -32,6 +32,7 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
     //calculated
     private int mItemCount;
     private int mCheckedItemCount;
+    private long mTotalPrice;
     private String mItemCountTitle;
 
     public int getNoteGroupId() {
@@ -79,6 +80,18 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
 
     public void setCheckedItemCount(int value) {
         mCheckedItemCount = value;
+    }
+
+    public boolean hasPrice() {
+        return mTotalPrice > 0;
+    }
+
+    public long getTotalPrice() {
+        return mTotalPrice;
+    }
+
+    public void setTotalPrice(long value) {
+        mTotalPrice = value;
     }
 
     public void addCheckedItemCount(int value) {
