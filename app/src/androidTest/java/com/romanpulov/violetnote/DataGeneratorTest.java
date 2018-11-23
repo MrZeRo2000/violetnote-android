@@ -62,17 +62,18 @@ public class DataGeneratorTest {
                     //checked items
 
                     for (int j = 1; j <= MAX_NOTE_ITEMS; j++) {
+                        boolean isPrice = (i == 2) && (j == 5);
                         String itemValueFormat = "Note item %2d for note %2d name";
                         if (j == 4)
                             itemValueFormat = "This is a very very very very very very long note item %2d for note %2d name";
 
-                        if (j == 5)
+                        if (isPrice)
                             itemValueFormat = "Note item %2d for note %2d name with value 12.44";
 
                         BasicNoteItemA newNoteItem = BasicNoteItemA.newCheckedEditInstance(String.format(Locale.getDefault(), itemValueFormat, j, i));
                         assertNotEquals(-1, noteManager.insertNoteItem(newNote, newNoteItem));
 
-                        if (j == 5)
+                        if (isPrice)
                             assertEquals(1244L, newNoteItem.getParamPrice());
                     }
 

@@ -229,7 +229,7 @@ public class DataManagementTest {
         dbHelper.openDB();
 
         DBNoteManager noteManager = new DBNoteManager(getTargetContext());
-        BasicNoteA note = noteManager.queryById(4);
+        BasicNoteA note = noteManager.queryById(2);
         noteManager.queryNoteDataItems(note);
 
         BasicNoteItemA noteItem = note.getItems().get(4);
