@@ -26,12 +26,21 @@ public class CheckoutProgressHelper {
     }
 
     public void setProgressData(int checkedItemCount, int itemCount) {
-        if ((checkedItemCount == 0) && (mHostView.getVisibility() == View.VISIBLE))
+        if (itemCount == 0)
             mHostView.setVisibility(View.GONE);
-        else if (checkedItemCount > 0) {
+        else {
             mProgressbar.setMax(itemCount);
             mProgressbar.setProgress(checkedItemCount);
-            mProgressTextView.setText(String.format(Locale.getDefault(), "%d/%d", checkedItemCount, itemCount));
+
+            String progressText;
+            if (checkedItemCount > 0) {
+                progressText = String.format(Locale.getDefault(), "%d/%d", checkedItemCount, itemCount);
+            } else {
+                progressText = String.format(Locale.getDefault(), "%d", itemCount);
+            }
+
+            mProgressTextView.setText(progressText);
+
             mHostView.setVisibility(View.VISIBLE);
         }
     }
