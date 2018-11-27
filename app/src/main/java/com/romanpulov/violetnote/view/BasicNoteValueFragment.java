@@ -76,7 +76,7 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
 
     public void showAddLayout() {
         if (mAddActionHelper != null) {
-            mAddActionHelper.showLayout();
+            mAddActionHelper.showLayout(null);
         }
     }
 
@@ -234,7 +234,7 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
         mAddActionHelper = new AddActionHelper(view.findViewById(R.id.add_panel_include));
         mAddActionHelper.setOnAddInteractionListener(new AddActionHelper.OnAddInteractionListener() {
             @Override
-            public void onAddFragmentInteraction(final String text) {
+            public void onAddFragmentInteraction(final int actionType, final String text) {
                 performAddAction(BasicNoteValueA.newEditInstance(text));
             }
         });

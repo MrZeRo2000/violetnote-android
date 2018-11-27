@@ -102,6 +102,14 @@
     <string name="notification_failure_channel_name">Load process failure</string>
     <string name="notification_failure_channel_description">Violet Note load process failure</string>
 
+    <!-- UI Hints -->
+    <string-array name="hint_action_entries">
+        <item>Add &#8230;</item>
+        <item>Edit &#8230;</item>
+    </string-array>
+
+    <string name="hint_action_add">Add &#8230;</string>
+    <string name="hint_action_edit">Edit &#8230;</string>
 
     <!-- UI Text -->
     <string name="ui_text_search_system">System</string>

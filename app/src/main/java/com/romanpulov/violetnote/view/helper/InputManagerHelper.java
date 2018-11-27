@@ -33,7 +33,7 @@ public class InputManagerHelper {
         if (v != null) {
             InputMethodManager inputMethodManager = (InputMethodManager) v.getContext().getSystemService(INPUT_METHOD_SERVICE);
             if (inputMethodManager != null)
-                inputMethodManager.showSoftInput(v, 0);
+                inputMethodManager.showSoftInput(v, InputMethodManager.SHOW_FORCED);
         }
     }
 

@@ -18,11 +18,15 @@ import java.util.Collection;
  * Created by romanpulov on 06.09.2016.
  */
 public class AddActionHelper implements AutoCompleteArrayAdapter.OnAutoCompleteTextListener {
+    public static final int ADD_ACTION_TYPE_ADD = 0;
+    public static final int ADD_ACTION_TYPE_EDIT = 1;
 
     private final View mActionView;
     private final ImageButton mListButton;
     private final ImageButton mCancelButton;
     private final AutoCompleteTextView mAddEditText;
+
+    private int mActionType;
 
     private OnAddInteractionListener mAddListener;
     private View.OnClickListener mListClickListener;
@@ -99,16 +103,24 @@ public class AddActionHelper implements AutoCompleteArrayAdapter.OnAutoCompleteT
 
     private void acceptText(String text) {
         if ((mAddListener != null) && (text != null) && (text.trim().length() > 0))
-            mAddListener.onAddFragmentInteraction(text);
+            mAddListener.onAddFragmentInteraction(mActionType, text);
         //clear search text for future
         mAddEditText.setText(null);
     }
 
+    public void showLayout(String text) {
+        mActionType = text == null ? ADD_ACTION_TYPE_ADD : ADD_ACTION_TYPE_EDIT;
+        mAddEditText.setText(text);
 
-    public void showLayout() {
+        String[] hints = mAddEditText.getContext().getResources().getStringArray(R.array.hint_action_entries);
+        mAddEditText.setHint(hints[mActionType]);
+
+        if (text != null)
+            mAddEditText.setSelection(text.length());
+
         mActionView.setVisibility(View.VISIBLE);
         if (mAddEditText.requestFocus())
-            InputManagerHelper.showInput(mAddEditText);
+            InputManagerHelper.toggleInputForced(mAddEditText.getContext());
     }
 
     public void hideLayout() {
@@ -133,6 +145,6 @@ public class AddActionHelper implements AutoCompleteArrayAdapter.OnAutoCompleteT
     }
 
     public interface OnAddInteractionListener {
-        void onAddFragmentInteraction(String text);
+        void onAddFragmentInteraction(int actionType, String text);
     }
 }

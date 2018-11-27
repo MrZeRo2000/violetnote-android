@@ -86,6 +86,35 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
             mCheckoutProgressHelper.setProgressData(mBasicNoteData.getNote().getCheckedItemCount(), mBasicNoteData.getNote().getItemCount(), mBasicNoteData.getCheckedPrice(), mBasicNoteData.getTotalPrice());
     }
 
+    private void performEditAction(String text) {
+        List<BasicNoteItemA> selectedNoteItems = BasicEntityNoteSelectionPosA.getItemsByPositions(mBasicNoteData.getNote().getItems(), mRecyclerViewSelector.getSelectedItems());
+        if (selectedNoteItems.size() == 1) {
+            BasicNoteItemA item = selectedNoteItems.get(0);
+
+            //change
+            item.setValueWithParams(text);
+
+            BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity(), mBasicNoteData);
+            executor.addAction(getString(R.string.caption_processing), new BasicNoteDataItemEditNameValueAction(mBasicNoteData, item));
+            executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData));
+            executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
+                @Override
+                public void onExecutionCompleted(BasicNoteDataA basicNoteData, boolean result) {
+                    mBasicNoteData = basicNoteData;
+                    updateCheckoutProgress();
+
+                    //clear editor reference
+                    if (mEditorDialog != null) {
+                        mEditorDialog.dismiss();
+                        mEditorDialog = null;
+                    }
+                }
+            });
+            executeActions(executor);
+        }
+    }
+
+
     private void performEditValueAction(final ActionMode mode, final BasicNoteItemA item) {
         TextEditDialogBuilder textEditDialogBuilder = (new TextEditDialogBuilder(getActivity(), getString(R.string.ui_note_value), item.getValueWithParams()))
                 .setNonEmptyErrorMessage(getString(R.string.error_field_not_empty))
@@ -102,28 +131,10 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                     InputManagerHelper.hideInput(focusedView);
 
                     //change
-                    item.setValueWithParams(text);
+                    performEditAction(text);
 
                     // finish anyway
                     mode.finish();
-
-                    BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity(), mBasicNoteData);
-                    executor.addAction(getString(R.string.caption_processing), new BasicNoteDataItemEditNameValueAction(mBasicNoteData, item));
-                    executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData));
-                    executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
-                        @Override
-                        public void onExecutionCompleted(BasicNoteDataA basicNoteData, boolean result) {
-                            mBasicNoteData = basicNoteData;
-                            updateCheckoutProgress();
-
-                            //clear editor reference
-                            if (mEditorDialog != null) {
-                                mEditorDialog.dismiss();
-                                mEditorDialog = null;
-                            }
-                        }
-                    });
-                    executeActions(executor);
                 }
             }
         });
@@ -148,7 +159,8 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                             performDeleteAction(mode, selectedNoteItems);
                             break;
                         case R.id.edit_value:
-                            performEditValueAction(mode, selectedNoteItems.get(0));
+                            //performEditValueAction(mode, selectedNoteItems.get(0));
+                            mAddActionHelper.showLayout(selectedNoteItems.get(0).getValueWithParams());
                             break;
                         case R.id.move_up:
                             performMoveAction(new BasicNoteMoveUpAction<BasicNoteItemA>(), selectedNoteItems);
@@ -184,17 +196,22 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
 
             if (mRecyclerViewSelector.isSelectedSingle())
                 mode.setTitle(DisplayTitleBuilder.buildItemsDisplayTitle(getActivity(), mBasicNoteData.getNote().getItems(), mRecyclerViewSelector.getSelectedItems()));
+
+            mAddActionHelper.hideLayout();
+
             return true;
         }
 
         @Override
         public void onDestroyActionMode(ActionMode mode) {
+            mAddActionHelper.hideLayout();
             if (mRecyclerViewSelector != null)
                 mRecyclerViewSelector.destroyActionMode();
         }
 
         @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            mAddActionHelper.hideLayout();
             updateActionMenu(menu);
             mode.setTitle(DisplayTitleBuilder.buildItemsDisplayTitle(getActivity(), mBasicNoteData.getNote().getItems(), mRecyclerViewSelector.getSelectedItems()));
             return true;
@@ -243,8 +260,17 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         mAddActionHelper = new AddActionHelper(view.findViewById(R.id.add_panel_include));
         mAddActionHelper.setOnAddInteractionListener(new AddActionHelper.OnAddInteractionListener() {
             @Override
-            public void onAddFragmentInteraction(final String text) {
-                performAddAction(BasicNoteItemA.newCheckedEditInstance(text));
+            public void onAddFragmentInteraction(final int actionType, final String text) {
+                switch (actionType) {
+                    case AddActionHelper.ADD_ACTION_TYPE_ADD:
+                        performAddAction(BasicNoteItemA.newCheckedEditInstance(text));
+                        break;
+                    case AddActionHelper.ADD_ACTION_TYPE_EDIT:
+                        performEditAction(text);
+                        mAddActionHelper.hideLayout();
+                        mRecyclerViewSelector.finishActionMode();
+                        break;
+                }
             }
         });
 
@@ -297,7 +323,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
 
     public void showAddLayout() {
         if (mAddActionHelper != null)
-            mAddActionHelper.showLayout();
+            mAddActionHelper.showLayout(null);
     }
 
     public void hideAddLayout() {
