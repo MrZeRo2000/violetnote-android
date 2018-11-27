@@ -107,18 +107,22 @@ public class AddActionHelper implements AutoCompleteArrayAdapter.OnAutoCompleteT
 
     public void showLayout() {
         mActionView.setVisibility(View.VISIBLE);
-        if (mActionView.findViewById(R.id.add_edit_text).requestFocus())
+        if (mAddEditText.requestFocus())
             InputManagerHelper.showInput(mAddEditText);
     }
 
     public void hideLayout() {
         InputManagerHelper.hideInput(mActionView);
         mActionView.setVisibility(View.GONE);
+        //clear search text for future
+        mAddEditText.setText(null);
     }
 
     @Override
     public void onSelectText(String text) {
         mAddEditText.setText(text);
+        if (text != null)
+            mAddEditText.setSelection(text.length());
         mAddEditText.dismissDropDown();
     }
 
