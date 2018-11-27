@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 import com.romanpulov.violetnote.view.helper.PriorityDisplayHelper;
@@ -21,6 +22,7 @@ import java.util.List;
 
 public class BasicNoteCheckedItemRecyclerViewAdapter extends RecyclerView.Adapter<BasicNoteCheckedItemRecyclerViewAdapter.ViewHolder> {
 
+    private final BasicNoteDataA mBasicNoteData;
     private final List<BasicNoteItemA> mItems;
     private final RecyclerViewHelper.RecyclerViewSelector mRecyclerViewSelector;
     private final BasicNoteCheckedItemFragment.OnBasicNoteCheckedItemFragmentInteractionListener mListener;
@@ -29,8 +31,9 @@ public class BasicNoteCheckedItemRecyclerViewAdapter extends RecyclerView.Adapte
         return mRecyclerViewSelector;
     }
 
-    public BasicNoteCheckedItemRecyclerViewAdapter(List<BasicNoteItemA> items, ActionMode.Callback actionModeCallback, BasicNoteCheckedItemFragment.OnBasicNoteCheckedItemFragmentInteractionListener listener) {
-        mItems = items;
+    public BasicNoteCheckedItemRecyclerViewAdapter(BasicNoteDataA basicNoteData, ActionMode.Callback actionModeCallback, BasicNoteCheckedItemFragment.OnBasicNoteCheckedItemFragmentInteractionListener listener) {
+        mBasicNoteData = basicNoteData;
+        mItems = basicNoteData.getNote().getItems();
         mRecyclerViewSelector = new RecyclerViewHelper.RecyclerViewSelector(this, actionModeCallback);
         mListener = listener;
     }
@@ -55,7 +58,12 @@ public class BasicNoteCheckedItemRecyclerViewAdapter extends RecyclerView.Adapte
         else
             holder.mValueView.setPaintFlags(holder.mValueView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
 
-        holder.mPriceView.setText(holder.mItem.getParamPriceDisplayValue());
+        if (mBasicNoteData.getTotalPrice() > 0) {
+            holder.mPriceView.setVisibility(View.VISIBLE);
+            holder.mPriceView.setText(holder.mItem.getParamPriceDisplayValue());
+        } else {
+            holder.mPriceView.setVisibility(View.GONE);
+        }
 
         // priority display
         PriorityDisplayHelper.updateImageViewPriority(holder.mPriorityView, holder.mItem.getPriority());

@@ -53,6 +53,8 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
         mValue = floatParams.getText();
         if (floatParams.hasValue())
             mParamPrice = floatParams.getLongValue();
+        else
+            mParamPrice = 0;
     }
 
     public void setValueWithParams(String value) {

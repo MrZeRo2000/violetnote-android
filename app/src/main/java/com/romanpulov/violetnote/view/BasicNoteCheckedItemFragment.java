@@ -96,7 +96,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         textEditDialogBuilder.setOnTextInputListener(new TextInputDialog.OnTextInputListener() {
             @Override
             public void onTextInput(String text) {
-                if (!text.equals(item.getValue())) {
+                if (!text.equals(item.getValueWithParams())) {
                     //hide editor
                     View focusedView = alertDialog.getCurrentFocus();
                     InputManagerHelper.hideInput(focusedView);
@@ -114,6 +114,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                         @Override
                         public void onExecutionCompleted(BasicNoteDataA basicNoteData, boolean result) {
                             mBasicNoteData = basicNoteData;
+                            updateCheckoutProgress();
 
                             //clear editor reference
                             if (mEditorDialog != null) {
@@ -211,7 +212,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-        BasicNoteCheckedItemRecyclerViewAdapter recyclerViewAdapter = new BasicNoteCheckedItemRecyclerViewAdapter(mBasicNoteData.getNote().getItems(), new ActionBarCallBack(),
+        BasicNoteCheckedItemRecyclerViewAdapter recyclerViewAdapter = new BasicNoteCheckedItemRecyclerViewAdapter(mBasicNoteData, new ActionBarCallBack(),
                 new OnBasicNoteCheckedItemFragmentInteractionListener() {
                     @Override
                     public void onBasicNoteItemFragmentInteraction(BasicNoteItemA item, int position) {
