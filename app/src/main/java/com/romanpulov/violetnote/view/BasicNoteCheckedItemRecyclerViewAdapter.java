@@ -94,7 +94,7 @@ public class BasicNoteCheckedItemRecyclerViewAdapter extends RecyclerView.Adapte
                 @Override
                 public void onClick(View v) {
                     if ((!mRecyclerViewSelector.isSelected()) && (mListener != null) && (getAdapterPosition() != -1))
-                        mListener.onBasicNoteItemPriceClick(mItems.get(getAdapterPosition()));
+                        mListener.onBasicNoteItemPriceClick(mItems.get(getAdapterPosition()), getAdapterPosition());
                 }
             });
         }

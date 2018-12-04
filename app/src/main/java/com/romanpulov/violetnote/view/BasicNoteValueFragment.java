@@ -26,7 +26,7 @@ import com.romanpulov.violetnote.view.core.BasicCommonNoteFragment;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 import com.romanpulov.violetnote.view.core.TextEditDialogBuilder;
 import com.romanpulov.violetnote.view.core.TextInputDialog;
-import com.romanpulov.violetnote.view.helper.AddActionHelper;
+import com.romanpulov.violetnote.view.helper.InputActionHelper;
 
 import java.util.List;
 
@@ -38,7 +38,7 @@ import java.util.List;
  */
 public class BasicNoteValueFragment extends BasicCommonNoteFragment {
     protected BasicNoteValueDataA mBasicNoteValueData;
-    private AddActionHelper mAddActionHelper;
+    private InputActionHelper mInputActionHelper;
 
     @Override
     public void refreshList(DBNoteManager noteManager) {
@@ -75,8 +75,8 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
     }
 
     public void showAddLayout() {
-        if (mAddActionHelper != null) {
-            mAddActionHelper.showLayout(null);
+        if (mInputActionHelper != null) {
+            mInputActionHelper.showAddLayout();
         }
     }
 
@@ -231,8 +231,8 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
         mRecyclerView.addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(getActivity(), RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_white_black_gradient));
 
         //add action panel
-        mAddActionHelper = new AddActionHelper(view.findViewById(R.id.add_panel_include));
-        mAddActionHelper.setOnAddInteractionListener(new AddActionHelper.OnAddInteractionListener() {
+        mInputActionHelper = new InputActionHelper(view.findViewById(R.id.add_panel_include));
+        mInputActionHelper.setOnAddInteractionListener(new InputActionHelper.OnAddInteractionListener() {
             @Override
             public void onAddFragmentInteraction(final int actionType, final String text) {
                 performAddAction(BasicNoteValueA.newEditInstance(text));

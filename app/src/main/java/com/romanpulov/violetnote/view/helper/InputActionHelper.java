@@ -1,5 +1,6 @@
 package com.romanpulov.violetnote.view.helper;
 
+import android.text.InputType;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -9,6 +10,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.model.InputParser;
 import com.romanpulov.violetnote.view.AutoCompleteArrayAdapter;
 
 import java.util.Collection;
@@ -17,16 +19,18 @@ import java.util.Collection;
  * Helper class for add action
  * Created by romanpulov on 06.09.2016.
  */
-public class AddActionHelper implements AutoCompleteArrayAdapter.OnAutoCompleteTextListener {
-    public static final int ADD_ACTION_TYPE_ADD = 0;
-    public static final int ADD_ACTION_TYPE_EDIT = 1;
+public class InputActionHelper implements AutoCompleteArrayAdapter.OnAutoCompleteTextListener {
+    public static final int INPUT_ACTION_TYPE_ADD = 0;
+    public static final int INPUT_ACTION_TYPE_EDIT = 1;
+    public static final int INPUT_ACTION_TYPE_NUMBER = 2;
 
     private final View mActionView;
     private final ImageButton mListButton;
     private final ImageButton mCancelButton;
-    private final AutoCompleteTextView mAddEditText;
+    private final AutoCompleteTextView mInputEditText;
 
     private int mActionType;
+    private Collection<String> mAutoCompleteList;
 
     private OnAddInteractionListener mAddListener;
     private View.OnClickListener mListClickListener;
@@ -43,12 +47,12 @@ public class AddActionHelper implements AutoCompleteArrayAdapter.OnAutoCompleteT
             mListButton.setVisibility(View.GONE);
     }
 
-    public AddActionHelper(View actionView) {
+    public InputActionHelper(View actionView) {
         mActionView = actionView;
 
         mListButton = mActionView.findViewById(R.id.list_button);
         mCancelButton = mActionView.findViewById(R.id.cancel_button);
-        mAddEditText = mActionView.findViewById(R.id.add_edit_text);
+        mInputEditText = mActionView.findViewById(R.id.add_edit_text);
 
         setupListButton();
         setupCancelButton();
@@ -56,10 +60,16 @@ public class AddActionHelper implements AutoCompleteArrayAdapter.OnAutoCompleteT
     }
 
     public void setAutoCompleteList(Collection<String> autoCompleteList) {
-        //ArrayAdapter<?> adapter = new ArrayAdapter<>(mAddEditText.getContext(), android.R.layout.simple_dropdown_item_1line, autoCompleteList.toArray(new String[autoCompleteList.size()]));
-        ArrayAdapter<?> adapter = new AutoCompleteArrayAdapter(mAddEditText.getContext(), R.layout.dropdown_button_item, autoCompleteList.toArray(new String[0]), this);
-        //ArrayAdapter<?> adapter = new AutoCompleteArrayAdapter(mAddEditText.getContext(), android.R.layout.simple_dropdown_item_1line, autoCompleteList.toArray(new String[autoCompleteList.size()]));
-        mAddEditText.setAdapter(adapter);
+        mAutoCompleteList = autoCompleteList;
+    }
+
+    private void prepareAutoCompleteList() {
+        ArrayAdapter<?> adapter = new AutoCompleteArrayAdapter(mInputEditText.getContext(), R.layout.dropdown_button_item, mAutoCompleteList.toArray(new String[0]), this);
+        mInputEditText.setAdapter(adapter);
+    }
+
+    private void clearAutoCompleteList() {
+        mInputEditText.setAdapter(null);
     }
 
     private void setupListButton() {
@@ -83,7 +93,7 @@ public class AddActionHelper implements AutoCompleteArrayAdapter.OnAutoCompleteT
     }
 
     private void setupEditText() {
-        mAddEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        mInputEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 if (
@@ -105,43 +115,64 @@ public class AddActionHelper implements AutoCompleteArrayAdapter.OnAutoCompleteT
         if ((mAddListener != null) && (text != null) && (text.trim().length() > 0))
             mAddListener.onAddFragmentInteraction(mActionType, text);
         //clear search text for future
-        mAddEditText.setText(null);
+        mInputEditText.setText(null);
     }
 
-    public void showLayout(String text) {
-        mActionType = text == null ? ADD_ACTION_TYPE_ADD : ADD_ACTION_TYPE_EDIT;
-        mAddEditText.setText(text);
+    public void showAddLayout() {
+        showLayout(null, INPUT_ACTION_TYPE_ADD);
+    }
 
-        String[] hints = mAddEditText.getContext().getResources().getStringArray(R.array.hint_action_entries);
-        mAddEditText.setHint(hints[mActionType]);
+    public void showEditNumberLayout(long number) {
+        showLayout(number == 0 ? null : InputParser.getFloatDisplayValue(number), INPUT_ACTION_TYPE_NUMBER);
+    }
+
+    public void showLayout(String text, int actionType) {
+        mActionType = actionType;
+
+        mInputEditText.setText(text);
+
+        switch (actionType) {
+            case INPUT_ACTION_TYPE_ADD:
+            case INPUT_ACTION_TYPE_EDIT:
+                mInputEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE);
+                prepareAutoCompleteList();
+                break;
+            case INPUT_ACTION_TYPE_NUMBER:
+                mInputEditText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                clearAutoCompleteList();
+                break;
+        }
+
+        String[] hints = mInputEditText.getContext().getResources().getStringArray(R.array.hint_action_entries);
+        mInputEditText.setHint(hints[mActionType]);
 
         if (text != null)
-            mAddEditText.setSelection(text.length());
+            mInputEditText.setSelection(text.length());
 
         mActionView.setVisibility(View.VISIBLE);
-        if (mAddEditText.requestFocus())
-            InputManagerHelper.toggleInputForced(mAddEditText.getContext());
+        if (mInputEditText.requestFocus())
+            InputManagerHelper.toggleInputForced(mInputEditText.getContext());
     }
 
     public void hideLayout() {
         InputManagerHelper.hideInput(mActionView);
         mActionView.setVisibility(View.GONE);
         //clear search text for future
-        mAddEditText.setText(null);
+        mInputEditText.setText(null);
     }
 
     @Override
     public void onSelectText(String text) {
-        mAddEditText.setText(text);
+        mInputEditText.setText(text);
         if (text != null)
-            mAddEditText.setSelection(text.length());
-        mAddEditText.dismissDropDown();
+            mInputEditText.setSelection(text.length());
+        mInputEditText.dismissDropDown();
     }
 
     @Override
     public void onCheckText(String text) {
         acceptText(text);
-        mAddEditText.dismissDropDown();
+        mInputEditText.dismissDropDown();
     }
 
     public interface OnAddInteractionListener {

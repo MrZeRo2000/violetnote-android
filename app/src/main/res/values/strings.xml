@@ -106,6 +106,7 @@
     <string-array name="hint_action_entries">
         <item>Add &#8230;</item>
         <item>Edit &#8230;</item>
+        <item>Edit &#8230;</item>
     </string-array>
 
     <string name="hint_action_add">Add &#8230;</string>
