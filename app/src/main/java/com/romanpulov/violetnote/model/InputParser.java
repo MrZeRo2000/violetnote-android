@@ -69,14 +69,19 @@ public class InputParser {
         if (matcher.matches() && (matcher.groupCount() > 2)) {
             result.mText = matcher.group(1);
             String floatString = matcher.group(2).replace(',', '.');
-            double floatValue = Double.parseDouble(floatString);
-            long longValue = (long)Math.round(floatValue * 100d);
+
+            long longValue = getLongValueFromString(floatString);
             if (longValue > 0) {
                 result.mLongValue = longValue;
             }
         }
 
         return result;
+    }
+
+    public static long getLongValueFromString(String floatString) {
+        double floatValue = Double.parseDouble(floatString);
+        return Math.round(floatValue * 100d);
     }
 
     public static String getFloatDisplayValue(long value) {

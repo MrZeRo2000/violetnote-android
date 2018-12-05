@@ -296,8 +296,9 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                         performEditAction(text, new NoteItemDataUpdater() {
                             @Override
                             public void updateNoteItemData(BasicNoteItemA item) {
+                                item.setParamPrice(InputParser.getLongValueFromString(text));
                                 //item.setParamPrice(InputParser.getFloatDisplayValue());
-                                Toast.makeText(getContext(), text, Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(getContext(), text, Toast.LENGTH_SHORT).show();
                             }
                         });
                         mInputActionHelper.hideLayout();
