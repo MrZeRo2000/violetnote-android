@@ -115,7 +115,10 @@ public final class StmtGenerator {
      * @return Create foreign key index statement
      */
     @NonNull
-    public static String createForeignKeyIndex(@NonNull String tableName, @NonNull String indexColumnName) {
+    public static String createForeignKeyIndexStatement(
+            @NonNull String tableName,
+            @NonNull String indexColumnName)
+    {
         return "CREATE INDEX fk_" + tableName + " ON " + tableName + " (" + indexColumnName + ");";
     }
 
@@ -126,7 +129,10 @@ public final class StmtGenerator {
      * @return Create unique index statement
      */
     @NonNull
-    public static String createUniqueIndex(@NonNull String tableName, @NonNull String indexColumnName) {
+    public static String createUniqueIndexStatement(
+            @NonNull String tableName,
+            @NonNull String indexColumnName)
+    {
         return "CREATE UNIQUE INDEX u_" + tableName + "_" + firstChars(new String[]{indexColumnName}) + " ON " + tableName + " (" + indexColumnName + ");";
     }
 
@@ -137,7 +143,18 @@ public final class StmtGenerator {
      * @return Create unique index statement
      */
     @NonNull
-    public static String createUniqueIndex(@NonNull String tableName, @NonNull String[] indexColumnNames) {
+    public static String createUniqueIndexStatement(@NonNull String tableName, @NonNull String[] indexColumnNames) {
         return "CREATE UNIQUE INDEX u_" + tableName + "_" + firstChars(indexColumnNames)  + " ON " + tableName + " (" + joinStrings(", ", indexColumnNames) + ");";
+    }
+
+    @NonNull
+    public static String createInsertTableStatement(
+            @NonNull String tableName,
+            @NonNull String[] tableCols,
+            @NonNull String values
+    ) {
+        return "INSERT INTO " + tableName + " (" +
+                joinStrings(", ", tableCols) + ") " +
+                values + ";";
     }
 }
