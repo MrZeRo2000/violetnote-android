@@ -4,6 +4,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import static com.romanpulov.violetnote.db.tabledef.DBCommonDef.*;
+
 /**
  * BasicNote database open helper
  * Created by romanpulov on 16.08.2016.
@@ -12,16 +14,6 @@ public class DBBasicNoteOpenHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "basic_note.db";
     public static final int DATABASE_VERSION = 3;
 
-    //common column names
-    public static final String ID_COLUMN_NAME = "_id";
-    public static final String NOTE_ID_COLUMN_NAME = "note_id";
-    public static final String LAST_MODIFIED_COLUMN_NAME = "last_modified";
-    public static final String ORDER_COLUMN_NAME = "order_id";
-    public static final String NAME_COLUMN_NAME = "name";
-    public static final String VALUE_COLUMN_NAME = "value";
-    public static final String CHECKED_COLUMN_NAME = "checked";
-    public static final String PRIORITY_COLUMN_NAME = "priority";
-    public static final String ENCRYPTED_STRING_COLUMN_NAME = "encrypted_string";
 
     //note groups
     public static final String NOTE_GROUPS_TABLE_NAME = "note_groups";

@@ -1,5 +1,6 @@
 package com.romanpulov.violetnote.db;
 
+import com.romanpulov.violetnote.db.tabledef.DBCommonDef;
 import com.romanpulov.violetnote.model.BasicNoteA;
 
 /**
@@ -21,12 +22,12 @@ public class BasicNoteDBManagementProvider implements DBManagementProvider {
 
     @Override
     public String getPrevOrderSelection() {
-        return DBBasicNoteOpenHelper.ORDER_COLUMN_NAME + " < ?";
+        return DBCommonDef.ORDER_COLUMN_NAME + " < ?";
     }
 
     @Override
     public String getNextOrderSelection() {
-        return DBBasicNoteOpenHelper.ORDER_COLUMN_NAME + " > ?";
+        return DBCommonDef.ORDER_COLUMN_NAME + " > ?";
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.romanpulov.violetnote.db;
 
+import com.romanpulov.violetnote.db.tabledef.DBCommonDef;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 
 /**
@@ -21,12 +22,12 @@ public class BasicNoteItemDBManagementProvider implements DBManagementProvider {
 
     @Override
     public String getPrevOrderSelection() {
-        return DBBasicNoteOpenHelper.NOTE_ID_COLUMN_NAME + " = ? AND " + DBBasicNoteOpenHelper.PRIORITY_COLUMN_NAME + " = ? AND " + DBBasicNoteOpenHelper.ORDER_COLUMN_NAME + " < ?";
+        return DBCommonDef.NOTE_ID_COLUMN_NAME + " = ? AND " + DBCommonDef.PRIORITY_COLUMN_NAME + " = ? AND " + DBCommonDef.ORDER_COLUMN_NAME + " < ?";
     }
 
     @Override
     public String getNextOrderSelection() {
-        return DBBasicNoteOpenHelper.NOTE_ID_COLUMN_NAME + " = ? AND " + DBBasicNoteOpenHelper.PRIORITY_COLUMN_NAME + " = ? AND " + DBBasicNoteOpenHelper.ORDER_COLUMN_NAME + " > ?";
+        return DBCommonDef.NOTE_ID_COLUMN_NAME + " = ? AND " + DBCommonDef.PRIORITY_COLUMN_NAME + " = ? AND " + DBCommonDef.ORDER_COLUMN_NAME + " > ?";
     }
 
     @Override
@@ -36,12 +37,12 @@ public class BasicNoteItemDBManagementProvider implements DBManagementProvider {
 
     @Override
     public String getOrderIdSelectionString() {
-        return DBBasicNoteOpenHelper.NOTE_ID_COLUMN_NAME + " = " + String.valueOf(mBasicNoteItem.getNoteId()) + " AND " + DBBasicNoteOpenHelper.PRIORITY_COLUMN_NAME + " = " + String.valueOf(mBasicNoteItem.getPriority());
+        return DBCommonDef.NOTE_ID_COLUMN_NAME + " = " + String.valueOf(mBasicNoteItem.getNoteId()) + " AND " + DBCommonDef.PRIORITY_COLUMN_NAME + " = " + String.valueOf(mBasicNoteItem.getPriority());
     }
 
     @Override
     public String getOrderIdSelection() {
-        return DBBasicNoteOpenHelper.NOTE_ID_COLUMN_NAME + " = ? AND " + DBBasicNoteOpenHelper.PRIORITY_COLUMN_NAME + " = ?";
+        return DBCommonDef.NOTE_ID_COLUMN_NAME + " = ? AND " + DBCommonDef.PRIORITY_COLUMN_NAME + " = ?";
     }
 
     @Override

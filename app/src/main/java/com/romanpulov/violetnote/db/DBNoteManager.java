@@ -7,6 +7,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.util.LongSparseArray;
 
+import com.romanpulov.violetnote.db.tabledef.DBCommonDef;
 import com.romanpulov.violetnote.model.BasicCommonNoteA;
 import com.romanpulov.violetnote.model.BasicEntityNoteA;
 import com.romanpulov.violetnote.model.BasicNoteA;
@@ -127,7 +128,7 @@ public class DBNoteManager extends BasicCommonNoteManager {
         try {
 
             c = mDB.query(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, DBBasicNoteOpenHelper.NOTES_TABLE_COLS,
-                    DBBasicNoteOpenHelper.ID_COLUMN_NAME + " != ? AND " +
+                    DBCommonDef.ID_COLUMN_NAME + " != ? AND " +
                     DBBasicNoteOpenHelper.NOTE_TYPE_COLUMN_NAME + " = ? AND " +
                     DBBasicNoteOpenHelper.IS_ENCRYPTED_COLUMN_NAME + " = ?", new String[]{String.valueOf(note.getId()), String.valueOf(note.getNoteType()), String.valueOf(BooleanUtils.toInt(note.isEncrypted()))},
                     null, null, DBBasicNoteOpenHelper.TITLE_COLUMN_NAME
@@ -204,9 +205,9 @@ public class DBNoteManager extends BasicCommonNoteManager {
 
     public void queryNoteDataItems(BasicNoteA note) {
 
-        String orderString = DBBasicNoteOpenHelper.PRIORITY_COLUMN_NAME + " DESC, " + DBBasicNoteOpenHelper.ORDER_COLUMN_NAME;
+        String orderString = DBCommonDef.PRIORITY_COLUMN_NAME + " DESC, " + DBCommonDef.ORDER_COLUMN_NAME;
         if (PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("pref_interface_checked_last", false))
-            orderString = DBBasicNoteOpenHelper.CHECKED_COLUMN_NAME + " ASC, " + orderString;
+            orderString = DBCommonDef.CHECKED_COLUMN_NAME + " ASC, " + orderString;
 
         //clear items
         note.getItems().clear();
@@ -219,7 +220,7 @@ public class DBNoteManager extends BasicCommonNoteManager {
         try {
             c = mDB.query(
                     DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME, DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_COLS,
-                    DBBasicNoteOpenHelper.NOTE_ID_COLUMN_NAME + " = ?", new String[] {String.valueOf(note.getId())}, null, null,
+                    DBCommonDef.NOTE_ID_COLUMN_NAME + " = ?", new String[] {String.valueOf(note.getId())}, null, null,
                     orderString
             );
 
@@ -264,7 +265,7 @@ public class DBNoteManager extends BasicCommonNoteManager {
             try {
                 c = mDB.query(
                         DBBasicNoteOpenHelper.NOTE_VALUES_TABLE_NAME, new String[]{DBBasicNoteOpenHelper.NOTE_VALUES_TABLE_COLS[2]},
-                        DBBasicNoteOpenHelper.NOTE_ID_COLUMN_NAME + " = ?", new String[]{String.valueOf(note.getId())}, null, null, null
+                        DBCommonDef.NOTE_ID_COLUMN_NAME + " = ?", new String[]{String.valueOf(note.getId())}, null, null, null
                 );
 
                 for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
@@ -286,7 +287,7 @@ public class DBNoteManager extends BasicCommonNoteManager {
         try {
             c = mDB.query(
                     DBBasicNoteOpenHelper.NOTE_VALUES_TABLE_NAME, new String[]{DBBasicNoteOpenHelper.NOTE_VALUES_TABLE_COLS[0], DBBasicNoteOpenHelper.NOTE_VALUES_TABLE_COLS[2]},
-                    DBBasicNoteOpenHelper.NOTE_ID_COLUMN_NAME + " = ?", new String[]{String.valueOf(note.getId())}, null, null, DBBasicNoteOpenHelper.NOTE_VALUES_TABLE_COLS[2]
+                    DBCommonDef.NOTE_ID_COLUMN_NAME + " = ?", new String[]{String.valueOf(note.getId())}, null, null, DBBasicNoteOpenHelper.NOTE_VALUES_TABLE_COLS[2]
             );
 
             for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
@@ -313,7 +314,7 @@ public class DBNoteManager extends BasicCommonNoteManager {
             cv.put(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_COLS[1], System.currentTimeMillis());
             cv.put(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_COLS[6], BooleanUtils.toInt(checked));
 
-            mDB.update(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME, cv, DBBasicNoteOpenHelper.ID_COLUMN_NAME + " = ?" , new String[] {String.valueOf(item.getId())});
+            mDB.update(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME, cv, DBCommonDef.ID_COLUMN_NAME + " = ?" , new String[] {String.valueOf(item.getId())});
         }
     }
 
@@ -322,7 +323,7 @@ public class DBNoteManager extends BasicCommonNoteManager {
         try {
             c = mDB.query(
                     DBBasicNoteOpenHelper.NOTES_TABLE_NAME, DBBasicNoteOpenHelper.NOTES_TABLE_COLS,
-                    DBBasicNoteOpenHelper.ID_COLUMN_NAME + "=?", new String[] {String.valueOf(id)}, null, null, null
+                    DBCommonDef.ID_COLUMN_NAME + "=?", new String[] {String.valueOf(id)}, null, null, null
             );
 
             c.moveToFirst();
@@ -380,7 +381,7 @@ public class DBNoteManager extends BasicCommonNoteManager {
 
         cv.put(DBBasicNoteOpenHelper.NOTE_VALUES_TABLE_COLS[2], item.getValue());
 
-        return mDB.update(DBBasicNoteOpenHelper.NOTE_VALUES_TABLE_NAME, cv, DBBasicNoteOpenHelper.ID_COLUMN_NAME + " = ?", new String[] {String.valueOf(item.getId())});
+        return mDB.update(DBBasicNoteOpenHelper.NOTE_VALUES_TABLE_NAME, cv, DBCommonDef.ID_COLUMN_NAME + " = ?", new String[] {String.valueOf(item.getId())});
     }
 
     public long insertNoteItem(BasicNoteA note, BasicNoteItemA item) {
@@ -425,11 +426,11 @@ public class DBNoteManager extends BasicCommonNoteManager {
 
     public long deleteNoteItem(BasicNoteItemA item) {
         deleteNoteItemParam(item);
-        return mDB.delete(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME, DBBasicNoteOpenHelper.ID_COLUMN_NAME + "=?", new String[] {String.valueOf(item.getId())});
+        return mDB.delete(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME, DBCommonDef.ID_COLUMN_NAME + "=?", new String[] {String.valueOf(item.getId())});
     }
 
     public long deleteEntityNote(String tableName, BasicEntityNoteA item) {
-        return mDB.delete(tableName, DBBasicNoteOpenHelper.ID_COLUMN_NAME + "=?", new String[] {String.valueOf(item.getId())});
+        return mDB.delete(tableName, DBCommonDef.ID_COLUMN_NAME + "=?", new String[] {String.valueOf(item.getId())});
     }
 
     public long checkNoteItem(BasicNoteItemA item) {
@@ -492,10 +493,10 @@ public class DBNoteManager extends BasicCommonNoteManager {
     public int updateNoteItemOther(BasicEntityNoteA note, long otherNoteId, long otherOrderId) {
         ContentValues cv = new ContentValues();
 
-        cv.put(DBBasicNoteOpenHelper.NOTE_ID_COLUMN_NAME, otherNoteId);
-        cv.put(DBBasicNoteOpenHelper.ORDER_COLUMN_NAME, otherOrderId);
+        cv.put(DBCommonDef.NOTE_ID_COLUMN_NAME, otherNoteId);
+        cv.put(DBCommonDef.ORDER_COLUMN_NAME, otherOrderId);
 
-        return mDB.update(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME, cv, DBBasicNoteOpenHelper.ID_COLUMN_NAME + " = ?" , new String[] {String.valueOf(note.getId())});
+        return mDB.update(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME, cv, DBCommonDef.ID_COLUMN_NAME + " = ?" , new String[] {String.valueOf(note.getId())});
     }
 
     public long insertNoteValue(BasicEntityNoteA note, BasicNoteValueA value) {
@@ -522,7 +523,7 @@ public class DBNoteManager extends BasicCommonNoteManager {
         try {
             c = mDB.query(
                     DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME, DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_COLS,
-                    DBBasicNoteOpenHelper.ID_COLUMN_NAME + "=?", new String[]{String.valueOf(id)}, null, null, null
+                    DBCommonDef.ID_COLUMN_NAME + "=?", new String[]{String.valueOf(id)}, null, null, null
             );
             c.moveToFirst();
             if (!c.isAfterLast())
@@ -541,7 +542,7 @@ public class DBNoteManager extends BasicCommonNoteManager {
         try {
             c = mDB.query(
                     DBBasicNoteOpenHelper.NOTES_TABLE_NAME, DBBasicNoteOpenHelper.NOTES_TABLE_COLS,
-                    DBBasicNoteOpenHelper.ID_COLUMN_NAME + "=?", new String[]{String.valueOf(id)}, null, null, null
+                    DBCommonDef.ID_COLUMN_NAME + "=?", new String[]{String.valueOf(id)}, null, null, null
             );
             c.moveToFirst();
             if (!c.isAfterLast())

@@ -31,45 +31,45 @@ public class InputParserTest {
     public void testInputParser() {
         String test1 = "Something with space";
         InputParser.FloatParamsResult result1 = InputParser.parseFloatParams(test1);
-        Assert.assertNull(result1.getIntValue());
+        Assert.assertNull(result1.getLongValue());
         Assert.assertEquals(test1, result1.getText());
 
         String test2 = "Something with space 52";
         InputParser.FloatParamsResult result2 = InputParser.parseFloatParams(test2);
-        Assert.assertEquals((Integer)5200, result2.getIntValue());
+        Assert.assertEquals((Long)5200L, result2.getLongValue());
         Assert.assertEquals("Something with space", result2.getText());
 
         String test3 = "Something with space 52,33";
         InputParser.FloatParamsResult result3 = InputParser.parseFloatParams(test3);
         Assert.assertEquals("Something with space", result3.getText());
-        Assert.assertEquals((Integer)5233, result3.getIntValue());
+        Assert.assertEquals((Long)5233L, result3.getLongValue());
 
         String test4 = "Something with space 52,33.777";
         InputParser.FloatParamsResult result4 = InputParser.parseFloatParams(test4);
         Assert.assertEquals(test4, result4.getText());
-        Assert.assertNull(result4.getIntValue());
+        Assert.assertNull(result4.getLongValue());
 
         String test5 = "Something with space 74";
         InputParser.FloatParamsResult result5 = InputParser.parseFloatParams(test5);
-        Assert.assertEquals((Integer)7400, result5.getIntValue());
+        Assert.assertEquals((Long)7400L, result5.getLongValue());
 
         String test6 = "Something with space .88";
         InputParser.FloatParamsResult result6 = InputParser.parseFloatParams(test6);
-        Assert.assertEquals((Integer)88, result6.getIntValue());
+        Assert.assertEquals((Long)88L, result6.getLongValue());
 
         String test7 = "Something with space rounded 6344.735476";
         InputParser.FloatParamsResult result7 = InputParser.parseFloatParams(test7);
-        Assert.assertEquals((Integer)634474, result7.getIntValue());
+        Assert.assertEquals((Long)634474L, result7.getLongValue());
 
         String test8 = "String with different numbers: 12, 33.44 88.15";
         InputParser.FloatParamsResult result8 = InputParser.parseFloatParams(test8);
-        Assert.assertEquals((Integer)8815, result8.getIntValue());
+        Assert.assertEquals((Long)8815L, result8.getLongValue());
         Assert.assertEquals("String with different numbers: 12, 33.44", result8.getText());
         System.out.println("Result 8:" + result8);
 
         String test9 = "Simple dot should not go .";
         InputParser.FloatParamsResult result9 = InputParser.parseFloatParams(test9);
-        Assert.assertNull(result9.getIntValue());
+        Assert.assertNull(result9.getLongValue());
         Assert.assertEquals(test9, result9.getText());
 
     }
