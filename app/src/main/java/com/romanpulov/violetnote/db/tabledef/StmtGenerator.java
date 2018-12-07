@@ -108,16 +108,34 @@ public final class StmtGenerator {
         return sb.toString();
     }
 
+    /**
+     * Create index on foreign key
+     * @param tableName Table name
+     * @param indexColumnName Foreign key column name for index
+     * @return Create foreign key index statement
+     */
     @NonNull
     public static String createForeignKeyIndex(@NonNull String tableName, @NonNull String indexColumnName) {
         return "CREATE INDEX fk_" + tableName + " ON " + tableName + " (" + indexColumnName + ");";
     }
 
+    /**
+     * Create unique index
+     * @param tableName Table Name
+     * @param indexColumnName Index column name
+     * @return Create unique index statement
+     */
     @NonNull
     public static String createUniqueIndex(@NonNull String tableName, @NonNull String indexColumnName) {
         return "CREATE UNIQUE INDEX u_" + tableName + "_" + firstChars(new String[]{indexColumnName}) + " ON " + tableName + " (" + indexColumnName + ");";
     }
 
+    /**
+     * Create unique index
+     * @param tableName Table Name
+     * @param indexColumnNames Index column names
+     * @return Create unique index statement
+     */
     @NonNull
     public static String createUniqueIndex(@NonNull String tableName, @NonNull String[] indexColumnNames) {
         return "CREATE UNIQUE INDEX u_" + tableName + "_" + firstChars(indexColumnNames)  + " ON " + tableName + " (" + joinStrings(", ", indexColumnNames) + ");";

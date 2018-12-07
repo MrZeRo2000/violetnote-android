@@ -44,7 +44,6 @@ public class StmtGeneratorTest {
         );
         Assert.assertEquals("CREATE TABLE t3 (_id INTEGER NOT NULL, t1_id INTEGER, t2_id INTEGER, str TEXT, FOREIGN KEY (t1_id) REFERENCES t1(_id), FOREIGN KEY (t2_id) REFERENCES t2(_id));", createStmt3);
 
-
         /*
         System.out.println(createStmt1);
         System.out.println(createStmt2);
