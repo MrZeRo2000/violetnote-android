@@ -25,5 +25,15 @@ public class StmtGeneratorTest {
         );
 
         Assert.assertEquals("CREATE TABLE t2 (_id INTEGER NOT NULL, t1_id INTEGER, str TEXT, FOREIGN KEY (t1_id) REFERENCES t1(_id));", createStmt2);
+
+        String fkIndexStmt = StmtGenerator.createForeignKeyIndex("t2", "t1_id");
+        String uIndex1Stmt = StmtGenerator.createUniqueIndex("t2", "t1_id");
+        String uIndex2Stmt = StmtGenerator.createUniqueIndex("t2", new String[]{"t1_id", "str"});
+
+        System.out.println(createStmt1);
+        System.out.println(createStmt2);
+        System.out.println(fkIndexStmt);
+        System.out.println(uIndex1Stmt);
+        System.out.println(uIndex2Stmt);
     }
 }
