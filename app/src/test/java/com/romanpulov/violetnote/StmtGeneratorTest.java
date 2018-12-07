@@ -8,11 +8,22 @@ import org.junit.Test;
 public class StmtGeneratorTest {
     @Test
     public void testCreate() {
-        String createStmt = StmtGenerator.createTableStatement(
-                "testTable",
+        String createStmt1 = StmtGenerator.createTableStatement(
+                "t1",
                 new String[] {"_id", "num", "str"},
                 new String[] {"INTEGER NOT NULL", "INTEGER", "TEXT"}
                 );
-        Assert.assertEquals("CREATE TABLE testTable (_id INTEGER NOT NULL, num INTEGER, str TEXT);", createStmt);
+        Assert.assertEquals("CREATE TABLE t1 (_id INTEGER NOT NULL, num INTEGER, str TEXT);", createStmt1);
+
+        String createStmt2 = StmtGenerator.createTableStatement(
+                "t2",
+                new String[] {"_id", "t1_id", "str"},
+                new String[] {"INTEGER NOT NULL", "INTEGER", "TEXT"},
+                "t1_id",
+                "t1",
+                "_id"
+        );
+
+        Assert.assertEquals("CREATE TABLE t2 (_id INTEGER NOT NULL, t1_id INTEGER, str TEXT, FOREIGN KEY (t1_id) REFERENCES t1(_id));", createStmt2);
     }
 }
