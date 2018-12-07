@@ -8,6 +8,18 @@ import android.text.TextUtils;
  */
 public final class StmtGenerator {
 
+    public static final class ForeignKeyRec {
+        private final String columnName;
+        private final String tableName;
+        private final String tableColumnName;
+
+        public ForeignKeyRec(String columnName, String tableName, String tableColumnName) {
+            this.columnName = columnName;
+            this.tableName = tableName;
+            this.tableColumnName = tableColumnName;
+        }
+    }
+
     /**
      * Create table without foreign key
      * @param tableName Table name
@@ -21,7 +33,7 @@ public final class StmtGenerator {
             @NonNull String[] tableCols,
             @NonNull String[] tableColTypes
     ) {
-        return createTableStatement(tableName, tableCols, tableColTypes, null, null, null);
+        return createTableStatement(tableName, tableCols, tableColTypes, null);
     }
 
     /**
@@ -29,9 +41,7 @@ public final class StmtGenerator {
      * @param tableName Table name
      * @param tableCols Table columns
      * @param tableColTypes Table column types
-     * @param foreignKeyColumnName Column name to apply the constraint
-     * @param foreignKeyTableName Foreign key table name
-     * @param foreignKeyTableColumnName Foreign key table column name
+     * @param foreignKeys Foreign keys
      * @return Create table statement
      */
     @NonNull
@@ -39,9 +49,7 @@ public final class StmtGenerator {
             @NonNull String tableName,
             @NonNull String[] tableCols,
             @NonNull String[] tableColTypes,
-            String foreignKeyColumnName,
-            String foreignKeyTableName,
-            String foreignKeyTableColumnName
+            ForeignKeyRec[] foreignKeys
             ) {
         if ((tableCols.length != tableColTypes.length) || (tableCols.length == 0))
             throw new IllegalArgumentException();
@@ -51,19 +59,28 @@ public final class StmtGenerator {
             tableStructure.append(tableCols[i]);
             tableStructure.append(" ");
             tableStructure.append(tableColTypes[i]);
-            if ((i < tableCols.length - 1) || (foreignKeyColumnName != null)) {
+            if ((i < tableCols.length - 1) || (foreignKeys != null)) {
                 tableStructure.append(", ");
             }
         }
 
-        if (foreignKeyColumnName != null) {
-            tableStructure.append("FOREIGN KEY (");
-            tableStructure.append(foreignKeyColumnName);
-            tableStructure.append(") REFERENCES ");
-            tableStructure.append(foreignKeyTableName);
-            tableStructure.append("(");
-            tableStructure.append(foreignKeyTableColumnName);
-            tableStructure.append(")");
+        if (foreignKeys != null) {
+            for (int i = 0; i < foreignKeys.length; i++) {
+                ForeignKeyRec f = foreignKeys[i];
+
+                tableStructure.append("FOREIGN KEY (");
+                tableStructure.append(f.columnName);
+                tableStructure.append(") REFERENCES ");
+                tableStructure.append(f.tableName);
+                tableStructure.append("(");
+                tableStructure.append(f.tableColumnName);
+                tableStructure.append(")");
+
+                if (i < foreignKeys.length - 1) {
+                    tableStructure.append(", ");
+                }
+
+            }
         }
 
         return "CREATE TABLE " + tableName + " (" + tableStructure.toString() + ");";
