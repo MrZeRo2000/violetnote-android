@@ -5,6 +5,8 @@ import com.romanpulov.violetnote.db.tabledef.StmtGenerator;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.Arrays;
+
 public class StmtGeneratorTest {
     @Test
     public void testCreate() {
@@ -60,5 +62,11 @@ public class StmtGeneratorTest {
         System.out.println(createStmt3);
         System.out.println(insertStmt1);
         */
+
+        String[] a1 = new String[] {"_id", "t1_id", "t2_id", "str"};
+        System.out.println("a1:" + Arrays.toString(a1));
+        String[] a2 = Arrays.copyOfRange(a1, 1, a1.length);
+        System.out.println("a2:" + Arrays.toString(a2));
+
     }
 }

@@ -1,5 +1,8 @@
 package com.romanpulov.violetnote.db.tabledef;
 
+import java.util.Collection;
+import java.util.List;
+
 /**
  * Common definitions
  */
@@ -16,4 +19,9 @@ public final class DBCommonDef {
     public static final String PRIORITY_COLUMN_NAME = "priority";
     public static final String ENCRYPTED_STRING_COLUMN_NAME = "encrypted_string";
 
+    public interface TableDefSQLProvider {
+        String getTableName();
+        List<String> getSQLCreate();
+        List<String> getSQLUpgrade(int oldVersion);
+    }
 }

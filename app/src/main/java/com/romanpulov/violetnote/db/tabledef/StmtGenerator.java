@@ -157,4 +157,14 @@ public final class StmtGenerator {
                 joinStrings(", ", tableCols) + ") " +
                 values + ";";
     }
+
+    /**
+     * Drop table
+     * @param tableName Table name to drop
+     * @return Drop table statement
+     */
+    @NonNull
+    public static String dropTableStatement(@NonNull String tableName) {
+        return "DROP TABLE IF EXISTS " + tableName;
+    }
 }
