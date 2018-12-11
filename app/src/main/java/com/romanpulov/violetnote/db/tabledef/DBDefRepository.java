@@ -9,9 +9,13 @@ public final class DBDefRepository {
     private static List<Class<? extends DBCommonDef.TableDefSQLProvider>> mTableDefs = new ArrayList<>();
 
     static {
+        //dictionary tables
         mTableDefs.add(NoteGroupsTableDef.class);
         mTableDefs.add(NoteItemParamTypesTableDef.class);
+
+        //core data tables
         mTableDefs.add(NotesTableDef.class);
+        mTableDefs.add(NoteItemsTableDef.class);
 
         //H tables
         mTableDefs.add(HEventTypesTableDef.class);
