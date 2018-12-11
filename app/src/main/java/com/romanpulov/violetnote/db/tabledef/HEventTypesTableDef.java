@@ -21,13 +21,15 @@ public final class HEventTypesTableDef implements DBCommonDef.TableDefSQLProvide
     public static final String[] TABLE_COLS = new String[] {
             DBCommonDef.ID_COLUMN_NAME,
             EVENT_GROUP_COLUMN_NAME,
+            EVENT_TYPE_CODE_COLUMN_NAME,
             EVENT_TYPE_NAME_COLUMN_NAME
     };
 
     public static final String[] TABLE_COL_TYPES = new String[] {
             "INTEGER PRIMARY KEY",
             "INTEGER NOT NULL",
-            "TEXT"
+            "TEXT NOT NULL",
+            "TEXT NOT NULL"
     };
 
     public static final String TABLE_CREATE = StmtGenerator.createTableStatement(TABLE_NAME, TABLE_COLS, TABLE_COL_TYPES);

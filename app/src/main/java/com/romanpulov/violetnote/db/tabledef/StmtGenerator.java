@@ -166,7 +166,7 @@ public final class StmtGenerator {
     ) {
         return "INSERT INTO " + tableName + " (" +
                 joinStrings(", ", tableCols) + ") " +
-                values + ";";
+                values + "; COMMIT;";
     }
 
     /**
