@@ -108,8 +108,9 @@ public final class StmtGenerator {
 
             String ss[] = s.split("_");
             if (ss.length > 1) {
-                sb.append(ss[0].substring(0, 1));
-                sb.append(ss[1].substring(0, 1));
+                for (String sd: ss) {
+                    sb.append(sd.substring(0, 1));
+                }
             } else {
                 sb.append(s.substring(0, 2));
             }
@@ -129,7 +130,7 @@ public final class StmtGenerator {
             @NonNull String tableName,
             @NonNull String indexColumnName)
     {
-        return "CREATE INDEX fk_" + tableName + " ON " + tableName + " (" + indexColumnName + ");";
+        return "CREATE INDEX fk_" + tableName + "_" + firstChars(new String[]{indexColumnName}) + " ON " + tableName + " (" + indexColumnName + ");";
     }
 
     /**

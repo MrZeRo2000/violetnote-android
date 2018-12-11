@@ -27,7 +27,7 @@ public class StmtGeneratorTest {
         Assert.assertEquals("CREATE TABLE t2 (_id INTEGER PRIMARY KEY, t1_id INTEGER, str TEXT, FOREIGN KEY (t1_id) REFERENCES t1(_id));", createStmt2);
 
         String fkIndexStmt = StmtGenerator.createForeignKeyIndexStatement("t2", "t1_id");
-        Assert.assertEquals("CREATE INDEX fk_t2 ON t2 (t1_id);", fkIndexStmt);
+        Assert.assertEquals("CREATE INDEX fk_t2_ti ON t2 (t1_id);", fkIndexStmt);
 
         String uIndex1Stmt = StmtGenerator.createUniqueIndexStatement("t2", "t1_id");
         Assert.assertEquals("CREATE UNIQUE INDEX u_t2_ti ON t2 (t1_id);", uIndex1Stmt);

@@ -11,6 +11,7 @@ public final class DBCommonDef {
     //common column names
     public static final String ID_COLUMN_NAME = "_id";
     public static final String NOTE_ID_COLUMN_NAME = "note_id";
+    public static final String NOTE_ITEM_ID_COLUMN_NAME = "note_item_id";
     public static final String LAST_MODIFIED_COLUMN_NAME = "last_modified";
     public static final String ORDER_COLUMN_NAME = "order_id";
     public static final String NAME_COLUMN_NAME = "name";

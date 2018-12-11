@@ -1,5 +1,7 @@
 package com.romanpulov.violetnote.db.tabledef;
 
+import android.support.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -50,6 +52,7 @@ public final class HEventTypesTableDef implements DBCommonDef.TableDefSQLProvide
     }
 
     @Override
+    @Nullable
     public List<String> getSQLUpgrade(int oldVersion) {
         List<String> result = new ArrayList<>();
         switch(oldVersion) {
