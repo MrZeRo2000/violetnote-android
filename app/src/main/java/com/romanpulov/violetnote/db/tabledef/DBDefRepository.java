@@ -16,6 +16,7 @@ public final class DBDefRepository {
         //core data tables
         mTableDefs.add(NotesTableDef.class);
         mTableDefs.add(NoteItemsTableDef.class);
+        mTableDefs.add(NoteValuesTableDef.class);
 
         //H tables
         mTableDefs.add(HEventTypesTableDef.class);
