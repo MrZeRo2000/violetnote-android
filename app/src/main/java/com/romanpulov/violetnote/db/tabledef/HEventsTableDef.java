@@ -38,7 +38,7 @@ public final class HEventsTableDef implements DBCommonDef.TableDefSQLProvider {
             TABLE_COLS,
             TABLE_COL_TYPES,
             new StmtGenerator.ForeignKeyRec[]{
-                    new StmtGenerator.ForeignKeyRec(EVENT_TYPE_ID_COLUMN_NAME, HEventTypesTableDef.TABLE_NAME, DBCommonDef.EVENT_TYPE_ID_COLUMN_NAME)
+                    new StmtGenerator.ForeignKeyRec(EVENT_TYPE_ID_COLUMN_NAME, HEventTypesTableDef.TABLE_NAME, DBCommonDef.ID_COLUMN_NAME)
             });
 
     public static final String U_INDEX_CREATE = StmtGenerator.createUniqueIndexStatement(TABLE_NAME, EVENT_TIME_COLUMN_NAME);

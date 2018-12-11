@@ -39,8 +39,8 @@ public final class HNoteCOItems implements DBCommonDef.TableDefSQLProvider {
             TABLE_COLS,
             TABLE_COL_TYPES,
             new StmtGenerator.ForeignKeyRec[]{
-                    new StmtGenerator.ForeignKeyRec(EVENT_ID_COLUMN_NAME, HEventsTableDef.TABLE_NAME, DBCommonDef.EVENT_ID_COLUMN_NAME),
-                    new StmtGenerator.ForeignKeyRec(NOTE_ID_COLUMN_NAME, NotesTableDef.TABLE_NAME, DBCommonDef.NOTE_ID_COLUMN_NAME)
+                    new StmtGenerator.ForeignKeyRec(EVENT_ID_COLUMN_NAME, HEventsTableDef.TABLE_NAME, DBCommonDef.ID_COLUMN_NAME),
+                    new StmtGenerator.ForeignKeyRec(NOTE_ID_COLUMN_NAME, NotesTableDef.TABLE_NAME, DBCommonDef.ID_COLUMN_NAME)
             });
 
     public static final String FK_INDEX_EVENT_CREATE = StmtGenerator.createForeignKeyIndexStatement(TABLE_NAME, EVENT_ID_COLUMN_NAME);

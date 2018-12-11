@@ -41,8 +41,8 @@ public final class HNoteCOItemParams implements DBCommonDef.TableDefSQLProvider 
             TABLE_COLS,
             TABLE_COL_TYPES,
             new StmtGenerator.ForeignKeyRec[]{
-                    new StmtGenerator.ForeignKeyRec(H_NOTE_CO_ITEM_ID_COLUMN_NAME, HNoteCOItems.TABLE_NAME, DBCommonDef.H_NOTE_CO_ITEM_ID_COLUMN_NAME),
-                    new StmtGenerator.ForeignKeyRec(NOTE_ITEM_PARAM_TYPE_ID_COLUMN_NAME, NoteItemsTableDef.TABLE_NAME, DBCommonDef.NOTE_ITEM_PARAM_TYPE_ID)
+                    new StmtGenerator.ForeignKeyRec(H_NOTE_CO_ITEM_ID_COLUMN_NAME, HNoteCOItems.TABLE_NAME, DBCommonDef.ID_COLUMN_NAME),
+                    new StmtGenerator.ForeignKeyRec(NOTE_ITEM_PARAM_TYPE_ID_COLUMN_NAME, NoteItemsTableDef.TABLE_NAME, DBCommonDef.ID_COLUMN_NAME)
             });
 
     public static final String FK_INDEX_H_NOTE_CO_ITEM_CREATE = StmtGenerator.createForeignKeyIndexStatement(TABLE_NAME, H_NOTE_CO_ITEM_ID_COLUMN_NAME);

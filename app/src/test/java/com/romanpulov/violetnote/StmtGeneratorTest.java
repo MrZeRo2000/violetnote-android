@@ -51,9 +51,10 @@ public class StmtGeneratorTest {
                 new String[] {"num", "str"},
                 "SELECT 3, 'test1' UNION ALL SELECT 6, 'test6'"
                 );
-        Assert.assertEquals("INSERT INTO t1 (num, str) SELECT 3, 'test1' UNION ALL SELECT 6, 'test6';", insertStmt1);
+        Assert.assertEquals("INSERT INTO t1 (num, str) SELECT 3, 'test1' UNION ALL SELECT 6, 'test6'; COMMIT;", insertStmt1);
 
-        /*
+        String alterStmt1 = StmtGenerator.createAlterTableAddStatement("t3", "s1", "TEXT");
+
         System.out.println(createStmt1);
         System.out.println(createStmt2);
         System.out.println(fkIndexStmt);
@@ -61,12 +62,14 @@ public class StmtGeneratorTest {
         System.out.println(uIndex2Stmt);
         System.out.println(createStmt3);
         System.out.println(insertStmt1);
-        */
+        System.out.println(alterStmt1);
 
+        /*
         String[] a1 = new String[] {"_id", "t1_id", "t2_id", "str"};
         System.out.println("a1:" + Arrays.toString(a1));
         String[] a2 = Arrays.copyOfRange(a1, 1, a1.length);
         System.out.println("a2:" + Arrays.toString(a2));
+        */
 
     }
 }

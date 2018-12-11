@@ -19,11 +19,15 @@ public final class DBCommonDef {
     public static final String CHECKED_COLUMN_NAME = "checked";
     public static final String PRIORITY_COLUMN_NAME = "priority";
     public static final String ENCRYPTED_STRING_COLUMN_NAME = "encrypted_string";
+    public static final String GROUP_ID_COLUMN_NAME = "group_id";
     //events related
     public static final String EVENT_TYPE_ID_COLUMN_NAME = "event_type_id";
     public static final String EVENT_ID_COLUMN_NAME = "event_id";
     public static final String H_NOTE_CO_ITEM_ID_COLUMN_NAME = "h_note_co_item_id";
     public static final String NOTE_ITEM_PARAM_TYPE_ID = "note_item_param_type_id";
+
+    //parameter names
+    public static final String NOTE_ITEM_PARAM_TYPE_NAME_PRICE = "Price";
 
     public interface TableDefSQLProvider {
         List<String> getSQLCreate();

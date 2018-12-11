@@ -98,7 +98,7 @@ public final class StmtGenerator {
         return sb.toString();
     }
 
-    public static String firstChars(@NonNull String[] strings) {
+    private static String firstChars(@NonNull String[] strings) {
         StringBuilder sb = new StringBuilder();
 
         for (String s: strings) {
@@ -177,5 +177,17 @@ public final class StmtGenerator {
     @NonNull
     public static String dropTableStatement(@NonNull String tableName) {
         return "DROP TABLE IF EXISTS " + tableName;
+    }
+
+    /**
+     * Alter table add new column
+     * @param tableName Table name
+     * @param columnName Column name
+     * @param columnType Column type
+     * @return Alter table add new column statement
+     */
+    @NonNull
+    public static String createAlterTableAddStatement(@NonNull String tableName, @NonNull String columnName, @NonNull String columnType) {
+        return "ALTER TABLE " + tableName + " ADD " + columnName + " " + columnType + ";";
     }
 }
