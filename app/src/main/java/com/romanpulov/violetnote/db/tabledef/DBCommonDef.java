@@ -22,6 +22,8 @@ public final class DBCommonDef {
     //events related
     public static final String EVENT_TYPE_ID_COLUMN_NAME = "event_type_id";
     public static final String EVENT_ID_COLUMN_NAME = "event_id";
+    public static final String H_NOTE_CO_ITEM_ID_COLUMN_NAME = "h_note_co_item_id";
+    public static final String NOTE_ITEM_PARAM_TYPE_ID = "note_item_param_type_id";
 
     public interface TableDefSQLProvider {
         List<String> getSQLCreate();

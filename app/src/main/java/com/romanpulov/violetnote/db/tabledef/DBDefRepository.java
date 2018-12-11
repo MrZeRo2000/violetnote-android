@@ -1,11 +1,9 @@
 package com.romanpulov.violetnote.db.tabledef;
 
-import java.time.Instant;
+import android.support.annotation.NonNull;
+
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 public final class DBDefRepository {
     private static List<Class<? extends DBCommonDef.TableDefSQLProvider>> mTableDefs = new ArrayList<>();
@@ -14,8 +12,11 @@ public final class DBDefRepository {
         mTableDefs.add(HEventTypesTableDef.class);
         mTableDefs.add(HEventsTableDef.class);
         mTableDefs.add(HNoteItemsTableDef.class);
+        mTableDefs.add(HNoteCOItems.class);
+        mTableDefs.add(HNoteCOItemParams.class);
     }
 
+    @NonNull
     public static List<Class<? extends DBCommonDef.TableDefSQLProvider>> getCreateTableDefs() {
         return mTableDefs;
     }

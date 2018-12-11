@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.romanpulov.violetnote.db.tabledef.DBCommonDef.*;
-
 /**
  * h_event_types table definition
  */
@@ -21,7 +19,7 @@ public final class HEventTypesTableDef implements DBCommonDef.TableDefSQLProvide
     public static final String EVENT_TYPE_CODE_COLUMN_NAME = "event_type_code";
     public static final String EVENT_TYPE_NAME_COLUMN_NAME = "event_type_name";
     public static final String[] TABLE_COLS = new String[] {
-            ID_COLUMN_NAME,
+            DBCommonDef.ID_COLUMN_NAME,
             EVENT_GROUP_COLUMN_NAME,
             EVENT_TYPE_NAME_COLUMN_NAME
     };
