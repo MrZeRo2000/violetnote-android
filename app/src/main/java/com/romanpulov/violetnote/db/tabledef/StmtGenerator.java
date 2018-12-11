@@ -102,7 +102,17 @@ public final class StmtGenerator {
         StringBuilder sb = new StringBuilder();
 
         for (String s: strings) {
-            sb.append(s.substring(0, 2));
+            if (sb.length() > 0) {
+                sb.append("_");
+            }
+
+            String ss[] = s.split("_");
+            if (ss.length > 1) {
+                sb.append(ss[0].substring(0, 1));
+                sb.append(ss[1].substring(0, 1));
+            } else {
+                sb.append(s.substring(0, 2));
+            }
         }
 
         return sb.toString();

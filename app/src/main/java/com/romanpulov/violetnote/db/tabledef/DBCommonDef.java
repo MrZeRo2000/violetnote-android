@@ -18,9 +18,11 @@ public final class DBCommonDef {
     public static final String CHECKED_COLUMN_NAME = "checked";
     public static final String PRIORITY_COLUMN_NAME = "priority";
     public static final String ENCRYPTED_STRING_COLUMN_NAME = "encrypted_string";
+    //events related
+    public static final String EVENT_TYPE_ID_COLUMN_NAME = "event_type_id";
+    public static final String EVENT_ID_COLUMN_NAME = "event_id";
 
     public interface TableDefSQLProvider {
-        String getTableName();
         List<String> getSQLCreate();
         List<String> getSQLUpgrade(int oldVersion);
     }

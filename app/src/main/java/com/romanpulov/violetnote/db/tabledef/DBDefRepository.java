@@ -12,6 +12,7 @@ public final class DBDefRepository {
 
     static {
         mTableDefs.add(HEventTypesTableDef.class);
+        mTableDefs.add(HEventsTableDef.class);
     }
 
     public static List<Class<? extends DBCommonDef.TableDefSQLProvider>> getCreateTableDefs() {

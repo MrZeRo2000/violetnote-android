@@ -30,10 +30,10 @@ public class StmtGeneratorTest {
         Assert.assertEquals("CREATE INDEX fk_t2 ON t2 (t1_id);", fkIndexStmt);
 
         String uIndex1Stmt = StmtGenerator.createUniqueIndexStatement("t2", "t1_id");
-        Assert.assertEquals("CREATE UNIQUE INDEX u_t2_t1 ON t2 (t1_id);", uIndex1Stmt);
+        Assert.assertEquals("CREATE UNIQUE INDEX u_t2_ti ON t2 (t1_id);", uIndex1Stmt);
 
         String uIndex2Stmt = StmtGenerator.createUniqueIndexStatement("t2", new String[]{"t1_id", "str"});
-        Assert.assertEquals("CREATE UNIQUE INDEX u_t2_t1st ON t2 (t1_id, str);", uIndex2Stmt);
+        Assert.assertEquals("CREATE UNIQUE INDEX u_t2_ti_st ON t2 (t1_id, str);", uIndex2Stmt);
 
         String createStmt3 = StmtGenerator.createTableStatement(
                 "t3",
