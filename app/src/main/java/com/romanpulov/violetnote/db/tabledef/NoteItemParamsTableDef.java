@@ -1,5 +1,6 @@
 package com.romanpulov.violetnote.db.tabledef;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -57,6 +58,22 @@ public final class NoteItemParamsTableDef implements DBCommonDef.TableDefSQLProv
 
     @Override
     public List<String> getSQLUpgrade(int oldVersion) {
-        return null;
+        List<String> result = new ArrayList<>();
+        switch(oldVersion) {
+            case 1:
+            case 2:
+                result.addAll(
+                        Arrays.asList(
+                                TABLE_CREATE,
+                                FK_INDEX_NOTE_ITEM_ID_CREATE,
+                                FK_INDEX_NOTE_ITEM_PARAM_TYPE_ID_CREATE
+                        )
+                );
+            case 100:
+                return result;
+            default:
+                return null;
+        }
+
     }
 }
