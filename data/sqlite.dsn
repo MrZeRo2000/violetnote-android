@@ -14,4 +14,4 @@ Timeout=
 NoTXN=0
 SyncPragma=
 StepAPI=0
-Database=D:\prj\AndroidStudioProjects\violetnote-android\data\basic_note.db
+Database=D:\prj\AndroidStudioProjects\violetnote-android\data\new_db.db
