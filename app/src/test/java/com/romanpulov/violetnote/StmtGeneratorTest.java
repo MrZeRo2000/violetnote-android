@@ -51,7 +51,7 @@ public class StmtGeneratorTest {
                 new String[] {"num", "str"},
                 "SELECT 3, 'test1' UNION ALL SELECT 6, 'test6'"
                 );
-        Assert.assertEquals("INSERT INTO t1 (num, str) SELECT 3, 'test1' UNION ALL SELECT 6, 'test6'; COMMIT;", insertStmt1);
+        Assert.assertEquals("INSERT INTO t1 (num, str) SELECT 3, 'test1' UNION ALL SELECT 6, 'test6';", insertStmt1);
 
         String alterStmt1 = StmtGenerator.createAlterTableAddStatement("t3", "s1", "TEXT");
 
