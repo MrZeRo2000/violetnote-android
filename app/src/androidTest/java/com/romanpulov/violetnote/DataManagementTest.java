@@ -18,6 +18,8 @@ import com.romanpulov.violetnote.db.DBBasicNoteHelper;
 import com.romanpulov.violetnote.db.DBBasicNoteOpenHelper;
 import com.romanpulov.violetnote.db.DBNoteManager;
 import com.romanpulov.violetnote.db.DateTimeFormatter;
+import com.romanpulov.violetnote.db.tabledef.DBCommonDef;
+import com.romanpulov.violetnote.db.tabledef.DBDefFactory;
 import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 
@@ -54,9 +56,9 @@ public class DataManagementTest {
 
         log("Get Max order id < 7 = " + dbBasicNoteHelper.getAggregateColumn(
                 DBBasicNoteOpenHelper.NOTES_TABLE_NAME,
-                DBBasicNoteOpenHelper.ORDER_COLUMN_NAME,
+                DBCommonDef.ORDER_COLUMN_NAME,
                 DBBasicNoteHelper.MAX_AGGREGATE_FUNCTION_NAME,
-                DBBasicNoteOpenHelper.ID_COLUMN_NAME + " < ?",
+                DBCommonDef.ID_COLUMN_NAME + " < ?",
                 new String[] {"7"}
         ));
 
@@ -121,7 +123,7 @@ public class DataManagementTest {
         Cursor c = null;
         try {
             c = db.query(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME, new String[]{"checked"},
-                    DBBasicNoteOpenHelper.NOTE_ID_COLUMN_NAME + " = ?", new String[]{"2"}, null, null, null);
+                    DBCommonDef.NOTE_ID_COLUMN_NAME + " = ?", new String[]{"2"}, null, null, null);
 
             int itemCount = 0;
             int checkedItemCount = 0;

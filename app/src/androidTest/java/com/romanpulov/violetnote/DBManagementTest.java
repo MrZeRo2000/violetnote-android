@@ -14,6 +14,7 @@ import com.romanpulov.violetnote.db.DBBasicNoteHelper;
 import com.romanpulov.violetnote.db.DBBasicNoteOpenHelper;
 import com.romanpulov.violetnote.db.DBManagementProvider;
 import com.romanpulov.violetnote.db.DBNoteManager;
+import com.romanpulov.violetnote.db.tabledef.DBCommonDef;
 import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
@@ -282,10 +283,10 @@ public class DBManagementTest {
     private void internalTestNoteMove() {
         createNotesTestData();
 
-        long note1id = mDBHelper.getAggregateColumn(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, DBBasicNoteOpenHelper.ID_COLUMN_NAME, "MAX", "title = ?", new String[]{mTestNoteNames.get(0)});
-        long note2id = mDBHelper.getAggregateColumn(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, DBBasicNoteOpenHelper.ID_COLUMN_NAME, "MAX", "title = ?", new String[]{mTestNoteNames.get(1)});
-        long note3id = mDBHelper.getAggregateColumn(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, DBBasicNoteOpenHelper.ID_COLUMN_NAME, "MAX", "title = ?", new String[]{mTestNoteNames.get(2)});
-        long note4id = mDBHelper.getAggregateColumn(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, DBBasicNoteOpenHelper.ID_COLUMN_NAME, "MAX", "title = ?", new String[]{mTestNoteNames.get(3)});
+        long note1id = mDBHelper.getAggregateColumn(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, DBCommonDef.ID_COLUMN_NAME, "MAX", "title = ?", new String[]{mTestNoteNames.get(0)});
+        long note2id = mDBHelper.getAggregateColumn(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, DBCommonDef.ID_COLUMN_NAME, "MAX", "title = ?", new String[]{mTestNoteNames.get(1)});
+        long note3id = mDBHelper.getAggregateColumn(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, DBCommonDef.ID_COLUMN_NAME, "MAX", "title = ?", new String[]{mTestNoteNames.get(2)});
+        long note4id = mDBHelper.getAggregateColumn(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, DBCommonDef.ID_COLUMN_NAME, "MAX", "title = ?", new String[]{mTestNoteNames.get(3)});
 
         long[] noteIdList = {note1id, note2id, note3id, note4id};
 
@@ -352,10 +353,10 @@ public class DBManagementTest {
     public void internalTestRelatedNoteListAndMovement() {
         createNoteItemTestData();
 
-        long note1id = mDBHelper.getAggregateColumn(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, DBBasicNoteOpenHelper.ID_COLUMN_NAME, "MAX", "title = ?", new String[]{mTestNoteNames.get(0)});
-        long note2id = mDBHelper.getAggregateColumn(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, DBBasicNoteOpenHelper.ID_COLUMN_NAME, "MAX", "title = ?", new String[]{mTestNoteNames.get(1)});
-        long note3id = mDBHelper.getAggregateColumn(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, DBBasicNoteOpenHelper.ID_COLUMN_NAME, "MAX", "title = ?", new String[]{mTestNoteNames.get(2)});
-        long note4id = mDBHelper.getAggregateColumn(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, DBBasicNoteOpenHelper.ID_COLUMN_NAME, "MAX", "title = ?", new String[]{mTestNoteNames.get(3)});
+        long note1id = mDBHelper.getAggregateColumn(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, DBCommonDef.ID_COLUMN_NAME, "MAX", "title = ?", new String[]{mTestNoteNames.get(0)});
+        long note2id = mDBHelper.getAggregateColumn(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, DBCommonDef.ID_COLUMN_NAME, "MAX", "title = ?", new String[]{mTestNoteNames.get(1)});
+        long note3id = mDBHelper.getAggregateColumn(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, DBCommonDef.ID_COLUMN_NAME, "MAX", "title = ?", new String[]{mTestNoteNames.get(2)});
+        long note4id = mDBHelper.getAggregateColumn(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, DBCommonDef.ID_COLUMN_NAME, "MAX", "title = ?", new String[]{mTestNoteNames.get(3)});
 
         long[] noteIdList = {note1id, note2id, note3id, note4id};
 

@@ -4,6 +4,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.romanpulov.violetnote.db.tabledef.DBDefFactory;
+
 import static com.romanpulov.violetnote.db.tabledef.DBCommonDef.*;
 
 /**
@@ -256,6 +258,10 @@ public class DBBasicNoteOpenHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        for (String s : DBDefFactory.buildDBCreate()) {
+            db.execSQL(s);
+        }
+        /*
         db.execSQL(NOTE_GROUPS_TABLE_CREATE);
         db.execSQL(NOTE_GROUPS_U_INDEX_CREATE);
         db.execSQL(NOTE_GROUPS_TABLE_INITIAL_LOAD);
@@ -281,6 +287,7 @@ public class DBBasicNoteOpenHelper extends SQLiteOpenHelper {
         db.execSQL(NOTE_ITEM_PARAMS_TABLE_CREATE);
         db.execSQL(NOTE_ITEM_PARAMS_FK_INDEX_CREATE);
         db.execSQL(NOTE_ITEM_PARAMS_FK_TYPE_INDEX_CREATE);
+        */
     }
 
     @Override
