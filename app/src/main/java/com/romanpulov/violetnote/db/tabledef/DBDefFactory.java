@@ -41,7 +41,10 @@ public class DBDefFactory {
         for (Class<? extends DBCommonDef.TableDefSQLProvider> p : providers) {
             DBCommonDef.TableDefSQLProvider providerInstance = createInstance(p);
             if (providerInstance != null) {
-                result.addAll(providerInstance.getSQLUpgrade(oldVersion));
+                List<String> sqlUpgrade = providerInstance.getSQLUpgrade(oldVersion);
+                if (sqlUpgrade != null) {
+                    result.addAll(sqlUpgrade);
+                }
             }
         }
 
@@ -51,4 +54,9 @@ public class DBDefFactory {
     public static List<String> buildDBCreate(){
         return buildDBDef(DBDefRepository.getCreateTableDefs());
     }
+
+    public static List<String> buildDBUpgrade(int oldVersion){
+        return buildDBUpgrade(DBDefRepository.getCreateTableDefs(), oldVersion);
+    }
+
 }

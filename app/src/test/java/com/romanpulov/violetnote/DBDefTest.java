@@ -12,4 +12,11 @@ public class DBDefTest {
             System.out.println(s);
         }
     }
+
+    @Test
+    public void testDBUpgradeFrom2() {
+        for (String s : DBDefFactory.buildDBUpgrade(2)) {
+            System.out.println(s);
+        }
+    }
 }
