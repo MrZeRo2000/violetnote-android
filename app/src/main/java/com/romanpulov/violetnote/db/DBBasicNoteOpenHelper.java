@@ -1,6 +1,7 @@
 package com.romanpulov.violetnote.db;
 
 import android.content.Context;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -15,7 +16,6 @@ import static com.romanpulov.violetnote.db.tabledef.DBCommonDef.*;
 public class DBBasicNoteOpenHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "basic_note.db";
     public static final int DATABASE_VERSION = 3;
-
 
     //note groups
     public static final String NOTE_GROUPS_TABLE_NAME = "note_groups";
@@ -292,6 +292,18 @@ public class DBBasicNoteOpenHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.endTransaction();
+        db.setForeignKeyConstraintsEnabled(false);
+        db.beginTransaction();
+        for (String s : DBDefFactory.buildDBUpgrade(oldVersion)) {
+            try {
+                db.execSQL(s);
+            } catch (SQLException e) {
+                throw e;
+            }
+        }
+
+        /*
         switch(oldVersion) {
             case 1:
                 db.execSQL("ALTER TABLE " + NOTE_ITEMS_TABLE_NAME + " ADD priority INTEGER NOT NULL DEFAULT 0;");
@@ -323,6 +335,7 @@ public class DBBasicNoteOpenHelper extends SQLiteOpenHelper {
                 db.execSQL("DROP TABLE IF EXISTS " + NOTES_TABLE_NAME);
                 onCreate(db);
         }
+        */
     }
 
     @Override

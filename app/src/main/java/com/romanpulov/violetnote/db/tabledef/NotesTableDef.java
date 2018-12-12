@@ -76,13 +76,12 @@ public final class NotesTableDef implements DBCommonDef.TableDefSQLProvider {
                 result.addAll(
                         Arrays.asList(
                                 "PRAGMA foreign_keys=off;",
-                                "BEGIN TRANSACTION;" +
-                                "ALTER TABLE notes RENAME TO _notes_old;" +
-                                TABLE_CREATE + FK_INDEX_GROUP_ID_CREATE +
-                                "INSERT INTO notes (_id, last_modified, order_id, group_id, note_type, title, is_encrypted, encrypted_string) "+
-                                "SELECT _id, last_modified, order_id, 2, note_type, title, is_encrypted, encrypted_string FROM _notes_old;" +
-                                "DROP TABLE _notes_old;"+
-                                "COMMIT;",
+                                "ALTER TABLE notes RENAME TO _notes_old;",
+                                TABLE_CREATE,
+                                FK_INDEX_GROUP_ID_CREATE,
+                                "INSERT INTO notes (_id, last_modified, order_id, group_id, note_type, title, is_encrypted, encrypted_string) " +
+                                "SELECT _id, last_modified, order_id, 2, note_type, title, is_encrypted, encrypted_string FROM _notes_old;",
+                                "DROP TABLE _notes_old;",
                                 "PRAGMA foreign_keys=on;"
                         )
                 );
