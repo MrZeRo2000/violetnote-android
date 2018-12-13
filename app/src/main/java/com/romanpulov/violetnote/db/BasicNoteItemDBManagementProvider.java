@@ -1,6 +1,7 @@
 package com.romanpulov.violetnote.db;
 
 import com.romanpulov.violetnote.db.tabledef.DBCommonDef;
+import com.romanpulov.violetnote.db.tabledef.NoteItemsTableDef;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 
 /**
@@ -17,7 +18,7 @@ public class BasicNoteItemDBManagementProvider implements DBManagementProvider {
 
     @Override
     public String getTableName() {
-        return DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME;
+        return NoteItemsTableDef.TABLE_NAME;
     }
 
     @Override

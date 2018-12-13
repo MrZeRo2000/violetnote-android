@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.romanpulov.violetnote.db.tabledef.DBCommonDef;
+import com.romanpulov.violetnote.db.tabledef.NoteItemsTableDef;
 
 /**
  * Database BasicNote operations helper class
@@ -76,7 +77,7 @@ public class DBBasicNoteHelper {
     }
 
     private static String getNoteIdPrioritySelection(long noteId, long priority) {
-        return DBBasicNoteOpenHelper.NOTE_ID_SELECTION_STRING + DBBasicNoteOpenHelper.AND_STRING + DBBasicNoteOpenHelper.PRIORITY_SELECTION_STRING;
+        return DBCommonDef.NOTE_ID_SELECTION_STRING + DBCommonDef.AND_STRING + DBCommonDef.PRIORITY_SELECTION_STRING;
     }
 
     private static String[] getNoteIdPrioritySelectionArgs(long noteId, long priority) {
@@ -92,7 +93,7 @@ public class DBBasicNoteHelper {
         if (noteId == 0)
             return null;
         else
-            return DBBasicNoteOpenHelper.NOTE_ID_SELECTION_STRING;
+            return DBCommonDef.NOTE_ID_SELECTION_STRING;
     }
 
     /**
@@ -124,7 +125,7 @@ public class DBBasicNoteHelper {
      * @return orderId
      */
     public long getNoteMaxOrderId(long noteId, long priority) {
-        return getAggregateColumn(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME, DBCommonDef.ORDER_COLUMN_NAME, MAX_AGGREGATE_FUNCTION_NAME,
+        return getAggregateColumn(NoteItemsTableDef.TABLE_NAME, DBCommonDef.ORDER_COLUMN_NAME, MAX_AGGREGATE_FUNCTION_NAME,
                 getNoteIdPrioritySelection(noteId, priority), getNoteIdPrioritySelectionArgs(noteId, priority));
     }
 
@@ -172,7 +173,7 @@ public class DBBasicNoteHelper {
                     tableName,
                     DBCommonDef.ORDER_COLUMN_NAME,
                     DBBasicNoteHelper.MAX_AGGREGATE_FUNCTION_NAME,
-                    DBBasicNoteOpenHelper.NOTE_ID_SELECTION_STRING + " AND "  + DBCommonDef.ORDER_COLUMN_NAME + " < ?",
+                    DBCommonDef.NOTE_ID_SELECTION_STRING + " AND "  + DBCommonDef.ORDER_COLUMN_NAME + " < ?",
                     new String[] {String.valueOf(noteId), String.valueOf(orderId)}
             );
     }
@@ -201,7 +202,7 @@ public class DBBasicNoteHelper {
                     tableName,
                     DBCommonDef.ORDER_COLUMN_NAME,
                     DBBasicNoteHelper.MIN_AGGREGATE_FUNCTION_NAME,
-                    DBBasicNoteOpenHelper.NOTE_ID_SELECTION_STRING + " AND "  + DBCommonDef.ORDER_COLUMN_NAME + " > ?",
+                    DBCommonDef.NOTE_ID_SELECTION_STRING + " AND "  + DBCommonDef.ORDER_COLUMN_NAME + " > ?",
                     new String[] {String.valueOf(noteId), String.valueOf(orderId)}
             );
     }

@@ -2,6 +2,7 @@ package com.romanpulov.violetnote.db;
 
 import android.content.Context;
 
+import com.romanpulov.violetnote.db.tabledef.DBCommonDef;
 import com.romanpulov.violetnote.model.BasicNoteItemParamTypeA;
 
 import java.util.List;
@@ -31,7 +32,7 @@ public class DBDictionaryCache {
     public void loadNoteParamTypes(DBNoteManager noteManager) {
         List<BasicNoteItemParamTypeA> noteParamTypes = noteManager.getNoteParamTypes();
         for (BasicNoteItemParamTypeA item : noteParamTypes) {
-            if (item.getParamTypeName().equals(DBBasicNoteOpenHelper.NOTE_ITEM_PARAM_TYPE_NAME_PRICE)) {
+            if (item.getParamTypeName().equals(DBCommonDef.NOTE_ITEM_PARAM_TYPE_NAME_PRICE)) {
                 mPriceNoteParamTypeId = item.getId();
             }
         }

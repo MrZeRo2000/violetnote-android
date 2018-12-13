@@ -29,6 +29,14 @@ public final class DBCommonDef {
     //parameter names
     public static final String NOTE_ITEM_PARAM_TYPE_NAME_PRICE = "Price";
 
+    //note_id selection
+    public static final String NOTE_ID_SELECTION_STRING = NOTE_ID_COLUMN_NAME + " = ?";
+
+    //priority selection
+    public static final String PRIORITY_SELECTION_STRING = PRIORITY_COLUMN_NAME + " = ?";
+
+    public static final String AND_STRING = " AND ";
+
     public interface TableDefSQLProvider {
         List<String> getSQLCreate();
         List<String> getSQLUpgrade(int oldVersion);

@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBBasicNoteOpenHelper;
 import com.romanpulov.violetnote.db.DBNoteManager;
+import com.romanpulov.violetnote.db.tabledef.NoteValuesTableDef;
 import com.romanpulov.violetnote.model.BasicEntityNoteSelectionPosA;
 import com.romanpulov.violetnote.model.BasicNoteValueA;
 import com.romanpulov.violetnote.model.BasicNoteValueDataA;
@@ -89,7 +90,7 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
 
                 //delete
                 for (BasicNoteValueA item : items)
-                    noteManager.deleteEntityNote(DBBasicNoteOpenHelper.NOTE_VALUES_TABLE_NAME, item);
+                    noteManager.deleteEntityNote(NoteValuesTableDef.TABLE_NAME, item);
 
                 refreshList(noteManager);
 
