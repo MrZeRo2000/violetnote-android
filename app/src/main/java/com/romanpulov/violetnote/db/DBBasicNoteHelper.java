@@ -40,8 +40,8 @@ public class DBBasicNoteHelper {
     }
 
     private DBBasicNoteHelper(Context context) {
-        mContext = context;
-        mDBOpenHelper = new DBBasicNoteOpenHelper(context);
+        mContext = context.getApplicationContext();
+        mDBOpenHelper = new DBBasicNoteOpenHelper(mContext);
         openDB();
     }
 
