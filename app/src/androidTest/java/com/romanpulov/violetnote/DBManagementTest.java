@@ -15,6 +15,8 @@ import com.romanpulov.violetnote.db.DBBasicNoteOpenHelper;
 import com.romanpulov.violetnote.db.DBManagementProvider;
 import com.romanpulov.violetnote.db.DBNoteManager;
 import com.romanpulov.violetnote.db.tabledef.DBCommonDef;
+import com.romanpulov.violetnote.db.tabledef.NoteItemsTableDef;
+import com.romanpulov.violetnote.db.tabledef.NotesTableDef;
 import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
@@ -68,7 +70,7 @@ public class DBManagementTest {
 
         int notePos = 0;
 
-        String insertNotesSql = "insert into " + DBBasicNoteOpenHelper.NOTES_TABLE_NAME + " (last_modified, order_id, group_id, note_type, title, is_encrypted) VALUES (?, ?, 1, ?, ?, ?)";
+        String insertNotesSql = "insert into " + NotesTableDef.TABLE_NAME + " (last_modified, order_id, group_id, note_type, title, is_encrypted) VALUES (?, ?, 1, ?, ?, ?)";
 
         // checked item 1
         String[] insertNotesArgs = new String[] {"0", "1", "0", mTestNoteNames.get(notePos++), "0"};
@@ -94,45 +96,45 @@ public class DBManagementTest {
         //note items with zero priority
 
         //0
-        String insertSQL = "insert into " + DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME +
+        String insertSQL = "insert into " + NoteItemsTableDef.TABLE_NAME +
                 "(last_modified, order_id, note_id, name, value, checked, priority) VALUES (?, ?, ?, ?, ?, ?, ?)";
         String[] insertArgs = new String[] {"0", "3", "1", "Note item 1", "Note item 1 value", "0", "0"};
         mDB.execSQL(insertSQL, insertArgs);
 
         //1
-        insertSQL = "insert into " + DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME +
+        insertSQL = "insert into " + NoteItemsTableDef.TABLE_NAME +
                 "(last_modified, order_id, note_id, name, value, checked, priority) VALUES (?, ?, ?, ?, ?, ?, ?)";
         insertArgs = new String[] {"0", "5", "1", "Note item 2", "Note item 2 value", "0", "0"};
         mDB.execSQL(insertSQL, insertArgs);
 
         //2
-        insertSQL = "insert into " + DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME +
+        insertSQL = "insert into " + NoteItemsTableDef.TABLE_NAME +
                 "(last_modified, order_id, note_id, name, value, checked, priority) VALUES (?, ?, ?, ?, ?, ?, ?)";
         insertArgs = new String[] {"0", "6", "1", "Note item 3", "Note item 3 value", "0", "0"};
         mDB.execSQL(insertSQL, insertArgs);
 
         //note items with high priority
         //3
-        insertSQL = "insert into " + DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME +
+        insertSQL = "insert into " + NoteItemsTableDef.TABLE_NAME +
                 "(last_modified, order_id, note_id, name, value, checked, priority) VALUES (?, ?, ?, ?, ?, ?, ?)";
         insertArgs = new String[] {"0", "1", "1", "Note item 11", "Note item 11 value", "0", "1"};
         mDB.execSQL(insertSQL, insertArgs);
 
         //4
-        insertSQL = "insert into " + DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME +
+        insertSQL = "insert into " + NoteItemsTableDef.TABLE_NAME +
                 "(last_modified, order_id, note_id, name, value, checked, priority) VALUES (?, ?, ?, ?, ?, ?, ?)";
         insertArgs = new String[] {"0", "2", "1", "Note item 12", "Note item 12 value", "0", "1"};
         mDB.execSQL(insertSQL, insertArgs);
 
         //note items with low priority
         //5
-        insertSQL = "insert into " + DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME +
+        insertSQL = "insert into " + NoteItemsTableDef.TABLE_NAME +
                 "(last_modified, order_id, note_id, name, value, checked, priority) VALUES (?, ?, ?, ?, ?, ?, ?)";
         insertArgs = new String[] {"0", "1", "1", "Note item 21", "Note item 11 value", "0", "-1"};
         mDB.execSQL(insertSQL, insertArgs);
 
         //6
-        insertSQL = "insert into " + DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME +
+        insertSQL = "insert into " + NoteItemsTableDef.TABLE_NAME +
                 "(last_modified, order_id, note_id, name, value, checked, priority) VALUES (?, ?, ?, ?, ?, ?, ?)";
         insertArgs = new String[] {"0", "2", "1", "Note item 22", "Note item 12 value", "0", "-1"};
         mDB.execSQL(insertSQL, insertArgs);
@@ -140,19 +142,19 @@ public class DBManagementTest {
 
         //note items with zero priority in another note item
         //7
-        insertSQL = "insert into " + DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME +
+        insertSQL = "insert into " + NoteItemsTableDef.TABLE_NAME +
                 "(last_modified, order_id, note_id, name, value, checked, priority) VALUES (?, ?, ?, ?, ?, ?, ?)";
         insertArgs = new String[] {"0", "1", "2", "Note item 201", "Note item 201 value", "0", "0"};
         mDB.execSQL(insertSQL, insertArgs);
 
         //8
-        insertSQL = "insert into " + DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME +
+        insertSQL = "insert into " + NoteItemsTableDef.TABLE_NAME +
                 "(last_modified, order_id, note_id, name, value, checked, priority) VALUES (?, ?, ?, ?, ?, ?, ?)";
         insertArgs = new String[] {"0", "3", "2", "Note item 202", "Note item 202 value", "0", "0"};
         mDB.execSQL(insertSQL, insertArgs);
 
         //9
-        insertSQL = "insert into " + DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME +
+        insertSQL = "insert into " + NoteItemsTableDef.TABLE_NAME +
                 "(last_modified, order_id, note_id, name, value, checked, priority) VALUES (?, ?, ?, ?, ?, ?, ?)";
         insertArgs = new String[] {"0", "2", "2", "Note item 202", "Note item 202 value", "0", "0"};
         mDB.execSQL(insertSQL, insertArgs);
@@ -283,10 +285,10 @@ public class DBManagementTest {
     private void internalTestNoteMove() {
         createNotesTestData();
 
-        long note1id = mDBHelper.getAggregateColumn(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, DBCommonDef.ID_COLUMN_NAME, "MAX", "title = ?", new String[]{mTestNoteNames.get(0)});
-        long note2id = mDBHelper.getAggregateColumn(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, DBCommonDef.ID_COLUMN_NAME, "MAX", "title = ?", new String[]{mTestNoteNames.get(1)});
-        long note3id = mDBHelper.getAggregateColumn(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, DBCommonDef.ID_COLUMN_NAME, "MAX", "title = ?", new String[]{mTestNoteNames.get(2)});
-        long note4id = mDBHelper.getAggregateColumn(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, DBCommonDef.ID_COLUMN_NAME, "MAX", "title = ?", new String[]{mTestNoteNames.get(3)});
+        long note1id = mDBHelper.getAggregateColumn(NotesTableDef.TABLE_NAME, DBCommonDef.ID_COLUMN_NAME, "MAX", "title = ?", new String[]{mTestNoteNames.get(0)});
+        long note2id = mDBHelper.getAggregateColumn(NotesTableDef.TABLE_NAME, DBCommonDef.ID_COLUMN_NAME, "MAX", "title = ?", new String[]{mTestNoteNames.get(1)});
+        long note3id = mDBHelper.getAggregateColumn(NotesTableDef.TABLE_NAME, DBCommonDef.ID_COLUMN_NAME, "MAX", "title = ?", new String[]{mTestNoteNames.get(2)});
+        long note4id = mDBHelper.getAggregateColumn(NotesTableDef.TABLE_NAME, DBCommonDef.ID_COLUMN_NAME, "MAX", "title = ?", new String[]{mTestNoteNames.get(3)});
 
         long[] noteIdList = {note1id, note2id, note3id, note4id};
 
@@ -353,10 +355,10 @@ public class DBManagementTest {
     public void internalTestRelatedNoteListAndMovement() {
         createNoteItemTestData();
 
-        long note1id = mDBHelper.getAggregateColumn(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, DBCommonDef.ID_COLUMN_NAME, "MAX", "title = ?", new String[]{mTestNoteNames.get(0)});
-        long note2id = mDBHelper.getAggregateColumn(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, DBCommonDef.ID_COLUMN_NAME, "MAX", "title = ?", new String[]{mTestNoteNames.get(1)});
-        long note3id = mDBHelper.getAggregateColumn(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, DBCommonDef.ID_COLUMN_NAME, "MAX", "title = ?", new String[]{mTestNoteNames.get(2)});
-        long note4id = mDBHelper.getAggregateColumn(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, DBCommonDef.ID_COLUMN_NAME, "MAX", "title = ?", new String[]{mTestNoteNames.get(3)});
+        long note1id = mDBHelper.getAggregateColumn(NotesTableDef.TABLE_NAME, DBCommonDef.ID_COLUMN_NAME, "MAX", "title = ?", new String[]{mTestNoteNames.get(0)});
+        long note2id = mDBHelper.getAggregateColumn(NotesTableDef.TABLE_NAME, DBCommonDef.ID_COLUMN_NAME, "MAX", "title = ?", new String[]{mTestNoteNames.get(1)});
+        long note3id = mDBHelper.getAggregateColumn(NotesTableDef.TABLE_NAME, DBCommonDef.ID_COLUMN_NAME, "MAX", "title = ?", new String[]{mTestNoteNames.get(2)});
+        long note4id = mDBHelper.getAggregateColumn(NotesTableDef.TABLE_NAME, DBCommonDef.ID_COLUMN_NAME, "MAX", "title = ?", new String[]{mTestNoteNames.get(3)});
 
         long[] noteIdList = {note1id, note2id, note3id, note4id};
 

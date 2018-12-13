@@ -15,11 +15,12 @@ import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static org.junit.Assert.*;
 
 import com.romanpulov.violetnote.db.DBBasicNoteHelper;
-import com.romanpulov.violetnote.db.DBBasicNoteOpenHelper;
 import com.romanpulov.violetnote.db.DBNoteManager;
 import com.romanpulov.violetnote.db.DateTimeFormatter;
 import com.romanpulov.violetnote.db.tabledef.DBCommonDef;
 import com.romanpulov.violetnote.db.tabledef.DBDefFactory;
+import com.romanpulov.violetnote.db.tabledef.NoteItemsTableDef;
+import com.romanpulov.violetnote.db.tabledef.NotesTableDef;
 import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 
@@ -51,26 +52,26 @@ public class DataManagementTest {
         assertTrue(noteList.size() >= DataGeneratorTest.MAX_NOTES);
 
         DBBasicNoteHelper dbBasicNoteHelper = DBBasicNoteHelper.getInstance(getTargetContext());
-        log("Min id =" + dbBasicNoteHelper.getMinId(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, 0));
-        log("Max id =" + dbBasicNoteHelper.getMaxId(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, 0));
+        log("Min id =" + dbBasicNoteHelper.getMinId(NotesTableDef.TABLE_NAME, 0));
+        log("Max id =" + dbBasicNoteHelper.getMaxId(NotesTableDef.TABLE_NAME, 0));
 
         log("Get Max order id < 7 = " + dbBasicNoteHelper.getAggregateColumn(
-                DBBasicNoteOpenHelper.NOTES_TABLE_NAME,
+                NotesTableDef.TABLE_NAME,
                 DBCommonDef.ORDER_COLUMN_NAME,
                 DBBasicNoteHelper.MAX_AGGREGATE_FUNCTION_NAME,
                 DBCommonDef.ID_COLUMN_NAME + " < ?",
                 new String[] {"7"}
         ));
 
-        log ("Get prev order id(5) = " + dbBasicNoteHelper.getPrevOrderId(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, 0, 5));
-        log ("Get prev order id(1) = " + dbBasicNoteHelper.getPrevOrderId(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, 0, 1));
-        log ("Get prev order id(0) = " + dbBasicNoteHelper.getPrevOrderId(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, 0, 0));
-        log ("Get prev order id(100) = " + dbBasicNoteHelper.getPrevOrderId(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, 0, 100));
+        log ("Get prev order id(5) = " + dbBasicNoteHelper.getPrevOrderId(NotesTableDef.TABLE_NAME, 0, 5));
+        log ("Get prev order id(1) = " + dbBasicNoteHelper.getPrevOrderId(NotesTableDef.TABLE_NAME, 0, 1));
+        log ("Get prev order id(0) = " + dbBasicNoteHelper.getPrevOrderId(NotesTableDef.TABLE_NAME, 0, 0));
+        log ("Get prev order id(100) = " + dbBasicNoteHelper.getPrevOrderId(NotesTableDef.TABLE_NAME, 0, 100));
 
-        log ("Get next order id(5) = " + dbBasicNoteHelper.getNextOrderId(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, 0, 5));
-        log ("Get next order id(1) = " + dbBasicNoteHelper.getNextOrderId(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, 0, 1));
-        log ("Get next order id(0) = " + dbBasicNoteHelper.getNextOrderId(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, 0, 0));
-        log ("Get next order id(100) = " + dbBasicNoteHelper.getNextOrderId(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, 0, 100));
+        log ("Get next order id(5) = " + dbBasicNoteHelper.getNextOrderId(NotesTableDef.TABLE_NAME, 0, 5));
+        log ("Get next order id(1) = " + dbBasicNoteHelper.getNextOrderId(NotesTableDef.TABLE_NAME, 0, 1));
+        log ("Get next order id(0) = " + dbBasicNoteHelper.getNextOrderId(NotesTableDef.TABLE_NAME, 0, 0));
+        log ("Get next order id(100) = " + dbBasicNoteHelper.getNextOrderId(NotesTableDef.TABLE_NAME, 0, 100));
 
         //validate exchange
         BasicNoteA note1 = noteManager.queryById(5);
@@ -78,7 +79,7 @@ public class DataManagementTest {
         long order1 = note1.getOrderId();
         long order2 = note2.getOrderId();
 
-        dbBasicNoteHelper.exchangeOrderId(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, 0, note1.getOrderId(), note2.getOrderId());
+        dbBasicNoteHelper.exchangeOrderId(NotesTableDef.TABLE_NAME, 0, note1.getOrderId(), note2.getOrderId());
 
         note1 = noteManager.queryById(5);
         note2 = noteManager.queryById(4);
@@ -86,7 +87,7 @@ public class DataManagementTest {
         assertEquals(note1.getOrderId(), order2);
         assertEquals(note2.getOrderId(), order1);
 
-        dbBasicNoteHelper.exchangeOrderId(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, 0, note1.getOrderId(), note2.getOrderId());
+        dbBasicNoteHelper.exchangeOrderId(NotesTableDef.TABLE_NAME, 0, note1.getOrderId(), note2.getOrderId());
 
         note1 = noteManager.queryById(5);
         note2 = noteManager.queryById(4);
@@ -107,7 +108,7 @@ public class DataManagementTest {
         assertEquals(note1.getOrderId(), noteList.size());
 
         //order id
-        long orderId = dbBasicNoteHelper.getOrderId(DBBasicNoteOpenHelper.NOTES_TABLE_NAME, note1.getId());
+        long orderId = dbBasicNoteHelper.getOrderId(NotesTableDef.TABLE_NAME, note1.getId());
         assertEquals(orderId, note1.getOrderId());
 
         dbHelper.closeDB();
@@ -122,7 +123,7 @@ public class DataManagementTest {
 
         Cursor c = null;
         try {
-            c = db.query(DBBasicNoteOpenHelper.NOTE_ITEMS_TABLE_NAME, new String[]{"checked"},
+            c = db.query(NoteItemsTableDef.TABLE_NAME, new String[]{"checked"},
                     DBCommonDef.NOTE_ID_COLUMN_NAME + " = ?", new String[]{"2"}, null, null, null);
 
             int itemCount = 0;
