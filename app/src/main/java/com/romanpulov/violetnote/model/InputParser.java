@@ -1,7 +1,5 @@
 package com.romanpulov.violetnote.model;
 
-import android.support.annotation.NonNull;
-
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -51,7 +49,7 @@ public class InputParser {
         }
 
         public String compose() {
-            String result = null;
+            String result;
             if (hasValue()) {
                 result = String.format(Locale.ENGLISH, FLOAT_PARAMS_FORMAT, mText, (double)mLongValue / 100d);
             } else {
@@ -90,7 +88,7 @@ public class InputParser {
 
     public static String composeFloatParams(String text, long value) {
         FloatParamsResult floatParamsResult = FloatParamsResult.fromTextAndValue(text, (int) value);
-        String result = null;
+        String result;
         if (floatParamsResult.hasValue()) {
             result = String.format(Locale.ENGLISH, FLOAT_PARAMS_FORMAT, floatParamsResult.mText, (double)floatParamsResult.mLongValue / 100d);
         } else {

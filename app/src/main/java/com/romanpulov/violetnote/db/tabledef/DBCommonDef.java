@@ -1,6 +1,5 @@
 package com.romanpulov.violetnote.db.tabledef;
 
-import java.util.Collection;
 import java.util.List;
 
 /**

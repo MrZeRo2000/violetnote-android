@@ -39,7 +39,9 @@
         android:id="@+id/value"
         android:layout_centerVertical="true"
         android:layout_toRightOf="@+id/checked"
+        android:layout_toEndOf="@+id/checked"
         android:layout_toLeftOf="@+id/price"
+        android:layout_toStartOf="@+id/price"
         android:textAppearance="@style/Text2"
         />
 
@@ -48,7 +50,9 @@
         android:layout_height="wrap_content"
         android:id="@+id/price"
         android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_marginLeft="@dimen/text_margin_half"
+        android:layout_marginStart="@dimen/text_margin_half"
         android:layout_centerVertical="true"
         android:gravity="center_horizontal"
         android:textAppearance="@style/Dim3Text"

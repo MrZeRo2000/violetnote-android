@@ -1,7 +1,6 @@
 package com.romanpulov.violetnote.db.tabledef;
 
 import android.support.annotation.NonNull;
-import android.text.TextUtils;
 
 /**
  * Statements generator

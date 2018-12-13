@@ -14,7 +14,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBNoteManager;
@@ -48,7 +47,6 @@ import com.romanpulov.violetnote.view.helper.CheckoutProgressHelper;
 import com.romanpulov.violetnote.view.helper.InputManagerHelper;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {

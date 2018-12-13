@@ -9,7 +9,6 @@ import android.util.Xml;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Scroller;
 
 import com.romanpulov.violetnote.R;
 

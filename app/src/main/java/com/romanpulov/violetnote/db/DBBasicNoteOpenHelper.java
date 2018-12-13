@@ -1,13 +1,10 @@
 package com.romanpulov.violetnote.db;
 
 import android.content.Context;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.romanpulov.violetnote.db.tabledef.DBDefFactory;
-
-import static com.romanpulov.violetnote.db.tabledef.DBCommonDef.*;
 
 /**
  * BasicNote database open helper
