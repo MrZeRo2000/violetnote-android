@@ -15,6 +15,7 @@ import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static org.junit.Assert.*;
 
 import com.romanpulov.violetnote.db.DBBasicNoteHelper;
+import com.romanpulov.violetnote.db.DBBasicNoteOpenHelper;
 import com.romanpulov.violetnote.db.DBNoteManager;
 import com.romanpulov.violetnote.db.DateTimeFormatter;
 import com.romanpulov.violetnote.db.tabledef.DBCommonDef;
@@ -36,41 +37,43 @@ public class DataManagementTest {
 
     private final DataGenerator mDataGenerator = new DataGenerator();
 
-    public void disable_test1() {
-        log("Data Management test message");
-        assertEquals(1, 1);
-    }
+    private DBBasicNoteHelper mDBHelper;
+    private SQLiteDatabase mDB;
+    private DBNoteManager mDBNoteManager;
 
-    @Before
-    public void prepareData() {
-        log("Preparing data");
+    private void initDB() {
+        mDBHelper = DBBasicNoteHelper.getInstance(getTargetContext());
+        mDBHelper.closeDB();
+
         mDataGenerator.generateData();
+
+        mDBHelper.openDB();
+        mDB = mDBHelper.getDB();
+        mDBNoteManager = new DBNoteManager(getTargetContext());
     }
 
-    @After
-    public void clearData() {
-        log("Clear data");
-        mDataGenerator.deleteDatabase();
-    }
 
     @Test
-    public void testMovePrev() {
+    public void testMain() {
+        initDB();
+        internalTestCheckCountQuery();
+        internalTestMovePrev();
+        internalTestCheckQueryTotalsRaw();
+        internalTestPriceParams();
+    }
+
+    public void internalTestMovePrev() {
         log("testMovePrev");
 
-        DBBasicNoteHelper dbHelper = DBBasicNoteHelper.getInstance(getTargetContext());
-        dbHelper.openDB();
-
-        DBNoteManager noteManager = new DBNoteManager(getTargetContext());
-        List<BasicNoteA> noteList = noteManager.queryNotes();
+        List<BasicNoteA> noteList = mDBNoteManager.queryNotes();
 
         // generator should be ran first
         assertTrue(noteList.size() >= DataGenerator.MAX_NOTES);
 
-        DBBasicNoteHelper dbBasicNoteHelper = DBBasicNoteHelper.getInstance(getTargetContext());
-        log("Min id =" + dbBasicNoteHelper.getMinId(NotesTableDef.TABLE_NAME, 0));
-        log("Max id =" + dbBasicNoteHelper.getMaxId(NotesTableDef.TABLE_NAME, 0));
+        log("Min id =" + mDBHelper.getMinId(NotesTableDef.TABLE_NAME, 0));
+        log("Max id =" + mDBHelper.getMaxId(NotesTableDef.TABLE_NAME, 0));
 
-        log("Get Max order id < 7 = " + dbBasicNoteHelper.getAggregateColumn(
+        log("Get Max order id < 7 = " + mDBHelper.getAggregateColumn(
                 NotesTableDef.TABLE_NAME,
                 DBCommonDef.ORDER_COLUMN_NAME,
                 DBBasicNoteHelper.MAX_AGGREGATE_FUNCTION_NAME,
@@ -78,57 +81,79 @@ public class DataManagementTest {
                 new String[] {"7"}
         ));
 
-        log ("Get prev order id(5) = " + dbBasicNoteHelper.getPrevOrderId(NotesTableDef.TABLE_NAME, 0, 5));
-        log ("Get prev order id(1) = " + dbBasicNoteHelper.getPrevOrderId(NotesTableDef.TABLE_NAME, 0, 1));
-        log ("Get prev order id(0) = " + dbBasicNoteHelper.getPrevOrderId(NotesTableDef.TABLE_NAME, 0, 0));
-        log ("Get prev order id(100) = " + dbBasicNoteHelper.getPrevOrderId(NotesTableDef.TABLE_NAME, 0, 100));
+        log ("Get prev order id(5) = " + mDBHelper.getPrevOrderId(NotesTableDef.TABLE_NAME, 0, 5));
+        log ("Get prev order id(1) = " + mDBHelper.getPrevOrderId(NotesTableDef.TABLE_NAME, 0, 1));
+        log ("Get prev order id(0) = " + mDBHelper.getPrevOrderId(NotesTableDef.TABLE_NAME, 0, 0));
+        log ("Get prev order id(100) = " + mDBHelper.getPrevOrderId(NotesTableDef.TABLE_NAME, 0, 100));
 
-        log ("Get next order id(5) = " + dbBasicNoteHelper.getNextOrderId(NotesTableDef.TABLE_NAME, 0, 5));
-        log ("Get next order id(1) = " + dbBasicNoteHelper.getNextOrderId(NotesTableDef.TABLE_NAME, 0, 1));
-        log ("Get next order id(0) = " + dbBasicNoteHelper.getNextOrderId(NotesTableDef.TABLE_NAME, 0, 0));
-        log ("Get next order id(100) = " + dbBasicNoteHelper.getNextOrderId(NotesTableDef.TABLE_NAME, 0, 100));
+        log ("Get next order id(5) = " + mDBHelper.getNextOrderId(NotesTableDef.TABLE_NAME, 0, 5));
+        log ("Get next order id(1) = " + mDBHelper.getNextOrderId(NotesTableDef.TABLE_NAME, 0, 1));
+        log ("Get next order id(0) = " + mDBHelper.getNextOrderId(NotesTableDef.TABLE_NAME, 0, 0));
+        log ("Get next order id(100) = " + mDBHelper.getNextOrderId(NotesTableDef.TABLE_NAME, 0, 100));
 
         //validate exchange
-        BasicNoteA note1 = noteManager.queryById(5);
-        BasicNoteA note2 = noteManager.queryById(4);
+        BasicNoteA note1 = mDBNoteManager.queryById(5);
+        BasicNoteA note2 = mDBNoteManager.queryById(4);
         long order1 = note1.getOrderId();
         long order2 = note2.getOrderId();
 
-        dbBasicNoteHelper.exchangeOrderId(NotesTableDef.TABLE_NAME, 0, note1.getOrderId(), note2.getOrderId());
+        mDBHelper.exchangeOrderId(NotesTableDef.TABLE_NAME, 0, note1.getOrderId(), note2.getOrderId());
 
-        note1 = noteManager.queryById(5);
-        note2 = noteManager.queryById(4);
+        note1 = mDBNoteManager.queryById(5);
+        note2 = mDBNoteManager.queryById(4);
 
         assertEquals(note1.getOrderId(), order2);
         assertEquals(note2.getOrderId(), order1);
 
-        dbBasicNoteHelper.exchangeOrderId(NotesTableDef.TABLE_NAME, 0, note1.getOrderId(), note2.getOrderId());
+        mDBHelper.exchangeOrderId(NotesTableDef.TABLE_NAME, 0, note1.getOrderId(), note2.getOrderId());
 
-        note1 = noteManager.queryById(5);
-        note2 = noteManager.queryById(4);
+        note1 = mDBNoteManager.queryById(5);
+        note2 = mDBNoteManager.queryById(4);
 
         assertEquals(note1.getOrderId(), order1);
         assertEquals(note2.getOrderId(), order2);
 
         //move top
-        note1 = noteManager.queryById(5);
-        noteManager.moveTop(note1);
+        note1 = mDBNoteManager.queryById(5);
+        mDBNoteManager.moveTop(note1);
 
-        note1 = noteManager.queryById(5);
+        note1 = mDBNoteManager.queryById(5);
         assertEquals(note1.getOrderId(), 1);
 
         //move bottom
-        noteManager.moveBottom(note1);
-        note1 = noteManager.queryById(5);
+        mDBNoteManager.moveBottom(note1);
+        note1 = mDBNoteManager.queryById(5);
         assertEquals(note1.getOrderId(), noteList.size());
 
         //order id
-        long orderId = dbBasicNoteHelper.getOrderId(NotesTableDef.TABLE_NAME, note1.getId());
+        long orderId = mDBHelper.getOrderId(NotesTableDef.TABLE_NAME, note1.getId());
         assertEquals(orderId, note1.getOrderId());
-
-        dbHelper.closeDB();
     }
 
+
+    public void internalTestCheckCountQuery() {
+        log("testCheckCountQuery");
+
+        long startTime = System.nanoTime();
+
+        Cursor c = null;
+        try {
+            c = mDB.rawQuery("SELECT COUNT(_id) AS count_total, SUM(checked) AS count_checked FROM note_items WHERE note_id = ?", new String[]{"2"});
+            c.moveToFirst();
+            if (!c.isAfterLast()) {
+                int itemCount = c.getInt(0);
+                int checkedItemCount = c.getInt(1);
+                log("itemCount = " + itemCount + ", checkedItemCount = " + checkedItemCount);
+            }
+        } finally {
+            if ((c !=null) && !c.isClosed())
+                c.close();
+        }
+
+        long endTime = System.nanoTime();
+
+        log ("testCheckCountQuery time: " + (endTime - startTime));
+    }
 
     public void testCheckCount() {
         DBBasicNoteHelper dbHelper = DBBasicNoteHelper.getInstance(getTargetContext());
@@ -162,40 +187,7 @@ public class DataManagementTest {
 
     }
 
-    @Test
-    public void testCheckCountQuery() {
-        log("testCheckCountQuery");
-
-        DBBasicNoteHelper dbHelper = DBBasicNoteHelper.getInstance(getTargetContext());
-        dbHelper.openDB();
-        SQLiteDatabase db = dbHelper.getDB();
-
-        long startTime = System.nanoTime();
-
-        Cursor c = null;
-        try {
-            c = db.rawQuery("SELECT COUNT(_id) AS count_total, SUM(checked) AS count_checked FROM note_items WHERE note_id = ?", new String[]{"2"});
-            c.moveToFirst();
-            if (!c.isAfterLast()) {
-                int itemCount = c.getInt(0);
-                int checkedItemCount = c.getInt(1);
-                log("itemCount = " + itemCount + ", checkedItemCount = " + checkedItemCount);
-            }
-        } finally {
-            if ((c !=null) && !c.isClosed())
-                c.close();
-        }
-
-        long endTime = System.nanoTime();
-
-        log ("testCheckCountQuery time: " + (endTime - startTime));
-        dbHelper.closeDB();
-
-    }
-
-
-    @Test
-    public void testCheckQueryTotalsRaw() {
+    public void internalTestCheckQueryTotalsRaw() {
         log("testCheckQueryTotalsRaw");
 
         long startTime = System.nanoTime();
@@ -217,14 +209,10 @@ public class DataManagementTest {
         "FROM notes n " +
         "ORDER BY n.order_id";
 
-        DBBasicNoteHelper dbHelper = DBBasicNoteHelper.getInstance(getTargetContext());
-        dbHelper.openDB();
-        SQLiteDatabase db = dbHelper.getDB();
-
         Cursor c = null;
         DateTimeFormatter dtf = new DateTimeFormatter(getTargetContext());
         try {
-            c = db.rawQuery(rawSQL, null);
+            c = mDB.rawQuery(rawSQL, null);
 
             for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
                 BasicNoteA newItem = DBNoteManager.noteFromCursorWithTotals(c, dtf);
@@ -240,30 +228,20 @@ public class DataManagementTest {
 
         log ("testCheckQueryTotalsRaw time: " + (endTime - startTime) + ", size = " + noteList.size());
         log ("testCheckQueryTotalsRaw List: " + noteList.toString());
-
-        dbHelper.closeDB();
     }
 
-    @Test
-    public void testPriceParams() {
+    public void internalTestPriceParams() {
         log("testPriceParams");
-
-        DBBasicNoteHelper dbHelper = DBBasicNoteHelper.getInstance(getTargetContext());
-        dbHelper.openDB();
-
-        DBNoteManager noteManager = new DBNoteManager(getTargetContext());
-        BasicNoteA note = noteManager.queryById(2);
-        noteManager.queryNoteDataItems(note);
+        BasicNoteA note = mDBNoteManager.queryById(2);
+        mDBNoteManager.queryNoteDataItems(note);
 
         BasicNoteItemA noteItem = note.getItems().get(4);
         assertNotEquals(0, noteItem.getParamPrice());
 
-        LongSparseArray<Long> longItemsParams = noteManager.queryNoteDataItemLongParams(noteItem);
+        LongSparseArray<Long> longItemsParams = mDBNoteManager.queryNoteDataItemLongParams(noteItem);
         long priceNoteParamTypeId = DBBasicNoteHelper.getInstance(getTargetContext()).getDBDictionaryCache().getPriceNoteParamTypeId();
         Long priceParam = longItemsParams.get(priceNoteParamTypeId);
         assertEquals((Long)noteItem.getParamPrice(), priceParam);
-
-        dbHelper.closeDB();
     }
 
 }
