@@ -13,6 +13,7 @@ import com.romanpulov.violetnote.db.DBStorageManager;
 /**
  * Created by romanpulov on 07.10.2016.
  */
+@Ignore
 @SmallTest
 public class DBRestoreTest {
 

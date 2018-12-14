@@ -14,6 +14,7 @@ import com.romanpulov.violetnote.db.DBStorageManager;
 /**
  * Created by romanpulov on 29.09.2016.
  */
+@Ignore
 @SmallTest
 public class DBBackupTest {
     private final static String TAG = "DBBackupTest";

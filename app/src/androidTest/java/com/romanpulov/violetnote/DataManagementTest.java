@@ -18,7 +18,6 @@ import com.romanpulov.violetnote.db.DBBasicNoteHelper;
 import com.romanpulov.violetnote.db.DBNoteManager;
 import com.romanpulov.violetnote.db.DateTimeFormatter;
 import com.romanpulov.violetnote.db.tabledef.DBCommonDef;
-import com.romanpulov.violetnote.db.tabledef.DBDefFactory;
 import com.romanpulov.violetnote.db.tabledef.NoteItemsTableDef;
 import com.romanpulov.violetnote.db.tabledef.NotesTableDef;
 import com.romanpulov.violetnote.model.BasicNoteA;
@@ -35,13 +34,29 @@ public class DataManagementTest {
         Log.d(TAG, message);
     }
 
+    private final DataGenerator mDataGenerator = new DataGenerator();
+
     public void disable_test1() {
         log("Data Management test message");
         assertEquals(1, 1);
     }
 
+    @Before
+    public void prepareData() {
+        log("Preparing data");
+        mDataGenerator.generateData();
+    }
+
+    @After
+    public void clearData() {
+        log("Clear data");
+        mDataGenerator.deleteDatabase();
+    }
+
     @Test
     public void testMovePrev() {
+        log("testMovePrev");
+
         DBBasicNoteHelper dbHelper = DBBasicNoteHelper.getInstance(getTargetContext());
         dbHelper.openDB();
 
@@ -49,7 +64,7 @@ public class DataManagementTest {
         List<BasicNoteA> noteList = noteManager.queryNotes();
 
         // generator should be ran first
-        assertTrue(noteList.size() >= DataGeneratorTest.MAX_NOTES);
+        assertTrue(noteList.size() >= DataGenerator.MAX_NOTES);
 
         DBBasicNoteHelper dbBasicNoteHelper = DBBasicNoteHelper.getInstance(getTargetContext());
         log("Min id =" + dbBasicNoteHelper.getMinId(NotesTableDef.TABLE_NAME, 0));
@@ -149,6 +164,8 @@ public class DataManagementTest {
 
     @Test
     public void testCheckCountQuery() {
+        log("testCheckCountQuery");
+
         DBBasicNoteHelper dbHelper = DBBasicNoteHelper.getInstance(getTargetContext());
         dbHelper.openDB();
         SQLiteDatabase db = dbHelper.getDB();
@@ -179,6 +196,7 @@ public class DataManagementTest {
 
     @Test
     public void testCheckQueryTotalsRaw() {
+        log("testCheckQueryTotalsRaw");
 
         long startTime = System.nanoTime();
 
@@ -228,6 +246,8 @@ public class DataManagementTest {
 
     @Test
     public void testPriceParams() {
+        log("testPriceParams");
+
         DBBasicNoteHelper dbHelper = DBBasicNoteHelper.getInstance(getTargetContext());
         dbHelper.openDB();
 
