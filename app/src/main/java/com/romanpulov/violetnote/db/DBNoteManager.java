@@ -270,7 +270,7 @@ public class DBNoteManager extends BasicCommonNoteManager {
             Cursor c = null;
             try {
                 c = mDB.query(
-                        NoteValuesTableDef.TABLE_NAME, new String[]{NoteValuesTableDef.TABLE_COLS[2]},
+                        NoteValuesTableDef.TABLE_NAME, new String[]{NoteValuesTableDef.VALUE_COLUMN_NAME},
                         DBCommonDef.NOTE_ID_COLUMN_NAME + " = ?", new String[]{String.valueOf(note.getId())}, null, null, null
                 );
 
@@ -292,8 +292,8 @@ public class DBNoteManager extends BasicCommonNoteManager {
         Cursor c = null;
         try {
             c = mDB.query(
-                    NoteValuesTableDef.TABLE_NAME, new String[]{NoteValuesTableDef.TABLE_COLS[0], NoteValuesTableDef.TABLE_COLS[2]},
-                    DBCommonDef.NOTE_ID_COLUMN_NAME + " = ?", new String[]{String.valueOf(note.getId())}, null, null, NoteValuesTableDef.TABLE_COLS[2]
+                    NoteValuesTableDef.TABLE_NAME, new String[]{DBCommonDef.ID_COLUMN_NAME, NoteValuesTableDef.VALUE_COLUMN_NAME},
+                    DBCommonDef.NOTE_ID_COLUMN_NAME + " = ?", new String[]{String.valueOf(note.getId())}, null, null, NoteValuesTableDef.VALUE_COLUMN_NAME
             );
 
             for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
@@ -317,8 +317,8 @@ public class DBNoteManager extends BasicCommonNoteManager {
         for (BasicNoteItemA item : noteData.getNoteList().get(0).getItems()) {
             ContentValues cv = new ContentValues();
 
-            cv.put(NoteItemsTableDef.TABLE_COLS[1], System.currentTimeMillis());
-            cv.put(NoteItemsTableDef.TABLE_COLS[6], BooleanUtils.toInt(checked));
+            cv.put(NoteItemsTableDef.LAST_MODIFIED_COLUMN_NAME, System.currentTimeMillis());
+            cv.put(NoteItemsTableDef.CHECKED_COLUMN_NAME, BooleanUtils.toInt(checked));
 
             mDB.update(NoteItemsTableDef.TABLE_NAME, cv, DBCommonDef.ID_COLUMN_NAME + " = ?" , new String[] {String.valueOf(item.getId())});
         }
@@ -346,13 +346,13 @@ public class DBNoteManager extends BasicCommonNoteManager {
     public long insertNote(BasicNoteA note) {
         ContentValues cv = new ContentValues();
 
-        cv.put(NotesTableDef.TABLE_COLS[1], System.currentTimeMillis());
-        cv.put(NotesTableDef.TABLE_COLS[2], DBBasicNoteHelper.getInstance(mContext).getMaxOrderId(NotesTableDef.TABLE_NAME, 0) + 1);
-        cv.put(NotesTableDef.TABLE_COLS[3], note.getNoteGroupId());
-        cv.put(NotesTableDef.TABLE_COLS[4], note.getNoteType());
-        cv.put(NotesTableDef.TABLE_COLS[5], note.getTitle());
-        cv.put(NotesTableDef.TABLE_COLS[6], BooleanUtils.toInt(note.isEncrypted()));
-        cv.put(NotesTableDef.TABLE_COLS[7], note.getEncryptedString());
+        cv.put(NotesTableDef.LAST_MODIFIED_COLUMN_NAME, System.currentTimeMillis());
+        cv.put(NotesTableDef.ORDER_COLUMN_NAME, DBBasicNoteHelper.getInstance(mContext).getMaxOrderId(NotesTableDef.TABLE_NAME, 0) + 1);
+        cv.put(NotesTableDef.GROUP_ID_COLUMN_NAME, note.getNoteGroupId());
+        cv.put(NotesTableDef.NOTE_TYPE_COLUMN_NAME, note.getNoteType());
+        cv.put(NotesTableDef.TITLE_COLUMN_NAME, note.getTitle());
+        cv.put(NotesTableDef.IS_ENCRYPTED_COLUMN_NAME, BooleanUtils.toInt(note.isEncrypted()));
+        cv.put(NotesTableDef.ENCRYPTED_STRING_COLUMN_NAME, note.getEncryptedString());
 
         return mDB.insert(NotesTableDef.TABLE_NAME, null, cv);
     }
@@ -368,24 +368,24 @@ public class DBNoteManager extends BasicCommonNoteManager {
         mDB.delete(NoteItemsTableDef.TABLE_NAME, DBCommonDef.NOTE_ID_SELECTION_STRING, noteIdArgs);
 
         //note
-        return mDB.delete(NotesTableDef.TABLE_NAME, NotesTableDef.TABLE_COLS[0] + "=" + note.getId(), null);
+        return mDB.delete(NotesTableDef.TABLE_NAME, DBCommonDef.ID_COLUMN_NAME + "=" + note.getId(), null);
     }
 
     public long updateNote(BasicNoteA note) {
         ContentValues cv = new ContentValues();
-        cv.put(NotesTableDef.TABLE_COLS[1], System.currentTimeMillis());
-        cv.put(NotesTableDef.TABLE_COLS[4], note.getNoteType());
-        cv.put(NotesTableDef.TABLE_COLS[5], note.getTitle());
-        cv.put(NotesTableDef.TABLE_COLS[6], BooleanUtils.toInt(note.isEncrypted()));
-        cv.put(NotesTableDef.TABLE_COLS[7], note.getEncryptedString());
+        cv.put(NotesTableDef.LAST_MODIFIED_COLUMN_NAME, System.currentTimeMillis());
+        cv.put(NotesTableDef.NOTE_TYPE_COLUMN_NAME, note.getNoteType());
+        cv.put(NotesTableDef.TITLE_COLUMN_NAME, note.getTitle());
+        cv.put(NotesTableDef.IS_ENCRYPTED_COLUMN_NAME, BooleanUtils.toInt(note.isEncrypted()));
+        cv.put(NotesTableDef.ENCRYPTED_STRING_COLUMN_NAME, note.getEncryptedString());
 
-        return mDB.update(NotesTableDef.TABLE_NAME, cv, NotesTableDef.TABLE_COLS[0] + "=" + note.getId(), null);
+        return mDB.update(NotesTableDef.TABLE_NAME, cv, DBCommonDef.ID_COLUMN_NAME + "=" + note.getId(), null);
     }
 
     public long updateNoteValueValue(BasicNoteValueA item) {
         ContentValues cv = new ContentValues();
 
-        cv.put(NoteValuesTableDef.TABLE_COLS[2], item.getValue());
+        cv.put(NoteValuesTableDef.VALUE_COLUMN_NAME, item.getValue());
 
         return mDB.update(NoteValuesTableDef.TABLE_NAME, cv, DBCommonDef.ID_COLUMN_NAME + " = ?", new String[] {String.valueOf(item.getId())});
     }
@@ -393,13 +393,13 @@ public class DBNoteManager extends BasicCommonNoteManager {
     public long insertNoteItem(BasicNoteA note, BasicNoteItemA item) {
         ContentValues cv = new ContentValues();
 
-        cv.put(NoteItemsTableDef.TABLE_COLS[1], System.currentTimeMillis());
-        cv.put(NoteItemsTableDef.TABLE_COLS[2], DBBasicNoteHelper.getInstance(mContext).getMaxOrderId(NoteItemsTableDef.TABLE_NAME, note.getId()) + 1);
-        cv.put(NoteItemsTableDef.TABLE_COLS[3], note.getId());
-        cv.put(NoteItemsTableDef.TABLE_COLS[4], item.getName());
-        cv.put(NoteItemsTableDef.TABLE_COLS[5], item.getValue());
-        cv.put(NoteItemsTableDef.TABLE_COLS[6], item.isChecked());
-        cv.put(NoteItemsTableDef.TABLE_COLS[7], item.getPriority());
+        cv.put(NoteItemsTableDef.LAST_MODIFIED_COLUMN_NAME, System.currentTimeMillis());
+        cv.put(NoteItemsTableDef.ORDER_COLUMN_NAME, DBBasicNoteHelper.getInstance(mContext).getMaxOrderId(NoteItemsTableDef.TABLE_NAME, note.getId()) + 1);
+        cv.put(NoteItemsTableDef.NOTE_ID_COLUMN_NAME, note.getId());
+        cv.put(NoteItemsTableDef.NAME_COLUMN_NAME, item.getName());
+        cv.put(NoteItemsTableDef.VALUE_COLUMN_NAME, item.getValue());
+        cv.put(NoteItemsTableDef.CHECKED_COLUMN_NAME, item.isChecked());
+        cv.put(NoteItemsTableDef.PRIORITY_COLUMN_NAME, item.getPriority());
 
         long newRowId = mDB.insert(NoteItemsTableDef.TABLE_NAME, null, cv);
 
@@ -442,25 +442,25 @@ public class DBNoteManager extends BasicCommonNoteManager {
     public long checkNoteItem(BasicNoteItemA item) {
         ContentValues cv = new ContentValues();
 
-        cv.put(NoteItemsTableDef.TABLE_COLS[1], System.currentTimeMillis());
-        cv.put(NoteItemsTableDef.TABLE_COLS[6], !item.isChecked());
+        cv.put(NoteItemsTableDef.LAST_MODIFIED_COLUMN_NAME, System.currentTimeMillis());
+        cv.put(NoteItemsTableDef.CHECKED_COLUMN_NAME, !item.isChecked());
 
-        return mDB.update(NoteItemsTableDef.TABLE_NAME, cv, NoteItemsTableDef.TABLE_COLS[0] + " = ?" , new String[] {String.valueOf(item.getId())});
+        return mDB.update(NoteItemsTableDef.TABLE_NAME, cv, DBCommonDef.ID_COLUMN_NAME + " = ?" , new String[] {String.valueOf(item.getId())});
     }
 
     public long updateNoteItemNameValue(BasicNoteItemA item) {
         ContentValues cv = new ContentValues();
 
-        cv.put(NoteItemsTableDef.TABLE_COLS[1], System.currentTimeMillis());
+        cv.put(NoteItemsTableDef.LAST_MODIFIED_COLUMN_NAME, System.currentTimeMillis());
         if (item.getName() != null)
-            cv.put(NoteItemsTableDef.TABLE_COLS[4], item.getName());
-        cv.put(NoteItemsTableDef.TABLE_COLS[5], item.getValue());
+            cv.put(NoteItemsTableDef.NAME_COLUMN_NAME, item.getName());
+        cv.put(NoteItemsTableDef.VALUE_COLUMN_NAME, item.getValue());
 
         deleteNoteItemParam(item);
         if (item.getParamPrice() > 0)
             insertNoteItemParam(item.getId(), getPriceNoteParamTypeId(), item.getParamPrice(), null);
 
-        return mDB.update(NoteItemsTableDef.TABLE_NAME, cv, NoteItemsTableDef.TABLE_COLS[0] + " = ?" , new String[] {String.valueOf(item.getId())});
+        return mDB.update(NoteItemsTableDef.TABLE_NAME, cv, DBCommonDef.ID_COLUMN_NAME + " = ?" , new String[] {String.valueOf(item.getId())});
     }
 
     public void checkOut(BasicNoteA note) {
@@ -508,8 +508,8 @@ public class DBNoteManager extends BasicCommonNoteManager {
     public long insertNoteValue(BasicEntityNoteA note, BasicNoteValueA value) {
         ContentValues cv = new ContentValues();
 
-        cv.put(NoteValuesTableDef.TABLE_COLS[1], note.getId());
-        cv.put(NoteValuesTableDef.TABLE_COLS[2], value.getValue());
+        cv.put(NoteValuesTableDef.NOTE_ID_COLUMN_NAME, note.getId());
+        cv.put(NoteValuesTableDef.VALUE_COLUMN_NAME, value.getValue());
 
         return mDB.insert(NoteValuesTableDef.TABLE_NAME, null, cv);
     }
@@ -517,9 +517,9 @@ public class DBNoteManager extends BasicCommonNoteManager {
     public long insertNoteHistory(BasicNoteA note, String value) {
         ContentValues cv = new ContentValues();
 
-        cv.put(NoteItemsHistoryTableDef.TABLE_COLS[1], System.currentTimeMillis());
-        cv.put(NoteItemsHistoryTableDef.TABLE_COLS[2], note.getId());
-        cv.put(NoteItemsHistoryTableDef.TABLE_COLS[3], value);
+        cv.put(NoteItemsHistoryTableDef.LAST_MODIFIED_COLUMN_NAME, System.currentTimeMillis());
+        cv.put(NoteItemsHistoryTableDef.NOTE_ID_COLUMN_NAME, note.getId());
+        cv.put(NoteItemsHistoryTableDef.VALUE_COLUMN_NAME, value);
 
         return mDB.insert(NoteItemsHistoryTableDef.TABLE_NAME, null, cv);
     }
