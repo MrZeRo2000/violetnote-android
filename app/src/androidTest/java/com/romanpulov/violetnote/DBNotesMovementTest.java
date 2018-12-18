@@ -25,8 +25,8 @@ import com.romanpulov.violetnote.model.BasicNoteItemA;
  * Created by rpulov on 09.08.2017.
  */
 @SmallTest
-public class DBManagementTest {
-    private final static String TAG = "DBManagementTest";
+public class DBNotesMovementTest {
+    private final static String TAG = "DBNotesMovementTest";
 
     private static void log(String message) {
         Log.d(TAG, message);
@@ -52,10 +52,12 @@ public class DBManagementTest {
      */
     @Test
     public void testMain() {
-        internalTestPriorityMove();
-        internalTestNoteMove();
-        internalTestNoteItemMove();
-        internalTestRelatedNoteListAndMovement();
+        synchronized (DBLock.instance) {
+            internalTestPriorityMove();
+            internalTestNoteMove();
+            internalTestNoteItemMove();
+            internalTestRelatedNoteListAndMovement();
+        }
     }
 
     private final List<String> mTestNoteNames = new ArrayList<>();

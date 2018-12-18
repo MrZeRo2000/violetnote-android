@@ -184,7 +184,7 @@ public class DBNoteManager extends BasicCommonNoteManager {
     }
 
     public LongSparseArray<Long> queryNoteDataItemLongParams(BasicNoteItemA noteItem) {
-        LongSparseArray<LongSparseArray<Long>> result = new LongSparseArray<>();
+        LongSparseArray<Long> result = new LongSparseArray<>();
 
         Cursor c = null;
         try {
@@ -197,11 +197,10 @@ public class DBNoteManager extends BasicCommonNoteManager {
                     );
             c.moveToFirst();
             if (!c.isAfterLast()) {
-                LongSparseArray<Long> la = new LongSparseArray<>();
-                la.append(c.getLong(2), c.getLong(3));
-                return la;
+                result.append(c.getLong(2), c.getLong(3));
+                return result;
             } else
-                return null;
+                return result;
 
         } finally {
             if ((c !=null) && !c.isClosed())

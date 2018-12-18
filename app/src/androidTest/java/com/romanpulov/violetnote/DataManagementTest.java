@@ -55,11 +55,13 @@ public class DataManagementTest {
 
     @Test
     public void testMain() {
-        initDB();
-        internalTestCheckCountQuery();
-        internalTestMovePrev();
-        internalTestCheckQueryTotalsRaw();
-        internalTestPriceParams();
+        synchronized (DBLock.instance) {
+            initDB();
+            internalTestCheckCountQuery();
+            internalTestMovePrev();
+            internalTestCheckQueryTotalsRaw();
+            internalTestPriceParams();
+        }
     }
 
     public void internalTestMovePrev() {
@@ -242,6 +244,13 @@ public class DataManagementTest {
         long priceNoteParamTypeId = DBBasicNoteHelper.getInstance(getTargetContext()).getDBDictionaryCache().getPriceNoteParamTypeId();
         Long priceParam = longItemsParams.get(priceNoteParamTypeId);
         assertEquals((Long)noteItem.getParamPrice(), priceParam);
+
+        noteItem.setValueWithParams("new value");
+        mDBNoteManager.updateNoteItemNameValue(noteItem);
+        longItemsParams = mDBNoteManager.queryNoteDataItemLongParams(noteItem);
+        priceParam = longItemsParams.get(priceNoteParamTypeId);
+        assertNull(priceParam);
+
     }
 
 }
