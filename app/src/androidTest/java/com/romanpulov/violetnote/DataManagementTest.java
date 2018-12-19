@@ -28,30 +28,17 @@ import com.romanpulov.violetnote.model.BasicNoteItemA;
  * Created by rpulov on 28.08.2016.
  */
 @SmallTest
-public class DataManagementTest {
+public class DataManagementTest extends DBBaseTest {
     private final static String TAG = "DataManagementTest";
 
     private static void log(String message) {
         Log.d(TAG, message);
     }
 
-    private final DataGenerator mDataGenerator = new DataGenerator();
-
-    private DBBasicNoteHelper mDBHelper;
-    private SQLiteDatabase mDB;
-    private DBNoteManager mDBNoteManager;
-
-    private void initDB() {
-        mDBHelper = DBBasicNoteHelper.getInstance(getTargetContext());
-        mDBHelper.closeDB();
-
-        mDataGenerator.generateData();
-
-        mDBHelper.openDB();
-        mDB = mDBHelper.getDB();
-        mDBNoteManager = new DBNoteManager(getTargetContext());
+    @Override
+    void prepareDatabase() {
+        (new DataGenerator()).generateData();
     }
-
 
     @Test
     public void testMain() {

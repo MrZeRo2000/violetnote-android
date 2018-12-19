@@ -1,19 +1,16 @@
 package com.romanpulov.violetnote;
 
-import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
 import android.support.test.filters.SmallTest;
 import org.junit.*;
-import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static org.junit.Assert.*;
 
-import com.romanpulov.violetnote.db.DBBasicNoteHelper;
 import com.romanpulov.violetnote.db.DBBasicNoteOpenHelper;
 import com.romanpulov.violetnote.db.DBManagementProvider;
-import com.romanpulov.violetnote.db.DBNoteManager;
 import com.romanpulov.violetnote.db.tabledef.DBCommonDef;
 import com.romanpulov.violetnote.db.tabledef.NoteItemsTableDef;
 import com.romanpulov.violetnote.db.tabledef.NotesTableDef;
@@ -25,26 +22,16 @@ import com.romanpulov.violetnote.model.BasicNoteItemA;
  * Created by rpulov on 09.08.2017.
  */
 @SmallTest
-public class DBNotesMovementTest {
+public class DBNotesMovementTest extends DBBaseTest {
     private final static String TAG = "DBNotesMovementTest";
 
     private static void log(String message) {
         Log.d(TAG, message);
     }
 
-    private DBBasicNoteHelper mDBHelper;
-    private SQLiteDatabase mDB;
-    private DBNoteManager mDBNoteManager;
-
-    private void initDB() {
-        mDBHelper = DBBasicNoteHelper.getInstance(getTargetContext());
-        mDBHelper.closeDB();
-
-        getTargetContext().deleteDatabase(DBBasicNoteOpenHelper.DATABASE_NAME);
-
-        mDBHelper.openDB();
-        mDB = mDBHelper.getDB();
-        mDBNoteManager = new DBNoteManager(getTargetContext());
+    @Override
+    void prepareDatabase() {
+        mContext.deleteDatabase(DBBasicNoteOpenHelper.DATABASE_NAME);
     }
 
     /**
@@ -267,7 +254,7 @@ public class DBNotesMovementTest {
         return result;
     }
 
-    private BasicNoteA[] getNotes(long[] noteIdList) {
+    private BasicNoteA[] getNotes(@NonNull long[] noteIdList) {
         BasicNoteA[] result = new BasicNoteA[noteIdList.length];
 
         int idx = 0;
@@ -278,7 +265,7 @@ public class DBNotesMovementTest {
         return result;
     }
 
-    private void queryNoteDataItems(BasicNoteA[] notes) {
+    private void queryNoteDataItems(@NonNull BasicNoteA[] notes) {
         for (BasicNoteA note : notes)
             mDBNoteManager.queryNoteDataItems(note);
     }
@@ -354,7 +341,7 @@ public class DBNotesMovementTest {
         Assert.assertEquals("1,5,2,4", getNotesOrder(noteIdList)) ;
     }
 
-    public void internalTestRelatedNoteListAndMovement() {
+    private void internalTestRelatedNoteListAndMovement() {
         createNoteItemTestData();
 
         long note1id = mDBHelper.getAggregateColumn(NotesTableDef.TABLE_NAME, DBCommonDef.ID_COLUMN_NAME, "MAX", "title = ?", new String[]{mTestNoteNames.get(0)});
