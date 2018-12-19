@@ -20,6 +20,10 @@ abstract class DBBaseTest {
 
     abstract void prepareDatabase();
 
+    void deleteDatabase() {
+        mContext.deleteDatabase(DBBasicNoteOpenHelper.DATABASE_NAME);
+    }
+
     void initDB() {
         mContext = getTargetContext();
         mDBHelper = DBBasicNoteHelper.getInstance(mContext);

@@ -12,17 +12,10 @@ import static com.romanpulov.violetnote.model.BasicOrderedEntityNoteA.PRIORITY_L
  * BasicCommonNoteA operations support class
  * Created by romanpulov on 29.08.2016.
  */
-public class BasicCommonNoteManager {
-    protected final Context mContext;
-    protected final DBBasicNoteHelper mDBHelper;
-    protected final SQLiteDatabase mDB;
-    protected final DateTimeFormatter mDTF;
+public class BasicCommonNoteManager extends BasicDBManager {
 
-    public BasicCommonNoteManager(Context context) {
-        mContext = context;
-        mDBHelper = DBBasicNoteHelper.getInstance(mContext);
-        mDB = mDBHelper.getDB();
-        mDTF = new DateTimeFormatter(context);
+    BasicCommonNoteManager(Context context) {
+        super(context);
     }
 
     public boolean delete(BasicCommonNoteA note) {

@@ -9,7 +9,6 @@ import android.support.test.filters.SmallTest;
 import org.junit.*;
 import static org.junit.Assert.*;
 
-import com.romanpulov.violetnote.db.DBBasicNoteOpenHelper;
 import com.romanpulov.violetnote.db.DBManagementProvider;
 import com.romanpulov.violetnote.db.tabledef.DBCommonDef;
 import com.romanpulov.violetnote.db.tabledef.NoteItemsTableDef;
@@ -31,7 +30,7 @@ public class DBNotesMovementTest extends DBBaseTest {
 
     @Override
     void prepareDatabase() {
-        mContext.deleteDatabase(DBBasicNoteOpenHelper.DATABASE_NAME);
+        deleteDatabase();
     }
 
     /**
