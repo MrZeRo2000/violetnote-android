@@ -6,6 +6,9 @@ import com.romanpulov.violetnote.db.DBBasicNoteOpenHelper;
 import com.romanpulov.violetnote.db.DBDictionaryCache;
 import com.romanpulov.violetnote.model.BasicHEventA;
 import com.romanpulov.violetnote.model.BasicHEventTypeA;
+import com.romanpulov.violetnote.model.BasicNoteA;
+import com.romanpulov.violetnote.model.BasicNoteItemA;
+import com.romanpulov.violetnote.model.NoteGroupA;
 
 import org.junit.*;
 
@@ -25,14 +28,35 @@ public final class DBHManagementTest extends DBBaseTest {
     @Test
     public void testMain() {
         synchronized (DBLock.instance) {
-            prepareTestData();
+            initDB();
+
+            //test events only, clear afterwards
             testEventTypes();
             testEvents();
+
+            prepareTestData();
         }
     }
 
     private void prepareTestData() {
-        initDB();
+
+        BasicNoteA note = BasicNoteA.newEditInstance(NoteGroupA.DEFAULT_NOTE_GROUP_ID, BasicNoteA.NOTE_TYPE_NAMED, "New note", false, null);
+        long result = mDBNoteManager.insertNote(note);
+        assertNotEquals(-1, result);
+        note.setId(result);
+
+        BasicNoteItemA noteItem = BasicNoteItemA.newNamedEditInstance("New name", "New Value");
+        result = mDBNoteManager.insertNoteItem(note, noteItem);
+        assertNotEquals(-1, result);
+
+
+        noteItem = BasicNoteItemA.newNamedEditInstance("Another name", "Another Value");
+        result = mDBNoteManager.insertNoteItem(note, noteItem);
+        assertNotEquals(-1, result);
+
+        List<BasicHEventA> testEvents = new ArrayList<>();
+        mDBHManager.queryHEvents(testEvents);
+        assertEquals(2, testEvents.size());
     }
 
     private void testEventTypes() {
@@ -59,6 +83,16 @@ public final class DBHManagementTest extends DBBaseTest {
         assertEquals(2, testEvents.size());
         mDBHManager.queryHEventsByType(testEvents, mDBHelper.getDBDictionaryCache().getCheckoutHEventParamId());
         assertEquals(1, testEvents.size());
+        assertEquals("Some summary", testEvents.get(0).getEventSummary());
+
+        mDBHManager.queryHEvents(testEvents);
+        for (BasicHEventA hEvent : testEvents) {
+            long result = mDBHManager.deleteHEvent(hEvent);
+            assertNotEquals(0, result);
+        }
+
+        mDBHManager.queryHEvents(testEvents);
+        assertEquals(0, testEvents.size());
     }
 
 }

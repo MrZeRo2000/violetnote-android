@@ -8,8 +8,10 @@ import android.support.annotation.NonNull;
 import com.romanpulov.violetnote.db.tabledef.DBCommonDef;
 import com.romanpulov.violetnote.db.tabledef.HEventTypesTableDef;
 import com.romanpulov.violetnote.db.tabledef.HEventsTableDef;
+import com.romanpulov.violetnote.db.tabledef.HNoteItemsTableDef;
 import com.romanpulov.violetnote.model.BasicHEventA;
 import com.romanpulov.violetnote.model.BasicHEventTypeA;
+import com.romanpulov.violetnote.model.BasicNoteItemA;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +54,11 @@ public final class DBHManager extends BasicDBManager {
         return mDB.insert(HEventsTableDef.TABLE_NAME, null, cv);
     }
 
+    public long deleteHEvent(@NonNull BasicHEventA hEvent) {
+        mDB.delete(HNoteItemsTableDef.TABLE_NAME, HNoteItemsTableDef.EVENT_ID_COLUMN_NAME + " = ?", new String[]{String.valueOf(hEvent.getId())});
+        return deleteById(HEventsTableDef.TABLE_NAME, hEvent.getId());
+    }
+
     public void queryHEvents(@NonNull final List<BasicHEventA> hEvents) {
         queryHEventsByType(hEvents, 0);
     }
@@ -83,5 +90,28 @@ public final class DBHManager extends BasicDBManager {
                 ));
             }
         });
+    }
+
+    private long insertHNoteItem(long eventId, @NonNull BasicNoteItemA noteItem) {
+        ContentValues cv = new ContentValues();
+
+        cv.put(HNoteItemsTableDef.EVENT_ID_COLUMN_NAME, eventId);
+        cv.put(HNoteItemsTableDef.NOTE_ITEM_ID_COLUMN_NAME, noteItem.getId());
+        cv.put(HNoteItemsTableDef.NAME_COLUMN_NAME, noteItem.getName());
+        cv.put(HNoteItemsTableDef.VALUE_COLUMN_NAME, noteItem.getValue());
+
+        return mDB.insert(HNoteItemsTableDef.TABLE_NAME, null, cv);
+    }
+
+    public long saveNoteItemsEvent(@NonNull BasicNoteItemA noteItem) {
+        long eventId = insertHEvent(mDBHelper.getDBDictionaryCache().getNoteItemsHEventParamId(), null);
+        if (eventId != -1) {
+            return insertHNoteItem(eventId, noteItem);
+        } else
+            return -1;
+    }
+
+    public long deleteHNoteItem(@NonNull BasicNoteItemA noteItem) {
+        return deleteById(HNoteItemsTableDef.TABLE_NAME, noteItem.getId());
     }
 }

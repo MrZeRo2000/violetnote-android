@@ -38,8 +38,11 @@ public class DBNoteManager extends BasicCommonNoteManager {
         Log.d(TAG, message);
     }
 
+    private final DBHManager mDBHManager;
+
     public DBNoteManager(Context context) {
         super(context);
+        mDBHManager = new DBHManager(context);
     }
 
     public static BasicNoteA noteFromCursor(Cursor c, DateTimeFormatter dtf) {
@@ -406,6 +409,11 @@ public class DBNoteManager extends BasicCommonNoteManager {
             insertNoteItemParam(newRowId, getPriceNoteParamTypeId(), item.getParamPrice(), null);
         }
 
+        if (newRowId > 0) {
+            item.setId(newRowId);
+            mDBHManager.saveNoteItemsEvent(item);
+        }
+
         return newRowId;
     }
 
@@ -459,7 +467,14 @@ public class DBNoteManager extends BasicCommonNoteManager {
         if (item.getParamPrice() > 0)
             insertNoteItemParam(item.getId(), getPriceNoteParamTypeId(), item.getParamPrice(), null);
 
-        return mDB.update(NoteItemsTableDef.TABLE_NAME, cv, DBCommonDef.ID_COLUMN_NAME + " = ?" , new String[] {String.valueOf(item.getId())});
+        DBHManager dbhManager = new DBHManager(mContext);
+
+        long result = mDB.update(NoteItemsTableDef.TABLE_NAME, cv, DBCommonDef.ID_COLUMN_NAME + " = ?" , new String[] {String.valueOf(item.getId())});
+
+        if (result > 0) {
+            dbhManager.saveNoteItemsEvent(item);
+        }
+        return result;
     }
 
     public void checkOut(BasicNoteA note) {
