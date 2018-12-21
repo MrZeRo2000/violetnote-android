@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.romanpulov.violetnote.db.DBBasicNoteHelper;
 import com.romanpulov.violetnote.db.DBBasicNoteOpenHelper;
+import com.romanpulov.violetnote.db.DBHManager;
 import com.romanpulov.violetnote.db.DBNoteManager;
 
 import static android.support.test.InstrumentationRegistry.getTargetContext;
@@ -15,6 +16,7 @@ import static android.support.test.InstrumentationRegistry.getTargetContext;
 abstract class DBBaseTest {
     DBBasicNoteHelper mDBHelper;
     SQLiteDatabase mDB;
+    DBHManager mDBHManager;
     DBNoteManager mDBNoteManager;
     Context mContext;
 
@@ -34,5 +36,6 @@ abstract class DBBaseTest {
         mDBHelper.openDB();
         mDB = mDBHelper.getDB();
         mDBNoteManager = new DBNoteManager(mContext);
+        mDBHManager = new DBHManager(mContext);
     }
 }

@@ -1,6 +1,7 @@
 package com.romanpulov.violetnote.db;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 /**
@@ -17,6 +18,24 @@ public abstract class BasicDBManager {
         mDBHelper = DBBasicNoteHelper.getInstance(mContext);
         mDB = mDBHelper.getDB();
         mDTF = new DateTimeFormatter(context);
+    }
+
+    interface CursorReaderHandler {
+        Cursor createCursor();
+        void readFromCursor(Cursor c);
+    }
+
+    void readCursor(CursorReaderHandler cursorReaderHandler) {
+        Cursor c = null;
+        try {
+            c = cursorReaderHandler.createCursor();
+            for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
+                cursorReaderHandler.readFromCursor(c);
+            }
+        } finally {
+            if ((c !=null) && !c.isClosed())
+                c.close();
+        }
     }
 
 }

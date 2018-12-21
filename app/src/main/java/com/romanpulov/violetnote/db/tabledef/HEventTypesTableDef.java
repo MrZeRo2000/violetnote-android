@@ -2,6 +2,8 @@ package com.romanpulov.violetnote.db.tabledef;
 
 import android.support.annotation.Nullable;
 
+import com.romanpulov.violetnote.model.BasicHEventTypeA;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -39,7 +41,11 @@ public final class HEventTypesTableDef implements DBCommonDef.TableDefSQLProvide
     public static final String INITIAL_LOAD = StmtGenerator.createInsertTableStatement(
             TABLE_NAME,
             Arrays.copyOfRange(TABLE_COLS, 1, TABLE_COLS.length),
-            "SELECT 1, 'NOTE_ITEMS', 'Note items' UNION ALL SELECT 1, 'CHECKOUT', 'Checkout'"
+            "SELECT 1, '" +
+                    BasicHEventTypeA.EVENT_TYPE_CODE_NOTE_ITEMS +   "', '" +
+                    BasicHEventTypeA.EVENT_TYPE_NAME_NOTE_ITEMS + "' UNION ALL SELECT 1, '" +
+                    BasicHEventTypeA.EVENT_TYPE_CODE_CHECKOUT + "', '" +
+                    BasicHEventTypeA.EVENT_TYPE_NAME_CHECKOUT + "'"
             );
 
     @Override
