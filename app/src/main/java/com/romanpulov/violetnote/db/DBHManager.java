@@ -11,6 +11,7 @@ import com.romanpulov.violetnote.db.tabledef.HEventsTableDef;
 import com.romanpulov.violetnote.db.tabledef.HNoteItemsTableDef;
 import com.romanpulov.violetnote.model.BasicHEventA;
 import com.romanpulov.violetnote.model.BasicHEventTypeA;
+import com.romanpulov.violetnote.model.BasicHNoteItemA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 
 import java.util.ArrayList;
@@ -92,6 +93,36 @@ public final class DBHManager extends BasicDBManager {
         });
     }
 
+    public void queryHNoteItemsByNoteItem(@NonNull final List<BasicHNoteItemA> hNoteItems, final BasicNoteItemA noteItem) {
+        hNoteItems.clear();
+
+        readCursor(new CursorReaderHandler() {
+            @Override
+            public Cursor createCursor() {
+                return mDB.query(
+                        HNoteItemsTableDef.TABLE_NAME,
+                        HNoteItemsTableDef.TABLE_COLS,
+                        HNoteItemsTableDef.NOTE_ITEM_ID_COLUMN_NAME + " = ?",
+                        new String[] {String.valueOf(noteItem.getId())},
+                        null,
+                        null,
+                        null
+                );
+            }
+
+            @Override
+            public void readFromCursor(Cursor c) {
+                hNoteItems.add(BasicHNoteItemA.newInstance(
+                        c.getLong(0),
+                        c.getLong(1),
+                        c.getLong(2),
+                        c.getString(3),
+                        c.getString(4)
+                ));
+            }
+        });
+    }
+
     private long insertHNoteItem(long eventId, @NonNull BasicNoteItemA noteItem) {
         ContentValues cv = new ContentValues();
 
@@ -112,6 +143,16 @@ public final class DBHManager extends BasicDBManager {
     }
 
     public long deleteHNoteItem(@NonNull BasicNoteItemA noteItem) {
-        return deleteById(HNoteItemsTableDef.TABLE_NAME, noteItem.getId());
+        long result = 0;
+
+        List<BasicHNoteItemA> hNoteItems = new ArrayList<>();
+        queryHNoteItemsByNoteItem(hNoteItems, noteItem);
+
+        for (BasicHNoteItemA hNoteItem : hNoteItems) {
+            result = deleteById(HNoteItemsTableDef.TABLE_NAME, hNoteItem.getId());
+            deleteById(HEventsTableDef.TABLE_NAME, hNoteItem.getEventId());
+        }
+
+        return result;
     }
 }

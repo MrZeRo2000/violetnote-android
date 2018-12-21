@@ -2,8 +2,6 @@ package com.romanpulov.violetnote;
 
 import android.support.test.filters.SmallTest;
 
-import com.romanpulov.violetnote.db.DBBasicNoteOpenHelper;
-import com.romanpulov.violetnote.db.DBDictionaryCache;
 import com.romanpulov.violetnote.model.BasicHEventA;
 import com.romanpulov.violetnote.model.BasicHEventTypeA;
 import com.romanpulov.violetnote.model.BasicNoteA;
@@ -15,7 +13,6 @@ import org.junit.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static org.junit.Assert.*;
 
 @SmallTest
@@ -34,11 +31,11 @@ public final class DBHManagementTest extends DBBaseTest {
             testEventTypes();
             testEvents();
 
-            prepareTestData();
+            testNotes();
         }
     }
 
-    private void prepareTestData() {
+    private void testNotes() {
 
         BasicNoteA note = BasicNoteA.newEditInstance(NoteGroupA.DEFAULT_NOTE_GROUP_ID, BasicNoteA.NOTE_TYPE_NAMED, "New note", false, null);
         long result = mDBNoteManager.insertNote(note);
@@ -53,10 +50,18 @@ public final class DBHManagementTest extends DBBaseTest {
         noteItem = BasicNoteItemA.newNamedEditInstance("Another name", "Another Value");
         result = mDBNoteManager.insertNoteItem(note, noteItem);
         assertNotEquals(-1, result);
+        noteItem.setId(result);
 
         List<BasicHEventA> testEvents = new ArrayList<>();
         mDBHManager.queryHEvents(testEvents);
         assertEquals(2, testEvents.size());
+
+        result = mDBNoteManager.deleteNoteItem(noteItem);
+        assertNotEquals(0, result);
+
+        testEvents = new ArrayList<>();
+        mDBHManager.queryHEvents(testEvents);
+        assertEquals(1, testEvents.size());
     }
 
     private void testEventTypes() {

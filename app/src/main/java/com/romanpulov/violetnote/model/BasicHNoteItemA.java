@@ -35,7 +35,7 @@ public final class BasicHNoteItemA extends BasicEntityNoteA {
     }
 
     @NonNull
-    public BasicHNoteItemA newInstance(long id, long eventId, long noteItemId, String name, String value) {
+    public static BasicHNoteItemA newInstance(long id, long eventId, long noteItemId, String name, String value) {
         return new BasicHNoteItemA(id, eventId, noteItemId, name, value);
     }
 }

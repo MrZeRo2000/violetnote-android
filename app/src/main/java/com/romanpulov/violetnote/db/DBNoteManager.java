@@ -439,6 +439,7 @@ public class DBNoteManager extends BasicCommonNoteManager {
 
     public long deleteNoteItem(BasicNoteItemA item) {
         deleteNoteItemParam(item);
+        mDBHManager.deleteHNoteItem(item);
         return deleteEntityNote(NoteItemsTableDef.TABLE_NAME, item);
     }
 
