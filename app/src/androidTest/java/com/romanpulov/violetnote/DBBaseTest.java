@@ -38,4 +38,12 @@ abstract class DBBaseTest {
         mDBNoteManager = new DBNoteManager(mContext);
         mDBHManager = new DBHManager(mContext);
     }
+
+    void sleep(long millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            //do nothing
+        }
+    }
 }

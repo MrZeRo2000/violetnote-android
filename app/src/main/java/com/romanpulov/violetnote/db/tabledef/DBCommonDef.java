@@ -1,5 +1,7 @@
 package com.romanpulov.violetnote.db.tabledef;
 
+import android.support.annotation.NonNull;
+
 import java.util.List;
 
 /**
@@ -35,6 +37,10 @@ public final class DBCommonDef {
     public static final String PRIORITY_SELECTION_STRING = PRIORITY_COLUMN_NAME + " = ?";
 
     public static final String AND_STRING = " AND ";
+
+    public static String getSelectionFieldDesc(String fieldName) {
+        return fieldName + " DESC";
+    }
 
     public interface TableDefSQLProvider {
         List<String> getSQLCreate();

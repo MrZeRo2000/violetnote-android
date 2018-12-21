@@ -2,6 +2,9 @@ package com.romanpulov.violetnote.model;
 
 import android.support.annotation.NonNull;
 
+/**
+ * HEventType data class
+ */
 public final class BasicHEventTypeA extends BasicEntityNoteA {
     public static final String EVENT_TYPE_CODE_NOTE_ITEMS = "NOTE_ITEMS";
     public static final String EVENT_TYPE_NAME_NOTE_ITEMS = "Note items";
