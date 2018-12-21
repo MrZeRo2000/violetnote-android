@@ -4,6 +4,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.romanpulov.violetnote.db.tabledef.DBCommonDef;
+
 /**
  * Base class for DB manager
  */
@@ -38,4 +40,7 @@ public abstract class BasicDBManager {
         }
     }
 
+    long deleteById(String tableName, long id) {
+        return mDB.delete(tableName, DBCommonDef.ID_COLUMN_NAME + "=?", new String[] {String.valueOf(id)});
+    }
 }

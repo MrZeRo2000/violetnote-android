@@ -431,11 +431,11 @@ public class DBNoteManager extends BasicCommonNoteManager {
 
     public long deleteNoteItem(BasicNoteItemA item) {
         deleteNoteItemParam(item);
-        return mDB.delete(NoteItemsTableDef.TABLE_NAME, DBCommonDef.ID_COLUMN_NAME + "=?", new String[] {String.valueOf(item.getId())});
+        return deleteEntityNote(NoteItemsTableDef.TABLE_NAME, item);
     }
 
     public long deleteEntityNote(String tableName, BasicEntityNoteA item) {
-        return mDB.delete(tableName, DBCommonDef.ID_COLUMN_NAME + "=?", new String[] {String.valueOf(item.getId())});
+        return deleteById(tableName, item.getId());
     }
 
     public long checkNoteItem(BasicNoteItemA item) {
