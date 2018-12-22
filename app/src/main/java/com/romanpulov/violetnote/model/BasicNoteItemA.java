@@ -6,9 +6,6 @@ import android.support.annotation.NonNull;
 
 import com.romanpulov.violetnote.db.BasicNoteItemDBManagementProvider;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * BasicNote item data
  * Created by rpulov on 11.08.2016.
@@ -18,7 +15,6 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
     private String mName;
     private String mValue;
     private boolean mChecked;
-    private long mParamPrice;
     private BasicNoteItemParams mNoteItemParams = BasicNoteItemParams.createEmpty();
 
     public long getNoteId() {
@@ -42,11 +38,11 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
     }
 
     public String getValueWithFloatParams(long noteItemParamTypeId) {
-        return InputParser.composeFloatParams(mValue, mParamPrice);
+        return InputParser.composeFloatParams(mValue, mNoteItemParams.getLong(noteItemParamTypeId));
     }
 
     public String getFloatParamDisplayValue(long noteItemParamTypeId) {
-        return InputParser.getFloatDisplayValue(mParamPrice);
+        return InputParser.getFloatDisplayValue(mNoteItemParams.getLong(noteItemParamTypeId));
     }
 
     public void setValue(String value) {
@@ -56,9 +52,9 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
     private void setFloatParams(long noteItemParamTypeId, @NonNull InputParser.FloatParamsResult floatParams) {
         mValue = floatParams.getText();
         if (floatParams.hasValue())
-            mParamPrice = floatParams.getLongValue();
+            mNoteItemParams.putLong(noteItemParamTypeId, floatParams.getLongValue());
         else
-            mParamPrice = 0;
+            mNoteItemParams.delete(noteItemParamTypeId);
     }
 
     public void setValueWithParams(long noteItemParamTypeId, String value) {
@@ -70,19 +66,11 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
         return paramValue == null ? 0L : paramValue.vInt;
     }
 
-    public long getParamPrice() {
-        return mParamPrice;
-    }
-
     public void setParamLong(long noteItemParamTypeId, long paramValue) {
         if (paramValue == 0)
             mNoteItemParams.delete(noteItemParamTypeId);
         else
-            mNoteItemParams.put(noteItemParamTypeId, BasicParamValueA.fromLong(paramValue));
-    }
-
-    public void setParamPrice(long price) {
-        mParamPrice = price;
+            mNoteItemParams.putLong(noteItemParamTypeId, paramValue);
     }
 
     public BasicNoteItemParams getNoteItemParams() {
@@ -165,7 +153,6 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
         dest.writeString(mName);
         dest.writeString(mValue);
         dest.writeInt(BooleanUtils.toInt(mChecked));
-        dest.writeLong(mParamPrice);
         dest.writeParcelable(mNoteItemParams, 0);
     }
 
@@ -179,7 +166,6 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
         mName = in.readString();
         mValue = in.readString();
         mChecked = BooleanUtils.fromInt(in.readInt());
-        mParamPrice = in.readLong();
         mNoteItemParams = in.readParcelable(BasicNoteItemParams.class.getClassLoader());
     }
 

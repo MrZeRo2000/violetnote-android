@@ -59,7 +59,7 @@ public class BasicNoteCheckedItemRecyclerViewAdapter extends RecyclerView.Adapte
         else
             holder.mValueView.setPaintFlags(holder.mValueView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
 
-        if (mBasicNoteData.getTotalPrice() > 0) {
+        if (mBasicNoteData.getLongParamTotal(mPriceNoteParamTypeId) > 0) {
             holder.mPriceView.setVisibility(View.VISIBLE);
             holder.mPriceView.setText(holder.mItem.getFloatParamDisplayValue(mPriceNoteParamTypeId));
         } else {

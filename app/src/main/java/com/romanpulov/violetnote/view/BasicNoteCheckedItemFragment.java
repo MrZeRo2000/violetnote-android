@@ -86,7 +86,12 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
 
     private void updateCheckoutProgress() {
         if (mCheckoutProgressHelper != null)
-            mCheckoutProgressHelper.setProgressData(mBasicNoteData.getNote().getCheckedItemCount(), mBasicNoteData.getNote().getItemCount(), mBasicNoteData.getCheckedPrice(), mBasicNoteData.getTotalPrice());
+            mCheckoutProgressHelper.setProgressData(
+                    mBasicNoteData.getNote().getCheckedItemCount(),
+                    mBasicNoteData.getNote().getItemCount(),
+                    mBasicNoteData.getCheckedLongParamTotal(mPriceNoteParamTypeId),
+                    mBasicNoteData.getLongParamTotal(mPriceNoteParamTypeId)
+            );
     }
 
     private List<BasicNoteItemA> getSelectedNoteItems() {
@@ -270,7 +275,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                     public void onBasicNoteItemPriceClick(BasicNoteItemA item, int position) {
                         if (mRecyclerViewSelector.getActionMode() == null) {
                             mRecyclerViewSelector.startActionMode(getView(), position);
-                            mInputActionHelper.showEditNumberLayout(item.getParamPrice());
+                            mInputActionHelper.showEditNumberLayout(item.getParamLong(mPriceNoteParamTypeId));
                         }
                     }
                 }
@@ -305,9 +310,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                         performEditAction(text, new NoteItemDataUpdater() {
                             @Override
                             public void updateNoteItemData(BasicNoteItemA item) {
-                                item.setParamPrice(InputParser.getLongValueFromString(text));
-                                //item.setParamPrice(InputParser.getFloatDisplayValue());
-                                //Toast.makeText(getContext(), text, Toast.LENGTH_SHORT).show();
+                                item.setParamLong(mPriceNoteParamTypeId, InputParser.getLongValueFromString(text));
                             }
                         });
                         mInputActionHelper.hideLayout();

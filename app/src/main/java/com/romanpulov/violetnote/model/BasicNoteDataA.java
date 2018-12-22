@@ -70,25 +70,25 @@ public class BasicNoteDataA implements Parcelable, PasswordProvider {
         return result;
     }
 
-    public long getCheckedPrice() {
+    public long getCheckedLongParamTotal(long noteItemParamTypeId) {
         long result = 0;
 
         for (BasicNoteA note : mNoteList) {
             for (BasicNoteItemA item : note.getItems()) {
                 if (item.isChecked())
-                    result += item.getParamPrice();
+                    result += item.getParamLong(noteItemParamTypeId);
             }
         }
 
         return result;
     }
 
-    public long getTotalPrice() {
+    public long getLongParamTotal(long noteItemParamTypeId) {
         long result = 0;
 
         for (BasicNoteA note : mNoteList) {
             for (BasicNoteItemA item : note.getItems()) {
-                result += item.getParamPrice();
+                result += item.getParamLong(noteItemParamTypeId);
             }
         }
 

@@ -53,7 +53,7 @@ public final class DBNoteItemPriceTest extends DBBaseTest {
         assertEquals(1277L, note.getTotalPrice());
 
         //added price param to first item
-        noPriceNoteItem.setParamPrice(200L);
+        noPriceNoteItem.setParamLong(priceNoteParamTypeId, 200L);
         result = mDBNoteManager.updateNoteItemNameValue(noPriceNoteItem);
         assertNotEquals(0, result);
 
@@ -62,7 +62,7 @@ public final class DBNoteItemPriceTest extends DBBaseTest {
         assertEquals(1477L, note.getTotalPrice());
 
         //changed price param for first item
-        noPriceNoteItem.setParamPrice(100L);
+        noPriceNoteItem.setParamLong(priceNoteParamTypeId, 100L);
         result = mDBNoteManager.updateNoteItemNameValue(noPriceNoteItem);
         assertNotEquals(0, result);
 
@@ -71,7 +71,7 @@ public final class DBNoteItemPriceTest extends DBBaseTest {
         assertEquals(1377L, note.getTotalPrice());
 
         //removed price param
-        noPriceNoteItem.setParamPrice(0L);
+        noPriceNoteItem.setParamLong(priceNoteParamTypeId, 0L);
         result = mDBNoteManager.updateNoteItemNameValue(noPriceNoteItem);
         assertNotEquals(0, result);
 

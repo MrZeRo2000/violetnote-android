@@ -70,7 +70,7 @@ public class DataGenerator {
                         assertNotEquals(-1, noteManager.insertNoteItem(newNote, newNoteItem));
 
                         if (isPrice)
-                            assertEquals(1244L, newNoteItem.getParamPrice());
+                            assertEquals(1244L, newNoteItem.getParamLong(priceNoteParamTypeId));
                     }
 
 

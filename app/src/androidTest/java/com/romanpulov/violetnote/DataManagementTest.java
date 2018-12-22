@@ -221,16 +221,18 @@ public class DataManagementTest extends DBBaseTest {
 
     public void internalTestPriceParams() {
         log("testPriceParams");
+
+        long priceNoteParamTypeId = DBBasicNoteHelper.getInstance(getTargetContext()).getDBDictionaryCache().getPriceNoteParamTypeId();
+
         BasicNoteA note = mDBNoteManager.queryById(2);
         mDBNoteManager.queryNoteDataItems(note);
 
         BasicNoteItemA noteItem = note.getItems().get(4);
-        assertNotEquals(0, noteItem.getParamPrice());
+        assertNotEquals(0, noteItem.getParamLong(priceNoteParamTypeId));
 
         LongSparseArray<Long> longItemsParams = mDBNoteManager.queryNoteDataItemLongParams(noteItem);
-        long priceNoteParamTypeId = DBBasicNoteHelper.getInstance(getTargetContext()).getDBDictionaryCache().getPriceNoteParamTypeId();
         Long priceParam = longItemsParams.get(priceNoteParamTypeId);
-        assertEquals((Long)noteItem.getParamPrice(), priceParam);
+        assertEquals((Long)noteItem.getParamLong(priceNoteParamTypeId), priceParam);
 
         noteItem.setValueWithParams(priceNoteParamTypeId, "new value");
         mDBNoteManager.updateNoteItemNameValue(noteItem);

@@ -273,6 +273,7 @@ public class DBNoteManager extends BasicCommonNoteManager {
             for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
                 BasicNoteItemA newItem = noteItemFromCursor(c, mDTF);
 
+                /*
                 LongSparseArray<Long> lParam = longParams.get(newItem.getId());
                 if (lParam != null) {
                     Long paramPrice = lParam.get(priceNoteParamTypeId);
@@ -281,13 +282,14 @@ public class DBNoteManager extends BasicCommonNoteManager {
                         newItem.setParamPrice(paramPrice);
                     }
                 }
+                */
 
                 BasicNoteItemParams params = paramsList.get(newItem.getId());
                 newItem.setNoteItemParams(params);
                 if (params != null) {
                     BasicParamValueA priceParamValue = params.get(priceNoteParamTypeId);
                     if (priceParamValue != null) {
-                        //totalPrice += priceParamValue.vInt;
+                        totalPrice += priceParamValue.vInt;
                     }
                 }
 
@@ -449,30 +451,45 @@ public class DBNoteManager extends BasicCommonNoteManager {
 
         long newRowId = mDB.insert(NoteItemsTableDef.TABLE_NAME, null, cv);
 
+        if (newRowId > 0) {
+            insertNoteItemParams(newRowId, item.getNoteItemParams());
+
+            item.setId(newRowId);
+            mDBHManager.saveNoteItemsEvent(item);
+        }
+/*
         if ((newRowId > 0) && (item.getParamPrice() > 0)) {
-            insertNoteItemParam(newRowId, getPriceNoteParamTypeId(), item.getParamPrice(), null);
+            insertNoteItemParam(newRowId, getPriceNoteParamTypeId(), item.getNoteItemParams().get(getPriceNoteParamTypeId()));
         }
 
         if (newRowId > 0) {
             item.setId(newRowId);
             mDBHManager.saveNoteItemsEvent(item);
         }
+*/
 
         return newRowId;
     }
 
-    public long insertNoteItemParam(long noteItemId, long paramTypeId, Long v_int, String v_text) {
-        if ((v_int == null) && ((v_text == null) || (v_text.isEmpty())))
+    public void insertNoteItemParams(long noteItemId, BasicNoteItemParams noteItemParams) {
+        for (int i = 0; i < noteItemParams.size(); i++) {
+            long noteItemParamTypeId = noteItemParams.keyAt(i);
+            insertNoteItemParam(noteItemId, noteItemParamTypeId, noteItemParams.get(noteItemParamTypeId));
+        }
+    }
+
+    public long insertNoteItemParam(long noteItemId, long paramTypeId, BasicParamValueA paramValue) {
+        if ((paramValue.vInt == 0) && ((paramValue.vText == null) || (paramValue.vText.isEmpty())))
             return 0;
 
         ContentValues cv = new ContentValues();
 
         cv.put(DBCommonDef.NOTE_ITEM_ID_COLUMN_NAME, noteItemId);
         cv.put(NoteItemParamsTableDef.NOTE_ITEM_PARAM_TYPE_ID_COLUMN_NAME, paramTypeId);
-        if (v_int != null)
-            cv.put(NoteItemParamsTableDef.V_INT_COLUMN_NAME, v_int);
-        if ((v_text != null) && (!v_text.isEmpty()))
-            cv.put(NoteItemParamsTableDef.V_TEXT_COLUMN_NAME, v_text);
+        if (paramValue.vInt != 0)
+            cv.put(NoteItemParamsTableDef.V_INT_COLUMN_NAME, paramValue.vInt);
+        if ((paramValue.vText != null) && (!paramValue.vText.isEmpty()))
+            cv.put(NoteItemParamsTableDef.V_TEXT_COLUMN_NAME, paramValue.vText);
 
         return mDB.insert(NoteItemParamsTableDef.TABLE_NAME, null, cv);
     }
@@ -509,8 +526,7 @@ public class DBNoteManager extends BasicCommonNoteManager {
         cv.put(NoteItemsTableDef.VALUE_COLUMN_NAME, item.getValue());
 
         deleteNoteItemParam(item);
-        if (item.getParamPrice() > 0)
-            insertNoteItemParam(item.getId(), getPriceNoteParamTypeId(), item.getParamPrice(), null);
+        insertNoteItemParams(item.getId(), item.getNoteItemParams());
 
         long result = mDB.update(NoteItemsTableDef.TABLE_NAME, cv, DBCommonDef.ID_COLUMN_NAME + " = ?" , new String[] {String.valueOf(item.getId())});
 
