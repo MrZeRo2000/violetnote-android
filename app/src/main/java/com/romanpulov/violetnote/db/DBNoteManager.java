@@ -204,7 +204,7 @@ public class DBNoteManager extends BasicCommonNoteManager {
             public void readFromCursor(Cursor c) {
                 long noteId = c.getLong(0);
                 long noteItemParamTypeId = c.getLong(1);
-                BasicParamValueA value = new BasicParamValueA(
+                BasicParamValueA value = BasicParamValueA.newInstance(
                     c.getLong(2), c.getString(3)
                 );
 

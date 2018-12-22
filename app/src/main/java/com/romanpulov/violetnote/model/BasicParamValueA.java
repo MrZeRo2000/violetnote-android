@@ -11,9 +11,24 @@ public final class BasicParamValueA implements Parcelable {
     public final long vInt;
     public final String vText;
 
-    public BasicParamValueA(long vInt, String vText) {
+    private BasicParamValueA(long vInt, String vText) {
         this.vInt = vInt;
         this.vText = vText;
+    }
+
+    @NonNull
+    public static BasicParamValueA newInstance(long vInt, String vText) {
+        return new BasicParamValueA(vInt, vText);
+    }
+
+    @NonNull
+    public static BasicParamValueA fromLong(long vInt) {
+        return newInstance(vInt, null);
+    }
+
+    @NonNull
+    public static BasicParamValueA fromString(String vText) {
+        return newInstance(0, vText);
     }
 
     private BasicParamValueA(@NonNull Parcel in) {

@@ -103,6 +103,10 @@ public final class BasicNoteItemParams implements Parcelable {
         paramValues.put(key, value);
     }
 
+    public void delete(long key) {
+        paramValues.delete(key);
+    }
+
     public BasicParamValueA get(long key) {
         return paramValues.get(key);
     }

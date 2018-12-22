@@ -70,7 +70,19 @@ public class ParcelableTest {
                 false
         );
 
-        noteItem.setNoteItemParams(BasicNoteItemParams.fromList(Collections.singletonList(new BasicNoteItemParams.BasicNoteItemParamValueA(15, new BasicParamValueA(5, "z")))));
+        noteItem.setNoteItemParams(
+                BasicNoteItemParams.fromList(
+                        Collections.singletonList(
+                                new BasicNoteItemParams.BasicNoteItemParamValueA(
+                                        15,
+                                        BasicParamValueA.newInstance(
+                                                5,
+                                                "z"
+                                        )
+                                )
+                        )
+                )
+        );
 
         Parcel parcel = Parcel.obtain();
         noteItem.writeToParcel(parcel, 0);
