@@ -15,7 +15,9 @@ import com.romanpulov.violetnote.model.BasicHNoteItemA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public final class DBHManager extends BasicDBManager {
     public DBHManager(Context context) {
@@ -39,6 +41,24 @@ public final class DBHManager extends BasicDBManager {
                         c.getString(2),
                         c.getString(3)
                 ));
+            }
+        });
+
+        return result;
+    }
+
+    public Map<String, Long> getHEventTypesMap() {
+        final Map<String, Long> result = new HashMap<>();
+        readCursor(new CursorReaderHandler() {
+            @Override
+            public Cursor createCursor() {
+                return mDB.query(HEventTypesTableDef.TABLE_NAME, HEventTypesTableDef.TABLE_COLS,
+                        null, null, null, null, null);
+            }
+
+            @Override
+            public void readFromCursor(Cursor c) {
+                result.put(c.getString(2), c.getLong(0));
             }
         });
 

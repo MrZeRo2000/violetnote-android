@@ -29,7 +29,9 @@ import com.romanpulov.violetnote.model.BooleanUtils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * BasicNoteA database operations
@@ -609,27 +611,25 @@ public class DBNoteManager extends BasicCommonNoteManager {
         }
     }
 
-    public List<BasicNoteItemParamTypeA> getNoteParamTypes() {
-        ArrayList<BasicNoteItemParamTypeA> noteParamTypes = new ArrayList<>();
-        Cursor c = null;
-        try {
-            c = mDB.query(
-                    NoteItemParamTypesTableDef.TABLE_NAME, NoteItemParamTypesTableDef.TABLE_COLS,
-                    null, null, null, null, null
-            );
-            for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
-                BasicNoteItemParamTypeA newNoteParamType = BasicNoteItemParamTypeA.newInstance(
-                        c.getLong(0),
-                        c.getString(1)
-                );
-                noteParamTypes.add(newNoteParamType);
-            }
-        } finally {
-            if ((c !=null) && !c.isClosed())
-                c.close();
-        }
+    public Map<String, Long> getNoteParamTypesMap() {
+        final Map<String, Long> result = new HashMap<>();
 
-        return noteParamTypes;
+        readCursor(new CursorReaderHandler() {
+            @Override
+            public Cursor createCursor() {
+                return mDB.query(
+                        NoteItemParamTypesTableDef.TABLE_NAME, NoteItemParamTypesTableDef.TABLE_COLS,
+                        null, null, null, null, null
+                );
+            }
+
+            @Override
+            public void readFromCursor(Cursor c) {
+                result.put(c.getString(1), c.getLong(0));
+            }
+        });
+
+        return result;
     }
 
     private long getPriceNoteParamTypeId() {
