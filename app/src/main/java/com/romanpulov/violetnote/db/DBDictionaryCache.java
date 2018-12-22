@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * Class for caching dictionary values
  */
-public class DBDictionaryCache implements DBDictionaryProvider {
+public class DBDictionaryCache {
     private boolean mIsLoaded = false;
 
     public boolean isLoaded() {
@@ -56,5 +56,7 @@ public class DBDictionaryCache implements DBDictionaryProvider {
 
     public void invalidate() {
         mIsLoaded = false;
+        mParamTypes = null;
+        mHEventTypes = null;
     }
 }

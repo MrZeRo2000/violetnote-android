@@ -282,7 +282,14 @@ public class DBNoteManager extends BasicCommonNoteManager {
                     }
                 }
 
-                newItem.setNoteItemParams(paramsList.get(newItem.getId()));
+                BasicNoteItemParams params = paramsList.get(newItem.getId());
+                newItem.setNoteItemParams(params);
+                if (params != null) {
+                    BasicParamValueA priceParamValue = params.get(priceNoteParamTypeId);
+                    if (priceParamValue != null) {
+                        //totalPrice += priceParamValue.vInt;
+                    }
+                }
 
                 if (newItem.isChecked())
                     checkedItemCount ++;
