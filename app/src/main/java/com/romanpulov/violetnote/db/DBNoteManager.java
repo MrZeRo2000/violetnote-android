@@ -21,7 +21,6 @@ import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteHistoryItemA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.model.BasicNoteItemParamTypeA;
-import com.romanpulov.violetnote.model.BasicNoteItemParamValueA;
 import com.romanpulov.violetnote.model.BasicNoteItemParams;
 import com.romanpulov.violetnote.model.BasicNoteValueA;
 import com.romanpulov.violetnote.model.BasicParamValueA;

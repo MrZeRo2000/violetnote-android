@@ -1,17 +1,14 @@
 package com.romanpulov.violetnote;
 
-import android.app.Application;
 import android.os.Parcel;
 import android.util.Log;
 
 import android.support.test.filters.SmallTest;
 import org.junit.*;
-import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static org.junit.Assert.*;
 
 import com.romanpulov.violetnote.loader.document.DocumentPassDataLoader;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
-import com.romanpulov.violetnote.model.BasicNoteItemParamValueA;
 import com.romanpulov.violetnote.model.BasicNoteItemParams;
 import com.romanpulov.violetnote.model.BasicParamValueA;
 import com.romanpulov.violetnote.model.PassDataA;
@@ -73,7 +70,7 @@ public class ParcelableTest {
                 false
         );
 
-        noteItem.setNoteItemParams(BasicNoteItemParams.fromList(Collections.singletonList(new BasicNoteItemParamValueA(15, new BasicParamValueA(5, "z")))));
+        noteItem.setNoteItemParams(BasicNoteItemParams.fromList(Collections.singletonList(new BasicNoteItemParams.BasicNoteItemParamValueA(15, new BasicParamValueA(5, "z")))));
 
         Parcel parcel = Parcel.obtain();
         noteItem.writeToParcel(parcel, 0);

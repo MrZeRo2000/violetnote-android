@@ -23,6 +23,45 @@ public final class BasicNoteItemParams implements Parcelable {
         return new BasicNoteItemParams(new LongSparseArray<BasicParamValueA>());
     }
 
+    public final static class BasicNoteItemParamValueA implements Parcelable {
+        private final long noteItemParamTypeId;
+        private final BasicParamValueA paramValue;
+
+        public BasicNoteItemParamValueA(long noteItemParamTypeId, BasicParamValueA paramValue) {
+            this.noteItemParamTypeId = noteItemParamTypeId;
+            this.paramValue = paramValue;
+        }
+
+        private BasicNoteItemParamValueA(@NonNull Parcel in) {
+            noteItemParamTypeId = in.readLong();
+            paramValue = in.readParcelable(BasicParamValueA.class.getClassLoader());
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(@NonNull Parcel dest, int flags) {
+            dest.writeLong(noteItemParamTypeId);
+            dest.writeParcelable(paramValue, 0);
+        }
+
+        public static final Parcelable.Creator<BasicNoteItemParamValueA> CREATOR = new Parcelable.Creator<BasicNoteItemParamValueA>(){
+
+            @Override
+            public BasicNoteItemParamValueA createFromParcel(Parcel source) {
+                return new BasicNoteItemParamValueA(source);
+            }
+
+            @Override
+            public BasicNoteItemParamValueA[] newArray(int size) {
+                return new BasicNoteItemParamValueA[size];
+            }
+        };
+    }
+
     public static LongSparseArray<BasicParamValueA> paramValuesFromList(@NonNull List<BasicNoteItemParamValueA> noteItemParamValues) {
         LongSparseArray<BasicParamValueA> result = new LongSparseArray<>();
         for (BasicNoteItemParamValueA value : noteItemParamValues) {
@@ -58,6 +97,10 @@ public final class BasicNoteItemParams implements Parcelable {
 
     public void append(long key, BasicParamValueA value) {
         paramValues.append(key, value);
+    }
+
+    public void put(long key, BasicParamValueA value) {
+        paramValues.put(key, value);
     }
 
     public BasicParamValueA get(long key) {
