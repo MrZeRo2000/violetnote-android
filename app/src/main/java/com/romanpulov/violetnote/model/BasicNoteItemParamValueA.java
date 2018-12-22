@@ -9,19 +9,16 @@ import android.support.annotation.NonNull;
  */
 public final class BasicNoteItemParamValueA implements Parcelable {
     public final long noteItemParamTypeId;
-    public final long vInt;
-    public final String vText;
+    public final BasicParamValueA paramValue;
 
-    public BasicNoteItemParamValueA(long noteItemParamTypeId, long vInt, String vText) {
+    public BasicNoteItemParamValueA(long noteItemParamTypeId, BasicParamValueA paramValue) {
         this.noteItemParamTypeId = noteItemParamTypeId;
-        this.vInt = vInt;
-        this.vText = vText;
+        this.paramValue = paramValue;
     }
 
     private BasicNoteItemParamValueA(@NonNull Parcel in) {
         noteItemParamTypeId = in.readLong();
-        vInt = in.readLong();
-        vText = in.readString();
+        paramValue = in.readParcelable(BasicParamValueA.class.getClassLoader());
     }
 
     @Override
@@ -32,8 +29,7 @@ public final class BasicNoteItemParamValueA implements Parcelable {
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeLong(noteItemParamTypeId);
-        dest.writeLong(vInt);
-        dest.writeString(vText);
+        dest.writeParcelable(paramValue, 0);
     }
 
     public static final Parcelable.Creator<BasicNoteItemParamValueA> CREATOR = new Parcelable.Creator<BasicNoteItemParamValueA>(){

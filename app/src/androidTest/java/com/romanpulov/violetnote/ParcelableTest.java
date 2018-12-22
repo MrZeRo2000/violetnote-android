@@ -12,6 +12,8 @@ import static org.junit.Assert.*;
 import com.romanpulov.violetnote.loader.document.DocumentPassDataLoader;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.model.BasicNoteItemParamValueA;
+import com.romanpulov.violetnote.model.BasicNoteItemParams;
+import com.romanpulov.violetnote.model.BasicParamValueA;
 import com.romanpulov.violetnote.model.PassDataA;
 
 import java.util.Arrays;
@@ -71,7 +73,7 @@ public class ParcelableTest {
                 false
         );
 
-        noteItem.setNoteItemParams(Collections.singletonList(new BasicNoteItemParamValueA(15, 5, "z")));
+        noteItem.setNoteItemParams(BasicNoteItemParams.fromList(Collections.singletonList(new BasicNoteItemParamValueA(15, new BasicParamValueA(5, "z")))));
 
         Parcel parcel = Parcel.obtain();
         noteItem.writeToParcel(parcel, 0);
@@ -81,8 +83,8 @@ public class ParcelableTest {
         BasicNoteItemA newNoteItem = BasicNoteItemA.CREATOR.createFromParcel(parcel);
 
         assertEquals(noteItem.getName(), newNoteItem.getName());
-        assertEquals(1, newNoteItem.getNoteItemParams().size());
-        assertEquals(5L, newNoteItem.getNoteItemParams().get(0).vInt);
-        assertNotEquals(6L, newNoteItem.getNoteItemParams().get(0).vInt);
+        assertEquals(1, newNoteItem.getNoteItemParams().paramValues.size());
+        assertEquals(5L, newNoteItem.getNoteItemParams().get(15).vInt);
+        assertNotEquals(6L, newNoteItem.getNoteItemParams().get(15).vInt);
     }
 }

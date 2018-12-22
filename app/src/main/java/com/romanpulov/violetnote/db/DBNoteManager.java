@@ -21,10 +21,14 @@ import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteHistoryItemA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.model.BasicNoteItemParamTypeA;
+import com.romanpulov.violetnote.model.BasicNoteItemParamValueA;
+import com.romanpulov.violetnote.model.BasicNoteItemParams;
 import com.romanpulov.violetnote.model.BasicNoteValueA;
+import com.romanpulov.violetnote.model.BasicParamValueA;
 import com.romanpulov.violetnote.model.BooleanUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -186,6 +190,35 @@ public class DBNoteManager extends BasicCommonNoteManager {
         return result;
     }
 
+    private LongSparseArray<BasicNoteItemParams> queryNoteDataParams(final BasicNoteA note) {
+        final LongSparseArray<BasicNoteItemParams> result = new LongSparseArray<>();
+
+        readCursor(new CursorReaderHandler() {
+            @Override
+            public Cursor createCursor() {
+                return mDB.rawQuery(DBRawQueryRepository.NOTE_ITEMS_PARAMS, new String[]{String.valueOf(note.getId())});
+            }
+
+            @Override
+            public void readFromCursor(Cursor c) {
+                long noteId = c.getLong(0);
+                long noteItemParamTypeId = c.getLong(1);
+                BasicParamValueA value = new BasicParamValueA(
+                    c.getLong(2), c.getString(3)
+                );
+
+                BasicNoteItemParams params = result.get(noteId);
+                if (params == null) {
+                    result.append(noteId, BasicNoteItemParams.fromValue(noteItemParamTypeId, value));
+                } else {
+                    params.append(noteItemParamTypeId, value);
+                }
+            }
+        });
+
+        return result;
+    }
+
     public LongSparseArray<Long> queryNoteDataItemLongParams(BasicNoteItemA noteItem) {
         LongSparseArray<Long> result = new LongSparseArray<>();
 
@@ -219,7 +252,8 @@ public class DBNoteManager extends BasicCommonNoteManager {
 
         //clear items
         note.getItems().clear();
-        LongSparseArray<LongSparseArray<Long>> params = queryNoteDataLongParams(note);
+        LongSparseArray<LongSparseArray<Long>> longParams = queryNoteDataLongParams(note);
+        LongSparseArray<BasicNoteItemParams> paramsList = queryNoteDataParams(note);
         long priceNoteParamTypeId = getPriceNoteParamTypeId();
 
         long totalPrice = 0L;
@@ -238,7 +272,7 @@ public class DBNoteManager extends BasicCommonNoteManager {
             for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
                 BasicNoteItemA newItem = noteItemFromCursor(c, mDTF);
 
-                LongSparseArray<Long> lParam = params.get(newItem.getId());
+                LongSparseArray<Long> lParam = longParams.get(newItem.getId());
                 if (lParam != null) {
                     Long paramPrice = lParam.get(priceNoteParamTypeId);
                     if (paramPrice != null) {
@@ -246,6 +280,8 @@ public class DBNoteManager extends BasicCommonNoteManager {
                         newItem.setParamPrice(paramPrice);
                     }
                 }
+
+                newItem.setNoteItemParams(paramsList.get(newItem.getId()));
 
                 if (newItem.isChecked())
                     checkedItemCount ++;

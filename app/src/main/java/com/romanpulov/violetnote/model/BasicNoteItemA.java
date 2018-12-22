@@ -19,7 +19,7 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
     private String mValue;
     private boolean mChecked;
     private long mParamPrice;
-    private List<BasicNoteItemParamValueA> mNoteItemParams = new ArrayList<>();
+    private BasicNoteItemParams mNoteItemParams = BasicNoteItemParams.createEmpty();
 
     public long getNoteId() {
         return mNoteId;
@@ -73,11 +73,11 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
         mParamPrice = price;
     }
 
-    public List<BasicNoteItemParamValueA> getNoteItemParams() {
+    public BasicNoteItemParams getNoteItemParams() {
         return mNoteItemParams;
     }
 
-    public void setNoteItemParams(List<BasicNoteItemParamValueA> params) {
+    public void setNoteItemParams(BasicNoteItemParams params) {
         mNoteItemParams = params;
     }
 
@@ -154,7 +154,7 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
         dest.writeString(mValue);
         dest.writeInt(BooleanUtils.toInt(mChecked));
         dest.writeLong(mParamPrice);
-        dest.writeTypedList(mNoteItemParams);
+        dest.writeParcelable(mNoteItemParams, 0);
     }
 
     private BasicNoteItemA(Parcel in) {
@@ -168,7 +168,7 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
         mValue = in.readString();
         mChecked = BooleanUtils.fromInt(in.readInt());
         mParamPrice = in.readLong();
-        in.readTypedList(mNoteItemParams, BasicNoteItemParamValueA.CREATOR);
+        mNoteItemParams = in.readParcelable(BasicNoteItemParams.class.getClassLoader());
     }
 
     public static final Parcelable.Creator<BasicNoteItemA> CREATOR = new Parcelable.Creator<BasicNoteItemA>() {
