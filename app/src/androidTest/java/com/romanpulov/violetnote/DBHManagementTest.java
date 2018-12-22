@@ -52,10 +52,18 @@ public final class DBHManagementTest extends DBBaseTest {
         assertNotEquals(-1, result);
         noteItem.setId(result);
 
+        //new events after create
         List<BasicHEventA> testEvents = new ArrayList<>();
         mDBHManager.queryHEvents(testEvents);
         assertEquals(2, testEvents.size());
 
+        //new event after update
+        noteItem.setValue("Another value = new");
+        mDBNoteManager.updateNoteItemNameValue(noteItem);
+        mDBHManager.queryHEvents(testEvents);
+        assertEquals(3, testEvents.size());
+
+        //delete note item and events should also be deleted
         result = mDBNoteManager.deleteNoteItem(noteItem);
         assertNotEquals(0, result);
 

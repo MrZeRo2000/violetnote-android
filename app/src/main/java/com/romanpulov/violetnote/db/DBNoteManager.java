@@ -468,12 +468,10 @@ public class DBNoteManager extends BasicCommonNoteManager {
         if (item.getParamPrice() > 0)
             insertNoteItemParam(item.getId(), getPriceNoteParamTypeId(), item.getParamPrice(), null);
 
-        DBHManager dbhManager = new DBHManager(mContext);
-
         long result = mDB.update(NoteItemsTableDef.TABLE_NAME, cv, DBCommonDef.ID_COLUMN_NAME + " = ?" , new String[] {String.valueOf(item.getId())});
 
         if (result > 0) {
-            dbhManager.saveNoteItemsEvent(item);
+            mDBHManager.saveNoteItemsEvent(item);
         }
         return result;
     }
