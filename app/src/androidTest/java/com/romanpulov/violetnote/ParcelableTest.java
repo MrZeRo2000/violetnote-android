@@ -10,7 +10,12 @@ import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static org.junit.Assert.*;
 
 import com.romanpulov.violetnote.loader.document.DocumentPassDataLoader;
+import com.romanpulov.violetnote.model.BasicNoteItemA;
+import com.romanpulov.violetnote.model.BasicNoteItemParamValueA;
 import com.romanpulov.violetnote.model.PassDataA;
+
+import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * Created by romanpulov on 01.12.2016.
@@ -52,4 +57,32 @@ public class ParcelableTest {
         assertEquals(data.getPassNoteData().get(0).getCategory().getCategoryName(), readData.getPassNoteData().get(0).getCategory().getCategoryName());
     }
 
+    @Test
+    public void testNoteItem() {
+        BasicNoteItemA noteItem = BasicNoteItemA.newInstance(
+                17,
+                136,
+                "last modified 136",
+                2,
+                1,
+                0,
+                "the name",
+                "the value",
+                false
+        );
+
+        noteItem.setNoteItemParams(Collections.singletonList(new BasicNoteItemParamValueA(15, 5, "z")));
+
+        Parcel parcel = Parcel.obtain();
+        noteItem.writeToParcel(parcel, 0);
+
+        parcel.setDataPosition(0);
+
+        BasicNoteItemA newNoteItem = BasicNoteItemA.CREATOR.createFromParcel(parcel);
+
+        assertEquals(noteItem.getName(), newNoteItem.getName());
+        assertEquals(1, newNoteItem.getNoteItemParams().size());
+        assertEquals(5L, newNoteItem.getNoteItemParams().get(0).vInt);
+        assertNotEquals(6L, newNoteItem.getNoteItemParams().get(0).vInt);
+    }
 }

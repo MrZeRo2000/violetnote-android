@@ -6,6 +6,9 @@ import android.support.annotation.NonNull;
 
 import com.romanpulov.violetnote.db.BasicNoteItemDBManagementProvider;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * BasicNote item data
  * Created by rpulov on 11.08.2016.
@@ -16,6 +19,7 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
     private String mValue;
     private boolean mChecked;
     private long mParamPrice;
+    private List<BasicNoteItemParamValueA> mNoteItemParams = new ArrayList<>();
 
     public long getNoteId() {
         return mNoteId;
@@ -49,7 +53,7 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
         mValue = value;
     }
 
-    private void setFloatParams(InputParser.FloatParamsResult floatParams) {
+    private void setFloatParams(@NonNull InputParser.FloatParamsResult floatParams) {
         mValue = floatParams.getText();
         if (floatParams.hasValue())
             mParamPrice = floatParams.getLongValue();
@@ -67,6 +71,14 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
 
     public void setParamPrice(long price) {
         mParamPrice = price;
+    }
+
+    public List<BasicNoteItemParamValueA> getNoteItemParams() {
+        return mNoteItemParams;
+    }
+
+    public void setNoteItemParams(List<BasicNoteItemParamValueA> params) {
+        mNoteItemParams = params;
     }
 
     @Override
@@ -142,6 +154,7 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
         dest.writeString(mValue);
         dest.writeInt(BooleanUtils.toInt(mChecked));
         dest.writeLong(mParamPrice);
+        dest.writeTypedList(mNoteItemParams);
     }
 
     private BasicNoteItemA(Parcel in) {
@@ -155,6 +168,7 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
         mValue = in.readString();
         mChecked = BooleanUtils.fromInt(in.readInt());
         mParamPrice = in.readLong();
+        in.readTypedList(mNoteItemParams, BasicNoteItemParamValueA.CREATOR);
     }
 
     public static final Parcelable.Creator<BasicNoteItemA> CREATOR = new Parcelable.Creator<BasicNoteItemA>() {
