@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.db.DBBasicNoteHelper;
 import com.romanpulov.violetnote.db.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicEntityNoteSelectionPosA;
 import com.romanpulov.violetnote.model.BasicNoteA;
@@ -53,6 +54,8 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
 
     private InputActionHelper mInputActionHelper;
     private CheckoutProgressHelper mCheckoutProgressHelper;
+
+    private long mPriceNoteParamTypeId = DBBasicNoteHelper.getInstance(getContext()).getDBDictionaryCache().getPriceNoteParamTypeId();
 
     @Override
     public void refreshList(DBNoteManager noteManager) {
@@ -121,7 +124,8 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
 
 
     private void performEditValueAction(final ActionMode mode, final BasicNoteItemA item) {
-        TextEditDialogBuilder textEditDialogBuilder = (new TextEditDialogBuilder(getActivity(), getString(R.string.ui_note_value), item.getValueWithParams()))
+        TextEditDialogBuilder textEditDialogBuilder = (new TextEditDialogBuilder(getActivity(), getString(R.string.ui_note_value),
+                item.getValueWithFloatParams(mPriceNoteParamTypeId)))
                 .setNonEmptyErrorMessage(getString(R.string.error_field_not_empty))
                 .setSelectEnd(true);
 
@@ -130,7 +134,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         textEditDialogBuilder.setOnTextInputListener(new TextInputDialog.OnTextInputListener() {
             @Override
             public void onTextInput(final String text) {
-                if (!text.equals(item.getValueWithParams())) {
+                if (!text.equals(item.getValueWithFloatParams(mPriceNoteParamTypeId))) {
                     //hide editor
                     View focusedView = alertDialog.getCurrentFocus();
                     InputManagerHelper.hideInput(focusedView);
@@ -139,7 +143,9 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                     performEditAction(text, new NoteItemDataUpdater() {
                         @Override
                         public void updateNoteItemData(BasicNoteItemA item) {
-                            item.setValueWithParams(text);
+                            item.setValueWithParams(
+                                    mPriceNoteParamTypeId,
+                                    text);
                         }
                     });
 
@@ -170,7 +176,8 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                             break;
                         case R.id.edit_value:
                             //performEditValueAction(mode, selectedNoteItems.get(0));
-                            mInputActionHelper.showLayout(selectedNoteItems.get(0).getValueWithParams(), InputActionHelper.INPUT_ACTION_TYPE_EDIT);
+                            mInputActionHelper.showLayout(selectedNoteItems.get(0).getValueWithFloatParams(mPriceNoteParamTypeId),
+                                    InputActionHelper.INPUT_ACTION_TYPE_EDIT);
                             break;
                         case R.id.move_up:
                             performMoveAction(new BasicNoteMoveUpAction<BasicNoteItemA>(), selectedNoteItems);
@@ -239,7 +246,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-        BasicNoteCheckedItemRecyclerViewAdapter recyclerViewAdapter = new BasicNoteCheckedItemRecyclerViewAdapter(mBasicNoteData, new ActionBarCallBack(),
+        BasicNoteCheckedItemRecyclerViewAdapter recyclerViewAdapter = new BasicNoteCheckedItemRecyclerViewAdapter(mBasicNoteData, mPriceNoteParamTypeId, new ActionBarCallBack(),
                 new OnBasicNoteCheckedItemFragmentInteractionListener() {
                     @Override
                     public void onBasicNoteItemFragmentInteraction(BasicNoteItemA item, int position) {
@@ -278,13 +285,17 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
             public void onAddFragmentInteraction(final int actionType, final String text) {
                 switch (actionType) {
                     case InputActionHelper.INPUT_ACTION_TYPE_ADD:
-                        performAddAction(BasicNoteItemA.newCheckedEditInstance(text));
+                        performAddAction(BasicNoteItemA.newCheckedEditInstance(
+                                mPriceNoteParamTypeId,
+                                text));
                         break;
                     case InputActionHelper.INPUT_ACTION_TYPE_EDIT:
                         performEditAction(text, new NoteItemDataUpdater() {
                             @Override
                             public void updateNoteItemData(BasicNoteItemA item) {
-                                item.setValueWithParams(text);
+                                item.setValueWithParams(
+                                        mPriceNoteParamTypeId,
+                                        text);
                             }
                         });
                         mInputActionHelper.hideLayout();

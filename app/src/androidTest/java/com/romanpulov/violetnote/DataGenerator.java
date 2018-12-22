@@ -38,6 +38,7 @@ public class DataGenerator {
         deleteDatabase();
 
         DBBasicNoteHelper.getInstance(getTargetContext()).openDB();
+        long priceNoteParamTypeId = DBBasicNoteHelper.getInstance(getTargetContext()).getDBDictionaryCache().getPriceNoteParamTypeId();
 
         log("Create notes");
         DBNoteManager noteManager = new DBNoteManager(getTargetContext());
@@ -65,7 +66,7 @@ public class DataGenerator {
                         if (isPrice)
                             itemValueFormat = "Note item %2d for note %2d name with value 12.44";
 
-                        BasicNoteItemA newNoteItem = BasicNoteItemA.newCheckedEditInstance(String.format(Locale.getDefault(), itemValueFormat, j, i));
+                        BasicNoteItemA newNoteItem = BasicNoteItemA.newCheckedEditInstance(priceNoteParamTypeId, String.format(Locale.getDefault(), itemValueFormat, j, i));
                         assertNotEquals(-1, noteManager.insertNoteItem(newNote, newNoteItem));
 
                         if (isPrice)

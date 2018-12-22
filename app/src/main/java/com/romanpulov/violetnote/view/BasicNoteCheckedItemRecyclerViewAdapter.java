@@ -22,6 +22,7 @@ import java.util.List;
 public class BasicNoteCheckedItemRecyclerViewAdapter extends RecyclerView.Adapter<BasicNoteCheckedItemRecyclerViewAdapter.ViewHolder> {
 
     private final BasicNoteDataA mBasicNoteData;
+    private final long mPriceNoteParamTypeId;
     private final List<BasicNoteItemA> mItems;
     private final RecyclerViewHelper.RecyclerViewSelector mRecyclerViewSelector;
     private final BasicNoteCheckedItemFragment.OnBasicNoteCheckedItemFragmentInteractionListener mListener;
@@ -30,8 +31,9 @@ public class BasicNoteCheckedItemRecyclerViewAdapter extends RecyclerView.Adapte
         return mRecyclerViewSelector;
     }
 
-    public BasicNoteCheckedItemRecyclerViewAdapter(BasicNoteDataA basicNoteData, ActionMode.Callback actionModeCallback, BasicNoteCheckedItemFragment.OnBasicNoteCheckedItemFragmentInteractionListener listener) {
+    public BasicNoteCheckedItemRecyclerViewAdapter(BasicNoteDataA basicNoteData, long priceNoteParamTypeId, ActionMode.Callback actionModeCallback, BasicNoteCheckedItemFragment.OnBasicNoteCheckedItemFragmentInteractionListener listener) {
         mBasicNoteData = basicNoteData;
+        mPriceNoteParamTypeId = priceNoteParamTypeId;
         mItems = basicNoteData.getNote().getItems();
         mRecyclerViewSelector = new RecyclerViewHelper.RecyclerViewSelector(this, actionModeCallback);
         mListener = listener;
@@ -59,7 +61,7 @@ public class BasicNoteCheckedItemRecyclerViewAdapter extends RecyclerView.Adapte
 
         if (mBasicNoteData.getTotalPrice() > 0) {
             holder.mPriceView.setVisibility(View.VISIBLE);
-            holder.mPriceView.setText(holder.mItem.getParamPriceDisplayValue());
+            holder.mPriceView.setText(holder.mItem.getFloatParamDisplayValue(mPriceNoteParamTypeId));
         } else {
             holder.mPriceView.setVisibility(View.GONE);
         }

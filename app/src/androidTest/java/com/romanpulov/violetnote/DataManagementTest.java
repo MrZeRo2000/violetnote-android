@@ -232,7 +232,7 @@ public class DataManagementTest extends DBBaseTest {
         Long priceParam = longItemsParams.get(priceNoteParamTypeId);
         assertEquals((Long)noteItem.getParamPrice(), priceParam);
 
-        noteItem.setValueWithParams("new value");
+        noteItem.setValueWithParams(priceNoteParamTypeId, "new value");
         mDBNoteManager.updateNoteItemNameValue(noteItem);
         longItemsParams = mDBNoteManager.queryNoteDataItemLongParams(noteItem);
         priceParam = longItemsParams.get(priceNoteParamTypeId);

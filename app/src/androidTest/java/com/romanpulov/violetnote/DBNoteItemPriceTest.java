@@ -2,12 +2,14 @@ package com.romanpulov.violetnote;
 
 import android.support.test.filters.SmallTest;
 
+import com.romanpulov.violetnote.db.DBBasicNoteHelper;
 import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.model.NoteGroupA;
 
 import org.junit.Test;
 
+import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
@@ -28,18 +30,20 @@ public final class DBNoteItemPriceTest extends DBBaseTest {
     }
 
     private void testNoteItemPrice() {
+        long priceNoteParamTypeId = DBBasicNoteHelper.getInstance(getTargetContext()).getDBDictionaryCache().getPriceNoteParamTypeId();
+
         //create new note
         BasicNoteA note = BasicNoteA.newEditInstance(NoteGroupA.DEFAULT_NOTE_GROUP_ID, BasicNoteA.NOTE_TYPE_NAMED, "New note", false, null);
         long result = mDBNoteManager.insertNote(note);
         assertNotEquals(-1, result);
         note.setId(result);
 
-        BasicNoteItemA noPriceNoteItem = BasicNoteItemA.newCheckedEditInstance("Value without param");
+        BasicNoteItemA noPriceNoteItem = BasicNoteItemA.newCheckedEditInstance(priceNoteParamTypeId, "Value without param");
         result = mDBNoteManager.insertNoteItem(note, noPriceNoteItem);
         assertNotEquals(-1, result);
         noPriceNoteItem.setId(result);
 
-        BasicNoteItemA hasPriceNoteItem = BasicNoteItemA.newCheckedEditInstance("Value with param 12.77");
+        BasicNoteItemA hasPriceNoteItem = BasicNoteItemA.newCheckedEditInstance(priceNoteParamTypeId, "Value with param 12.77");
         result = mDBNoteManager.insertNoteItem(note, hasPriceNoteItem);
         assertNotEquals(-1, result);
         hasPriceNoteItem.setId(result);
