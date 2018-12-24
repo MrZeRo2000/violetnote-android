@@ -26,8 +26,8 @@ public final class DBDefRepository {
         mTableDefs.add(HEventTypesTableDef.class);
         mTableDefs.add(HEventsTableDef.class);
         mTableDefs.add(HNoteItemsTableDef.class);
-        mTableDefs.add(HNoteCOItems.class);
-        mTableDefs.add(HNoteCOItemParams.class);
+        mTableDefs.add(HNoteCOItemsTableDef.class);
+        mTableDefs.add(HNoteCOItemParamsTableDef.class);
     }
 
     @NonNull

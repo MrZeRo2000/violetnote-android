@@ -10,6 +10,7 @@ import static org.junit.Assert.*;
 import com.romanpulov.violetnote.loader.document.DocumentPassDataLoader;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.model.BasicNoteItemParams;
+import com.romanpulov.violetnote.model.vo.BasicNoteItemParamValueA;
 import com.romanpulov.violetnote.model.vo.BasicParamValueA;
 import com.romanpulov.violetnote.model.PassDataA;
 
@@ -72,7 +73,7 @@ public class ParcelableTest {
         noteItem.setNoteItemParams(
                 BasicNoteItemParams.fromList(
                         Collections.singletonList(
-                                new BasicNoteItemParams.BasicNoteItemParamValueA(
+                                new BasicNoteItemParamValueA(
                                         15,
                                         BasicParamValueA.newInstance(
                                                 5,

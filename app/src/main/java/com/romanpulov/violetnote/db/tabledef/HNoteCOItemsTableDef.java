@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * h_note_co_items table definition
  */
-public final class HNoteCOItems implements DBCommonDef.TableDefSQLProvider {
+public final class HNoteCOItemsTableDef implements DBCommonDef.TableDefSQLProvider {
 
     //table
     public static final String TABLE_NAME = "h_note_co_items";

@@ -5,6 +5,7 @@ import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.util.LongSparseArray;
 
+import com.romanpulov.violetnote.model.vo.BasicNoteItemParamValueA;
 import com.romanpulov.violetnote.model.vo.BasicParamValueA;
 
 import java.util.ArrayList;
@@ -46,45 +47,6 @@ public final class BasicNoteItemParams implements Parcelable, Iterable<BasicPara
         return new BasicParamValueIterator();
     }
 
-    public final static class BasicNoteItemParamValueA implements Parcelable {
-        private final long noteItemParamTypeId;
-        private final BasicParamValueA paramValue;
-
-        public BasicNoteItemParamValueA(long noteItemParamTypeId, BasicParamValueA paramValue) {
-            this.noteItemParamTypeId = noteItemParamTypeId;
-            this.paramValue = paramValue;
-        }
-
-        private BasicNoteItemParamValueA(@NonNull Parcel in) {
-            noteItemParamTypeId = in.readLong();
-            paramValue = in.readParcelable(BasicParamValueA.class.getClassLoader());
-        }
-
-        @Override
-        public int describeContents() {
-            return 0;
-        }
-
-        @Override
-        public void writeToParcel(@NonNull Parcel dest, int flags) {
-            dest.writeLong(noteItemParamTypeId);
-            dest.writeParcelable(paramValue, 0);
-        }
-
-        public static final Parcelable.Creator<BasicNoteItemParamValueA> CREATOR = new Parcelable.Creator<BasicNoteItemParamValueA>(){
-
-            @Override
-            public BasicNoteItemParamValueA createFromParcel(Parcel source) {
-                return new BasicNoteItemParamValueA(source);
-            }
-
-            @Override
-            public BasicNoteItemParamValueA[] newArray(int size) {
-                return new BasicNoteItemParamValueA[size];
-            }
-        };
-    }
-
     public static LongSparseArray<BasicParamValueA> paramValuesFromList(@NonNull List<BasicNoteItemParamValueA> noteItemParamValues) {
         LongSparseArray<BasicParamValueA> result = new LongSparseArray<>();
         for (BasicNoteItemParamValueA value : noteItemParamValues) {
@@ -107,7 +69,7 @@ public final class BasicNoteItemParams implements Parcelable, Iterable<BasicPara
     }
 
     @NonNull
-    private static List<BasicNoteItemParamValueA> paramValuesToList(@NonNull LongSparseArray<BasicParamValueA> paramValues) {
+    public static List<BasicNoteItemParamValueA> paramValuesToList(@NonNull LongSparseArray<BasicParamValueA> paramValues) {
         List<BasicNoteItemParamValueA> result = new ArrayList<>();
 
         for (int i = 0; i < paramValues.size(); i++) {

@@ -550,6 +550,9 @@ public class DBNoteManager extends BasicCommonNoteManager {
 
                     //insert history
                     insertNoteHistory(note, item.getValue());
+
+                    //insert h
+                    mDBHManager.saveNoteCOEvent(note, item);
                 }
 
                 //delete note

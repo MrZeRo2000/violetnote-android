@@ -8,11 +8,16 @@ import android.support.annotation.NonNull;
 import com.romanpulov.violetnote.db.tabledef.DBCommonDef;
 import com.romanpulov.violetnote.db.tabledef.HEventTypesTableDef;
 import com.romanpulov.violetnote.db.tabledef.HEventsTableDef;
+import com.romanpulov.violetnote.db.tabledef.HNoteCOItemParamsTableDef;
+import com.romanpulov.violetnote.db.tabledef.HNoteCOItemsTableDef;
 import com.romanpulov.violetnote.db.tabledef.HNoteItemsTableDef;
 import com.romanpulov.violetnote.model.BasicHEventA;
 import com.romanpulov.violetnote.model.BasicHEventTypeA;
 import com.romanpulov.violetnote.model.BasicHNoteItemA;
+import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
+import com.romanpulov.violetnote.model.BasicNoteItemParams;
+import com.romanpulov.violetnote.model.vo.BasicNoteItemParamValueA;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -154,12 +159,58 @@ public final class DBHManager extends BasicDBManager {
         return mDB.insert(HNoteItemsTableDef.TABLE_NAME, null, cv);
     }
 
+    private long insertHNoteCOItem(long eventId, @NonNull BasicNoteA note, @NonNull BasicNoteItemA noteItem) {
+        ContentValues cv = new ContentValues();
+
+        cv.put(HNoteCOItemsTableDef.EVENT_ID_COLUMN_NAME, eventId);
+        cv.put(HNoteCOItemsTableDef.NOTE_ID_COLUMN_NAME, note.getId());
+        cv.put(HNoteCOItemsTableDef.VALUE_COLUMN_NAME, noteItem.getValue());
+
+        return mDB.insert(HNoteCOItemsTableDef.TABLE_NAME, null, cv);
+    }
+
+    private long insertHNoteCOItemParam(long hNoteCOItemId, BasicNoteItemParamValueA param) {
+        ContentValues cv = new ContentValues();
+
+        cv.put(HNoteCOItemParamsTableDef.H_NOTE_CO_ITEM_ID_COLUMN_NAME, hNoteCOItemId);
+        cv.put(HNoteCOItemParamsTableDef.NOTE_ITEM_PARAM_TYPE_ID_COLUMN_NAME, param.noteItemParamTypeId);
+        cv.put(HNoteCOItemParamsTableDef.V_INT_COLUMN_NAME, param.paramValue.vInt);
+        cv.put(HNoteCOItemParamsTableDef.V_TEXT_COLUMN_NAME, param.paramValue.vText);
+
+        return mDB.insert(HNoteCOItemParamsTableDef.TABLE_NAME, null, cv);    }
+
+    private long insertHNoteCOItemParams(long hNoteCOItemId, @NonNull BasicNoteItemParams params) {
+        long result = 0;
+
+        List<BasicNoteItemParamValueA> paramList = BasicNoteItemParams.paramValuesToList(params.paramValues);
+        for (BasicNoteItemParamValueA param : paramList) {
+            result = insertHNoteCOItemParam(hNoteCOItemId, param);
+            if (result == -1)
+                return result;
+        }
+
+        return result;
+    }
+
     public long saveNoteItemsEvent(@NonNull BasicNoteItemA noteItem) {
         long eventId = insertHEvent(mDBHelper.getDBDictionaryCache().getNoteItemsHEventParamId(), null);
         if (eventId != -1) {
             return insertHNoteItem(eventId, noteItem);
         } else
-            return -1;
+            return eventId;
+    }
+
+    public long saveNoteCOEvent(@NonNull BasicNoteA note, @NonNull BasicNoteItemA noteItem) {
+        long eventId = insertHEvent(mDBHelper.getDBDictionaryCache().getCheckoutHEventParamId(), null);
+        if (eventId != -1) {
+            long hNoteCOItemId = insertHNoteCOItem(eventId, note, noteItem);
+            BasicNoteItemParams params = noteItem.getNoteItemParams();
+            if ((hNoteCOItemId != -1) && (params.size() > 0)) {
+                return insertHNoteCOItemParams(hNoteCOItemId, noteItem.getNoteItemParams());
+            } else
+                return hNoteCOItemId;
+        } else
+            return eventId;
     }
 
     public long deleteHNoteItem(@NonNull BasicNoteItemA noteItem) {

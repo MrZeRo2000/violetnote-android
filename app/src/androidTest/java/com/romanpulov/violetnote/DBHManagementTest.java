@@ -97,6 +97,59 @@ public final class DBHManagementTest extends DBBaseTest {
         assertNotEquals(-1, result);
         note.setId(result);
 
+        ArrayList<BasicNoteA> notes =  mDBNoteManager.queryNotes();
+        assertEquals(1, notes.size());
+
+        long priceNoteParamTypeId = mDBHelper.getDBDictionaryCache().getPriceNoteParamTypeId();
+
+        BasicNoteItemA noteItem1 = BasicNoteItemA.newCheckedEditInstance(priceNoteParamTypeId, "Data without value");
+        result = mDBNoteManager.insertNoteItem(note, noteItem1);
+        assertNotEquals(-1, result);
+        noteItem1.setId(result);
+
+        mDBNoteManager.queryNoteDataItems(note);
+        assertEquals(1, note.getItemCount());
+
+        BasicNoteItemA noteItem2 = BasicNoteItemA.newCheckedEditInstance(priceNoteParamTypeId, "Data with value 23.55");
+        result = mDBNoteManager.insertNoteItem(note, noteItem2);
+        assertNotEquals(-1, result);
+        noteItem2.setId(result);
+
+        assertEquals(2355L, noteItem2.getNoteItemParams().getLong(priceNoteParamTypeId));
+        mDBNoteManager.queryNoteDataItems(note);
+        assertEquals(2, note.getItemCount());
+        assertEquals(2355L, note.getItems().get(1).getNoteItemParams().getLong(priceNoteParamTypeId));
+
+        BasicNoteItemA noteItem3 = BasicNoteItemA.newCheckedEditInstance(priceNoteParamTypeId, "Another value 34");
+        result = mDBNoteManager.insertNoteItem(note, noteItem3);
+        assertNotEquals(-1, result);
+        noteItem3.setId(result);
+
+        mDBNoteManager.queryNoteDataItems(note);
+        assertEquals(3, note.getItemCount());
+        assertEquals(3400L, note.getItems().get(2).getNoteItemParams().getLong(priceNoteParamTypeId));
+        assertEquals(5755L, note.getTotalPrice());
+
+        //check items
+        result = mDBNoteManager.checkNoteItem(noteItem1);
+        assertNotEquals(-1, result);
+        result = mDBNoteManager.checkNoteItem(noteItem2);
+        assertNotEquals(-1, result);
+
+        //checkout items
+        mDBNoteManager.queryNoteDataItems(note);
+        mDBNoteManager.checkOut(note);
+
+        //here we should have some history
+
+
+        mDBNoteManager.queryNoteDataItems(note);
+        assertEquals(1, note.getItemCount());
+
+        mDBNoteManager.deleteNote(note);
+        mDBNoteManager.queryNoteDataItems(note);
+        assertEquals(0, note.getItemCount());
+
     }
 
     private void testEventTypes() {

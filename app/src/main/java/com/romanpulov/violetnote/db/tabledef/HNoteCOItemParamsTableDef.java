@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * h_note_co_item_params table definition
  */
-public final class HNoteCOItemParams implements DBCommonDef.TableDefSQLProvider {
+public final class HNoteCOItemParamsTableDef implements DBCommonDef.TableDefSQLProvider {
 
     //table
     public static final String TABLE_NAME = "h_note_co_item_params";
@@ -41,7 +41,7 @@ public final class HNoteCOItemParams implements DBCommonDef.TableDefSQLProvider 
             TABLE_COLS,
             TABLE_COL_TYPES,
             new StmtGenerator.ForeignKeyRec[]{
-                    new StmtGenerator.ForeignKeyRec(H_NOTE_CO_ITEM_ID_COLUMN_NAME, HNoteCOItems.TABLE_NAME, DBCommonDef.ID_COLUMN_NAME),
+                    new StmtGenerator.ForeignKeyRec(H_NOTE_CO_ITEM_ID_COLUMN_NAME, HNoteCOItemsTableDef.TABLE_NAME, DBCommonDef.ID_COLUMN_NAME),
                     new StmtGenerator.ForeignKeyRec(NOTE_ITEM_PARAM_TYPE_ID_COLUMN_NAME, NoteItemParamTypesTableDef.TABLE_NAME, DBCommonDef.ID_COLUMN_NAME)
             });
 
