@@ -73,7 +73,7 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
         }
     }
 
-    private void performDeleteAction(final ActionMode mode, final List<? extends BasicCommonNoteA> items) {
+    private void performDeleteAction(final ActionMode mode, final List<BasicNoteA> items) {
         AlertOkCancelSupportDialogFragment dialog = AlertOkCancelSupportDialogFragment.newAlertOkCancelDialog(getString(R.string.ui_question_are_you_sure));
         dialog.setOkButtonClickListener(new AlertOkCancelSupportDialogFragment.OnClickListener() {
             @Override
@@ -81,7 +81,7 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
                 // delete item
                 DBNoteManager mNoteManager = new DBNoteManager(getActivity());
 
-                for (BasicCommonNoteA item : items)
+                for (BasicNoteA item : items)
                     mNoteManager.deleteNote(item);
 
                 // refresh list

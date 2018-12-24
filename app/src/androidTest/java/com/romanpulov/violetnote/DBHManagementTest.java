@@ -32,6 +32,7 @@ public final class DBHManagementTest extends DBBaseTest {
             testEvents();
 
             testHNoteItems();
+            testHNoteCOItems();
         }
     }
 
@@ -80,7 +81,22 @@ public final class DBHManagementTest extends DBBaseTest {
         assertEquals(2, testEvents.size());
 
         //one time action to get backup for tests
-        backupDB();
+        //backupDB();
+
+        //delete the note
+        result = mDBNoteManager.deleteNote(note);
+        assertNotEquals(0, result);
+
+        ArrayList<BasicNoteA> notes =  mDBNoteManager.queryNotes();
+        assertEquals(0, notes.size());
+    }
+
+    private void testHNoteCOItems() {
+        BasicNoteA note = BasicNoteA.newEditInstance(NoteGroupA.DEFAULT_NOTE_GROUP_ID, BasicNoteA.NOTE_TYPE_CHECKED, "Checked note", false, null);
+        long result = mDBNoteManager.insertNote(note);
+        assertNotEquals(-1, result);
+        note.setId(result);
+
     }
 
     private void testEventTypes() {

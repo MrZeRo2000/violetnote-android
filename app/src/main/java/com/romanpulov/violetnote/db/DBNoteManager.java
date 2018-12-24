@@ -403,7 +403,7 @@ public class DBNoteManager extends BasicCommonNoteManager {
         return mDB.insert(NotesTableDef.TABLE_NAME, null, cv);
     }
 
-    public long deleteNote(BasicCommonNoteA note) {
+    public long deleteNote(BasicNoteA note) {
         String[] noteIdArgs = new String[] {String.valueOf(note.getId())};
 
         //history
@@ -411,7 +411,11 @@ public class DBNoteManager extends BasicCommonNoteManager {
         //values
         mDB.delete(NoteValuesTableDef.TABLE_NAME, DBCommonDef.NOTE_ID_SELECTION_STRING, noteIdArgs);
         //items
-        mDB.delete(NoteItemsTableDef.TABLE_NAME, DBCommonDef.NOTE_ID_SELECTION_STRING, noteIdArgs);
+        queryNoteDataItems(note);
+        for (BasicNoteItemA noteItem : note.getItems()) {
+            deleteNoteItem(noteItem);
+        }
+        //mDB.delete(NoteItemsTableDef.TABLE_NAME, DBCommonDef.NOTE_ID_SELECTION_STRING, noteIdArgs);
 
         //note
         return mDB.delete(NotesTableDef.TABLE_NAME, DBCommonDef.ID_COLUMN_NAME + "=" + note.getId(), null);
