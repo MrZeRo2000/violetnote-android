@@ -7,6 +7,7 @@ import com.romanpulov.violetnote.db.DBBasicNoteHelper;
 import com.romanpulov.violetnote.db.DBBasicNoteOpenHelper;
 import com.romanpulov.violetnote.db.DBHManager;
 import com.romanpulov.violetnote.db.DBNoteManager;
+import com.romanpulov.violetnote.db.DBStorageManager;
 
 import static android.support.test.InstrumentationRegistry.getTargetContext;
 
@@ -37,6 +38,13 @@ abstract class DBBaseTest {
         mDB = mDBHelper.getDB();
         mDBNoteManager = new DBNoteManager(mContext);
         mDBHManager = new DBHManager(mContext);
+    }
+
+    void backupDB() {
+        mDBHelper.closeDB();
+        DBStorageManager storageManager = new DBStorageManager(mContext);
+        storageManager.createRollingLocalBackup();
+        mDBHelper.openDB();
     }
 
     void sleep(long millis) {

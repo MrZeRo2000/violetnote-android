@@ -20,14 +20,12 @@ import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteHistoryItemA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
-import com.romanpulov.violetnote.model.BasicNoteItemParamTypeA;
 import com.romanpulov.violetnote.model.BasicNoteItemParams;
 import com.romanpulov.violetnote.model.BasicNoteValueA;
-import com.romanpulov.violetnote.model.BasicParamValueA;
+import com.romanpulov.violetnote.model.vo.BasicParamValueA;
 import com.romanpulov.violetnote.model.BooleanUtils;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;

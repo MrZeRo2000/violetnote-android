@@ -31,4 +31,16 @@ public class DBRawQueryRepository {
         "FROM note_items ni " +
         "LEFT OUTER JOIN note_item_params nip ON ni._id = nip.note_item_id " +
         "WHERE ni.note_id = ? " ;
+
+    public static final String NOTE_ITEMS_EVENTS =
+            "SELECT " +
+            "hni.note_item_id, " +
+            "he._id AS event_id, " +
+            "he.event_time, " +
+            "hni.name, " +
+            "hni.value " +
+            "FROM h_note_items hni " +
+            "INNER JOIN h_events he ON hni.event_id = he._id " +
+            "ORDER BY he.event_time DESC"
+            ;
 }

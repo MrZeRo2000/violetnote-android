@@ -5,6 +5,8 @@ import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.util.LongSparseArray;
 
+import com.romanpulov.violetnote.model.vo.BasicParamValueA;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;

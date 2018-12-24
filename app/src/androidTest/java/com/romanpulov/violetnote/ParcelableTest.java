@@ -10,10 +10,9 @@ import static org.junit.Assert.*;
 import com.romanpulov.violetnote.loader.document.DocumentPassDataLoader;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.model.BasicNoteItemParams;
-import com.romanpulov.violetnote.model.BasicParamValueA;
+import com.romanpulov.violetnote.model.vo.BasicParamValueA;
 import com.romanpulov.violetnote.model.PassDataA;
 
-import java.util.Arrays;
 import java.util.Collections;
 
 /**

@@ -5,6 +5,7 @@ import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
 import com.romanpulov.violetnote.db.BasicNoteItemDBManagementProvider;
+import com.romanpulov.violetnote.model.vo.BasicParamValueA;
 
 /**
  * BasicNote item data

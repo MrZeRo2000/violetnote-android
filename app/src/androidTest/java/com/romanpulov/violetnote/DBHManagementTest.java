@@ -31,26 +31,27 @@ public final class DBHManagementTest extends DBBaseTest {
             testEventTypes();
             testEvents();
 
-            testNotes();
+            testHNoteItems();
         }
     }
 
-    private void testNotes() {
+    private void testHNoteItems() {
 
         BasicNoteA note = BasicNoteA.newEditInstance(NoteGroupA.DEFAULT_NOTE_GROUP_ID, BasicNoteA.NOTE_TYPE_NAMED, "New note", false, null);
         long result = mDBNoteManager.insertNote(note);
         assertNotEquals(-1, result);
         note.setId(result);
 
-        BasicNoteItemA noteItem = BasicNoteItemA.newNamedEditInstance("New name", "New Value");
-        result = mDBNoteManager.insertNoteItem(note, noteItem);
+        BasicNoteItemA noteItem1 = BasicNoteItemA.newNamedEditInstance("New name", "New Value");
+        result = mDBNoteManager.insertNoteItem(note, noteItem1);
         assertNotEquals(-1, result);
+        noteItem1.setId(result);
 
 
-        noteItem = BasicNoteItemA.newNamedEditInstance("Another name", "Another Value");
-        result = mDBNoteManager.insertNoteItem(note, noteItem);
+        BasicNoteItemA noteItem2 = BasicNoteItemA.newNamedEditInstance("Another name", "Another Value");
+        result = mDBNoteManager.insertNoteItem(note, noteItem2);
         assertNotEquals(-1, result);
-        noteItem.setId(result);
+        noteItem2.setId(result);
 
         //new events after create
         List<BasicHEventA> testEvents = new ArrayList<>();
@@ -58,18 +59,28 @@ public final class DBHManagementTest extends DBBaseTest {
         assertEquals(2, testEvents.size());
 
         //new event after update
-        noteItem.setValue("Another value = new");
-        mDBNoteManager.updateNoteItemNameValue(noteItem);
+        noteItem2.setValue("Another value = new");
+        mDBNoteManager.updateNoteItemNameValue(noteItem2);
         mDBHManager.queryHEvents(testEvents);
         assertEquals(3, testEvents.size());
 
         //delete note item and events should also be deleted
-        result = mDBNoteManager.deleteNoteItem(noteItem);
+        result = mDBNoteManager.deleteNoteItem(noteItem2);
         assertNotEquals(0, result);
 
         testEvents = new ArrayList<>();
         mDBHManager.queryHEvents(testEvents);
         assertEquals(1, testEvents.size());
+
+        noteItem1.setName("Changed name");
+        noteItem1.setValue("Changed value");
+        mDBNoteManager.updateNoteItemNameValue(noteItem1);
+
+        mDBHManager.queryHEvents(testEvents);
+        assertEquals(2, testEvents.size());
+
+        //one time action to get backup for tests
+        backupDB();
     }
 
     private void testEventTypes() {
