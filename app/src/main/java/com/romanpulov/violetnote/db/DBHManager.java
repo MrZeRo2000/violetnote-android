@@ -13,6 +13,7 @@ import com.romanpulov.violetnote.db.tabledef.HNoteCOItemsTableDef;
 import com.romanpulov.violetnote.db.tabledef.HNoteItemsTableDef;
 import com.romanpulov.violetnote.model.BasicHEventA;
 import com.romanpulov.violetnote.model.BasicHEventTypeA;
+import com.romanpulov.violetnote.model.BasicHNoteCOItemA;
 import com.romanpulov.violetnote.model.BasicHNoteItemA;
 import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
@@ -118,8 +119,9 @@ public final class DBHManager extends BasicDBManager {
         });
     }
 
-    public void queryHNoteItemsByNoteItem(@NonNull final List<BasicHNoteItemA> hNoteItems, final BasicNoteItemA noteItem) {
-        hNoteItems.clear();
+    @NonNull
+    public List<BasicHNoteItemA> queryHNoteItemsByNoteItem(final BasicNoteItemA noteItem) {
+        final List<BasicHNoteItemA> result = new ArrayList<>();
 
         readCursor(new CursorReaderHandler() {
             @Override
@@ -137,7 +139,7 @@ public final class DBHManager extends BasicDBManager {
 
             @Override
             public void readFromCursor(Cursor c) {
-                hNoteItems.add(BasicHNoteItemA.newInstance(
+                result.add(BasicHNoteItemA.newInstance(
                         c.getLong(0),
                         c.getLong(1),
                         c.getLong(2),
@@ -146,6 +148,39 @@ public final class DBHManager extends BasicDBManager {
                 ));
             }
         });
+
+        return result;
+    }
+
+    public List<BasicHNoteCOItemA> queryHNoteCOItemsByNote(final BasicNoteA note) {
+        final List<BasicHNoteCOItemA> result = new ArrayList<>();
+
+        readCursor(new CursorReaderHandler() {
+            @Override
+            public Cursor createCursor() {
+                return mDB.query(
+                        HNoteCOItemsTableDef.TABLE_NAME,
+                        HNoteCOItemsTableDef.TABLE_COLS,
+                        HNoteCOItemsTableDef.NOTE_ID_COLUMN_NAME + " = ?",
+                        new String[] {String.valueOf(note.getId())},
+                        null,
+                        null,
+                        null
+                );
+            }
+
+            @Override
+            public void readFromCursor(Cursor c) {
+                result.add(BasicHNoteCOItemA.newInstance(
+                        c.getLong(0),
+                        c.getLong(1),
+                        c.getLong(2),
+                        c.getString(3)
+                ));
+            }
+        });
+
+        return result;
     }
 
     private long insertHNoteItem(long eventId, @NonNull BasicNoteItemA noteItem) {
@@ -216,8 +251,7 @@ public final class DBHManager extends BasicDBManager {
     public long deleteHNoteItem(@NonNull BasicNoteItemA noteItem) {
         long result = 0;
 
-        List<BasicHNoteItemA> hNoteItems = new ArrayList<>();
-        queryHNoteItemsByNoteItem(hNoteItems, noteItem);
+        List<BasicHNoteItemA> hNoteItems = queryHNoteItemsByNoteItem(noteItem);
 
         for (BasicHNoteItemA hNoteItem : hNoteItems) {
             result = deleteById(HNoteItemsTableDef.TABLE_NAME, hNoteItem.getId());

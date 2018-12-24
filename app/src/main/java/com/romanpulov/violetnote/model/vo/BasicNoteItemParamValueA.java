@@ -8,9 +8,14 @@ public final class BasicNoteItemParamValueA implements Parcelable {
     public final long noteItemParamTypeId;
     public final BasicParamValueA paramValue;
 
-    public BasicNoteItemParamValueA(long noteItemParamTypeId, BasicParamValueA paramValue) {
+    private BasicNoteItemParamValueA(long noteItemParamTypeId, BasicParamValueA paramValue) {
         this.noteItemParamTypeId = noteItemParamTypeId;
         this.paramValue = paramValue;
+    }
+
+    @NonNull
+    public static BasicNoteItemParamValueA newInstance(long noteItemParamTypeId, BasicParamValueA paramValue) {
+        return new BasicNoteItemParamValueA(noteItemParamTypeId, paramValue);
     }
 
     private BasicNoteItemParamValueA(@NonNull Parcel in) {

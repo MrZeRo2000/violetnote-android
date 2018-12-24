@@ -73,7 +73,7 @@ public class ParcelableTest {
         noteItem.setNoteItemParams(
                 BasicNoteItemParams.fromList(
                         Collections.singletonList(
-                                new BasicNoteItemParamValueA(
+                                BasicNoteItemParamValueA.newInstance(
                                         15,
                                         BasicParamValueA.newInstance(
                                                 5,

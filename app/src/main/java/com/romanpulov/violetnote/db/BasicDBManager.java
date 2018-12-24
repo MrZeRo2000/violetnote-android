@@ -41,6 +41,11 @@ public abstract class BasicDBManager {
     }
 
     long deleteById(String tableName, long id) {
-        return mDB.delete(tableName, DBCommonDef.ID_COLUMN_NAME + "=?", new String[] {String.valueOf(id)});
+        return deleteById(tableName, DBCommonDef.ID_COLUMN_NAME, id);
     }
+
+    long deleteById(String tableName, String columnName, long id) {
+        return mDB.delete(tableName, columnName + " = ?", new String[] {String.valueOf(id)});
+    }
+
 }

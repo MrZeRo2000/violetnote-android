@@ -74,7 +74,7 @@ public final class BasicNoteItemParams implements Parcelable, Iterable<BasicPara
 
         for (int i = 0; i < paramValues.size(); i++) {
             long key = paramValues.keyAt(i);
-            result.add(new BasicNoteItemParamValueA(key, paramValues.get(key)));
+            result.add(BasicNoteItemParamValueA.newInstance(key, paramValues.get(key)));
         }
 
         return result;
