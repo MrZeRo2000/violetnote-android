@@ -8,10 +8,7 @@ public abstract class AbstractBasicHEventItemParamDAO<T> extends AbstractBasicHE
 
     private BasicHNoteCOItemParamDAO mBasicHNoteCOItemParamDAO;
     BasicHNoteCOItemParamDAO getBasicHNoteCOItemParamDAO() {
-        if (mBasicHNoteCOItemParamDAO == null)
-            mBasicHNoteCOItemParamDAO = new BasicHNoteCOItemParamDAO(mContext);
-
-        return mBasicHNoteCOItemParamDAO;
+        return mBasicHNoteCOItemParamDAO == null ? (mBasicHNoteCOItemParamDAO = new BasicHNoteCOItemParamDAO(mContext)) : mBasicHNoteCOItemParamDAO;
     }
 
     public AbstractBasicHEventItemParamDAO(Context context) {

@@ -194,11 +194,13 @@ public class DataManagementTest extends DBBaseTest {
         long priceNoteParamTypeId = DBBasicNoteHelper.getInstance(getTargetContext()).getDBDictionaryCache().getPriceNoteParamTypeId();
 
         BasicNoteA note = mDBNoteManager.mBasicNoteDAO.getById(2);
-        mDBNoteManager.queryNoteDataItems(note);
+        mDBNoteManager.mBasicNoteItemDAO.fillNoteDataItems(note);
 
         BasicNoteItemA noteItem = note.getItems().get(4);
         assertNotEquals(0, noteItem.getParamLong(priceNoteParamTypeId));
 
+        /*
+        // not actual tests, to be deleted
         LongSparseArray<Long> longItemsParams = mDBNoteManager.queryNoteDataItemLongParams(noteItem);
         Long priceParam = longItemsParams.get(priceNoteParamTypeId);
         assertEquals((Long)noteItem.getParamLong(priceNoteParamTypeId), priceParam);
@@ -208,7 +210,7 @@ public class DataManagementTest extends DBBaseTest {
         longItemsParams = mDBNoteManager.queryNoteDataItemLongParams(noteItem);
         priceParam = longItemsParams.get(priceNoteParamTypeId);
         assertNull(priceParam);
-
+        */
     }
 
 }

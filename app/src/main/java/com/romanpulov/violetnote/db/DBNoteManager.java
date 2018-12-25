@@ -8,6 +8,8 @@ import android.util.Log;
 import android.util.LongSparseArray;
 
 import com.romanpulov.violetnote.db.dao.BasicNoteDAO;
+import com.romanpulov.violetnote.db.dao.BasicNoteItemDAO;
+import com.romanpulov.violetnote.db.dao.BasicNoteItemParamsDAO;
 import com.romanpulov.violetnote.db.tabledef.DBCommonDef;
 import com.romanpulov.violetnote.db.tabledef.NoteItemParamTypesTableDef;
 import com.romanpulov.violetnote.db.tabledef.NoteItemParamsTableDef;
@@ -44,11 +46,15 @@ public class DBNoteManager extends BasicCommonNoteManager {
 
     private final DBHManager mDBHManager;
     public final BasicNoteDAO mBasicNoteDAO;
+    public final BasicNoteItemDAO mBasicNoteItemDAO;
+    public final BasicNoteItemParamsDAO mBasicNoteItemParamsDAO;
 
     public DBNoteManager(Context context) {
         super(context);
         mDBHManager = new DBHManager(context);
         mBasicNoteDAO = new BasicNoteDAO(context);
+        mBasicNoteItemDAO = new BasicNoteItemDAO(context);
+        mBasicNoteItemParamsDAO = new BasicNoteItemParamsDAO(context);
     }
 
 
@@ -66,15 +72,6 @@ public class DBNoteManager extends BasicCommonNoteManager {
         );
     }
 
-    private static BasicNoteHistoryItemA noteHistoryItemFromCursor(Cursor c, DateTimeFormatter dtf) {
-        return BasicNoteHistoryItemA.newInstance(
-                c.getLong(0),
-                c.getLong(1),
-                dtf.formatDateTimeDelimited(new Date(c.getLong(1)), "\n"),
-                c.getString(2)
-        );
-    }
-
     public BasicNoteDataA fromNoteData(BasicNoteA note) {
         ArrayList<BasicNoteA> notes = new ArrayList<>();
         List<BasicNoteA> relatedNotes = mBasicNoteDAO.getRelatedNotes(note);
@@ -85,81 +82,8 @@ public class DBNoteManager extends BasicCommonNoteManager {
         return BasicNoteDataA.newInstance(null, notes, relatedNotes);
     }
 
-    private LongSparseArray<LongSparseArray<Long>> queryNoteDataLongParams(BasicNoteA note) {
-        LongSparseArray<LongSparseArray<Long>> result = new LongSparseArray<>();
-
-        Cursor c = null;
-        try {
-            c = mDB.rawQuery(DBRawQueryRepository.NOTE_ITEMS_PARAMS, new String[]{String.valueOf(note.getId())});
-            for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
-                LongSparseArray<Long> la = new LongSparseArray<>();
-                la.append(c.getLong(1), c.getLong(2));
-                result.append(c.getLong(0), la);
-            }
-
-        } finally {
-            if ((c !=null) && !c.isClosed())
-                c.close();
-        }
-
-        return result;
-    }
-
-    private LongSparseArray<BasicNoteItemParams> queryNoteDataParams(final BasicNoteA note) {
-        final LongSparseArray<BasicNoteItemParams> result = new LongSparseArray<>();
-
-        readCursor(new CursorReaderHandler() {
-            @Override
-            public Cursor createCursor() {
-                return mDB.rawQuery(DBRawQueryRepository.NOTE_ITEMS_PARAMS, new String[]{String.valueOf(note.getId())});
-            }
-
-            @Override
-            public void readFromCursor(Cursor c) {
-                long noteId = c.getLong(0);
-                long noteItemParamTypeId = c.getLong(1);
-                BasicParamValueA value = BasicParamValueA.newInstance(
-                    c.getLong(2), c.getString(3)
-                );
-
-                BasicNoteItemParams params = result.get(noteId);
-                if (params == null) {
-                    result.append(noteId, BasicNoteItemParams.fromValue(noteItemParamTypeId, value));
-                } else {
-                    params.append(noteItemParamTypeId, value);
-                }
-            }
-        });
-
-        return result;
-    }
-
-    public LongSparseArray<Long> queryNoteDataItemLongParams(BasicNoteItemA noteItem) {
-        LongSparseArray<Long> result = new LongSparseArray<>();
-
-        Cursor c = null;
-        try {
-            c = mDB.query(
-                    NoteItemParamsTableDef.TABLE_NAME,
-                    NoteItemParamsTableDef.TABLE_COLS,
-                    DBCommonDef.NOTE_ITEM_ID_COLUMN_NAME + " = ?",
-                    new String[]{String.valueOf(noteItem.getId())},
-                    null, null, null
-                    );
-            c.moveToFirst();
-            if (!c.isAfterLast()) {
-                result.append(c.getLong(2), c.getLong(3));
-                return result;
-            } else
-                return result;
-
-        } finally {
-            if ((c !=null) && !c.isClosed())
-                c.close();
-        }
-    }
-
-    public void queryNoteDataItems(BasicNoteA note) {
+    /*
+   public void queryNoteDataItems(BasicNoteA note) {
 
         String orderString = DBCommonDef.PRIORITY_COLUMN_NAME + " DESC, " + DBCommonDef.ORDER_COLUMN_NAME;
         if (PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("pref_interface_checked_last", false))
@@ -167,11 +91,13 @@ public class DBNoteManager extends BasicCommonNoteManager {
 
         //clear items
         note.getItems().clear();
-        LongSparseArray<LongSparseArray<Long>> longParams = queryNoteDataLongParams(note);
-        LongSparseArray<BasicNoteItemParams> paramsList = queryNoteDataParams(note);
+        LongSparseArray<BasicNoteItemParams> paramsList = mBasicNoteItemParamsDAO.getByNote(note);
         long priceNoteParamTypeId = getPriceNoteParamTypeId();
 
         long totalPrice = 0L;
+        int itemCount = 0;
+        int checkedItemCount = 0;
+
         //get items
         Cursor c = null;
         try {
@@ -181,22 +107,9 @@ public class DBNoteManager extends BasicCommonNoteManager {
                     orderString
             );
 
-            int itemCount = 0;
-            int checkedItemCount = 0;
 
             for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
                 BasicNoteItemA newItem = noteItemFromCursor(c, mDTF);
-
-                /*
-                LongSparseArray<Long> lParam = longParams.get(newItem.getId());
-                if (lParam != null) {
-                    Long paramPrice = lParam.get(priceNoteParamTypeId);
-                    if (paramPrice != null) {
-                        totalPrice += paramPrice;
-                        newItem.setParamPrice(paramPrice);
-                    }
-                }
-                */
 
                 BasicNoteItemParams params = paramsList.get(newItem.getId());
                 newItem.setNoteItemParams(params);
@@ -222,6 +135,7 @@ public class DBNoteManager extends BasicCommonNoteManager {
                 c.close();
         }
     }
+    */
 
     public void queryNoteDataValues(BasicNoteA note) {
         //clear values
@@ -308,7 +222,7 @@ public class DBNoteManager extends BasicCommonNoteManager {
         //values
         mDB.delete(NoteValuesTableDef.TABLE_NAME, DBCommonDef.NOTE_ID_SELECTION_STRING, noteIdArgs);
         //items
-        queryNoteDataItems(note);
+        mBasicNoteItemDAO.fillNoteDataItems(note);
         for (BasicNoteItemA noteItem : note.getItems()) {
             deleteNoteItem(noteItem);
         }

@@ -56,7 +56,7 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
 
     @Override
     public void refreshList(DBNoteManager noteManager) {
-        noteManager.queryNoteDataItems(mBasicNoteData.getNote());
+        noteManager.mBasicNoteItemDAO.fillNoteDataItems(mBasicNoteData.getNote());
     }
 
     protected void afterExecutionCompleted() {
@@ -266,7 +266,7 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
 
                 if ((note != null) && (!note.isEncrypted())) {
                     DBNoteManager noteManager = new DBNoteManager(getActivity());
-                    noteManager.queryNoteDataItems(note);
+                    noteManager.mBasicNoteItemDAO.fillNoteDataItems(note);
                     noteManager.queryNoteDataValues(note);
                 }
             }

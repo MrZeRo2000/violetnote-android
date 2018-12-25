@@ -109,7 +109,7 @@ public final class DBHManagementTest extends DBBaseTest {
         assertNotEquals(-1, result);
         noteItem1.setId(result);
 
-        mDBNoteManager.queryNoteDataItems(note);
+        mDBNoteManager.mBasicNoteItemDAO.fillNoteDataItems(note);
         assertEquals(1, note.getItemCount());
 
         BasicNoteItemA noteItem2 = BasicNoteItemA.newCheckedEditInstance(priceNoteParamTypeId, "Data with value 23.55");
@@ -118,7 +118,7 @@ public final class DBHManagementTest extends DBBaseTest {
         noteItem2.setId(result);
 
         assertEquals(2355L, noteItem2.getNoteItemParams().getLong(priceNoteParamTypeId));
-        mDBNoteManager.queryNoteDataItems(note);
+        mDBNoteManager.mBasicNoteItemDAO.fillNoteDataItems(note);
         assertEquals(2, note.getItemCount());
         assertEquals(2355L, note.getItems().get(1).getNoteItemParams().getLong(priceNoteParamTypeId));
 
@@ -127,7 +127,7 @@ public final class DBHManagementTest extends DBBaseTest {
         assertNotEquals(-1, result);
         noteItem3.setId(result);
 
-        mDBNoteManager.queryNoteDataItems(note);
+        mDBNoteManager.mBasicNoteItemDAO.fillNoteDataItems(note);
         assertEquals(3, note.getItemCount());
         assertEquals(3400L, note.getItems().get(2).getNoteItemParams().getLong(priceNoteParamTypeId));
         assertEquals(5755L, note.getTotalPrice());
@@ -139,7 +139,7 @@ public final class DBHManagementTest extends DBBaseTest {
         assertNotEquals(-1, result);
 
         //checkout items
-        mDBNoteManager.queryNoteDataItems(note);
+        mDBNoteManager.mBasicNoteItemDAO.fillNoteDataItems(note);
         mDBNoteManager.checkOut(note);
 
         //here we should have some history
@@ -147,12 +147,12 @@ public final class DBHManagementTest extends DBBaseTest {
         assertEquals(2, hNoteCOItems.size());
 
         //check remaining items after checkout
-        mDBNoteManager.queryNoteDataItems(note);
+        mDBNoteManager.mBasicNoteItemDAO.fillNoteDataItems(note);
         assertEquals(1, note.getItemCount());
 
         //delete note with items
         mDBNoteManager.deleteNote(note);
-        mDBNoteManager.queryNoteDataItems(note);
+        mDBNoteManager.mBasicNoteItemDAO.fillNoteDataItems(note);
         assertEquals(0, note.getItemCount());
 
     }

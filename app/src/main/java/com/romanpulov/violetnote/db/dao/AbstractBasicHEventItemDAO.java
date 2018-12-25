@@ -6,10 +6,7 @@ public abstract class AbstractBasicHEventItemDAO<T> extends AbstractDAO<T> {
 
     private BasicHEventDAO mBasicHEventDAO;
     BasicHEventDAO getBasicHEventDAO() {
-        if (mBasicHEventDAO == null)
-            mBasicHEventDAO = new BasicHEventDAO(mContext);
-
-        return mBasicHEventDAO;
+        return mBasicHEventDAO == null ? (mBasicHEventDAO = new BasicHEventDAO(mContext)) : mBasicHEventDAO;
     }
 
     public AbstractBasicHEventItemDAO(Context context) {
