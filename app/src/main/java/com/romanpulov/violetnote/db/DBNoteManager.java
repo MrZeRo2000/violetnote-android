@@ -3,9 +3,7 @@ package com.romanpulov.violetnote.db;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.preference.PreferenceManager;
 import android.util.Log;
-import android.util.LongSparseArray;
 
 import com.romanpulov.violetnote.db.dao.BasicNoteDAO;
 import com.romanpulov.violetnote.db.dao.BasicNoteItemDAO;
@@ -17,11 +15,9 @@ import com.romanpulov.violetnote.db.tabledef.NoteItemsHistoryTableDef;
 import com.romanpulov.violetnote.db.tabledef.NoteItemsTableDef;
 import com.romanpulov.violetnote.db.tabledef.NoteValuesTableDef;
 import com.romanpulov.violetnote.db.tabledef.NotesTableDef;
-import com.romanpulov.violetnote.model.BasicCommonNoteA;
 import com.romanpulov.violetnote.model.BasicEntityNoteA;
 import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
-import com.romanpulov.violetnote.model.BasicNoteHistoryItemA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.model.BasicNoteItemParams;
 import com.romanpulov.violetnote.model.BasicNoteValueA;
@@ -222,7 +218,7 @@ public class DBNoteManager extends BasicCommonNoteManager {
         //values
         mDB.delete(NoteValuesTableDef.TABLE_NAME, DBCommonDef.NOTE_ID_SELECTION_STRING, noteIdArgs);
         //items
-        mBasicNoteItemDAO.fillNoteDataItems(note);
+        mBasicNoteItemDAO.fillNoteDataItemsWithSummary(note);
         for (BasicNoteItemA noteItem : note.getItems()) {
             deleteNoteItem(noteItem);
         }

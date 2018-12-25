@@ -30,7 +30,6 @@ import com.romanpulov.violetnote.view.core.PasswordActivity;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 import com.romanpulov.violetnote.view.helper.ActionHelper;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -56,7 +55,7 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
 
     @Override
     public void refreshList(DBNoteManager noteManager) {
-        noteManager.mBasicNoteItemDAO.fillNoteDataItems(mBasicNoteData.getNote());
+        noteManager.mBasicNoteItemDAO.fillNoteDataItemsWithSummary(mBasicNoteData.getNote());
     }
 
     protected void afterExecutionCompleted() {
@@ -266,7 +265,7 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
 
                 if ((note != null) && (!note.isEncrypted())) {
                     DBNoteManager noteManager = new DBNoteManager(getActivity());
-                    noteManager.mBasicNoteItemDAO.fillNoteDataItems(note);
+                    noteManager.mBasicNoteItemDAO.fillNoteDataItemsWithSummary(note);
                     noteManager.queryNoteDataValues(note);
                 }
             }

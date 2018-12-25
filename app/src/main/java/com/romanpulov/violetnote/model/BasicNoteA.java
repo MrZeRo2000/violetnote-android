@@ -119,15 +119,19 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
         return mItemCountTitle;
     }
 
-    private final List<BasicNoteItemA> mItems = new ArrayList<>();
+    private List<BasicNoteItemA> mItems = new ArrayList<>();
 
     public final List<BasicNoteItemA> getItems() {
         return mItems;
     }
 
+    public void setItems(List<BasicNoteItemA> items) {
+        mItems = items == null ? new ArrayList<BasicNoteItemA>() : items;
+    }
+
     private final Set<String> mValues = new HashSet<>();
 
-    public Set<String>  getValues() {
+    public Set<String> getValues() {
         return mValues;
     }
 

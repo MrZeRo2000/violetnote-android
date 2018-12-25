@@ -49,7 +49,7 @@ public final class DBNoteItemPriceTest extends DBBaseTest {
         hasPriceNoteItem.setId(result);
 
         //total price from value
-        mDBNoteManager.mBasicNoteItemDAO.fillNoteDataItems(note);
+        mDBNoteManager.mBasicNoteItemDAO.fillNoteDataItemsWithSummary(note);
         assertEquals(1277L, note.getTotalPrice());
 
         //added price param to first item
@@ -58,7 +58,7 @@ public final class DBNoteItemPriceTest extends DBBaseTest {
         assertNotEquals(0, result);
 
         //check total increased
-        mDBNoteManager.mBasicNoteItemDAO.fillNoteDataItems(note);
+        mDBNoteManager.mBasicNoteItemDAO.fillNoteDataItemsWithSummary(note);
         assertEquals(1477L, note.getTotalPrice());
 
         //changed price param for first item
@@ -67,7 +67,7 @@ public final class DBNoteItemPriceTest extends DBBaseTest {
         assertNotEquals(0, result);
 
         //check total item decreased
-        mDBNoteManager.mBasicNoteItemDAO.fillNoteDataItems(note);
+        mDBNoteManager.mBasicNoteItemDAO.fillNoteDataItemsWithSummary(note);
         assertEquals(1377L, note.getTotalPrice());
 
         //removed price param
@@ -76,7 +76,7 @@ public final class DBNoteItemPriceTest extends DBBaseTest {
         assertNotEquals(0, result);
 
         //total price back to initial value
-        mDBNoteManager.mBasicNoteItemDAO.fillNoteDataItems(note);
+        mDBNoteManager.mBasicNoteItemDAO.fillNoteDataItemsWithSummary(note);
         assertEquals(1277L, note.getTotalPrice());
     }
 }

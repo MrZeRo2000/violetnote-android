@@ -31,7 +31,7 @@ public class BasicNoteDataRefreshAction extends BasicNoteDataAction {
     @Override
     public boolean execute(DBNoteManager noteManager) {
         //retrieve data
-        noteManager.mBasicNoteItemDAO.fillNoteDataItems(mBasicNoteData.getNote());
+        noteManager.mBasicNoteItemDAO.fillNoteDataItemsWithSummary(mBasicNoteData.getNote());
         if (mRequireValues)
             noteManager.queryNoteDataValues(mBasicNoteData.getNote());
 

@@ -266,7 +266,7 @@ public class DBNotesMovementTest extends DBBaseTest {
 
     private void queryNoteDataItems(@NonNull BasicNoteA[] notes) {
         for (BasicNoteA note : notes)
-            mDBNoteManager.mBasicNoteItemDAO.fillNoteDataItems(note);
+            mDBNoteManager.mBasicNoteItemDAO.fillNoteDataItemsWithSummary(note);
     }
 
 

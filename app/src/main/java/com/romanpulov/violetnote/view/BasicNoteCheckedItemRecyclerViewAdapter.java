@@ -23,7 +23,6 @@ public class BasicNoteCheckedItemRecyclerViewAdapter extends RecyclerView.Adapte
 
     private final BasicNoteDataA mBasicNoteData;
     private final long mPriceNoteParamTypeId;
-    private final List<BasicNoteItemA> mItems;
     private final RecyclerViewHelper.RecyclerViewSelector mRecyclerViewSelector;
     private final BasicNoteCheckedItemFragment.OnBasicNoteCheckedItemFragmentInteractionListener mListener;
 
@@ -34,7 +33,6 @@ public class BasicNoteCheckedItemRecyclerViewAdapter extends RecyclerView.Adapte
     public BasicNoteCheckedItemRecyclerViewAdapter(BasicNoteDataA basicNoteData, long priceNoteParamTypeId, ActionMode.Callback actionModeCallback, BasicNoteCheckedItemFragment.OnBasicNoteCheckedItemFragmentInteractionListener listener) {
         mBasicNoteData = basicNoteData;
         mPriceNoteParamTypeId = priceNoteParamTypeId;
-        mItems = basicNoteData.getNote().getItems();
         mRecyclerViewSelector = new RecyclerViewHelper.RecyclerViewSelector(this, actionModeCallback);
         mListener = listener;
     }
@@ -49,7 +47,7 @@ public class BasicNoteCheckedItemRecyclerViewAdapter extends RecyclerView.Adapte
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        holder.mItem = mItems.get(position);
+        holder.mItem = mBasicNoteData.getNote().getItems().get(position);
         holder.mCheckedView.setChecked(holder.mItem.isChecked());
         holder.mValueView.setText(holder.mItem.getValue());
 
@@ -75,7 +73,7 @@ public class BasicNoteCheckedItemRecyclerViewAdapter extends RecyclerView.Adapte
 
     @Override
     public int getItemCount() {
-        return mItems.size();
+        return mBasicNoteData.getNote().getItems().size();
     }
 
     class ViewHolder extends RecyclerViewHelper.SelectableViewHolder {
@@ -95,7 +93,7 @@ public class BasicNoteCheckedItemRecyclerViewAdapter extends RecyclerView.Adapte
                 @Override
                 public void onClick(View v) {
                     if ((!mRecyclerViewSelector.isSelected()) && (mListener != null) && (getAdapterPosition() != -1))
-                        mListener.onBasicNoteItemPriceClick(mItems.get(getAdapterPosition()), getAdapterPosition());
+                        mListener.onBasicNoteItemPriceClick(mBasicNoteData.getNote().getItems().get(getAdapterPosition()), getAdapterPosition());
                 }
             });
         }
@@ -104,7 +102,7 @@ public class BasicNoteCheckedItemRecyclerViewAdapter extends RecyclerView.Adapte
         public void onClick(View v) {
             super.onClick(v);
             if ((!mRecyclerViewSelector.isSelected()) && (mListener != null) && (getAdapterPosition() != -1))
-                mListener.onBasicNoteItemFragmentInteraction(mItems.get(getAdapterPosition()), getAdapterPosition());
+                mListener.onBasicNoteItemFragmentInteraction(mBasicNoteData.getNote().getItems().get(getAdapterPosition()), getAdapterPosition());
         }
 
         @Override

@@ -16,6 +16,7 @@ import com.romanpulov.violetnote.model.BasicNoteItemParams;
 import com.romanpulov.violetnote.model.BooleanUtils;
 import com.romanpulov.violetnote.model.vo.BasicParamValueA;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -48,9 +49,8 @@ public final class BasicNoteItemDAO extends AbstractDAO<BasicNoteItemA> {
         );
     }
 
-    public void fillNoteDataItems(final BasicNoteA note) {
-        //clear items
-        note.getItems().clear();
+    public void fillNoteDataItemsWithSummary(final BasicNoteA note) {
+        final List<BasicNoteItemA> items = new ArrayList<>();
 
         String orderString = DBCommonDef.PRIORITY_COLUMN_NAME + " DESC, " + DBCommonDef.ORDER_COLUMN_NAME;
         if (PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("pref_interface_checked_last", false))
@@ -99,14 +99,13 @@ public final class BasicNoteItemDAO extends AbstractDAO<BasicNoteItemA> {
                     calcSummary.checkedItemCount++;
                 }
                 calcSummary.itemCount ++;
-                note.getItems().add(newItem);
-
+                items.add(newItem);
             }
         });
 
+        note.setItems(items);
         note.setItemCount(calcSummary.itemCount);
         note.setCheckedItemCount(calcSummary.checkedItemCount);
         note.setTotalPrice(calcSummary.totalPrice);
-
     }
 }

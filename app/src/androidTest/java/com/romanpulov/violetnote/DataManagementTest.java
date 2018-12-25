@@ -4,20 +4,16 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import android.util.Log;
-import java.util.ArrayList;
+
 import java.util.List;
 
 import android.support.test.filters.SmallTest;
-import android.util.LongSparseArray;
 
 import org.junit.*;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static org.junit.Assert.*;
 
 import com.romanpulov.violetnote.db.DBBasicNoteHelper;
-import com.romanpulov.violetnote.db.DBBasicNoteOpenHelper;
-import com.romanpulov.violetnote.db.DBNoteManager;
-import com.romanpulov.violetnote.db.DateTimeFormatter;
 import com.romanpulov.violetnote.db.tabledef.DBCommonDef;
 import com.romanpulov.violetnote.db.tabledef.NoteItemsTableDef;
 import com.romanpulov.violetnote.db.tabledef.NotesTableDef;
@@ -194,7 +190,7 @@ public class DataManagementTest extends DBBaseTest {
         long priceNoteParamTypeId = DBBasicNoteHelper.getInstance(getTargetContext()).getDBDictionaryCache().getPriceNoteParamTypeId();
 
         BasicNoteA note = mDBNoteManager.mBasicNoteDAO.getById(2);
-        mDBNoteManager.mBasicNoteItemDAO.fillNoteDataItems(note);
+        mDBNoteManager.mBasicNoteItemDAO.fillNoteDataItemsWithSummary(note);
 
         BasicNoteItemA noteItem = note.getItems().get(4);
         assertNotEquals(0, noteItem.getParamLong(priceNoteParamTypeId));
