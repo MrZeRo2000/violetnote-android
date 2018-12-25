@@ -17,8 +17,13 @@ public final class BasicHNoteCOItemA extends BasicEntityNoteA {
     }
 
     private final String mValue;
-    public String getName() {
+    public String getValue() {
         return mValue;
+    }
+
+    private BasicNoteItemParams mNoteItemParams = BasicNoteItemParams.createEmpty();
+    public BasicNoteItemParams getNoteItemParams() {
+        return mNoteItemParams;
     }
 
     private BasicHNoteCOItemA(long id, long eventId, long noteId, String value) {
@@ -31,5 +36,15 @@ public final class BasicHNoteCOItemA extends BasicEntityNoteA {
     @NonNull
     public static BasicHNoteCOItemA newInstance(long id, long eventId, long noteId, String value) {
         return new BasicHNoteCOItemA(id, eventId, noteId, value);
+    }
+
+    @NonNull
+    public static BasicHNoteCOItemA fromEventData(long eventId, @NonNull BasicNoteA note, @NonNull BasicNoteItemA noteItem) {
+        return newInstance(
+                0,
+                eventId,
+                note.getId(),
+                noteItem.getValue()
+        );
     }
 }

@@ -4,6 +4,8 @@ import android.support.test.filters.SmallTest;
 
 import com.romanpulov.violetnote.model.BasicHEventA;
 import com.romanpulov.violetnote.model.BasicHEventTypeA;
+import com.romanpulov.violetnote.model.BasicHNoteCOItemA;
+import com.romanpulov.violetnote.model.BasicHNoteItemA;
 import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.model.NoteGroupA;
@@ -55,29 +57,29 @@ public final class DBHManagementTest extends DBBaseTest {
         noteItem2.setId(result);
 
         //new events after create
-        List<BasicHEventA> testEvents = new ArrayList<>();
-        mDBHManager.queryHEvents(testEvents);
+        List<BasicHEventA> testEvents = mDBHManager.basicHEventDAO.getAll();
         assertEquals(2, testEvents.size());
+        List<BasicHNoteItemA> testEventItems = mDBHManager.basicHNoteItemDAO.getAll();
+        assertEquals(2, testEventItems.size());
 
         //new event after update
         noteItem2.setValue("Another value = new");
         mDBNoteManager.updateNoteItemNameValue(noteItem2);
-        mDBHManager.queryHEvents(testEvents);
+        testEvents = mDBHManager.basicHEventDAO.getAll();
         assertEquals(3, testEvents.size());
 
         //delete note item and events should also be deleted
         result = mDBNoteManager.deleteNoteItem(noteItem2);
         assertNotEquals(0, result);
 
-        testEvents = new ArrayList<>();
-        mDBHManager.queryHEvents(testEvents);
+        testEvents = mDBHManager.basicHEventDAO.getAll();
         assertEquals(1, testEvents.size());
 
         noteItem1.setName("Changed name");
         noteItem1.setValue("Changed value");
         mDBNoteManager.updateNoteItemNameValue(noteItem1);
 
-        mDBHManager.queryHEvents(testEvents);
+        testEvents = mDBHManager.basicHEventDAO.getAll();
         assertEquals(2, testEvents.size());
 
         //one time action to get backup for tests
@@ -141,11 +143,14 @@ public final class DBHManagementTest extends DBBaseTest {
         mDBNoteManager.checkOut(note);
 
         //here we should have some history
+        List<BasicHNoteCOItemA> hNoteCOItems =  mDBHManager.basicHNoteCOItemDAO.getByNoteId(note.getId());
+        assertEquals(2, hNoteCOItems.size());
 
-
+        //check remaining items after checkout
         mDBNoteManager.queryNoteDataItems(note);
         assertEquals(1, note.getItemCount());
 
+        //delete note with items
         mDBNoteManager.deleteNote(note);
         mDBNoteManager.queryNoteDataItems(note);
         assertEquals(0, note.getItemCount());
@@ -153,7 +158,7 @@ public final class DBHManagementTest extends DBBaseTest {
     }
 
     private void testEventTypes() {
-        List<BasicHEventTypeA> hEventTypes = mDBHManager.getHEventTypes();
+        List<BasicHEventTypeA> hEventTypes = mDBHManager.basicHEventTypeDAO.getAll();
         Assert.assertEquals(2, hEventTypes.size());
 
         Assert.assertEquals(1, mDBHelper.getDBDictionaryCache().getNoteItemsHEventParamId());
@@ -161,30 +166,28 @@ public final class DBHManagementTest extends DBBaseTest {
     }
 
     private void testEvents() {
-        assertNotEquals(-1, mDBHManager.insertHEvent(mDBHelper.getDBDictionaryCache().getNoteItemsHEventParamId(), null));
+        assertNotEquals(-1, mDBHManager.basicHEventDAO.insert(BasicHEventA.fromEventType(mDBHelper.getDBDictionaryCache().getNoteItemsHEventParamId())));
         sleep(500);
-        assertNotEquals(-1, mDBHManager.insertHEvent(mDBHelper.getDBDictionaryCache().getNoteItemsHEventParamId(), null));
+        assertNotEquals(-1, mDBHManager.basicHEventDAO.insert(BasicHEventA.fromEventType(mDBHelper.getDBDictionaryCache().getNoteItemsHEventParamId())));
         sleep(600);
-        assertNotEquals(-1, mDBHManager.insertHEvent(mDBHelper.getDBDictionaryCache().getCheckoutHEventParamId(), "Some summary"));
+        assertNotEquals(-1, mDBHManager.basicHEventDAO.insert(BasicHEventA.fromEventTypeWithSummary(mDBHelper.getDBDictionaryCache().getCheckoutHEventParamId(), "Some summary")));
 
-        List<BasicHEventA> testEvents = new ArrayList<>();
-
-        mDBHManager.queryHEvents(testEvents);
+        List<BasicHEventA> testEvents = mDBHManager.basicHEventDAO.getAll();
         assertEquals(3, testEvents.size());
 
-        mDBHManager.queryHEventsByType(testEvents, mDBHelper.getDBDictionaryCache().getNoteItemsHEventParamId());
+        testEvents = mDBHManager.basicHEventDAO.getByType(mDBHelper.getDBDictionaryCache().getNoteItemsHEventParamId());
         assertEquals(2, testEvents.size());
-        mDBHManager.queryHEventsByType(testEvents, mDBHelper.getDBDictionaryCache().getCheckoutHEventParamId());
+        testEvents = mDBHManager.basicHEventDAO.getByType(mDBHelper.getDBDictionaryCache().getCheckoutHEventParamId());
         assertEquals(1, testEvents.size());
         assertEquals("Some summary", testEvents.get(0).getEventSummary());
 
-        mDBHManager.queryHEvents(testEvents);
+        testEvents = mDBHManager.basicHEventDAO.getAll();
         for (BasicHEventA hEvent : testEvents) {
-            long result = mDBHManager.deleteHEvent(hEvent);
+            long result = mDBHManager.basicHEventDAO.delete(hEvent);
             assertNotEquals(0, result);
         }
 
-        mDBHManager.queryHEvents(testEvents);
+        testEvents = mDBHManager.basicHEventDAO.getAll();
         assertEquals(0, testEvents.size());
     }
 

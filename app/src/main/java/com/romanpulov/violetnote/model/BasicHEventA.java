@@ -34,8 +34,13 @@ public final class BasicHEventA extends BasicEntityNoteA {
     }
 
     @NonNull
-    public static BasicHEventA newInstance(long eventTypeId, String eventSummary) {
+    public static BasicHEventA fromEventTypeWithSummary(long eventTypeId, String eventSummary) {
         return new BasicHEventA(0, eventTypeId, System.currentTimeMillis(), eventSummary);
+    }
+
+    @NonNull
+    public static BasicHEventA fromEventType(long eventTypeId) {
+        return new BasicHEventA(0, eventTypeId, System.currentTimeMillis(), null);
     }
 
 }

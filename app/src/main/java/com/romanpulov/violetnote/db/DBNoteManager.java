@@ -416,7 +416,7 @@ public class DBNoteManager extends BasicCommonNoteManager {
             deleteNoteItem(noteItem);
         }
         //h
-        mDBHManager.deleteHNoteCOItems(note);
+        mDBHManager.basicHNoteCOItemDAO.deleteEvent(note);
 
         //note
         return mDB.delete(NotesTableDef.TABLE_NAME, DBCommonDef.ID_COLUMN_NAME + "=" + note.getId(), null);
@@ -458,7 +458,7 @@ public class DBNoteManager extends BasicCommonNoteManager {
             insertNoteItemParams(newRowId, item.getNoteItemParams());
 
             item.setId(newRowId);
-            mDBHManager.saveNoteItemsEvent(item);
+            mDBHManager.basicHNoteItemDAO.saveEvent(item);
         }
 /*
         if ((newRowId > 0) && (item.getParamPrice() > 0)) {
@@ -503,7 +503,8 @@ public class DBNoteManager extends BasicCommonNoteManager {
 
     public long deleteNoteItem(BasicNoteItemA item) {
         deleteNoteItemParam(item);
-        mDBHManager.deleteHNoteItem(item);
+        //mDBHManager.deleteHNoteItem(item);
+        mDBHManager.basicHNoteItemDAO.deleteEvent(item);
         return deleteEntityNote(NoteItemsTableDef.TABLE_NAME, item);
     }
 
@@ -534,7 +535,7 @@ public class DBNoteManager extends BasicCommonNoteManager {
         long result = mDB.update(NoteItemsTableDef.TABLE_NAME, cv, DBCommonDef.ID_COLUMN_NAME + " = ?" , new String[] {String.valueOf(item.getId())});
 
         if (result > 0) {
-            mDBHManager.saveNoteItemsEvent(item);
+            mDBHManager.basicHNoteItemDAO.saveEvent(item);
         }
         return result;
     }
@@ -553,7 +554,7 @@ public class DBNoteManager extends BasicCommonNoteManager {
                     insertNoteHistory(note, item.getValue());
 
                     //insert h
-                    mDBHManager.saveNoteCOEvent(note, item);
+                    mDBHManager.basicHNoteCOItemDAO.saveEvent(note, item);
                 }
 
                 //delete note
