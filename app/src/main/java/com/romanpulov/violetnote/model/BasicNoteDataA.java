@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * BasicNote data class
@@ -27,9 +28,9 @@ public class BasicNoteDataA implements Parcelable, PasswordProvider {
         return mNoteList;
     }
 
-    private ArrayList<BasicNoteA> mRelatedNoteList;
+    private List<BasicNoteA> mRelatedNoteList;
 
-    public ArrayList<BasicNoteA> getRelatedNoteList() {
+    public List<BasicNoteA> getRelatedNoteList() {
         return mRelatedNoteList;
     }
 
@@ -50,7 +51,7 @@ public class BasicNoteDataA implements Parcelable, PasswordProvider {
         return newNoteData;
     }
 
-    public static BasicNoteDataA newInstance(String password, ArrayList<BasicNoteA> noteList, ArrayList<BasicNoteA> relatedNoteList) {
+    public static BasicNoteDataA newInstance(String password, ArrayList<BasicNoteA> noteList, List<BasicNoteA> relatedNoteList) {
         BasicNoteDataA newNoteData = new BasicNoteDataA(password);
         newNoteData.mNoteList = noteList;
         newNoteData.mRelatedNoteList = relatedNoteList;

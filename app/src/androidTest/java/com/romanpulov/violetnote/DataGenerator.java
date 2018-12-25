@@ -118,7 +118,7 @@ public class DataGenerator {
             }
 
         }
-        List<BasicNoteA> noteList = noteManager.queryNotes();
+        List<BasicNoteA> noteList = noteManager.mBasicNoteDAO.getTotals();
         assertEquals(noteList.size(), MAX_NOTES);
         log("Created " + MAX_NOTES + " notes");
 

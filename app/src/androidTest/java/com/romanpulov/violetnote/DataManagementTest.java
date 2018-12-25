@@ -54,7 +54,7 @@ public class DataManagementTest extends DBBaseTest {
     public void internalTestMovePrev() {
         log("testMovePrev");
 
-        List<BasicNoteA> noteList = mDBNoteManager.queryNotes();
+        List<BasicNoteA> noteList = mDBNoteManager.mBasicNoteDAO.getTotals();
 
         // generator should be ran first
         assertTrue(noteList.size() >= DataGenerator.MAX_NOTES);
@@ -81,37 +81,37 @@ public class DataManagementTest extends DBBaseTest {
         log ("Get next order id(100) = " + mDBHelper.getNextOrderId(NotesTableDef.TABLE_NAME, 0, 100));
 
         //validate exchange
-        BasicNoteA note1 = mDBNoteManager.queryById(5);
-        BasicNoteA note2 = mDBNoteManager.queryById(4);
+        BasicNoteA note1 = mDBNoteManager.mBasicNoteDAO.getById(5);
+        BasicNoteA note2 = mDBNoteManager.mBasicNoteDAO.getById(4);
         long order1 = note1.getOrderId();
         long order2 = note2.getOrderId();
 
         mDBHelper.exchangeOrderId(NotesTableDef.TABLE_NAME, 0, note1.getOrderId(), note2.getOrderId());
 
-        note1 = mDBNoteManager.queryById(5);
-        note2 = mDBNoteManager.queryById(4);
+        note1 = mDBNoteManager.mBasicNoteDAO.getById(5);
+        note2 = mDBNoteManager.mBasicNoteDAO.getById(4);
 
         assertEquals(note1.getOrderId(), order2);
         assertEquals(note2.getOrderId(), order1);
 
         mDBHelper.exchangeOrderId(NotesTableDef.TABLE_NAME, 0, note1.getOrderId(), note2.getOrderId());
 
-        note1 = mDBNoteManager.queryById(5);
-        note2 = mDBNoteManager.queryById(4);
+        note1 = mDBNoteManager.mBasicNoteDAO.getById(5);
+        note2 = mDBNoteManager.mBasicNoteDAO.getById(4);
 
         assertEquals(note1.getOrderId(), order1);
         assertEquals(note2.getOrderId(), order2);
 
         //move top
-        note1 = mDBNoteManager.queryById(5);
+        note1 = mDBNoteManager.mBasicNoteDAO.getById(5);
         mDBNoteManager.moveTop(note1);
 
-        note1 = mDBNoteManager.queryById(5);
+        note1 = mDBNoteManager.mBasicNoteDAO.getById(5);
         assertEquals(note1.getOrderId(), 1);
 
         //move bottom
         mDBNoteManager.moveBottom(note1);
-        note1 = mDBNoteManager.queryById(5);
+        note1 = mDBNoteManager.mBasicNoteDAO.getById(5);
         assertEquals(note1.getOrderId(), noteList.size());
 
         //order id
@@ -181,38 +181,7 @@ public class DataManagementTest extends DBBaseTest {
 
         long startTime = System.nanoTime();
 
-        List<BasicNoteA> noteList = new ArrayList<>();
-
-        String rawSQL =
-        "SELECT " +
-        "n._id, " +
-                "n.last_modified," +
-                "n.order_id," +
-                "n.group_id," +
-                "n.note_type," +
-                "n.title," +
-                "n.is_encrypted," +
-                "n.encrypted_string," +
-                "(SELECT COUNT(ni._id) FROM note_items ni WHERE ni.note_id = n._id) AS count_total, " +
-                "(SELECT SUM(ni.checked) FROM note_items ni WHERE ni.note_id = n._id) AS count_checked " +
-        "FROM notes n " +
-        "ORDER BY n.order_id";
-
-        Cursor c = null;
-        DateTimeFormatter dtf = new DateTimeFormatter(getTargetContext());
-        try {
-            c = mDB.rawQuery(rawSQL, null);
-
-            for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
-                BasicNoteA newItem = DBNoteManager.noteFromCursorWithTotals(c, dtf);
-
-                noteList.add(newItem);
-            }
-        } finally {
-            if ((c !=null) && !c.isClosed())
-                c.close();
-        }
-
+        List<BasicNoteA> noteList = mDBNoteManager.mBasicNoteDAO.getTotals();
         long endTime = System.nanoTime();
 
         log ("testCheckQueryTotalsRaw time: " + (endTime - startTime) + ", size = " + noteList.size());
@@ -224,7 +193,7 @@ public class DataManagementTest extends DBBaseTest {
 
         long priceNoteParamTypeId = DBBasicNoteHelper.getInstance(getTargetContext()).getDBDictionaryCache().getPriceNoteParamTypeId();
 
-        BasicNoteA note = mDBNoteManager.queryById(2);
+        BasicNoteA note = mDBNoteManager.mBasicNoteDAO.getById(2);
         mDBNoteManager.queryNoteDataItems(note);
 
         BasicNoteItemA noteItem = note.getItems().get(4);

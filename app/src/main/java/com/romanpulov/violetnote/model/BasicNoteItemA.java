@@ -79,7 +79,11 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
     }
 
     public void setNoteItemParams(BasicNoteItemParams params) {
-        mNoteItemParams = params;
+        if (params == null) {
+            mNoteItemParams = BasicNoteItemParams.createEmpty();
+        } else {
+            mNoteItemParams = params;
+        }
     }
 
     @Override

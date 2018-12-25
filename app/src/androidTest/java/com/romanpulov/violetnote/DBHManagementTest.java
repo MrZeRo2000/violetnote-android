@@ -89,7 +89,7 @@ public final class DBHManagementTest extends DBBaseTest {
         result = mDBNoteManager.deleteNote(note);
         assertNotEquals(0, result);
 
-        ArrayList<BasicNoteA> notes =  mDBNoteManager.queryNotes();
+        List<BasicNoteA> notes =  mDBNoteManager.mBasicNoteDAO.getTotals();
         assertEquals(0, notes.size());
     }
 
@@ -99,7 +99,7 @@ public final class DBHManagementTest extends DBBaseTest {
         assertNotEquals(-1, result);
         note.setId(result);
 
-        ArrayList<BasicNoteA> notes =  mDBNoteManager.queryNotes();
+        List<BasicNoteA> notes =  mDBNoteManager.mBasicNoteDAO.getTotals();
         assertEquals(1, notes.size());
 
         long priceNoteParamTypeId = mDBHelper.getDBDictionaryCache().getPriceNoteParamTypeId();

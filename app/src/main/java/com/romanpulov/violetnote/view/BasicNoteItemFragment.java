@@ -42,7 +42,7 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
     protected final static int MENU_GROUP_OTHER_ITEMS = Menu.FIRST + 1;
 
     protected BasicNoteDataA mBasicNoteData;
-    protected ArrayList<BasicNoteA> mRelatedNotes;
+    protected List<BasicNoteA> mRelatedNotes;
 
     protected DialogInterface mEditorDialog;
 

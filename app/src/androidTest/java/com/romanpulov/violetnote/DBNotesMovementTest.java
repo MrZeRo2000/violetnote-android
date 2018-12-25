@@ -243,7 +243,7 @@ public class DBNotesMovementTest extends DBBaseTest {
         String result = "";
 
         for (long noteId : noteIdList) {
-            BasicNoteA note = mDBNoteManager.get(noteId);
+            BasicNoteA note = mDBNoteManager.mBasicNoteDAO.getById(noteId);
             if (result.isEmpty())
                 result = String.valueOf(note.getOrderId());
             else
@@ -258,7 +258,7 @@ public class DBNotesMovementTest extends DBBaseTest {
 
         int idx = 0;
         for (long noteId : noteIdList) {
-            result[idx ++] = mDBNoteManager.get(noteId);;
+            result[idx ++] = mDBNoteManager.mBasicNoteDAO.getById(noteId);;
         }
 
         return result;

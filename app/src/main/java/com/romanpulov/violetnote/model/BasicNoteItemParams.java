@@ -105,7 +105,8 @@ public final class BasicNoteItemParams implements Parcelable, Iterable<BasicPara
     }
 
     public long getLong(long key) {
-        return paramValues.get(key).vInt;
+        BasicParamValueA paramValue = paramValues.get(key);
+        return paramValue == null ? 0 : paramValue.vInt;
     }
 
     public long size() {

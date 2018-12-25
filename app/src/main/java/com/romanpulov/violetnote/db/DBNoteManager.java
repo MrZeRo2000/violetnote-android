@@ -7,6 +7,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.util.LongSparseArray;
 
+import com.romanpulov.violetnote.db.dao.BasicNoteDAO;
 import com.romanpulov.violetnote.db.tabledef.DBCommonDef;
 import com.romanpulov.violetnote.db.tabledef.NoteItemParamTypesTableDef;
 import com.romanpulov.violetnote.db.tabledef.NoteItemParamsTableDef;
@@ -42,40 +43,12 @@ public class DBNoteManager extends BasicCommonNoteManager {
     }
 
     private final DBHManager mDBHManager;
+    public final BasicNoteDAO mBasicNoteDAO;
 
     public DBNoteManager(Context context) {
         super(context);
         mDBHManager = new DBHManager(context);
-    }
-
-    public static BasicNoteA noteFromCursor(Cursor c, DateTimeFormatter dtf) {
-        return BasicNoteA.newInstance(
-                c.getLong(0),
-                c.getLong(1),
-                dtf.formatDateTimeDelimited(new Date(c.getLong(1)), "\n"),
-                c.getLong(2),
-                c.getInt(3),
-                c.getInt(4),
-                c.getString(5),
-                BooleanUtils.fromInt(c.getInt(6)),
-                c.getString(7)
-        );
-    }
-
-    public static BasicNoteA noteFromCursorWithTotals(Cursor c, DateTimeFormatter dtf) {
-        return BasicNoteA.newInstanceWithTotals(
-                c.getLong(0),
-                c.getLong(1),
-                dtf.formatDateTimeDelimited(new Date(c.getLong(1)), "\n"),
-                c.getLong(2),
-                c.getInt(3),
-                c.getInt(4),
-                c.getString(5),
-                BooleanUtils.fromInt(c.getInt(6)),
-                c.getString(7),
-                c.getInt(8),
-                c.getInt(9)
-        );
+        mBasicNoteDAO = new BasicNoteDAO(context);
     }
 
 
@@ -102,66 +75,9 @@ public class DBNoteManager extends BasicCommonNoteManager {
         );
     }
 
-    /**
-     * Returns notes to UI
-     * @return Note List
-     */
-    public ArrayList<BasicNoteA> queryNotes() {
-        return queryNotesTotals();
-    }
-
-    /**
-     * Returns notes from raw query, with totals
-     * @return Note List
-     */
-    public ArrayList<BasicNoteA> queryNotesTotals() {
-        ArrayList<BasicNoteA> result = new ArrayList<>();
-
-        Cursor c = null;
-        try {
-            c = mDB.rawQuery(DBRawQueryRepository.NOTES_WITH_TOTALS, null);
-            for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
-                BasicNoteA newNote = noteFromCursorWithTotals(c, mDTF);
-                result.add(newNote);
-            }
-
-        } finally {
-            if ((c !=null) && !c.isClosed())
-                c.close();
-        }
-
-        return result;
-    }
-
-    public ArrayList<BasicNoteA> queryRelatedNotes(BasicNoteA note) {
-        ArrayList<BasicNoteA> result = new ArrayList<>();
-
-        Cursor c = null;
-        try {
-
-            c = mDB.query(NotesTableDef.TABLE_NAME, NotesTableDef.TABLE_COLS,
-                    DBCommonDef.ID_COLUMN_NAME + " != ? AND " +
-                    NotesTableDef.NOTE_TYPE_COLUMN_NAME + " = ? AND " +
-                    NotesTableDef.IS_ENCRYPTED_COLUMN_NAME + " = ?", new String[]{String.valueOf(note.getId()), String.valueOf(note.getNoteType()), String.valueOf(BooleanUtils.toInt(note.isEncrypted()))},
-                    null, null, NotesTableDef.TITLE_COLUMN_NAME
-            );
-
-            for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
-                BasicNoteA newNote = noteFromCursor(c, mDTF);
-                result.add(newNote);
-            }
-
-        } finally {
-            if ((c !=null) && !c.isClosed())
-                c.close();
-        }
-
-        return result;
-    }
-
     public BasicNoteDataA fromNoteData(BasicNoteA note) {
         ArrayList<BasicNoteA> notes = new ArrayList<>();
-        ArrayList<BasicNoteA> relatedNotes = queryRelatedNotes(note);
+        List<BasicNoteA> relatedNotes = mBasicNoteDAO.getRelatedNotes(note);
 
         //get note
         notes.add(note);
@@ -354,7 +270,7 @@ public class DBNoteManager extends BasicCommonNoteManager {
     }
 
     public void refreshNotes(ArrayList<BasicNoteA> notes) {
-        ArrayList<BasicNoteA> newNotes = queryNotes();
+        List<BasicNoteA> newNotes = mBasicNoteDAO.getTotals();
         notes.clear();
         notes.addAll(newNotes);
     }
@@ -367,25 +283,6 @@ public class DBNoteManager extends BasicCommonNoteManager {
             cv.put(NoteItemsTableDef.CHECKED_COLUMN_NAME, BooleanUtils.toInt(checked));
 
             mDB.update(NoteItemsTableDef.TABLE_NAME, cv, DBCommonDef.ID_COLUMN_NAME + " = ?" , new String[] {String.valueOf(item.getId())});
-        }
-    }
-
-    public BasicNoteA queryById(long id) {
-        Cursor c = null;
-        try {
-            c = mDB.query(
-                    NotesTableDef.TABLE_NAME, NotesTableDef.TABLE_COLS,
-                    DBCommonDef.ID_COLUMN_NAME + "=?", new String[] {String.valueOf(id)}, null, null, null
-            );
-
-            c.moveToFirst();
-            if (!c.isAfterLast()) {
-                return noteFromCursor(c, mDTF);
-            } else
-                return null;
-        } finally {
-            if ((c !=null) && !c.isClosed())
-                c.close();
         }
     }
 
@@ -621,24 +518,6 @@ public class DBNoteManager extends BasicCommonNoteManager {
                 c.close();
         }
 
-    }
-
-    public BasicNoteA get(long id) {
-        Cursor c = null;
-        try {
-            c = mDB.query(
-                    NotesTableDef.TABLE_NAME, NotesTableDef.TABLE_COLS,
-                    DBCommonDef.ID_COLUMN_NAME + "=?", new String[]{String.valueOf(id)}, null, null, null
-            );
-            c.moveToFirst();
-            if (!c.isAfterLast())
-                return noteFromCursor(c, mDTF);
-            else
-                return null;
-        } finally {
-            if ((c !=null) && !c.isClosed())
-                c.close();
-        }
     }
 
     public Map<String, Long> getNoteParamTypesMap() {

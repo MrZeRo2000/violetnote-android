@@ -45,7 +45,7 @@ public class ApplicationTest {
         log("Create note");
         DBNoteManager noteManager = new DBNoteManager(getTargetContext());
         noteManager.insertNote(BasicNoteA.newEditInstance(NoteGroupA.DEFAULT_NOTE_GROUP_ID, 1,"New Note", false, null));
-        List<BasicNoteA> noteList = noteManager.queryNotes();
+        List<BasicNoteA> noteList = noteManager.mBasicNoteDAO.getTotals();
         assertEquals(noteList.size(), 1);
 
         log("Check note");
@@ -62,7 +62,7 @@ public class ApplicationTest {
         log("Delete note");
 
         noteManager.deleteNote(deleteNote);
-        noteList = noteManager.queryNotes();
+        noteList = noteManager.mBasicNoteDAO.getTotals();
         assertEquals(noteList.size(), 0);
 
         log("****************** testDBNote finish");
