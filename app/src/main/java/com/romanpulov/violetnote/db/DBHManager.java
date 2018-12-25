@@ -22,8 +22,10 @@ import com.romanpulov.violetnote.model.vo.BasicNoteItemParamValueA;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public final class DBHManager extends BasicDBManager {
     public DBHManager(Context context) {
@@ -204,7 +206,7 @@ public final class DBHManager extends BasicDBManager {
         return mDB.insert(HNoteCOItemsTableDef.TABLE_NAME, null, cv);
     }
 
-    private long insertHNoteCOItemParam(long hNoteCOItemId, BasicNoteItemParamValueA param) {
+    private long insertHNoteCOItemParam(long hNoteCOItemId, @NonNull BasicNoteItemParamValueA param) {
         ContentValues cv = new ContentValues();
 
         cv.put(HNoteCOItemParamsTableDef.H_NOTE_CO_ITEM_ID_COLUMN_NAME, hNoteCOItemId);
@@ -248,6 +250,10 @@ public final class DBHManager extends BasicDBManager {
             return eventId;
     }
 
+    public long deleteHEvent(long eventId) {
+        return deleteById(HEventsTableDef.TABLE_NAME, eventId);
+    }
+
     public long deleteHNoteItem(@NonNull BasicNoteItemA noteItem) {
         long result = 0;
 
@@ -255,7 +261,30 @@ public final class DBHManager extends BasicDBManager {
 
         for (BasicHNoteItemA hNoteItem : hNoteItems) {
             result = deleteById(HNoteItemsTableDef.TABLE_NAME, hNoteItem.getId());
-            deleteById(HEventsTableDef.TABLE_NAME, hNoteItem.getEventId());
+            deleteHEvent(hNoteItem.getEventId());
+        }
+
+        return result;
+    }
+
+    public long deleteHNoteCOItems(@NonNull BasicNoteA note) {
+        long result = 0;
+
+        List<BasicHNoteCOItemA> hNoteCOItems = queryHNoteCOItemsByNote(note);
+        Set<Long> hEvents = new HashSet<>();
+
+        for (BasicHNoteCOItemA hNoteCOItem : hNoteCOItems) {
+            //delete params
+            deleteById(HNoteCOItemParamsTableDef.TABLE_NAME, HNoteCOItemParamsTableDef.H_NOTE_CO_ITEM_ID_COLUMN_NAME, hNoteCOItem.getId());
+            //delete note
+            deleteById(HNoteCOItemsTableDef.TABLE_NAME, hNoteCOItem.getId());
+            //save event
+            hEvents.add(hNoteCOItem.getEventId());
+        }
+
+        //delete saved events
+        for (long eventId : hEvents) {
+            result = deleteHEvent(eventId);
         }
 
         return result;

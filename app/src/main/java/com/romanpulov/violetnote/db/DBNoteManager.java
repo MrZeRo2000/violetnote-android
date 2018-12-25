@@ -415,7 +415,8 @@ public class DBNoteManager extends BasicCommonNoteManager {
         for (BasicNoteItemA noteItem : note.getItems()) {
             deleteNoteItem(noteItem);
         }
-        //mDB.delete(NoteItemsTableDef.TABLE_NAME, DBCommonDef.NOTE_ID_SELECTION_STRING, noteIdArgs);
+        //h
+        mDBHManager.deleteHNoteCOItems(note);
 
         //note
         return mDB.delete(NotesTableDef.TABLE_NAME, DBCommonDef.ID_COLUMN_NAME + "=" + note.getId(), null);
