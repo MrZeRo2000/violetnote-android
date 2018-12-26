@@ -48,7 +48,7 @@ public class DBDictionaryCache {
         DBNoteManager noteManager = new DBNoteManager(context);
         DBHManager dbhManager = new DBHManager(context);
 
-        mParamTypes = noteManager.getNoteParamTypesMap();
+        mParamTypes = noteManager.mBasicNoteItemParamTypeDAO.getAllAsMap();
         mHEventTypes = dbhManager.basicHEventTypeDAO.getAllAsMap();
 
         mIsLoaded = true;

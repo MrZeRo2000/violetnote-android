@@ -39,12 +39,12 @@ public final class DBNoteItemPriceTest extends DBBaseTest {
         note.setId(result);
 
         BasicNoteItemA noPriceNoteItem = BasicNoteItemA.newCheckedEditInstance(priceNoteParamTypeId, "Value without param");
-        result = mDBNoteManager.insertNoteItem(note, noPriceNoteItem);
+        result = mDBNoteManager.mBasicNoteItemDAO.insertWithNote(note, noPriceNoteItem);
         assertNotEquals(-1, result);
         noPriceNoteItem.setId(result);
 
         BasicNoteItemA hasPriceNoteItem = BasicNoteItemA.newCheckedEditInstance(priceNoteParamTypeId, "Value with param 12.77");
-        result = mDBNoteManager.insertNoteItem(note, hasPriceNoteItem);
+        result = mDBNoteManager.mBasicNoteItemDAO.insertWithNote(note, hasPriceNoteItem);
         assertNotEquals(-1, result);
         hasPriceNoteItem.setId(result);
 
@@ -54,7 +54,7 @@ public final class DBNoteItemPriceTest extends DBBaseTest {
 
         //added price param to first item
         noPriceNoteItem.setParamLong(priceNoteParamTypeId, 200L);
-        result = mDBNoteManager.updateNoteItemNameValue(noPriceNoteItem);
+        result = mDBNoteManager.mBasicNoteItemDAO.updateNameValue(noPriceNoteItem);
         assertNotEquals(0, result);
 
         //check total increased
@@ -63,7 +63,7 @@ public final class DBNoteItemPriceTest extends DBBaseTest {
 
         //changed price param for first item
         noPriceNoteItem.setParamLong(priceNoteParamTypeId, 100L);
-        result = mDBNoteManager.updateNoteItemNameValue(noPriceNoteItem);
+        result = mDBNoteManager.mBasicNoteItemDAO.updateNameValue(noPriceNoteItem);
         assertNotEquals(0, result);
 
         //check total item decreased
@@ -72,7 +72,7 @@ public final class DBNoteItemPriceTest extends DBBaseTest {
 
         //removed price param
         noPriceNoteItem.setParamLong(priceNoteParamTypeId, 0L);
-        result = mDBNoteManager.updateNoteItemNameValue(noPriceNoteItem);
+        result = mDBNoteManager.mBasicNoteItemDAO.updateNameValue(noPriceNoteItem);
         assertNotEquals(0, result);
 
         //total price back to initial value

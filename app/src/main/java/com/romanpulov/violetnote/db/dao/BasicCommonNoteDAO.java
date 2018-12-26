@@ -1,24 +1,24 @@
-package com.romanpulov.violetnote.db;
+package com.romanpulov.violetnote.db.dao;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.NonNull;
 
+import com.romanpulov.violetnote.db.DBManagementProvider;
 import com.romanpulov.violetnote.model.BasicCommonNoteA;
 
 import static com.romanpulov.violetnote.model.BasicOrderedEntityNoteA.PRIORITY_HIGH;
 import static com.romanpulov.violetnote.model.BasicOrderedEntityNoteA.PRIORITY_LOW;
 
 /**
- * BasicCommonNoteA operations support class
- * Created by romanpulov on 29.08.2016.
+ * BasicCommonNote DAO
  */
-public class BasicCommonNoteManager extends BasicDBManager {
+public final class BasicCommonNoteDAO extends AbstractDAO<BasicCommonNoteA> {
 
-    BasicCommonNoteManager(Context context) {
+    public BasicCommonNoteDAO(Context context) {
         super(context);
     }
 
-    public boolean moveUp(BasicCommonNoteA note) {
+    public boolean moveUp(@NonNull BasicCommonNoteA note) {
         DBManagementProvider dbManagementProvider = note.getDBManagementProvider();
 
         long prevOrderId = mDBHelper.getPrevOrderId(dbManagementProvider.getTableName(), dbManagementProvider.getPrevOrderSelection(), dbManagementProvider.getOrderSelectionArgs());
@@ -30,7 +30,7 @@ public class BasicCommonNoteManager extends BasicDBManager {
             return false;
     }
 
-    public boolean moveDown(BasicCommonNoteA note) {
+    public boolean moveDown(@NonNull BasicCommonNoteA note) {
         DBManagementProvider dbManagementProvider = note.getDBManagementProvider();
 
         long nextOrderId = mDBHelper.getNextOrderId(dbManagementProvider.getTableName(), dbManagementProvider.getNextOrderSelection(), dbManagementProvider.getOrderSelectionArgs());
@@ -42,7 +42,7 @@ public class BasicCommonNoteManager extends BasicDBManager {
             return false;
     }
 
-    public boolean moveTop(BasicCommonNoteA note) {
+    public boolean moveTop(@NonNull BasicCommonNoteA note) {
         DBManagementProvider dbManagementProvider = note.getDBManagementProvider();
 
         long minOrderId = mDBHelper.getMinOrderId(dbManagementProvider.getTableName(), dbManagementProvider.getOrderIdSelection(), dbManagementProvider.getOrderIdSelectionArgs());
@@ -55,7 +55,7 @@ public class BasicCommonNoteManager extends BasicDBManager {
             return false;
     }
 
-    public boolean moveBottom(BasicCommonNoteA note) {
+    public boolean moveBottom(@NonNull BasicCommonNoteA note) {
         DBManagementProvider dbManagementProvider = note.getDBManagementProvider();
 
         long maxOrderId = mDBHelper.getMaxOrderId(dbManagementProvider.getTableName(), dbManagementProvider.getOrderIdSelection(), dbManagementProvider.getOrderIdSelectionArgs());
@@ -68,7 +68,7 @@ public class BasicCommonNoteManager extends BasicDBManager {
             return false;
     }
 
-    public boolean priorityUp(BasicCommonNoteA note) {
+    public boolean priorityUp(@NonNull BasicCommonNoteA note) {
         long priority = note.getPriority();
         if (priority == PRIORITY_HIGH)
             return false;
@@ -78,7 +78,7 @@ public class BasicCommonNoteManager extends BasicDBManager {
         return updatePriority(note, priority);
     }
 
-    public boolean priorityDown(BasicCommonNoteA note) {
+    public boolean priorityDown(@NonNull BasicCommonNoteA note) {
         long priority = note.getPriority();
         if (priority == PRIORITY_LOW)
             return false;
@@ -88,7 +88,7 @@ public class BasicCommonNoteManager extends BasicDBManager {
         return updatePriority(note, priority);
     }
 
-    private boolean updatePriority(BasicCommonNoteA note, long priority) {
+    private boolean updatePriority(@NonNull BasicCommonNoteA note, long priority) {
         DBManagementProvider dbManagementProvider = note.getDBManagementProvider();
 
         note.setPriority(priority);

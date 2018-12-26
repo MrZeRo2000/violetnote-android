@@ -157,7 +157,7 @@ public class DBNotesMovementTest extends DBBaseTest {
 
     private void loadNoteItems() {
         for (int i = 0; i < items.length; i++) {
-            items[i] = mDBNoteManager.getNoteItem(i + 1);
+            items[i] = mDBNoteManager.mBasicNoteItemDAO.getById(i + 1);
             providers[i] = items[i].getDBManagementProvider();
         }
     }
@@ -178,7 +178,7 @@ public class DBNotesMovementTest extends DBBaseTest {
         provider = providers[2];
         Assert.assertEquals(6, items[2].getOrderId());
 
-        mDBNoteManager.priorityUp(items[0]);
+        mDBNoteManager.mBasicCommonNoteDAO.priorityUp(items[0]);
         loadNoteItems();
         Assert.assertEquals(1, items[0].getPriority());
         assertEquals(3, items[0].getOrderId());
@@ -189,7 +189,7 @@ public class DBNotesMovementTest extends DBBaseTest {
         maxOrderId = mDBHelper.getMaxOrderId(provider.getTableName(), provider.getOrderIdSelection(), provider.getOrderIdSelectionArgs());
         Assert.assertEquals(6, maxOrderId);
 
-        mDBNoteManager.priorityDown(items[0]);
+        mDBNoteManager.mBasicCommonNoteDAO.priorityDown(items[0]);
         loadNoteItems();
         Assert.assertEquals(0, items[0].getPriority());
 
@@ -214,22 +214,22 @@ public class DBNotesMovementTest extends DBBaseTest {
         Assert.assertEquals(1, prevOrderId);
 
         //note 2 move top
-        mDBNoteManager.moveTop(items[2]);
+        mDBNoteManager.mBasicCommonNoteDAO.moveTop(items[2]);
         loadNoteItems();
         Assert.assertEquals(3, items[2].getOrderId());
 
         //note 2 move top - remains the same
-        mDBNoteManager.moveTop(items[2]);
+        mDBNoteManager.mBasicCommonNoteDAO.moveTop(items[2]);
         loadNoteItems();
         Assert.assertEquals(3, items[2].getOrderId());
 
         //note 2 move bottom
-        mDBNoteManager.moveBottom(items[2]);
+        mDBNoteManager.mBasicCommonNoteDAO.moveBottom(items[2]);
         loadNoteItems();
         Assert.assertEquals(6, items[2].getOrderId());
 
         //high prio item move bottom
-        mDBNoteManager.moveBottom(items[3]);
+        mDBNoteManager.mBasicCommonNoteDAO.moveBottom(items[3]);
         loadNoteItems();
         Assert.assertEquals(2, items[3].getOrderId());
         Assert.assertEquals(1, items[4].getOrderId());
@@ -300,42 +300,42 @@ public class DBNotesMovementTest extends DBBaseTest {
         Assert.assertEquals("1,2,4,5", getNotesOrder(noteIdList)) ;
 
         //note 1 move up - no action : 1, 2, 4, 5
-        mDBNoteManager.moveUp(notes[0]);
+        mDBNoteManager.mBasicCommonNoteDAO.moveUp(notes[0]);
         notes = getNotes(noteIdList);
         Assert.assertEquals("1,2,4,5", getNotesOrder(noteIdList)) ;
 
         //note 3 move up - order exchange : 1, 4, 2, 5
-        mDBNoteManager.moveUp(notes[2]);
+        mDBNoteManager.mBasicCommonNoteDAO.moveUp(notes[2]);
         notes = getNotes(noteIdList);
         Assert.assertEquals("1,4,2,5", getNotesOrder(noteIdList)) ;
 
         //note 1 move down - order exchange
-        mDBNoteManager.moveDown(notes[1]);
+        mDBNoteManager.mBasicCommonNoteDAO.moveDown(notes[1]);
         notes = getNotes(noteIdList);
         Assert.assertEquals("1,5,2,4", getNotesOrder(noteIdList)) ;
 
         //note 2 move down - no action
-        mDBNoteManager.moveDown(notes[1]);
+        mDBNoteManager.mBasicCommonNoteDAO.moveDown(notes[1]);
         notes = getNotes(noteIdList);
         Assert.assertEquals("1,5,2,4", getNotesOrder(noteIdList)) ;
 
         //note 2 move top
-        mDBNoteManager.moveTop(notes[1]);
+        mDBNoteManager.mBasicCommonNoteDAO.moveTop(notes[1]);
         notes = getNotes(noteIdList);
         Assert.assertEquals("2,1,3,5", getNotesOrder(noteIdList)) ;
 
         //note 2 move top - no action
-        mDBNoteManager.moveTop(notes[1]);
+        mDBNoteManager.mBasicCommonNoteDAO.moveTop(notes[1]);
         notes = getNotes(noteIdList);
         Assert.assertEquals("2,1,3,5", getNotesOrder(noteIdList)) ;
 
         //note 2 move bottom
-        mDBNoteManager.moveBottom(notes[1]);
+        mDBNoteManager.mBasicCommonNoteDAO.moveBottom(notes[1]);
         notes = getNotes(noteIdList);
         Assert.assertEquals("1,5,2,4", getNotesOrder(noteIdList)) ;
 
         //note 2 move bottom - no action
-        mDBNoteManager.moveBottom(notes[1]);
+        mDBNoteManager.mBasicCommonNoteDAO.moveBottom(notes[1]);
         notes = getNotes(noteIdList);
         Assert.assertEquals("1,5,2,4", getNotesOrder(noteIdList)) ;
     }
@@ -353,10 +353,10 @@ public class DBNotesMovementTest extends DBBaseTest {
         BasicNoteA[] notes = getNotes(noteIdList);
 
         //related notes
-        BasicNoteDataA noteData2 = mDBNoteManager.fromNoteData(notes[1]);
+        BasicNoteDataA noteData2 = mDBNoteManager.mBasicNoteDAO.createNoteDataFromNote(notes[1]);
         Assert.assertEquals(2, noteData2.getRelatedNoteList().size());
 
-        BasicNoteDataA noteData4 = mDBNoteManager.fromNoteData(notes[3]);
+        BasicNoteDataA noteData4 = mDBNoteManager.mBasicNoteDAO.createNoteDataFromNote(notes[3]);
         Assert.assertEquals(0, noteData4.getRelatedNoteList().size());
 
         //notes priority
@@ -373,7 +373,7 @@ public class DBNotesMovementTest extends DBBaseTest {
         BasicNoteItemA itemToMove = notes[0].getItems().get(6);
         BasicNoteA noteToMoveTo = notes[1];
 
-        mDBNoteManager.moveNoteItemOther(itemToMove, noteToMoveTo);
+        mDBNoteManager.mBasicNoteItemDAO.moveToOtherNote(itemToMove, noteToMoveTo);
 
         queryNoteDataItems(notes);
 

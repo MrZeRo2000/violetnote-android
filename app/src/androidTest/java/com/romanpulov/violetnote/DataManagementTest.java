@@ -100,13 +100,13 @@ public class DataManagementTest extends DBBaseTest {
 
         //move top
         note1 = mDBNoteManager.mBasicNoteDAO.getById(5);
-        mDBNoteManager.moveTop(note1);
+        mDBNoteManager.mBasicCommonNoteDAO.moveTop(note1);
 
         note1 = mDBNoteManager.mBasicNoteDAO.getById(5);
         assertEquals(note1.getOrderId(), 1);
 
         //move bottom
-        mDBNoteManager.moveBottom(note1);
+        mDBNoteManager.mBasicCommonNoteDAO.moveBottom(note1);
         note1 = mDBNoteManager.mBasicNoteDAO.getById(5);
         assertEquals(note1.getOrderId(), noteList.size());
 

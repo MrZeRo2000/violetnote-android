@@ -45,13 +45,13 @@ public final class DBHManagementTest extends DBBaseTest {
         note.setId(result);
 
         BasicNoteItemA noteItem1 = BasicNoteItemA.newNamedEditInstance("New name", "New Value");
-        result = mDBNoteManager.insertNoteItem(note, noteItem1);
+        result = mDBNoteManager.mBasicNoteItemDAO.insertWithNote(note, noteItem1);
         assertNotEquals(-1, result);
         noteItem1.setId(result);
 
 
         BasicNoteItemA noteItem2 = BasicNoteItemA.newNamedEditInstance("Another name", "Another Value");
-        result = mDBNoteManager.insertNoteItem(note, noteItem2);
+        result = mDBNoteManager.mBasicNoteItemDAO.insertWithNote(note, noteItem2);
         assertNotEquals(-1, result);
         noteItem2.setId(result);
 
@@ -63,12 +63,12 @@ public final class DBHManagementTest extends DBBaseTest {
 
         //new event after update
         noteItem2.setValue("Another value = new");
-        mDBNoteManager.updateNoteItemNameValue(noteItem2);
+        mDBNoteManager.mBasicNoteItemDAO.updateNameValue(noteItem2);
         testEvents = mDBHManager.basicHEventDAO.getAll();
         assertEquals(3, testEvents.size());
 
         //delete note item and events should also be deleted
-        result = mDBNoteManager.deleteNoteItem(noteItem2);
+        result = mDBNoteManager.mBasicNoteItemDAO.delete(noteItem2);
         assertNotEquals(0, result);
 
         testEvents = mDBHManager.basicHEventDAO.getAll();
@@ -76,7 +76,7 @@ public final class DBHManagementTest extends DBBaseTest {
 
         noteItem1.setName("Changed name");
         noteItem1.setValue("Changed value");
-        mDBNoteManager.updateNoteItemNameValue(noteItem1);
+        mDBNoteManager.mBasicNoteItemDAO.updateNameValue(noteItem1);
 
         testEvents = mDBHManager.basicHEventDAO.getAll();
         assertEquals(2, testEvents.size());
@@ -104,7 +104,7 @@ public final class DBHManagementTest extends DBBaseTest {
         long priceNoteParamTypeId = mDBHelper.getDBDictionaryCache().getPriceNoteParamTypeId();
 
         BasicNoteItemA noteItem1 = BasicNoteItemA.newCheckedEditInstance(priceNoteParamTypeId, "Data without value");
-        result = mDBNoteManager.insertNoteItem(note, noteItem1);
+        result = mDBNoteManager.mBasicNoteItemDAO.insertWithNote(note, noteItem1);
         assertNotEquals(-1, result);
         noteItem1.setId(result);
 
@@ -112,7 +112,7 @@ public final class DBHManagementTest extends DBBaseTest {
         assertEquals(1, note.getItemCount());
 
         BasicNoteItemA noteItem2 = BasicNoteItemA.newCheckedEditInstance(priceNoteParamTypeId, "Data with value 23.55");
-        result = mDBNoteManager.insertNoteItem(note, noteItem2);
+        result = mDBNoteManager.mBasicNoteItemDAO.insertWithNote(note, noteItem2);
         assertNotEquals(-1, result);
         noteItem2.setId(result);
 
@@ -122,7 +122,7 @@ public final class DBHManagementTest extends DBBaseTest {
         assertEquals(2355L, note.getItems().get(1).getNoteItemParams().getLong(priceNoteParamTypeId));
 
         BasicNoteItemA noteItem3 = BasicNoteItemA.newCheckedEditInstance(priceNoteParamTypeId, "Another value 34");
-        result = mDBNoteManager.insertNoteItem(note, noteItem3);
+        result = mDBNoteManager.mBasicNoteItemDAO.insertWithNote(note, noteItem3);
         assertNotEquals(-1, result);
         noteItem3.setId(result);
 
@@ -132,14 +132,14 @@ public final class DBHManagementTest extends DBBaseTest {
         assertEquals(5755L, note.getTotalPrice());
 
         //check items
-        result = mDBNoteManager.checkNoteItem(noteItem1);
+        result = mDBNoteManager.mBasicNoteItemDAO.updateChecked(noteItem1, true);
         assertNotEquals(-1, result);
-        result = mDBNoteManager.checkNoteItem(noteItem2);
+        result = mDBNoteManager.mBasicNoteItemDAO.updateChecked(noteItem2, true);
         assertNotEquals(-1, result);
 
         //checkout items
         mDBNoteManager.mBasicNoteItemDAO.fillNoteDataItemsWithSummary(note);
-        mDBNoteManager.checkOut(note);
+        mDBNoteManager.mBasicNoteDAO.checkOut(note);
 
         //here we should have some history
         List<BasicHNoteCOItemA> hNoteCOItems =  mDBHManager.basicHNoteCOItemDAO.getByNoteId(note.getId());

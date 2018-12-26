@@ -15,7 +15,7 @@ public class BasicNoteMoveUpAction<T extends BasicCommonNoteA> extends BasicNote
 
     @Override
     public boolean execute(DBNoteManager noteManager, T item) {
-        return noteManager.moveUp(item);
+        return noteManager.mBasicCommonNoteDAO.moveUp(item);
     }
 
     @Override

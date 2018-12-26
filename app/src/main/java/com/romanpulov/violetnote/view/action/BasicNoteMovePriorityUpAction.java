@@ -21,7 +21,7 @@ public class BasicNoteMovePriorityUpAction<T extends BasicCommonNoteA> extends B
 
     @Override
     public boolean execute(DBNoteManager noteManager, T item) {
-        return noteManager.priorityUp(item);
+        return noteManager.mBasicCommonNoteDAO.priorityUp(item);
     }
 
     @Override

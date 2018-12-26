@@ -12,7 +12,6 @@ import com.romanpulov.violetnote.db.DBBasicNoteOpenHelper;
 import com.romanpulov.violetnote.db.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
-import com.romanpulov.violetnote.model.BasicNoteValueA;
 import com.romanpulov.violetnote.model.NoteGroupA;
 
 public class DataGenerator {
@@ -67,7 +66,7 @@ public class DataGenerator {
                             itemValueFormat = "Note item %2d for note %2d name with value 12.44";
 
                         BasicNoteItemA newNoteItem = BasicNoteItemA.newCheckedEditInstance(priceNoteParamTypeId, String.format(Locale.getDefault(), itemValueFormat, j, i));
-                        assertNotEquals(-1, noteManager.insertNoteItem(newNote, newNoteItem));
+                        assertNotEquals(-1, noteManager.mBasicNoteItemDAO.insertWithNote(newNote, newNoteItem));
 
                         if (isPrice)
                             assertEquals(1244L, newNoteItem.getParamLong(priceNoteParamTypeId));
@@ -81,7 +80,7 @@ public class DataGenerator {
                             valueFormat = "This is a very very very very very very long value %2d";
 
                         String newValue = String.format(Locale.getDefault(), valueFormat, j);
-                        assertNotEquals(-1, noteManager.insertNoteValue(newNote, BasicNoteValueA.newEditInstance(newValue)));
+                        assertNotEquals(-1, noteManager.mBasicNoteValueDAO.insertWithNote(newNote, newValue));
                     }
 
                     //history for checked items
@@ -91,7 +90,7 @@ public class DataGenerator {
                             historyValueFormat = "This is a very very very very very very long history value %2d";
 
                         String newHistoryValue = String.format(Locale.getDefault(), historyValueFormat, j);
-                        assertNotEquals(-1, noteManager.insertNoteHistory(newNote, newHistoryValue));
+                        assertNotEquals(-1, noteManager.mBasicNoteHistoryDAO.insertNoteValue(newNote, newHistoryValue));
 
                         //assertFalse(-1 == noteManager.insertNoteValue(newNote, newHistoryValue));
                     }
@@ -112,7 +111,7 @@ public class DataGenerator {
                                 String.format(Locale.getDefault(), itemNameFormat, j, i),
                                 String.format(Locale.getDefault(), itemValueFormat, j, i)
                         );
-                        assertNotEquals(-1, noteManager.insertNoteItem(newNote, newNoteItem));
+                        assertNotEquals(-1, noteManager.mBasicNoteItemDAO.insertWithNote(newNote, newNoteItem));
                     }
                 }
             }

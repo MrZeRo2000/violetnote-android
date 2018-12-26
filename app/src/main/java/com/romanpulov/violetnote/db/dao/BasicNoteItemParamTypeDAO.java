@@ -4,8 +4,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
 
-import com.romanpulov.violetnote.db.tabledef.HEventTypesTableDef;
-import com.romanpulov.violetnote.model.BasicHEventTypeA;
+import com.romanpulov.violetnote.db.tabledef.NoteItemParamTypesTableDef;
+import com.romanpulov.violetnote.model.BasicNoteItemParamTypeA;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,38 +13,38 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * HEventType DAO
+ * BasicNoteItemParamType DAO
  */
-public final class BasicHEventTypeDAO extends AbstractDAO<BasicHEventTypeA> {
+public final class BasicNoteItemParamTypeDAO extends AbstractDAO<BasicNoteItemParamTypeA> {
 
-    public BasicHEventTypeDAO(Context context) {
+    public BasicNoteItemParamTypeDAO(Context context) {
         super(context);
     }
 
-    @Override
     @NonNull
-    public List<BasicHEventTypeA> getAll() {
-        final List<BasicHEventTypeA> result = new ArrayList<>();
+    @Override
+    public List<BasicNoteItemParamTypeA> getAll() {
+        final List<BasicNoteItemParamTypeA> result = new ArrayList<>();
+
         readCursor(new CursorReaderHandler() {
             @Override
             public Cursor createCursor() {
                 return mDB.query(
-                        HEventTypesTableDef.TABLE_NAME,
-                        HEventTypesTableDef.TABLE_COLS,
+                        NoteItemParamTypesTableDef.TABLE_NAME,
+                        NoteItemParamTypesTableDef.TABLE_COLS,
                         null,
                         null,
                         null,
                         null,
-                        null);
+                        null
+                );
             }
 
             @Override
             public void readFromCursor(Cursor c) {
-                result.add(BasicHEventTypeA.newInstance(
+                result.add(BasicNoteItemParamTypeA.newInstance(
                         c.getLong(0),
-                        c.getLong(1),
-                        c.getString(2),
-                        c.getString(3)
+                        c.getString(1)
                 ));
             }
         });
@@ -54,16 +54,24 @@ public final class BasicHEventTypeDAO extends AbstractDAO<BasicHEventTypeA> {
 
     public Map<String, Long> getAllAsMap() {
         final Map<String, Long> result = new HashMap<>();
+
         readCursor(new CursorReaderHandler() {
             @Override
             public Cursor createCursor() {
-                return mDB.query(HEventTypesTableDef.TABLE_NAME, HEventTypesTableDef.TABLE_COLS,
-                        null, null, null, null, null);
+                return mDB.query(
+                        NoteItemParamTypesTableDef.TABLE_NAME,
+                        NoteItemParamTypesTableDef.TABLE_COLS,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null
+                );
             }
 
             @Override
             public void readFromCursor(Cursor c) {
-                result.put(c.getString(2), c.getLong(0));
+                result.put(c.getString(1), c.getLong(0));
             }
         });
 

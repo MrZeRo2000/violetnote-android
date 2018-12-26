@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -131,14 +132,14 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
         mItems = items == null ? new ArrayList<BasicNoteItemA>() : items;
     }
 
-    private Collection<String> mValues = Collections.unmodifiableSet(Collections.<String>emptySet());
+    private Set<String> mValues = new HashSet<>();
 
     public Collection<String> getValues() {
         return mValues;
     }
 
     public void setValues(Collection<String> values) {
-        mValues = values == null ? Collections.unmodifiableSet(Collections.<String>emptySet()) : values;
+        mValues = values == null ?  new HashSet<String>() : new HashSet<>(values);
     }
 
     private final List<BasicNoteHistoryItemA> mHistoryItems = new ArrayList<>();

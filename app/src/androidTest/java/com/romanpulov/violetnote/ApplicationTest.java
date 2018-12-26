@@ -55,7 +55,7 @@ public class ApplicationTest {
 
         log("Edit note");
         newNote.setTitle("Changed title");
-        noteManager.updateNote(newNote);
+        noteManager.mBasicNoteDAO.update(newNote);
         log("Edited note:" + newNote);
 
         BasicNoteA deleteNote = noteList.get(0);

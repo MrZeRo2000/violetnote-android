@@ -8,7 +8,7 @@ import com.romanpulov.violetnote.db.dao.BasicHNoteCOItemDAO;
 import com.romanpulov.violetnote.db.dao.BasicHNoteCOItemParamDAO;
 import com.romanpulov.violetnote.db.dao.BasicHNoteItemDAO;
 
-public final class DBHManager extends BasicDBManager {
+public final class DBHManager extends AbstractDBManager {
     public final BasicHEventTypeDAO basicHEventTypeDAO;
     public final BasicHEventDAO basicHEventDAO;
     public final BasicHNoteItemDAO basicHNoteItemDAO;
