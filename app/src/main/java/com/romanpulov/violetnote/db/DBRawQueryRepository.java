@@ -29,7 +29,7 @@ public class DBRawQueryRepository {
         "nip.v_int AS param_v_int, " +
         "nip.v_text AS param_v_text " +
         "FROM note_items ni " +
-        "LEFT OUTER JOIN note_item_params nip ON ni._id = nip.note_item_id " +
+        "INNER JOIN note_item_params nip ON ni._id = nip.note_item_id " +
         "WHERE ni.note_id = ? " ;
 
     public static final String NOTE_ITEMS_EVENTS =

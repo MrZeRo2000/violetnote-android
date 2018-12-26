@@ -43,14 +43,11 @@ public final class NoteItemsHistoryTableDef implements DBCommonDef.TableDefSQLPr
 
     public static final String FK_INDEX_NOTE_ID_CREATE = StmtGenerator.createForeignKeyIndexStatement(TABLE_NAME, NOTE_ID_COLUMN_NAME);
 
-    public static final String U_INDEX_CREATE = StmtGenerator.createUniqueIndexStatement(TABLE_NAME, new String[]{NOTE_ID_COLUMN_NAME, VALUE_COLUMN_NAME});
-
     @Override
     public List<String> getSQLCreate() {
         return Arrays.asList(
                 TABLE_CREATE,
-                FK_INDEX_NOTE_ID_CREATE,
-                U_INDEX_CREATE
+                FK_INDEX_NOTE_ID_CREATE
         );
     }
 

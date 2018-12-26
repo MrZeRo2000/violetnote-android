@@ -5,6 +5,7 @@ import android.support.test.filters.SmallTest;
 import com.romanpulov.violetnote.model.BasicHEventA;
 import com.romanpulov.violetnote.model.BasicHEventTypeA;
 import com.romanpulov.violetnote.model.BasicHNoteCOItemA;
+import com.romanpulov.violetnote.model.BasicHNoteCOItemParam;
 import com.romanpulov.violetnote.model.BasicHNoteItemA;
 import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
@@ -110,6 +111,8 @@ public final class DBHManagementTest extends DBBaseTest {
 
         mDBNoteManager.mBasicNoteItemDAO.fillNoteDataItemsWithSummary(note);
         assertEquals(1, note.getItemCount());
+        //should be no params
+        assertEquals(0, note.getItems().get(0).getNoteItemParams().size());
 
         BasicNoteItemA noteItem2 = BasicNoteItemA.newCheckedEditInstance(priceNoteParamTypeId, "Data with value 23.55");
         result = mDBNoteManager.mBasicNoteItemDAO.insertWithNote(note, noteItem2);
@@ -120,6 +123,8 @@ public final class DBHManagementTest extends DBBaseTest {
         mDBNoteManager.mBasicNoteItemDAO.fillNoteDataItemsWithSummary(note);
         assertEquals(2, note.getItemCount());
         assertEquals(2355L, note.getItems().get(1).getNoteItemParams().getLong(priceNoteParamTypeId));
+        //one param
+        assertEquals(1, note.getItems().get(1).getNoteItemParams().size());
 
         BasicNoteItemA noteItem3 = BasicNoteItemA.newCheckedEditInstance(priceNoteParamTypeId, "Another value 34");
         result = mDBNoteManager.mBasicNoteItemDAO.insertWithNote(note, noteItem3);
