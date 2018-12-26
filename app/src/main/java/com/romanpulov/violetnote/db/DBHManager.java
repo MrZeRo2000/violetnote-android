@@ -9,18 +9,18 @@ import com.romanpulov.violetnote.db.dao.BasicHNoteCOItemParamDAO;
 import com.romanpulov.violetnote.db.dao.BasicHNoteItemDAO;
 
 public final class DBHManager extends AbstractDBManager {
-    public final BasicHEventTypeDAO basicHEventTypeDAO;
-    public final BasicHEventDAO basicHEventDAO;
-    public final BasicHNoteItemDAO basicHNoteItemDAO;
-    public final BasicHNoteCOItemDAO basicHNoteCOItemDAO;
-    public final BasicHNoteCOItemParamDAO basicHNoteCOItemParamDAO;
+    public final BasicHEventTypeDAO mBasicHEventTypeDAO;
+    public final BasicHEventDAO mBasicHEventDAO;
+    public final BasicHNoteItemDAO mBasicHNoteItemDAO;
+    public final BasicHNoteCOItemDAO mBasicHNoteCOItemDAO;
+    public final BasicHNoteCOItemParamDAO mBasicHNoteCOItemParamDAO;
 
     public DBHManager(Context context) {
         super(context);
-        basicHEventTypeDAO = new BasicHEventTypeDAO(context);
-        basicHEventDAO = new BasicHEventDAO(context);
-        basicHNoteItemDAO = new BasicHNoteItemDAO(context);
-        basicHNoteCOItemDAO = new BasicHNoteCOItemDAO(context);
-        basicHNoteCOItemParamDAO = new BasicHNoteCOItemParamDAO(context);
+        mBasicHEventTypeDAO = new BasicHEventTypeDAO(context);
+        mBasicHEventDAO = new BasicHEventDAO(context);
+        mBasicHNoteItemDAO = new BasicHNoteItemDAO(context);
+        mBasicHNoteCOItemDAO = new BasicHNoteCOItemDAO(context);
+        mBasicHNoteCOItemParamDAO = new BasicHNoteCOItemParamDAO(context);
     }
 }

@@ -2,6 +2,8 @@ package com.romanpulov.violetnote.db;
 
 import android.content.Context;
 
+import com.romanpulov.violetnote.db.dao.BasicHEventTypeDAO;
+import com.romanpulov.violetnote.db.dao.BasicNoteItemParamTypeDAO;
 import com.romanpulov.violetnote.db.tabledef.DBCommonDef;
 import com.romanpulov.violetnote.model.BasicHEventTypeA;
 
@@ -45,11 +47,11 @@ public class DBDictionaryCache {
      * @param context Context
      */
     public void load(Context context) {
-        DBNoteManager noteManager = new DBNoteManager(context);
-        DBHManager dbhManager = new DBHManager(context);
+        BasicNoteItemParamTypeDAO basicNoteItemParamTypeDAO = new BasicNoteItemParamTypeDAO(context);
+        BasicHEventTypeDAO basicHEventTypeDAO = new BasicHEventTypeDAO(context);
 
-        mParamTypes = noteManager.mBasicNoteItemParamTypeDAO.getAllAsMap();
-        mHEventTypes = dbhManager.basicHEventTypeDAO.getAllAsMap();
+        mParamTypes = basicNoteItemParamTypeDAO.getAllAsMap();
+        mHEventTypes = basicHEventTypeDAO.getAllAsMap();
 
         mIsLoaded = true;
     }
