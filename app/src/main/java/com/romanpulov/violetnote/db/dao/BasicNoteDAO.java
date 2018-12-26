@@ -1,5 +1,6 @@
 package com.romanpulov.violetnote.db.dao;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
@@ -8,18 +9,25 @@ import android.support.annotation.Nullable;
 import com.romanpulov.violetnote.db.DBRawQueryRepository;
 import com.romanpulov.violetnote.db.DateTimeFormatter;
 import com.romanpulov.violetnote.db.tabledef.DBCommonDef;
+import com.romanpulov.violetnote.db.tabledef.NoteItemsHistoryTableDef;
+import com.romanpulov.violetnote.db.tabledef.NoteValuesTableDef;
 import com.romanpulov.violetnote.db.tabledef.NotesTableDef;
 import com.romanpulov.violetnote.model.BasicNoteA;
+import com.romanpulov.violetnote.model.BasicNoteDataA;
+import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.model.BooleanUtils;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 /**
  * BasicNoteDAO class
  */
-public final class BasicNoteDAO extends AbstractDAO<BasicNoteA> {
+public final class BasicNoteDAO extends AbstractBasicNoteDAO<BasicNoteA> {
 
     public BasicNoteDAO(Context context) {
         super(context);
@@ -54,6 +62,16 @@ public final class BasicNoteDAO extends AbstractDAO<BasicNoteA> {
                 c.getInt(8),
                 c.getInt(9)
         );
+    }
+
+    public BasicNoteDataA createNoteDataFromNote(BasicNoteA note) {
+        ArrayList<BasicNoteA> notes = new ArrayList<>();
+        List<BasicNoteA> relatedNotes = getRelatedNotes(note);
+
+        //get note
+        notes.add(note);
+
+        return BasicNoteDataA.newInstance(null, notes, relatedNotes);
     }
 
     @NonNull
@@ -160,4 +178,121 @@ public final class BasicNoteDAO extends AbstractDAO<BasicNoteA> {
 
         return result[0];
     }
+
+    public Collection<String> getNoteValues(@NonNull final BasicNoteA note, final boolean isOrdered) {
+        final Collection<String> result = new HashSet<>();
+
+        if (!note.isEncrypted()) {
+            readCursor(new CursorReaderHandler() {
+                @Override
+                public Cursor createCursor() {
+                    return mDB.query(
+                            NoteValuesTableDef.TABLE_NAME,
+                            new String[]{NoteValuesTableDef.VALUE_COLUMN_NAME},
+                            DBCommonDef.NOTE_ID_COLUMN_NAME + " = ?",
+                            new String[]{String.valueOf(note.getId())},
+                            null,
+                            null,
+                            isOrdered ? NoteValuesTableDef.VALUE_COLUMN_NAME : null
+                    );
+                }
+
+                @Override
+                public void readFromCursor(Cursor c) {
+                    result.add(c.getString(0));
+                }
+            });
+        };
+
+        return result;
+    }
+
+    @NonNull
+    public Collection<String> getNoteValues(@NonNull final BasicNoteA note) {
+        return getNoteValues(note, false);
+    }
+
+    public void fillNoteValues(@NonNull final BasicNoteA note) {
+        note.setValues(getNoteValues(note));
+    }
+
+    public void fillNotes(@NonNull ArrayList<BasicNoteA> notes) {
+        List<BasicNoteA> newNotes = getTotals();
+        notes.clear();
+        notes.addAll(newNotes);
+    }
+
+    @Override
+    public long insert(@NonNull BasicNoteA object) {
+        ContentValues cv = new ContentValues();
+
+        cv.put(NotesTableDef.LAST_MODIFIED_COLUMN_NAME, System.currentTimeMillis());
+        cv.put(NotesTableDef.ORDER_COLUMN_NAME, mDBHelper.getInstance(mContext).getMaxOrderId(NotesTableDef.TABLE_NAME, 0) + 1);
+        cv.put(NotesTableDef.GROUP_ID_COLUMN_NAME, object.getNoteGroupId());
+        cv.put(NotesTableDef.NOTE_TYPE_COLUMN_NAME, object.getNoteType());
+        cv.put(NotesTableDef.TITLE_COLUMN_NAME, object.getTitle());
+        cv.put(NotesTableDef.IS_ENCRYPTED_COLUMN_NAME, BooleanUtils.toInt(object.isEncrypted()));
+        cv.put(NotesTableDef.ENCRYPTED_STRING_COLUMN_NAME, object.getEncryptedString());
+
+        return mDB.insert(NotesTableDef.TABLE_NAME, null, cv);
+    }
+
+    @Override
+    public long delete(@NonNull BasicNoteA object) {
+        String[] noteIdArgs = new String[] {String.valueOf(object.getId())};
+
+        //history
+        mDB.delete(NoteItemsHistoryTableDef.TABLE_NAME, DBCommonDef.NOTE_ID_SELECTION_STRING, noteIdArgs);
+        //values
+        internalDeleteById(NoteValuesTableDef.TABLE_NAME, DBCommonDef.NOTE_ID_COLUMN_NAME, object.getId());
+        //items
+        BasicNoteItemDAO basicNoteItemDAO = new BasicNoteItemDAO(mContext);
+        List<BasicNoteItemA> noteItems = basicNoteItemDAO.getByNote(object);
+        for (BasicNoteItemA noteItem : noteItems) {
+            basicNoteItemDAO.delete(noteItem);
+        }
+        //h
+        BasicHNoteCOItemDAO basicHNoteCOItemDAO = new BasicHNoteCOItemDAO(mContext);
+        basicHNoteCOItemDAO.deleteEvent(object);
+
+        //note
+        return internalDeleteById(NotesTableDef.TABLE_NAME, object.getId());
+    }
+
+    @Override
+    public long update(@NonNull BasicNoteA object) {
+        ContentValues cv = new ContentValues();
+
+        cv.put(NotesTableDef.LAST_MODIFIED_COLUMN_NAME, System.currentTimeMillis());
+        cv.put(NotesTableDef.NOTE_TYPE_COLUMN_NAME, object.getNoteType());
+        cv.put(NotesTableDef.TITLE_COLUMN_NAME, object.getTitle());
+        cv.put(NotesTableDef.IS_ENCRYPTED_COLUMN_NAME, BooleanUtils.toInt(object.isEncrypted()));
+        cv.put(NotesTableDef.ENCRYPTED_STRING_COLUMN_NAME, object.getEncryptedString());
+
+        return mDB.update(NotesTableDef.TABLE_NAME, cv, DBCommonDef.ID_COLUMN_NAME + "=" + object.getId(), null);
+    }
+
+    public void checkOut(@NonNull BasicNoteA note) {
+        for (BasicNoteItemA item : note.getItems()) {
+            if (item.isChecked()) {
+
+                //add note values and history for not encrypted only
+                if (!note.isEncrypted()) {
+                    //insert value
+                    if (note.getValues().add(item.getValue()))
+                        getBasicNoteValueDAO().insertWithNote(note, item.getValue());
+
+                    //insert history
+                    getBasicNoteHistoryDAO().insertNoteValue(note, item.getValue());
+
+                    //insert h
+                    getBasicHNoteCOItemDAO().saveEvent(note, item);
+                }
+
+                //delete note
+                getBasicNoteItemDAO().delete(item);
+            }
+        }
+    }
+
 }

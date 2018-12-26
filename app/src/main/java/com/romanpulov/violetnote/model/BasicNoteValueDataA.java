@@ -22,6 +22,9 @@ public class BasicNoteValueDataA implements Parcelable {
     public List<BasicNoteValueA> getValues() {
         return mValues;
     }
+    public void setValues(List<BasicNoteValueA> value) {
+        mValues = value;
+    }
 
     private BasicNoteValueDataA() {
 

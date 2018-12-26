@@ -27,6 +27,6 @@ public class BasicNoteDataItemEditNameValueAction extends BasicNoteDataItemActio
         }
 
         //update
-        return noteManager.updateNoteItemNameValue(mItems.get(0)) == 1;
+        return noteManager.mBasicNoteItemDAO.updateNameValue(mItems.get(0)) == 1;
     }
 }

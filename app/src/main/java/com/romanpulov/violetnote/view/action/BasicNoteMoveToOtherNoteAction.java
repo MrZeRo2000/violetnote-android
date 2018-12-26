@@ -22,7 +22,7 @@ public class BasicNoteMoveToOtherNoteAction<T extends BasicNoteItemA> extends Ba
 
     @Override
     public boolean execute(DBNoteManager noteManager, T item) {
-        return noteManager.moveNoteItemOther(item, mOtherNote) == 1;
+        return noteManager.mBasicNoteItemDAO.moveToOtherNote(item, mOtherNote) == 1;
     }
 
     @Override

@@ -42,8 +42,7 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
 
     @Override
     public void refreshList(DBNoteManager noteManager) {
-        //noteManager.qu
-        noteManager.queryNoteDataValuesOrdered(mBasicNoteValueData.getNote(), mBasicNoteValueData.getValues());
+        mBasicNoteValueData.setValues(noteManager.mBasicNoteValueDAO.getByNoteId(mBasicNoteValueData.getNote().getId()));
     }
 
     private OnNoteValueFragmentInteractionListener mListener;
@@ -89,7 +88,7 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
 
                 //delete
                 for (BasicNoteValueA item : items)
-                    noteManager.deleteEntityNote(NoteValuesTableDef.TABLE_NAME, item);
+                    noteManager.mBasicNoteValueDAO.delete(item);
 
                 refreshList(noteManager);
 
@@ -118,7 +117,7 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
                             DBNoteManager noteManager = new DBNoteManager(getActivity());
 
                             try {
-                                if (noteManager.updateNoteValueValue(item) == 1) {
+                                if (noteManager.mBasicNoteValueDAO.update(item) == 1) {
                                     //refresh list
                                     refreshList(noteManager);
                                 }
@@ -184,7 +183,7 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
     private void performAddAction(BasicNoteValueA value) {
         DBNoteManager mNoteManager = new DBNoteManager(getActivity());
         try {
-            if (mNoteManager.insertNoteValue(mBasicNoteValueData.getNote(), value) != -1) {
+            if (mNoteManager.mBasicNoteValueDAO.insertWithNote(mBasicNoteValueData.getNote(), value.getValue()) != -1) {
                 // refresh list
                 refreshList(mNoteManager);
                 RecyclerViewHelper.adapterNotifyDataSetChanged(mRecyclerView);
@@ -219,7 +218,7 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
 
         BasicNoteValueRecyclerViewAdapter recyclerViewAdapter = new BasicNoteValueRecyclerViewAdapter(
-                mBasicNoteValueData.getValues(), new ActionBarCallBack(), null
+                mBasicNoteValueData, new ActionBarCallBack(), null
         );
         mRecyclerViewSelector = recyclerViewAdapter.getRecyclerViewSelector();
         mRecyclerView.setAdapter(recyclerViewAdapter);

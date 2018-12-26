@@ -6,6 +6,6 @@ import com.romanpulov.violetnote.model.BasicNoteItemA;
 public class BasicNoteItemDeleteAction extends BasicNoteDeleteAction<BasicNoteItemA> {
     @Override
     public boolean execute(DBNoteManager noteManager, BasicNoteItemA item) {
-        return noteManager.deleteNoteItem(item) != 0;
+        return noteManager.mBasicNoteItemDAO.delete(item) != 0;
     }
 }

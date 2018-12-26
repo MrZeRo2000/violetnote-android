@@ -10,12 +10,7 @@ import java.util.List;
  * Created by romanpulov on 22.08.2017.
  */
 
-public class BasicNoteDeleteAction<T extends BasicCommonNoteA> extends BasicNoteAction<T> {
-
-    @Override
-    public boolean execute(DBNoteManager noteManager, T item) {
-        return noteManager.delete(item);
-    }
+public abstract class BasicNoteDeleteAction<T extends BasicCommonNoteA> extends BasicNoteAction<T> {
 
     @Override
     public boolean execute(DBNoteManager noteManager, List<T> items) {

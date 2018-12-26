@@ -32,8 +32,9 @@ public class BasicNoteDataRefreshAction extends BasicNoteDataAction {
     public boolean execute(DBNoteManager noteManager) {
         //retrieve data
         noteManager.mBasicNoteItemDAO.fillNoteDataItemsWithSummary(mBasicNoteData.getNote());
-        if (mRequireValues)
-            noteManager.queryNoteDataValues(mBasicNoteData.getNote());
+        if (mRequireValues) {
+            noteManager.mBasicNoteDAO.fillNoteValues(mBasicNoteData.getNote());
+        }
 
         //decrypt
         if (mBasicNoteData.getNote().isEncrypted()) {

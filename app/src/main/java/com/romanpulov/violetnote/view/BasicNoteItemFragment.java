@@ -266,7 +266,7 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
                 if ((note != null) && (!note.isEncrypted())) {
                     DBNoteManager noteManager = new DBNoteManager(getActivity());
                     noteManager.mBasicNoteItemDAO.fillNoteDataItemsWithSummary(note);
-                    noteManager.queryNoteDataValues(note);
+                    noteManager.mBasicNoteDAO.fillNoteValues(note);
                 }
             }
         }

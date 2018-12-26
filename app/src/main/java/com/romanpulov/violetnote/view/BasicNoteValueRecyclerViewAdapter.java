@@ -10,13 +10,14 @@ import android.widget.TextView;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.model.BasicNoteValueA;
+import com.romanpulov.violetnote.model.BasicNoteValueDataA;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 
 import java.util.List;
 
 public class BasicNoteValueRecyclerViewAdapter extends RecyclerView.Adapter<BasicNoteValueRecyclerViewAdapter.ViewHolder> {
 
-    private final List<BasicNoteValueA> mItems;
+    private final BasicNoteValueDataA mBasicNoteValueDataA;
     private final RecyclerViewHelper.RecyclerViewSelector mRecyclerViewSelector;
     private final BasicNoteValueFragment.OnNoteValueFragmentInteractionListener mListener;
 
@@ -24,8 +25,8 @@ public class BasicNoteValueRecyclerViewAdapter extends RecyclerView.Adapter<Basi
         return mRecyclerViewSelector;
     }
 
-    public BasicNoteValueRecyclerViewAdapter(List<BasicNoteValueA> items, ActionMode.Callback actionModeCallback, BasicNoteValueFragment.OnNoteValueFragmentInteractionListener listener) {
-        mItems = items;
+    public BasicNoteValueRecyclerViewAdapter(BasicNoteValueDataA basicNoteValueDataA, ActionMode.Callback actionModeCallback, BasicNoteValueFragment.OnNoteValueFragmentInteractionListener listener) {
+        mBasicNoteValueDataA = basicNoteValueDataA;
         mRecyclerViewSelector = new RecyclerViewHelper.RecyclerViewSelector(this, actionModeCallback);
         mListener = listener;
     }
@@ -40,8 +41,8 @@ public class BasicNoteValueRecyclerViewAdapter extends RecyclerView.Adapter<Basi
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        holder.mItem = mItems.get(position);
-        holder.mValueView.setText(mItems.get(position).getValue());
+        holder.mItem = mBasicNoteValueDataA.getValues().get(position);
+        holder.mValueView.setText(mBasicNoteValueDataA.getValues().get(position).getValue());
 
         // background
         holder.updateBackground();
@@ -49,7 +50,7 @@ public class BasicNoteValueRecyclerViewAdapter extends RecyclerView.Adapter<Basi
 
     @Override
     public int getItemCount() {
-        return mItems.size();
+        return mBasicNoteValueDataA.getValues().size();
     }
 
     public class ViewHolder extends RecyclerViewHelper.SelectableViewHolder {
@@ -65,7 +66,7 @@ public class BasicNoteValueRecyclerViewAdapter extends RecyclerView.Adapter<Basi
         public void onClick(View v) {
             super.onClick(v);
             if ((!mRecyclerViewSelector.isSelected()) && (mListener != null) && (getAdapterPosition() != -1))
-                mListener.onNoteValueClicked(mItems.get(getAdapterPosition()), getAdapterPosition());
+                mListener.onNoteValueClicked(mBasicNoteValueDataA.getValues().get(getAdapterPosition()), getAdapterPosition());
         }
 
         @Override

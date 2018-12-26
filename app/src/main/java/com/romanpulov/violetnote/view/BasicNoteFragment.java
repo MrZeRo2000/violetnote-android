@@ -57,14 +57,14 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
 
     @Override
     public void refreshList(DBNoteManager noteManager) {
-        noteManager.refreshNotes(mNoteList);
+        noteManager.mBasicNoteDAO.fillNotes(mNoteList);
         if (mRecyclerView != null)
             RecyclerViewHelper.adapterNotifyDataSetChanged(mRecyclerView);
     }
 
     public void performAddAction(final BasicNoteA item) {
         DBNoteManager mNoteManager = new DBNoteManager(getActivity());
-        if (mNoteManager.insertNote(item) != -1) {
+        if (mNoteManager.mBasicNoteDAO.insert(item) != -1) {
             // refresh list
             refreshList(mNoteManager);
 
@@ -82,7 +82,7 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
                 DBNoteManager mNoteManager = new DBNoteManager(getActivity());
 
                 for (BasicNoteA item : items)
-                    mNoteManager.deleteNote(item);
+                    mNoteManager.mBasicNoteDAO.delete(item);
 
                 // refresh list
                 refreshList(mNoteManager);
@@ -109,7 +109,7 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
 
                             //update database
                             DBNoteManager noteManager = new DBNoteManager(getActivity());
-                            noteManager.updateNote(item);
+                            noteManager.mBasicNoteDAO.update(item);
 
                             //refresh list
                             BasicNoteFragment.this.refreshList(noteManager);

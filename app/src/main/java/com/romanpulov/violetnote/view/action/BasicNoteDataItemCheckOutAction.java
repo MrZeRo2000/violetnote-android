@@ -15,7 +15,7 @@ public class BasicNoteDataItemCheckOutAction extends BasicNoteDataItemAction {
 
     @Override
     public boolean execute(DBNoteManager noteManager) {
-        noteManager.checkOut(mBasicNoteData.getNote());
+        noteManager.mBasicNoteDAO.checkOut(mBasicNoteData.getNote());
         return true;
     }
 }

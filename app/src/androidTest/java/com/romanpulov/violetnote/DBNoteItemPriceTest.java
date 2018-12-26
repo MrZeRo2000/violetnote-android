@@ -34,7 +34,7 @@ public final class DBNoteItemPriceTest extends DBBaseTest {
 
         //create new note
         BasicNoteA note = BasicNoteA.newEditInstance(NoteGroupA.DEFAULT_NOTE_GROUP_ID, BasicNoteA.NOTE_TYPE_NAMED, "New note", false, null);
-        long result = mDBNoteManager.insertNote(note);
+        long result = mDBNoteManager.mBasicNoteDAO.insert(note);
         assertNotEquals(-1, result);
         note.setId(result);
 

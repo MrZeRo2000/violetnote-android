@@ -40,7 +40,7 @@ public final class DBHManagementTest extends DBBaseTest {
     private void testHNoteItems() {
 
         BasicNoteA note = BasicNoteA.newEditInstance(NoteGroupA.DEFAULT_NOTE_GROUP_ID, BasicNoteA.NOTE_TYPE_NAMED, "New note", false, null);
-        long result = mDBNoteManager.insertNote(note);
+        long result = mDBNoteManager.mBasicNoteDAO.insert(note);
         assertNotEquals(-1, result);
         note.setId(result);
 
@@ -85,7 +85,7 @@ public final class DBHManagementTest extends DBBaseTest {
         //backupDB();
 
         //delete the note
-        result = mDBNoteManager.deleteNote(note);
+        result = mDBNoteManager.mBasicNoteDAO.delete(note);
         assertNotEquals(0, result);
 
         List<BasicNoteA> notes =  mDBNoteManager.mBasicNoteDAO.getTotals();
@@ -94,7 +94,7 @@ public final class DBHManagementTest extends DBBaseTest {
 
     private void testHNoteCOItems() {
         BasicNoteA note = BasicNoteA.newEditInstance(NoteGroupA.DEFAULT_NOTE_GROUP_ID, BasicNoteA.NOTE_TYPE_CHECKED, "Checked note", false, null);
-        long result = mDBNoteManager.insertNote(note);
+        long result = mDBNoteManager.mBasicNoteDAO.insert(note);
         assertNotEquals(-1, result);
         note.setId(result);
 
@@ -150,7 +150,7 @@ public final class DBHManagementTest extends DBBaseTest {
         assertEquals(1, note.getItemCount());
 
         //delete note with items
-        mDBNoteManager.deleteNote(note);
+        mDBNoteManager.mBasicNoteDAO.delete(note);
         mDBNoteManager.mBasicNoteItemDAO.fillNoteDataItemsWithSummary(note);
         assertEquals(0, note.getItemCount());
 

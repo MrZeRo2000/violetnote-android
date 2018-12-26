@@ -6,6 +6,8 @@ import android.os.Parcelable;
 import com.romanpulov.violetnote.db.BasicNoteDBManagementProvider;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -129,10 +131,14 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
         mItems = items == null ? new ArrayList<BasicNoteItemA>() : items;
     }
 
-    private final Set<String> mValues = new HashSet<>();
+    private Collection<String> mValues = Collections.unmodifiableSet(Collections.<String>emptySet());
 
-    public Set<String> getValues() {
+    public Collection<String> getValues() {
         return mValues;
+    }
+
+    public void setValues(Collection<String> values) {
+        mValues = values == null ? Collections.unmodifiableSet(Collections.<String>emptySet()) : values;
     }
 
     private final List<BasicNoteHistoryItemA> mHistoryItems = new ArrayList<>();
@@ -290,7 +296,7 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
         in.readTypedList(mItems, BasicNoteItemA.CREATOR);
 
         String[] values = in.createStringArray();
-        Collections.addAll(mValues, values);
+        setValues(Arrays.asList(values));
 
         in.readTypedList(mHistoryItems, BasicNoteHistoryItemA.CREATOR);
     }

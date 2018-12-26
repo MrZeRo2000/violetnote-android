@@ -259,9 +259,9 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
 
                         DBNoteManager manager = new DBNoteManager(getActivity());
                         //update item
-                        manager.checkNoteItem(item);
+                        manager.mBasicNoteItemDAO.updateChecked(item, !item.isChecked());
                         //ensure item is updated and reload
-                        BasicNoteItemA updatedItem = manager.getNoteItem(item.getId());
+                        BasicNoteItemA updatedItem = manager.mBasicNoteItemDAO.getById(item.getId());
                         item.updateChecked(updatedItem);
 
                         //update checked
@@ -335,9 +335,8 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                     Intent intent = new Intent(getActivity(), BasicNoteValueActivity.class);
 
                     //retrieve data
-                    List<BasicNoteValueA> values = new ArrayList<>();
                     DBNoteManager manager = new DBNoteManager(getActivity());
-                    manager.queryNoteDataValuesOrdered(mBasicNoteData.getNote(), values);
+                    List<BasicNoteValueA> values = manager.mBasicNoteValueDAO.getByNoteId(mBasicNoteData.getNote().getId());
                     BasicNoteValueDataA noteValueDataA = BasicNoteValueDataA.newInstance(mBasicNoteData.getNote(), values);
 
                     //pass and start activity
@@ -360,7 +359,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         //update values
         DBNoteManager noteManager = new DBNoteManager(getActivity());
-        noteManager.queryNoteDataValues(mBasicNoteData.getNote());
+        noteManager.mBasicNoteDAO.fillNoteValues(mBasicNoteData.getNote());
 
         //update autocomplete
         if (mInputActionHelper != null)

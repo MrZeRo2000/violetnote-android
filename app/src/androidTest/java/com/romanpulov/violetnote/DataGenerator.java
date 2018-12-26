@@ -48,7 +48,7 @@ public class DataGenerator {
                 titleFormat = "This is a very very very very very very long note with number %2d";
 
             BasicNoteA newNote = BasicNoteA.newEditInstance(NoteGroupA.DEFAULT_NOTE_GROUP_ID, i % 2, String.format(Locale.getDefault(), titleFormat, i), (i % 5) == 0 , null);
-            assertNotEquals(-1, noteManager.insertNote(newNote));
+            assertNotEquals(-1, noteManager.mBasicNoteDAO.insert(newNote));
 
             newNote.setId(i);
             //items are for not encrypted only

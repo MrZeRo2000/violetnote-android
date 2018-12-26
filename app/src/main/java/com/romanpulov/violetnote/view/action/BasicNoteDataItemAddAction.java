@@ -27,6 +27,6 @@ public class BasicNoteDataItemAddAction extends BasicNoteDataItemAction {
         }
 
         //insert
-        return noteManager.insertNoteItem(mBasicNoteData.getNote(), mItems.get(0)) != -1;
+        return noteManager.mBasicNoteItemDAO.insertWithNote(mBasicNoteData.getNote(), mItems.get(0)) != -1;
     }
 }

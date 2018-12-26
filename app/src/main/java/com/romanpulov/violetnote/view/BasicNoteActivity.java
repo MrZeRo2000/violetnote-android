@@ -73,7 +73,7 @@ public class BasicNoteActivity extends ActionBarCompatActivity implements BasicN
     @Override
     public void onBasicNoteFragmentInteraction(BasicNoteA item) {
         DBNoteManager noteManager = new DBNoteManager(this);
-        BasicNoteDataA noteData = noteManager.fromNoteData(item);
+        BasicNoteDataA noteData = noteManager.mBasicNoteDAO.createNoteDataFromNote(item);
 
         Intent intent = null;
 
