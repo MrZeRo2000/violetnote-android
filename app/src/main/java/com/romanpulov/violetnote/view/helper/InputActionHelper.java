@@ -64,8 +64,10 @@ public class InputActionHelper implements AutoCompleteArrayAdapter.OnAutoComplet
     }
 
     private void prepareAutoCompleteList() {
-        ArrayAdapter<?> adapter = new AutoCompleteArrayAdapter(mInputEditText.getContext(), R.layout.dropdown_button_item, mAutoCompleteList.toArray(new String[0]), this);
-        mInputEditText.setAdapter(adapter);
+        if (mAutoCompleteList != null) {
+            ArrayAdapter<?> adapter = new AutoCompleteArrayAdapter(mInputEditText.getContext(), R.layout.dropdown_button_item, mAutoCompleteList.toArray(new String[0]), this);
+            mInputEditText.setAdapter(adapter);
+        }
     }
 
     private void clearAutoCompleteList() {
