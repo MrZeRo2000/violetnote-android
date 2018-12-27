@@ -4,12 +4,16 @@ import android.os.Parcel;
 import android.util.Log;
 
 import android.support.test.filters.SmallTest;
+import android.util.LongSparseArray;
+
 import org.junit.*;
 import static org.junit.Assert.*;
 
 import com.romanpulov.violetnote.loader.document.DocumentPassDataLoader;
+import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.model.BasicNoteItemParams;
+import com.romanpulov.violetnote.model.BasicNoteSummary;
 import com.romanpulov.violetnote.model.vo.BasicNoteItemParamValueA;
 import com.romanpulov.violetnote.model.vo.BasicParamValueA;
 import com.romanpulov.violetnote.model.PassDataA;
@@ -95,5 +99,45 @@ public class ParcelableTest {
         assertEquals(1, newNoteItem.getNoteItemParams().paramValues.size());
         assertEquals(5L, newNoteItem.getNoteItemParams().get(15).vInt);
         assertNotEquals(6L, newNoteItem.getNoteItemParams().get(15).vInt);
+    }
+
+    @Test
+    public void testNote() {
+        BasicNoteA note = BasicNoteA.newInstanceWithTotals(
+          2,
+          45,
+          "last modified",
+          4,
+          5,
+          1,
+          "The Note",
+          false,
+          null,
+          24,
+          16
+        );
+
+        BasicNoteSummary summary = BasicNoteSummary.fromItemCounts(45, 22);
+        LongSparseArray<Long> params = new LongSparseArray<>();
+        params.append(8L, 53L);
+        summary.appendParams(params);
+        note.setSummary(summary);
+
+        Parcel parcel = Parcel.obtain();
+        note.writeToParcel(parcel, 0);
+
+        parcel.setDataPosition(0);
+
+        BasicNoteA newNote = BasicNoteA.CREATOR.createFromParcel(parcel);
+        BasicNoteSummary newSummary = newNote.getSummary();
+
+        assertEquals(note.getNoteType(), newNote.getNoteType());
+        assertEquals(note.getId(), note.getId());
+
+        assertEquals(summary.getItemCount(), newSummary.getItemCount());
+        assertEquals(summary.getCheckedItemCount(), newSummary.getCheckedItemCount());
+        assertEquals(summary.getParams().get(8L), newSummary.getParams().get(8L));
+
+
     }
 }
