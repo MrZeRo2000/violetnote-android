@@ -216,11 +216,17 @@ public final class BasicNoteItemDAO extends AbstractBasicNoteItemDAO<BasicNoteIt
     }
 
     public long insertWithNote(@NonNull BasicNoteA note, @NonNull BasicNoteItemA item) {
+        item.setNoteId(note.getId());
+        return insert(item);
+    }
+
+    @Override
+    public long insert(@NonNull BasicNoteItemA item) {
         ContentValues cv = new ContentValues();
 
         cv.put(NoteItemsTableDef.LAST_MODIFIED_COLUMN_NAME, System.currentTimeMillis());
-        cv.put(NoteItemsTableDef.ORDER_COLUMN_NAME, mDBHelper.getInstance(mContext).getMaxOrderId(NoteItemsTableDef.TABLE_NAME, note.getId()) + 1);
-        cv.put(NoteItemsTableDef.NOTE_ID_COLUMN_NAME, note.getId());
+        cv.put(NoteItemsTableDef.ORDER_COLUMN_NAME, mDBHelper.getMaxOrderId(NoteItemsTableDef.TABLE_NAME, item.getNoteId()) + 1);
+        cv.put(NoteItemsTableDef.NOTE_ID_COLUMN_NAME, item.getNoteId());
         cv.put(NoteItemsTableDef.NAME_COLUMN_NAME, item.getName());
         cv.put(NoteItemsTableDef.VALUE_COLUMN_NAME, item.getValue());
         cv.put(NoteItemsTableDef.CHECKED_COLUMN_NAME, item.isChecked());

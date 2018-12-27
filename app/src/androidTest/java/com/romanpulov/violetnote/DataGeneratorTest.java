@@ -7,6 +7,8 @@ import org.junit.*;
 
 import static org.junit.Assert.assertEquals;
 
+@Ignore
+@SmallTest
 public class DataGeneratorTest {
     private final static String TAG = "DataGeneratorTest";
 
