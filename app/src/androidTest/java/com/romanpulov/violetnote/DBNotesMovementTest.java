@@ -367,8 +367,8 @@ public class DBNotesMovementTest extends DBBaseTest {
         //notes movement
         queryNoteDataItems(notes);
 
-        int note1ItemCount = notes[0].getItemCount();
-        int note2ItemCount = notes[1].getItemCount();
+        int note1ItemCount = notes[0].getSummary().getItemCount();
+        int note2ItemCount = notes[1].getSummary().getItemCount();
 
         BasicNoteItemA itemToMove = notes[0].getItems().get(6);
         BasicNoteA noteToMoveTo = notes[1];
@@ -377,10 +377,10 @@ public class DBNotesMovementTest extends DBBaseTest {
 
         queryNoteDataItems(notes);
 
-        Assert.assertEquals(note1ItemCount - 1, notes[0].getItemCount());
-        Assert.assertEquals(note2ItemCount + 1, notes[1].getItemCount());
+        Assert.assertEquals(note1ItemCount - 1, notes[0].getSummary().getItemCount());
+        Assert.assertEquals(note2ItemCount + 1, notes[1].getSummary().getItemCount());
 
-        Assert.assertEquals(-1, notes[1].getItems().get(notes[1].getItemCount()-1).getPriority());
-        Assert.assertEquals(1, notes[1].getItems().get(notes[1].getItemCount()-1).getOrderId());
+        Assert.assertEquals(-1, notes[1].getItems().get(notes[1].getSummary().getItemCount()-1).getPriority());
+        Assert.assertEquals(1, notes[1].getItems().get(notes[1].getSummary().getItemCount()-1).getOrderId());
     }
 }

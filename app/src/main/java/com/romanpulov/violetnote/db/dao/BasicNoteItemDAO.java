@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.LongSparseArray;
 
 import com.romanpulov.violetnote.db.DateTimeFormatter;
@@ -14,9 +13,8 @@ import com.romanpulov.violetnote.db.tabledef.NoteItemsTableDef;
 import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.model.BasicNoteItemParams;
-import com.romanpulov.violetnote.model.BasicNoteValueA;
+import com.romanpulov.violetnote.model.BasicNoteSummary;
 import com.romanpulov.violetnote.model.BooleanUtils;
-import com.romanpulov.violetnote.model.vo.BasicParamValueA;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -107,15 +105,8 @@ public final class BasicNoteItemDAO extends AbstractBasicNoteItemDAO<BasicNoteIt
 
         final String queryOrderString = orderString;
         final LongSparseArray<BasicNoteItemParams> paramsList = getBasicNoteItemParamsDAO().getByNote(note);
-        final long priceNoteParamTypeId = mDBHelper.getDBDictionaryCache().getPriceNoteParamTypeId();
 
-        class CalcSummary {
-            long totalPrice = 0L;
-            int itemCount = 0;
-            int checkedItemCount = 0;
-        }
-
-        final CalcSummary calcSummary = new CalcSummary();
+        final BasicNoteSummary calcSummary = BasicNoteSummary.createEmpty();
 
         readCursor(new CursorReaderHandler() {
             @Override
@@ -138,24 +129,19 @@ public final class BasicNoteItemDAO extends AbstractBasicNoteItemDAO<BasicNoteIt
                 BasicNoteItemParams params = paramsList.get(newItem.getId());
                 newItem.setNoteItemParams(params);
                 if (params != null) {
-                    BasicParamValueA priceParamValue = params.get(priceNoteParamTypeId);
-                    if (priceParamValue != null) {
-                        calcSummary.totalPrice += priceParamValue.vInt;
-                    }
+                    calcSummary.appendParams(params.toLongList());
                 }
 
                 if (newItem.isChecked()) {
-                    calcSummary.checkedItemCount++;
+                    calcSummary.addCheckedItemCount();
                 }
-                calcSummary.itemCount ++;
+                calcSummary.addItemCount();
                 items.add(newItem);
             }
         });
 
         note.setItems(items);
-        note.setItemCount(calcSummary.itemCount);
-        note.setCheckedItemCount(calcSummary.checkedItemCount);
-        note.setTotalPrice(calcSummary.totalPrice);
+        note.setSummary(calcSummary);
     }
 
     public long updateChecked(BasicNoteItemA item, boolean checked) {

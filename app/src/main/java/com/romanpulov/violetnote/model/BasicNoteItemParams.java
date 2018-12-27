@@ -80,6 +80,17 @@ public final class BasicNoteItemParams implements Parcelable, Iterable<BasicPara
         return result;
     }
 
+    public LongSparseArray<Long> toLongList() {
+        LongSparseArray<Long> result = new LongSparseArray<>();
+
+        for(int i = 0; i < paramValues.size(); i++) {
+            long key = paramValues.keyAt(i);
+            result.append(key, paramValues.get(key).vInt);
+        }
+
+        return result;
+    }
+
     public void append(long key, BasicParamValueA value) {
         paramValues.append(key, value);
     }

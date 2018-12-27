@@ -2,17 +2,17 @@ package com.romanpulov.violetnote.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
+import android.util.LongSparseArray;
 
 import com.romanpulov.violetnote.db.BasicNoteDBManagementProvider;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -23,9 +23,6 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
     public static final int NOTE_TYPE_CHECKED = 0;
     public static final int NOTE_TYPE_NAMED = 1;
 
-    private static final String CHECKED_ITEM_COUNT_TITLE_FORMAT = "%d/%d";
-    private static final String NAMED_ITEM_COUNT_TITLE_FORMAT = "%d";
-
     private int mGroupId;
     private int mNoteType;
     private String mTitle;
@@ -33,10 +30,18 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
     private String mEncryptedString;
 
     //calculated
-    private int mItemCount;
-    private int mCheckedItemCount;
-    private long mTotalPrice;
-    private String mItemCountTitle;
+
+    private BasicNoteSummary mSummary = new BasicNoteSummary();
+
+    @NonNull
+    public BasicNoteSummary getSummary() {
+        return mSummary;
+    }
+
+    public void setSummary(BasicNoteSummary value) {
+        mSummary = value;
+        summaryChanged();
+    }
 
     public int getNoteGroupId() {
         return mGroupId;
@@ -69,57 +74,12 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
         return mEncryptedString;
     }
 
-    public int getItemCount() {
-        return mItemCount;
-    }
-
-    public void setItemCount(int value) {
-        mItemCount = value;
-    }
-
-    public int getCheckedItemCount() {
-        return mCheckedItemCount;
-    }
-
-    public void setCheckedItemCount(int value) {
-        mCheckedItemCount = value;
-    }
-
-    public boolean hasPrice() {
-        return mTotalPrice > 0;
-    }
-
-    public long getTotalPrice() {
-        return mTotalPrice;
-    }
-
-    public void setTotalPrice(long value) {
-        mTotalPrice = value;
-    }
-
-    public void addCheckedItemCount(int value) {
-        mCheckedItemCount += value;
-    }
-
-    private void updateItemCountTitle() {
-        if (mItemCount > 0)
-            switch (mNoteType) {
-                case NOTE_TYPE_CHECKED:
-                    mItemCountTitle = String.format(Locale.getDefault(), CHECKED_ITEM_COUNT_TITLE_FORMAT, mCheckedItemCount, mItemCount);
-                    break;
-                case NOTE_TYPE_NAMED:
-                    mItemCountTitle = String.format(Locale.getDefault(), NAMED_ITEM_COUNT_TITLE_FORMAT, mItemCount);
-                    break;
-                default:
-                    mItemCountTitle = null;
-            }
-        else
-            mItemCountTitle = null;
-
+    public void summaryChanged() {
+        mSummary.updateItemCountTitle(mNoteType);
     }
 
     public String getItemCountTitle() {
-        return mItemCountTitle;
+        return mSummary.getItemCountTitle();
     }
 
     private List<BasicNoteItemA> mItems = new ArrayList<>();
@@ -237,9 +197,8 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
         instance.mTitle = title;
         instance.mEncrypted = encrypted;
         instance.mEncryptedString = encryptedString;
-        instance.mItemCount = itemCount;
-        instance.mCheckedItemCount = checkedItemCount;
-        instance.updateItemCountTitle();
+        instance.mSummary = BasicNoteSummary.fromItemCounts(itemCount, checkedItemCount);
+        instance.summaryChanged();
 
         return instance;
     }
@@ -277,8 +236,7 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
                 "[title=" + mTitle + "]," +
                 "[encrypted=" + mEncrypted + "]," +
                 "[encryptedString=" + mEncryptedString + "]" +
-                "[itemCount=" + mItemCount + "]" +
-                "[checkedItemCount=" + mCheckedItemCount + "]" +
+                "[summary=" + mSummary + "]" +
                 "}";
     }
 
@@ -292,14 +250,16 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
         mTitle = in.readString();
         mEncrypted = BooleanUtils.fromInt(in.readInt());
         mEncryptedString = in.readString();
-        mItemCount = in.readInt();
-        mCheckedItemCount = in.readInt();
+        mSummary = in.readParcelable(BasicNoteSummary.class.getClassLoader());
+
         in.readTypedList(mItems, BasicNoteItemA.CREATOR);
 
         String[] values = in.createStringArray();
         setValues(Arrays.asList(values));
 
         in.readTypedList(mHistoryItems, BasicNoteHistoryItemA.CREATOR);
+
+        summaryChanged();
     }
 
     @Override
@@ -318,8 +278,7 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
         dest.writeString(mTitle);
         dest.writeInt(BooleanUtils.toInt(mEncrypted));
         dest.writeString(mEncryptedString);
-        dest.writeInt(mItemCount);
-        dest.writeInt(mCheckedItemCount);
+        dest.writeParcelable(mSummary, 0);
         dest.writeTypedList(mItems);
         dest.writeStringArray(mValues.toArray(new String[0]));
         dest.writeTypedList(mHistoryItems);

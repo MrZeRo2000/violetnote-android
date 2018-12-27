@@ -109,7 +109,7 @@ public final class DBHManagementTest extends DBBaseTest {
         noteItem1.setId(result);
 
         mDBNoteManager.mBasicNoteItemDAO.fillNoteDataItemsWithSummary(note);
-        assertEquals(1, note.getItemCount());
+        assertEquals(1, note.getSummary().getItemCount());
         //should be no params
         assertEquals(0, note.getItems().get(0).getNoteItemParams().size());
 
@@ -120,7 +120,7 @@ public final class DBHManagementTest extends DBBaseTest {
 
         assertEquals(2355L, noteItem2.getNoteItemParams().getLong(priceNoteParamTypeId));
         mDBNoteManager.mBasicNoteItemDAO.fillNoteDataItemsWithSummary(note);
-        assertEquals(2, note.getItemCount());
+        assertEquals(2, note.getSummary().getItemCount());
         assertEquals(2355L, note.getItems().get(1).getNoteItemParams().getLong(priceNoteParamTypeId));
         //one param
         assertEquals(1, note.getItems().get(1).getNoteItemParams().size());
@@ -131,9 +131,9 @@ public final class DBHManagementTest extends DBBaseTest {
         noteItem3.setId(result);
 
         mDBNoteManager.mBasicNoteItemDAO.fillNoteDataItemsWithSummary(note);
-        assertEquals(3, note.getItemCount());
+        assertEquals(3, note.getSummary().getItemCount());
         assertEquals(3400L, note.getItems().get(2).getNoteItemParams().getLong(priceNoteParamTypeId));
-        assertEquals(5755L, note.getTotalPrice());
+        assertEquals(5755L, note.getSummary().getParams().get(priceNoteParamTypeId).longValue());
 
         //check items
         result = mDBNoteManager.mBasicNoteItemDAO.updateChecked(noteItem1, true);
@@ -151,12 +151,12 @@ public final class DBHManagementTest extends DBBaseTest {
 
         //check remaining items after checkout
         mDBNoteManager.mBasicNoteItemDAO.fillNoteDataItemsWithSummary(note);
-        assertEquals(1, note.getItemCount());
+        assertEquals(1, note.getSummary().getItemCount());
 
         //delete note with items
         mDBNoteManager.mBasicNoteDAO.delete(note);
         mDBNoteManager.mBasicNoteItemDAO.fillNoteDataItemsWithSummary(note);
-        assertEquals(0, note.getItemCount());
+        assertEquals(0, note.getSummary().getItemCount());
 
     }
 

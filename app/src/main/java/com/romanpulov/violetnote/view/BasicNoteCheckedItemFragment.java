@@ -47,7 +47,6 @@ import com.romanpulov.violetnote.view.core.TextEditDialogBuilder;
 import com.romanpulov.violetnote.view.helper.CheckoutProgressHelper;
 import com.romanpulov.violetnote.view.helper.InputManagerHelper;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
@@ -87,8 +86,8 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
     private void updateCheckoutProgress() {
         if (mCheckoutProgressHelper != null)
             mCheckoutProgressHelper.setProgressData(
-                    mBasicNoteData.getNote().getCheckedItemCount(),
-                    mBasicNoteData.getNote().getItemCount(),
+                    mBasicNoteData.getNote().getSummary().getCheckedItemCount(),
+                    mBasicNoteData.getNote().getSummary().getItemCount(),
                     mBasicNoteData.getCheckedLongParamTotal(mPriceNoteParamTypeId),
                     mBasicNoteData.getLongParamTotal(mPriceNoteParamTypeId)
             );
@@ -265,7 +264,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                         item.updateChecked(updatedItem);
 
                         //update checked
-                        mBasicNoteData.getNote().addCheckedItemCount(item.isChecked() ? 1 : - 1);
+                        mBasicNoteData.getNote().getSummary().addCheckedItemCount(item.isChecked() ? 1 : - 1);
                         updateCheckoutProgress();
 
                         RecyclerViewHelper.adapterNotifyDataSetChanged(mRecyclerView);

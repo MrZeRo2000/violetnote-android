@@ -78,7 +78,7 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
      * @param menu Menu to update
      */
     protected void updateActionMenu(Menu menu) {
-        ActionHelper.updateActionMenu(menu, mRecyclerViewSelector.getSelectedItems().size(), mBasicNoteData.getNote().getItemCount());
+        ActionHelper.updateActionMenu(menu, mRecyclerViewSelector.getSelectedItems().size(), mBasicNoteData.getNote().getSummary().getItemCount());
     }
 
 
@@ -86,8 +86,8 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
      * Common logic to select all items
      */
     protected void performSelectAll() {
-        if (mBasicNoteData.getNote().getItemCount() > 0)
-            mRecyclerViewSelector.setSelectedItems(ActionHelper.createSelectAllItems(mBasicNoteData.getNote().getItemCount()));
+        if (mBasicNoteData.getNote().getSummary().getItemCount() > 0)
+            mRecyclerViewSelector.setSelectedItems(ActionHelper.createSelectAllItems(mBasicNoteData.getNote().getSummary().getItemCount()));
     }
 
     /**
