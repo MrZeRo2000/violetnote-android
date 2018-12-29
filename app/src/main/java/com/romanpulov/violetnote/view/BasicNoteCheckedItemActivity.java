@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.view.core.BasicNoteDataPasswordActivity;
@@ -24,9 +25,18 @@ public class BasicNoteCheckedItemActivity extends BasicNoteDataPasswordActivity 
 
             Fragment fragment = fm.findFragmentById(getFragmentContainerId());
             //BasicNoteCheckedItemFragment fragment = (BasicNoteCheckedItemFragment) fm.findFragmentById(getFragmentContainerId());
-            if(!(fragment instanceof BasicNoteCheckedItemFragment)) {
-                Fragment newFragment = BasicNoteCheckedItemFragment.newInstance(mBasicNoteData, this);
-                removeFragment().beginTransaction().add(getFragmentContainerId(), newFragment).commit();
+            BasicNoteCheckedItemFragment basicNoteCheckedItemFragment;
+            if (fragment instanceof BasicNoteCheckedItemFragment) {
+                basicNoteCheckedItemFragment = (BasicNoteCheckedItemFragment) fragment;
+            } else {
+                basicNoteCheckedItemFragment = BasicNoteCheckedItemFragment.newInstance(mBasicNoteData, this);
+                removeFragment().beginTransaction().add(getFragmentContainerId(), basicNoteCheckedItemFragment).commit();
+            }
+
+            Toolbar bottomToolbar = findViewById(R.id.toolbar_bottom);
+            if (bottomToolbar != null) {
+                bottomToolbar.setVisibility(View.GONE);
+                //basicNoteCheckedItemFragment.setupBottomToolbar(bottomToolbar);
             }
         }
     }

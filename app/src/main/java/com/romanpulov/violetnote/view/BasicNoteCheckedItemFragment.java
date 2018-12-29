@@ -9,11 +9,13 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBBasicNoteHelper;
@@ -28,6 +30,7 @@ import com.romanpulov.violetnote.model.InputParser;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutorHost;
 import com.romanpulov.violetnote.view.action.BasicNoteMovePriorityDownAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMovePriorityUpAction;
+import com.romanpulov.violetnote.view.helper.BottomToolbarHelper;
 import com.romanpulov.violetnote.view.helper.DisplayTitleBuilder;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutor;
 import com.romanpulov.violetnote.view.action.BasicNoteDataItemCheckOutAction;
@@ -53,6 +56,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
 
     private InputActionHelper mInputActionHelper;
     private CheckoutProgressHelper mCheckoutProgressHelper;
+    private BottomToolbarHelper mBottomToolbarHelper;
 
     private long mPriceNoteParamTypeId = DBBasicNoteHelper.getInstance(getContext()).getDBDictionaryCache().getPriceNoteParamTypeId();
 
@@ -60,6 +64,17 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
     public void refreshList(DBNoteManager noteManager) {
         super.refreshList(noteManager);
         updateCheckoutProgress();
+    }
+
+    public void setupBottomToolbar(@NonNull Toolbar toolbar) {
+        toolbar.inflateMenu(R.menu.menu_listitem_checked_bottom_actions);
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                return false;
+            }
+        });
+        mBottomToolbarHelper = new BottomToolbarHelper(toolbar);
     }
 
     @Override
@@ -226,6 +241,9 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         @Override
         public void onDestroyActionMode(ActionMode mode) {
             mInputActionHelper.hideLayout();
+            if (mBottomToolbarHelper != null) {
+                mBottomToolbarHelper.hideLayout();
+            }
             if (mRecyclerViewSelector != null)
                 mRecyclerViewSelector.destroyActionMode();
         }
@@ -233,6 +251,9 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
             mInputActionHelper.hideLayout();
+            if (mBottomToolbarHelper != null) {
+                mBottomToolbarHelper.showLayout(mRecyclerViewSelector.getSelectedItems().size(), mBasicNoteData.getNote().getSummary().getItemCount());
+            }
             updateActionMenu(menu);
             mode.setTitle(DisplayTitleBuilder.buildItemsDisplayTitle(getActivity(), mBasicNoteData.getNote().getItems(), mRecyclerViewSelector.getSelectedItems()));
             return true;

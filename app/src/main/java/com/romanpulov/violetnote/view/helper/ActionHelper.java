@@ -18,18 +18,22 @@ public class ActionHelper {
      * @param selectedCount selected items count
      * @param totalCount total items count
      */
-    public static void updateActionMenu(Menu menu, int selectedCount, int totalCount) {
+    public static int updateActionMenu(Menu menu, int selectedCount, int totalCount) {
+        int visibleCount = 0;
+
         for (int menuIndex = 0; menuIndex < menu.size(); menuIndex ++) {
             MenuItem menuItem = menu.getItem(menuIndex);
+
+            boolean isVisible = false;
 
             if (menuItem != null) {
                 switch (menuItem.getItemId()) {
                     case R.id.select_all:
-                        menuItem.setVisible(!((selectedCount == totalCount)));
+                        isVisible = !((selectedCount == totalCount));
                         break;
                     case R.id.edit_value:
                     case R.id.edit:
-                        menuItem.setVisible(selectedCount == 1);
+                        isVisible = selectedCount == 1;
                         break;
                     case R.id.move_up:
                     case R.id.move_down:
@@ -37,11 +41,20 @@ public class ActionHelper {
                     case R.id.move_bottom:
                     case R.id.priority_up:
                     case R.id.priority_down:
-                        menuItem.setVisible(selectedCount != totalCount);
+                        isVisible = selectedCount != totalCount;
                         break;
+                    default:
+                        isVisible = menuItem.isVisible();
+                }
+
+                menuItem.setVisible(isVisible);
+                if (isVisible) {
+                    visibleCount ++;
                 }
             }
         }
+
+        return visibleCount;
     }
 
     /**
