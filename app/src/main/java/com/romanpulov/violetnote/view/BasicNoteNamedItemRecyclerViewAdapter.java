@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 import com.romanpulov.violetnote.view.helper.PriorityDisplayHelper;
@@ -18,7 +19,7 @@ import java.util.List;
 
 public class BasicNoteNamedItemRecyclerViewAdapter extends RecyclerView.Adapter<BasicNoteNamedItemRecyclerViewAdapter.ViewHolder> {
 
-    private final List<BasicNoteItemA> mItems;
+    private final BasicNoteDataA mBasicNoteData;
     private final RecyclerViewHelper.RecyclerViewSelector mRecyclerViewSelector;
     private final BasicNoteCheckedItemFragment.OnBasicNoteItemFragmentInteractionListener mListener;
 
@@ -26,8 +27,8 @@ public class BasicNoteNamedItemRecyclerViewAdapter extends RecyclerView.Adapter<
         return mRecyclerViewSelector;
     }
 
-    public BasicNoteNamedItemRecyclerViewAdapter(List<BasicNoteItemA> items, ActionMode.Callback actionModeCallback, BasicNoteCheckedItemFragment.OnBasicNoteItemFragmentInteractionListener listener) {
-        mItems = items;
+    public BasicNoteNamedItemRecyclerViewAdapter(BasicNoteDataA basicNoteData, ActionMode.Callback actionModeCallback, BasicNoteCheckedItemFragment.OnBasicNoteItemFragmentInteractionListener listener) {
+        mBasicNoteData = basicNoteData;
         mRecyclerViewSelector = new RecyclerViewHelper.RecyclerViewSelector(this, actionModeCallback);
         mListener = listener;
     }
@@ -42,9 +43,9 @@ public class BasicNoteNamedItemRecyclerViewAdapter extends RecyclerView.Adapter<
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        holder.mItem = mItems.get(position);
-        holder.mNameView.setText(mItems.get(position).getName());
-        holder.mValueView.setText(mItems.get(position).getValue());
+        holder.mItem = mBasicNoteData.getNote().getItems().get(position);
+        holder.mNameView.setText(mBasicNoteData.getNote().getItems().get(position).getName());
+        holder.mValueView.setText(mBasicNoteData.getNote().getItems().get(position).getValue());
         holder.mLastModifiedView.setText(holder.mItem.getLastModifiedString());
 
         // priority display
@@ -56,7 +57,7 @@ public class BasicNoteNamedItemRecyclerViewAdapter extends RecyclerView.Adapter<
 
     @Override
     public int getItemCount() {
-        return mItems.size();
+        return mBasicNoteData.getNote().getItems().size();
     }
 
     class ViewHolder extends RecyclerViewHelper.SelectableViewHolder {
@@ -78,7 +79,7 @@ public class BasicNoteNamedItemRecyclerViewAdapter extends RecyclerView.Adapter<
         public void onClick(View v) {
             super.onClick(v);
             if ((!mRecyclerViewSelector.isSelected()) && (mListener != null) && (getAdapterPosition() != -1))
-                mListener.onBasicNoteItemFragmentInteraction(mItems.get(getAdapterPosition()), getAdapterPosition());
+                mListener.onBasicNoteItemFragmentInteraction(mBasicNoteData.getNote().getItems().get(getAdapterPosition()), getAdapterPosition());
         }
 
         @Override

@@ -20,6 +20,17 @@
         android:layout_height="match_parent"
         android:id="@+id/fragment_id"
         android:layout_below="@+id/toolbar"
+        android:layout_above="@id/toolbar_bottom"
+        />
+
+    <android.support.v7.widget.ActionMenuView
+        android:id="@+id/toolbar_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/actionModeBackground"
+        android:theme="@style/ToolBarStyle"
+        android:layout_alignParentBottom="true"
+        app:popupTheme="@style/ToolBarStyle"
         />
 
 </RelativeLayout>

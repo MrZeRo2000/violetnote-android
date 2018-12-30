@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.view.ActionMode;
+import android.support.v7.widget.ActionMenuView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -22,6 +23,7 @@ import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutorHost;
 import com.romanpulov.violetnote.view.action.BasicNoteMovePriorityDownAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMovePriorityUpAction;
+import com.romanpulov.violetnote.view.helper.BottomToolbarHelper;
 import com.romanpulov.violetnote.view.helper.DisplayTitleBuilder;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutor;
 import com.romanpulov.violetnote.view.action.BasicNoteDataItemEditNameValueAction;
@@ -41,6 +43,8 @@ import java.util.List;
 
 public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
 
+    private BottomToolbarHelper mBottomToolbarHelper;
+
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -56,6 +60,18 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
         fragment.setArguments(args);
         return fragment;
     }
+
+    @Override
+    public void setupBottomToolbar(@NonNull ActionMenuView toolbar) {
+        toolbar.setOnMenuItemClickListener(new ActionMenuView.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                return processMoveMenuItemClick(menuItem);
+            }
+        });
+        mBottomToolbarHelper = new BottomToolbarHelper(toolbar);
+    }
+
 
     public void performAddAction() {
         NameValueInputDialog dialog = new NameValueInputDialog(getActivity(), getString(R.string.ui_name_value_title));
@@ -217,12 +233,18 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
 
         @Override
         public void onDestroyActionMode(ActionMode mode) {
+            if (mBottomToolbarHelper != null) {
+                mBottomToolbarHelper.hideLayout();
+            }
             if (mRecyclerViewSelector != null)
                 mRecyclerViewSelector.destroyActionMode();
         }
 
         @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            if (mBottomToolbarHelper != null) {
+                mBottomToolbarHelper.showLayout(mRecyclerViewSelector.getSelectedItems().size(), mBasicNoteData.getNote().getSummary().getItemCount());
+            }
             updateActionMenu(menu);
             return true;
         }
@@ -240,7 +262,7 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
 
             mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-            BasicNoteNamedItemRecyclerViewAdapter recyclerViewAdapter = new BasicNoteNamedItemRecyclerViewAdapter(mBasicNoteData.getNote().getItems(), new ActionBarCallBack(),
+            BasicNoteNamedItemRecyclerViewAdapter recyclerViewAdapter = new BasicNoteNamedItemRecyclerViewAdapter(mBasicNoteData, new ActionBarCallBack(),
                     new OnBasicNoteItemFragmentInteractionListener() {
                         @Override
                         public void onBasicNoteItemFragmentInteraction(BasicNoteItemA item, int position) {

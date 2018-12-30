@@ -58,7 +58,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         updateCheckoutProgress();
     }
 
-
+    @Override
     public void setupBottomToolbar(@NonNull ActionMenuView toolbar) {
         toolbar.setOnMenuItemClickListener(new ActionMenuView.OnMenuItemClickListener() {
             @Override

@@ -36,7 +36,7 @@ public class BasicNoteCheckedItemActivity extends BasicNoteDataPasswordActivity 
 
             ActionMenuView bottomToolbar = findViewById(R.id.toolbar_bottom);
             if (bottomToolbar != null) {
-                getMenuInflater().inflate(R.menu.menu_listitem_checked_bottom_actions, bottomToolbar.getMenu());
+                getMenuInflater().inflate(R.menu.menu_listitem_bottom_actions, bottomToolbar.getMenu());
                 basicNoteCheckedItemFragment.setupBottomToolbar(bottomToolbar);
             }
         }
