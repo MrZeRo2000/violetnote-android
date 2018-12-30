@@ -21,10 +21,10 @@ public class PriorityDisplayHelper {
     public static void updateImageViewPriority(ImageView imageView, long priority) {
         if (priority == BasicOrderedEntityNoteA.PRIORITY_HIGH) {
             imageView.setVisibility(View.VISIBLE);
-            imageView.setImageResource(R.drawable.ic_up);
+            imageView.setImageResource(R.drawable.ic_arrow_up_bold_red);
         } else if (priority == BasicOrderedEntityNoteA.PRIORITY_LOW) {
             imageView.setVisibility(View.VISIBLE);
-            imageView.setImageResource(R.drawable.ic_down);
+            imageView.setImageResource(R.drawable.ic_arrow_down_bold_green);
         } else {
             imageView.setVisibility(View.GONE);
             imageView.setImageResource(android.R.color.transparent);
