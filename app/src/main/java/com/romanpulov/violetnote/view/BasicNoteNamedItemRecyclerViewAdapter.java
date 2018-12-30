@@ -83,6 +83,7 @@ public class BasicNoteNamedItemRecyclerViewAdapter extends RecyclerView.Adapter<
         }
 
         @Override
+        @NonNull
         public String toString() {
             return super.toString() +
                     " name= '" + mNameView.getText() + "'" +

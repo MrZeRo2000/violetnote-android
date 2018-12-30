@@ -67,6 +67,7 @@ public class NoteRecyclerViewAdapter extends RecyclerView.Adapter<NoteRecyclerVi
         }
 
         @Override
+        @NonNull
         public String toString() {
             return super.toString() + " '" + mSystemView.getText() + " '" + mUserView.getText() + "'";
         }

@@ -106,6 +106,7 @@ public class BasicNoteCheckedItemRecyclerViewAdapter extends RecyclerView.Adapte
         }
 
         @Override
+        @NonNull
         public String toString() {
             return super.toString() + " '" + mCheckedView.isChecked() + "', " +  " '" + mValueView.getText() + "'";
         }

@@ -68,6 +68,7 @@ public class CategoryRecyclerViewAdapter extends RecyclerView.Adapter<CategoryRe
         }
 
         @Override
+        @NonNull
         public String toString() {
             return super.toString() + " '" + mCategoryDescription.getText() + "'";
         }

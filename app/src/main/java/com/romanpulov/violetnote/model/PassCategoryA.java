@@ -2,6 +2,7 @@ package com.romanpulov.violetnote.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import com.romanpulov.violetnotecore.Model.PassCategory;
 
@@ -33,6 +34,7 @@ public class PassCategoryA implements Parcelable {
     }
 
     @Override
+    @NonNull
     public String toString() {
         return "{[CategoryName=" + mCategoryName + "], [NotesCount=" + mNotesCount + "]}";
     }

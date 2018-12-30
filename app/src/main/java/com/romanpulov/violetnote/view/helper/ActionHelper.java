@@ -24,9 +24,9 @@ public class ActionHelper {
         for (int menuIndex = 0; menuIndex < menu.size(); menuIndex ++) {
             MenuItem menuItem = menu.getItem(menuIndex);
 
-            boolean isVisible = false;
-
             if (menuItem != null) {
+                boolean isVisible;
+
                 switch (menuItem.getItemId()) {
                     case R.id.select_all:
                         isVisible = !((selectedCount == totalCount));

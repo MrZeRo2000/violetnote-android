@@ -68,6 +68,7 @@ public class NoteDetailsRecyclerViewAdapter extends RecyclerView.Adapter<NoteDet
         }
 
         @Override
+        @NonNull
         public String toString() {
             return super.toString() + " '" + mValueView.getText() + "'";
         }

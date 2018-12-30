@@ -1,5 +1,7 @@
 package com.romanpulov.violetnote.filechooser;
 
+import android.support.annotation.NonNull;
+
 import com.romanpulov.violetnote.chooser.ChooseItem;
 
 import java.io.File;
@@ -82,6 +84,7 @@ public class FileChooseItem implements ChooseItem {
     }
 
     @Override
+    @NonNull
     public String toString() {
         return "{[Path=" + getItemPath() + "], [Name=" + getItemName() + "], [ItemType=" + getItemType() + "]}";
     }

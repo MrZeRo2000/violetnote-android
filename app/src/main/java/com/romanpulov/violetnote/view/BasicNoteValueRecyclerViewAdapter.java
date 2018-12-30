@@ -70,6 +70,7 @@ public class BasicNoteValueRecyclerViewAdapter extends RecyclerView.Adapter<Basi
         }
 
         @Override
+        @NonNull
         public String toString() {
             return super.toString() + " '" + mValueView.getText() + "'";
         }

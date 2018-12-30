@@ -68,7 +68,7 @@ public abstract class HrChooserFragment extends Fragment {
             switch (mItems.get(position).getItemType()) {
                 case ChooseItem.ITEM_PARENT:
                     holder.mTextView.setText(null);
-                    holder.mTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_arrow_top, 0, 0, 0);
+                    holder.mTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_more_horiz, 0, 0, 0);
                     break;
                 case ChooseItem.ITEM_DIRECTORY:
                     holder.mTextView.setText(mItems.get(position).getItemName());
