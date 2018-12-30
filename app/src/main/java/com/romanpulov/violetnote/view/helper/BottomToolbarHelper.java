@@ -1,12 +1,12 @@
 package com.romanpulov.violetnote.view.helper;
 
-import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.ActionMenuView;
 import android.view.View;
 
 public class BottomToolbarHelper {
-    private final Toolbar mToolbar;
+    private final ActionMenuView mToolbar;
 
-    public BottomToolbarHelper(Toolbar toolbar) {
+    public BottomToolbarHelper(ActionMenuView toolbar) {
         mToolbar = toolbar;
         hideLayout();
     }

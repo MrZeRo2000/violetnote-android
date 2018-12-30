@@ -8,19 +8,17 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.view.ActionMode;
+import android.support.v7.widget.ActionMenuView;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBBasicNoteHelper;
 import com.romanpulov.violetnote.db.DBNoteManager;
-import com.romanpulov.violetnote.model.BasicEntityNoteSelectionPosA;
 import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
@@ -28,8 +26,6 @@ import com.romanpulov.violetnote.model.BasicNoteValueA;
 import com.romanpulov.violetnote.model.BasicNoteValueDataA;
 import com.romanpulov.violetnote.model.InputParser;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutorHost;
-import com.romanpulov.violetnote.view.action.BasicNoteMovePriorityDownAction;
-import com.romanpulov.violetnote.view.action.BasicNoteMovePriorityUpAction;
 import com.romanpulov.violetnote.view.helper.BottomToolbarHelper;
 import com.romanpulov.violetnote.view.helper.DisplayTitleBuilder;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutor;
@@ -37,10 +33,6 @@ import com.romanpulov.violetnote.view.action.BasicNoteDataItemCheckOutAction;
 import com.romanpulov.violetnote.view.action.BasicNoteDataItemEditNameValueAction;
 import com.romanpulov.violetnote.view.action.BasicNoteDataItemUpdateCheckedAction;
 import com.romanpulov.violetnote.view.action.BasicNoteDataRefreshAction;
-import com.romanpulov.violetnote.view.action.BasicNoteMoveBottomAction;
-import com.romanpulov.violetnote.view.action.BasicNoteMoveDownAction;
-import com.romanpulov.violetnote.view.action.BasicNoteMoveTopAction;
-import com.romanpulov.violetnote.view.action.BasicNoteMoveUpAction;
 import com.romanpulov.violetnote.view.core.AlertOkCancelSupportDialogFragment;
 import com.romanpulov.violetnote.view.core.PasswordActivity;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
@@ -66,12 +58,12 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         updateCheckoutProgress();
     }
 
-    public void setupBottomToolbar(@NonNull Toolbar toolbar) {
-        toolbar.inflateMenu(R.menu.menu_listitem_checked_bottom_actions);
-        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+
+    public void setupBottomToolbar(@NonNull ActionMenuView toolbar) {
+        toolbar.setOnMenuItemClickListener(new ActionMenuView.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                return false;
+                return processMoveMenuItemClick(menuItem);
             }
         });
         mBottomToolbarHelper = new BottomToolbarHelper(toolbar);
@@ -106,10 +98,6 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                     mBasicNoteData.getCheckedLongParamTotal(mPriceNoteParamTypeId),
                     mBasicNoteData.getLongParamTotal(mPriceNoteParamTypeId)
             );
-    }
-
-    private List<BasicNoteItemA> getSelectedNoteItems() {
-        return BasicEntityNoteSelectionPosA.getItemsByPositions(mBasicNoteData.getNote().getItems(), mRecyclerViewSelector.getSelectedItems());
     }
 
     private void performEditAction(String text, NoteItemDataUpdater noteItemDataUpdater) {
@@ -180,7 +168,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
     public class ActionBarCallBack implements ActionMode.Callback {
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            List<BasicNoteItemA> selectedNoteItems = BasicEntityNoteSelectionPosA.getItemsByPositions(mBasicNoteData.getNote().getItems(), mRecyclerViewSelector.getSelectedItems());
+            List<BasicNoteItemA> selectedNoteItems = getSelectedNoteItems();
 
             if (selectedNoteItems.size() > 0) {
                 if ((item.getGroupId() == MENU_GROUP_OTHER_ITEMS) && (mRelatedNotes != null)) {
@@ -194,27 +182,8 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                             performDeleteAction(mode, selectedNoteItems);
                             break;
                         case R.id.edit_value:
-                            //performEditValueAction(mode, selectedNoteItems.get(0));
                             mInputActionHelper.showLayout(selectedNoteItems.get(0).getValueWithFloatParams(mPriceNoteParamTypeId),
                                     InputActionHelper.INPUT_ACTION_TYPE_EDIT);
-                            break;
-                        case R.id.move_up:
-                            performMoveAction(new BasicNoteMoveUpAction<BasicNoteItemA>(), selectedNoteItems);
-                            break;
-                        case R.id.move_top:
-                            performMoveAction(new BasicNoteMoveTopAction<BasicNoteItemA>(), selectedNoteItems);
-                            break;
-                        case R.id.move_down:
-                            performMoveAction(new BasicNoteMoveDownAction<BasicNoteItemA>(), selectedNoteItems);
-                            break;
-                        case R.id.move_bottom:
-                            performMoveAction(new BasicNoteMoveBottomAction<BasicNoteItemA>(), selectedNoteItems);
-                            break;
-                        case R.id.priority_up:
-                            performMoveAction(new BasicNoteMovePriorityUpAction<BasicNoteItemA>(), selectedNoteItems);
-                            break;
-                        case R.id.priority_down:
-                            performMoveAction(new BasicNoteMovePriorityDownAction<BasicNoteItemA>(), selectedNoteItems);
                             break;
                         case R.id.select_all:
                             performSelectAll();

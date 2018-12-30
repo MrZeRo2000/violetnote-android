@@ -4,31 +4,37 @@
     <item
         android:id="@+id/move_up"
         android:title="@string/action_move_up"
-        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_arrow_upward"
+        app:showAsAction="always"
         />
     <item
         android:id="@+id/move_top"
         android:title="@string/action_move_top"
-        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_vertical_align_top"
+        app:showAsAction="always"
         />
     <item
         android:id="@+id/move_down"
         android:title="@string/action_move_down"
-        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_arrow_downward"
+        app:showAsAction="always"
         />
     <item
         android:id="@+id/move_bottom"
         android:title="@string/action_move_bottom"
-        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_vertical_align_bottom"
+        app:showAsAction="always"
         />
     <item
         android:id="@+id/priority_up"
         android:title="@string/action_priority_up"
-        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_thumb_up"
+        app:showAsAction="always"
         />
     <item
         android:id="@+id/priority_down"
         android:title="@string/action_priority_down"
-        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_thumb_down"
+        app:showAsAction="always"
         />
 </menu>

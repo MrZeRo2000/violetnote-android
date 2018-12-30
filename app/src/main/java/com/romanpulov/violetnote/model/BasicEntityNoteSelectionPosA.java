@@ -1,5 +1,7 @@
 package com.romanpulov.violetnote.model;
 
+import android.support.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -25,7 +27,8 @@ public final class BasicEntityNoteSelectionPosA {
      * @param itemPositions positions
      * @return List of items
      */
-    public static <T> List<T> getItemsByPositions(List<? extends T> items, Collection<Integer> itemPositions) {
+    @NonNull
+    public static <T> List<T> getItemsByPositions(@NonNull List<? extends T> items, @NonNull Collection<Integer> itemPositions) {
         List<T> itemsPos = new ArrayList<>();
 
         for (Integer item : itemPositions ) {

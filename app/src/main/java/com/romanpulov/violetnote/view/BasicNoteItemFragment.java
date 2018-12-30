@@ -23,7 +23,13 @@ import com.romanpulov.violetnote.view.action.BasicNoteDataNoteItemAction;
 import com.romanpulov.violetnote.view.action.BasicNoteDataRefreshAction;
 import com.romanpulov.violetnote.view.action.BasicNoteItemDeleteAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveAction;
+import com.romanpulov.violetnote.view.action.BasicNoteMoveBottomAction;
+import com.romanpulov.violetnote.view.action.BasicNoteMoveDownAction;
+import com.romanpulov.violetnote.view.action.BasicNoteMovePriorityDownAction;
+import com.romanpulov.violetnote.view.action.BasicNoteMovePriorityUpAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveToOtherNoteAction;
+import com.romanpulov.violetnote.view.action.BasicNoteMoveTopAction;
+import com.romanpulov.violetnote.view.action.BasicNoteMoveUpAction;
 import com.romanpulov.violetnote.view.core.AlertOkCancelSupportDialogFragment;
 import com.romanpulov.violetnote.view.core.BasicCommonNoteFragment;
 import com.romanpulov.violetnote.view.core.PasswordActivity;
@@ -81,6 +87,43 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
         ActionHelper.updateActionMenu(menu, mRecyclerViewSelector.getSelectedItems().size(), mBasicNoteData.getNote().getSummary().getItemCount());
     }
 
+    /**
+     * Returns selected items
+     * @return selected items
+     */
+    protected List<BasicNoteItemA> getSelectedNoteItems() {
+        return BasicEntityNoteSelectionPosA.getItemsByPositions(mBasicNoteData.getNote().getItems(), mRecyclerViewSelector.getSelectedItems());
+    }
+
+    protected boolean processMoveMenuItemClick(MenuItem menuItem) {
+        List<BasicNoteItemA> selectedNoteItems = getSelectedNoteItems();
+
+        if (selectedNoteItems.size() > 0) {
+            switch (menuItem.getItemId()) {
+                case R.id.move_up:
+                    performMoveAction(new BasicNoteMoveUpAction<BasicNoteItemA>(), selectedNoteItems);
+                    return true;
+                case R.id.move_top:
+                    performMoveAction(new BasicNoteMoveTopAction<BasicNoteItemA>(), selectedNoteItems);
+                    return true;
+                case R.id.move_down:
+                    performMoveAction(new BasicNoteMoveDownAction<BasicNoteItemA>(), selectedNoteItems);
+                    return true;
+                case R.id.move_bottom:
+                    performMoveAction(new BasicNoteMoveBottomAction<BasicNoteItemA>(), selectedNoteItems);
+                    return true;
+                case R.id.priority_up:
+                    performMoveAction(new BasicNoteMovePriorityUpAction<BasicNoteItemA>(), selectedNoteItems);
+                    return true;
+                case R.id.priority_down:
+                    performMoveAction(new BasicNoteMovePriorityDownAction<BasicNoteItemA>(), selectedNoteItems);
+                    return true;
+                default:
+                    return false;
+            }
+        } else
+            return false;
+    }
 
     /**
      * Common logic to select all items
