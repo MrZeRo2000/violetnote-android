@@ -202,7 +202,7 @@ public final class BasicNoteDAO extends AbstractBasicNoteDAO<BasicNoteA> {
                     result.add(c.getString(0));
                 }
             });
-        };
+        }
 
         return result;
     }
@@ -227,7 +227,7 @@ public final class BasicNoteDAO extends AbstractBasicNoteDAO<BasicNoteA> {
         ContentValues cv = new ContentValues();
 
         cv.put(NotesTableDef.LAST_MODIFIED_COLUMN_NAME, System.currentTimeMillis());
-        cv.put(NotesTableDef.ORDER_COLUMN_NAME, mDBHelper.getInstance(mContext).getMaxOrderId(NotesTableDef.TABLE_NAME, 0) + 1);
+        cv.put(NotesTableDef.ORDER_COLUMN_NAME, mDBHelper.getMaxOrderId(NotesTableDef.TABLE_NAME, 0) + 1);
         cv.put(NotesTableDef.GROUP_ID_COLUMN_NAME, object.getNoteGroupId());
         cv.put(NotesTableDef.NOTE_TYPE_COLUMN_NAME, object.getNoteType());
         cv.put(NotesTableDef.TITLE_COLUMN_NAME, object.getTitle());
