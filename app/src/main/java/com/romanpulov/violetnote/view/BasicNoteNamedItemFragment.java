@@ -3,6 +3,7 @@ package com.romanpulov.violetnote.view;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.ActionMenuView;
@@ -61,17 +62,17 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
         return fragment;
     }
 
-    @Override
-    public void setupBottomToolbar(@NonNull ActionMenuView toolbar) {
-        toolbar.setOnMenuItemClickListener(new ActionMenuView.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                return processMoveMenuItemClick(menuItem);
-            }
-        });
-        mBottomToolbarHelper = new BottomToolbarHelper(toolbar);
+    private void setupBottomToolbarHelper() {
+        FragmentActivity activity = getActivity();
+        if (activity != null) {
+            mBottomToolbarHelper = BottomToolbarHelper.fromContext(activity, new ActionMenuView.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem menuItem) {
+                    return processMoveMenuItemClick(menuItem);
+                }
+            });
+        }
     }
-
 
     public void performAddAction() {
         NameValueInputDialog dialog = new NameValueInputDialog(getActivity(), getString(R.string.ui_name_value_title));
@@ -242,6 +243,10 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
 
         @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            if (mBottomToolbarHelper == null) {
+                setupBottomToolbarHelper();
+            }
+
             if (mBottomToolbarHelper != null) {
                 mBottomToolbarHelper.showLayout(mRecyclerViewSelector.getSelectedItems().size(), mBasicNoteData.getNote().getSummary().getItemCount());
             }

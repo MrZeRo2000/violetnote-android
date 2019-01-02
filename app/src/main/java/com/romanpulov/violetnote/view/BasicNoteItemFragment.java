@@ -2,12 +2,10 @@ package com.romanpulov.violetnote.view;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.view.ActionMode;
-import android.support.v7.widget.ActionMenuView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
@@ -65,8 +63,6 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
     public void refreshList(DBNoteManager noteManager) {
         noteManager.mBasicNoteItemDAO.fillNoteDataItemsWithSummary(mBasicNoteData.getNote());
     }
-
-    public abstract void setupBottomToolbar(@NonNull ActionMenuView toolbar);
 
     protected void afterExecutionCompleted() {
         //some action after execution

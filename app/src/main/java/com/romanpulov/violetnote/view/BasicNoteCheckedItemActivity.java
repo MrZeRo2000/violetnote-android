@@ -7,11 +7,13 @@ import android.support.v7.widget.ActionMenuView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.view.core.BasicNoteDataPasswordActivity;
 
-public class BasicNoteCheckedItemActivity extends BasicNoteDataPasswordActivity {
+public class BasicNoteCheckedItemActivity extends BasicNoteDataPasswordActivity implements BottomToolbarProvider {
+    private ActionMenuView mBottomToolbar;
 
     @Override
     protected int getFragmentContainerId() {
@@ -25,19 +27,9 @@ public class BasicNoteCheckedItemActivity extends BasicNoteDataPasswordActivity 
 
             Fragment fragment = fm.findFragmentById(getFragmentContainerId());
 
-            BasicNoteCheckedItemFragment basicNoteCheckedItemFragment;
-
-            if (fragment instanceof BasicNoteCheckedItemFragment) {
-                basicNoteCheckedItemFragment = (BasicNoteCheckedItemFragment) fragment;
-            } else {
-                basicNoteCheckedItemFragment = BasicNoteCheckedItemFragment.newInstance(mBasicNoteData, this);
+            if (!(fragment instanceof BasicNoteCheckedItemFragment)) {
+                BasicNoteCheckedItemFragment basicNoteCheckedItemFragment = BasicNoteCheckedItemFragment.newInstance(mBasicNoteData, this);
                 removeFragment().beginTransaction().add(getFragmentContainerId(), basicNoteCheckedItemFragment).commit();
-            }
-
-            ActionMenuView bottomToolbar = findViewById(R.id.toolbar_bottom);
-            if (bottomToolbar != null) {
-                getMenuInflater().inflate(R.menu.menu_listitem_bottom_actions, bottomToolbar.getMenu());
-                basicNoteCheckedItemFragment.setupBottomToolbar(bottomToolbar);
             }
         }
     }
@@ -54,6 +46,13 @@ public class BasicNoteCheckedItemActivity extends BasicNoteDataPasswordActivity 
         toolbar.setTitle(mBasicNoteData.getNote().getTitle());
         setSupportActionBar(toolbar);
         setupActionBar();
+
+        //bottom toolbar
+        mBottomToolbar = findViewById(R.id.toolbar_bottom);
+        if (mBottomToolbar != null) {
+            mBottomToolbar.setVisibility(View.GONE);
+            getMenuInflater().inflate(R.menu.menu_listitem_bottom_actions, mBottomToolbar.getMenu());
+        }
 
         refreshFragment();
     }
@@ -98,5 +97,10 @@ public class BasicNoteCheckedItemActivity extends BasicNoteDataPasswordActivity 
             }
         } else
             return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public ActionMenuView getBottomToolbar() {
+        return mBottomToolbar;
     }
 }

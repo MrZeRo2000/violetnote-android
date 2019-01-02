@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.view.ActionMode;
@@ -58,15 +59,16 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         updateCheckoutProgress();
     }
 
-    @Override
-    public void setupBottomToolbar(@NonNull ActionMenuView toolbar) {
-        toolbar.setOnMenuItemClickListener(new ActionMenuView.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                return processMoveMenuItemClick(menuItem);
-            }
-        });
-        mBottomToolbarHelper = new BottomToolbarHelper(toolbar);
+    private void setupBottomToolbarHelper() {
+        FragmentActivity activity = getActivity();
+        if (activity != null) {
+            mBottomToolbarHelper = BottomToolbarHelper.fromContext(activity, new ActionMenuView.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem menuItem) {
+                    return processMoveMenuItemClick(menuItem);
+                }
+            });
+        }
     }
 
     @Override
@@ -220,6 +222,11 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
             mInputActionHelper.hideLayout();
+
+            if (mBottomToolbarHelper == null) {
+                setupBottomToolbarHelper();
+            }
+
             if (mBottomToolbarHelper != null) {
                 mBottomToolbarHelper.showLayout(mRecyclerViewSelector.getSelectedItems().size(), mBasicNoteData.getNote().getSummary().getItemCount());
             }

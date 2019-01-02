@@ -7,11 +7,13 @@ import android.support.v7.widget.ActionMenuView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.view.core.BasicNoteDataPasswordActivity;
 
-public class BasicNoteNamedItemActivity extends BasicNoteDataPasswordActivity {
+public class BasicNoteNamedItemActivity extends BasicNoteDataPasswordActivity implements BottomToolbarProvider {
+    private ActionMenuView mBottomToolbar;
 
     @Override
     protected int getFragmentContainerId() {
@@ -33,12 +35,6 @@ public class BasicNoteNamedItemActivity extends BasicNoteDataPasswordActivity {
                 basicNoteNamedItemFragment = BasicNoteNamedItemFragment.newInstance(mBasicNoteData, this);
                 removeFragment().beginTransaction().add(getFragmentContainerId(), basicNoteNamedItemFragment).commit();
             }
-
-            ActionMenuView bottomToolbar = findViewById(R.id.toolbar_bottom);
-            if (bottomToolbar != null) {
-                getMenuInflater().inflate(R.menu.menu_listitem_bottom_actions, bottomToolbar.getMenu());
-                basicNoteNamedItemFragment.setupBottomToolbar(bottomToolbar);
-            }
         }
     }
 
@@ -54,6 +50,13 @@ public class BasicNoteNamedItemActivity extends BasicNoteDataPasswordActivity {
         toolbar.setTitle(mBasicNoteData.getNote().getTitle());
         setSupportActionBar(toolbar);
         setupActionBar();
+
+        //bottom toolbar
+        mBottomToolbar = findViewById(R.id.toolbar_bottom);
+        if (mBottomToolbar != null) {
+            mBottomToolbar.setVisibility(View.GONE);
+            getMenuInflater().inflate(R.menu.menu_listitem_bottom_actions, mBottomToolbar.getMenu());
+        }
 
         refreshFragment();
     }
@@ -78,5 +81,10 @@ public class BasicNoteNamedItemActivity extends BasicNoteDataPasswordActivity {
             }
         }  else
             return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public ActionMenuView getBottomToolbar() {
+        return mBottomToolbar;
     }
 }
