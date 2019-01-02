@@ -22,19 +22,13 @@ public class BasicNoteNamedItemActivity extends BasicNoteDataPasswordActivity im
 
     @Override
     protected void refreshFragment() {
-        if (!getProgress()) {
-            FragmentManager fm = getSupportFragmentManager();
-
-            Fragment fragment = fm.findFragmentById(getFragmentContainerId());
-
-            BasicNoteNamedItemFragment basicNoteNamedItemFragment;
-
-            if (fragment instanceof BasicNoteNamedItemFragment) {
-                basicNoteNamedItemFragment = (BasicNoteNamedItemFragment)fragment;
-            } else{
-                basicNoteNamedItemFragment = BasicNoteNamedItemFragment.newInstance(mBasicNoteData, this);
-                removeFragment().beginTransaction().add(getFragmentContainerId(), basicNoteNamedItemFragment).commit();
-            }
+        if (!getProgress() && !(getFragment() instanceof BasicNoteNamedItemFragment)) {
+            BasicNoteNamedItemFragment basicNoteNamedItemFragment =
+                    BasicNoteNamedItemFragment.newInstance(mBasicNoteData, this);
+            removeFragment().beginTransaction().add(
+                    getFragmentContainerId(),
+                    basicNoteNamedItemFragment
+            ).commit();
         }
     }
 
@@ -54,8 +48,8 @@ public class BasicNoteNamedItemActivity extends BasicNoteDataPasswordActivity im
         //bottom toolbar
         mBottomToolbar = findViewById(R.id.toolbar_bottom);
         if (mBottomToolbar != null) {
-            mBottomToolbar.setVisibility(View.GONE);
             getMenuInflater().inflate(R.menu.menu_listitem_bottom_actions, mBottomToolbar.getMenu());
+            mBottomToolbar.setVisibility(View.GONE);
         }
 
         refreshFragment();
