@@ -35,6 +35,7 @@ import com.romanpulov.violetnote.view.core.BasicCommonNoteFragment;
 import com.romanpulov.violetnote.view.core.PasswordActivity;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 import com.romanpulov.violetnote.view.helper.ActionHelper;
+import com.romanpulov.violetnote.view.helper.BottomToolbarHelper;
 
 import java.util.List;
 
@@ -58,6 +59,8 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
     }
 
     protected OnBasicNoteItemFragmentInteractionListener mListener;
+
+    protected BottomToolbarHelper mBottomToolbarHelper;
 
     @Override
     public void refreshList(DBNoteManager noteManager) {

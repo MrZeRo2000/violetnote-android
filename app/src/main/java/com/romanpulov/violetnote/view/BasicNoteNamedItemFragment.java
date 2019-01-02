@@ -9,7 +9,6 @@ import android.support.v7.view.ActionMode;
 import android.support.v7.widget.ActionMenuView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -43,8 +42,6 @@ import com.romanpulov.violetnote.view.helper.InputManagerHelper;
 import java.util.List;
 
 public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
-
-    private BottomToolbarHelper mBottomToolbarHelper;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the

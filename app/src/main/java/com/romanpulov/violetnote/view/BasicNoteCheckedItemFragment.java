@@ -49,7 +49,6 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
 
     private InputActionHelper mInputActionHelper;
     private CheckoutProgressHelper mCheckoutProgressHelper;
-    private BottomToolbarHelper mBottomToolbarHelper;
 
     private long mPriceNoteParamTypeId = DBBasicNoteHelper.getInstance(getContext()).getDBDictionaryCache().getPriceNoteParamTypeId();
 

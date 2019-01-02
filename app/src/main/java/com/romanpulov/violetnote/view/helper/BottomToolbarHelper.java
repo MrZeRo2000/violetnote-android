@@ -27,6 +27,7 @@ public class BottomToolbarHelper {
             ActionMenuView.OnMenuItemClickListener menuItemClickListener) {
         mToolbar = toolbarProvider.getBottomToolbar();
         mToolbar.setOnMenuItemClickListener(menuItemClickListener);
+        mToolbar.setPopupTheme(0);
         hideLayout();
     }
 
