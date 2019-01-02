@@ -28,13 +28,13 @@
     <item
         android:id="@+id/priority_up"
         android:title="@string/action_priority_up"
-        android:icon="@drawable/ic_thumb_up"
+        android:icon="@drawable/ic_arrow_up_bold_white"
         app:showAsAction="always"
         />
     <item
         android:id="@+id/priority_down"
         android:title="@string/action_priority_down"
-        android:icon="@drawable/ic_thumb_down"
+        android:icon="@drawable/ic_arrow_down_bold_white"
         app:showAsAction="always"
         />
 </menu>
