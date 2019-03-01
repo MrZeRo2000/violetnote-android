@@ -35,12 +35,9 @@ public class DBBasicNoteOpenHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.endTransaction();
         db.setForeignKeyConstraintsEnabled(false);
-        db.beginTransaction();
         for (String s : DBDefFactory.buildDBUpgrade(oldVersion)) {
             db.execSQL(s);
         }
-        db.endTransaction();
-        db.setForeignKeyConstraintsEnabled(true);
         db.beginTransaction();
     }
 

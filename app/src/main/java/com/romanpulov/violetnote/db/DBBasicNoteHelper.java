@@ -20,7 +20,7 @@ public class DBBasicNoteHelper {
 
     public static DBBasicNoteHelper getInstance(Context context) {
         if (mInstance == null)
-            mInstance = new DBBasicNoteHelper(context);
+            mInstance = new DBBasicNoteHelper(context.getApplicationContext());
         return mInstance;
     }
 
