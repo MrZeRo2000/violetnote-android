@@ -173,7 +173,7 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
                 if (result) {
                     afterExecutionCompleted();
 
-                    mBasicNoteData = basicNoteData;
+                    //mBasicNoteData = basicNoteData;
 
                     RecyclerViewHelper.adapterNotifyDataSetChanged(mRecyclerView);
                     int position = mBasicNoteData.getNote().getLastNoteItemPriorityPosition(item.getPriority());

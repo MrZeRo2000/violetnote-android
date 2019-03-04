@@ -8,7 +8,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.ActionMenuView;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -37,11 +36,14 @@ import com.romanpulov.violetnote.view.core.PasswordActivity;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 import com.romanpulov.violetnote.view.core.TextEditDialogBuilder;
 import com.romanpulov.violetnote.view.core.TextInputDialog;
+import com.romanpulov.violetnote.view.helper.InputActionHelper;
 import com.romanpulov.violetnote.view.helper.InputManagerHelper;
 
 import java.util.List;
 
 public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
+
+    private InputActionHelper mInputActionHelper;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -71,6 +73,17 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
         }
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        hideInputActionLayout();
+    }
+
+    public void hideInputActionLayout() {
+        if (mInputActionHelper != null)
+            mInputActionHelper.hideLayout();
+    }
+
     public void performAddAction() {
         NameValueInputDialog dialog = new NameValueInputDialog(getActivity(), getString(R.string.ui_name_value_title));
         dialog.setOnNameValueInputListener(new NameValueInputDialog.OnNameValueInputListener() {
@@ -83,6 +96,38 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
         });
         dialog.show();
         mEditorDialog = dialog.getAlertDialog();
+    }
+
+    private void performEditValueAction(String text) {
+        List<BasicNoteItemA> selectedNoteItems = getSelectedNoteItems();
+        if (selectedNoteItems.size() == 1) {
+            BasicNoteItemA item = selectedNoteItems.get(0);
+
+            if (!(text.equals(item.getValue()))) {
+
+                item.setValue(text);
+
+                if (mRecyclerViewSelector != null)
+                    mRecyclerViewSelector.finishActionMode();
+
+                BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity(), mBasicNoteData);
+                executor.addAction(getString(R.string.caption_processing), new BasicNoteDataItemEditNameValueAction(mBasicNoteData, item));
+                executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData));
+                executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
+                    @Override
+                    public void onExecutionCompleted(BasicNoteDataA basicNoteData, boolean result) {
+                        mBasicNoteData = basicNoteData;
+
+                        //clear editor reference
+                        if (mEditorDialog != null) {
+                            mEditorDialog.dismiss();
+                            mEditorDialog = null;
+                        }
+                    }
+                });
+                executeActions(executor);
+            }
+        }
     }
 
     private void performEditValueAction(final ActionMode mode, final BasicNoteItemA item) {
@@ -187,7 +232,9 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
                         performDeleteAction(mode, selectedNoteItems);
                         break;
                     case R.id.edit_value:
-                        performEditValueAction(mode, selectedNoteItems.get(0));
+                        //performEditValueAction(mode, selectedNoteItems.get(0));
+                        mInputActionHelper.showLayout(selectedNoteItems.get(0).getValue(),
+                                InputActionHelper.INPUT_ACTION_TYPE_EDIT);
                         break;
                     case R.id.edit:
                         performEditAction(mode, selectedNoteItems.get(0));
@@ -226,20 +273,28 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
 
             if (mRecyclerViewSelector.isSelected())
                 mode.setTitle(DisplayTitleBuilder.buildItemsDisplayTitle(getActivity(), mBasicNoteData.getNote().getItems(), mRecyclerViewSelector.getSelectedItems()));
+
+            hideInputActionLayout();
+
             return true;
         }
 
         @Override
         public void onDestroyActionMode(ActionMode mode) {
+            hideInputActionLayout();
+
             if (mBottomToolbarHelper != null) {
                 mBottomToolbarHelper.hideLayout();
             }
+
             if (mRecyclerViewSelector != null)
                 mRecyclerViewSelector.destroyActionMode();
         }
 
         @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            hideInputActionLayout();
+
             if (mBottomToolbarHelper == null) {
                 setupBottomToolbarHelper();
             }
@@ -257,31 +312,43 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_basic_note_named_item_list, container, false);
 
-        // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            mRecyclerView = (RecyclerView) view;
+        Context context = view.getContext();
 
-            mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+        mRecyclerView = view.findViewById(R.id.list);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-            BasicNoteNamedItemRecyclerViewAdapter recyclerViewAdapter = new BasicNoteNamedItemRecyclerViewAdapter(mBasicNoteData, new ActionBarCallBack(),
-                    new OnBasicNoteItemFragmentInteractionListener() {
-                        @Override
-                        public void onBasicNoteItemFragmentInteraction(BasicNoteItemA item, int position) {
-                            // no action currently required
-                            //placeholder for future
-                        }
+        BasicNoteNamedItemRecyclerViewAdapter recyclerViewAdapter = new BasicNoteNamedItemRecyclerViewAdapter(mBasicNoteData, new ActionBarCallBack(),
+                new OnBasicNoteItemFragmentInteractionListener() {
+                    @Override
+                    public void onBasicNoteItemFragmentInteraction(BasicNoteItemA item, int position) {
+                        // no action currently required
+                        //placeholder for future
                     }
-            );
-            mRecyclerViewSelector = recyclerViewAdapter.getRecyclerViewSelector();
-            mRecyclerView.setAdapter(recyclerViewAdapter);
+                }
+        );
+        mRecyclerViewSelector = recyclerViewAdapter.getRecyclerViewSelector();
+        mRecyclerView.setAdapter(recyclerViewAdapter);
 
-            //restore selected items
-            restoreSelectedItems(savedInstanceState, view);
+        //add action panel
+        mInputActionHelper = new InputActionHelper(view.findViewById(R.id.add_panel_include));
+        mInputActionHelper.setOnAddInteractionListener(new InputActionHelper.OnAddInteractionListener() {
+            @Override
+            public void onAddFragmentInteraction(int actionType, String text) {
+                switch (actionType) {
+                    case InputActionHelper.INPUT_ACTION_TYPE_EDIT:
+                        hideInputActionLayout();
+                        performEditValueAction(text);
+                        break;
+                }
+            }
+        });
 
-            // add decoration
-            mRecyclerView.addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(getActivity(), RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_white_black_gradient));
-        }
+        //restore selected items
+        restoreSelectedItems(savedInstanceState, view);
+
+        // add decoration
+        mRecyclerView.addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(getActivity(), RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_white_black_gradient));
+
         return view;
     }
 }
