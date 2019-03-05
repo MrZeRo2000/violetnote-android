@@ -136,7 +136,7 @@ public class InputActionHelper implements AutoCompleteArrayAdapter.OnAutoComplet
         switch (actionType) {
             case INPUT_ACTION_TYPE_ADD:
             case INPUT_ACTION_TYPE_EDIT:
-                mInputEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE);
+                mInputEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
                 prepareAutoCompleteList();
                 break;
             case INPUT_ACTION_TYPE_NUMBER:

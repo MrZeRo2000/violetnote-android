@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/name"
-        android:inputType="text"
+        android:inputType="textCapSentences"
         android:maxLines="1"
         android:hint="@string/hint_name"
         android:importantForAutofill="no"
@@ -22,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/value"
-        android:inputType="textMultiLine"
+        android:inputType="textCapSentences|textMultiLine"
         android:hint="@string/hint_value"
         android:importantForAutofill="no"
         />

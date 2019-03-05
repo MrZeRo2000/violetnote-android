@@ -50,7 +50,7 @@ public class TextInputDialog extends AlertInputDialog {
     public TextInputDialog(Context context, String title) {
         mContext = context;
         mTitle = title;
-        mInputType = InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_FLAG_MULTI_LINE;
+        mInputType = InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES;
     }
 
     public void setNonEmptyErrorMessage(String message) {
