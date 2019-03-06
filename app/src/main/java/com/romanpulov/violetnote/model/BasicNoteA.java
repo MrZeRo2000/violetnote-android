@@ -3,16 +3,14 @@ package com.romanpulov.violetnote.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
-import android.util.LongSparseArray;
 
-import com.romanpulov.violetnote.db.BasicNoteDBManagementProvider;
+import com.romanpulov.violetnote.db.provider.BasicNoteDBManagementProvider;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 
 /**

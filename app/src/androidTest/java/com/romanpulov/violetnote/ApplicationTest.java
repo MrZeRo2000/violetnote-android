@@ -9,10 +9,10 @@ import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static org.junit.Assert.*;
 
 import com.romanpulov.violetnote.db.DBBasicNoteOpenHelper;
-import com.romanpulov.violetnote.db.DBNoteManager;
+import com.romanpulov.violetnote.db.manager.DBNoteManager;
 import com.romanpulov.library.dropbox.DropboxHelper;
 import com.romanpulov.violetnote.model.BasicNoteA;
-import com.romanpulov.violetnote.model.NoteGroupA;
+import com.romanpulov.violetnote.model.BasicNoteGroupA;
 
 @SmallTest
 public class ApplicationTest {
@@ -44,7 +44,7 @@ public class ApplicationTest {
 
         log("Create note");
         DBNoteManager noteManager = new DBNoteManager(getTargetContext());
-        noteManager.mBasicNoteDAO.insert(BasicNoteA.newEditInstance(NoteGroupA.DEFAULT_NOTE_GROUP_ID, 1,"New Note", false, null));
+        noteManager.mBasicNoteDAO.insert(BasicNoteA.newEditInstance(BasicNoteGroupA.DEFAULT_NOTE_GROUP_ID, 1,"New Note", false, null));
         List<BasicNoteA> noteList = noteManager.mBasicNoteDAO.getTotals();
         assertEquals(noteList.size(), 1);
 

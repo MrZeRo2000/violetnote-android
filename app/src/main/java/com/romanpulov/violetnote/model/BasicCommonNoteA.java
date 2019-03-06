@@ -1,6 +1,6 @@
 package com.romanpulov.violetnote.model;
 
-import com.romanpulov.violetnote.db.DBManagementProvider;
+import com.romanpulov.violetnote.db.provider.DBManagementProvider;
 
 /**
  * Base class for BasicCommonNote

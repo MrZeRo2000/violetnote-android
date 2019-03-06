@@ -1,7 +1,5 @@
 package com.romanpulov.violetnote.view.core;
 
-import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -9,11 +7,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-import com.romanpulov.violetnote.R;
-import com.romanpulov.violetnote.db.DBNoteManager;
+import com.romanpulov.violetnote.db.manager.DBNoteManager;
 
 import java.util.Collection;
 

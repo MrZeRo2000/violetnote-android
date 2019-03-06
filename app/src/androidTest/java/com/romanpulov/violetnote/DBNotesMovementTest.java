@@ -9,7 +9,7 @@ import android.support.test.filters.SmallTest;
 import org.junit.*;
 import static org.junit.Assert.*;
 
-import com.romanpulov.violetnote.db.DBManagementProvider;
+import com.romanpulov.violetnote.db.provider.DBManagementProvider;
 import com.romanpulov.violetnote.db.tabledef.DBCommonDef;
 import com.romanpulov.violetnote.db.tabledef.NoteItemsTableDef;
 import com.romanpulov.violetnote.db.tabledef.NotesTableDef;

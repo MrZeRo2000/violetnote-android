@@ -5,8 +5,8 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.romanpulov.violetnote.db.DBBasicNoteHelper;
 import com.romanpulov.violetnote.db.DBBasicNoteOpenHelper;
-import com.romanpulov.violetnote.db.DBHManager;
-import com.romanpulov.violetnote.db.DBNoteManager;
+import com.romanpulov.violetnote.db.manager.DBHManager;
+import com.romanpulov.violetnote.db.manager.DBNoteManager;
 import com.romanpulov.violetnote.db.DBStorageManager;
 
 import static android.support.test.InstrumentationRegistry.getTargetContext;

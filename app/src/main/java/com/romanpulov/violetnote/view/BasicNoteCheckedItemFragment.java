@@ -19,7 +19,7 @@ import android.view.ViewGroup;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBBasicNoteHelper;
-import com.romanpulov.violetnote.db.DBNoteManager;
+import com.romanpulov.violetnote.db.manager.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;

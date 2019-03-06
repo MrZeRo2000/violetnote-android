@@ -8,7 +8,7 @@ import com.romanpulov.violetnote.model.BasicHNoteCOItemA;
 import com.romanpulov.violetnote.model.BasicHNoteItemA;
 import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
-import com.romanpulov.violetnote.model.NoteGroupA;
+import com.romanpulov.violetnote.model.BasicNoteGroupA;
 
 import org.junit.*;
 
@@ -39,7 +39,7 @@ public final class DBHManagementTest extends DBBaseTest {
 
     private void testHNoteItems() {
 
-        BasicNoteA note = BasicNoteA.newEditInstance(NoteGroupA.DEFAULT_NOTE_GROUP_ID, BasicNoteA.NOTE_TYPE_NAMED, "New note", false, null);
+        BasicNoteA note = BasicNoteA.newEditInstance(BasicNoteGroupA.DEFAULT_NOTE_GROUP_ID, BasicNoteA.NOTE_TYPE_NAMED, "New note", false, null);
         long result = mDBNoteManager.mBasicNoteDAO.insert(note);
         assertNotEquals(-1, result);
         note.setId(result);
@@ -93,7 +93,7 @@ public final class DBHManagementTest extends DBBaseTest {
     }
 
     private void testHNoteCOItems() {
-        BasicNoteA note = BasicNoteA.newEditInstance(NoteGroupA.DEFAULT_NOTE_GROUP_ID, BasicNoteA.NOTE_TYPE_CHECKED, "Checked note", false, null);
+        BasicNoteA note = BasicNoteA.newEditInstance(BasicNoteGroupA.DEFAULT_NOTE_GROUP_ID, BasicNoteA.NOTE_TYPE_CHECKED, "Checked note", false, null);
         long result = mDBNoteManager.mBasicNoteDAO.insert(note);
         assertNotEquals(-1, result);
         note.setId(result);

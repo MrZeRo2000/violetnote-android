@@ -1,25 +1,22 @@
-package com.romanpulov.violetnote.db;
+package com.romanpulov.violetnote.db.provider;
 
 import com.romanpulov.violetnote.db.tabledef.DBCommonDef;
-import com.romanpulov.violetnote.db.tabledef.NotesTableDef;
-import com.romanpulov.violetnote.model.BasicNoteA;
+import com.romanpulov.violetnote.model.BasicOrderedEntityNoteA;
 
 /**
- * BasicNoteA database management operations
+ * AbstractBasicOrderedEntityNoteDBManagementProvider database management operations
  * Created by rpulov on 09.08.2017.
  */
 
-public class BasicNoteDBManagementProvider implements DBManagementProvider {
-    private final BasicNoteA mBasicNote;
+public abstract class AbstractBasicOrderedEntityNoteDBManagementProvider implements DBManagementProvider {
+    private final BasicOrderedEntityNoteA mBasicOrderedEntityNote;
 
-    public BasicNoteDBManagementProvider(BasicNoteA basicNote) {
-        mBasicNote = basicNote;
+    public AbstractBasicOrderedEntityNoteDBManagementProvider(BasicOrderedEntityNoteA basicOrderedEntityNoteA) {
+        mBasicOrderedEntityNote = basicOrderedEntityNoteA;
     }
 
     @Override
-    public String getTableName() {
-        return NotesTableDef.TABLE_NAME;
-    }
+    public abstract String getTableName();
 
     @Override
     public String getPrevOrderSelection() {
@@ -33,7 +30,7 @@ public class BasicNoteDBManagementProvider implements DBManagementProvider {
 
     @Override
     public String[] getOrderSelectionArgs() {
-        return new String[] {String.valueOf(mBasicNote.getOrderId())};
+        return new String[] {String.valueOf(mBasicOrderedEntityNote.getOrderId())};
     }
 
     @Override

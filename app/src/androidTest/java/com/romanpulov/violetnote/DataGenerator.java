@@ -9,10 +9,10 @@ import static org.junit.Assert.*;
 
 import com.romanpulov.violetnote.db.DBBasicNoteHelper;
 import com.romanpulov.violetnote.db.DBBasicNoteOpenHelper;
-import com.romanpulov.violetnote.db.DBNoteManager;
+import com.romanpulov.violetnote.db.manager.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
-import com.romanpulov.violetnote.model.NoteGroupA;
+import com.romanpulov.violetnote.model.BasicNoteGroupA;
 
 public class DataGenerator {
     private final static String TAG = "DataGenerator";
@@ -46,7 +46,7 @@ public class DataGenerator {
             if (i == 3)
                 titleFormat = "This is a very very very very very very long note with number %2d";
 
-            BasicNoteA newNote = BasicNoteA.newEditInstance(NoteGroupA.DEFAULT_NOTE_GROUP_ID, i % 2, String.format(Locale.getDefault(), titleFormat, i), (i % 5) == 0 , null);
+            BasicNoteA newNote = BasicNoteA.newEditInstance(BasicNoteGroupA.DEFAULT_NOTE_GROUP_ID, i % 2, String.format(Locale.getDefault(), titleFormat, i), (i % 5) == 0 , null);
             assertNotEquals(-1, noteManager.mBasicNoteDAO.insert(newNote));
 
             newNote.setId(i);

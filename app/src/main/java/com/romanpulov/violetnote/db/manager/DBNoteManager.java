@@ -1,8 +1,6 @@
-package com.romanpulov.violetnote.db;
+package com.romanpulov.violetnote.db.manager;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.util.Log;
 
 import com.romanpulov.violetnote.db.dao.BasicCommonNoteDAO;
@@ -12,27 +10,6 @@ import com.romanpulov.violetnote.db.dao.BasicNoteItemDAO;
 import com.romanpulov.violetnote.db.dao.BasicNoteItemParamTypeDAO;
 import com.romanpulov.violetnote.db.dao.BasicNoteItemParamsDAO;
 import com.romanpulov.violetnote.db.dao.BasicNoteValueDAO;
-import com.romanpulov.violetnote.db.tabledef.DBCommonDef;
-import com.romanpulov.violetnote.db.tabledef.NoteItemParamTypesTableDef;
-import com.romanpulov.violetnote.db.tabledef.NoteItemParamsTableDef;
-import com.romanpulov.violetnote.db.tabledef.NoteItemsHistoryTableDef;
-import com.romanpulov.violetnote.db.tabledef.NoteItemsTableDef;
-import com.romanpulov.violetnote.db.tabledef.NoteValuesTableDef;
-import com.romanpulov.violetnote.db.tabledef.NotesTableDef;
-import com.romanpulov.violetnote.model.BasicEntityNoteA;
-import com.romanpulov.violetnote.model.BasicNoteA;
-import com.romanpulov.violetnote.model.BasicNoteDataA;
-import com.romanpulov.violetnote.model.BasicNoteItemA;
-import com.romanpulov.violetnote.model.BasicNoteItemParams;
-import com.romanpulov.violetnote.model.BasicNoteValueA;
-import com.romanpulov.violetnote.model.vo.BasicParamValueA;
-import com.romanpulov.violetnote.model.BooleanUtils;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * BasicNoteA database operations

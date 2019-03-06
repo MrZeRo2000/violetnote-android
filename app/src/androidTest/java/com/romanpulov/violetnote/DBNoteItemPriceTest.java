@@ -5,7 +5,7 @@ import android.support.test.filters.SmallTest;
 import com.romanpulov.violetnote.db.DBBasicNoteHelper;
 import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
-import com.romanpulov.violetnote.model.NoteGroupA;
+import com.romanpulov.violetnote.model.BasicNoteGroupA;
 
 import org.junit.Test;
 
@@ -33,7 +33,7 @@ public final class DBNoteItemPriceTest extends DBBaseTest {
         long priceNoteParamTypeId = DBBasicNoteHelper.getInstance(getTargetContext()).getDBDictionaryCache().getPriceNoteParamTypeId();
 
         //create new note
-        BasicNoteA note = BasicNoteA.newEditInstance(NoteGroupA.DEFAULT_NOTE_GROUP_ID, BasicNoteA.NOTE_TYPE_NAMED, "New note", false, null);
+        BasicNoteA note = BasicNoteA.newEditInstance(BasicNoteGroupA.DEFAULT_NOTE_GROUP_ID, BasicNoteA.NOTE_TYPE_NAMED, "New note", false, null);
         long result = mDBNoteManager.mBasicNoteDAO.insert(note);
         assertNotEquals(-1, result);
         note.setId(result);

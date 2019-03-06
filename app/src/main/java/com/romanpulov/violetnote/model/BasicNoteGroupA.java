@@ -1,6 +1,6 @@
 package com.romanpulov.violetnote.model;
 
-public class NoteGroupA {
+public class BasicNoteGroupA {
     public static final int DEFAULT_NOTE_GROUP_ID = 2;
 
     private int mGroupId;

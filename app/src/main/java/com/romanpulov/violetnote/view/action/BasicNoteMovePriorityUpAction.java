@@ -1,6 +1,6 @@
 package com.romanpulov.violetnote.view.action;
 
-import com.romanpulov.violetnote.db.DBNoteManager;
+import com.romanpulov.violetnote.db.manager.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicCommonNoteA;
 import com.romanpulov.violetnote.model.BasicOrderedEntityNoteA;
 import com.romanpulov.violetnote.model.MovementDirection;

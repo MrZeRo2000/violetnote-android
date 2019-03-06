@@ -10,7 +10,7 @@ import android.widget.RadioButton;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.model.BasicNoteA;
-import com.romanpulov.violetnote.model.NoteGroupA;
+import com.romanpulov.violetnote.model.BasicNoteGroupA;
 import com.romanpulov.violetnote.view.core.ActionBarCompatActivity;
 import com.romanpulov.violetnote.view.helper.InputManagerHelper;
 
@@ -64,7 +64,7 @@ public class BasicNoteEditActivity extends ActionBarCompatActivity {
 
     private BasicNoteA newNote() {
         return BasicNoteA.newEditInstance(
-                NoteGroupA.DEFAULT_NOTE_GROUP_ID,
+                BasicNoteGroupA.DEFAULT_NOTE_GROUP_ID,
                 mViewHolder.mNoteTypeChecked.isChecked() ? 0 : 1,
                 mViewHolder.mTitle.getText().toString(),
                 mViewHolder.mIsEncrypted.isChecked(),

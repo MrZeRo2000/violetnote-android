@@ -1,4 +1,4 @@
-package com.romanpulov.violetnote.db;
+package com.romanpulov.violetnote.db.provider;
 
 /**
  * Database management provider interface

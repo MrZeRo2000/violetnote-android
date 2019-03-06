@@ -1,4 +1,4 @@
-package com.romanpulov.violetnote.db;
+package com.romanpulov.violetnote.db.manager;
 
 import android.content.Context;
 

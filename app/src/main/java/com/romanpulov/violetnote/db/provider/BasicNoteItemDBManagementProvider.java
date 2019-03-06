@@ -1,4 +1,4 @@
-package com.romanpulov.violetnote.db;
+package com.romanpulov.violetnote.db.provider;
 
 import com.romanpulov.violetnote.db.tabledef.DBCommonDef;
 import com.romanpulov.violetnote.db.tabledef.NoteItemsTableDef;

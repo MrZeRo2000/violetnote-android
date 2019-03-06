@@ -29,17 +29,20 @@ public class DBDictionaryCache {
 
     public long getPriceNoteParamTypeId() {
         checkLoaded();
-        return mParamTypes.get(DBCommonDef.NOTE_ITEM_PARAM_TYPE_NAME_PRICE);
+        Long value = mParamTypes.get(DBCommonDef.NOTE_ITEM_PARAM_TYPE_NAME_PRICE);
+        return value == null ? 0 : value;
     }
 
     public long getNoteItemsHEventParamId() {
         checkLoaded();
-        return mHEventTypes.get(BasicHEventTypeA.EVENT_TYPE_CODE_NOTE_ITEMS);
+        Long value = mHEventTypes.get(BasicHEventTypeA.EVENT_TYPE_CODE_NOTE_ITEMS);
+        return value == null ? 0 : value;
     }
 
     public long getCheckoutHEventParamId() {
         checkLoaded();
-        return mHEventTypes.get(BasicHEventTypeA.EVENT_TYPE_CODE_CHECKOUT);
+        Long value = mHEventTypes.get(BasicHEventTypeA.EVENT_TYPE_CODE_CHECKOUT);
+        return value == null ? 0 : value;
     }
 
     /**
