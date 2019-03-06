@@ -11,6 +11,7 @@ import static org.junit.Assert.*;
 
 import com.romanpulov.violetnote.loader.document.DocumentPassDataLoader;
 import com.romanpulov.violetnote.model.BasicNoteA;
+import com.romanpulov.violetnote.model.BasicNoteGroupA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.model.BasicNoteItemParams;
 import com.romanpulov.violetnote.model.BasicNoteSummary;
@@ -139,5 +140,23 @@ public class ParcelableTest {
         assertEquals(summary.getParams().get(8L), newSummary.getParams().get(8L));
 
 
+    }
+
+    @Test
+    public void testNoteGroup() {
+        BasicNoteGroupA noteGroup = BasicNoteGroupA.newInstance(22, 2, 20,"Name1", 5234);
+
+        String noteGroupString = noteGroup.toString();
+
+        Parcel parcel = Parcel.obtain();
+        noteGroup.writeToParcel(parcel, 0);
+
+        parcel.setDataPosition(0);
+
+        BasicNoteGroupA newNoteGroup = BasicNoteGroupA.CREATOR.createFromParcel(parcel);
+
+        String newNoteGroupString = newNoteGroup.toString();
+
+        assertEquals(newNoteGroupString, noteGroupString);
     }
 }

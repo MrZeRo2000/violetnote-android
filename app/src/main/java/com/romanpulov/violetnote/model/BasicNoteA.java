@@ -238,7 +238,7 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
                 "}";
     }
 
-    private BasicNoteA(Parcel in) {
+    private BasicNoteA(@NonNull Parcel in) {
         setId(in.readLong());
         setLastModified(in.readLong());
         setLastModifiedString(in.readString());
