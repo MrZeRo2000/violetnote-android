@@ -10,10 +10,26 @@ import java.util.Arrays;
 
 public class BasicNoteGroupA extends BasicCommonNoteA implements Parcelable {
     public static final int DEFAULT_NOTE_GROUP_ID = 2;
+    public static final int PASSWORD_NOTE_GROUP_TYPE = 1;
+    public static final int BASIC_NOTE_GROUP_TYPE = 10;
 
     private long mGroupType;
+
+    public long getGroupType() {
+        return mGroupType;
+    }
+
     private String mGroupName;
+
+    public String getGroupName() {
+        return mGroupName;
+    }
+
     private long mGroupIcon;
+
+    public long getGroupIcon() {
+        return mGroupIcon;
+    }
 
     @Override
     public String getDisplayTitle() {
@@ -24,7 +40,7 @@ public class BasicNoteGroupA extends BasicCommonNoteA implements Parcelable {
         setDBManagementProvider(new BasicNoteGroupDBManagementProvider(this));
     }
 
-    public static BasicNoteGroupA newInstance(long id, long orderId, long groupType, String groupName, long groupIcon) {
+    public static BasicNoteGroupA newInstance(long id, long groupType, String groupName, long groupIcon, long orderId) {
         BasicNoteGroupA instance = new BasicNoteGroupA();
 
         instance.setId(id);

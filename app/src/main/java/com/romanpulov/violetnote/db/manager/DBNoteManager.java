@@ -5,11 +5,13 @@ import android.util.Log;
 
 import com.romanpulov.violetnote.db.dao.BasicCommonNoteDAO;
 import com.romanpulov.violetnote.db.dao.BasicNoteDAO;
+import com.romanpulov.violetnote.db.dao.BasicNoteGroupDAO;
 import com.romanpulov.violetnote.db.dao.BasicNoteHistoryDAO;
 import com.romanpulov.violetnote.db.dao.BasicNoteItemDAO;
 import com.romanpulov.violetnote.db.dao.BasicNoteItemParamTypeDAO;
 import com.romanpulov.violetnote.db.dao.BasicNoteItemParamsDAO;
 import com.romanpulov.violetnote.db.dao.BasicNoteValueDAO;
+import com.romanpulov.violetnote.model.BasicNoteGroupA;
 
 /**
  * BasicNoteA database operations
@@ -28,6 +30,7 @@ public class DBNoteManager extends AbstractDBManager {
     public final BasicNoteHistoryDAO mBasicNoteHistoryDAO;
     public final BasicNoteItemParamTypeDAO mBasicNoteItemParamTypeDAO;
     public final BasicCommonNoteDAO mBasicCommonNoteDAO;
+    public final BasicNoteGroupDAO mBasicNoteGroupDAO;
 
     public DBNoteManager(Context context) {
         super(context);
@@ -38,5 +41,6 @@ public class DBNoteManager extends AbstractDBManager {
         mBasicNoteHistoryDAO = new BasicNoteHistoryDAO(context);
         mBasicNoteItemParamTypeDAO = new BasicNoteItemParamTypeDAO(context);
         mBasicCommonNoteDAO = new BasicCommonNoteDAO(context);
+        mBasicNoteGroupDAO = new BasicNoteGroupDAO(context);
     }
 }

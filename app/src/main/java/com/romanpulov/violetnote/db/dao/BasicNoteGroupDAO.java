@@ -13,6 +13,16 @@ import java.util.List;
 
 public class BasicNoteGroupDAO extends AbstractDAO<BasicNoteGroupA> {
 
+    public static BasicNoteGroupA fromCursor(@NonNull Cursor c) {
+        return BasicNoteGroupA.newInstance(
+                c.getLong(0),
+                c.getLong(1),
+                c.getString(2),
+                c.getLong(3),
+                c.getLong(4)
+        );
+    }
+
     public BasicNoteGroupDAO(Context context) {
         super(context);
     }
@@ -38,7 +48,7 @@ public class BasicNoteGroupDAO extends AbstractDAO<BasicNoteGroupA> {
 
             @Override
             public void readFromCursor(Cursor c) {
-
+                result.add(fromCursor(c));
             }
         });
 
