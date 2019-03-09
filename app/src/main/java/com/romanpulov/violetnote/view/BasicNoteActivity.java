@@ -25,13 +25,14 @@ public class BasicNoteActivity extends ActionBarCompatActivity implements BasicN
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        DBNoteManager noteManager = new DBNoteManager(this);
-
         Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            mBasicNoteGroup = (BasicNoteGroupA)extras.get(BasicNoteGroupA.BASIC_NOTE_GROUP_DATA);
+        if ((extras != null) && ((mBasicNoteGroup = (BasicNoteGroupA)extras.get(BasicNoteGroupA.BASIC_NOTE_GROUP_DATA)) != null)) {
+
+            setTitle(mBasicNoteGroup.getGroupName());
 
             FragmentManager fm = getSupportFragmentManager();
+
+            DBNoteManager noteManager = new DBNoteManager(this);
 
             mFragment = (BasicNoteFragment)fm.findFragmentById(android.R.id.content);
             if (mFragment == null) {

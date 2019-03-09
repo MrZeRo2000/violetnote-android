@@ -1,6 +1,7 @@
 package com.romanpulov.violetnote.view;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,43 +20,20 @@ import java.util.List;
 
 public class DashboardActivity extends ActionBarCompatActivity implements OnBasicGroupInteractionListener {
 
-    private void startActivity(Class<?> clazz) {
-        Intent intent = new Intent(this, clazz);
-        startActivity(intent);
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard_list);
 
         RecyclerView recyclerView = findViewById(R.id.list);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        int orientation = getResources().getConfiguration().orientation;
+        int gridSpanCount =  orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 2;
+        recyclerView.setLayoutManager(new GridLayoutManager(this, gridSpanCount));
 
         DBNoteManager noteManager = new DBNoteManager(this);
         List<BasicNoteGroupA> basicNoteGroupList = noteManager.mBasicNoteGroupDAO.getAll();
 
         recyclerView.setAdapter(new DashboardItemRecyclerViewAdapter(basicNoteGroupList, this));
-
-        /*
-        setContentView(R.layout.activity_dashboard);
-
-        Button passNoteButton = findViewById(R.id.pass_note_button);
-        passNoteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(CategoryActivity.class);
-            }
-        });
-
-        Button basicNoteButton = findViewById(R.id.basic_note_button);
-        basicNoteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(BasicNoteActivity.class);
-            }
-        });
-        */
     }
 
     @Override
@@ -68,7 +46,7 @@ public class DashboardActivity extends ActionBarCompatActivity implements OnBasi
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_settings:
-                startActivity(SettingsActivity.class);
+                startActivity(new Intent(this, SettingsActivity.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
