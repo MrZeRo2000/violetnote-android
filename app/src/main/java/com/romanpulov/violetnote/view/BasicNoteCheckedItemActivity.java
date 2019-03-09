@@ -71,33 +71,40 @@ public class BasicNoteCheckedItemActivity extends BasicNoteDataPasswordActivity 
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Fragment fragment = getFragment();
-        if (fragment instanceof BasicNoteCheckedItemFragment) {
-            switch (item.getItemId()) {
-                case R.id.action_add:
-                    ((BasicNoteCheckedItemFragment) fragment).showAddLayout();
-                    return true;
-                case R.id.action_check_all:
-                    ((BasicNoteCheckedItemFragment) fragment).performUpdateChecked(true);
-                    return true;
-                case R.id.action_uncheck_all:
-                    ((BasicNoteCheckedItemFragment) fragment).performUpdateChecked(false);
-                    return true;
-                case R.id.action_checkout:
-                    ((BasicNoteCheckedItemFragment) fragment).checkOut();
-                    return true;
-                case R.id.action_refresh:
-                    ((BasicNoteCheckedItemFragment) fragment).refreshListWithView();
-                    return true;
-                default:
-                    return super.onOptionsItemSelected(item);
-            }
-        } else
-            return super.onOptionsItemSelected(item);
+        //workaround for issue with losing data after navigating via back button
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        } else {
+            Fragment fragment = getFragment();
+            if (fragment instanceof BasicNoteCheckedItemFragment) {
+                switch (item.getItemId()) {
+                    case R.id.action_add:
+                        ((BasicNoteCheckedItemFragment) fragment).showAddLayout();
+                        return true;
+                    case R.id.action_check_all:
+                        ((BasicNoteCheckedItemFragment) fragment).performUpdateChecked(true);
+                        return true;
+                    case R.id.action_uncheck_all:
+                        ((BasicNoteCheckedItemFragment) fragment).performUpdateChecked(false);
+                        return true;
+                    case R.id.action_checkout:
+                        ((BasicNoteCheckedItemFragment) fragment).checkOut();
+                        return true;
+                    case R.id.action_refresh:
+                        ((BasicNoteCheckedItemFragment) fragment).refreshListWithView();
+                        return true;
+                    default:
+                        return super.onOptionsItemSelected(item);
+                }
+            } else
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
     public ActionMenuView getBottomToolbar() {
         return mBottomToolbar;
     }
+
 }

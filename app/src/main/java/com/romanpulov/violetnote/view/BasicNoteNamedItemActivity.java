@@ -63,18 +63,28 @@ public class BasicNoteNamedItemActivity extends BasicNoteDataPasswordActivity im
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Fragment fragment = getFragment();
-        if (fragment != null) {
-            switch (item.getItemId()) {
-                case R.id.action_add:
-                    if (fragment instanceof BasicNoteNamedItemFragment)
-                        ((BasicNoteNamedItemFragment)fragment).performAddAction();
-                    return true;
-                default:
-                    return super.onOptionsItemSelected(item);
-            }
-        }  else
-            return super.onOptionsItemSelected(item);
+        //workaround for issue with losing data after navigating via back button
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        } else {
+            Fragment fragment = getFragment();
+            if (fragment != null) {
+                switch (item.getItemId()) {
+                    //workaround for issue with losing data after navigating via back button
+                    case android.R.id.home:
+                        finish();
+                        return true;
+                    case R.id.action_add:
+                        if (fragment instanceof BasicNoteNamedItemFragment)
+                            ((BasicNoteNamedItemFragment) fragment).performAddAction();
+                        return true;
+                    default:
+                        return super.onOptionsItemSelected(item);
+                }
+            } else
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
