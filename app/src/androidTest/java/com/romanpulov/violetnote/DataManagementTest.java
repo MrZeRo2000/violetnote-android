@@ -18,6 +18,7 @@ import com.romanpulov.violetnote.db.tabledef.DBCommonDef;
 import com.romanpulov.violetnote.db.tabledef.NoteItemsTableDef;
 import com.romanpulov.violetnote.db.tabledef.NotesTableDef;
 import com.romanpulov.violetnote.model.BasicNoteA;
+import com.romanpulov.violetnote.model.BasicNoteGroupA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 
 /**
@@ -50,7 +51,9 @@ public class DataManagementTest extends DBBaseTest {
     public void internalTestMovePrev() {
         log("testMovePrev");
 
-        List<BasicNoteA> noteList = mDBNoteManager.mBasicNoteDAO.getTotals();
+        BasicNoteGroupA group = mDBNoteManager.mBasicNoteGroupDAO.getById(2);
+
+        List<BasicNoteA> noteList = mDBNoteManager.mBasicNoteDAO.getTotalsByGroup(group);
 
         // generator should be ran first
         assertTrue(noteList.size() >= DataGenerator.MAX_NOTES);
@@ -177,7 +180,9 @@ public class DataManagementTest extends DBBaseTest {
 
         long startTime = System.nanoTime();
 
-        List<BasicNoteA> noteList = mDBNoteManager.mBasicNoteDAO.getTotals();
+        BasicNoteGroupA group = mDBNoteManager.mBasicNoteGroupDAO.getById(2);
+
+        List<BasicNoteA> noteList = mDBNoteManager.mBasicNoteDAO.getTotalsByGroup(group);
         long endTime = System.nanoTime();
 
         log ("testCheckQueryTotalsRaw time: " + (endTime - startTime) + ", size = " + noteList.size());

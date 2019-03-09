@@ -3,6 +3,7 @@ package com.romanpulov.violetnote.db.dao;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.romanpulov.violetnote.db.tabledef.DBCommonDef;
 import com.romanpulov.violetnote.db.tabledef.NoteGroupsTableDef;
@@ -54,4 +55,32 @@ public class BasicNoteGroupDAO extends AbstractDAO<BasicNoteGroupA> {
 
         return result;
     }
+
+    @Nullable
+    public BasicNoteGroupA getById(final long id) {
+        final BasicNoteGroupA[] result = new BasicNoteGroupA[1];
+
+        readCursor(new CursorReaderHandler() {
+            @Override
+            public Cursor createCursor() {
+                return mDB.query(
+                        NoteGroupsTableDef.TABLE_NAME,
+                        NoteGroupsTableDef.TABLE_COLS,
+                        DBCommonDef.ID_COLUMN_NAME + "=?",
+                        new String[] {String.valueOf(id)},
+                        null,
+                        null,
+                        null
+                );
+            }
+
+            @Override
+            public void readFromCursor(Cursor c) {
+                result[0] = fromCursor(c);
+            }
+        });
+
+        return result[0];
+    }
+
 }

@@ -3,6 +3,7 @@ package com.romanpulov.violetnote.view;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.view.ActionMode;
@@ -18,6 +19,7 @@ import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.manager.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicEntityNoteSelectionPosA;
 import com.romanpulov.violetnote.model.BasicNoteA;
+import com.romanpulov.violetnote.model.BasicNoteGroupA;
 import com.romanpulov.violetnote.view.helper.DisplayTitleBuilder;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveBottomAction;
@@ -41,13 +43,17 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
         Log.d("BasicNoteFragment", message);
     }
 
+    private BasicNoteGroupA mNoteGroup;
     private OnBasicNoteFragmentInteractionListener mListener;
 
     private final ArrayList<BasicNoteA> mNoteList = new ArrayList<>();
 
-    public static BasicNoteFragment newInstance(DBNoteManager noteManager) {
+    public static BasicNoteFragment newInstance(DBNoteManager noteManager, BasicNoteGroupA noteGroup) {
         BasicNoteFragment fragment = new BasicNoteFragment();
-        fragment.refreshList(noteManager);
+        Bundle args = new Bundle();
+        args.putParcelable(BasicNoteGroupA.BASIC_NOTE_GROUP_DATA, noteGroup);
+        fragment.setArguments(args);
+        //fragment.refreshList(noteManager);
         return fragment;
     }
 
@@ -56,7 +62,7 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
 
     @Override
     public void refreshList(DBNoteManager noteManager) {
-        noteManager.mBasicNoteDAO.fillNotes(mNoteList);
+        noteManager.mBasicNoteDAO.fillNotesByGroup(mNoteGroup, mNoteList);
         if (mRecyclerView != null)
             RecyclerViewHelper.adapterNotifyDataSetChanged(mRecyclerView);
     }
@@ -195,12 +201,23 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
         }
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            mNoteGroup = arguments.getParcelable(BasicNoteGroupA.BASIC_NOTE_GROUP_DATA);
+        }
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_basic_note_list, container, false);
         mRecyclerView = view.findViewById(R.id.list);
+
+        refreshList(new DBNoteManager(view.getContext()));
 
         // Set the adapter
         Context context = view.getContext();

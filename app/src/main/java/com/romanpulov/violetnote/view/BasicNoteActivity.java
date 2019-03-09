@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.manager.DBNoteManager;
@@ -34,7 +35,7 @@ public class BasicNoteActivity extends ActionBarCompatActivity implements BasicN
 
             mFragment = (BasicNoteFragment)fm.findFragmentById(android.R.id.content);
             if (mFragment == null) {
-                mFragment = BasicNoteFragment.newInstance(noteManager);
+                mFragment = BasicNoteFragment.newInstance(noteManager, mBasicNoteGroup);
                 fm.beginTransaction().replace(android.R.id.content, mFragment).commit();
             } else {
                 mFragment.refreshList(noteManager);

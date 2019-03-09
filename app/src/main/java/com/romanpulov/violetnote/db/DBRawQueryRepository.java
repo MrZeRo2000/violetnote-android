@@ -20,6 +20,7 @@ public class DBRawQueryRepository {
         "(SELECT COUNT(ni._id) FROM note_items ni WHERE ni.note_id = n._id) AS count_total, " +
         "(SELECT SUM(ni.checked) FROM note_items ni WHERE ni.note_id = n._id) AS count_checked " +
         "FROM notes n " +
+        "WHERE group_id = ? " +
         "ORDER BY n.order_id";
 
     public static final String NOTE_ITEMS_PARAMS  =

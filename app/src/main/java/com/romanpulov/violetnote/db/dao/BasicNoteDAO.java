@@ -107,13 +107,16 @@ public final class BasicNoteDAO extends AbstractBasicNoteDAO<BasicNoteA> {
      * Returns notes from raw query, with totals
      * @return Note List
      */
-    public List<BasicNoteA> getTotals() {
+    public List<BasicNoteA> getTotalsByGroup(final BasicNoteGroupA noteGroup) {
         final List<BasicNoteA> result = new ArrayList<>();
 
         readCursor(new CursorReaderHandler() {
             @Override
             public Cursor createCursor() {
-                return mDB.rawQuery(DBRawQueryRepository.NOTES_WITH_TOTALS, null);
+                return mDB.rawQuery(
+                        DBRawQueryRepository.NOTES_WITH_TOTALS,
+                        new String[] {String.valueOf(noteGroup.getId())}
+                );
             }
 
             @Override
@@ -217,8 +220,8 @@ public final class BasicNoteDAO extends AbstractBasicNoteDAO<BasicNoteA> {
         note.setValues(getNoteValues(note));
     }
 
-    public void fillNotes(@NonNull ArrayList<BasicNoteA> notes) {
-        List<BasicNoteA> newNotes = getTotals();
+    public void fillNotesByGroup(@NonNull BasicNoteGroupA noteGroup, @NonNull ArrayList<BasicNoteA> notes) {
+        List<BasicNoteA> newNotes = getTotalsByGroup(noteGroup);
         notes.clear();
         notes.addAll(newNotes);
     }

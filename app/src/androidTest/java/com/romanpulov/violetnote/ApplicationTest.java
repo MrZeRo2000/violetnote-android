@@ -42,10 +42,13 @@ public class ApplicationTest {
         log("Delete database");
         getTargetContext().deleteDatabase(DBBasicNoteOpenHelper.DATABASE_NAME);
 
-        log("Create note");
         DBNoteManager noteManager = new DBNoteManager(getTargetContext());
+        log("Get group");
+        BasicNoteGroupA group = noteManager.mBasicNoteGroupDAO.getById(2);
+
+        log("Create note");
         noteManager.mBasicNoteDAO.insert(BasicNoteA.newEditInstance(BasicNoteGroupA.DEFAULT_NOTE_GROUP_ID, 1,"New Note", false, null));
-        List<BasicNoteA> noteList = noteManager.mBasicNoteDAO.getTotals();
+        List<BasicNoteA> noteList = noteManager.mBasicNoteDAO.getTotalsByGroup(group);
         assertEquals(noteList.size(), 1);
 
         log("Check note");
@@ -62,7 +65,7 @@ public class ApplicationTest {
         log("Delete note");
 
         noteManager.mBasicNoteDAO.delete(deleteNote);
-        noteList = noteManager.mBasicNoteDAO.getTotals();
+        noteList = noteManager.mBasicNoteDAO.getTotalsByGroup(group);
         assertEquals(noteList.size(), 0);
 
         log("****************** testDBNote finish");

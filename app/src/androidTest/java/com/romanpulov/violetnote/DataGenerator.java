@@ -117,7 +117,10 @@ public class DataGenerator {
             }
 
         }
-        List<BasicNoteA> noteList = noteManager.mBasicNoteDAO.getTotals();
+
+        BasicNoteGroupA group = noteManager.mBasicNoteGroupDAO.getById(2);
+
+        List<BasicNoteA> noteList = noteManager.mBasicNoteDAO.getTotalsByGroup(group);
         assertEquals(noteList.size(), MAX_NOTES);
         log("Created " + MAX_NOTES + " notes");
 
