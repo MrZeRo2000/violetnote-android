@@ -11,10 +11,12 @@ import static org.junit.Assert.*;
 
 import com.romanpulov.violetnote.db.provider.DBManagementProvider;
 import com.romanpulov.violetnote.db.tabledef.DBCommonDef;
+import com.romanpulov.violetnote.db.tabledef.NoteGroupsTableDef;
 import com.romanpulov.violetnote.db.tabledef.NoteItemsTableDef;
 import com.romanpulov.violetnote.db.tabledef.NotesTableDef;
 import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
+import com.romanpulov.violetnote.model.BasicNoteGroupA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 
 /**
@@ -58,7 +60,7 @@ public class DBNotesMovementTest extends DBBaseTest {
 
         int notePos = 0;
 
-        String insertNotesSql = "insert into " + NotesTableDef.TABLE_NAME + " (last_modified, order_id, group_id, note_type, title, is_encrypted) VALUES (?, ?, 1, ?, ?, ?)";
+        String insertNotesSql = "insert into " + NotesTableDef.TABLE_NAME + " (last_modified, order_id, group_id, note_type, title, is_encrypted) VALUES (?, ?, 2, ?, ?, ?)";
 
         // checked item 1
         String[] insertNotesArgs = new String[] {"0", "1", "0", mTestNoteNames.get(notePos++), "0"};
@@ -352,11 +354,14 @@ public class DBNotesMovementTest extends DBBaseTest {
 
         BasicNoteA[] notes = getNotes(noteIdList);
 
+        List<BasicNoteGroupA> groups = mDBNoteManager.mBasicNoteGroupDAO.getAll();
+        BasicNoteGroupA group = groups.get(1);
+
         //related notes
-        BasicNoteDataA noteData2 = mDBNoteManager.mBasicNoteDAO.createNoteDataFromNote(notes[1]);
+        BasicNoteDataA noteData2 = mDBNoteManager.mBasicNoteDAO.createNoteDataFromNote(group, notes[1]);
         Assert.assertEquals(2, noteData2.getRelatedNoteList().size());
 
-        BasicNoteDataA noteData4 = mDBNoteManager.mBasicNoteDAO.createNoteDataFromNote(notes[3]);
+        BasicNoteDataA noteData4 = mDBNoteManager.mBasicNoteDAO.createNoteDataFromNote(group, notes[3]);
         Assert.assertEquals(0, noteData4.getRelatedNoteList().size());
 
         //notes priority

@@ -14,6 +14,7 @@ import com.romanpulov.violetnote.db.tabledef.NoteValuesTableDef;
 import com.romanpulov.violetnote.db.tabledef.NotesTableDef;
 import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
+import com.romanpulov.violetnote.model.BasicNoteGroupA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.model.BooleanUtils;
 
@@ -64,14 +65,14 @@ public final class BasicNoteDAO extends AbstractBasicNoteDAO<BasicNoteA> {
         );
     }
 
-    public BasicNoteDataA createNoteDataFromNote(BasicNoteA note) {
+    public BasicNoteDataA createNoteDataFromNote(BasicNoteGroupA noteGroup, BasicNoteA note) {
         ArrayList<BasicNoteA> notes = new ArrayList<>();
         List<BasicNoteA> relatedNotes = getRelatedNotes(note);
 
         //get note
         notes.add(note);
 
-        return BasicNoteDataA.newInstance(null, notes, relatedNotes);
+        return BasicNoteDataA.newInstance(null, noteGroup, notes, relatedNotes);
     }
 
     @NonNull

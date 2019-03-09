@@ -17,6 +17,7 @@ import com.romanpulov.violetnote.view.core.PasswordActivity;
 public class BasicNoteActivity extends ActionBarCompatActivity implements BasicNoteFragment.OnBasicNoteFragmentInteractionListener {
     public static final String NOTE = "Note";
 
+    private BasicNoteGroupA mBasicNoteGroup;
     private BasicNoteFragment mFragment;
 
     @Override
@@ -27,7 +28,7 @@ public class BasicNoteActivity extends ActionBarCompatActivity implements BasicN
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            BasicNoteGroupA basicNoteGroup = (BasicNoteGroupA)extras.get(BasicNoteGroupA.BASIC_NOTE_GROUP_DATA);
+            mBasicNoteGroup = (BasicNoteGroupA)extras.get(BasicNoteGroupA.BASIC_NOTE_GROUP_DATA);
 
             FragmentManager fm = getSupportFragmentManager();
 
@@ -79,7 +80,7 @@ public class BasicNoteActivity extends ActionBarCompatActivity implements BasicN
     @Override
     public void onBasicNoteFragmentInteraction(BasicNoteA item) {
         DBNoteManager noteManager = new DBNoteManager(this);
-        BasicNoteDataA noteData = noteManager.mBasicNoteDAO.createNoteDataFromNote(item);
+        BasicNoteDataA noteData = noteManager.mBasicNoteDAO.createNoteDataFromNote(mBasicNoteGroup, item);
 
         Intent intent = null;
 

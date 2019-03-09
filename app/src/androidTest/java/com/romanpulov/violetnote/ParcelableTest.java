@@ -144,7 +144,7 @@ public class ParcelableTest {
 
     @Test
     public void testNoteGroup() {
-        BasicNoteGroupA noteGroup = BasicNoteGroupA.newInstance(22, 2, 20,"Name1", 5234);
+        BasicNoteGroupA noteGroup = BasicNoteGroupA.newInstance(22, 20,"Name1", 5234, 2);
 
         String noteGroupString = noteGroup.toString();
 

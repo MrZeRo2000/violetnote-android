@@ -22,6 +22,12 @@ public class BasicNoteDataA implements Parcelable, PasswordProvider {
         mPassword = password;
     }
 
+    private BasicNoteGroupA mNoteGroup;
+
+    public BasicNoteGroupA getNoteGroup() {
+        return mNoteGroup;
+    }
+
     private ArrayList<BasicNoteA> mNoteList;
 
     public ArrayList<BasicNoteA> getNoteList() {
@@ -45,14 +51,9 @@ public class BasicNoteDataA implements Parcelable, PasswordProvider {
         mPassword = password;
     }
 
-    private static BasicNoteDataA newInstance(String password, ArrayList<BasicNoteA> noteList) {
+    public static BasicNoteDataA newInstance(String password, BasicNoteGroupA noteGroup, ArrayList<BasicNoteA> noteList, List<BasicNoteA> relatedNoteList) {
         BasicNoteDataA newNoteData = new BasicNoteDataA(password);
-        newNoteData.mNoteList = noteList;
-        return newNoteData;
-    }
-
-    public static BasicNoteDataA newInstance(String password, ArrayList<BasicNoteA> noteList, List<BasicNoteA> relatedNoteList) {
-        BasicNoteDataA newNoteData = new BasicNoteDataA(password);
+        newNoteData.mNoteGroup = noteGroup;
         newNoteData.mNoteList = noteList;
         newNoteData.mRelatedNoteList = relatedNoteList;
         return newNoteData;
@@ -104,12 +105,14 @@ public class BasicNoteDataA implements Parcelable, PasswordProvider {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(mPassword);
+        dest.writeParcelable(mNoteGroup, 0);
         dest.writeTypedList(mNoteList);
         dest.writeTypedList(mRelatedNoteList);
     }
 
     private BasicNoteDataA(Parcel in) {
         mPassword = in.readString();
+        mNoteGroup = in.readParcelable(BasicNoteGroupA.class.getClassLoader());
         mNoteList = new ArrayList<>();
         mRelatedNoteList = new ArrayList<>();
         in.readTypedList(mNoteList, BasicNoteA.CREATOR);
