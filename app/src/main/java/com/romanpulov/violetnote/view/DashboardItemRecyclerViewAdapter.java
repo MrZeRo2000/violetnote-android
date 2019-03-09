@@ -36,9 +36,9 @@ public class DashboardItemRecyclerViewAdapter extends RecyclerView.Adapter<Dashb
         int drawableId;
 
         if (item.getGroupType() == BasicNoteGroupA.PASSWORD_NOTE_GROUP_TYPE) {
-            drawableId = R.drawable.img_pass_note;
+            drawableId = R.drawable.img_personal_storage_box;
         } else if (item.getGroupIcon() == 0) {
-            drawableId = R.drawable.img_simple_note;
+            drawableId = R.drawable.img_notebook;
         } else {
             drawableId = (int)item.getGroupIcon();
         }
