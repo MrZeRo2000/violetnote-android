@@ -12,6 +12,7 @@ public class BasicNoteGroupA extends BasicCommonNoteA implements Parcelable {
     public static final int DEFAULT_NOTE_GROUP_ID = 2;
     public static final int PASSWORD_NOTE_GROUP_TYPE = 1;
     public static final int BASIC_NOTE_GROUP_TYPE = 10;
+    public static final String BASIC_NOTE_GROUP_DATA = "BasicNoteGroupData";
 
     private long mGroupType;
 

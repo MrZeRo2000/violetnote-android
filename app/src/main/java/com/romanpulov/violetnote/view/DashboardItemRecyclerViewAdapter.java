@@ -16,11 +16,11 @@ import java.util.List;
 public class DashboardItemRecyclerViewAdapter extends RecyclerView.Adapter<DashboardItemRecyclerViewAdapter.ViewHolder> {
 
     private final List<BasicNoteGroupA> mBasicNoteGroupList;
-    private final Context mContext;
+    private final OnBasicGroupInteractionListener mListener;
 
-    public DashboardItemRecyclerViewAdapter(Context context, List<BasicNoteGroupA> basicNoteGroupList) {
-        this.mContext = context;
+    public DashboardItemRecyclerViewAdapter(List<BasicNoteGroupA> basicNoteGroupList, OnBasicGroupInteractionListener listener) {
         this.mBasicNoteGroupList = basicNoteGroupList;
+        this.mListener = listener;
     }
 
     @NonNull
@@ -47,10 +47,18 @@ public class DashboardItemRecyclerViewAdapter extends RecyclerView.Adapter<Dashb
     }
 
     @Override
-    public void onBindViewHolder(@NonNull DashboardItemRecyclerViewAdapter.ViewHolder viewHolder, int i) {
-        BasicNoteGroupA item = mBasicNoteGroupList.get(i);
+    public void onBindViewHolder(@NonNull final DashboardItemRecyclerViewAdapter.ViewHolder viewHolder, int i) {
+        final BasicNoteGroupA item = mBasicNoteGroupList.get(i);
         viewHolder.mButton.setText(item.getGroupName());
         viewHolder.mButton.setCompoundDrawablesWithIntrinsicBounds(0,getDrawableForItem(item), 0, 0);
+        viewHolder.mButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (null != mListener) {
+                    mListener.onBasicGroupSelection(item);
+                }
+            }
+        });
     }
 
     @Override

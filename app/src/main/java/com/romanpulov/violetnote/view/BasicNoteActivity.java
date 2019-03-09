@@ -10,6 +10,7 @@ import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.manager.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
+import com.romanpulov.violetnote.model.BasicNoteGroupA;
 import com.romanpulov.violetnote.view.core.ActionBarCompatActivity;
 import com.romanpulov.violetnote.view.core.PasswordActivity;
 
@@ -24,14 +25,19 @@ public class BasicNoteActivity extends ActionBarCompatActivity implements BasicN
 
         DBNoteManager noteManager = new DBNoteManager(this);
 
-        FragmentManager fm = getSupportFragmentManager();
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            BasicNoteGroupA basicNoteGroup = (BasicNoteGroupA)extras.get(BasicNoteGroupA.BASIC_NOTE_GROUP_DATA);
 
-        mFragment = (BasicNoteFragment)fm.findFragmentById(android.R.id.content);
-        if (mFragment == null) {
-            mFragment = BasicNoteFragment.newInstance(noteManager);
-            fm.beginTransaction().replace(android.R.id.content, mFragment).commit();
-        } else {
-            mFragment.refreshList(noteManager);
+            FragmentManager fm = getSupportFragmentManager();
+
+            mFragment = (BasicNoteFragment)fm.findFragmentById(android.R.id.content);
+            if (mFragment == null) {
+                mFragment = BasicNoteFragment.newInstance(noteManager);
+                fm.beginTransaction().replace(android.R.id.content, mFragment).commit();
+            } else {
+                mFragment.refreshList(noteManager);
+            }
         }
     }
 
