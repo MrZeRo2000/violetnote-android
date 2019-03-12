@@ -37,6 +37,7 @@ import com.romanpulov.violetnote.service.LoaderService;
 import com.romanpulov.violetnote.service.LoaderServiceManager;
 import com.romanpulov.violetnote.view.helper.PermissionRequestHelper;
 import com.romanpulov.violetnote.view.preference.AccountDropboxPreferenceSetup;
+import com.romanpulov.violetnote.view.preference.BasicNoteGroupsPreferenceSetup;
 import com.romanpulov.violetnote.view.preference.CloudStorageTypePreferenceSetup;
 import com.romanpulov.violetnote.view.preference.processor.PreferenceBackupDropboxProcessor;
 import com.romanpulov.violetnote.view.preference.processor.PreferenceBackupLocalProcessor;
@@ -110,6 +111,7 @@ public class SettingsFragment extends PreferenceFragment {
         mPreferenceLoadProcessors.put(PreferenceRestoreLocalProcessor.getLoaderClass().getName(), mPreferenceRestoreLocalProcessor);
         setupPrefLocalRestoreLoadService();
 
+        new BasicNoteGroupsPreferenceSetup(this).execute();
         new SourceTypePreferenceSetup(this).execute();
         new SourcePathPreferenceSetup(this).execute();
         new AccountDropboxPreferenceSetup(this).execute();

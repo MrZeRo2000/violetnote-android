@@ -15,6 +15,7 @@ import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.model.BasicNoteItemParams;
 import com.romanpulov.violetnote.model.BasicNoteSummary;
 import com.romanpulov.violetnote.model.BooleanUtils;
+import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -100,7 +101,7 @@ public final class BasicNoteItemDAO extends AbstractBasicNoteItemDAO<BasicNoteIt
         final List<BasicNoteItemA> items = new ArrayList<>();
 
         String orderString = DBCommonDef.PRIORITY_COLUMN_NAME + " DESC, " + DBCommonDef.ORDER_COLUMN_NAME;
-        if (PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("pref_interface_checked_last", false))
+        if (PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(PreferenceRepository.PREF_KEY_INTERFACE_CHECKED_LAST, false))
             orderString = DBCommonDef.CHECKED_COLUMN_NAME + " ASC, " + orderString;
 
         final String queryOrderString = orderString;

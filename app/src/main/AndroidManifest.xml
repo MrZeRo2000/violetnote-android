@@ -83,6 +83,12 @@
             android:theme="@style/MainAppTheme"
             />
         <activity
+            android:name=".view.BasicNoteGroupActivity"
+            android:label="@string/title_activity_basic_note_group"
+            android:parentActivityName=".view.SettingsActivity"
+            android:theme="@style/MainAppTheme"
+            />
+        <activity
             android:name=".view.BasicNoteActivity"
             android:label="@string/title_activity_basic_note"
             android:parentActivityName=".view.DashboardActivity"
