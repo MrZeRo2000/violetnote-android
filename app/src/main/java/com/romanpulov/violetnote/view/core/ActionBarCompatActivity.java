@@ -19,12 +19,14 @@ public abstract class ActionBarCompatActivity extends AppCompatActivity {
     protected void setupActionBar() {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            actionBar.setIcon(R.mipmap.ic_launcher);
-            actionBar.setDisplayUseLogoEnabled(true);
-            actionBar.setDisplayShowHomeEnabled(true);
             // disable arrow back for launch activity
-            if (!(this.getClass().getName().equals(DashboardActivity.class.getName())))
+            if (this.getClass().getName().equals(DashboardActivity.class.getName())) {
+                actionBar.setIcon(R.mipmap.ic_launcher);
+                actionBar.setDisplayUseLogoEnabled(true);
+                actionBar.setDisplayShowHomeEnabled(true);
+            } else {
                 actionBar.setDisplayHomeAsUpEnabled(true);
+            }
         }
     }
 
