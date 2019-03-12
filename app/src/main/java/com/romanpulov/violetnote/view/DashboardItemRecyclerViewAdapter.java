@@ -10,6 +10,7 @@ import android.widget.Button;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.model.BasicNoteGroupA;
+import com.romanpulov.violetnote.view.helper.DrawableSelectionHelper;
 
 import java.util.List;
 
@@ -25,32 +26,18 @@ public class DashboardItemRecyclerViewAdapter extends RecyclerView.Adapter<Dashb
 
     @NonNull
     @Override
-    public DashboardItemRecyclerViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
+    public DashboardItemRecyclerViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int position) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_dashboard_list_item, parent, false);
 
 
         return new ViewHolder(view);
     }
 
-    private int getDrawableForItem(BasicNoteGroupA item) {
-        int drawableId;
-
-        if (item.getGroupType() == BasicNoteGroupA.PASSWORD_NOTE_GROUP_TYPE) {
-            drawableId = R.drawable.img_personal_storage_box;
-        } else if (item.getGroupIcon() == 0) {
-            drawableId = R.drawable.img_notebook;
-        } else {
-            drawableId = (int)item.getGroupIcon();
-        }
-
-        return drawableId;
-    }
-
     @Override
-    public void onBindViewHolder(@NonNull final DashboardItemRecyclerViewAdapter.ViewHolder viewHolder, int i) {
-        final BasicNoteGroupA item = mBasicNoteGroupList.get(i);
+    public void onBindViewHolder(@NonNull final DashboardItemRecyclerViewAdapter.ViewHolder viewHolder, int position) {
+        final BasicNoteGroupA item = mBasicNoteGroupList.get(position);
         viewHolder.mButton.setText(item.getGroupName());
-        viewHolder.mButton.setCompoundDrawablesWithIntrinsicBounds(0,getDrawableForItem(item), 0, 0);
+        viewHolder.mButton.setCompoundDrawablesWithIntrinsicBounds(0, DrawableSelectionHelper.getDrawableForNoteGroup(item), 0, 0);
         viewHolder.mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,7 +58,7 @@ public class DashboardItemRecyclerViewAdapter extends RecyclerView.Adapter<Dashb
 
         public ViewHolder(View view) {
             super(view);
-            mButton = view.findViewById(R.id.button);
+            mButton = (Button)view;
         }
     }
 }
