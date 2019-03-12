@@ -3,6 +3,8 @@ package com.romanpulov.violetnote.view;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.manager.DBNoteManager;
@@ -26,5 +28,22 @@ public class BasicNoteGroupActivity extends ActionBarCompatActivity {
         List<BasicNoteGroupA> basicNoteGroupList = noteManager.mBasicNoteGroupDAO.getByGroupType(BasicNoteGroupA.BASIC_NOTE_GROUP_TYPE);
 
         recyclerView.setAdapter(new BasicNoteGroupItemRecyclerViewAdapter(basicNoteGroupList));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_add_action, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_add:
+
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
