@@ -3,6 +3,7 @@ package com.romanpulov.violetnote.view;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -38,6 +39,17 @@ public class BasicNoteEditActivity extends ActionBarCompatActivity {
     protected void onPause() {
         super.onPause();
         InputManagerHelper.hideInput(mViewHolder.mTitle);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //workaround for issue with losing data after navigating via back button
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
     }
 
     private static class ViewHolder {

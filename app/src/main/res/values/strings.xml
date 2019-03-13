@@ -123,7 +123,8 @@
     <string name="ui_image_cancel_description">Cancel</string>
     <string name="ui_image_list_description">List</string>
 
-    <string name="title_activity_basic_note_group">Basic note groups</string>
+    <string name="title_activity_basic_note_group">Basic note group</string>
+    <string name="title_activity_basic_note_group_edit">Basic note group edit</string>
     <string name="title_activity_basic_note">Basic note</string>
     <string name="title_activity_basic_note_edit">Basic note edit</string>
     <string name="title_activity_basic_note_checked_item">Checked note</string>
