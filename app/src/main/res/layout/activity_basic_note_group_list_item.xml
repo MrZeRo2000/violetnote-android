@@ -12,6 +12,5 @@
     android:drawableRight="@drawable/img_app"
     android:gravity="center_vertical"
     android:background="@drawable/list_selector"
-    android:text="Group name"
     android:textAppearance="@style/Text1"
     />
