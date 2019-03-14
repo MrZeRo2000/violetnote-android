@@ -20,20 +20,25 @@ import java.util.List;
 
 public class DashboardActivity extends ActionBarCompatActivity implements OnBasicGroupInteractionListener {
 
+    private RecyclerView mRecyclerView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard_list);
 
-        RecyclerView recyclerView = findViewById(R.id.list);
+        mRecyclerView = findViewById(R.id.list);
         int orientation = getResources().getConfiguration().orientation;
         int gridSpanCount =  orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 2;
-        recyclerView.setLayoutManager(new GridLayoutManager(this, gridSpanCount));
+        mRecyclerView.setLayoutManager(new GridLayoutManager(this, gridSpanCount));
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
         DBNoteManager noteManager = new DBNoteManager(this);
         List<BasicNoteGroupA> basicNoteGroupList = noteManager.mBasicNoteGroupDAO.getAll();
-
-        recyclerView.setAdapter(new DashboardItemRecyclerViewAdapter(basicNoteGroupList, this));
+        mRecyclerView.setAdapter(new DashboardItemRecyclerViewAdapter(basicNoteGroupList, this));
     }
 
     @Override

@@ -7,20 +7,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.SimpleAdapter;
-import android.widget.SpinnerAdapter;
 
 import com.romanpulov.violetnote.R;
 
 public class BasicNoteGroupImageAdapter extends ArrayAdapter<Integer> {
 
-    private final Integer[] mImages;
-
     public BasicNoteGroupImageAdapter(Context context, int resource, Integer[] images) {
         super(context, resource, images);
-        mImages = images;
     }
 
     @NonNull

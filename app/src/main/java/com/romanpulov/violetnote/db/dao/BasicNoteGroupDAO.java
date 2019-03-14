@@ -1,5 +1,6 @@
 package com.romanpulov.violetnote.db.dao;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
@@ -14,7 +15,7 @@ import java.util.List;
 
 public class BasicNoteGroupDAO extends AbstractDAO<BasicNoteGroupA> {
 
-    public static BasicNoteGroupA fromCursor(@NonNull Cursor c) {
+    private static BasicNoteGroupA fromCursor(@NonNull Cursor c) {
         return BasicNoteGroupA.newInstance(
                 c.getLong(0),
                 c.getLong(1),
@@ -83,6 +84,12 @@ public class BasicNoteGroupDAO extends AbstractDAO<BasicNoteGroupA> {
         return result;
     }
 
+    public void fillByGroupType(long groupType, @NonNull List<BasicNoteGroupA> noteGroupList) {
+        final List<BasicNoteGroupA> newNoteGroupList = getByGroupType(groupType);
+        noteGroupList.clear();
+        noteGroupList.addAll(newNoteGroupList);
+    }
+
     @Nullable
     public BasicNoteGroupA getById(final long id) {
         final BasicNoteGroupA[] result = new BasicNoteGroupA[1];
@@ -110,4 +117,19 @@ public class BasicNoteGroupDAO extends AbstractDAO<BasicNoteGroupA> {
         return result[0];
     }
 
+    @Override
+    public long insert(@NonNull BasicNoteGroupA noteGroup) {
+        ContentValues cv = new ContentValues();
+
+        cv.put(NoteGroupsTableDef.NOTE_GROUP_TYPE_COLUMN_NAME, noteGroup.getGroupType());
+        cv.put(NoteGroupsTableDef.NOTE_GROUP_NAME_COLUMN_NAME, noteGroup.getGroupName());
+        cv.put(NoteGroupsTableDef.NOTE_GROUP_ICON_COLUMN_NAME, noteGroup.getGroupIcon());
+        cv.put(DBCommonDef.ORDER_COLUMN_NAME, mDBHelper.getMaxOrderId (
+                NoteGroupsTableDef.TABLE_NAME,
+                NoteGroupsTableDef.NOTE_GROUP_TYPE_COLUMN_NAME + " = ?",
+                new String[]{String.valueOf(noteGroup.getGroupType())}) + 1
+        );
+
+        return mDB.insert(NoteGroupsTableDef.TABLE_NAME, null, cv);
+    }
 }

@@ -6,8 +6,6 @@ import android.support.annotation.NonNull;
 
 import com.romanpulov.violetnote.db.provider.BasicNoteGroupDBManagementProvider;
 
-import java.util.Arrays;
-
 public class BasicNoteGroupA extends BasicCommonNoteA implements Parcelable {
     public static final long DEFAULT_NOTE_GROUP_ID = 2;
     public static final long PASSWORD_NOTE_GROUP_TYPE = 1;
@@ -54,9 +52,10 @@ public class BasicNoteGroupA extends BasicCommonNoteA implements Parcelable {
         return instance;
     }
 
-    public static BasicNoteGroupA newEditInstance(String groupName, long groupIcon) {
+    public static BasicNoteGroupA newEditInstance(long groupType, String groupName, long groupIcon) {
         BasicNoteGroupA instance = new BasicNoteGroupA();
 
+        instance.mGroupType = groupType;
         instance.mGroupName = groupName;
         instance.mGroupIcon = groupIcon;
 

@@ -12,10 +12,15 @@ import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.manager.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicNoteGroupA;
 import com.romanpulov.violetnote.view.core.ActionBarCompatActivity;
+import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 
 import java.util.List;
 
 public class BasicNoteGroupActivity extends ActionBarCompatActivity {
+
+    private List<BasicNoteGroupA> mBasicNoteGroupList;
+    private DBNoteManager mNoteManager;
+    private RecyclerView mRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,13 +28,12 @@ public class BasicNoteGroupActivity extends ActionBarCompatActivity {
 
         setContentView(R.layout.activity_basic_note_group_list);
 
-        RecyclerView recyclerView = findViewById(R.id.list);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView = findViewById(R.id.list);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        DBNoteManager noteManager = new DBNoteManager(this);
-        List<BasicNoteGroupA> basicNoteGroupList = noteManager.mBasicNoteGroupDAO.getByGroupType(BasicNoteGroupA.BASIC_NOTE_GROUP_TYPE);
-
-        recyclerView.setAdapter(new BasicNoteGroupItemRecyclerViewAdapter(basicNoteGroupList));
+        mNoteManager =  new DBNoteManager(this);
+        mBasicNoteGroupList = mNoteManager.mBasicNoteGroupDAO.getByGroupType(BasicNoteGroupA.BASIC_NOTE_GROUP_TYPE);
+        mRecyclerView.setAdapter(new BasicNoteGroupItemRecyclerViewAdapter(mBasicNoteGroupList));
     }
 
     @Override
@@ -51,6 +55,15 @@ public class BasicNoteGroupActivity extends ActionBarCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+        BasicNoteGroupA noteGroup;
+        if ((data != null) && ((noteGroup = data.getParcelableExtra(BasicNoteGroupA.BASIC_NOTE_GROUP_DATA)) != null)) {
+            if (mNoteManager.mBasicNoteGroupDAO.insert(noteGroup) != -1) {
+                mNoteManager.mBasicNoteGroupDAO.fillByGroupType(BasicNoteGroupA.BASIC_NOTE_GROUP_TYPE, mBasicNoteGroupList);
+
+                if (mRecyclerView != null) {
+                    RecyclerViewHelper.adapterNotifyDataSetChanged(mRecyclerView);
+                }
+            }
+        }
     }
 }
