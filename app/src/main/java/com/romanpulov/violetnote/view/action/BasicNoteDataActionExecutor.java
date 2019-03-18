@@ -16,59 +16,17 @@ import java.util.Map;
  * BasicNoteDataA action executor
  * Created by romanpulov on 13.09.2016.
  */
-public class BasicNoteDataActionExecutor {
-    private final Context mContext;
-    private final BasicNoteDataA mBasicNoteData;
-    private final List<Map.Entry<String, BasicNoteDataAction>> mActionList = new ArrayList<>();
-
-    private OnExecutionCompletedListener mListener;
-
-    public OnExecutionCompletedListener getOnExecutionCompletedListener() {
-        return mListener;
-    }
-
-    public void setOnExecutionCompletedListener(OnExecutionCompletedListener listener) {
-        mListener = listener;
-    }
-
-    private OnExecutionProgressListener mProgressListener;
-
-    public void setOnExecutionProgressListener(OnExecutionProgressListener progressListener) {
-        mProgressListener = progressListener;
-    }
+public class BasicNoteDataActionExecutor extends BasicActionExecutor<BasicNoteDataA> {
 
     public BasicNoteDataActionExecutor(Context context, BasicNoteDataA basicNoteData) {
-        mContext = context;
-        mBasicNoteData = basicNoteData;
-    }
-
-    public void addAction(String description, BasicNoteDataAction action) {
-        mActionList.add(new AbstractMap.SimpleEntry<>(description, action));
-    }
-
-    private DBNoteManager createNoteManager() {
-        return new DBNoteManager(mContext);
-    }
-
-    private boolean internalExecute() {
-        DBNoteManager noteManager = createNoteManager();
-
-        for (Map.Entry<String, BasicNoteDataAction> entry : mActionList) {
-            if (!entry.getValue().execute(noteManager)) {
-                return false;
-            }
-        }
-        return true;
+        super(context, basicNoteData);
     }
 
     public void execute() {
-        if (mBasicNoteData.getNote().isEncrypted())
+        if (mData.getNote().isEncrypted())
             new ExecuteAsyncTask(this).execute();
         else {
-            boolean executionResult = internalExecute();
-
-            if (mListener != null)
-                mListener.onExecutionCompleted(mBasicNoteData, executionResult);
+            super.execute();
         }
     }
 
@@ -111,16 +69,10 @@ public class BasicNoteDataActionExecutor {
         @Override
         protected void onPostExecute(Boolean result) {
             if (mHost.mListener != null)
-                mHost.mListener.onExecutionCompleted(mHost.mBasicNoteData, result);
+                mHost.mListener.onExecutionCompleted(mHost.mData, result);
         }
     }
 
-    public interface OnExecutionCompletedListener {
-        void onExecutionCompleted(BasicNoteDataA basicNoteData, boolean result);
-    }
-
-    public interface OnExecutionProgressListener {
-        void onExecutionProgress(String progressText);
-    }
+    public interface OnExecutionCompletedListener extends BasicActionExecutor.OnExecutionCompletedListener<BasicNoteDataA> {};
 
 }

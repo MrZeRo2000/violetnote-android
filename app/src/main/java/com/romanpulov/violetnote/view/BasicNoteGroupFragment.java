@@ -81,6 +81,10 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
             }
         }
 
+        private void performDeleteAction(final ActionMode mode, final List<BasicNoteGroupA> items) {
+
+        }
+
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             mode.getMenuInflater().inflate(R.menu.menu_listitem_generic_actions, menu);
