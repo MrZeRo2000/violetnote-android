@@ -33,7 +33,7 @@ public class BasicNoteCheckedItemRecyclerViewAdapter extends RecyclerView.Adapte
     public BasicNoteCheckedItemRecyclerViewAdapter(BasicNoteDataA basicNoteData, long priceNoteParamTypeId, ActionMode.Callback actionModeCallback, BasicNoteCheckedItemFragment.OnBasicNoteCheckedItemFragmentInteractionListener listener) {
         mBasicNoteData = basicNoteData;
         mPriceNoteParamTypeId = priceNoteParamTypeId;
-        mRecyclerViewSelector = new RecyclerViewHelper.RecyclerViewSelector(this, actionModeCallback);
+        mRecyclerViewSelector = new RecyclerViewHelper.RecyclerViewSelectorMultiple(this, actionModeCallback);
         mListener = listener;
     }
 

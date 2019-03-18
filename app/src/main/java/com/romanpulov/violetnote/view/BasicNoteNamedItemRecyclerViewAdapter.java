@@ -29,7 +29,7 @@ public class BasicNoteNamedItemRecyclerViewAdapter extends RecyclerView.Adapter<
 
     public BasicNoteNamedItemRecyclerViewAdapter(BasicNoteDataA basicNoteData, ActionMode.Callback actionModeCallback, BasicNoteCheckedItemFragment.OnBasicNoteItemFragmentInteractionListener listener) {
         mBasicNoteData = basicNoteData;
-        mRecyclerViewSelector = new RecyclerViewHelper.RecyclerViewSelector(this, actionModeCallback);
+        mRecyclerViewSelector = new RecyclerViewHelper.RecyclerViewSelectorMultiple(this, actionModeCallback);
         mListener = listener;
     }
 

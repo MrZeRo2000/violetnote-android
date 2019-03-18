@@ -164,7 +164,7 @@ public class RecyclerViewHelper {
         }
     }
 
-    public static class RecyclerViewSelector {
+    public abstract static class RecyclerViewSelector {
 
         final Set<Integer> mSelectedItems = new HashSet<>();
 
@@ -217,18 +217,7 @@ public class RecyclerViewHelper {
                 setSelectedView(v, position);
         }
 
-        public void setSelectedView(View v, int position) {
-            if (mSelectedItems.size() > 0) {
-                if (mSelectedItems.contains(position)) {
-                    mSelectedItems.remove(position);
-                    if (mSelectedItems.size() == 0) {
-                        finishActionMode();
-                    }
-                } else
-                    mSelectedItems.add(position);
-                selectionChanged();
-            }
-        }
+        public abstract void setSelectedView(View v, int position);
 
         public void setSelectedItems(Integer[] items) {
             mSelectedItems.clear();
@@ -245,12 +234,34 @@ public class RecyclerViewHelper {
         }
     }
 
+    public static class RecyclerViewSelectorMultiple extends RecyclerViewSelector {
+
+        public RecyclerViewSelectorMultiple(RecyclerView.Adapter<?> adapter, ActionMode.Callback actionModeCallback) {
+            super(adapter, actionModeCallback);
+        }
+
+        @Override
+        public void setSelectedView(View v, int position) {
+            if (mSelectedItems.size() > 0) {
+                if (mSelectedItems.contains(position)) {
+                    mSelectedItems.remove(position);
+                    if (mSelectedItems.size() == 0) {
+                        finishActionMode();
+                    }
+                } else
+                    mSelectedItems.add(position);
+                selectionChanged();
+            }
+        }
+    }
+
     public static class RecyclerViewSelectorSingle extends RecyclerViewSelector {
 
         public RecyclerViewSelectorSingle(RecyclerView.Adapter<?> adapter, ActionMode.Callback actionModeCallback) {
             super(adapter, actionModeCallback);
         }
 
+        @Override
         public void setSelectedView(View v, int position) {
             if (mSelectedItems.size() > 0) {
                 if (mSelectedItems.contains(position)) {
@@ -266,6 +277,7 @@ public class RecyclerViewHelper {
             }
         }
 
+        @Override
         public void setSelectedItems(Integer[] items) {
             mSelectedItems.clear();
 

@@ -24,7 +24,6 @@ public class BasicNoteGroupItemRecyclerViewAdapter extends RecyclerView.Adapter<
         return mRecyclerViewSelector;
     }
 
-
     public BasicNoteGroupItemRecyclerViewAdapter(List<BasicNoteGroupA> basicNoteGroupList, ActionMode.Callback actionModeCallback) {
         this.mBasicNoteGroupList = basicNoteGroupList;
         this.mRecyclerViewSelector = new RecyclerViewHelper.RecyclerViewSelectorSingle(this, actionModeCallback);
@@ -40,6 +39,7 @@ public class BasicNoteGroupItemRecyclerViewAdapter extends RecyclerView.Adapter<
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         BasicNoteGroupA item = mBasicNoteGroupList.get(position);
+        //button
         viewHolder.mButton.setText(item.getGroupName());
         viewHolder.mButton.setCompoundDrawablesWithIntrinsicBounds(0, 0, DrawableSelectionHelper.getDrawableForNoteGroup(item), 0);
         // background

@@ -35,7 +35,7 @@ public class BasicNoteRecycleViewAdapter extends RecyclerView.Adapter<BasicNoteR
 
     public BasicNoteRecycleViewAdapter(List<BasicNoteA> items, ActionMode.Callback actionModeCallback, BasicNoteFragment.OnBasicNoteFragmentInteractionListener listener) {
         mItems = items;
-        mRecyclerViewSelector = new RecyclerViewHelper.RecyclerViewSelector(this, actionModeCallback);
+        mRecyclerViewSelector = new RecyclerViewHelper.RecyclerViewSelectorMultiple(this, actionModeCallback);
         mListener = listener;
     }
 
