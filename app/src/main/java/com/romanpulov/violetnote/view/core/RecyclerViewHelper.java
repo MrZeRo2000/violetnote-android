@@ -165,8 +165,8 @@ public class RecyclerViewHelper {
     }
 
     public static class RecyclerViewSelector {
-        //private int mSelectedItemPos = -1;
-        private final Set<Integer> mSelectedItems = new HashSet<>();
+
+        final Set<Integer> mSelectedItems = new HashSet<>();
 
         public Collection<Integer> getSelectedItems() {
             return mSelectedItems;
@@ -184,12 +184,6 @@ public class RecyclerViewHelper {
         private final ActionMode.Callback mActionModeCallback;
         private ActionMode mActionMode;
 
-        /*
-        public int getSelectedItemPos() {
-            return mSelectedItemPos;
-        }
-        */
-
         public ActionMode getActionMode() {
             return mActionMode;
         }
@@ -201,7 +195,7 @@ public class RecyclerViewHelper {
             }
         }
 
-        private void selectionChanged() {
+        void selectionChanged() {
             mAdapter.notifyDataSetChanged();
             if (mActionMode != null) {
                 mActionMode.invalidate();
@@ -248,6 +242,38 @@ public class RecyclerViewHelper {
             mSelectedItems.clear();
             mActionMode = null;
             mAdapter.notifyDataSetChanged();
+        }
+    }
+
+    public static class RecyclerViewSelectorSingle extends RecyclerViewSelector {
+
+        public RecyclerViewSelectorSingle(RecyclerView.Adapter<?> adapter, ActionMode.Callback actionModeCallback) {
+            super(adapter, actionModeCallback);
+        }
+
+        public void setSelectedView(View v, int position) {
+            if (mSelectedItems.size() > 0) {
+                if (mSelectedItems.contains(position)) {
+                    mSelectedItems.remove(position);
+                    if (mSelectedItems.size() == 0) {
+                        finishActionMode();
+                    }
+                } else {
+                    mSelectedItems.clear();
+                    mSelectedItems.add(position);
+                }
+                selectionChanged();
+            }
+        }
+
+        public void setSelectedItems(Integer[] items) {
+            mSelectedItems.clear();
+
+            if (items.length > 0) {
+                mSelectedItems.add(items[0]);
+            }
+
+            selectionChanged();
         }
     }
 }

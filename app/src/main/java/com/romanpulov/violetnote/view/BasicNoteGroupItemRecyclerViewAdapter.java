@@ -27,7 +27,7 @@ public class BasicNoteGroupItemRecyclerViewAdapter extends RecyclerView.Adapter<
 
     public BasicNoteGroupItemRecyclerViewAdapter(List<BasicNoteGroupA> basicNoteGroupList, ActionMode.Callback actionModeCallback) {
         this.mBasicNoteGroupList = basicNoteGroupList;
-        this.mRecyclerViewSelector = new RecyclerViewHelper.RecyclerViewSelector(this, actionModeCallback);
+        this.mRecyclerViewSelector = new RecyclerViewHelper.RecyclerViewSelectorSingle(this, actionModeCallback);
     }
 
     @NonNull

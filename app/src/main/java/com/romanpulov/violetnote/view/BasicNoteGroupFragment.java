@@ -19,6 +19,7 @@ import com.romanpulov.violetnote.model.BasicEntityNoteSelectionPosA;
 import com.romanpulov.violetnote.model.BasicNoteGroupA;
 import com.romanpulov.violetnote.view.core.BasicCommonNoteFragment;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
+import com.romanpulov.violetnote.view.helper.DisplayTitleBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,15 +75,18 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
             return false;
         }
 
+        private void updateTitle(ActionMode mode) {
+            if ((mRecyclerViewSelector != null) && (mRecyclerViewSelector.isSelected())) {
+                mode.setTitle(DisplayTitleBuilder.buildItemsDisplayTitle(getContext(), mBasicNoteGroupList, mRecyclerViewSelector.getSelectedItems()));
+            }
+        }
+
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             mode.getMenuInflater().inflate(R.menu.menu_listitem_generic_actions, menu);
-            if (mRecyclerViewSelector.isSelected()) {
-                //mode.setTitle(DisplayTitleBuilder.buildItemsDisplayTitle(getActivity(), mNoteList, mRecyclerViewSelector.getSelectedItems()));
-            }
+            updateTitle(mode);
             return true;
         }
-
 
         @Override
         public void onDestroyActionMode(ActionMode mode) {
@@ -96,7 +100,7 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
             MenuItem menuItem = menu.findItem(R.id.edit);
             if (menuItem != null)
                 menuItem.setVisible(mRecyclerViewSelector.isSelectedSingle());
-            //mode.setTitle(DisplayTitleBuilder.buildItemsDisplayTitle(getActivity(), mNoteList, mRecyclerViewSelector.getSelectedItems()));
+            updateTitle(mode);
             return false;
         }
     }

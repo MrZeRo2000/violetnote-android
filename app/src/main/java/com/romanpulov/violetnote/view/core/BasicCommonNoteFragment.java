@@ -47,8 +47,10 @@ public abstract class BasicCommonNoteFragment extends Fragment {
                 }
                 outState.putIntArray(KEY_SELECTED_ITEMS_ARRAY, selectedItemsArray);
                 ActionMode actionMode = mRecyclerViewSelector.getActionMode();
-                if (actionMode != null)
-                    outState.putString(KEY_SELECTION_TITLE, actionMode.getTitle().toString());
+                if (actionMode != null) {
+                    String title = actionMode.getTitle() == null ? null : actionMode.getTitle().toString();
+                    outState.putString(KEY_SELECTION_TITLE, title);
+                }
             }
         }
         super.onSaveInstanceState(outState);
@@ -67,8 +69,10 @@ public abstract class BasicCommonNoteFragment extends Fragment {
                 }
 
                 ActionMode actionMode = mRecyclerViewSelector.getActionMode();
-                if (actionMode != null)
-                    actionMode.setTitle(savedInstanceState.getString(KEY_SELECTION_TITLE, actionMode.getTitle().toString()));
+                if (actionMode != null) {
+                    String defaultTitle = actionMode.getTitle() == null ? null : actionMode.getTitle().toString();
+                    actionMode.setTitle(savedInstanceState.getString(KEY_SELECTION_TITLE, defaultTitle));
+                }
             }
         }
     }
