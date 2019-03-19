@@ -42,7 +42,7 @@ public class BasicNoteDataActionExecutor extends BasicActionExecutor<BasicNoteDa
         protected Boolean doInBackground(Void... params) {
             DBNoteManager noteManager = mHost.createNoteManager();
 
-            for (Map.Entry<String, BasicNoteDataAction> entry : mHost.mActionList) {
+            for (Map.Entry<String, BasicAction<BasicNoteDataA>> entry : mHost.mActionList) {
                 //get caption, default if no caption
                 String caption = entry.getKey();
                 if ((caption == null) || caption.isEmpty())

@@ -103,10 +103,39 @@ public final class BasicNoteDAO extends AbstractBasicNoteDAO<BasicNoteA> {
         return result;
     }
 
+    @NonNull
+    public List<BasicNoteA> getByGroup(final BasicNoteGroupA noteGroup) {
+        final List<BasicNoteA> result = new ArrayList<>();
+
+        readCursor(new CursorReaderHandler() {
+            @Override
+            public Cursor createCursor() {
+                return mDB.query(
+                        NotesTableDef.TABLE_NAME,
+                        NotesTableDef.TABLE_COLS,
+                        NotesTableDef.GROUP_ID_COLUMN_NAME + " = ?",
+                        new String[] {String.valueOf(noteGroup.getId())},
+                        null,
+                        null,
+                        null
+                );
+
+            }
+
+            @Override
+            public void readFromCursor(Cursor c) {
+                result.add(noteFromCursor(c, mDTF));
+            }
+        });
+
+        return result;
+    }
+
     /**
      * Returns notes from raw query, with totals
      * @return Note List
      */
+    @NonNull
     public List<BasicNoteA> getTotalsByGroup(final BasicNoteGroupA noteGroup) {
         final List<BasicNoteA> result = new ArrayList<>();
 

@@ -21,12 +21,12 @@ public class BasicNoteDataItemAddAction extends BasicNoteDataItemAction {
     @Override
     public boolean execute(DBNoteManager noteManager) {
         //encrypt
-        if (mBasicNoteData.getNote().isEncrypted()) {
-            if (!PassNoteItemJSONCryptService.encryptBasicNoteItem(mItems.get(0), mBasicNoteData.getPassword()))
+        if (mData.getNote().isEncrypted()) {
+            if (!PassNoteItemJSONCryptService.encryptBasicNoteItem(mItems.get(0), mData.getPassword()))
                 return false;
         }
 
         //insert
-        return noteManager.mBasicNoteItemDAO.insertWithNote(mBasicNoteData.getNote(), mItems.get(0)) != -1;
+        return noteManager.mBasicNoteItemDAO.insertWithNote(mData.getNote(), mItems.get(0)) != -1;
     }
 }

@@ -31,19 +31,19 @@ public class BasicNoteDataRefreshAction extends BasicNoteDataAction {
     @Override
     public boolean execute(DBNoteManager noteManager) {
         //retrieve data
-        noteManager.mBasicNoteItemDAO.fillNoteDataItemsWithSummary(mBasicNoteData.getNote());
+        noteManager.mBasicNoteItemDAO.fillNoteDataItemsWithSummary(mData.getNote());
         if (mRequireValues) {
-            noteManager.mBasicNoteDAO.fillNoteValues(mBasicNoteData.getNote());
+            noteManager.mBasicNoteDAO.fillNoteValues(mData.getNote());
         }
 
         //decrypt
-        if (mBasicNoteData.getNote().isEncrypted()) {
-            for (BasicNoteItemA item : mBasicNoteData.getNote().getItems()) {
+        if (mData.getNote().isEncrypted()) {
+            for (BasicNoteItemA item : mData.getNote().getItems()) {
                 if (!PassNoteItemJSONCryptService.decryptBasicNoteItem(item, mPassword))
                     return false;
             }
         }
-        mBasicNoteData.setPassword(mPassword);
+        mData.setPassword(mPassword);
         return true;
     }
 }

@@ -28,33 +28,20 @@ public class BasicNoteGroupActivity extends ActionBarCompatActivity implements B
 
     }
 
-    private BasicNoteGroupFragment mFragment;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        /*
-        setContentView(R.layout.activity_basic_note_group_list);
-
-        mRecyclerView = findViewById(R.id.list);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        mNoteManager =  new DBNoteManager(this);
-        mBasicNoteGroupList = mNoteManager.mBasicNoteGroupDAO.getByGroupType(BasicNoteGroupA.BASIC_NOTE_GROUP_TYPE);
-        mRecyclerView.setAdapter(new BasicNoteGroupItemRecyclerViewAdapter(mBasicNoteGroupList));
-        */
 
         FragmentManager fm = getSupportFragmentManager();
 
         DBNoteManager noteManager = new DBNoteManager(this);
 
-        mFragment = (BasicNoteGroupFragment)fm.findFragmentById(android.R.id.content);
-        if (mFragment == null) {
-            mFragment = BasicNoteGroupFragment.newInstance();
-            fm.beginTransaction().replace(android.R.id.content, mFragment).commit();
+        BasicNoteGroupFragment fragment = (BasicNoteGroupFragment)fm.findFragmentById(android.R.id.content);
+        if (fragment == null) {
+            fragment = BasicNoteGroupFragment.newInstance();
+            fm.beginTransaction().replace(android.R.id.content, fragment).commit();
         } else {
-            mFragment.refreshList(noteManager);
+            fragment.refreshList(noteManager);
         }
 
     }
@@ -80,15 +67,13 @@ public class BasicNoteGroupActivity extends ActionBarCompatActivity implements B
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         BasicNoteGroupA noteGroup;
         if ((data != null) && ((noteGroup = data.getParcelableExtra(BasicNoteGroupA.BASIC_NOTE_GROUP_DATA)) != null)) {
-            /*
-            if (mNoteManager.mBasicNoteGroupDAO.insert(noteGroup) != -1) {
-                mNoteManager.mBasicNoteGroupDAO.fillByGroupType(BasicNoteGroupA.BASIC_NOTE_GROUP_TYPE, mBasicNoteGroupList);
+            FragmentManager fm = getSupportFragmentManager();
 
-                if (mRecyclerView != null) {
-                    RecyclerViewHelper.adapterNotifyDataSetChanged(mRecyclerView);
-                }
+            BasicNoteGroupFragment fragment = (BasicNoteGroupFragment)fm.findFragmentById(android.R.id.content);
+
+            if (fragment != null) {
+                fragment.performAddAction(noteGroup);
             }
-            */
         }
     }
 }

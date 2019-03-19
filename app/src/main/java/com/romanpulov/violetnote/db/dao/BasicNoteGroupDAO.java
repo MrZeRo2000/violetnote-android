@@ -132,4 +132,9 @@ public class BasicNoteGroupDAO extends AbstractDAO<BasicNoteGroupA> {
 
         return mDB.insert(NoteGroupsTableDef.TABLE_NAME, null, cv);
     }
+
+    @Override
+    public long delete(@NonNull BasicNoteGroupA object) {
+        return internalDeleteById(NoteGroupsTableDef.TABLE_NAME, object.getId());
+    }
 }

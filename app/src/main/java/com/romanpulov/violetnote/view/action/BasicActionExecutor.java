@@ -13,7 +13,7 @@ import java.util.Map;
 public class BasicActionExecutor<T> {
     protected final Context mContext;
     protected final T mData;
-    protected final List<Map.Entry<String, BasicNoteDataAction>> mActionList = new ArrayList<>();
+    protected final List<Map.Entry<String, BasicAction<T>>> mActionList = new ArrayList<>();
 
     protected OnExecutionCompletedListener<T> mListener;
 
@@ -44,7 +44,7 @@ public class BasicActionExecutor<T> {
         void onExecutionProgress(String progressText);
     }
 
-    public void addAction(String description, BasicNoteDataAction action) {
+    public void addAction(String description, BasicAction<T> action) {
         mActionList.add(new AbstractMap.SimpleEntry<>(description, action));
     }
 
@@ -56,7 +56,7 @@ public class BasicActionExecutor<T> {
     protected boolean internalExecute() {
         DBNoteManager noteManager = createNoteManager();
 
-        for (Map.Entry<String, BasicNoteDataAction> entry : mActionList) {
+        for (Map.Entry<String, BasicAction<T>> entry : mActionList) {
             if (!entry.getValue().execute(noteManager)) {
                 return false;
             }

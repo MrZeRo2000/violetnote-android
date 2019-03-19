@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,17 +19,26 @@ import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.manager.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicEntityNoteSelectionPosA;
 import com.romanpulov.violetnote.model.BasicNoteGroupA;
+import com.romanpulov.violetnote.view.action.BasicActionExecutor;
+import com.romanpulov.violetnote.view.action.BasicNoteGroupAction;
+import com.romanpulov.violetnote.view.action.BasicNoteGroupAddAction;
+import com.romanpulov.violetnote.view.action.BasicNoteGroupDeleteAction;
+import com.romanpulov.violetnote.view.action.BasicNoteGroupRefreshAction;
+import com.romanpulov.violetnote.view.core.AlertOkCancelSupportDialogFragment;
 import com.romanpulov.violetnote.view.core.BasicCommonNoteFragment;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 import com.romanpulov.violetnote.view.helper.DisplayTitleBuilder;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
 
     private final List<BasicNoteGroupA> mBasicNoteGroupList = new ArrayList<>();
     private OnBasicNoteGroupFragmentInteractionListener mListener;
+    private DBNoteManager mDBNoteManager;
 
     public static BasicNoteGroupFragment newInstance() {
         return new BasicNoteGroupFragment();
@@ -39,9 +50,78 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
 
     @Override
     public void refreshList(DBNoteManager noteManager) {
-        noteManager.mBasicNoteGroupDAO.fillByGroupType(BasicNoteGroupA.BASIC_NOTE_GROUP_TYPE, mBasicNoteGroupList);
+        (new BasicNoteGroupRefreshAction(mBasicNoteGroupList)).execute(noteManager);
+
         if (mRecyclerView != null)
             RecyclerViewHelper.adapterNotifyDataSetChanged(mRecyclerView);
+    }
+
+    public void performAddAction(@NonNull final BasicNoteGroupA item) {
+        final List<BasicNoteGroupA> items = Collections.singletonList(item);
+        BasicActionExecutor<List<BasicNoteGroupA>> executor = new BasicActionExecutor<>(getContext(), items);
+        executor.addAction(getString(R.string.caption_processing), new BasicNoteGroupAddAction(items));
+        executor.addAction(getString(R.string.caption_loading), new BasicNoteGroupRefreshAction(mBasicNoteGroupList));
+        executor.setOnExecutionCompletedListener(new BasicActionExecutor.OnExecutionCompletedListener<List<BasicNoteGroupA>>() {
+            @Override
+            public void onExecutionCompleted(List<BasicNoteGroupA> data, boolean result) {
+                if (result) {
+                    RecyclerViewHelper.adapterNotifyDataSetChanged(mRecyclerView);
+
+                    int position = mBasicNoteGroupList.size() - 1;
+
+                    if (position > -1)
+                        mRecyclerView.scrollToPosition(position);
+
+                }
+            }
+        });
+        executor.execute();
+    }
+
+    private void performDeleteAction(@NonNull final ActionMode mode, @NonNull final List<BasicNoteGroupA> items) {
+        // initial check
+        if (items.size() != 1) {
+            return;
+        }
+
+        BasicNoteGroupA item = items.get(0);
+
+        AlertOkCancelSupportDialogFragment dialog;
+
+        // check notes
+        if (mDBNoteManager.mBasicNoteDAO.getByGroup(item).size() > 0) {
+            dialog = AlertOkCancelSupportDialogFragment.newAlertOkInfoDialog(getString(R.string.ui_error_group_delete_contain_notes, item.getDisplayTitle()));
+        } else {
+            dialog = AlertOkCancelSupportDialogFragment.newAlertOkCancelDialog(getString(R.string.ui_question_delete_item_are_you_sure, item.getDisplayTitle()));
+            dialog.setOkButtonClickListener(new AlertOkCancelSupportDialogFragment.OnClickListener() {
+                @Override
+                public void OnClick(DialogFragment dialog) {
+                    BasicActionExecutor<List<BasicNoteGroupA>> executor = new BasicActionExecutor<>(getContext(), items);
+                    executor.addAction(getString(R.string.caption_processing), new BasicNoteGroupAction(items, new BasicNoteGroupDeleteAction()));
+                    executor.addAction(getString(R.string.caption_loading), new BasicNoteGroupRefreshAction(mBasicNoteGroupList));
+                    executor.setOnExecutionCompletedListener(new BasicActionExecutor.OnExecutionCompletedListener<List<BasicNoteGroupA>>() {
+                        @Override
+                        public void onExecutionCompleted(List<BasicNoteGroupA> data, boolean result) {
+                            if (result) {
+                                mode.finish();
+                            }
+                            if (mDialogFragment != null) {
+                                mDialogFragment.dismiss();
+                                mDialogFragment = null;
+                            }
+
+                        }
+                    });
+                    executor.execute();
+                }
+            });
+        }
+
+        FragmentManager fragmentManager = getFragmentManager();
+        if (fragmentManager != null)
+            dialog.show(fragmentManager, null);
+
+        mDialogFragment = dialog;
     }
 
     public class ActionBarCallBack implements ActionMode.Callback {
@@ -50,10 +130,10 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
             List<BasicNoteGroupA> selectedNoteItems = BasicEntityNoteSelectionPosA.getItemsByPositions(mBasicNoteGroupList, mRecyclerViewSelector.getSelectedItems());
 
             //int selectedItemPos = mRecyclerViewSelector.getSelectedItemPos();
-            if (selectedNoteItems.size() > 0) {
+            if (selectedNoteItems.size() == 1) {
                 switch (item.getItemId()) {
                     case R.id.delete:
-                        //performDeleteAction(mode, selectedNoteItems);
+                        performDeleteAction(mode, selectedNoteItems);
                         break;
                     case R.id.edit:
                         //performEditAction(mode, selectedNoteItems.get(0));
@@ -81,13 +161,9 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
             }
         }
 
-        private void performDeleteAction(final ActionMode mode, final List<BasicNoteGroupA> items) {
-
-        }
-
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            mode.getMenuInflater().inflate(R.menu.menu_listitem_generic_actions, menu);
+            mode.getMenuInflater().inflate(R.menu.menu_edit_delete_actions, menu);
             updateTitle(mode);
             return true;
         }
@@ -120,7 +196,8 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
         mRecyclerView = (RecyclerView) view;
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-        refreshList(new DBNoteManager(context));
+        mDBNoteManager = new DBNoteManager(context);
+        refreshList(mDBNoteManager);
 
         BasicNoteGroupItemRecyclerViewAdapter recyclerViewAdapter = new BasicNoteGroupItemRecyclerViewAdapter(mBasicNoteGroupList, new ActionBarCallBack());
         mRecyclerView.setAdapter(recyclerViewAdapter);

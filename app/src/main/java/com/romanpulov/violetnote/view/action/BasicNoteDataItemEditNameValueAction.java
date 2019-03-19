@@ -21,8 +21,8 @@ public class BasicNoteDataItemEditNameValueAction extends BasicNoteDataItemActio
     @Override
     public boolean execute(DBNoteManager noteManager) {
         //encrypt
-        if (mBasicNoteData.getNote().isEncrypted()) {
-            if (!PassNoteItemJSONCryptService.encryptBasicNoteItem(mItems.get(0), mBasicNoteData.getPassword()))
+        if (mData.getNote().isEncrypted()) {
+            if (!PassNoteItemJSONCryptService.encryptBasicNoteItem(mItems.get(0), mData.getPassword()))
                 return false;
         }
 
