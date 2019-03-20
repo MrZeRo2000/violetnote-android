@@ -5,8 +5,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.view.ActionMode;
+import android.support.v7.widget.ActionMenuView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +22,7 @@ import com.romanpulov.violetnote.db.manager.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicEntityNoteSelectionPosA;
 import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteGroupA;
+import com.romanpulov.violetnote.view.helper.BottomToolbarHelper;
 import com.romanpulov.violetnote.view.helper.DisplayTitleBuilder;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveBottomAction;
@@ -65,6 +68,41 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
         noteManager.mBasicNoteDAO.fillNotesByGroup(mNoteGroup, mNoteList);
         if (mRecyclerView != null)
             RecyclerViewHelper.adapterNotifyDataSetChanged(mRecyclerView);
+    }
+
+    private void setupBottomToolbarHelper() {
+        FragmentActivity activity = getActivity();
+        if (activity != null) {
+            mBottomToolbarHelper = BottomToolbarHelper.fromContext(activity, new ActionMenuView.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem menuItem) {
+                    return processMoveMenuItemClick(menuItem);
+                }
+            });
+        }
+    }
+
+    protected boolean processMoveMenuItemClick(MenuItem menuItem) {
+        List<BasicNoteA> selectedNoteItems = BasicEntityNoteSelectionPosA.getItemsByPositions(mNoteList, mRecyclerViewSelector.getSelectedItems());
+
+        //int selectedItemPos = mRecyclerViewSelector.getSelectedItemPos();
+        if (selectedNoteItems.size() > 0) {
+            switch (menuItem.getItemId()) {
+                case R.id.move_up:
+                    performMoveAction(new BasicNoteMoveUpAction<BasicNoteA>(), selectedNoteItems);
+                    return true;
+                case R.id.move_top:
+                    performMoveAction(new BasicNoteMoveTopAction<BasicNoteA>(), selectedNoteItems);
+                    return true;
+                case R.id.move_down:
+                    performMoveAction(new BasicNoteMoveDownAction<BasicNoteA>(), selectedNoteItems);
+                    return true;
+                case R.id.move_bottom:
+                    performMoveAction(new BasicNoteMoveBottomAction<BasicNoteA>(), selectedNoteItems);
+                    return true;
+            }
+        }
+        return false;
     }
 
     public void performAddAction(final BasicNoteA item) {
@@ -156,18 +194,6 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
                     case R.id.edit:
                         performEditAction(mode, selectedNoteItems.get(0));
                         break;
-                    case R.id.move_up:
-                        performMoveAction(new BasicNoteMoveUpAction<BasicNoteA>(), selectedNoteItems);
-                        break;
-                    case R.id.move_top:
-                        performMoveAction(new BasicNoteMoveTopAction<BasicNoteA>(), selectedNoteItems);
-                        break;
-                    case R.id.move_down:
-                        performMoveAction(new BasicNoteMoveDownAction<BasicNoteA>(), selectedNoteItems);
-                        break;
-                    case R.id.move_bottom:
-                        performMoveAction(new BasicNoteMoveBottomAction<BasicNoteA>(), selectedNoteItems);
-                        break;
                 }
             }
             return false;
@@ -176,7 +202,7 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             log("onCreateActionMode");
-            mode.getMenuInflater().inflate(R.menu.menu_listitem_generic_actions, menu);
+            mode.getMenuInflater().inflate(R.menu.menu_edit_delete_actions, menu);
             if (mRecyclerViewSelector.isSelected())
                 mode.setTitle(DisplayTitleBuilder.buildItemsDisplayTitle(getActivity(), mNoteList, mRecyclerViewSelector.getSelectedItems()));
             return true;
@@ -185,6 +211,9 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
 
         @Override
         public void onDestroyActionMode(ActionMode mode) {
+            if (mBottomToolbarHelper != null) {
+                mBottomToolbarHelper.hideLayout();
+            }
             if (mRecyclerViewSelector != null)
                 mRecyclerViewSelector.destroyActionMode();
         }
@@ -196,6 +225,15 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
             MenuItem menuItem = menu.findItem(R.id.edit);
             if (menuItem != null)
                 menuItem.setVisible(mRecyclerViewSelector.isSelectedSingle());
+
+            if (mBottomToolbarHelper == null) {
+                setupBottomToolbarHelper();
+            }
+
+            if (mBottomToolbarHelper != null) {
+                mBottomToolbarHelper.showLayout(mRecyclerViewSelector.getSelectedItems().size(), mNoteList.size());
+            }
+
             mode.setTitle(DisplayTitleBuilder.buildItemsDisplayTitle(getActivity(), mNoteList, mRecyclerViewSelector.getSelectedItems()));
             return false;
         }
