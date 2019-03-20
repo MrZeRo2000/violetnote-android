@@ -36,7 +36,7 @@ public class BasicNoteCheckedItemActivity extends BasicNoteDataPasswordActivity 
         super.onCreate(savedInstanceState);
 
         //for ToolBar
-        setContentView(R.layout.activity_basic_note_checked_item);
+        setContentView(R.layout.activity_toolbar_fragment_toolbar);
 
         //setup ToolBar instead of ActionBar
         Toolbar toolbar = findViewById(R.id.toolbar);
