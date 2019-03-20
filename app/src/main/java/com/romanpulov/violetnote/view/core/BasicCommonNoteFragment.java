@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.romanpulov.violetnote.db.manager.DBNoteManager;
+import com.romanpulov.violetnote.view.helper.BottomToolbarHelper;
 
 import java.util.Collection;
 
@@ -21,6 +22,7 @@ public abstract class BasicCommonNoteFragment extends Fragment {
     protected static final String KEY_SELECTED_ITEMS_ARRAY = "selected items array";
     protected static final String KEY_SELECTION_TITLE = "selection title";
     protected DialogFragment mDialogFragment;
+    protected BottomToolbarHelper mBottomToolbarHelper;
 
     protected RecyclerView mRecyclerView;
     protected RecyclerViewHelper.RecyclerViewSelector mRecyclerViewSelector;

@@ -60,8 +60,6 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
 
     protected OnBasicNoteItemFragmentInteractionListener mListener;
 
-    protected BottomToolbarHelper mBottomToolbarHelper;
-
     @Override
     public void refreshList(DBNoteManager noteManager) {
         noteManager.mBasicNoteItemDAO.fillNoteDataItemsWithSummary(mBasicNoteData.getNote());

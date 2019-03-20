@@ -7,8 +7,7 @@ import java.util.List;
 
 public class BasicNoteGroupAction extends BasicAction<List<BasicNoteGroupA>> {
 
-    private final BasicNoteAction<BasicNoteGroupA> mNoteGroupAction;
-
+    protected final BasicNoteAction<BasicNoteGroupA> mNoteGroupAction;
 
     public BasicNoteGroupAction(List<BasicNoteGroupA> data, BasicNoteAction<BasicNoteGroupA> noteGroupAction) {
         super(data);
