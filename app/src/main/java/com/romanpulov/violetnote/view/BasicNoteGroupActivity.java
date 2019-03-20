@@ -77,7 +77,7 @@ public class BasicNoteGroupActivity extends ActionBarCompatActivity implements B
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_add:
-                startActivityForResult(new Intent(this, BasicNoteGroupEditActivity.class), 0);
+                startActivityForResult(new Intent(this, BasicNoteGroupEditActivity.class), BasicNoteGroupFragment.ACTIVITY_REQUEST_INSERT);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -86,8 +86,10 @@ public class BasicNoteGroupActivity extends ActionBarCompatActivity implements B
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
         BasicNoteGroupA noteGroup;
-        if ((data != null) && ((noteGroup = data.getParcelableExtra(BasicNoteGroupA.BASIC_NOTE_GROUP_DATA)) != null)) {
+        if ((requestCode == BasicNoteGroupFragment.ACTIVITY_REQUEST_INSERT) && (resultCode == RESULT_OK) && (data != null) && ((noteGroup = data.getParcelableExtra(BasicNoteGroupA.BASIC_NOTE_GROUP_DATA)) != null)) {
             FragmentManager fm = getSupportFragmentManager();
 
             BasicNoteGroupFragment fragment = (BasicNoteGroupFragment)fm.findFragmentById(R.id.fragment_id);

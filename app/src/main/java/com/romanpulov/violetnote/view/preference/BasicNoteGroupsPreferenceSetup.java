@@ -9,7 +9,7 @@ import com.romanpulov.violetnote.view.BasicNoteGroupActivity;
 public class BasicNoteGroupsPreferenceSetup extends PreferenceSetup {
 
     public BasicNoteGroupsPreferenceSetup(PreferenceFragment preferenceFragment) {
-        super(preferenceFragment, PreferenceRepository.PREF_KEY_INTERFACE_GROUPS);
+        super(preferenceFragment, PreferenceRepository.PREF_INTERFACE_BASIC_NOTE_GROUPS);
     }
 
     @Override

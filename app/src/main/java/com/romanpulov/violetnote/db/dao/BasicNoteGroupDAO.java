@@ -134,7 +134,19 @@ public class BasicNoteGroupDAO extends AbstractDAO<BasicNoteGroupA> {
     }
 
     @Override
-    public long delete(@NonNull BasicNoteGroupA object) {
-        return internalDeleteById(NoteGroupsTableDef.TABLE_NAME, object.getId());
+    public long delete(@NonNull BasicNoteGroupA noteGroup) {
+        return internalDeleteById(NoteGroupsTableDef.TABLE_NAME, noteGroup.getId());
+    }
+
+    @Override
+    public long update(@NonNull BasicNoteGroupA noteGroup) {
+        ContentValues cv = new ContentValues();
+
+        cv.put(NoteGroupsTableDef.NOTE_GROUP_TYPE_COLUMN_NAME, noteGroup.getGroupType());
+        cv.put(NoteGroupsTableDef.NOTE_GROUP_NAME_COLUMN_NAME, noteGroup.getGroupName());
+        cv.put(NoteGroupsTableDef.NOTE_GROUP_ICON_COLUMN_NAME, noteGroup.getGroupIcon());
+        cv.put(DBCommonDef.ORDER_COLUMN_NAME, noteGroup.getOrderId());
+
+        return mDB.update(NoteGroupsTableDef.TABLE_NAME, cv, DBCommonDef.ID_COLUMN_NAME + " = ?" , new String[]{String.valueOf(noteGroup.getId())});
     }
 }

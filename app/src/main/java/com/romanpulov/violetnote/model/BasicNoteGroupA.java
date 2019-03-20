@@ -24,10 +24,18 @@ public class BasicNoteGroupA extends BasicCommonNoteA implements Parcelable {
         return mGroupName;
     }
 
+    public void setGroupName(String value) {
+        mGroupName = value;
+    }
+
     private long mGroupIcon;
 
     public long getGroupIcon() {
         return mGroupIcon;
+    }
+
+    public void setGroupIcon(long value) {
+        mGroupIcon = value;
     }
 
     @Override

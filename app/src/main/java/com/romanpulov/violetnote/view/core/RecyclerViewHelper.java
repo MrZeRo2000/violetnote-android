@@ -35,6 +35,13 @@ public class RecyclerViewHelper {
             adapter.notifyDataSetChanged();
     }
 
+    public static void adapterNotifyItemChanged(@NonNull RecyclerView recyclerView, int position) {
+        RecyclerView.Adapter adapter = recyclerView.getAdapter();
+        if (adapter != null)
+            adapter.notifyItemChanged(position);
+    }
+
+
     /**
      * Taken from
      * \Android\sdk\extras\android\support\samples\Support7Demos\src\com\example\android\supportv7\widget\decorator\

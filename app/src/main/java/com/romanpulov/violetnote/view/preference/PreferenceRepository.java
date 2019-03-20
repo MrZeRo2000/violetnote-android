@@ -28,7 +28,7 @@ public class PreferenceRepository {
     public static final long PREF_LOAD_LOADING = 1;
     public static final long PREF_LOAD_CURRENT_VALUE = 2;
 
-    public static final String PREF_KEY_INTERFACE_GROUPS = "pref_interface_groups";
+    public static final String PREF_INTERFACE_BASIC_NOTE_GROUPS = "pref_interface_basic_note_groups";
     public static final String PREF_KEY_INTERFACE_CHECKED_LAST = "pref_interface_checked_last";
 
     public static final String PREF_KEY_SOURCE_PATH = "pref_source_path";

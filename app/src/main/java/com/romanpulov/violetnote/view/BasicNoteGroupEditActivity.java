@@ -45,7 +45,7 @@ public class BasicNoteGroupEditActivity extends ActionBarCompatActivity {
         if (mNoteGroup == null) {
             mImgSelector.setSelection(0);
             mTitle.requestFocus();
-            InputManagerHelper.toggleInputForced(this);
+            InputManagerHelper.showInput(mTitle);
         } else {
             mTitle.setText(mNoteGroup.getGroupName());
             int drawable = DrawableSelectionHelper.getDrawableForNoteGroup(mNoteGroup);
@@ -57,7 +57,14 @@ public class BasicNoteGroupEditActivity extends ActionBarCompatActivity {
         }
     }
 
-    private BasicNoteGroupA newNoteGroup() {
+    private void updateNoteGroup() {
+        if (mNoteGroup != null) {
+            mNoteGroup.setGroupName(mTitle.getText().toString().trim());
+            mNoteGroup.setGroupIcon(getGroupIcon());
+        }
+    }
+
+    private long getGroupIcon() {
         int selectedItemPos = mImgSelector.getSelectedItemPosition();
         long groupIcon = 0;
         int selectedImg = mImgList[selectedItemPos];
@@ -65,14 +72,24 @@ public class BasicNoteGroupEditActivity extends ActionBarCompatActivity {
             groupIcon = selectedImg;
         }
 
-        return BasicNoteGroupA.newEditInstance(BasicNoteGroupA.BASIC_NOTE_GROUP_TYPE, mTitle.getText().toString(), groupIcon);
+        return groupIcon;
+    }
+
+    private BasicNoteGroupA newNoteGroup() {
+        return BasicNoteGroupA.newEditInstance(BasicNoteGroupA.BASIC_NOTE_GROUP_TYPE, null, 0);
     }
 
     public void okButtonClick(View view) {
         if (mTitle.getText().toString().trim().isEmpty()) {
             mTitle.setError(this.getString(R.string.error_field_not_empty));
         } else {
-            getIntent().putExtra(BasicNoteGroupA.BASIC_NOTE_GROUP_DATA, newNoteGroup());
+            if (mNoteGroup == null) {
+                mNoteGroup = newNoteGroup();
+            }
+
+            updateNoteGroup();
+
+            getIntent().putExtra(BasicNoteGroupA.BASIC_NOTE_GROUP_DATA, mNoteGroup);
             setResult(RESULT_OK, getIntent());
             finish();
         }

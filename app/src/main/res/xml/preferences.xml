@@ -5,8 +5,8 @@
         android:layout="@layout/preferences_category"
         >
         <Preference
-            android:key="pref_interface_groups"
-            android:title="@string/pref_title_interface_groups"
+            android:key="pref_interface_basic_note_groups"
+            android:title="@string/pref_title_interface_basic_note_groups"
             />
         <CheckBoxPreference
             android:key="pref_interface_checked_last"

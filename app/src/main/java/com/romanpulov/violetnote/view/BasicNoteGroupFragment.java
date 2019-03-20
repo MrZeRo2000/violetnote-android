@@ -1,6 +1,8 @@
 package com.romanpulov.violetnote.view;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -25,6 +27,7 @@ import com.romanpulov.violetnote.view.action.BasicActionExecutor;
 import com.romanpulov.violetnote.view.action.BasicNoteGroupAction;
 import com.romanpulov.violetnote.view.action.BasicNoteGroupAddAction;
 import com.romanpulov.violetnote.view.action.BasicNoteGroupDeleteAction;
+import com.romanpulov.violetnote.view.action.BasicNoteGroupEditAction;
 import com.romanpulov.violetnote.view.action.BasicNoteGroupRefreshAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveBottomAction;
@@ -38,11 +41,12 @@ import com.romanpulov.violetnote.view.helper.BottomToolbarHelper;
 import com.romanpulov.violetnote.view.helper.DisplayTitleBuilder;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
+    public static final int ACTIVITY_REQUEST_INSERT = 0;
+    public static final int ACTIVITY_REQUEST_EDIT = 1;
 
     private final List<BasicNoteGroupA> mBasicNoteGroupList = new ArrayList<>();
     private OnBasicNoteGroupFragmentInteractionListener mListener;
@@ -194,6 +198,48 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
         mDialogFragment = dialog;
     }
 
+    private void performEditAction(@NonNull final ActionMode mode, @NonNull final List<BasicNoteGroupA> items) {
+        if (items.size() == 1) {
+            BasicNoteGroupA item = items.get(0);
+            Intent intent = new Intent(getContext(), BasicNoteGroupEditActivity.class);
+            intent.putExtra(BasicNoteGroupA.BASIC_NOTE_GROUP_DATA, item);
+            startActivityForResult(intent, ACTIVITY_REQUEST_EDIT);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        final BasicNoteGroupA noteGroup;
+        if ((requestCode == BasicNoteGroupFragment.ACTIVITY_REQUEST_EDIT) && (resultCode == Activity.RESULT_OK) && (data != null) && ((noteGroup = data.getParcelableExtra(BasicNoteGroupA.BASIC_NOTE_GROUP_DATA)) != null)) {
+            List<BasicNoteGroupA> items = Collections.singletonList(noteGroup);
+
+            //executor
+            BasicActionExecutor<List<BasicNoteGroupA>> executor = new BasicActionExecutor<>(getContext(), items);
+
+            //actions
+            executor.addAction(getString(R.string.caption_processing), new BasicNoteGroupEditAction(items));
+            executor.addAction(getString(R.string.caption_loading), new BasicNoteGroupRefreshAction(mBasicNoteGroupList));
+
+            //on complete
+            executor.setOnExecutionCompletedListener(new BasicActionExecutor.OnExecutionCompletedListener<List<BasicNoteGroupA>>() {
+                @Override
+                public void onExecutionCompleted(List<BasicNoteGroupA> data, boolean result) {
+                    if (result) {
+                        int position = mBasicNoteGroupList.indexOf(noteGroup);
+                        if (mRecyclerView != null) {
+                            RecyclerViewHelper.adapterNotifyItemChanged(mRecyclerView, position);
+                        }
+                    }
+                }
+            });
+
+            //execute
+            executor.execute();
+        }
+    }
+
     public class ActionBarCallBack implements ActionMode.Callback {
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
@@ -206,7 +252,7 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
                         performDeleteAction(mode, selectedNoteItems);
                         break;
                     case R.id.edit:
-                        //performEditAction(mode, selectedNoteItems.get(0));
+                        performEditAction(mode, selectedNoteItems);
                         break;
                     case R.id.move_up:
                         //performMoveAction(new BasicNoteMoveUpAction<BasicNoteA>(), selectedNoteItems);
