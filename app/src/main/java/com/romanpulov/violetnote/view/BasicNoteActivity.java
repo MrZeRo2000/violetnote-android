@@ -3,8 +3,11 @@ package com.romanpulov.violetnote.view;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.ActionMenuView;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.romanpulov.violetnote.R;
@@ -15,11 +18,13 @@ import com.romanpulov.violetnote.model.BasicNoteGroupA;
 import com.romanpulov.violetnote.view.core.ActionBarCompatActivity;
 import com.romanpulov.violetnote.view.core.PasswordActivity;
 
-public class BasicNoteActivity extends ActionBarCompatActivity implements BasicNoteFragment.OnBasicNoteFragmentInteractionListener {
+public class BasicNoteActivity extends ActionBarCompatActivity implements BasicNoteFragment.OnBasicNoteFragmentInteractionListener, BottomToolbarProvider {
     public static final String NOTE = "Note";
 
     private BasicNoteGroupA mBasicNoteGroup;
+
     private BasicNoteFragment mFragment;
+    private ActionMenuView mBottomToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,14 +35,30 @@ public class BasicNoteActivity extends ActionBarCompatActivity implements BasicN
 
             setTitle(mBasicNoteGroup.getGroupName());
 
+            //for ToolBar
+            setContentView(R.layout.activity_toolbar_fragment_toolbar);
+
+            //setup ToolBar instead of ActionBar
+            Toolbar toolbar = findViewById(R.id.toolbar);
+            toolbar.setTitle(getTitle());
+            setSupportActionBar(toolbar);
+            setupActionBar();
+
+            //bottom toolbar
+            mBottomToolbar = findViewById(R.id.toolbar_bottom);
+            if (mBottomToolbar != null) {
+                getMenuInflater().inflate(R.menu.menu_listitem_bottom_move_actions, mBottomToolbar.getMenu());
+                mBottomToolbar.setVisibility(View.GONE);
+            }
+
             FragmentManager fm = getSupportFragmentManager();
 
             DBNoteManager noteManager = new DBNoteManager(this);
 
-            mFragment = (BasicNoteFragment)fm.findFragmentById(android.R.id.content);
+            mFragment = (BasicNoteFragment)fm.findFragmentById(R.id.fragment_id);
             if (mFragment == null) {
                 mFragment = BasicNoteFragment.newInstance(noteManager, mBasicNoteGroup);
-                fm.beginTransaction().replace(android.R.id.content, mFragment).commit();
+                fm.beginTransaction().replace(R.id.fragment_id, mFragment).commit();
             } else {
                 mFragment.refreshList(noteManager);
             }
@@ -101,5 +122,10 @@ public class BasicNoteActivity extends ActionBarCompatActivity implements BasicN
             PasswordActivity.getPasswordValidityChecker().resetPeriod();
             startActivityForResult(intent, 0);
         }
+    }
+
+    @Override
+    public ActionMenuView getBottomToolbar() {
+        return mBottomToolbar;
     }
 }

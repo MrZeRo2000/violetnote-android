@@ -98,7 +98,7 @@
             android:name=".view.BasicNoteActivity"
             android:label="@string/title_activity_basic_note"
             android:parentActivityName=".view.DashboardActivity"
-            android:theme="@style/MainAppTheme"
+            android:theme="@style/ToolBarTheme"
             />
         <activity
             android:name=".view.BasicNoteEditActivity"
