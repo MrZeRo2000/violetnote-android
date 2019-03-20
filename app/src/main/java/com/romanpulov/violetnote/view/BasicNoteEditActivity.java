@@ -75,8 +75,16 @@ public class BasicNoteEditActivity extends ActionBarCompatActivity {
     }
 
     private BasicNoteA newNote() {
+        long noteGroupId = BasicNoteGroupA.DEFAULT_NOTE_GROUP_ID;
+
+        BasicNoteGroupA noteGroupA = getIntent().getParcelableExtra(BasicNoteGroupA.BASIC_NOTE_GROUP_DATA);
+
+        if (noteGroupA != null) {
+            noteGroupId = noteGroupA.getId();
+        }
+
         return BasicNoteA.newEditInstance(
-                BasicNoteGroupA.DEFAULT_NOTE_GROUP_ID,
+                noteGroupId,
                 mViewHolder.mNoteTypeChecked.isChecked() ? 0 : 1,
                 mViewHolder.mTitle.getText().toString(),
                 mViewHolder.mIsEncrypted.isChecked(),
