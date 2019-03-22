@@ -38,6 +38,13 @@ public class BasicNoteGroupA extends BasicCommonNoteA implements Parcelable {
         mGroupIcon = value;
     }
 
+    //calculated
+    private long mNoteCount;
+
+    public long getNoteCount() {
+        return mNoteCount;
+    }
+
     @Override
     public String getDisplayTitle() {
         return mGroupName;
@@ -47,7 +54,7 @@ public class BasicNoteGroupA extends BasicCommonNoteA implements Parcelable {
         setDBManagementProvider(new BasicNoteGroupDBManagementProvider(this));
     }
 
-    public static BasicNoteGroupA newInstance(long id, long groupType, String groupName, long groupIcon, long orderId) {
+    public static BasicNoteGroupA newInstance(long id, long groupType, String groupName, long groupIcon, long orderId, long noteCount) {
         BasicNoteGroupA instance = new BasicNoteGroupA();
 
         instance.setId(id);
@@ -56,6 +63,8 @@ public class BasicNoteGroupA extends BasicCommonNoteA implements Parcelable {
         instance.mGroupType = groupType;
         instance.mGroupName = groupName;
         instance.mGroupIcon = groupIcon;
+
+        instance.mNoteCount = noteCount;
 
         return instance;
     }
@@ -76,6 +85,7 @@ public class BasicNoteGroupA extends BasicCommonNoteA implements Parcelable {
         mGroupType = in.readLong();
         mGroupName = in.readString();
         mGroupIcon = in.readLong();
+        mNoteCount = in.readLong();
     }
 
     @Override
@@ -90,6 +100,7 @@ public class BasicNoteGroupA extends BasicCommonNoteA implements Parcelable {
         dest.writeLong(mGroupType);
         dest.writeString(mGroupName);
         dest.writeLong(mGroupIcon);
+        dest.writeLong(mNoteCount);
     }
 
     public static final Parcelable.Creator<BasicNoteGroupA> CREATOR = new Parcelable.Creator<BasicNoteGroupA>() {
@@ -114,6 +125,7 @@ public class BasicNoteGroupA extends BasicCommonNoteA implements Parcelable {
                 "[groupType=" + mGroupType + "]," +
                 "[groupName=" + mGroupName + "]," +
                 "[groupIcon=" + mGroupIcon + "]" +
+                "[noteCount=" + mNoteCount + "]" +
                 "}";
     }
 }

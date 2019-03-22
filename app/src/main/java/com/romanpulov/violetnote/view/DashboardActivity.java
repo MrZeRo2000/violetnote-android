@@ -37,7 +37,7 @@ public class DashboardActivity extends ActionBarCompatActivity implements OnBasi
     protected void onResume() {
         super.onResume();
         DBNoteManager noteManager = new DBNoteManager(this);
-        List<BasicNoteGroupA> basicNoteGroupList = noteManager.mBasicNoteGroupDAO.getAll();
+        List<BasicNoteGroupA> basicNoteGroupList = noteManager.mBasicNoteGroupDAO.getAllWithTotals();
         mRecyclerView.setAdapter(new DashboardItemRecyclerViewAdapter(basicNoteGroupList, this));
     }
 

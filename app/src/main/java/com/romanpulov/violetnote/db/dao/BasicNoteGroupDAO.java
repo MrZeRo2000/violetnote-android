@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.romanpulov.violetnote.db.DBRawQueryRepository;
 import com.romanpulov.violetnote.db.tabledef.DBCommonDef;
 import com.romanpulov.violetnote.db.tabledef.NoteGroupsTableDef;
 import com.romanpulov.violetnote.model.BasicNoteGroupA;
@@ -21,7 +22,19 @@ public class BasicNoteGroupDAO extends AbstractDAO<BasicNoteGroupA> {
                 c.getLong(1),
                 c.getString(2),
                 c.getLong(3),
-                c.getLong(4)
+                c.getLong(4),
+                0
+        );
+    }
+
+    private static BasicNoteGroupA fromCursorWithTotals(@NonNull Cursor c) {
+        return BasicNoteGroupA.newInstance(
+                c.getLong(0),
+                c.getLong(1),
+                c.getString(2),
+                c.getLong(3),
+                c.getLong(4),
+                c.getLong(5)
         );
     }
 
@@ -51,6 +64,27 @@ public class BasicNoteGroupDAO extends AbstractDAO<BasicNoteGroupA> {
             @Override
             public void readFromCursor(Cursor c) {
                 result.add(fromCursor(c));
+            }
+        });
+
+        return result;
+    }
+
+    public List<BasicNoteGroupA> getAllWithTotals() {
+        final List<BasicNoteGroupA> result = new ArrayList<>();
+
+        readCursor(new CursorReaderHandler() {
+            @Override
+            public Cursor createCursor() {
+                return mDB.rawQuery(
+                        DBRawQueryRepository.NOTE_GROUPS_WITH_TOTALS,
+                        null
+                );
+            }
+
+            @Override
+            public void readFromCursor(Cursor c) {
+                result.add(fromCursorWithTotals(c));
             }
         });
 

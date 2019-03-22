@@ -26,6 +26,8 @@ public class DBNoteGroupDAOTestDBBaseTest extends DBBaseTest {
         noteGroups = mDBNoteManager.mBasicNoteGroupDAO.getByGroupType(BasicNoteGroupA.BASIC_NOTE_GROUP_TYPE);
         Assert.assertEquals(1, noteGroups.size());
 
+        Assert.assertEquals(0, noteGroups.get(0).getNoteCount());
+
         //insert
         mDBNoteManager.mBasicNoteGroupDAO.insert(BasicNoteGroupA.newEditInstance(BasicNoteGroupA.BASIC_NOTE_GROUP_TYPE, "New group name", 0));
         noteGroups = mDBNoteManager.mBasicNoteGroupDAO.getByGroupType(BasicNoteGroupA.BASIC_NOTE_GROUP_TYPE);

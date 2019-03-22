@@ -47,8 +47,12 @@ public class DashboardItemRecyclerViewAdapter extends RecyclerView.Adapter<Dashb
                 }
             }
         });
-        //to be implemented later
-        viewHolder.mItemCountView.setVisibility(View.GONE);
+
+        long noteCount = item.getNoteCount();
+        viewHolder.mItemCountView.setVisibility(noteCount == 0 ? View.GONE : View.VISIBLE);
+        if (noteCount > 0) {
+            viewHolder.mItemCountView.setText(String.valueOf(noteCount));
+        }
     }
 
     @Override

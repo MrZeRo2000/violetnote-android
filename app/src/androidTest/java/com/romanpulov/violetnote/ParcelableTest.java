@@ -144,7 +144,7 @@ public class ParcelableTest {
 
     @Test
     public void testNoteGroup() {
-        BasicNoteGroupA noteGroup = BasicNoteGroupA.newInstance(22, 20,"Name1", 5234, 2);
+        BasicNoteGroupA noteGroup = BasicNoteGroupA.newInstance(22, 20,"Name1", 5234, 2, 4);
 
         String noteGroupString = noteGroup.toString();
 
@@ -158,5 +158,7 @@ public class ParcelableTest {
         String newNoteGroupString = newNoteGroup.toString();
 
         assertEquals(newNoteGroupString, noteGroupString);
+
+        assertEquals(noteGroup.getNoteCount(), newNoteGroup.getNoteCount());
     }
 }

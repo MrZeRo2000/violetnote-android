@@ -7,6 +7,17 @@ package com.romanpulov.violetnote.db;
 
 public class DBRawQueryRepository {
 
+    public static final String NOTE_GROUPS_WITH_TOTALS =
+        "SELECT " +
+        "g._id, " +
+        "g.note_group_type, " +
+        "g.note_group_name, " +
+        "g.note_group_icon, " +
+        "g.order_id, " +
+        "(SELECT COUNT(n._id) FROM notes n WHERE n.group_id = g._id) AS count_notes " +
+        "FROM note_groups g " +
+        "ORDER BY g.order_id";
+
     public static final String NOTES_WITH_TOTALS =
         "SELECT " +
         "n._id, " +
