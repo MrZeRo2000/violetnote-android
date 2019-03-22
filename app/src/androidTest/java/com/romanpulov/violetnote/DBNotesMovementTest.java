@@ -62,11 +62,11 @@ public class DBNotesMovementTest extends DBBaseTest {
         String insertNoteGroupsSql = "insert into " + NoteGroupsTableDef.TABLE_NAME + " (note_group_type, note_group_name, note_group_icon, order_id) VALUES (?, ?, ?, ?)";
 
         //note group 2
-        String[] insertNoteGroupsParams = new String[] {String.valueOf(BasicNoteGroupA.BASIC_NOTE_GROUP_TYPE), "Note group 2", "0", "2"};
+        String[] insertNoteGroupsParams = new String[] {String.valueOf(BasicNoteGroupA.BASIC_NOTE_GROUP_TYPE), "Note group 2", "0", "3"};
         mDB.execSQL(insertNoteGroupsSql, insertNoteGroupsParams);
 
         //note group 3
-        insertNoteGroupsParams = new String[] {String.valueOf(BasicNoteGroupA.BASIC_NOTE_GROUP_TYPE), "Note group 3", "0", "3"};
+        insertNoteGroupsParams = new String[] {String.valueOf(BasicNoteGroupA.BASIC_NOTE_GROUP_TYPE), "Note group 3", "0", "4"};
         mDB.execSQL(insertNoteGroupsSql, insertNoteGroupsParams);
     }
 
