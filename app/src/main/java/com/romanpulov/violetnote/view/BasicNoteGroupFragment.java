@@ -231,12 +231,20 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
                         if (mRecyclerView != null) {
                             RecyclerViewHelper.adapterNotifyItemChanged(mRecyclerView, position);
                         }
+
+                        updateTitle(mRecyclerViewSelector.getActionMode());
                     }
                 }
             });
 
             //execute
             executor.execute();
+        }
+    }
+
+    private void updateTitle(ActionMode mode) {
+        if ((mRecyclerViewSelector != null) && (mRecyclerViewSelector.isSelected())) {
+            mode.setTitle(DisplayTitleBuilder.buildItemsDisplayTitle(getContext(), mBasicNoteGroupList, mRecyclerViewSelector.getSelectedItems()));
         }
     }
 
@@ -269,12 +277,6 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
                 }
             }
             return false;
-        }
-
-        private void updateTitle(ActionMode mode) {
-            if ((mRecyclerViewSelector != null) && (mRecyclerViewSelector.isSelected())) {
-                mode.setTitle(DisplayTitleBuilder.buildItemsDisplayTitle(getContext(), mBasicNoteGroupList, mRecyclerViewSelector.getSelectedItems()));
-            }
         }
 
         @Override

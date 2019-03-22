@@ -7,4 +7,6 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+    <!-- Highlight circle dimensions -->
+    <dimen name="highlight_circle">26dp</dimen>
 </resources>

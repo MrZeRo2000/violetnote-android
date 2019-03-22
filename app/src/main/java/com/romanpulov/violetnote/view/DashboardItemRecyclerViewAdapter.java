@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.model.BasicNoteGroupA;
@@ -46,6 +47,8 @@ public class DashboardItemRecyclerViewAdapter extends RecyclerView.Adapter<Dashb
                 }
             }
         });
+        //to be implemented later
+        viewHolder.mItemCountView.setVisibility(View.GONE);
     }
 
     @Override
@@ -55,10 +58,12 @@ public class DashboardItemRecyclerViewAdapter extends RecyclerView.Adapter<Dashb
 
     class ViewHolder extends RecyclerView.ViewHolder {
         private final Button mButton;
+        private final TextView mItemCountView;
 
         public ViewHolder(View view) {
             super(view);
-            mButton = (Button)view;
+            mButton = view.findViewById(R.id.button);
+            mItemCountView = view.findViewById(R.id.item_count);
         }
     }
 }
