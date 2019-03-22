@@ -3,7 +3,7 @@ package com.romanpulov.violetnote.db.provider;
 import com.romanpulov.violetnote.db.tabledef.NoteGroupsTableDef;
 import com.romanpulov.violetnote.model.BasicNoteGroupA;
 
-public class BasicNoteGroupDBManagementProvider extends AbstractBasicOrderedEntityNoteDBManagementProvider {
+public class BasicNoteGroupDBManagementProvider extends AbstractBasicOrderedEntityNoteDBManagementProvider<BasicNoteGroupA> {
 
     public BasicNoteGroupDBManagementProvider(BasicNoteGroupA basicNoteGroup) {
         super(basicNoteGroup);

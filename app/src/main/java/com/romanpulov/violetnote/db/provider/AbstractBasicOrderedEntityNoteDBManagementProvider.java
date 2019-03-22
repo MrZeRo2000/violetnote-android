@@ -8,11 +8,11 @@ import com.romanpulov.violetnote.model.BasicOrderedEntityNoteA;
  * Created by rpulov on 09.08.2017.
  */
 
-public abstract class AbstractBasicOrderedEntityNoteDBManagementProvider implements DBManagementProvider {
-    private final BasicOrderedEntityNoteA mBasicOrderedEntityNote;
+public abstract class AbstractBasicOrderedEntityNoteDBManagementProvider<T extends BasicOrderedEntityNoteA> implements DBManagementProvider {
+    protected final T mData;
 
-    public AbstractBasicOrderedEntityNoteDBManagementProvider(BasicOrderedEntityNoteA basicOrderedEntityNoteA) {
-        mBasicOrderedEntityNote = basicOrderedEntityNoteA;
+    public AbstractBasicOrderedEntityNoteDBManagementProvider(T basicOrderedEntityNoteA) {
+        mData = basicOrderedEntityNoteA;
     }
 
     @Override
@@ -30,7 +30,7 @@ public abstract class AbstractBasicOrderedEntityNoteDBManagementProvider impleme
 
     @Override
     public String[] getOrderSelectionArgs() {
-        return new String[] {String.valueOf(mBasicOrderedEntityNote.getOrderId())};
+        return new String[] {String.valueOf(mData.getOrderId())};
     }
 
     @Override

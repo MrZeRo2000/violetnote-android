@@ -35,7 +35,6 @@ import com.romanpulov.violetnote.view.core.BasicCommonNoteFragment;
 import com.romanpulov.violetnote.view.core.PasswordActivity;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 import com.romanpulov.violetnote.view.helper.ActionHelper;
-import com.romanpulov.violetnote.view.helper.BottomToolbarHelper;
 
 import java.util.List;
 
@@ -186,7 +185,7 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
     }
 
     protected void performMoveToOtherNoteAction(final ActionMode mode, final List<BasicNoteItemA> items, final BasicNoteA otherNote) {
-        String confirmationQuestion = getString(R.string.ui_question_selected_notes_move_to_other_note, items.size(), otherNote.getTitle());
+        String confirmationQuestion = getString(R.string.ui_question_selected_note_items_move_to_other_note, items.size(), otherNote.getTitle());
         AlertOkCancelSupportDialogFragment dialog = AlertOkCancelSupportDialogFragment.newAlertOkCancelDialog(confirmationQuestion);
         dialog.setOkButtonClickListener(new AlertOkCancelSupportDialogFragment.OnClickListener() {
             @Override

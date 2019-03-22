@@ -148,7 +148,8 @@
     <string name="ui_dialog_title_confirmation">Confirmation</string>
     <string name="ui_question_are_you_sure">Are you sure?</string>
     <string name="ui_question_delete_item_are_you_sure">%s will be deleted!\nAre you sure?</string>
-    <string name="ui_question_selected_notes_move_to_other_note" formatted="true">Are you sure to move %1$d notes to other note %2$s ?</string>
+    <string name="ui_question_selected_note_items_move_to_other_note" formatted="true">Are you sure to move %1$d note items to other note: %2$s ?</string>
+    <string name="ui_question_selected_note_move_to_other_note_group" formatted="true">Are you sure to move %1$d notes to other note group: %2$s ?</string>
     <string name="ui_question_are_you_sure_checkout_items" formatted="true">Are you sure to checkout %1$d items?</string>
     <string name="ui_error_empty_password">Password should not be empty</string>
     <string name="ui_error_group_delete_contain_notes">%s will not be deleted because it contains notes.</string>

@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.romanpulov.violetnote.db.tabledef.DBCommonDef;
 import com.romanpulov.violetnote.db.tabledef.NoteItemsTableDef;
+import com.romanpulov.violetnote.db.tabledef.NotesTableDef;
 
 /**
  * Database BasicNote operations helper class
@@ -98,24 +99,37 @@ public class DBBasicNoteHelper {
 
     /**
      * Selection args
-     * @param noteId 0 for notes, note_id value for note items
+     * @param id 0 for notes, id value for items
      * @return selection args
      */
-    private static String[] getNoteIdSelectionArgs(long noteId) {
-        if (noteId == 0)
+    private static String[] getIdSelectionArgs(long id) {
+        if (id == 0)
             return null;
         else
-            return new String[] {String.valueOf(noteId)};
+            return new String[] {String.valueOf(id)};
     }
+
+    private static String getGroupIdSelection(long groupId) {
+        if (groupId == 0)
+            return null;
+        else
+            return DBCommonDef.GROUP_ID_SELECTION_STRING;
+    }
+
 
     public long getMaxOrderId(String tableName, String selection, String[] selectionArgs) {
         return getAggregateColumn(tableName, DBCommonDef.ORDER_COLUMN_NAME, MAX_AGGREGATE_FUNCTION_NAME,
                 selection, selectionArgs);
     }
 
-    public long getMaxOrderId(String tableName, long noteId) {
+    public long getMaxNoteOrderId(String tableName, long noteId) {
         return getAggregateColumn(tableName, DBCommonDef.ORDER_COLUMN_NAME, MAX_AGGREGATE_FUNCTION_NAME,
-                getNoteIdSelection(noteId), getNoteIdSelectionArgs(noteId));
+                getNoteIdSelection(noteId), getIdSelectionArgs(noteId));
+    }
+
+    public long getNoteGroupMaxOrderId(long noteGroupId) {
+        return getAggregateColumn(NotesTableDef.TABLE_NAME, DBCommonDef.ORDER_COLUMN_NAME, MAX_AGGREGATE_FUNCTION_NAME,
+                getGroupIdSelection(noteGroupId), getIdSelectionArgs(noteGroupId));
     }
 
     /**
@@ -131,7 +145,7 @@ public class DBBasicNoteHelper {
 
     public long getMinOrderId(String tableName, long noteId) {
         return getAggregateColumn(tableName, DBCommonDef.ORDER_COLUMN_NAME, MIN_AGGREGATE_FUNCTION_NAME,
-                getNoteIdSelection(noteId), getNoteIdSelectionArgs(noteId));
+                getNoteIdSelection(noteId), getIdSelectionArgs(noteId));
     }
 
     public long getMinOrderId(String tableName, String selection, String[] selectionArgs) {
@@ -141,12 +155,12 @@ public class DBBasicNoteHelper {
 
     public long getMaxId(String tableName, long noteId) {
         return getAggregateColumn(tableName, DBCommonDef.ID_COLUMN_NAME, MAX_AGGREGATE_FUNCTION_NAME,
-                getNoteIdSelection(noteId), getNoteIdSelectionArgs(noteId));
+                getNoteIdSelection(noteId), getIdSelectionArgs(noteId));
     }
 
     public long getMinId(String tableName, long noteId) {
         return getAggregateColumn(tableName, DBCommonDef.ID_COLUMN_NAME, MIN_AGGREGATE_FUNCTION_NAME,
-                getNoteIdSelection(noteId), getNoteIdSelectionArgs(noteId));
+                getNoteIdSelection(noteId), getIdSelectionArgs(noteId));
     }
 
     public long getPrevOrderId(String tableName, String selection, String[] selectionArgs) {

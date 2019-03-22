@@ -249,7 +249,7 @@ public final class BasicNoteDAO extends AbstractBasicNoteDAO<BasicNoteA> {
         note.setValues(getNoteValues(note));
     }
 
-    public void fillNotesByGroup(@NonNull BasicNoteGroupA noteGroup, @NonNull ArrayList<BasicNoteA> notes) {
+    public void fillNotesByGroup(@NonNull BasicNoteGroupA noteGroup, @NonNull List<BasicNoteA> notes) {
         List<BasicNoteA> newNotes = getTotalsByGroup(noteGroup);
         notes.clear();
         notes.addAll(newNotes);
@@ -260,7 +260,7 @@ public final class BasicNoteDAO extends AbstractBasicNoteDAO<BasicNoteA> {
         ContentValues cv = new ContentValues();
 
         cv.put(NotesTableDef.LAST_MODIFIED_COLUMN_NAME, System.currentTimeMillis());
-        cv.put(NotesTableDef.ORDER_COLUMN_NAME, mDBHelper.getMaxOrderId(NotesTableDef.TABLE_NAME, 0) + 1);
+        cv.put(NotesTableDef.ORDER_COLUMN_NAME, mDBHelper.getNoteGroupMaxOrderId(object.getNoteGroupId()) + 1);
         cv.put(NotesTableDef.GROUP_ID_COLUMN_NAME, object.getNoteGroupId());
         cv.put(NotesTableDef.NOTE_TYPE_COLUMN_NAME, object.getNoteType());
         cv.put(NotesTableDef.TITLE_COLUMN_NAME, object.getTitle());
@@ -328,4 +328,18 @@ public final class BasicNoteDAO extends AbstractBasicNoteDAO<BasicNoteA> {
         }
     }
 
+    public int updateToOtherNoteGroup(@NonNull BasicNoteA note, @NonNull BasicNoteGroupA otherNoteGroup, long otherOrderId) {
+        ContentValues cv = new ContentValues();
+
+        cv.put(NotesTableDef.LAST_MODIFIED_COLUMN_NAME, System.currentTimeMillis());
+        cv.put(NotesTableDef.GROUP_ID_COLUMN_NAME, otherNoteGroup.getId());
+        cv.put(DBCommonDef.ORDER_COLUMN_NAME, otherOrderId);
+
+        return mDB.update(NotesTableDef.TABLE_NAME, cv, DBCommonDef.ID_COLUMN_NAME + " = ?", new String[]{String.valueOf(note.getId())});
+    }
+
+    public int moveToOtherNoteGroup(@NonNull BasicNoteA note, @NonNull BasicNoteGroupA otherNoteGroup) {
+        long maxOrderId = mDBHelper.getMaxOrderId(NotesTableDef.TABLE_NAME, NotesTableDef.GROUP_ID_COLUMN_NAME + " = ?", new String[]{String.valueOf(otherNoteGroup.getId())});
+        return updateToOtherNoteGroup(note, otherNoteGroup, maxOrderId + 1);
+    }
 }

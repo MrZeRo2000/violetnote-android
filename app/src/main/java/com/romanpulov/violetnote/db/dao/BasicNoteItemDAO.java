@@ -212,7 +212,7 @@ public final class BasicNoteItemDAO extends AbstractBasicNoteItemDAO<BasicNoteIt
         ContentValues cv = new ContentValues();
 
         cv.put(NoteItemsTableDef.LAST_MODIFIED_COLUMN_NAME, System.currentTimeMillis());
-        cv.put(NoteItemsTableDef.ORDER_COLUMN_NAME, mDBHelper.getMaxOrderId(NoteItemsTableDef.TABLE_NAME, item.getNoteId()) + 1);
+        cv.put(NoteItemsTableDef.ORDER_COLUMN_NAME, mDBHelper.getMaxNoteOrderId(NoteItemsTableDef.TABLE_NAME, item.getNoteId()) + 1);
         cv.put(NoteItemsTableDef.NOTE_ID_COLUMN_NAME, item.getNoteId());
         cv.put(NoteItemsTableDef.NAME_COLUMN_NAME, item.getName());
         cv.put(NoteItemsTableDef.VALUE_COLUMN_NAME, item.getValue());

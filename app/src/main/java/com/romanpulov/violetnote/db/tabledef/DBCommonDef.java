@@ -33,6 +33,9 @@ public final class DBCommonDef {
     //note_id selection
     public static final String NOTE_ID_SELECTION_STRING = NOTE_ID_COLUMN_NAME + " = ?";
 
+    //group_id selection
+    public static final String GROUP_ID_SELECTION_STRING = GROUP_ID_COLUMN_NAME + " = ?";
+
     //priority selection
     public static final String PRIORITY_SELECTION_STRING = PRIORITY_COLUMN_NAME + " = ?";
 

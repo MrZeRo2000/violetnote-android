@@ -84,6 +84,33 @@ public class BasicNoteGroupDAO extends AbstractDAO<BasicNoteGroupA> {
         return result;
     }
 
+    @NonNull
+    public List<BasicNoteGroupA> getRelatedNoteGroupList(@NonNull final BasicNoteGroupA noteGroup) {
+        final List<BasicNoteGroupA> result = new ArrayList<>();
+
+        readCursor(new CursorReaderHandler() {
+            @Override
+            public Cursor createCursor() {
+                return mDB.query(
+                        NoteGroupsTableDef.TABLE_NAME,
+                        NoteGroupsTableDef.TABLE_COLS,
+                        NoteGroupsTableDef.NOTE_GROUP_TYPE_COLUMN_NAME + " = ? AND " + DBCommonDef.ID_COLUMN_NAME + " != ?",
+                        new String[]{String.valueOf(noteGroup.getGroupType()), String.valueOf(noteGroup.getId())},
+                        null,
+                        null,
+                        DBCommonDef.ORDER_COLUMN_NAME
+                );
+            }
+
+            @Override
+            public void readFromCursor(Cursor c) {
+                result.add(fromCursor(c));
+            }
+        });
+
+        return result;
+    }
+
     public void fillByGroupType(long groupType, @NonNull List<BasicNoteGroupA> noteGroupList) {
         final List<BasicNoteGroupA> newNoteGroupList = getByGroupType(groupType);
         noteGroupList.clear();

@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -22,6 +23,9 @@ import com.romanpulov.violetnote.db.manager.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicEntityNoteSelectionPosA;
 import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteGroupA;
+import com.romanpulov.violetnote.view.action.BasicActionExecutor;
+import com.romanpulov.violetnote.view.action.BasicNoteMoveToOtherNoteGroupAction;
+import com.romanpulov.violetnote.view.action.BasicNoteRefreshAction;
 import com.romanpulov.violetnote.view.helper.BottomToolbarHelper;
 import com.romanpulov.violetnote.view.helper.DisplayTitleBuilder;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveAction;
@@ -45,11 +49,13 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
     private static void log(String message) {
         Log.d("BasicNoteFragment", message);
     }
+    protected final static int MENU_GROUP_OTHER_ITEMS = Menu.FIRST + 1;
 
     private BasicNoteGroupA mNoteGroup;
+    private List<BasicNoteGroupA> mRelatedNoteGroupList;
     private OnBasicNoteFragmentInteractionListener mListener;
 
-    private final ArrayList<BasicNoteA> mNoteList = new ArrayList<>();
+    private final List<BasicNoteA> mNoteList = new ArrayList<>();
 
     public static BasicNoteFragment newInstance(DBNoteManager noteManager, BasicNoteGroupA noteGroup) {
         BasicNoteFragment fragment = new BasicNoteFragment();
@@ -164,6 +170,48 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
                 .execute();
     }
 
+    private void performMoveToOtherNoteGroupAction(final ActionMode mode, @NonNull final List<BasicNoteA> items, @NonNull final BasicNoteGroupA otherNoteGroup) {
+        String confirmationQuestion = getString(R.string.ui_question_selected_note_move_to_other_note_group, items.size(), otherNoteGroup.getDisplayTitle());
+        AlertOkCancelSupportDialogFragment dialog = AlertOkCancelSupportDialogFragment.newAlertOkCancelDialog(confirmationQuestion);
+        dialog.setOkButtonClickListener(new AlertOkCancelSupportDialogFragment.OnClickListener() {
+            @Override
+            public void OnClick(DialogFragment dialog) {
+                //executor
+                BasicActionExecutor<List<BasicNoteA>> executor = new BasicActionExecutor<>(getContext(), mNoteList);
+
+                //actions
+                executor.addAction(getString(R.string.caption_processing), new BasicNoteMoveToOtherNoteGroupAction(items, otherNoteGroup));
+                executor.addAction(getString(R.string.caption_loading), new BasicNoteRefreshAction(mNoteList, mNoteGroup));
+
+                //on completed
+                executor.setOnExecutionCompletedListener(new BasicActionExecutor.OnExecutionCompletedListener<List<BasicNoteA>>() {
+                    @Override
+                    public void onExecutionCompleted(List<BasicNoteA> data, boolean result) {
+                        mode.finish();
+
+                        if (result) {
+                            RecyclerViewHelper.adapterNotifyDataSetChanged(mRecyclerView);
+                        }
+
+                        if (mDialogFragment != null) {
+                            mDialogFragment.dismiss();
+                            mDialogFragment = null;
+                        }
+                    }
+                });
+
+                //execute
+                executor.execute();
+            }
+        });
+
+        FragmentManager fragmentManager = getFragmentManager();
+        if (fragmentManager != null)
+            dialog.show(fragmentManager, null);
+
+        mDialogFragment = dialog;
+    }
+
     private void performMoveAction(BasicNoteMoveAction<BasicNoteA> action, List<BasicNoteA> items) {
         DBNoteManager noteManager = new DBNoteManager(getActivity());
 
@@ -187,22 +235,49 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
 
             //int selectedItemPos = mRecyclerViewSelector.getSelectedItemPos();
             if (selectedNoteItems.size() > 0) {
-                switch (item.getItemId()) {
-                    case R.id.delete:
-                        performDeleteAction(mode, selectedNoteItems);
-                        break;
-                    case R.id.edit:
-                        performEditAction(mode, selectedNoteItems.get(0));
-                        break;
+                if ((item.getGroupId() == MENU_GROUP_OTHER_ITEMS) && (mRelatedNoteGroupList != null)) {
+                    // move to other items
+                    BasicNoteGroupA otherNoteGroup = mRelatedNoteGroupList.get(item.getItemId());
+                    performMoveToOtherNoteGroupAction(mode, selectedNoteItems, otherNoteGroup);
+                } else {
+                    switch (item.getItemId()) {
+                        case R.id.delete:
+                            performDeleteAction(mode, selectedNoteItems);
+                            break;
+                        case R.id.edit:
+                            performEditAction(mode, selectedNoteItems.get(0));
+                            break;
+                    }
                 }
             }
             return false;
         }
 
+        private void buildMoveToOtherGroupsSubMenu(Menu menu) {
+            DBNoteManager mNoteManager = new DBNoteManager(getContext());
+            mRelatedNoteGroupList =  mNoteManager.mBasicNoteGroupDAO.getRelatedNoteGroupList(mNoteGroup);
+
+            SubMenu subMenu = null;
+            int order = 1;
+            int relatedNoteGroupIndex = 0;
+
+            for (BasicNoteGroupA noteGroupA : mRelatedNoteGroupList) {
+                if (subMenu == null) {
+                    subMenu = menu.addSubMenu(Menu.NONE, Menu.NONE, order++, getString(R.string.action_move_other));
+                    subMenu.getItem().setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+                    subMenu.clearHeader();
+                }
+
+                subMenu.add(MENU_GROUP_OTHER_ITEMS, relatedNoteGroupIndex ++, Menu.NONE, noteGroupA.getDisplayTitle());
+            }
+        }
+
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            log("onCreateActionMode");
             mode.getMenuInflater().inflate(R.menu.menu_edit_delete_actions, menu);
+
+            buildMoveToOtherGroupsSubMenu(menu);
+
             if (mRecyclerViewSelector.isSelected())
                 mode.setTitle(DisplayTitleBuilder.buildItemsDisplayTitle(getActivity(), mNoteList, mRecyclerViewSelector.getSelectedItems()));
             return true;
