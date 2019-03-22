@@ -4,8 +4,9 @@
     android:shape="oval"
     >
     <solid android:color="@color/colorHeader"/>
+    <stroke android:color="@color/brightTextColor" android:width="@dimen/highlight_circle_border"/>
     <size
-        android:height="@dimen/highlight_circle"
-        android:width="@dimen/highlight_circle"
+        android:height="@dimen/highlight_circle_size"
+        android:width="@dimen/highlight_circle_size"
         />
 </shape>

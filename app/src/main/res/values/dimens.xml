@@ -8,5 +8,6 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <!-- Highlight circle dimensions -->
-    <dimen name="highlight_circle">26dp</dimen>
+    <dimen name="highlight_circle_size">26dp</dimen>
+    <dimen name="highlight_circle_border">1dp</dimen>
 </resources>
