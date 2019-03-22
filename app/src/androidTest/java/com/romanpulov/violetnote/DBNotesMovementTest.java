@@ -45,6 +45,7 @@ public class DBNotesMovementTest extends DBBaseTest {
             internalTestNoteMove();
             internalTestNoteItemMove();
             internalTestRelatedNoteListAndMovement();
+            internalTestNoteGroupsMovement();
         }
     }
 
@@ -55,29 +56,46 @@ public class DBNotesMovementTest extends DBBaseTest {
             mTestNoteNames.add("Instrumentation test note " + String.valueOf(i));
     }
 
-    private void createNotesTestData() {
+    private void createNoteGroupsTestData() {
         initDB();
+
+        String insertNoteGroupsSql = "insert into " + NoteGroupsTableDef.TABLE_NAME + " (note_group_type, note_group_name, note_group_icon, order_id) VALUES (?, ?, ?, ?)";
+
+        //note group 2
+        String[] insertNoteGroupsParams = new String[] {String.valueOf(BasicNoteGroupA.BASIC_NOTE_GROUP_TYPE), "Note group 2", "0", "2"};
+        mDB.execSQL(insertNoteGroupsSql, insertNoteGroupsParams);
+
+        //note group 3
+        insertNoteGroupsParams = new String[] {String.valueOf(BasicNoteGroupA.BASIC_NOTE_GROUP_TYPE), "Note group 3", "0", "3"};
+        mDB.execSQL(insertNoteGroupsSql, insertNoteGroupsParams);
+    }
+
+    private void createNotesTestData() {
+        createNoteGroupsTestData();
 
         int notePos = 0;
 
-        String insertNotesSql = "insert into " + NotesTableDef.TABLE_NAME + " (last_modified, order_id, group_id, note_type, title, is_encrypted) VALUES (?, ?, 2, ?, ?, ?)";
+        String insertNotesSql = "insert into " + NotesTableDef.TABLE_NAME + " (last_modified, order_id, group_id, note_type, title, is_encrypted) VALUES (?, ?, ?, ?, ?, ?)";
 
         // checked item 1
-        String[] insertNotesArgs = new String[] {"0", "1", "0", mTestNoteNames.get(notePos++), "0"};
+        String[] insertNotesArgs = new String[] {"0", "1", "2", "2", mTestNoteNames.get(notePos++), "0"};
         mDB.execSQL(insertNotesSql, insertNotesArgs);
 
         // checked item 2
-        insertNotesArgs = new String[] {"0", "2", "0", mTestNoteNames.get(notePos++), "0"};
+        insertNotesArgs = new String[] {"0", "2", "2", "0", mTestNoteNames.get(notePos++), "0"};
         mDB.execSQL(insertNotesSql, insertNotesArgs);
 
         // checked item 3
-        insertNotesArgs = new String[] {"0", "4", "0", mTestNoteNames.get(notePos++), "0"};
+        insertNotesArgs = new String[] {"0", "4", "2", "0", mTestNoteNames.get(notePos++), "0"};
         mDB.execSQL(insertNotesSql, insertNotesArgs);
 
         // name value item 1
-        insertNotesArgs = new String[] {"0", "5", "1", mTestNoteNames.get(notePos), "0"};
+        insertNotesArgs = new String[] {"0", "5", "2", "1", mTestNoteNames.get(notePos++), "0"};
         mDB.execSQL(insertNotesSql, insertNotesArgs);
 
+        //checked item in group 2
+        insertNotesArgs = new String[] {"0", "1", "3", "0", mTestNoteNames.get(notePos), "0"};
+        mDB.execSQL(insertNotesSql, insertNotesArgs);
     }
 
     private void createNoteItemTestData() {
@@ -387,5 +405,37 @@ public class DBNotesMovementTest extends DBBaseTest {
 
         Assert.assertEquals(-1, notes[1].getItems().get(notes[1].getSummary().getItemCount()-1).getPriority());
         Assert.assertEquals(1, notes[1].getItems().get(notes[1].getSummary().getItemCount()-1).getOrderId());
+    }
+
+    private void internalTestNoteGroupsMovement() {
+        createNotesTestData();
+
+        long note3id = mDBHelper.getAggregateColumn(NotesTableDef.TABLE_NAME, DBCommonDef.ID_COLUMN_NAME, "MAX", "title = ?", new String[]{mTestNoteNames.get(2)});
+        long note4id = mDBHelper.getAggregateColumn(NotesTableDef.TABLE_NAME, DBCommonDef.ID_COLUMN_NAME, "MAX", "title = ?", new String[]{mTestNoteNames.get(3)});
+
+        //get note 3, 4
+        long[] noteIdList = {note3id, note4id};
+        BasicNoteA[] notes = getNotes(noteIdList);
+        Assert.assertEquals(2, notes.length);
+
+        // get groups
+        List<BasicNoteGroupA> noteGroups =  mDBNoteManager.mBasicNoteGroupDAO.getByGroupType(BasicNoteGroupA.BASIC_NOTE_GROUP_TYPE);
+        Assert.assertEquals(3, noteGroups.size());
+
+        //move note 3 to group 2
+        mDBNoteManager.mBasicNoteDAO.moveToOtherNoteGroup(notes[0], noteGroups.get(1));
+
+        //check new note group and order
+        BasicNoteA movedNote3 = mDBNoteManager.mBasicNoteDAO.getById(note3id);
+        Assert.assertEquals(noteGroups.get(1).getId(), movedNote3.getNoteGroupId());
+        Assert.assertEquals(2, movedNote3.getOrderId());
+
+        //move note 4 to group 3
+        mDBNoteManager.mBasicNoteDAO.moveToOtherNoteGroup(notes[1], noteGroups.get(2));
+
+        //check new note group and order
+        BasicNoteA movedNote4 = mDBNoteManager.mBasicNoteDAO.getById(note4id);
+        Assert.assertEquals(noteGroups.get(2).getId(), movedNote4.getNoteGroupId());
+        Assert.assertEquals(1, movedNote4.getOrderId());
     }
 }
