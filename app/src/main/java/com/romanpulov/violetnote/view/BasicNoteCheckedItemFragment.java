@@ -172,6 +172,10 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         mEditorDialog = alertDialog;
     }
 
+    private void updateTitle(ActionMode mode) {
+        mode.setTitle(DisplayTitleBuilder.buildItemsDisplayTitle(getActivity(), mBasicNoteData.getNote().getItems(), mRecyclerViewSelector.getSelectedItems()));
+    }
+
     public class ActionBarCallBack implements ActionMode.Callback {
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
@@ -206,8 +210,10 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
 
             buildMoveToOtherNotesSubMenu(menu);
 
-            if (mRecyclerViewSelector.isSelectedSingle())
-                mode.setTitle(DisplayTitleBuilder.buildItemsDisplayTitle(getActivity(), mBasicNoteData.getNote().getItems(), mRecyclerViewSelector.getSelectedItems()));
+            if (mRecyclerViewSelector.isSelectedSingle()) {
+                updateTitle(mode);
+            }
+
 
             mInputActionHelper.hideLayout();
 
@@ -217,6 +223,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         @Override
         public void onDestroyActionMode(ActionMode mode) {
             mInputActionHelper.hideLayout();
+
             if (mBottomToolbarHelper != null) {
                 mBottomToolbarHelper.hideLayout();
             }
@@ -236,7 +243,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                 mBottomToolbarHelper.showLayout(mRecyclerViewSelector.getSelectedItems().size(), mBasicNoteData.getNote().getSummary().getItemCount());
             }
             updateActionMenu(menu);
-            mode.setTitle(DisplayTitleBuilder.buildItemsDisplayTitle(getActivity(), mBasicNoteData.getNote().getItems(), mRecyclerViewSelector.getSelectedItems()));
+            updateTitle(mode);
             return true;
         }
     }
