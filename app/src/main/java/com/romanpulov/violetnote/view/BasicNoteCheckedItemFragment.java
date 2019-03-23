@@ -289,6 +289,9 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         mInputActionHelper.setOnAddInteractionListener(new InputActionHelper.OnAddInteractionListener() {
             @Override
             public void onAddFragmentInteraction(final int actionType, final String text) {
+                if (mBasicNoteData.getNote().isEncrypted()) {
+                    InputManagerHelper.hideInput(view);
+                }
                 switch (actionType) {
                     case InputActionHelper.INPUT_ACTION_TYPE_ADD:
                         performAddAction(BasicNoteItemA.newCheckedEditInstance(
