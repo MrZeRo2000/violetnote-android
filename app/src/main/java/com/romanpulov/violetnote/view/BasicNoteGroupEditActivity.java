@@ -45,7 +45,6 @@ public class BasicNoteGroupEditActivity extends ActionBarCompatActivity {
         if (mNoteGroup == null) {
             mImgSelector.setSelection(0);
             mTitle.requestFocus();
-            InputManagerHelper.showInput(mTitle);
         } else {
             mTitle.setText(mNoteGroup.getGroupName());
             int drawable = DrawableSelectionHelper.getDrawableForNoteGroup(mNoteGroup);
@@ -54,6 +53,21 @@ public class BasicNoteGroupEditActivity extends ActionBarCompatActivity {
                 position = 0;
             }
             mImgSelector.setSelection(position);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        InputManagerHelper.hideInput(mTitle);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (mNoteGroup == null) {
+            InputManagerHelper.toggleInputForced(this);
         }
     }
 
