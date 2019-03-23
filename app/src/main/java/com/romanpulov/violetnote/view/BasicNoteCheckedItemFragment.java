@@ -214,15 +214,14 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                 updateTitle(mode);
             }
 
-
-            mInputActionHelper.hideLayout();
+            hideAddLayout();
 
             return true;
         }
 
         @Override
         public void onDestroyActionMode(ActionMode mode) {
-            mInputActionHelper.hideLayout();
+            hideAddLayout();
 
             if (mBottomToolbarHelper != null) {
                 mBottomToolbarHelper.hideLayout();
@@ -233,7 +232,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
 
         @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            mInputActionHelper.hideLayout();
+            hideAddLayout();
 
             if (mBottomToolbarHelper == null) {
                 setupBottomToolbarHelper();
@@ -263,7 +262,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                 new OnBasicNoteCheckedItemFragmentInteractionListener() {
                     @Override
                     public void onBasicNoteItemFragmentInteraction(BasicNoteItemA item, int position) {
-                        mInputActionHelper.hideLayout();
+                        hideAddLayout();
 
                         DBNoteManager manager = new DBNoteManager(getActivity());
                         //update item
@@ -314,7 +313,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                                         text);
                             }
                         });
-                        mInputActionHelper.hideLayout();
+                        hideAddLayout();
                         mRecyclerViewSelector.finishActionMode();
                         break;
                     case InputActionHelper.INPUT_ACTION_TYPE_NUMBER:
@@ -324,7 +323,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                                 item.setParamLong(mPriceNoteParamTypeId, InputParser.getLongValueFromString(text));
                             }
                         });
-                        mInputActionHelper.hideLayout();
+                        hideAddLayout();
                         mRecyclerViewSelector.finishActionMode();
                         break;
                 }

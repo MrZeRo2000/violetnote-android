@@ -2,6 +2,7 @@ package com.romanpulov.violetnote.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.ActionMenuView;
 import android.support.v7.widget.Toolbar;
@@ -55,7 +56,7 @@ public class BasicNoteActivity extends ActionBarCompatActivity implements BasicN
 
             DBNoteManager noteManager = new DBNoteManager(this);
 
-            mFragment = (BasicNoteFragment)fm.findFragmentById(R.id.fragment_id);
+            mFragment = getFragment();
             if (mFragment == null) {
                 mFragment = BasicNoteFragment.newInstance(noteManager, mBasicNoteGroup);
                 fm.beginTransaction().replace(R.id.fragment_id, mFragment).commit();
@@ -63,6 +64,11 @@ public class BasicNoteActivity extends ActionBarCompatActivity implements BasicN
                 mFragment.refreshList(noteManager);
             }
         }
+    }
+
+    private BasicNoteFragment getFragment() {
+        FragmentManager fm = getSupportFragmentManager();
+        return (BasicNoteFragment)fm.findFragmentById(R.id.fragment_id);
     }
 
     @Override
@@ -76,6 +82,14 @@ public class BasicNoteActivity extends ActionBarCompatActivity implements BasicN
         super.onRestart();
         // to handle back button from underlying activity
         // mFragment.refreshList(new DBNoteManager(this));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mFragment != null) {
+            mFragment.hideAddLayout();
+        }
     }
 
     @Override

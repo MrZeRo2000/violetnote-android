@@ -315,7 +315,9 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
 
             buildMoveToOtherGroupsSubMenu(menu);
 
-            mInputActionHelper.hideLayout();
+            if (mInputActionHelper != null) {
+                mInputActionHelper.hideLayout();
+            }
 
             if (mRecyclerViewSelector.isSelected()) {
                 updateTitle(mode);
@@ -327,7 +329,7 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
 
         @Override
         public void onDestroyActionMode(ActionMode mode) {
-            mInputActionHelper.hideLayout();
+            hideAddLayout();
 
             if (mBottomToolbarHelper != null) {
                 mBottomToolbarHelper.hideLayout();
@@ -338,7 +340,8 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
 
         @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            mInputActionHelper.hideLayout();
+            hideAddLayout();
+
             log("onPrepareActionMode");
             //menu.getItem(R.menu.)
             MenuItem menuItem = menu.findItem(R.id.edit);
@@ -395,7 +398,7 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
         mInputActionHelper.setOnAddInteractionListener(new InputActionHelper.OnAddInteractionListener() {
             @Override
             public void onAddFragmentInteraction(int actionType, String text) {
-                mInputActionHelper.hideLayout();
+                hideAddLayout();
 
                 performEditAction(text);
 
@@ -404,6 +407,12 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
         });
 
         return view;
+    }
+
+    public void hideAddLayout() {
+        if (mInputActionHelper != null) {
+            mInputActionHelper.hideLayout();
+        }
     }
 
     @Override
