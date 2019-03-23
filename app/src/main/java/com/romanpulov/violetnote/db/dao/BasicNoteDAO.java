@@ -167,9 +167,10 @@ public final class BasicNoteDAO extends AbstractBasicNoteDAO<BasicNoteA> {
                         NotesTableDef.TABLE_NAME,
                         NotesTableDef.TABLE_COLS,
                         DBCommonDef.ID_COLUMN_NAME + " != ? AND " +
+                                NotesTableDef.GROUP_ID_COLUMN_NAME  + " = ? AND " +
                                 NotesTableDef.NOTE_TYPE_COLUMN_NAME + " = ? AND " +
                                 NotesTableDef.IS_ENCRYPTED_COLUMN_NAME + " = ?",
-                        new String[]{String.valueOf(note.getId()), String.valueOf(note.getNoteType()), String.valueOf(BooleanUtils.toInt(note.isEncrypted()))},
+                        new String[]{String.valueOf(note.getId()), String.valueOf(note.getNoteGroupId()), String.valueOf(note.getNoteType()), String.valueOf(BooleanUtils.toInt(note.isEncrypted()))},
                         null,
                         null,
                         NotesTableDef.TITLE_COLUMN_NAME
