@@ -13,6 +13,10 @@
             android:title="@string/pref_title_interface_checked_last"
             android:defaultValue="false"
             />
+        <Preference
+            android:key="pref_interface_checked_update_interval"
+            android:title="@string/pref_title_interface_checked_update_interval"
+            />
     </PreferenceCategory>
     <PreferenceCategory
         android:title="@string/pref_title_pass_note_data"

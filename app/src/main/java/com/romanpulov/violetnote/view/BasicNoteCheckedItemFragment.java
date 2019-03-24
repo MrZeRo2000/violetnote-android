@@ -2,7 +2,11 @@ package com.romanpulov.violetnote.view;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.net.IpSecManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
@@ -42,6 +46,7 @@ import com.romanpulov.violetnote.view.helper.InputActionHelper;
 import com.romanpulov.violetnote.view.core.TextEditDialogBuilder;
 import com.romanpulov.violetnote.view.helper.CheckoutProgressHelper;
 import com.romanpulov.violetnote.view.helper.InputManagerHelper;
+import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 
 import java.util.List;
 
@@ -51,6 +56,14 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
     private CheckoutProgressHelper mCheckoutProgressHelper;
 
     private long mPriceNoteParamTypeId;
+
+    private Handler mRefreshHandler = new Handler();
+    private Runnable mRefreshRunnable = new Runnable() {
+        @Override
+        public void run() {
+            refreshListWithView();
+        }
+    };
 
     @Override
     public void onAttach(Context context) {
@@ -106,6 +119,17 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                     mBasicNoteData.getCheckedLongParamTotal(mPriceNoteParamTypeId),
                     mBasicNoteData.getLongParamTotal(mPriceNoteParamTypeId)
             );
+        }
+    }
+
+    private void refreshCheckedItemsDisplay() {
+        if (PreferenceRepository.isInterfaceCheckedLast(getContext())) {
+            int delay = PreferenceRepository.getInterfaceCheckedUpdateInterval(getContext());
+
+            if (delay > 0) {
+                mRefreshHandler.removeMessages(0);
+                mRefreshHandler.postDelayed(mRefreshRunnable, delay * 1000);
+            }
         }
     }
 
@@ -276,6 +300,9 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                         //update checked
                         mBasicNoteData.getNote().getSummary().addCheckedItemCount(item.isChecked() ? 1 : - 1);
                         updateCheckedItems();
+
+                        //refresh display
+                        refreshCheckedItemsDisplay();
 
                         RecyclerViewHelper.adapterNotifyDataSetChanged(mRecyclerView);
                     }

@@ -38,6 +38,7 @@ import com.romanpulov.violetnote.service.LoaderServiceManager;
 import com.romanpulov.violetnote.view.helper.PermissionRequestHelper;
 import com.romanpulov.violetnote.view.preference.AccountDropboxPreferenceSetup;
 import com.romanpulov.violetnote.view.preference.BasicNoteGroupsPreferenceSetup;
+import com.romanpulov.violetnote.view.preference.CheckedUpdateIntervalPreferenceSetup;
 import com.romanpulov.violetnote.view.preference.CloudStorageTypePreferenceSetup;
 import com.romanpulov.violetnote.view.preference.processor.PreferenceBackupDropboxProcessor;
 import com.romanpulov.violetnote.view.preference.processor.PreferenceBackupLocalProcessor;
@@ -116,6 +117,7 @@ public class SettingsFragment extends PreferenceFragment {
         new SourcePathPreferenceSetup(this).execute();
         new AccountDropboxPreferenceSetup(this).execute();
         new CloudStorageTypePreferenceSetup(this).execute();
+        new CheckedUpdateIntervalPreferenceSetup(this).execute();
     }
 
     private boolean checkInternetConnection() {

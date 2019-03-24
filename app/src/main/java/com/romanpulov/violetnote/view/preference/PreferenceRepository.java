@@ -1,6 +1,7 @@
 package com.romanpulov.violetnote.view.preference;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
@@ -13,6 +14,7 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 /**
  * Preference repository class to be used for preference configuration
@@ -24,12 +26,15 @@ public class PreferenceRepository {
     public static final int SOURCE_TYPE_DROPBOX = 1;
     public static final int DEFAULT_SOURCE_TYPE = SOURCE_TYPE_FILE;
 
+    public static final int DEFAULT_CHECKED_UPDATE_REFRESH_INTERVAL = 0;
+
     public static final long PREF_LOAD_NEVER = 0;
     public static final long PREF_LOAD_LOADING = 1;
     public static final long PREF_LOAD_CURRENT_VALUE = 2;
 
     public static final String PREF_INTERFACE_BASIC_NOTE_GROUPS = "pref_interface_basic_note_groups";
     public static final String PREF_KEY_INTERFACE_CHECKED_LAST = "pref_interface_checked_last";
+    public static final String PREF_KEY_INTERFACE_CHECKED_UPDATE_INTERVAL = "pref_interface_checked_update_interval";
 
     public static final String PREF_KEY_SOURCE_PATH = "pref_source_path";
     public static final String PREF_KEY_SOURCE_TYPE = "pref_source_type";
@@ -156,6 +161,27 @@ public class PreferenceRepository {
         if (preference instanceof ProgressPreference) {
             ProgressPreference progressPreference = (ProgressPreference) preference;
             progressPreference.setProgressVisibility(v);
+        }
+    }
+
+    public static boolean isInterfaceCheckedLast(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(PreferenceRepository.PREF_KEY_INTERFACE_CHECKED_LAST, false);
+    }
+
+    public static int getInterfaceCheckedUpdateInterval(Context context) {
+        int prefUpdateInterval = PreferenceManager.getDefaultSharedPreferences(context).getInt(PREF_KEY_INTERFACE_CHECKED_UPDATE_INTERVAL, DEFAULT_CHECKED_UPDATE_REFRESH_INTERVAL);
+
+        String intervalResourceValue = null;
+        try {
+            intervalResourceValue = context.getResources().getStringArray(R.array.pref_checked_update_interval_entry_values)[prefUpdateInterval];
+        } catch (Resources.NotFoundException e) {
+            e.printStackTrace();
+        }
+
+        if (intervalResourceValue != null) {
+            return Integer.valueOf(intervalResourceValue);
+        } else {
+            return 0;
         }
     }
 }
