@@ -61,7 +61,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
     @Override
     public void refreshList(DBNoteManager noteManager) {
         super.refreshList(noteManager);
-        updateCheckoutProgress();
+        updateCheckedItems();
     }
 
     private void setupBottomToolbarHelper() {
@@ -78,7 +78,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
 
     @Override
     protected void afterExecutionCompleted() {
-        updateCheckoutProgress();
+        updateCheckedItems();
     }
 
     /**
@@ -97,14 +97,16 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         return fragment;
     }
 
-    private void updateCheckoutProgress() {
-        if (mCheckoutProgressHelper != null)
+    private void updateCheckedItems() {
+        //update checkout progress
+        if (mCheckoutProgressHelper != null) {
             mCheckoutProgressHelper.setProgressData(
                     mBasicNoteData.getNote().getSummary().getCheckedItemCount(),
                     mBasicNoteData.getNote().getSummary().getItemCount(),
                     mBasicNoteData.getCheckedLongParamTotal(mPriceNoteParamTypeId),
                     mBasicNoteData.getLongParamTotal(mPriceNoteParamTypeId)
             );
+        }
     }
 
     private void performEditAction(String text, NoteItemDataUpdater noteItemDataUpdater) {
@@ -123,7 +125,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                 @Override
                 public void onExecutionCompleted(BasicNoteDataA basicNoteData, boolean result) {
                     mBasicNoteData = basicNoteData;
-                    updateCheckoutProgress();
+                    updateCheckedItems();
 
                     //clear editor reference
                     if (mEditorDialog != null) {
@@ -273,7 +275,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
 
                         //update checked
                         mBasicNoteData.getNote().getSummary().addCheckedItemCount(item.isChecked() ? 1 : - 1);
-                        updateCheckoutProgress();
+                        updateCheckedItems();
 
                         RecyclerViewHelper.adapterNotifyDataSetChanged(mRecyclerView);
                     }
@@ -332,7 +334,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
 
         //add checkout progress
         mCheckoutProgressHelper = new CheckoutProgressHelper(view.findViewById(R.id.checkout_progress_panel_include));
-        updateCheckoutProgress();
+        updateCheckedItems();
 
         // for not encrypted set up AutoComplete and list button
         if (!mBasicNoteData.getNote().isEncrypted()) {
