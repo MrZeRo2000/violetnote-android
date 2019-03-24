@@ -124,8 +124,10 @@
     <string name="ui_image_list_description">List</string>
 
     <string name="title_activity_basic_note_group">Basic note groups</string>
-    <string name="title_activity_basic_note_group_edit">Basic note group edit</string>
+    <string name="title_activity_basic_note_group_add">Add group</string>
+    <string name="title_activity_basic_note_group_edit">Edit group %s</string>
     <string name="title_activity_basic_note">Basic note</string>
+    <string name="title_activity_basic_note_add">Add note</string>
     <string name="title_activity_basic_note_edit">Basic note edit</string>
     <string name="title_activity_basic_note_checked_item">Checked note</string>
     <string name="title_activity_basic_note_named_item">Named note</string>

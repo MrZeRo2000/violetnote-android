@@ -102,7 +102,7 @@
             />
         <activity
             android:name=".view.BasicNoteEditActivity"
-            android:label="@string/title_activity_basic_note_edit"
+            android:label="@string/title_activity_basic_note_add"
             android:parentActivityName=".view.BasicNoteActivity"
             android:theme="@style/EditTheme"
             />

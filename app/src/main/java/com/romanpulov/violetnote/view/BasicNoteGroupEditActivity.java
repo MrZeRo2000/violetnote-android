@@ -43,9 +43,11 @@ public class BasicNoteGroupEditActivity extends ActionBarCompatActivity {
         mNoteGroup = getIntent().getParcelableExtra(BasicNoteGroupA.BASIC_NOTE_GROUP_DATA);
 
         if (mNoteGroup == null) {
+            setTitle(R.string.title_activity_basic_note_group_add);
             mImgSelector.setSelection(0);
             mTitle.requestFocus();
         } else {
+            setTitle(getString(R.string.title_activity_basic_note_group_edit, mNoteGroup.getDisplayTitle()));
             mTitle.setText(mNoteGroup.getGroupName());
             int drawable = DrawableSelectionHelper.getDrawableForNoteGroup(mNoteGroup);
             int position = Arrays.asList(mImgList).indexOf(drawable);
