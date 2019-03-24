@@ -25,6 +25,20 @@ public class BasicNoteValueDataA implements Parcelable {
     public void setValues(List<BasicNoteValueA> value) {
         mValues = value;
     }
+    public int indexOf(BasicNoteValueA value) {
+        int result = -1;
+
+        int index = 0;
+        for (BasicNoteValueA item: mValues) {
+            if (item.getValue().equals(value.getValue())) {
+                result = index;
+                break;
+            }
+            index++;
+        }
+
+        return result;
+    }
 
     private BasicNoteValueDataA() {
 

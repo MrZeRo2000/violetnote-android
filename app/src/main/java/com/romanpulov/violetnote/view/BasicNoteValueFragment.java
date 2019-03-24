@@ -1,6 +1,7 @@
 package com.romanpulov.violetnote.view;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -27,6 +28,7 @@ import com.romanpulov.violetnote.view.core.TextEditDialogBuilder;
 import com.romanpulov.violetnote.view.core.TextInputDialog;
 import com.romanpulov.violetnote.view.helper.InputActionHelper;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -72,10 +74,21 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
         }
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        hideAddLayout();
+    }
+
     public void showAddLayout() {
         if (mInputActionHelper != null) {
             mInputActionHelper.showAddLayout();
         }
+    }
+
+    public void hideAddLayout() {
+        if (mInputActionHelper != null)
+            mInputActionHelper.hideLayout();
     }
 
     private void performDeleteAction(final ActionMode mode, final List<BasicNoteValueA> items) {
@@ -102,55 +115,66 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
 
     }
 
-    private void performEditAction(final ActionMode mode, final BasicNoteValueA item) {
-        (new TextEditDialogBuilder(getActivity(), getString(R.string.ui_note_title), item.getValue()))
-                .setNonEmptyErrorMessage(getString(R.string.error_field_not_empty))
-                .setOnTextInputListener(new TextInputDialog.OnTextInputListener() {
-                    @Override
-                    public void onTextInput(String text) {
-                        if (!text.equals(item.getValue())) {
-                            //change
-                            item.setValue(text);
+    private void performEditAction(String text) {
+        List<BasicNoteValueA> selectedItems = getSelectedNoteItems();
+        BasicNoteValueA item;
+        if ((selectedItems.size() == 1) && (!(item = selectedItems.get(0)).getValue().equals(text))) {
+            //change
+            item.setValue(text);
 
-                            //update database
-                            DBNoteManager noteManager = new DBNoteManager(getActivity());
+            //update
+            DBNoteManager noteManager = new DBNoteManager(getContext());
 
-                            try {
-                                if (noteManager.mBasicNoteValueDAO.update(item) == 1) {
-                                    //refresh list
-                                    refreshList(noteManager);
-                                }
-                            } catch (Exception e) {
-                                //catch possible unique index violation
-                                refreshList(noteManager);
-                            }
-                        }
-                        // finish anyway
-                        mode.finish();
+            try {
+                if (noteManager.mBasicNoteValueDAO.update(item) == 1) {
+                    refreshList(noteManager);
+                    //update list item
+                    int position = mBasicNoteValueData.indexOf(item);
+                    if ((position != -1) && (mRecyclerView != null)) {
+                        RecyclerViewHelper.adapterNotifyDataSetChanged(mRecyclerView);
+                        mRecyclerView.scrollToPosition(position);
                     }
-                })
-                .execute();
+                }
+            } catch (SQLiteException e) {
+                //catch possible unique index violation
+                refreshList(noteManager);
+                RecyclerViewHelper.adapterNotifyDataSetChanged(mRecyclerView);
+            }
+        }
+    }
+
+    private void updateTitle(@NonNull ActionMode mode) {
+        mode.setTitle(DisplayTitleBuilder.buildItemsDisplayTitle(getActivity(), mBasicNoteValueData.getValues(), mRecyclerViewSelector.getSelectedItems()));
+    }
+
+    @NonNull
+    private List<BasicNoteValueA> getSelectedNoteItems() {
+        return BasicEntityNoteSelectionPosA.getItemsByPositions(mBasicNoteValueData.getValues(), mRecyclerViewSelector.getSelectedItems());
     }
 
     public class ActionBarCallBack implements ActionMode.Callback {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            hideAddLayout();
             mode.getMenuInflater().inflate(R.menu.menu_listitem_minimal_actions, menu);
-            if (mRecyclerViewSelector.isSelected())
-                mode.setTitle(DisplayTitleBuilder.buildItemsDisplayTitle(getActivity(), mBasicNoteValueData.getValues(), mRecyclerViewSelector.getSelectedItems()));
+            if (mRecyclerViewSelector.isSelected()) {
+                updateTitle(mode);
+            }
+
             return true;
         }
 
         @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            hideAddLayout();
             ActionHelper.updateActionMenu(menu, mRecyclerViewSelector.getSelectedItems().size(), mBasicNoteValueData.getValues().size());
-            mode.setTitle(DisplayTitleBuilder.buildItemsDisplayTitle(getActivity(), mBasicNoteValueData.getValues(), mRecyclerViewSelector.getSelectedItems()));
+            updateTitle(mode);
             return false;
         }
 
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            List<BasicNoteValueA> selectedNoteItems = BasicEntityNoteSelectionPosA.getItemsByPositions(mBasicNoteValueData.getValues(), mRecyclerViewSelector.getSelectedItems());
+            List<BasicNoteValueA> selectedNoteItems = getSelectedNoteItems();
 
             if (selectedNoteItems.size() > 0) {
                 switch (item.getItemId()) {
@@ -159,9 +183,11 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
                         break;
                     case R.id.delete:
                         performDeleteAction(mode, selectedNoteItems);
+                        hideAddLayout();
                         break;
                     case R.id.edit:
-                        performEditAction(mode, selectedNoteItems.get(0));
+                        //performEditAction(mode, selectedNoteItems.get(0));
+                        mInputActionHelper.showLayout(selectedNoteItems.get(0).getValue(), InputActionHelper.INPUT_ACTION_TYPE_EDIT);
                         break;
                 }
             }
@@ -170,6 +196,7 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
 
         @Override
         public void onDestroyActionMode(ActionMode mode) {
+            hideAddLayout();
             if (mRecyclerViewSelector != null)
                 mRecyclerViewSelector.destroyActionMode();
         }
@@ -233,7 +260,18 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
         mInputActionHelper.setOnAddInteractionListener(new InputActionHelper.OnAddInteractionListener() {
             @Override
             public void onAddFragmentInteraction(final int actionType, final String text) {
-                performAddAction(BasicNoteValueA.newEditInstance(text));
+                switch (actionType) {
+                    case InputActionHelper.INPUT_ACTION_TYPE_ADD:
+                        performAddAction(BasicNoteValueA.newEditInstance(text));
+                        break;
+                    case InputActionHelper.INPUT_ACTION_TYPE_EDIT:
+                        //performEditAction();
+                        performEditAction(text);
+                        hideAddLayout();
+                        mRecyclerViewSelector.finishActionMode();
+                        break;
+                }
+
             }
         });
 

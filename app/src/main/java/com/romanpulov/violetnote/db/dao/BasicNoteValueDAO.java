@@ -71,4 +71,9 @@ public final class BasicNoteValueDAO extends AbstractDAO<BasicNoteValueA> {
 
         return mDB.insert(NoteValuesTableDef.TABLE_NAME, null, cv);
     }
+
+    @Override
+    public long delete(@NonNull BasicNoteValueA object) {
+        return internalDeleteById(NoteValuesTableDef.TABLE_NAME, object.getId());
+    }
 }
