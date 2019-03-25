@@ -15,6 +15,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.ActionMenuView;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,6 +32,7 @@ import com.romanpulov.violetnote.model.BasicNoteValueA;
 import com.romanpulov.violetnote.model.BasicNoteValueDataA;
 import com.romanpulov.violetnote.model.InputParser;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutorHost;
+import com.romanpulov.violetnote.view.core.PassDataPasswordActivity;
 import com.romanpulov.violetnote.view.helper.BottomToolbarHelper;
 import com.romanpulov.violetnote.view.helper.DisplayTitleBuilder;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutor;
@@ -56,25 +58,58 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
     private CheckoutProgressHelper mCheckoutProgressHelper;
 
     private long mPriceNoteParamTypeId;
+    private int mCheckedUpdateInterval;
 
     private Handler mRefreshHandler = new Handler();
+
     private Runnable mRefreshRunnable = new Runnable() {
         @Override
         public void run() {
-            refreshListWithView();
+            Context context = getContext();
+            if (context != null) {
+                try {
+                    refreshListWithView();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         }
     };
+
+    @Override
+    public void refreshListWithView() {
+        Context context = getContext();
+        if (context != null) {
+            BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(context, mBasicNoteData);
+            executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData));
+            executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
+                @Override
+                public void onExecutionCompleted(BasicNoteDataA basicNoteData, boolean result) {
+                    afterExecutionCompleted();
+                    RecyclerViewHelper.adapterNotifyDataSetChanged(mRecyclerView);
+                    PassDataPasswordActivity.getPasswordValidityChecker().startPeriod();
+                }
+            });
+            executeActions(executor);
+        }
+    }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         mPriceNoteParamTypeId = DBBasicNoteHelper.getInstance(context).getDBDictionaryCache().getPriceNoteParamTypeId();
+        if (PreferenceRepository.isInterfaceCheckedLast(context)) {
+            mCheckedUpdateInterval = PreferenceRepository.getInterfaceCheckedUpdateInterval(getContext());
+        } else {
+            mCheckedUpdateInterval = 0;
+        }
     }
 
     @Override
     public void refreshList(DBNoteManager noteManager) {
         super.refreshList(noteManager);
         updateCheckedItems();
+        PassDataPasswordActivity.getPasswordValidityChecker().startPeriod();
     }
 
     private void setupBottomToolbarHelper() {
@@ -123,13 +158,9 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
     }
 
     private void refreshCheckedItemsDisplay() {
-        if (PreferenceRepository.isInterfaceCheckedLast(getContext())) {
-            int delay = PreferenceRepository.getInterfaceCheckedUpdateInterval(getContext());
-
-            if (delay > 0) {
-                mRefreshHandler.removeMessages(0);
-                mRefreshHandler.postDelayed(mRefreshRunnable, delay * 1000);
-            }
+        if (mCheckedUpdateInterval > 0) {
+            mRefreshHandler.removeMessages(0);
+            mRefreshHandler.postDelayed(mRefreshRunnable, mCheckedUpdateInterval * 1000);
         }
     }
 
