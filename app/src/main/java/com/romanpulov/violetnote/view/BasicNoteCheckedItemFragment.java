@@ -60,7 +60,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
     private long mPriceNoteParamTypeId;
     private int mCheckedUpdateInterval;
 
-    private Handler mRefreshHandler = new Handler();
+    public static final Handler mRefreshHandler = new Handler();
 
     private Runnable mRefreshRunnable = new Runnable() {
         @Override

@@ -1,9 +1,7 @@
 package com.romanpulov.violetnote.view;
 
-import android.os.PersistableBundle;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.ActionMenuView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -26,6 +24,13 @@ public class BasicNoteCheckedItemActivity extends BasicNoteDataPasswordActivity 
 
     @Override
     protected void refreshFragment() {
+        if (BasicNoteCheckedItemFragment.mRefreshHandler.hasMessages(0)) {
+            BasicNoteCheckedItemFragment.mRefreshHandler.removeMessages(0);
+            setForceUpdatePassword(true);
+        } else {
+            setForceUpdatePassword(false);
+        }
+
         if (!getProgress() && !(getFragment() instanceof BasicNoteCheckedItemFragment)) {
             BasicNoteCheckedItemFragment basicNoteCheckedItemFragment =
                     BasicNoteCheckedItemFragment.newInstance(mBasicNoteData, this);

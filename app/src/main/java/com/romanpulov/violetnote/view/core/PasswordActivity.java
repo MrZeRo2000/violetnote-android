@@ -66,6 +66,12 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
         mIsProgress = value;
     }
 
+    private boolean mForceUpdatePassword = false;
+
+    public void setForceUpdatePassword(boolean value) {
+        mForceUpdatePassword = value;
+    }
+
     protected boolean getProgress() {
         return mIsProgress;
     }
@@ -140,6 +146,24 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
 
     protected abstract void updatePassword(String password);
 
+    private void internalRefreshFragment() {
+        if (mForceUpdatePassword) {
+            updatePassword(mPasswordProvider.getPassword());
+        } else {
+            refreshFragment();
+        }
+    }
+
+    protected void processRequestPasswordInput(String text) {
+        String oldPassword = getPassword();
+        if ((oldPassword != null) && (oldPassword.equals(text))) {
+            PassDataPasswordActivity.getPasswordValidityChecker().startPeriod();
+            internalRefreshFragment();
+        } else {
+            updatePassword(text);
+        }
+    }
+
     protected void requestPassword() {
         final PasswordInputDialog passwordInputDialog = new PasswordInputDialog(this);
         passwordInputDialog.setNonEmptyErrorMessage(getString(R.string.ui_error_empty_password));
@@ -151,18 +175,14 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
                 InputManagerHelper.hideInput(focusedView);
 
                 //dismiss dialog
-                mDialog.dismiss();
-                mDialog = null;
+                if (mDialog != null) {
+                    mDialog.dismiss();
+                    mDialog = null;
+                }
 
                 //process input
                 if (text != null) {
-                    String oldPassword = getPassword();
-                    if ((oldPassword != null) && (oldPassword.equals(text))) {
-                        PassDataPasswordActivity.getPasswordValidityChecker().startPeriod();
-                        refreshFragment();
-                    } else {
-                        updatePassword(text);
-                    }
+                    processRequestPasswordInput(text);
                 } else {
                     setResult(RESULT_CANCELED);
                     setLoadErrorFragment();
@@ -214,7 +234,7 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
                     removeFragment();
                     requestPassword();
                 } else {
-                    refreshFragment();
+                    internalRefreshFragment();
                     mPasswordRequired = true;
                 }
             }
