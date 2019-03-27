@@ -10,7 +10,7 @@ import java.util.List;
  * BasicNoteItemA action
  * Created by rpulov on 18.09.2016.
  */
-public class BasicNoteDataNoteItemAction extends BasicNoteDataItemAction {
+public class BasicNoteDataNoteItemAction extends BasicItemsAction<BasicNoteDataA, BasicNoteItemA> {
     private final BasicNoteAction<BasicNoteItemA> mNoteAction;
 
     public BasicNoteDataNoteItemAction(BasicNoteDataA basicNoteData, BasicNoteAction<BasicNoteItemA> noteAction, List<BasicNoteItemA> items) {

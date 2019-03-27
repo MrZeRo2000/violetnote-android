@@ -12,7 +12,7 @@ import java.util.Collections;
  * BasicNoteItemA edit name and value action
  * Created by rpulov on 16.09.2016.
  */
-public class BasicNoteDataItemEditNameValueAction extends BasicNoteDataItemAction  {
+public class BasicNoteDataItemEditNameValueAction extends BasicItemsAction<BasicNoteDataA, BasicNoteItemA>  {
 
     public BasicNoteDataItemEditNameValueAction(BasicNoteDataA basicNoteData, BasicNoteItemA item) {
         super(basicNoteData, Collections.singletonList(item));

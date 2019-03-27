@@ -9,7 +9,7 @@ import com.romanpulov.violetnote.model.PassNoteItemJSONCryptService;
  * BasicNoteDataA refresh action
  * Created by romanpulov on 13.09.2016.
  */
-public class BasicNoteDataRefreshAction extends BasicNoteDataAction {
+public class BasicNoteDataRefreshAction extends BasicAction<BasicNoteDataA> {
     private final String mPassword;
     private boolean mRequireValues = false;
 

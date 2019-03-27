@@ -7,7 +7,7 @@ import com.romanpulov.violetnote.model.BasicNoteDataA;
  * BasicNoteDataA update checked action
  * Created by rpulov on 18.09.2016.
  */
-public class BasicNoteDataItemUpdateCheckedAction extends BasicNoteDataAction  {
+public class BasicNoteDataItemUpdateCheckedAction extends BasicAction<BasicNoteDataA>  {
     private final boolean mChecked;
 
     public BasicNoteDataItemUpdateCheckedAction(BasicNoteDataA basicNoteData, boolean checked) {
