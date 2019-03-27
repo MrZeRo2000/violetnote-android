@@ -6,6 +6,7 @@ import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.model.PassNoteItemJSONCryptService;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * BasicNoteItemA edit name and value action
@@ -14,8 +15,7 @@ import java.util.ArrayList;
 public class BasicNoteDataItemEditNameValueAction extends BasicNoteDataItemAction  {
 
     public BasicNoteDataItemEditNameValueAction(BasicNoteDataA basicNoteData, BasicNoteItemA item) {
-        super(basicNoteData, new ArrayList<BasicNoteItemA>());
-        mItems.add(item);
+        super(basicNoteData, Collections.singletonList(item));
     }
 
     @Override
