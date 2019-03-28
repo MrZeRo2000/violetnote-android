@@ -81,7 +81,7 @@ public class BasicNoteActivity extends ActionBarCompatActivity implements BasicN
     protected void onRestart() {
         super.onRestart();
         // to handle back button from underlying activity
-        // mFragment.refreshList(new DBNoteManager(this));
+        mFragment.refreshList(new DBNoteManager(this));
     }
 
     @Override
