@@ -171,7 +171,7 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
                 @Override
                 public void OnClick(DialogFragment dialog) {
                     BasicActionExecutor<List<BasicNoteGroupA>> executor = new BasicActionExecutor<>(getContext(), items);
-                    executor.addAction(getString(R.string.caption_processing), new BasicNoteGroupAction(items, new BasicNoteGroupDeleteAction()));
+                    executor.addAction(getString(R.string.caption_processing), new BasicNoteGroupDeleteAction(mBasicNoteGroupList, items));
                     executor.addAction(getString(R.string.caption_loading), new BasicNoteGroupRefreshAction(mBasicNoteGroupList));
                     executor.setOnExecutionCompletedListener(new BasicActionExecutor.OnExecutionCompletedListener<List<BasicNoteGroupA>>() {
                         @Override
