@@ -16,20 +16,19 @@ import com.romanpulov.violetnote.model.BasicEntityNoteSelectionPosA;
 import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
+import com.romanpulov.violetnote.view.action.BasicItemsMoveDownAction;
+import com.romanpulov.violetnote.view.action.BasicItemsMovePriorityDownAction;
+import com.romanpulov.violetnote.view.action.BasicItemsMovePriorityUpAction;
+import com.romanpulov.violetnote.view.action.BasicItemsMoveTopAction;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutor;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutorHost;
 import com.romanpulov.violetnote.view.action.BasicNoteDataItemAddAction;
-import com.romanpulov.violetnote.view.action.BasicNoteDataNoteItemAction;
 import com.romanpulov.violetnote.view.action.BasicNoteDataRefreshAction;
 import com.romanpulov.violetnote.view.action.BasicNoteItemDeleteAction;
-import com.romanpulov.violetnote.view.action.BasicNoteMoveAction;
-import com.romanpulov.violetnote.view.action.BasicNoteMoveBottomAction;
-import com.romanpulov.violetnote.view.action.BasicNoteMoveDownAction;
-import com.romanpulov.violetnote.view.action.BasicNoteMovePriorityDownAction;
-import com.romanpulov.violetnote.view.action.BasicNoteMovePriorityUpAction;
+import com.romanpulov.violetnote.view.action.BasicItemsMoveAction;
+import com.romanpulov.violetnote.view.action.BasicItemsMoveBottomAction;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveToOtherNoteAction;
-import com.romanpulov.violetnote.view.action.BasicNoteMoveTopAction;
-import com.romanpulov.violetnote.view.action.BasicNoteMoveUpAction;
+import com.romanpulov.violetnote.view.action.BasicItemsMoveUpAction;
 import com.romanpulov.violetnote.view.core.AlertOkCancelSupportDialogFragment;
 import com.romanpulov.violetnote.view.core.BasicCommonNoteFragment;
 import com.romanpulov.violetnote.view.core.PasswordActivity;
@@ -101,22 +100,22 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
         if (selectedNoteItems.size() > 0) {
             switch (menuItem.getItemId()) {
                 case R.id.move_up:
-                    performMoveAction(new BasicNoteMoveUpAction<BasicNoteItemA>(), selectedNoteItems);
+                    performMoveAction(new BasicItemsMoveUpAction<>(mBasicNoteData, selectedNoteItems), selectedNoteItems);
                     return true;
                 case R.id.move_top:
-                    performMoveAction(new BasicNoteMoveTopAction<BasicNoteItemA>(), selectedNoteItems);
+                    performMoveAction(new BasicItemsMoveTopAction<>(mBasicNoteData, selectedNoteItems), selectedNoteItems);
                     return true;
                 case R.id.move_down:
-                    performMoveAction(new BasicNoteMoveDownAction<BasicNoteItemA>(), selectedNoteItems);
+                    performMoveAction(new BasicItemsMoveDownAction<>(mBasicNoteData, selectedNoteItems), selectedNoteItems);
                     return true;
                 case R.id.move_bottom:
-                    performMoveAction(new BasicNoteMoveBottomAction<BasicNoteItemA>(), selectedNoteItems);
+                    performMoveAction(new BasicItemsMoveBottomAction<>(mBasicNoteData, selectedNoteItems), selectedNoteItems);
                     return true;
                 case R.id.priority_up:
-                    performMoveAction(new BasicNoteMovePriorityUpAction<BasicNoteItemA>(), selectedNoteItems);
+                    performMoveAction(new BasicItemsMovePriorityUpAction<>(mBasicNoteData, selectedNoteItems), selectedNoteItems);
                     return true;
                 case R.id.priority_down:
-                    performMoveAction(new BasicNoteMovePriorityDownAction<BasicNoteItemA>(), selectedNoteItems);
+                    performMoveAction(new BasicItemsMovePriorityDownAction<>(mBasicNoteData, selectedNoteItems), selectedNoteItems);
                     return true;
                 default:
                     return false;
@@ -265,12 +264,12 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
      * @param action movement type action
      * @param items items to move
      */
-    protected void performMoveAction(final BasicNoteMoveAction<BasicNoteItemA> action, final List<BasicNoteItemA> items) {
+    protected void performMoveAction(final BasicItemsMoveAction<BasicNoteDataA, BasicNoteItemA> action, final List<BasicNoteItemA> items) {
         //executor
         BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity(), mBasicNoteData);
 
         //actions
-        executor.addAction(getString(R.string.caption_processing), new BasicNoteDataNoteItemAction(mBasicNoteData, action, items));
+        executor.addAction(getString(R.string.caption_processing), action);
         executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData));
 
         //on complete

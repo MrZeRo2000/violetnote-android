@@ -19,18 +19,18 @@ import com.romanpulov.violetnote.model.BasicEntityNoteSelectionPosA;
 import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
+import com.romanpulov.violetnote.view.action.BasicItemsMoveBottomAction;
+import com.romanpulov.violetnote.view.action.BasicItemsMoveDownAction;
+import com.romanpulov.violetnote.view.action.BasicItemsMovePriorityDownAction;
+import com.romanpulov.violetnote.view.action.BasicItemsMoveTopAction;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutorHost;
-import com.romanpulov.violetnote.view.action.BasicNoteMovePriorityDownAction;
-import com.romanpulov.violetnote.view.action.BasicNoteMovePriorityUpAction;
+import com.romanpulov.violetnote.view.action.BasicItemsMovePriorityUpAction;
 import com.romanpulov.violetnote.view.helper.BottomToolbarHelper;
 import com.romanpulov.violetnote.view.helper.DisplayTitleBuilder;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutor;
 import com.romanpulov.violetnote.view.action.BasicNoteDataItemEditNameValueAction;
 import com.romanpulov.violetnote.view.action.BasicNoteDataRefreshAction;
-import com.romanpulov.violetnote.view.action.BasicNoteMoveBottomAction;
-import com.romanpulov.violetnote.view.action.BasicNoteMoveDownAction;
-import com.romanpulov.violetnote.view.action.BasicNoteMoveTopAction;
-import com.romanpulov.violetnote.view.action.BasicNoteMoveUpAction;
+import com.romanpulov.violetnote.view.action.BasicItemsMoveUpAction;
 import com.romanpulov.violetnote.view.core.NameValueInputDialog;
 import com.romanpulov.violetnote.view.core.PasswordActivity;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
@@ -240,22 +240,22 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
                         performEditAction(mode, selectedNoteItems.get(0));
                         break;
                     case R.id.move_up:
-                        performMoveAction(new BasicNoteMoveUpAction<BasicNoteItemA>(), selectedNoteItems);
+                        performMoveAction(new BasicItemsMoveUpAction<>(mBasicNoteData, selectedNoteItems), selectedNoteItems);
                         break;
                     case R.id.move_top:
-                        performMoveAction(new BasicNoteMoveTopAction<BasicNoteItemA>(), selectedNoteItems);
+                        performMoveAction(new BasicItemsMoveTopAction<>(mBasicNoteData, selectedNoteItems), selectedNoteItems);
                         break;
                     case R.id.move_down:
-                        performMoveAction(new BasicNoteMoveDownAction<BasicNoteItemA>(), selectedNoteItems);
+                        performMoveAction(new BasicItemsMoveDownAction<>(mBasicNoteData, selectedNoteItems), selectedNoteItems);
                         break;
                     case R.id.move_bottom:
-                        performMoveAction(new BasicNoteMoveBottomAction<BasicNoteItemA>(), selectedNoteItems);
+                        performMoveAction(new BasicItemsMoveBottomAction<>(mBasicNoteData, selectedNoteItems), selectedNoteItems);
                         break;
                     case R.id.priority_up:
-                        performMoveAction(new BasicNoteMovePriorityUpAction<BasicNoteItemA>(), selectedNoteItems);
+                        performMoveAction(new BasicItemsMovePriorityUpAction<>(mBasicNoteData, selectedNoteItems), selectedNoteItems);
                         break;
                     case R.id.priority_down:
-                        performMoveAction(new BasicNoteMovePriorityDownAction<BasicNoteItemA>(), selectedNoteItems);
+                        performMoveAction(new BasicItemsMovePriorityDownAction<>(mBasicNoteData, selectedNoteItems), selectedNoteItems);
                         break;
                     case R.id.select_all:
                         performSelectAll();

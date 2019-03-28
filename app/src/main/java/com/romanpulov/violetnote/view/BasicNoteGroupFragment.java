@@ -24,16 +24,15 @@ import com.romanpulov.violetnote.db.manager.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicEntityNoteSelectionPosA;
 import com.romanpulov.violetnote.model.BasicNoteGroupA;
 import com.romanpulov.violetnote.view.action.BasicActionExecutor;
-import com.romanpulov.violetnote.view.action.BasicNoteGroupAction;
+import com.romanpulov.violetnote.view.action.BasicItemsMoveAction;
+import com.romanpulov.violetnote.view.action.BasicItemsMoveBottomAction;
+import com.romanpulov.violetnote.view.action.BasicItemsMoveDownAction;
+import com.romanpulov.violetnote.view.action.BasicItemsMoveTopAction;
+import com.romanpulov.violetnote.view.action.BasicItemsMoveUpAction;
 import com.romanpulov.violetnote.view.action.BasicNoteGroupAddAction;
 import com.romanpulov.violetnote.view.action.BasicNoteGroupDeleteAction;
 import com.romanpulov.violetnote.view.action.BasicNoteGroupEditAction;
 import com.romanpulov.violetnote.view.action.BasicNoteGroupRefreshAction;
-import com.romanpulov.violetnote.view.action.BasicNoteMoveAction;
-import com.romanpulov.violetnote.view.action.BasicNoteMoveBottomAction;
-import com.romanpulov.violetnote.view.action.BasicNoteMoveDownAction;
-import com.romanpulov.violetnote.view.action.BasicNoteMoveTopAction;
-import com.romanpulov.violetnote.view.action.BasicNoteMoveUpAction;
 import com.romanpulov.violetnote.view.core.AlertOkCancelSupportDialogFragment;
 import com.romanpulov.violetnote.view.core.BasicCommonNoteFragment;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
@@ -86,16 +85,16 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
         if (selectedNoteItems.size() > 0) {
             switch (menuItem.getItemId()) {
                 case R.id.move_up:
-                    performMoveAction(new BasicNoteMoveUpAction<BasicNoteGroupA>(), selectedNoteItems);
+                    performMoveAction(new BasicItemsMoveUpAction<>(mBasicNoteGroupList, selectedNoteItems), selectedNoteItems);
                     return true;
                 case R.id.move_top:
-                    performMoveAction(new BasicNoteMoveTopAction<BasicNoteGroupA>(), selectedNoteItems);
+                    performMoveAction(new BasicItemsMoveTopAction<>(mBasicNoteGroupList, selectedNoteItems), selectedNoteItems);
                     return true;
                 case R.id.move_down:
-                    performMoveAction(new BasicNoteMoveDownAction<BasicNoteGroupA>(), selectedNoteItems);
+                    performMoveAction(new BasicItemsMoveDownAction<>(mBasicNoteGroupList, selectedNoteItems), selectedNoteItems);
                     return true;
                 case R.id.move_bottom:
-                    performMoveAction(new BasicNoteMoveBottomAction<BasicNoteGroupA>(), selectedNoteItems);
+                    performMoveAction(new BasicItemsMoveBottomAction<>(mBasicNoteGroupList, selectedNoteItems), selectedNoteItems);
                     return true;
                 default:
                     return false;
@@ -104,12 +103,12 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
             return false;
     }
 
-    protected void performMoveAction(final BasicNoteMoveAction<BasicNoteGroupA> action, final List<BasicNoteGroupA> items) {
+    protected void performMoveAction(final BasicItemsMoveAction<List<BasicNoteGroupA>, BasicNoteGroupA> action, final List<BasicNoteGroupA> items) {
         //executor
         BasicActionExecutor<List<BasicNoteGroupA>> executor = new BasicActionExecutor<>(getContext(), items);
 
         //actions
-        executor.addAction(getString(R.string.caption_processing), new BasicNoteGroupAction(items, action));
+        executor.addAction(getString(R.string.caption_processing), action);
         executor.addAction(getString(R.string.caption_loading), new BasicNoteGroupRefreshAction(mBasicNoteGroupList));
 
         //on complete
@@ -263,16 +262,16 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
                         performEditAction(mode, selectedNoteItems);
                         break;
                     case R.id.move_up:
-                        //performMoveAction(new BasicNoteMoveUpAction<BasicNoteA>(), selectedNoteItems);
+                        //performMoveAction(new BasicItemsMoveUpAction<BasicNoteA>(), selectedNoteItems);
                         break;
                     case R.id.move_top:
-                        //performMoveAction(new BasicNoteMoveTopAction<BasicNoteA>(), selectedNoteItems);
+                        //performMoveAction(new BasicItemsMoveTopAction<BasicNoteA>(), selectedNoteItems);
                         break;
                     case R.id.move_down:
-                        //performMoveAction(new BasicNoteMoveDownAction<BasicNoteA>(), selectedNoteItems);
+                        //performMoveAction(new BasicItemsMoveDownAction<BasicNoteA>(), selectedNoteItems);
                         break;
                     case R.id.move_bottom:
-                        //performMoveAction(new BasicNoteMoveBottomAction<BasicNoteA>(), selectedNoteItems);
+                        //performMoveAction(new BasicItemsMoveBottomAction<BasicNoteA>(), selectedNoteItems);
                         break;
                 }
             }

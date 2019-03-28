@@ -17,7 +17,6 @@ import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.manager.DBNoteManager;
@@ -29,16 +28,14 @@ import com.romanpulov.violetnote.view.action.BasicNoteMoveToOtherNoteGroupAction
 import com.romanpulov.violetnote.view.action.BasicNoteRefreshAction;
 import com.romanpulov.violetnote.view.helper.BottomToolbarHelper;
 import com.romanpulov.violetnote.view.helper.DisplayTitleBuilder;
-import com.romanpulov.violetnote.view.action.BasicNoteMoveAction;
-import com.romanpulov.violetnote.view.action.BasicNoteMoveBottomAction;
-import com.romanpulov.violetnote.view.action.BasicNoteMoveDownAction;
-import com.romanpulov.violetnote.view.action.BasicNoteMoveTopAction;
-import com.romanpulov.violetnote.view.action.BasicNoteMoveUpAction;
+import com.romanpulov.violetnote.view.action.BasicItemsMoveAction;
+import com.romanpulov.violetnote.view.action.BasicItemsMoveBottomAction;
+import com.romanpulov.violetnote.view.action.BasicItemsMoveDownAction;
+import com.romanpulov.violetnote.view.action.BasicItemsMoveTopAction;
+import com.romanpulov.violetnote.view.action.BasicItemsMoveUpAction;
 import com.romanpulov.violetnote.view.core.AlertOkCancelSupportDialogFragment;
 import com.romanpulov.violetnote.view.core.BasicCommonNoteFragment;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
-import com.romanpulov.violetnote.view.core.TextInputDialog;
-import com.romanpulov.violetnote.view.core.TextEditDialogBuilder;
 import com.romanpulov.violetnote.view.helper.InputActionHelper;
 
 import java.util.ArrayList;
@@ -104,16 +101,16 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
         if (selectedNotes.size() > 0) {
             switch (menuItem.getItemId()) {
                 case R.id.move_up:
-                    performMoveAction(new BasicNoteMoveUpAction<BasicNoteA>(), selectedNotes);
+                    performMoveAction(new BasicItemsMoveUpAction<>(mNoteGroup, selectedNotes), selectedNotes);
                     return true;
                 case R.id.move_top:
-                    performMoveAction(new BasicNoteMoveTopAction<BasicNoteA>(), selectedNotes);
+                    performMoveAction(new BasicItemsMoveTopAction<>(mNoteGroup, selectedNotes), selectedNotes);
                     return true;
                 case R.id.move_down:
-                    performMoveAction(new BasicNoteMoveDownAction<BasicNoteA>(), selectedNotes);
+                    performMoveAction(new BasicItemsMoveDownAction<>(mNoteGroup, selectedNotes), selectedNotes);
                     return true;
                 case R.id.move_bottom:
-                    performMoveAction(new BasicNoteMoveBottomAction<BasicNoteA>(), selectedNotes);
+                    performMoveAction(new BasicItemsMoveBottomAction<>(mNoteGroup, selectedNotes), selectedNotes);
                     return true;
             }
         }
@@ -245,10 +242,10 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
         mDialogFragment = dialog;
     }
 
-    private void performMoveAction(BasicNoteMoveAction<BasicNoteA> action, List<BasicNoteA> items) {
+    private void performMoveAction(BasicItemsMoveAction<?, BasicNoteA> action, List<BasicNoteA> items) {
         DBNoteManager noteManager = new DBNoteManager(getActivity());
 
-        if (action.execute(noteManager, items)) {
+        if (action.execute(noteManager)) {
             refreshList(noteManager);
 
             BasicEntityNoteSelectionPosA selectionPos = new BasicEntityNoteSelectionPosA(mNoteList, items);

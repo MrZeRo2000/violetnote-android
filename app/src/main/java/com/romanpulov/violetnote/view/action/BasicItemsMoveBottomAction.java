@@ -11,29 +11,28 @@ import java.util.List;
  * BasicCommonNoteA move bottom action
  * Created by rpulov on 07.09.2016.
  */
-public class BasicNoteMoveBottomAction <T extends BasicCommonNoteA> extends BasicNoteMoveAction<T>  {
+public class BasicItemsMoveBottomAction<T, I extends BasicCommonNoteA> extends BasicItemsMoveAction<T, I> {
 
-    @Override
-    public boolean execute(DBNoteManager noteManager, T item) {
-        return noteManager.mBasicCommonNoteDAO.moveBottom(item);
-    }
-
-    @Override
-    public boolean execute(DBNoteManager noteManager, List<T> items) {
-        boolean result = false;
-        BasicOrderedEntityNoteA.sortAsc(items);
-
-        for (T item : items) {
-            if (execute(noteManager, item)) {
-                result = true;
-            }
-        }
-
-        return result;
+    public BasicItemsMoveBottomAction(T data, List<I> items) {
+        super(data, items);
     }
 
     @Override
     public int getDirection() {
         return MovementDirection.DIRECTION_DOWN;
+    }
+
+    @Override
+    public boolean execute(DBNoteManager noteManager) {
+        boolean result = false;
+        BasicOrderedEntityNoteA.sortAsc(mItems);
+
+        for (I item : mItems) {
+            if (noteManager.mBasicCommonNoteDAO.moveBottom(item)) {
+                result = true;
+            }
+        }
+
+        return result;
     }
 }

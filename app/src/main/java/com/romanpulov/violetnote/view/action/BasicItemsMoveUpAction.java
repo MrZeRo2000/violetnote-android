@@ -11,30 +11,29 @@ import java.util.List;
  * BasicCommonNoteA move up action
  * Created by rpulov on 07.09.2016.
  */
-public class BasicNoteMoveUpAction<T extends BasicCommonNoteA> extends BasicNoteMoveAction<T> {
+public class BasicItemsMoveUpAction<T, I extends BasicCommonNoteA> extends BasicItemsMoveAction<T, I> {
 
-    @Override
-    public boolean execute(DBNoteManager noteManager, T item) {
-        return noteManager.mBasicCommonNoteDAO.moveUp(item);
+    public BasicItemsMoveUpAction(T data, List<I> items) {
+        super(data, items);
     }
 
     @Override
-    public boolean execute(DBNoteManager noteManager, List<T> items) {
-        boolean result = false;
-        BasicOrderedEntityNoteA.sortAsc(items);
+    public int getDirection() {
+        return MovementDirection.DIRECTION_UP;
+    }
 
-        for (T item : items) {
-            if (execute(noteManager, item)) {
+    @Override
+    public boolean execute(DBNoteManager noteManager) {
+        boolean result = false;
+        BasicOrderedEntityNoteA.sortAsc(mItems);
+
+        for (I item : mItems) {
+            if (noteManager.mBasicCommonNoteDAO.moveUp(item)) {
                 result = true;
             } else
                 break;
         }
 
         return result;
-    }
-
-    @Override
-    public int getDirection() {
-        return MovementDirection.DIRECTION_UP;
     }
 }
