@@ -191,7 +191,7 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
             @Override
             public void OnClick(DialogFragment dialog) {
                 BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity(), mBasicNoteData);
-                executor.addAction(getString(R.string.caption_processing), new BasicNoteDataNoteItemAction(mBasicNoteData, new BasicNoteMoveToOtherNoteAction<>(otherNote), items));
+                executor.addAction(getString(R.string.caption_processing), new BasicNoteMoveToOtherNoteAction<>(mBasicNoteData, items, otherNote));
                 executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData));
                 executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
                     @Override

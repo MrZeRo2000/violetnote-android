@@ -2,6 +2,7 @@ package com.romanpulov.violetnote.view.action;
 
 import com.romanpulov.violetnote.db.manager.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicNoteA;
+import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.model.BasicOrderedEntityNoteA;
 
@@ -12,26 +13,22 @@ import java.util.List;
  * Created by romanpulov on 06.10.2017.
  */
 
-public class BasicNoteMoveToOtherNoteAction<T extends BasicNoteItemA> extends BasicNoteAction<T> {
+public class BasicNoteMoveToOtherNoteAction<I extends BasicNoteItemA> extends BasicItemsAction<BasicNoteDataA, I> {
 
     private final BasicNoteA mOtherNote;
 
-    public BasicNoteMoveToOtherNoteAction(BasicNoteA otherNote) {
+    public BasicNoteMoveToOtherNoteAction(BasicNoteDataA data, List<I> items, BasicNoteA otherNote) {
+        super(data, items);
         mOtherNote = otherNote;
     }
 
     @Override
-    public boolean execute(DBNoteManager noteManager, T item) {
-        return noteManager.mBasicNoteItemDAO.moveToOtherNote(item, mOtherNote) == 1;
-    }
-
-    @Override
-    public boolean execute(DBNoteManager noteManager, List<T> items) {
+    public boolean execute(DBNoteManager noteManager) {
         boolean result = false;
-        BasicOrderedEntityNoteA.sortAsc(items);
+        BasicOrderedEntityNoteA.sortAsc(mItems);
 
-        for (T item : items) {
-            if (execute(noteManager, item)) {
+        for (I item : mItems) {
+            if (noteManager.mBasicNoteItemDAO.moveToOtherNote(item, mOtherNote) == 1) {
                 result = true;
             } else {
                 result = false;
