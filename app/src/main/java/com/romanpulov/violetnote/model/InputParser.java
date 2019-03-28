@@ -1,5 +1,7 @@
 package com.romanpulov.violetnote.model;
 
+import android.support.annotation.NonNull;
+
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -44,6 +46,7 @@ public class InputParser {
         }
 
         @Override
+        @NonNull
         public String toString() {
             return String.format(Locale.ENGLISH, "{Text=%s, FloatValue=%d}", mText, mLongValue );
         }

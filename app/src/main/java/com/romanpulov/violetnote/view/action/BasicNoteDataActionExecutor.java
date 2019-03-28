@@ -7,9 +7,6 @@ import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.manager.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -73,6 +70,6 @@ public class BasicNoteDataActionExecutor extends BasicActionExecutor<BasicNoteDa
         }
     }
 
-    public interface OnExecutionCompletedListener extends BasicActionExecutor.OnExecutionCompletedListener<BasicNoteDataA> {};
+    public interface OnExecutionCompletedListener extends BasicActionExecutor.OnExecutionCompletedListener<BasicNoteDataA> {}
 
 }

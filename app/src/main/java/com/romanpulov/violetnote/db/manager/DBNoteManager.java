@@ -11,7 +11,6 @@ import com.romanpulov.violetnote.db.dao.BasicNoteItemDAO;
 import com.romanpulov.violetnote.db.dao.BasicNoteItemParamTypeDAO;
 import com.romanpulov.violetnote.db.dao.BasicNoteItemParamsDAO;
 import com.romanpulov.violetnote.db.dao.BasicNoteValueDAO;
-import com.romanpulov.violetnote.model.BasicNoteGroupA;
 
 /**
  * BasicNoteA database operations

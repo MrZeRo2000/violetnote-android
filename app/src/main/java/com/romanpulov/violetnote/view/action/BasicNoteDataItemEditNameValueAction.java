@@ -5,7 +5,6 @@ import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.model.PassNoteItemJSONCryptService;
 
-import java.util.ArrayList;
 import java.util.Collections;
 
 /**

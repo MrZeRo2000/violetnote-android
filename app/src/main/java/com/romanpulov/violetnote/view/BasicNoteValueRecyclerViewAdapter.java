@@ -13,8 +13,6 @@ import com.romanpulov.violetnote.model.BasicNoteValueA;
 import com.romanpulov.violetnote.model.BasicNoteValueDataA;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 
-import java.util.List;
-
 public class BasicNoteValueRecyclerViewAdapter extends RecyclerView.Adapter<BasicNoteValueRecyclerViewAdapter.ViewHolder> {
 
     private final BasicNoteValueDataA mBasicNoteValueDataA;

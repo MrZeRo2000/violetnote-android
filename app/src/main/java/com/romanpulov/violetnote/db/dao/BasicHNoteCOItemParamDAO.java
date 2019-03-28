@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.support.annotation.NonNull;
 
 import com.romanpulov.violetnote.db.tabledef.HNoteCOItemParamsTableDef;
-import com.romanpulov.violetnote.db.tabledef.HNoteCOItemsTableDef;
 import com.romanpulov.violetnote.model.BasicHNoteCOItemParam;
 
 import java.util.ArrayList;

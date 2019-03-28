@@ -1,7 +1,5 @@
 package com.romanpulov.violetnote.db.tabledef;
 
-import android.support.annotation.NonNull;
-
 import java.util.List;
 
 /**

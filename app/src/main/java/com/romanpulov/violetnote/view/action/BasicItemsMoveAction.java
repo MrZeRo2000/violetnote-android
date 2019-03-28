@@ -1,7 +1,6 @@
 package com.romanpulov.violetnote.view.action;
 
 import com.romanpulov.violetnote.model.BasicEntityNoteA;
-import com.romanpulov.violetnote.model.BasicNoteDataA;
 
 import java.util.List;
 
