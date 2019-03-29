@@ -94,6 +94,11 @@ public class PassNoteA implements Parcelable {
             String name = in.readString();
             String value = in.readString();
             mNoteAttr.put(name, value);
+            /*
+            if ((name != null) && (value != null)) {
+                mNoteAttr.put(name, value);
+            }
+            */
         }
     }
 

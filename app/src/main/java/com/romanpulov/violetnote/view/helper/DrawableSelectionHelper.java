@@ -7,7 +7,7 @@ import com.romanpulov.violetnote.model.BasicNoteGroupA;
 
 public class DrawableSelectionHelper {
 
-    public static int DEFAULT_BASIC_NOTE_GROUP_DRAWABLE = R.drawable.img_notebook;
+    public static final int DEFAULT_BASIC_NOTE_GROUP_DRAWABLE = R.drawable.img_notebook;
 
     public static int getDrawableForNoteGroup(@NonNull BasicNoteGroupA item) {
         int drawableId;

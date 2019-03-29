@@ -20,7 +20,7 @@ public class BasicNoteGroupEditActivity extends ActionBarCompatActivity {
     private EditText mTitle;
     private Spinner mImgSelector;
 
-    private static Integer[] mImgList = new Integer[] {
+    private static final Integer[] mImgList = new Integer[] {
             R.drawable.img_notebook,
             R.drawable.img_app,
             R.drawable.img_bag,

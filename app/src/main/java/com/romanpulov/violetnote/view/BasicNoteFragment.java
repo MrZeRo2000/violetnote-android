@@ -10,7 +10,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.ActionMenuView;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -45,9 +44,6 @@ import java.util.List;
  * A placeholder fragment containing a simple view.
  */
 public class BasicNoteFragment extends BasicCommonNoteFragment {
-    private static void log(String message) {
-        Log.d("BasicNoteFragment", message);
-    }
     protected final static int MENU_GROUP_OTHER_ITEMS = Menu.FIRST + 1;
 
     private InputActionHelper mInputActionHelper;
@@ -173,32 +169,6 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
             }
         }
     }
-
-    /*
-    private void performEditAction(final ActionMode mode, final BasicNoteA item) {
-        (new TextEditDialogBuilder(getActivity(), getString(R.string.ui_note_title), item.getTitle()))
-                .setNonEmptyErrorMessage(getString(R.string.error_field_not_empty))
-                .setOnTextInputListener(new TextInputDialog.OnTextInputListener() {
-                    @Override
-                    public void onTextInput(String text) {
-                        if (!text.equals(item.getTitle())) {
-                            //change
-                            item.setTitle(text);
-
-                            //update database
-                            DBNoteManager noteManager = new DBNoteManager(getActivity());
-                            noteManager.mBasicNoteDAO.update(item);
-
-                            //refresh list
-                            BasicNoteFragment.this.refreshList(noteManager);
-                        }
-                        // finish anyway
-                        mode.finish();
-                    }
-                })
-                .execute();
-    }
-    */
 
     private void performMoveToOtherNoteGroupAction(final ActionMode mode, @NonNull final List<BasicNoteA> items, @NonNull final BasicNoteGroupA otherNoteGroup) {
         String confirmationQuestion = getString(R.string.ui_question_selected_note_move_to_other_note_group, items.size(), otherNoteGroup.getDisplayTitle());
@@ -339,7 +309,6 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
             hideAddLayout();
 
-            log("onPrepareActionMode");
             //menu.getItem(R.menu.)
             MenuItem menuItem = menu.findItem(R.id.edit);
             if (menuItem != null)

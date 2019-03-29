@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class DBDefRepository {
-    private static List<Class<? extends DBCommonDef.TableDefSQLProvider>> mTableDefs = new ArrayList<>();
+    private static final List<Class<? extends DBCommonDef.TableDefSQLProvider>> mTableDefs = new ArrayList<>();
 
     static {
         //dictionary tables

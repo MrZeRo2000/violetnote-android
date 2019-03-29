@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 
 import com.romanpulov.violetnote.R;
@@ -25,9 +24,6 @@ import java.util.Set;
  * Created by rpulov on 15.05.2016.
  */
 public class RecyclerViewHelper {
-    public static void log(String message) {
-        Log.d("RecyclerViewHelper", message);
-    }
 
     public static void adapterNotifyDataSetChanged(@NonNull RecyclerView recyclerView) {
         RecyclerView.Adapter adapter = recyclerView.getAdapter();

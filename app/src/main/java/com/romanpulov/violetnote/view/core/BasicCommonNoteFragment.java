@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -28,14 +27,6 @@ public abstract class BasicCommonNoteFragment extends Fragment {
     protected RecyclerViewHelper.RecyclerViewSelector mRecyclerViewSelector;
 
     public abstract void refreshList(DBNoteManager noteManager);
-
-    public void refreshListWithView() {
-        FragmentActivity activity = getActivity();
-        if ((activity != null) && (mRecyclerView != null)) {
-            refreshList(new DBNoteManager(activity));
-            RecyclerViewHelper.adapterNotifyDataSetChanged(mRecyclerView);
-        }
-    }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {

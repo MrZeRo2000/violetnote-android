@@ -58,7 +58,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
 
     public static final Handler mRefreshHandler = new Handler();
 
-    private Runnable mRefreshRunnable = new Runnable() {
+    private final Runnable mRefreshRunnable = new Runnable() {
         @Override
         public void run() {
             Context context = getContext();
@@ -72,7 +72,6 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         }
     };
 
-    @Override
     public void refreshListWithView() {
         Context context = getContext();
         if (context != null) {

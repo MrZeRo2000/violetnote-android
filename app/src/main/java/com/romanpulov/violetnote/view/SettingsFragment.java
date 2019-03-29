@@ -66,7 +66,7 @@ public class SettingsFragment extends PreferenceFragment {
     private final Map<String, PreferenceLoaderProcessor> mPreferenceLoadProcessors = new HashMap<>();
 
     private LoaderServiceManager mLoaderServiceManager;
-    private BroadcastReceiver mLoaderServiceBroadcastReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver mLoaderServiceBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             String loaderClassName = intent.getStringExtra(LoaderService.SERVICE_RESULT_LOADER_NAME);
@@ -342,7 +342,7 @@ public class SettingsFragment extends PreferenceFragment {
     private LoaderService mBoundService;
     private boolean mIsBound;
 
-    private ServiceConnection mConnection = new ServiceConnection() {
+    private final ServiceConnection mConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className, IBinder service) {
             // This is called when the connection with the service has been
             // established, giving us the service object we can use to

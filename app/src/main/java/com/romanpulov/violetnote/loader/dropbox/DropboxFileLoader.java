@@ -49,7 +49,7 @@ public abstract class DropboxFileLoader extends FileLoader {
         }
     }
 
-    @SuppressWarnings("unused")
+    @SuppressWarnings({"unused", "SameReturnValue"})
     public static boolean isLoaderInternetRequired() {return true;}
 
     public DropboxFileLoader(Context context, LoadPathProvider loadPathProvider) {

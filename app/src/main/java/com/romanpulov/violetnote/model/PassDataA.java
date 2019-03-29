@@ -78,7 +78,8 @@ public class PassDataA implements Parcelable, PasswordProvider {
                 //check for allowed search criteria
                 if (((attrCount == 0) && isSearchSystem) || ((attrCount == 1) && isSearchUser)) {
                     //check if matches expression
-                    if (note.getNoteAttr().get(a).matches(searchRegExpString)) {
+                    String av = note.getNoteAttr().get(a);
+                    if ((av != null) && (av.matches(searchRegExpString))) {
                         if (noteList == null)
                             noteList = new ArrayList<>();
                         noteList.add(note);

@@ -20,7 +20,8 @@
         android:maxLines="1"
         android:inputType="textCapSentences"
         android:hint="@string/hint_title"
-        android:importantForAutofill="no"/>
+        tools:ignore="AutoFill"
+        />
 
     <Spinner
         android:layout_width="match_parent"

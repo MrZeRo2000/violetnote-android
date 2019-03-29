@@ -44,7 +44,7 @@ public final class BasicNoteSummary implements Parcelable {
         return mItemCountTitle;
     }
 
-    private LongSparseArray<Long> mParams = new LongSparseArray<>();
+    private final LongSparseArray<Long> mParams = new LongSparseArray<>();
 
     public LongSparseArray<Long> getParams() {
         return mParams;

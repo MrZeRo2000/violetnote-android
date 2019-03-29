@@ -3,6 +3,7 @@ package com.romanpulov.violetnote.view.core;
 import android.content.Context;
 import android.text.InputType;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 
 import com.romanpulov.violetnote.R;
@@ -26,8 +27,12 @@ public class PasswordInputDialog extends TextInputDialog {
         mInputView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus)
-                    mAlertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                if (hasFocus) {
+                    Window window = mAlertDialog.getWindow();
+                    if (window != null) {
+                        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                    }
+                }
             }
         });
 

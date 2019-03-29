@@ -21,7 +21,7 @@ public final class BasicHNoteCOItemA extends BasicEntityNoteA {
         return mValue;
     }
 
-    private BasicNoteItemParams mNoteItemParams = BasicNoteItemParams.createEmpty();
+    private final BasicNoteItemParams mNoteItemParams = BasicNoteItemParams.createEmpty();
     public BasicNoteItemParams getNoteItemParams() {
         return mNoteItemParams;
     }

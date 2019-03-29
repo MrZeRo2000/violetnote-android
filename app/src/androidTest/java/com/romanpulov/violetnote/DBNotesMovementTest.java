@@ -78,7 +78,7 @@ public class DBNotesMovementTest extends DBBaseTest {
         String insertNotesSql = "insert into " + NotesTableDef.TABLE_NAME + " (last_modified, order_id, group_id, note_type, title, is_encrypted) VALUES (?, ?, ?, ?, ?, ?)";
 
         // checked item 1
-        String[] insertNotesArgs = new String[] {"0", "1", "2", "2", mTestNoteNames.get(notePos++), "0"};
+        String[] insertNotesArgs = new String[] {"0", "1", "2", "0", mTestNoteNames.get(notePos++), "0"};
         mDB.execSQL(insertNotesSql, insertNotesArgs);
 
         // checked item 2

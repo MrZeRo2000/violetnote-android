@@ -2,7 +2,6 @@ package com.romanpulov.violetnote.service;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import com.romanpulov.library.common.service.ServiceUtils;
 
@@ -12,9 +11,6 @@ import com.romanpulov.library.common.service.ServiceUtils;
  */
 
 public class LoaderServiceManager {
-    private static void log(String message) {
-        Log.d("LoaderServiceManager", message);
-    }
 
     private final Context mContext;
 
@@ -24,7 +20,6 @@ public class LoaderServiceManager {
 
     public boolean startLoader(String loaderClassName) {
         if (isLoaderServiceRunning()) {
-            log("the loader service is running");
             return false;
         }
         else {
