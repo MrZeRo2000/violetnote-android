@@ -100,7 +100,7 @@ public class BasicNoteCheckedItemActivity extends BasicNoteDataPasswordActivity 
                         ((BasicNoteCheckedItemFragment) fragment).checkOut();
                         return true;
                     case R.id.action_refresh:
-                        if (PasswordActivity.getPasswordValidityChecker().isValid()) {
+                        if (!mBasicNoteData.getNote().isEncrypted() || PasswordActivity.getPasswordValidityChecker().isValid()) {
                             ((BasicNoteCheckedItemFragment) fragment).refreshListWithView();
                         } else {
                             removeFragment();
