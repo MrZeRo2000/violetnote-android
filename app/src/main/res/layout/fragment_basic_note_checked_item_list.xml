@@ -8,16 +8,23 @@
     android:orientation="vertical"
     >
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/list"
-        android:name="com.romanpulov.violetnote.view.BasicNoteCheckedItemFragment"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swiperefresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="0dp"
-        android:layout_marginRight="0dp"
-        android:layout_weight="1"
-        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-        tools:listitem="@layout/fragment_basic_note_checked_item" />
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/list"
+            android:name="com.romanpulov.violetnote.view.BasicNoteCheckedItemFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_weight="1"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+            tools:listitem="@layout/fragment_basic_note_checked_item" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <include layout="@layout/checkout_progress_panel"
         android:id="@+id/checkout_progress_panel_include"

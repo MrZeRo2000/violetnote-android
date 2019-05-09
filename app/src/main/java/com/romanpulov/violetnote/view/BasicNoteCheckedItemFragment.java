@@ -1,5 +1,6 @@
 package com.romanpulov.violetnote.view;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.ActionMenuView;
@@ -52,6 +54,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
 
     private InputActionHelper mInputActionHelper;
     private CheckoutProgressHelper mCheckoutProgressHelper;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     private long mPriceNoteParamTypeId;
     private int mCheckedUpdateInterval;
@@ -345,6 +348,17 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         mRecyclerViewSelector = recyclerViewAdapter.getRecyclerViewSelector();
         mRecyclerView.setAdapter(recyclerViewAdapter);
 
+        //swite refresh
+        mSwipeRefreshLayout = view.findViewById(R.id.swiperefresh);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (mRecyclerViewSelector.getActionMode() == null) {
+                    performRefresh();
+                }
+            }
+        });
+
         //add action panel
         mInputActionHelper = new InputActionHelper(view.findViewById(R.id.add_panel_include));
         mInputActionHelper.setOnAddInteractionListener(new InputActionHelper.OnAddInteractionListener() {
@@ -477,6 +491,25 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         });
 
         executeActions(executor);
+    }
+
+    public void performRefresh() {
+        if (!mBasicNoteData.getNote().isEncrypted() || PasswordActivity.getPasswordValidityChecker().isValid()) {
+            refreshListWithView();
+            setSwipeRefreshing(false);
+        } else {
+            setSwipeRefreshing(false);
+            Activity activity = getActivity();
+            if (activity instanceof BasicNoteCheckedItemActivity) {
+                ((BasicNoteCheckedItemActivity)activity).requestInvalidateFragment();
+            }
+        }
+    }
+
+    public void setSwipeRefreshing(boolean value) {
+        if (mSwipeRefreshLayout != null) {
+            mSwipeRefreshLayout.setRefreshing(value);
+        }
     }
 
     public void checkOut() {

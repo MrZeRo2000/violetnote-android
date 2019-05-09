@@ -86,26 +86,23 @@ public class BasicNoteCheckedItemActivity extends BasicNoteDataPasswordActivity 
         } else {
             Fragment fragment = getFragment();
             if (fragment instanceof BasicNoteCheckedItemFragment) {
+                BasicNoteCheckedItemFragment basicNoteCheckedItemFragment = (BasicNoteCheckedItemFragment) fragment;
                 switch (item.getItemId()) {
                     case R.id.action_add:
-                        ((BasicNoteCheckedItemFragment) fragment).showAddLayout();
+                        basicNoteCheckedItemFragment.showAddLayout();
                         return true;
                     case R.id.action_check_all:
-                        ((BasicNoteCheckedItemFragment) fragment).performUpdateChecked(true);
+                        basicNoteCheckedItemFragment.performUpdateChecked(true);
                         return true;
                     case R.id.action_uncheck_all:
-                        ((BasicNoteCheckedItemFragment) fragment).performUpdateChecked(false);
+                        basicNoteCheckedItemFragment.performUpdateChecked(false);
                         return true;
                     case R.id.action_checkout:
-                        ((BasicNoteCheckedItemFragment) fragment).checkOut();
+                        basicNoteCheckedItemFragment.checkOut();
                         return true;
                     case R.id.action_refresh:
-                        if (!mBasicNoteData.getNote().isEncrypted() || PasswordActivity.getPasswordValidityChecker().isValid()) {
-                            ((BasicNoteCheckedItemFragment) fragment).refreshListWithView();
-                        } else {
-                            removeFragment();
-                            requestPassword();
-                        }
+                        basicNoteCheckedItemFragment.setSwipeRefreshing(true);
+                        basicNoteCheckedItemFragment.performRefresh();
                         return true;
                     default:
                         return super.onOptionsItemSelected(item);
@@ -113,6 +110,11 @@ public class BasicNoteCheckedItemActivity extends BasicNoteDataPasswordActivity 
             } else
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public void requestInvalidateFragment() {
+        removeFragment();
+        requestPassword();
     }
 
     @Override
