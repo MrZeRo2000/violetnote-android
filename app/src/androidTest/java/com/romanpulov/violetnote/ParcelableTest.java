@@ -15,6 +15,7 @@ import com.romanpulov.violetnote.model.BasicNoteGroupA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.model.BasicNoteItemParams;
 import com.romanpulov.violetnote.model.BasicNoteSummary;
+import com.romanpulov.violetnote.model.ParcelableUtils;
 import com.romanpulov.violetnote.model.vo.BasicNoteItemParamValueA;
 import com.romanpulov.violetnote.model.vo.BasicParamValueA;
 import com.romanpulov.violetnote.model.PassDataA;
@@ -60,6 +61,25 @@ public class ParcelableTest {
         //selective check category for note
         assertEquals(data.getPassNoteData().get(0).getCategory().getCategoryName(), readData.getPassNoteData().get(0).getCategory().getCategoryName());
     }
+
+    @Test
+    public void testParcelableUtils() {
+        PassDataA data = DocumentPassDataLoader.loadSamplePassData();
+        PassDataA readData = ParcelableUtils.duplicateParcelableObject(data, PassDataA.CREATOR);
+
+        assertEquals(data.getPassCategoryData().size(), readData.getPassCategoryData().size());
+        assertEquals(data.getPassNoteData().size(), readData.getPassNoteData().size());
+
+        //selective check category name
+        assertEquals(data.getPassCategoryData().get(0).getCategoryName(), readData.getPassCategoryData().get(0).getCategoryName());
+
+        //selective check attributes
+        assertEquals(data.getPassNoteData().get(0).getNoteAttr().size(), readData.getPassNoteData().get(0).getNoteAttr().size());
+
+        //selective check category for note
+        assertEquals(data.getPassNoteData().get(0).getCategory().getCategoryName(), readData.getPassNoteData().get(0).getCategory().getCategoryName());
+    }
+
 
     @Test
     public void testNoteItem() {
