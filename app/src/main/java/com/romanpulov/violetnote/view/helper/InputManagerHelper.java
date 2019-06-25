@@ -1,7 +1,11 @@
 package com.romanpulov.violetnote.view.helper;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
@@ -45,5 +49,16 @@ public class InputManagerHelper {
         InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(INPUT_METHOD_SERVICE);
         if (inputMethodManager != null)
             inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+    }
+
+    /**
+     * Shows input from window
+     * @param window Window
+     */
+    public static void showWindowInput(@Nullable Window window) {
+        if (window != null) {
+            window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
+            window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        }
     }
 }

@@ -7,10 +7,13 @@ import android.text.InputType;
 import android.util.AttributeSet;
 import android.util.Xml;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.view.helper.InputManagerHelper;
 
 import org.xmlpull.v1.XmlPullParser;
 
@@ -30,6 +33,7 @@ public class TextInputDialog extends AlertInputDialog {
     protected String mText;
     protected int mInputType;
     protected boolean mSelectEnd;
+    protected boolean mShowInput;
     private String mNonEmptyErrorMessage;
     protected View mInputView;
 
@@ -39,6 +43,10 @@ public class TextInputDialog extends AlertInputDialog {
 
     public void setSelectEnd(boolean value) {
         mSelectEnd = value;
+    }
+
+    public void setShowInput(boolean value) {
+        mShowInput = value;
     }
 
     private OnTextInputListener mOnTextInputListener;
@@ -86,8 +94,10 @@ public class TextInputDialog extends AlertInputDialog {
         input.setInputType(mInputType);
         input.setTextColor(mContext.getResources().getColor(R.color.brightTextColor));
         input.setText(mText);
-        if (mSelectEnd)
+        if (mSelectEnd && (mText != null))
             input.setSelection(mText.length());
+
+        input.requestFocus();
 
         alert.setView(input);
         alert.setTitle(mTitle);
@@ -139,6 +149,10 @@ public class TextInputDialog extends AlertInputDialog {
                     });
                 }
             });
+        }
+
+        if (mShowInput) {
+            InputManagerHelper.showWindowInput(mAlertDialog.getWindow());
         }
 
         mAlertDialog.show();

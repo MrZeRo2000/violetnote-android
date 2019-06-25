@@ -3,6 +3,7 @@ package com.romanpulov.violetnote.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.romanpulov.violetnote.db.provider.BasicNoteDBManagementProvider;
 
@@ -133,6 +134,19 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
             return -1;
         else
             return result;
+    }
+
+    @Nullable
+    public static BasicNoteA findByTitle(Iterable<BasicNoteA> noteList, String title) {
+        if (noteList != null) {
+            for (BasicNoteA note : noteList) {
+                if ((note.mTitle != null) && (note.mTitle.equals(title))) {
+                    return note;
+                }
+            }
+        }
+
+        return null;
     }
 
     private BasicNoteA() {

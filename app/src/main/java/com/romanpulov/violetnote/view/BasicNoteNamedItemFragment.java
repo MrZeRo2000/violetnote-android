@@ -302,6 +302,12 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
             if (mBottomToolbarHelper != null) {
                 mBottomToolbarHelper.showLayout(mRecyclerViewSelector.getSelectedItems().size(), mBasicNoteData.getNote().getSummary().getItemCount());
             }
+
+            List<BasicNoteItemA> selectedNoteItems = getSelectedNoteItems();
+            if (selectedNoteItems.size() == 1) {
+                mRecyclerView.scrollToPosition(mBasicNoteData.getNote().getItems().indexOf(selectedNoteItems.get(0)));
+            }
+
             updateActionMenu(menu);
             return true;
         }

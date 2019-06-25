@@ -13,6 +13,7 @@ public class TextEditDialogBuilder {
     private final String mInitialValue;
     private String mNonEmptyErrorMessage;
     private boolean mSelectEnd;
+    private boolean mShowInput;
 
     private TextInputDialog.OnTextInputListener mListener;
 
@@ -32,6 +33,11 @@ public class TextEditDialogBuilder {
         return this;
     }
 
+    public TextEditDialogBuilder setShowInput(boolean value) {
+        mShowInput = value;
+        return this;
+    }
+
     public TextEditDialogBuilder setOnTextInputListener(TextInputDialog.OnTextInputListener listener) {
         mListener = listener;
         return this;
@@ -41,6 +47,7 @@ public class TextEditDialogBuilder {
         TextInputDialog dialog = new TextInputDialog(mContext, mTitle);
         dialog.setText(mInitialValue);
         dialog.setSelectEnd(mSelectEnd);
+        dialog.setShowInput(mShowInput);
         if (mNonEmptyErrorMessage != null)
             dialog.setNonEmptyErrorMessage(mNonEmptyErrorMessage);
 

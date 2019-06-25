@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.ActionMenuView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,9 +23,13 @@ import com.romanpulov.violetnote.db.manager.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicEntityNoteSelectionPosA;
 import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteGroupA;
+import com.romanpulov.violetnote.model.BasicNoteItemA;
+import com.romanpulov.violetnote.model.ParcelableUtils;
 import com.romanpulov.violetnote.view.action.BasicActionExecutor;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveToOtherNoteGroupAction;
 import com.romanpulov.violetnote.view.action.BasicNoteRefreshAction;
+import com.romanpulov.violetnote.view.core.TextEditDialogBuilder;
+import com.romanpulov.violetnote.view.core.TextInputDialog;
 import com.romanpulov.violetnote.view.helper.BottomToolbarHelper;
 import com.romanpulov.violetnote.view.helper.DisplayTitleBuilder;
 import com.romanpulov.violetnote.view.action.BasicItemsMoveAction;
@@ -36,6 +41,8 @@ import com.romanpulov.violetnote.view.core.AlertOkCancelSupportDialogFragment;
 import com.romanpulov.violetnote.view.core.BasicCommonNoteFragment;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 import com.romanpulov.violetnote.view.helper.InputActionHelper;
+import com.romanpulov.violetnote.view.helper.InputManagerHelper;
+import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -148,6 +155,61 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
             dialog.show(fragmentManager, null);
     }
 
+    private void performDuplicateAction(final ActionMode mode, final BasicNoteA item) {
+        TextEditDialogBuilder textEditDialogBuilder = (new TextEditDialogBuilder(getActivity(), getString(R.string.ui_note_value),
+                null))
+                .setNonEmptyErrorMessage(getString(R.string.error_field_not_empty))
+                .setShowInput(true);
+
+        final AlertDialog alertDialog = textEditDialogBuilder.execute();
+        alertDialog.setTitle(R.string.ui_note_title);
+
+        textEditDialogBuilder.setOnTextInputListener(new TextInputDialog.OnTextInputListener() {
+            @Override
+            public void onTextInput(final String text) {
+                //hide editor
+                View focusedView = alertDialog.getCurrentFocus();
+                InputManagerHelper.hideInput(focusedView);
+
+                if (BasicNoteA.findByTitle(mNoteList, text) == null) {
+                    //add
+                    BasicNoteA newNote = ParcelableUtils.duplicateParcelableObject(item, BasicNoteA.CREATOR);
+                    newNote.setTitle(text);
+
+                    //persist
+                    DBNoteManager mNoteManager = new DBNoteManager(getActivity());
+
+                    //get items
+                    mNoteManager.mBasicNoteItemDAO.fillNoteDataItemsWithSummary(newNote);
+
+                    //get new id
+                    long newItemId = mNoteManager.mBasicNoteDAO.insert(newNote);
+                    if (newItemId != -1) {
+                        //insert items ignoring any errors
+                        for (BasicNoteItemA noteItem : newNote.getItems()) {
+                            noteItem.setNoteId(newItemId);
+                            mNoteManager.mBasicNoteItemDAO.insert(noteItem);
+                        }
+
+                        // refresh list
+                        refreshList(mNoteManager);
+
+                        //scroll to bottom
+                        mRecyclerView.scrollToPosition(mNoteList.size() - 1);
+                    }
+
+                    // finish anyway
+                    mode.finish();
+                } else {
+                    Context context = getContext();
+                    if (context != null) {
+                        PreferenceRepository.displayMessage(context, context.getString(R.string.ui_error_note_already_exists, text));
+                    }
+                }
+            }
+        });
+    }
+
     private void performEditAction(String text) {
         List<BasicNoteA> selectedNotes = getSelectedNotes();
         BasicNoteA selectedNote;
@@ -248,8 +310,10 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
                             performDeleteAction(mode, selectedNotes);
                             break;
                         case R.id.edit:
-                            final BasicNoteA selectedNote = selectedNotes.get(0);
-                            mInputActionHelper.showLayout(selectedNote.getTitle(), InputActionHelper.INPUT_ACTION_TYPE_EDIT);
+                            mInputActionHelper.showLayout(selectedNotes.get(0).getTitle(), InputActionHelper.INPUT_ACTION_TYPE_EDIT);
+                            break;
+                        case R.id.duplicate:
+                            performDuplicateAction(mode, selectedNotes.get(0));
                             break;
                     }
                 }
@@ -278,7 +342,7 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
 
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            mode.getMenuInflater().inflate(R.menu.menu_edit_delete_actions, menu);
+            mode.getMenuInflater().inflate(R.menu.menu_edit_delete_duplicate_actions, menu);
 
             buildMoveToOtherGroupsSubMenu(menu);
 
@@ -305,14 +369,29 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
                 mRecyclerViewSelector.destroyActionMode();
         }
 
+        private void setSingleSelectedMenusVisibility(@NonNull Iterable<MenuItem> menuItems) {
+            for (MenuItem menuItem : menuItems) {
+                menuItem.setVisible(mRecyclerViewSelector.isSelectedSingle());
+            }
+        }
+
         @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
             hideAddLayout();
 
-            //menu.getItem(R.menu.)
-            MenuItem menuItem = menu.findItem(R.id.edit);
-            if (menuItem != null)
-                menuItem.setVisible(mRecyclerViewSelector.isSelectedSingle());
+            List<MenuItem> singleMenuItems = new ArrayList<>();
+
+            MenuItem editMenuItem = menu.findItem(R.id.edit);
+            if (editMenuItem != null) {
+                singleMenuItems.add(editMenuItem);
+            }
+
+            MenuItem duplicateMenuItem = menu.findItem(R.id.duplicate);
+            if (duplicateMenuItem != null) {
+                singleMenuItems.add(duplicateMenuItem);
+            }
+
+            setSingleSelectedMenusVisibility(singleMenuItems);
 
             if (mBottomToolbarHelper == null) {
                 setupBottomToolbarHelper();
@@ -320,6 +399,11 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
 
             if (mBottomToolbarHelper != null) {
                 mBottomToolbarHelper.showLayout(mRecyclerViewSelector.getSelectedItems().size(), mNoteList.size());
+            }
+
+            List<BasicNoteA> selectedNotes = getSelectedNotes();
+            if (selectedNotes.size() == 1) {
+                mRecyclerView.scrollToPosition(mNoteList.indexOf(selectedNotes.get(0)));
             }
 
             updateTitle(mode);
