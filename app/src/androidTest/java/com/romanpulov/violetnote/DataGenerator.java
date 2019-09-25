@@ -1,5 +1,6 @@
 package com.romanpulov.violetnote;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 import java.util.List;
 import java.util.Locale;
@@ -37,7 +38,7 @@ public class DataGenerator {
         deleteDatabase();
 
         DBBasicNoteHelper.getInstance(getTargetContext()).openDB();
-        long priceNoteParamTypeId = DBBasicNoteHelper.getInstance(getTargetContext()).getDBDictionaryCache().getPriceNoteParamTypeId();
+        final long priceNoteParamTypeId = DBBasicNoteHelper.getInstance(getTargetContext()).getDBDictionaryCache().getPriceNoteParamTypeId();
 
         log("Create notes");
         DBNoteManager noteManager = new DBNoteManager(getTargetContext());
@@ -124,6 +125,42 @@ public class DataGenerator {
         assertEquals(noteList.size(), MAX_NOTES);
         log("Created " + MAX_NOTES + " notes");
 
+        createNoteGroup(noteManager);
+
         DBBasicNoteHelper.getInstance(getTargetContext()).closeDB();
+    }
+
+    private void createNoteGroup(@NonNull DBNoteManager noteManager) {
+        final long priceNoteParamTypeId = DBBasicNoteHelper.getInstance(getTargetContext()).getDBDictionaryCache().getPriceNoteParamTypeId();
+
+        //new note group
+        BasicNoteGroupA newNoteGroup = BasicNoteGroupA.newEditInstance(BasicNoteGroupA.BASIC_NOTE_GROUP_TYPE, "Group 2", 0);
+        long newNoteGroupId = noteManager.mBasicNoteGroupDAO.insert(newNoteGroup);
+        assertNotEquals(-1, newNoteGroupId);
+
+        BasicNoteA newNote = BasicNoteA.newEditInstance(newNoteGroupId, BasicNoteA.NOTE_TYPE_CHECKED, "Checked 1", false, null);
+        long newNoteId = noteManager.mBasicNoteDAO.insert(newNote);
+        assertNotEquals(-1, newNoteId);
+        newNote.setId(newNoteId);
+
+        BasicNoteItemA newNoteItem = BasicNoteItemA.newCheckedEditInstance(priceNoteParamTypeId, "Item 1");
+        assertNotEquals(-1, noteManager.mBasicNoteItemDAO.insertWithNote(newNote, newNoteItem));
+
+        BasicNoteItemA newNoteItem2 = BasicNoteItemA.newCheckedEditInstance(priceNoteParamTypeId, "Item 2");
+        assertNotEquals(-1, noteManager.mBasicNoteItemDAO.insertWithNote(newNote, newNoteItem2));
+
+        noteManager.mBasicNoteItemDAO.updateChecked(newNoteItem2, true);
+
+        BasicNoteA newNote2 = BasicNoteA.newEditInstance(newNoteGroupId, BasicNoteA.NOTE_TYPE_CHECKED, "Checked 2", false, null);
+        long newNoteId2 = noteManager.mBasicNoteDAO.insert(newNote2);
+        assertNotEquals(-1, newNoteId2);
+        newNote2.setId(newNoteId2);
+
+        BasicNoteItemA newNoteItem21 = BasicNoteItemA.newCheckedEditInstance(priceNoteParamTypeId, "Item 21");
+        assertNotEquals(-1, noteManager.mBasicNoteItemDAO.insertWithNote(newNote2, newNoteItem21));
+
+        //new empty note group
+        BasicNoteGroupA emptyNoteGroup = BasicNoteGroupA.newEditInstance(BasicNoteGroupA.BASIC_NOTE_GROUP_TYPE, "Empty group", 0);
+        assertNotEquals(-1, noteManager.mBasicNoteGroupDAO.insert(emptyNoteGroup));
     }
 }

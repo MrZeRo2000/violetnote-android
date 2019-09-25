@@ -7,6 +7,27 @@ package com.romanpulov.violetnote.db;
 
 public class DBRawQueryRepository {
 
+    public static final String NOTE_GROUPS_WITH_TOTALS_WITH_CHECKED =
+        "SELECT " +
+        "g._id, " +
+        "g.note_group_type, " +
+        "g.note_group_name, " +
+        "g.note_group_icon, " +
+        "g.order_id, " +
+        "COUNT(DISTINCT n._id) AS count_notes, " +
+        "COUNT(CASE WHEN n.note_type = 0 AND ni.checked = 1 THEN 1 END) AS count_checked, " +
+        "COUNT(CASE WHEN n.note_type = 0 AND ni.checked = 0 THEN 1 END) AS count_unchecked " +
+        "FROM note_groups g " +
+        "LEFT OUTER JOIN notes n ON n.group_id = g._id " +
+        "LEFT OUTER JOIN note_items ni ON ni.note_id = n._id " +
+        "GROUP BY " +
+        "g._id, " +
+        "g.note_group_type, " +
+        "g.note_group_name, " +
+        "g.note_group_icon, " +
+        "g.order_id " +
+        "ORDER BY g.order_id";
+
     public static final String NOTE_GROUPS_WITH_TOTALS =
         "SELECT " +
         "g._id, " +
