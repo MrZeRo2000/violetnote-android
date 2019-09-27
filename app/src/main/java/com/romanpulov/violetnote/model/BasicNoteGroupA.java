@@ -39,10 +39,10 @@ public class BasicNoteGroupA extends BasicCommonNoteA implements Parcelable {
     }
 
     //calculated
-    private long mNoteCount;
+    private BasicNoteGroupSummary mBasicNoteGroupSummary;
 
-    public long getNoteCount() {
-        return mNoteCount;
+    public BasicNoteGroupSummary getSummary() {
+        return mBasicNoteGroupSummary;
     }
 
     @Override
@@ -54,7 +54,7 @@ public class BasicNoteGroupA extends BasicCommonNoteA implements Parcelable {
         setDBManagementProvider(new BasicNoteGroupDBManagementProvider(this));
     }
 
-    public static BasicNoteGroupA newInstance(long id, long groupType, String groupName, long groupIcon, long orderId, long noteCount) {
+    public static BasicNoteGroupA newInstance(long id, long groupType, String groupName, long groupIcon, long orderId) {
         BasicNoteGroupA instance = new BasicNoteGroupA();
 
         instance.setId(id);
@@ -64,7 +64,24 @@ public class BasicNoteGroupA extends BasicCommonNoteA implements Parcelable {
         instance.mGroupName = groupName;
         instance.mGroupIcon = groupIcon;
 
-        instance.mNoteCount = noteCount;
+        instance.mBasicNoteGroupSummary = BasicNoteGroupSummary.createEmpty();
+
+        return instance;
+    }
+
+
+    public static BasicNoteGroupA newInstanceWithTotals(long id, long groupType, String groupName, long groupIcon, long orderId,
+                                                        long noteCount, long noteItemCheckedCount, long noteItemUncheckedCount) {
+        BasicNoteGroupA instance = new BasicNoteGroupA();
+
+        instance.setId(id);
+        instance.setOrderId(orderId);
+
+        instance.mGroupType = groupType;
+        instance.mGroupName = groupName;
+        instance.mGroupIcon = groupIcon;
+
+        instance.mBasicNoteGroupSummary = BasicNoteGroupSummary.newInstance(noteCount, noteItemCheckedCount, noteItemUncheckedCount);
 
         return instance;
     }
@@ -76,6 +93,8 @@ public class BasicNoteGroupA extends BasicCommonNoteA implements Parcelable {
         instance.mGroupName = groupName;
         instance.mGroupIcon = groupIcon;
 
+        instance.mBasicNoteGroupSummary = BasicNoteGroupSummary.createEmpty();
+
         return instance;
     }
 
@@ -85,7 +104,7 @@ public class BasicNoteGroupA extends BasicCommonNoteA implements Parcelable {
         mGroupType = in.readLong();
         mGroupName = in.readString();
         mGroupIcon = in.readLong();
-        mNoteCount = in.readLong();
+        mBasicNoteGroupSummary = in.readParcelable(BasicNoteGroupSummary.class.getClassLoader());
     }
 
     @Override
@@ -100,7 +119,7 @@ public class BasicNoteGroupA extends BasicCommonNoteA implements Parcelable {
         dest.writeLong(mGroupType);
         dest.writeString(mGroupName);
         dest.writeLong(mGroupIcon);
-        dest.writeLong(mNoteCount);
+        dest.writeParcelable(mBasicNoteGroupSummary, 0);
     }
 
     public static final Parcelable.Creator<BasicNoteGroupA> CREATOR = new Parcelable.Creator<BasicNoteGroupA>() {
@@ -125,7 +144,7 @@ public class BasicNoteGroupA extends BasicCommonNoteA implements Parcelable {
                 "[groupType=" + mGroupType + "]," +
                 "[groupName=" + mGroupName + "]," +
                 "[groupIcon=" + mGroupIcon + "]" +
-                "[noteCount=" + mNoteCount + "]" +
+                "[summary=" + mBasicNoteGroupSummary + "]" +
                 "}";
     }
 }

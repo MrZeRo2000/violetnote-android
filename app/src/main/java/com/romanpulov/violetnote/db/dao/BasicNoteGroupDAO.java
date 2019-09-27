@@ -22,19 +22,20 @@ public class BasicNoteGroupDAO extends AbstractDAO<BasicNoteGroupA> {
                 c.getLong(1),
                 c.getString(2),
                 c.getLong(3),
-                c.getLong(4),
-                0
+                c.getLong(4)
         );
     }
 
     private static BasicNoteGroupA fromCursorWithTotals(@NonNull Cursor c) {
-        return BasicNoteGroupA.newInstance(
+        return BasicNoteGroupA.newInstanceWithTotals(
                 c.getLong(0),
                 c.getLong(1),
                 c.getString(2),
                 c.getLong(3),
                 c.getLong(4),
-                c.getLong(5)
+                c.getLong(5),
+                c.getLong(6),
+                c.getLong(7)
         );
     }
 
@@ -77,7 +78,7 @@ public class BasicNoteGroupDAO extends AbstractDAO<BasicNoteGroupA> {
             @Override
             public Cursor createCursor() {
                 return mDB.rawQuery(
-                        DBRawQueryRepository.NOTE_GROUPS_WITH_TOTALS,
+                        DBRawQueryRepository.NOTE_GROUPS_WITH_TOTALS_WITH_CHECKED,
                         null
                 );
             }

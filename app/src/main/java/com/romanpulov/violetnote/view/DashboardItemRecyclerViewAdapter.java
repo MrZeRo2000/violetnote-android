@@ -25,8 +25,8 @@ public class DashboardItemRecyclerViewAdapter extends RecyclerView.Adapter<Dashb
 
     private void calcMaxNoteCount() {
         for (BasicNoteGroupA item : mBasicNoteGroupList) {
-            if (item.getNoteCount() > mMaxNoteCount) {
-                mMaxNoteCount = item.getNoteCount();
+            if (item.getSummary().getNoteCount() > mMaxNoteCount) {
+                mMaxNoteCount = item.getSummary().getNoteCount();
             }
         }
     }
@@ -58,7 +58,7 @@ public class DashboardItemRecyclerViewAdapter extends RecyclerView.Adapter<Dashb
             }
         });
 
-        long noteCount = item.getNoteCount();
+        long noteCount = item.getSummary().getNoteCount();
         viewHolder.mItemCountView.setVisibility(noteCount == 0 ? View.GONE : View.VISIBLE);
         if (noteCount > 0) {
             viewHolder.mItemCountView.setText(String.valueOf(noteCount));
