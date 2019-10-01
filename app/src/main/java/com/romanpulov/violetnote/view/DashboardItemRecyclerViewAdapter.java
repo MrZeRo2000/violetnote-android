@@ -66,6 +66,19 @@ public class DashboardItemRecyclerViewAdapter extends RecyclerView.Adapter<Dashb
                 viewHolder.mItemCountView.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
             }
         }
+
+        long noteUncheckedCount = item.getSummary().getNoteItemUncheckedCount();
+        viewHolder.mItemUncheckedCountView.setVisibility(noteUncheckedCount == 0 ? View.GONE : View.VISIBLE);
+        if (noteUncheckedCount > 0) {
+            viewHolder.mItemUncheckedCountView.setText(String.valueOf(noteUncheckedCount));
+        }
+
+        long noteCheckedCount = item.getSummary().getNoteItemCheckedCount();
+        viewHolder.mItemCheckedCountView.setVisibility(noteCheckedCount == 0 ? View.GONE : View.VISIBLE);
+        if (noteCheckedCount > 0) {
+            viewHolder.mItemCheckedCountView.setText(String.valueOf(noteCheckedCount));
+        }
+
     }
 
     @Override
@@ -76,11 +89,15 @@ public class DashboardItemRecyclerViewAdapter extends RecyclerView.Adapter<Dashb
     class ViewHolder extends RecyclerView.ViewHolder {
         private final Button mButton;
         private final TextView mItemCountView;
+        private final TextView mItemUncheckedCountView;
+        private final TextView mItemCheckedCountView;
 
         public ViewHolder(View view) {
             super(view);
             mButton = view.findViewById(R.id.button);
             mItemCountView = view.findViewById(R.id.item_count);
+            mItemUncheckedCountView = view.findViewById(R.id.item_unchecked_count);
+            mItemCheckedCountView = view.findViewById(R.id.item_checked_count);
         }
     }
 }

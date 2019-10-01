@@ -35,4 +35,27 @@
         android:background="@drawable/highlight_circle"
         android:textAppearance="@style/Text4"
         />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/item_unchecked_count"
+        android:gravity="center"
+        android:layout_below="@+id/item_count"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/yellow_circle"
+        android:textAppearance="@style/Text4"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/item_checked_count"
+        android:gravity="center"
+        android:layout_below="@+id/item_unchecked_count"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/green_circle"
+        android:textAppearance="@style/Text4"
+        />
 </RelativeLayout>
