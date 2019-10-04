@@ -20,15 +20,6 @@ public class BasicNoteGroupEditActivity extends ActionBarCompatActivity {
     private EditText mTitle;
     private Spinner mImgSelector;
 
-    private static final Integer[] mImgList = new Integer[] {
-            R.drawable.img_notebook,
-            R.drawable.img_app,
-            R.drawable.img_bag,
-            R.drawable.img_doc,
-            R.drawable.img_home,
-            R.drawable.img_starry
-    };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +28,10 @@ public class BasicNoteGroupEditActivity extends ActionBarCompatActivity {
 
         mTitle = findViewById(R.id.title_edit_text);
         mImgSelector = findViewById(R.id.img_selector);
-        mImgSelector.setAdapter(new BasicNoteGroupImageAdapter(this, R.layout.view_img_selector_spinner, mImgList));
+        mImgSelector.setAdapter(new BasicNoteGroupImageAdapter(this,
+                R.layout.view_img_selector_spinner,
+                DrawableSelectionHelper.getDrawableList())
+        );
 
         mNoteGroup = getIntent().getParcelableExtra(BasicNoteGroupA.BASIC_NOTE_GROUP_DATA);
 
@@ -49,10 +43,7 @@ public class BasicNoteGroupEditActivity extends ActionBarCompatActivity {
             setTitle(getString(R.string.title_activity_basic_note_group_edit, mNoteGroup.getDisplayTitle()));
             mTitle.setText(mNoteGroup.getGroupName());
             int drawable = DrawableSelectionHelper.getDrawableForNoteGroup(mNoteGroup);
-            int position = Arrays.asList(mImgList).indexOf(drawable);
-            if (position == -1) {
-                position = 0;
-            }
+            int position = DrawableSelectionHelper.getDrawablePosition(drawable);
             mImgSelector.setSelection(position);
         }
     }
@@ -75,19 +66,10 @@ public class BasicNoteGroupEditActivity extends ActionBarCompatActivity {
     private void updateNoteGroup() {
         if (mNoteGroup != null) {
             mNoteGroup.setGroupName(mTitle.getText().toString().trim());
-            mNoteGroup.setGroupIcon(getGroupIcon());
+            mNoteGroup.setGroupIcon(
+                DrawableSelectionHelper.getGroupIconByPosition(mImgSelector.getSelectedItemPosition())
+            );
         }
-    }
-
-    private long getGroupIcon() {
-        int selectedItemPos = mImgSelector.getSelectedItemPosition();
-        long groupIcon = 0;
-        int selectedImg = mImgList[selectedItemPos];
-        if (selectedImg != DrawableSelectionHelper.DEFAULT_BASIC_NOTE_GROUP_DRAWABLE) {
-            groupIcon = selectedImg;
-        }
-
-        return groupIcon;
     }
 
     private BasicNoteGroupA newNoteGroup() {
