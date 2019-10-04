@@ -13,7 +13,7 @@ import com.romanpulov.violetnote.db.tabledef.NoteItemsTableDef;
 import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.model.BasicNoteItemParams;
-import com.romanpulov.violetnote.model.BasicNoteSummary;
+import com.romanpulov.violetnote.model.vo.BasicNoteSummary;
 import com.romanpulov.violetnote.model.BooleanUtils;
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 

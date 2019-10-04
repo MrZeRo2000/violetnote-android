@@ -5,6 +5,7 @@ import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
 import com.romanpulov.violetnote.db.provider.BasicNoteGroupDBManagementProvider;
+import com.romanpulov.violetnote.model.vo.BasicNoteGroupSummary;
 
 public class BasicNoteGroupA extends BasicCommonNoteA implements Parcelable {
     public static final long DEFAULT_NOTE_GROUP_ID = 2;

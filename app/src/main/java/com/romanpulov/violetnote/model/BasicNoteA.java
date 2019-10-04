@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.romanpulov.violetnote.db.provider.BasicNoteDBManagementProvider;
+import com.romanpulov.violetnote.model.vo.BasicNoteSummary;
 
 import java.util.ArrayList;
 import java.util.Arrays;
