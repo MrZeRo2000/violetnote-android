@@ -52,4 +52,41 @@ public class JSONTest {
         }
     }
 
+    @Test
+    public void testDisplayOptions() {
+        JSONObject jo = new JSONObject();
+
+        JSONObject ind = new JSONObject();
+        try {
+            ind.put("display_total", true);
+            ind.put("display_unchecked", false);
+            ind.put("display_checked", true);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            jo.put("indicators", ind);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        log("testDisplayOptions");
+        log(jo.toString());
+
+
+        try {
+            JSONObject jo1 = new JSONObject(jo.toString());
+
+            JSONObject ind1 = (JSONObject) jo1.get("indicators");
+
+            assertTrue(ind1.optBoolean("display_total"));
+            assertFalse(ind1.optBoolean("display_unchecked"));
+            assertTrue(ind1.optBoolean("display_checked"));
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
 }

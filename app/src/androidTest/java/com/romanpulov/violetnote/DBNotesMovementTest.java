@@ -420,8 +420,8 @@ public class DBNotesMovementTest extends DBBaseTest {
 
         List<BasicNoteGroupA> noteGroups =  mDBNoteManager.mBasicNoteGroupDAO.getAllWithTotals();
         Assert.assertEquals(4, noteGroups.size());
-        Assert.assertEquals(4, noteGroups.get(1).getNoteCount());
-        Assert.assertEquals(1, noteGroups.get(2).getNoteCount());
+        Assert.assertEquals(4, noteGroups.get(1).getSummary().getNoteCount());
+        Assert.assertEquals(1, noteGroups.get(2).getSummary().getNoteCount());
 
         // get groups
         noteGroups =  mDBNoteManager.mBasicNoteGroupDAO.getByGroupType(BasicNoteGroupA.BASIC_NOTE_GROUP_TYPE);
