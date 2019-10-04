@@ -5,6 +5,7 @@ import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
 import com.romanpulov.violetnote.db.provider.BasicNoteGroupDBManagementProvider;
+import com.romanpulov.violetnote.model.vo.BasicNoteGroupDisplayOptions;
 import com.romanpulov.violetnote.model.vo.BasicNoteGroupSummary;
 
 public class BasicNoteGroupA extends BasicCommonNoteA implements Parcelable {
@@ -39,8 +40,14 @@ public class BasicNoteGroupA extends BasicCommonNoteA implements Parcelable {
         mGroupIcon = value;
     }
 
+    private BasicNoteGroupDisplayOptions mBasicNoteGroupDisplayOptions = BasicNoteGroupDisplayOptions.createWithDefaults();
+
+    public BasicNoteGroupDisplayOptions getDisplayOptions() {
+        return mBasicNoteGroupDisplayOptions;
+    }
+
     //calculated
-    private BasicNoteGroupSummary mBasicNoteGroupSummary;
+    private BasicNoteGroupSummary mBasicNoteGroupSummary = BasicNoteGroupSummary.createEmpty();;
 
     public BasicNoteGroupSummary getSummary() {
         return mBasicNoteGroupSummary;
@@ -64,8 +71,6 @@ public class BasicNoteGroupA extends BasicCommonNoteA implements Parcelable {
         instance.mGroupType = groupType;
         instance.mGroupName = groupName;
         instance.mGroupIcon = groupIcon;
-
-        instance.mBasicNoteGroupSummary = BasicNoteGroupSummary.createEmpty();
 
         return instance;
     }
@@ -94,8 +99,6 @@ public class BasicNoteGroupA extends BasicCommonNoteA implements Parcelable {
         instance.mGroupName = groupName;
         instance.mGroupIcon = groupIcon;
 
-        instance.mBasicNoteGroupSummary = BasicNoteGroupSummary.createEmpty();
-
         return instance;
     }
 
@@ -106,6 +109,7 @@ public class BasicNoteGroupA extends BasicCommonNoteA implements Parcelable {
         mGroupName = in.readString();
         mGroupIcon = in.readLong();
         mBasicNoteGroupSummary = in.readParcelable(BasicNoteGroupSummary.class.getClassLoader());
+        mBasicNoteGroupDisplayOptions = in.readParcelable(BasicNoteGroupDisplayOptions.class.getClassLoader());
     }
 
     @Override
@@ -121,6 +125,7 @@ public class BasicNoteGroupA extends BasicCommonNoteA implements Parcelable {
         dest.writeString(mGroupName);
         dest.writeLong(mGroupIcon);
         dest.writeParcelable(mBasicNoteGroupSummary, 0);
+        dest.writeParcelable(mBasicNoteGroupDisplayOptions, 0);
     }
 
     public static final Parcelable.Creator<BasicNoteGroupA> CREATOR = new Parcelable.Creator<BasicNoteGroupA>() {

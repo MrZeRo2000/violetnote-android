@@ -78,7 +78,7 @@ public class JSONTest {
         try {
             JSONObject jo1 = new JSONObject(jo.toString());
 
-            JSONObject ind1 = (JSONObject) jo1.get("indicators");
+            JSONObject ind1 = jo1.getJSONObject("indicators");
 
             assertTrue(ind1.optBoolean("display_total"));
             assertFalse(ind1.optBoolean("display_unchecked"));
@@ -87,6 +87,11 @@ public class JSONTest {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
 
+    @Test
+    public void testEmptyJSON() {
+        JSONObject jo = new JSONObject();
+        log("Empty json object:" + jo.toString());
     }
 }
