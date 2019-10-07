@@ -14,6 +14,7 @@ public class DBRawQueryRepository {
         "g.note_group_name, " +
         "g.note_group_icon, " +
         "g.order_id, " +
+        "g.note_group_display_options, " +
         "COUNT(DISTINCT n._id) AS count_notes, " +
         "COUNT(CASE WHEN n.note_type = 0 AND ni.checked = 1 THEN 1 END) AS count_checked, " +
         "COUNT(CASE WHEN n.note_type = 0 AND ni.checked = 0 THEN 1 END) AS count_unchecked " +
@@ -25,7 +26,8 @@ public class DBRawQueryRepository {
         "g.note_group_type, " +
         "g.note_group_name, " +
         "g.note_group_icon, " +
-        "g.order_id " +
+        "g.order_id, " +
+        "g.note_group_display_options " +
         "ORDER BY g.order_id";
 
     public static final String NOTE_GROUPS_WITH_TOTALS =

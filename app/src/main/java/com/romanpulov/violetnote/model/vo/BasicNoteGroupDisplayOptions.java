@@ -42,7 +42,7 @@ public class BasicNoteGroupDisplayOptions implements Parcelable {
     }
 
     public static BasicNoteGroupDisplayOptions fromJSONString(String jsonString) {
-        BasicNoteGroupDisplayOptions instance = new BasicNoteGroupDisplayOptions();
+        BasicNoteGroupDisplayOptions instance = createWithDefaults();
 
         if ((jsonString != null) && !(jsonString.isEmpty()))
         try {

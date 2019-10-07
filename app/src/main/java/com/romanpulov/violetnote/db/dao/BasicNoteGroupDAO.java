@@ -22,7 +22,8 @@ public class BasicNoteGroupDAO extends AbstractDAO<BasicNoteGroupA> {
                 c.getLong(1),
                 c.getString(2),
                 c.getLong(3),
-                c.getLong(4)
+                c.getLong(4),
+                c.getString(5)
         );
     }
 
@@ -33,6 +34,7 @@ public class BasicNoteGroupDAO extends AbstractDAO<BasicNoteGroupA> {
                 c.getString(2),
                 c.getLong(3),
                 c.getLong(4),
+                c.getString(5),
                 c.getLong(5),
                 c.getLong(6),
                 c.getLong(7)

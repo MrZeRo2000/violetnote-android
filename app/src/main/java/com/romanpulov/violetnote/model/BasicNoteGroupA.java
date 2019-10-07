@@ -62,7 +62,7 @@ public class BasicNoteGroupA extends BasicCommonNoteA implements Parcelable {
         setDBManagementProvider(new BasicNoteGroupDBManagementProvider(this));
     }
 
-    public static BasicNoteGroupA newInstance(long id, long groupType, String groupName, long groupIcon, long orderId) {
+    public static BasicNoteGroupA newInstance(long id, long groupType, String groupName, long groupIcon, long orderId, String groupDisplayOptions) {
         BasicNoteGroupA instance = new BasicNoteGroupA();
 
         instance.setId(id);
@@ -71,12 +71,13 @@ public class BasicNoteGroupA extends BasicCommonNoteA implements Parcelable {
         instance.mGroupType = groupType;
         instance.mGroupName = groupName;
         instance.mGroupIcon = groupIcon;
+        instance.mBasicNoteGroupDisplayOptions = BasicNoteGroupDisplayOptions.fromJSONString(groupDisplayOptions);
 
         return instance;
     }
 
 
-    public static BasicNoteGroupA newInstanceWithTotals(long id, long groupType, String groupName, long groupIcon, long orderId,
+    public static BasicNoteGroupA newInstanceWithTotals(long id, long groupType, String groupName, long groupIcon, long orderId, String groupDisplayOptions,
                                                         long noteCount, long noteItemCheckedCount, long noteItemUncheckedCount) {
         BasicNoteGroupA instance = new BasicNoteGroupA();
 
@@ -86,6 +87,7 @@ public class BasicNoteGroupA extends BasicCommonNoteA implements Parcelable {
         instance.mGroupType = groupType;
         instance.mGroupName = groupName;
         instance.mGroupIcon = groupIcon;
+        instance.mBasicNoteGroupDisplayOptions = BasicNoteGroupDisplayOptions.fromJSONString(groupDisplayOptions);
 
         instance.mBasicNoteGroupSummary = BasicNoteGroupSummary.newInstance(noteCount, noteItemCheckedCount, noteItemUncheckedCount);
 
