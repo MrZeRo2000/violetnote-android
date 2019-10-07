@@ -35,9 +35,9 @@ public class BasicNoteGroupDAO extends AbstractDAO<BasicNoteGroupA> {
                 c.getLong(3),
                 c.getLong(4),
                 c.getString(5),
-                c.getLong(5),
                 c.getLong(6),
-                c.getLong(7)
+                c.getLong(7),
+                c.getLong(8)
         );
     }
 
