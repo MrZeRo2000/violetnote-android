@@ -40,6 +40,39 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/text_margin"
+        android:orientation="horizontal"
+        >
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/show_total"
+            android:text="@string/ui_display_options_show_total"
+            />
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/show_unchecked"
+            android:text="@string/ui_display_options_show_unchecked"
+            />
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/show_checked"
+            android:text="@string/ui_display_options_show_checked"
+            />
+
+    </LinearLayout>
+
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -49,6 +82,5 @@
         android:text="@android:string/ok"
         android:onClick="okButtonClick"
         />
-
 
 </LinearLayout>

@@ -193,6 +193,7 @@ public class BasicNoteGroupDAO extends AbstractDAO<BasicNoteGroupA> {
                 NoteGroupsTableDef.NOTE_GROUP_TYPE_COLUMN_NAME + " = ?",
                 new String[]{String.valueOf(noteGroup.getGroupType())}) + 1
         );
+        cv.put(NoteGroupsTableDef.NOTE_GROUP_DISPLAY_OPTIONS, noteGroup.getDisplayOptions().toJSONString());
 
         return mDB.insert(NoteGroupsTableDef.TABLE_NAME, null, cv);
     }
@@ -210,6 +211,7 @@ public class BasicNoteGroupDAO extends AbstractDAO<BasicNoteGroupA> {
         cv.put(NoteGroupsTableDef.NOTE_GROUP_NAME_COLUMN_NAME, noteGroup.getGroupName());
         cv.put(NoteGroupsTableDef.NOTE_GROUP_ICON_COLUMN_NAME, noteGroup.getGroupIcon());
         cv.put(DBCommonDef.ORDER_COLUMN_NAME, noteGroup.getOrderId());
+        cv.put(NoteGroupsTableDef.NOTE_GROUP_DISPLAY_OPTIONS, noteGroup.getDisplayOptions().toJSONString());
 
         return mDB.update(NoteGroupsTableDef.TABLE_NAME, cv, DBCommonDef.ID_COLUMN_NAME + " = ?" , new String[]{String.valueOf(noteGroup.getId())});
     }

@@ -177,6 +177,10 @@
     <string name="ui_error_note_already_exists">Note %s already exists</string>
     <string name="ui_error_group_delete_contain_notes">%s will not be deleted because it contains notes.</string>
 
+    <string name="ui_display_options_show_total">Show total</string>
+    <string name="ui_display_options_show_unchecked">Show unchecked</string>
+    <string name="ui_display_options_show_checked">Show checked</string>
+
     <!-- Content description for images -->
     <string name="content_description_priority">Priority</string>
 

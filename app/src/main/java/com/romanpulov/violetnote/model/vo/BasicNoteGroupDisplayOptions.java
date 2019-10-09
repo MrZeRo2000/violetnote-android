@@ -21,16 +21,28 @@ public class BasicNoteGroupDisplayOptions implements Parcelable {
         return mTotalFlag;
     }
 
+    public void setTotalFlag(boolean value) {
+        mTotalFlag = value;
+    }
+
     private boolean mUncheckedFlag;
 
     public boolean getUncheckedFlag() {
         return mUncheckedFlag;
     }
 
+    public void setUncheckedFlag(boolean value) {
+        mUncheckedFlag = value;
+    }
+
     private boolean mCheckedFlag;
 
     public boolean getCheckedFlag() {
         return mCheckedFlag;
+    }
+
+    public void setCheckedFlag(boolean value) {
+        mCheckedFlag = value;
     }
 
     private BasicNoteGroupDisplayOptions() {
@@ -75,7 +87,7 @@ public class BasicNoteGroupDisplayOptions implements Parcelable {
                 jo_indicators.put(CHECKED_FLAG, true);
             }
 
-            if (jo.length() > 0) {
+            if (jo_indicators.length() > 0) {
                 jo.put(INDICATORS, jo_indicators);
             }
 

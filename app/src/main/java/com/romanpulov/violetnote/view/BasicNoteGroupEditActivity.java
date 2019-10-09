@@ -2,6 +2,7 @@ package com.romanpulov.violetnote.view;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 
@@ -20,6 +21,10 @@ public class BasicNoteGroupEditActivity extends ActionBarCompatActivity {
     private EditText mTitle;
     private Spinner mImgSelector;
 
+    private CheckBox mShowTotal;
+    private CheckBox mShowUnchecked;
+    private CheckBox mShowChecked;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +38,10 @@ public class BasicNoteGroupEditActivity extends ActionBarCompatActivity {
                 DrawableSelectionHelper.getDrawableList())
         );
 
+        mShowTotal = findViewById(R.id.show_total);
+        mShowUnchecked = findViewById(R.id.show_unchecked);
+        mShowChecked = findViewById(R.id.show_checked);
+
         mNoteGroup = getIntent().getParcelableExtra(BasicNoteGroupA.BASIC_NOTE_GROUP_DATA);
 
         if (mNoteGroup == null) {
@@ -41,10 +50,16 @@ public class BasicNoteGroupEditActivity extends ActionBarCompatActivity {
             mTitle.requestFocus();
         } else {
             setTitle(getString(R.string.title_activity_basic_note_group_edit, mNoteGroup.getDisplayTitle()));
+
             mTitle.setText(mNoteGroup.getGroupName());
+
             int drawable = DrawableSelectionHelper.getDrawableForNoteGroup(mNoteGroup);
             int position = DrawableSelectionHelper.getDrawablePosition(drawable);
             mImgSelector.setSelection(position);
+
+            mShowTotal.setChecked(mNoteGroup.getDisplayOptions().getTotalFlag());
+            mShowUnchecked.setChecked(mNoteGroup.getDisplayOptions().getUncheckedFlag());
+            mShowChecked.setChecked(mNoteGroup.getDisplayOptions().getCheckedFlag());
         }
     }
 
@@ -69,6 +84,10 @@ public class BasicNoteGroupEditActivity extends ActionBarCompatActivity {
             mNoteGroup.setGroupIcon(
                 DrawableSelectionHelper.getGroupIconByPosition(mImgSelector.getSelectedItemPosition())
             );
+
+            mNoteGroup.getDisplayOptions().setTotalFlag(mShowTotal.isChecked());
+            mNoteGroup.getDisplayOptions().setUncheckedFlag(mShowUnchecked.isChecked());
+            mNoteGroup.getDisplayOptions().setCheckedFlag(mShowChecked.isChecked());
         }
     }
 
