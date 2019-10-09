@@ -59,8 +59,14 @@ public class DashboardItemRecyclerViewAdapter extends RecyclerView.Adapter<Dashb
         });
 
         long noteCount = item.getSummary().getNoteCount();
-        viewHolder.mItemCountView.setVisibility(noteCount == 0 ? View.GONE : View.VISIBLE);
-        if (noteCount > 0) {
+        int itemCountVisibility;
+        if (!item.getDisplayOptions().getTotalFlag() || noteCount == 0) {
+            itemCountVisibility = View.GONE;
+        } else {
+            itemCountVisibility = View.VISIBLE;
+        }
+        viewHolder.mItemCountView.setVisibility(itemCountVisibility);
+        if (itemCountVisibility == View.VISIBLE) {
             viewHolder.mItemCountView.setText(String.valueOf(noteCount));
             if (noteCount == mMaxNoteCount) {
                 viewHolder.mItemCountView.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
@@ -68,14 +74,26 @@ public class DashboardItemRecyclerViewAdapter extends RecyclerView.Adapter<Dashb
         }
 
         long noteUncheckedCount = item.getSummary().getNoteItemUncheckedCount();
-        viewHolder.mItemUncheckedCountView.setVisibility(noteUncheckedCount == 0 ? View.GONE : View.VISIBLE);
-        if (noteUncheckedCount > 0) {
+        int itemUncheckedCountVisibility;
+        if (!item.getDisplayOptions().getUncheckedFlag() || noteUncheckedCount == 0) {
+            itemUncheckedCountVisibility = View.GONE;
+        } else {
+            itemUncheckedCountVisibility = View.VISIBLE;
+        }
+        viewHolder.mItemUncheckedCountView.setVisibility(itemUncheckedCountVisibility);
+        if (itemUncheckedCountVisibility == View.VISIBLE) {
             viewHolder.mItemUncheckedCountView.setText(String.valueOf(noteUncheckedCount));
         }
 
         long noteCheckedCount = item.getSummary().getNoteItemCheckedCount();
-        viewHolder.mItemCheckedCountView.setVisibility(noteCheckedCount == 0 ? View.GONE : View.VISIBLE);
-        if (noteCheckedCount > 0) {
+        int itemCheckedCountVisibility;
+        if (!item.getDisplayOptions().getCheckedFlag() || noteCheckedCount == 0) {
+            itemCheckedCountVisibility = View.GONE;
+        } else {
+            itemCheckedCountVisibility = View.VISIBLE;
+        }
+        viewHolder.mItemCheckedCountView.setVisibility(itemCheckedCountVisibility);
+        if (itemCheckedCountVisibility == View.VISIBLE) {
             viewHolder.mItemCheckedCountView.setText(String.valueOf(noteCheckedCount));
         }
 
