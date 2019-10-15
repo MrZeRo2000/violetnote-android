@@ -1,15 +1,18 @@
 package com.romanpulov.violetnote.view;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.romanpulov.violetnote.view.NoteDetailsFragment.OnNoteDetailsInteractionListener;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.model.PassNoteA;
+import com.romanpulov.violetnote.view.helper.ClipboardHelper;
 
 import java.util.List;
 
@@ -32,10 +35,10 @@ public class NoteDetailsRecyclerViewAdapter extends RecyclerView.Adapter<NoteDet
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         holder.mItem = mValues.get(position);
-        holder.mNameView.setText(mValues.get(position).mName);
-        holder.mValueView.setText(mValues.get(position).mValue);
+        holder.mNameView.setText(holder.mItem.mName);
+        holder.mValueView.setText(holder.mItem.mValue);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,6 +48,17 @@ public class NoteDetailsRecyclerViewAdapter extends RecyclerView.Adapter<NoteDet
                     // fragment is attached to one) that an item has been selected.
                     mListener.onAttrItemSelection(holder.mItem);
                 }
+            }
+        });
+
+        holder.mView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Context context = holder.mView.getContext();
+                String message = context.getString(R.string.ui_info_copy_to_clipboard, holder.mItem.mName);
+                ClipboardHelper.copyPlainText(context, holder.mItem.mValue);
+                Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+                return true;
             }
         });
     }
