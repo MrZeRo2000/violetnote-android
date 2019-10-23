@@ -2,6 +2,9 @@ package com.romanpulov.violetnote;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
+
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -165,6 +168,15 @@ public class DataGenerator {
         assertNotEquals(-1, noteManager.mBasicNoteGroupDAO.insert(emptyNoteGroup));
     }
 
+    private BasicNoteItemA insertCheckedNoteItem(@NonNull DBNoteManager noteManager, @NonNull BasicNoteA note, String noteItemName) {
+        final long priceNoteParamTypeId = DBBasicNoteHelper.getInstance(getTargetContext()).getDBDictionaryCache().getPriceNoteParamTypeId();
+        BasicNoteItemA result = BasicNoteItemA.newCheckedEditInstance(priceNoteParamTypeId, noteItemName);
+        long newNoteItemId = noteManager.mBasicNoteItemDAO.insertWithNote(note, result);
+        assertNotEquals(-1, newNoteItemId);
+
+        return result;
+    }
+
     private void createHistoryEvents(@NonNull DBNoteManager noteManager) {
         final long priceNoteParamTypeId = DBBasicNoteHelper.getInstance(getTargetContext()).getDBDictionaryCache().getPriceNoteParamTypeId();
 
@@ -179,17 +191,33 @@ public class DataGenerator {
         assertNotEquals(-1, newNoteGroupId);
         newNote.setId(newNoteId);
 
+        //new checked note items
+        BasicNoteItemA newNoteItem1 = insertCheckedNoteItem(noteManager, newNote, "Cat");
+        BasicNoteItemA newNoteItem2 = insertCheckedNoteItem(noteManager, newNote, "Dog");
+        BasicNoteItemA newNoteItem3 = insertCheckedNoteItem(noteManager, newNote, "Elephant");
+        BasicNoteItemA newNoteItem4 = insertCheckedNoteItem(noteManager, newNote, "Crocodile");
 
+        //update checked 1
+        BasicNoteItemA[] notesToCheck = new BasicNoteItemA[] {newNoteItem1, newNoteItem2};
+        assertNotEquals(0, noteManager.mBasicNoteItemDAO.updateCheckedList(Arrays.asList(notesToCheck), true));
 
-        //new checked note item 1
-        BasicNoteItemA newNoteItem1 = BasicNoteItemA.newCheckedEditInstance(priceNoteParamTypeId, "Cat");
-        assertNotEquals(-1, noteManager.mBasicNoteItemDAO.insertWithNote(newNote, newNoteItem1));
+        //update note and checkout
+        noteManager.mBasicNoteItemDAO.fillNoteDataItemsWithSummary(newNote);
+        noteManager.mBasicNoteDAO.fillNoteValues(newNote);
+        noteManager.mBasicNoteDAO.checkOut(newNote);
 
-        BasicNoteItemA newNoteItem2 = BasicNoteItemA.newCheckedEditInstance(priceNoteParamTypeId, "Dog");
-        assertNotEquals(-1, noteManager.mBasicNoteItemDAO.insertWithNote(newNote, newNoteItem2));
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
-        BasicNoteItemA newNoteItem3 = BasicNoteItemA.newCheckedEditInstance(priceNoteParamTypeId, "Elephant");
-        assertNotEquals(-1, noteManager.mBasicNoteItemDAO.insertWithNote(newNote, newNoteItem3));
+        //update checked 2
+        assertNotEquals(0, noteManager.mBasicNoteItemDAO.updateCheckedList(Collections.singletonList(newNoteItem3), true));
 
+        //update note and checkout
+        noteManager.mBasicNoteItemDAO.fillNoteDataItemsWithSummary(newNote);
+        noteManager.mBasicNoteDAO.fillNoteValues(newNote);
+        noteManager.mBasicNoteDAO.checkOut(newNote);
     }
 }
