@@ -126,6 +126,7 @@ public class DataGenerator {
         log("Created " + MAX_NOTES + " notes");
 
         createNoteGroup(noteManager);
+        createHistoryEvents(noteManager);
 
         DBBasicNoteHelper.getInstance(getTargetContext()).closeDB();
     }
@@ -162,5 +163,33 @@ public class DataGenerator {
         //new empty note group
         BasicNoteGroupA emptyNoteGroup = BasicNoteGroupA.newEditInstance(BasicNoteGroupA.BASIC_NOTE_GROUP_TYPE, "Empty group", 0);
         assertNotEquals(-1, noteManager.mBasicNoteGroupDAO.insert(emptyNoteGroup));
+    }
+
+    private void createHistoryEvents(@NonNull DBNoteManager noteManager) {
+        final long priceNoteParamTypeId = DBBasicNoteHelper.getInstance(getTargetContext()).getDBDictionaryCache().getPriceNoteParamTypeId();
+
+        //new note group
+        BasicNoteGroupA newNoteGroup = BasicNoteGroupA.newEditInstance(BasicNoteGroupA.BASIC_NOTE_GROUP_TYPE, "History Events", 0);
+        long newNoteGroupId = noteManager.mBasicNoteGroupDAO.insert(newNoteGroup);
+        assertNotEquals(-1, newNoteGroupId);
+
+        //new checked note
+        BasicNoteA newNote = BasicNoteA.newEditInstance(newNoteGroupId, BasicNoteA.NOTE_TYPE_CHECKED, "Animals", false, null);
+        long newNoteId = noteManager.mBasicNoteDAO.insert(newNote);
+        assertNotEquals(-1, newNoteGroupId);
+        newNote.setId(newNoteId);
+
+
+
+        //new checked note item 1
+        BasicNoteItemA newNoteItem1 = BasicNoteItemA.newCheckedEditInstance(priceNoteParamTypeId, "Cat");
+        assertNotEquals(-1, noteManager.mBasicNoteItemDAO.insertWithNote(newNote, newNoteItem1));
+
+        BasicNoteItemA newNoteItem2 = BasicNoteItemA.newCheckedEditInstance(priceNoteParamTypeId, "Dog");
+        assertNotEquals(-1, noteManager.mBasicNoteItemDAO.insertWithNote(newNote, newNoteItem2));
+
+        BasicNoteItemA newNoteItem3 = BasicNoteItemA.newCheckedEditInstance(priceNoteParamTypeId, "Elephant");
+        assertNotEquals(-1, noteManager.mBasicNoteItemDAO.insertWithNote(newNote, newNoteItem3));
+
     }
 }

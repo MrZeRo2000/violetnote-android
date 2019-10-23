@@ -1,0 +1,5 @@
+
+# sqlite logs
+
+*.db-shm
+*.db-wal
