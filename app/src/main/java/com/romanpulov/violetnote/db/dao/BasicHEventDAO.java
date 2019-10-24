@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
 
+import com.romanpulov.violetnote.db.DBRawQueryRepository;
 import com.romanpulov.violetnote.db.tabledef.DBCommonDef;
 import com.romanpulov.violetnote.db.tabledef.HEventsTableDef;
 import com.romanpulov.violetnote.db.tabledef.HNoteItemsTableDef;
@@ -44,6 +45,32 @@ public final class BasicHEventDAO extends AbstractDAO<BasicHEventA> {
                         null,
                         null,
                         DBCommonDef.getSelectionFieldDesc(DBCommonDef.ID_COLUMN_NAME)
+                );
+            }
+
+            @Override
+            public void readFromCursor(Cursor c) {
+                result.add(BasicHEventA.newInstance(
+                        c.getLong(0),
+                        c.getLong(1),
+                        c.getLong(2),
+                        c.getString(3)
+                ));
+            }
+        });
+
+        return result;
+    }
+
+    public List<BasicHEventA> getByCOItemsNoteId(final long noteId) {
+        final List<BasicHEventA> result = new ArrayList<>();
+
+        readCursor(new CursorReaderHandler() {
+            @Override
+            public Cursor createCursor() {
+                return mDB.rawQuery(
+                        DBRawQueryRepository.H_EVENTS_BY_CO_ITEMS_NOTE_ID,
+                        new String[] {String.valueOf(noteId)}
                 );
             }
 

@@ -78,4 +78,16 @@ public class DBRawQueryRepository {
             "INNER JOIN h_events he ON hni.event_id = he._id " +
             "ORDER BY he.event_time DESC"
             ;
+
+    public static final String H_EVENTS_BY_CO_ITEMS_NOTE_ID =
+            "SELECT " +
+            "he._id, " +
+            "he.event_type_id, " +
+            "he.event_time, " +
+            "he.event_summary " +
+            "FROM h_events he " +
+            "INNER JOIN h_note_co_items heci ON he._id = heci.event_id " +
+            "WHERE heci.note_id = ? " +
+            "ORDER BY he.event_time DESC"
+            ;
 }
