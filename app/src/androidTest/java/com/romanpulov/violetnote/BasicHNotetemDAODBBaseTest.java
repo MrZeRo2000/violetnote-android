@@ -1,6 +1,7 @@
 package com.romanpulov.violetnote;
 
 import com.romanpulov.violetnote.db.dao.BasicHNoteCOItemDAO;
+import com.romanpulov.violetnote.model.BasicHEventA;
 import com.romanpulov.violetnote.model.BasicHNoteCOItemA;
 import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteGroupA;
@@ -10,7 +11,7 @@ import org.junit.Assert;
 
 import java.util.List;
 
-public class BasicHNoteCOItemDAODBBaseTest extends DBBaseTest {
+public class BasicHNotetemDAODBBaseTest extends DBBaseTest {
     @Override
     void prepareDatabase() {
         deleteDatabase();
@@ -52,6 +53,12 @@ public class BasicHNoteCOItemDAODBBaseTest extends DBBaseTest {
 
             List<BasicHNoteCOItemA> hNoteCOItems = mDBHManager.mBasicHNoteCOItemDAO.getByNoteId(animalsNote.getId());
             Assert.assertEquals(3, hNoteCOItems.size());
+
+            List<BasicHEventA> hEvents = mDBHManager.mBasicHEventDAO.getByCOItemsNoteId(animalsNote.getId());
+            Assert.assertEquals(2, hEvents.size());
+
+            Assert.assertEquals(1, hEvents.get(0).getItemCount());
+            Assert.assertEquals(2, hEvents.get(1).getItemCount());
         }
     }
 }
