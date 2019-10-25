@@ -51,6 +51,8 @@ import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 import java.util.List;
 
 public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
+    private static final int RESULT_CODE_VALUES = 0;
+    private static final int RESULT_CODE_HISTORY = 1;
 
     private InputActionHelper mInputActionHelper;
     private CheckoutProgressHelper mCheckoutProgressHelper;
@@ -426,7 +428,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
 
                     //pass and start activity
                     intent.putExtra(BasicNoteValueDataA.class.getName(), noteValueDataA);
-                    startActivityForResult(intent, 0);
+                    startActivityForResult(intent, RESULT_CODE_VALUES);
                 }
             });
         }
@@ -440,15 +442,28 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         return view;
     }
 
+    public void startHEventHistoryActivity() {
+        Intent intent = new Intent(getActivity(), BasicHEventCOItemActivity.class);
+        intent.putExtra(BasicHEventCOItemActivity.class.getName(), mBasicNoteData.getNote());
+        startActivityForResult(intent, RESULT_CODE_HISTORY);
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //update values
-        DBNoteManager noteManager = new DBNoteManager(getActivity());
-        noteManager.mBasicNoteDAO.fillNoteValues(mBasicNoteData.getNote());
+        switch (requestCode) {
+            case RESULT_CODE_VALUES:
+                //update values
+                DBNoteManager noteManager = new DBNoteManager(getActivity());
+                noteManager.mBasicNoteDAO.fillNoteValues(mBasicNoteData.getNote());
 
-        //update autocomplete
-        if (mInputActionHelper != null)
-            mInputActionHelper.setAutoCompleteList(mBasicNoteData.getNote().getValues());
+                //update autocomplete
+                if (mInputActionHelper != null)
+                    mInputActionHelper.setAutoCompleteList(mBasicNoteData.getNote().getValues());
+                break;
+            case RESULT_CODE_HISTORY:
+                //TO-DO: processing history actions
+                break;
+        }
     }
 
     public void showAddLayout() {

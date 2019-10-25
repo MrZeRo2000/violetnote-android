@@ -25,6 +25,11 @@
         compat:showAsAction="never"
         />
     <item
+        android:id="@+id/action_history"
+        android:title="@string/action_history"
+        compat:showAsAction="never"
+        />
+    <item
         android:id="@+id/action_refresh"
         android:title="@string/action_refresh"
         compat:showAsAction="never"

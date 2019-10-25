@@ -100,6 +100,9 @@ public class BasicNoteCheckedItemActivity extends BasicNoteDataPasswordActivity 
                     case R.id.action_checkout:
                         basicNoteCheckedItemFragment.checkOut();
                         return true;
+                    case R.id.action_history:
+                        basicNoteCheckedItemFragment.startHEventHistoryActivity();
+                        return true;
                     case R.id.action_refresh:
                         basicNoteCheckedItemFragment.setSwipeRefreshing(true);
                         basicNoteCheckedItemFragment.performRefresh();

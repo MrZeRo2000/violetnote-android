@@ -32,6 +32,7 @@
     <string name="action_checkout">Checkout</string>
     <string name="action_check_all">Check all</string>
     <string name="action_uncheck_all">Uncheck all</string>
+    <string name="action_history">History</string>
     <string name="action_reload">Reload</string>
     <string name="action_select">Select</string>
     <string name="action_select_all">Select all</string>
@@ -151,7 +152,8 @@
     <string name="title_activity_basic_note_edit">Basic note edit</string>
     <string name="title_activity_basic_note_checked_item">Checked note</string>
     <string name="title_activity_basic_note_named_item">Named note</string>
-    <string name="title_activity_basic_note_value">values</string>
+    <string name="title_activity_basic_note_value">Values</string>
+    <string name="title_activity_basic_history_event_co_item">Checkout events history</string>
     <string name="title_activity_password_category">Note category</string>
     <string name="title_activity_password_note">Note list</string>
     <string name="title_activity_password_note_details">Note details</string>

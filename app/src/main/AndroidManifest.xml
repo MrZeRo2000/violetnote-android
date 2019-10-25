@@ -126,6 +126,12 @@
             android:theme="@style/MainAppTheme"
             android:windowSoftInputMode="adjustResize"
             />
+        <activity
+            android:name=".view.BasicHEventCOItemActivity"
+            android:label="@string/title_activity_basic_history_event_co_item"
+            android:parentActivityName=".view.BasicNoteCheckedItemActivity"
+            android:theme="@style/ToolBarTheme"
+            />
     </application>
 
 </manifest>
