@@ -306,26 +306,28 @@ public final class BasicNoteDAO extends AbstractBasicNoteDAO<BasicNoteA> {
     }
 
     public void checkOut(@NonNull BasicNoteA note) {
-        for (BasicNoteItemA item : note.getItems()) {
-            if (item.isChecked()) {
+        List<BasicNoteItemA> checkedItems = BasicNoteItemA.getCheckedBasicNoteItems(note.getItems());
 
-                //add note values and history for not encrypted only
-                if (!note.isEncrypted()) {
-                    //insert value
-                    if (note.getValues().add(item.getValue()))
-                        getBasicNoteValueDAO().insertWithNote(note, item.getValue());
+        for (BasicNoteItemA item : checkedItems) {
+            //add note values and history for not encrypted only
+            if (!note.isEncrypted()) {
+                //insert value
+                if (note.getValues().add(item.getValue()))
+                    getBasicNoteValueDAO().insertWithNote(note, item.getValue());
 
-                    //insert history
-                    getBasicNoteHistoryDAO().insertNoteValue(note, item.getValue());
+                //insert history
+                getBasicNoteHistoryDAO().insertNoteValue(note, item.getValue());
 
-                    //insert h
-                    getBasicHNoteCOItemDAO().saveEvent(note, item);
-                }
-
-                //delete note
-                getBasicNoteItemDAO().delete(item);
+                //insert h
+                //getBasicHNoteCOItemDAO().saveEvent(note, item);
             }
+
+            //delete note
+            getBasicNoteItemDAO().delete(item);
         }
+
+        //insert h
+        getBasicHNoteCOItemDAO().saveEvent(note, checkedItems);
     }
 
     public int updateToOtherNoteGroup(@NonNull BasicNoteA note, @NonNull BasicNoteGroupA otherNoteGroup, long otherOrderId) {

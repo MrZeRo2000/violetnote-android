@@ -7,6 +7,9 @@ import android.support.annotation.NonNull;
 import com.romanpulov.violetnote.db.provider.BasicNoteItemDBManagementProvider;
 import com.romanpulov.violetnote.model.vo.BasicParamValueA;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * BasicNote item data
  * Created by rpulov on 11.08.2016.
@@ -84,6 +87,18 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
         } else {
             mNoteItemParams = params;
         }
+    }
+
+    public static <T extends BasicNoteItemA> List<T> getCheckedBasicNoteItems(List<T> items) {
+        List<T> result = new ArrayList<>();
+
+        for (T item: items) {
+            if (item.isChecked()) {
+                result.add(item);
+            }
+        }
+
+        return result;
     }
 
     @Override

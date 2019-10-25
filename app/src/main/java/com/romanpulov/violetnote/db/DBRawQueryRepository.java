@@ -84,10 +84,16 @@ public class DBRawQueryRepository {
             "he._id, " +
             "he.event_type_id, " +
             "he.event_time, " +
-            "he.event_summary " +
+            "he.event_summary, " +
+             "COUNT(heci._id) AS count_items " +
             "FROM h_events he " +
             "INNER JOIN h_note_co_items heci ON he._id = heci.event_id " +
             "WHERE heci.note_id = ? " +
+            "GROUP BY " +
+            "he._id, " +
+            "he.event_type_id, " +
+            "he.event_time, " +
+            "he.event_summary " +
             "ORDER BY he.event_time DESC"
             ;
 }

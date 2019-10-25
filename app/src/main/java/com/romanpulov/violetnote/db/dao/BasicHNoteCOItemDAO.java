@@ -128,17 +128,24 @@ public final class BasicHNoteCOItemDAO extends AbstractBasicHEventItemParamDAO<B
         return result;
     }
 
-    public long saveEvent(@NonNull BasicNoteA note, @NonNull BasicNoteItemA noteItem) {
-        long eventId = getBasicHEventDAO().insert(BasicHEventA.fromEventType(mDBHelper.getDBDictionaryCache().getCheckoutHEventParamId()));
-        if (eventId != -1) {
-            long hNoteCOItemId = insert(BasicHNoteCOItemA.fromEventData(eventId, note, noteItem));
-            BasicNoteItemParams params = noteItem.getNoteItemParams();
-            if ((hNoteCOItemId != -1) && (params.size() > 0)) {
-                return insertHNoteCOItemParams(hNoteCOItemId, noteItem.getNoteItemParams());
+    public long saveEvent(@NonNull BasicNoteA note, @NonNull List<BasicNoteItemA> noteItems) {
+        if (noteItems.size() > 0) {
+            long eventId = getBasicHEventDAO().insert(BasicHEventA.fromEventType(mDBHelper.getDBDictionaryCache().getCheckoutHEventParamId()));
+            if (eventId != -1) {
+                long result = -1;
+                for (BasicNoteItemA noteItem : noteItems) {
+                    long hNoteCOItemId = insert(BasicHNoteCOItemA.fromEventData(eventId, note, noteItem));
+                    BasicNoteItemParams params = noteItem.getNoteItemParams();
+                    if ((hNoteCOItemId != -1) && (params.size() > 0)) {
+                        result = insertHNoteCOItemParams(hNoteCOItemId, noteItem.getNoteItemParams());
+                    }
+                }
+                return result;
             } else
-                return hNoteCOItemId;
-        } else
-            return eventId;
+                return eventId;
+        } else {
+            return 0;
+        }
     }
 
     public long deleteEvent(@NonNull BasicNoteA note) {
