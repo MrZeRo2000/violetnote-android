@@ -153,7 +153,7 @@
     <string name="title_activity_basic_note_checked_item">Checked note</string>
     <string name="title_activity_basic_note_named_item">Named note</string>
     <string name="title_activity_basic_note_value">Values</string>
-    <string name="title_activity_basic_history_event_co_item">Checkout events history</string>
+    <string name="title_activity_basic_history_event_co_item">%s checkout events history</string>
     <string name="title_activity_password_category">Note category</string>
     <string name="title_activity_password_note">Note list</string>
     <string name="title_activity_password_note_details">Note details</string>
