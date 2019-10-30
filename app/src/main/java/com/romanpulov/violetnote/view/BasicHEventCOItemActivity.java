@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.db.manager.DBHManager;
 import com.romanpulov.violetnote.db.manager.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.view.core.ActionBarCompatActivity;
@@ -41,9 +42,10 @@ public class BasicHEventCOItemActivity extends ActionBarCompatActivity {
 
             BasicHEventCOItemFragment fragment = (BasicHEventCOItemFragment)fm.findFragmentById(R.id.fragment_id);
             if (fragment == null) {
-
+                fragment = BasicHEventCOItemFragment.newInstance(note);
+                fm.beginTransaction().replace(R.id.fragment_id, fragment).commit();
             } else {
-                fragment.refreshList(new DBNoteManager(this));
+                fragment.refreshList(new DBHManager(this));
             }
 
         }

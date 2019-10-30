@@ -1,6 +1,10 @@
 package com.romanpulov.violetnote.model;
 
 import android.support.annotation.NonNull;
+import android.util.LongSparseArray;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * HNoteCOItem data class
@@ -46,5 +50,18 @@ public final class BasicHNoteCOItemA extends BasicEntityNoteA {
                 note.getId(),
                 noteItem.getValue()
         );
+    }
+
+    public static void fillArrayFromList(@NonNull LongSparseArray<List<BasicHNoteCOItemA>> hNoteCOItemArray, @NonNull List<BasicHNoteCOItemA> hNoteCOItemList) {
+        hNoteCOItemArray.clear();
+        for (BasicHNoteCOItemA hNoteCOItem: hNoteCOItemList) {
+            List<BasicHNoteCOItemA> hItems = hNoteCOItemArray.get(hNoteCOItem.getEventId());
+            if (hItems == null) {
+                hItems = new ArrayList<>();
+                hNoteCOItemArray.append(hNoteCOItem.getEventId(), hItems);
+            }
+            hItems.add(hNoteCOItem);
+        }
+
     }
 }
