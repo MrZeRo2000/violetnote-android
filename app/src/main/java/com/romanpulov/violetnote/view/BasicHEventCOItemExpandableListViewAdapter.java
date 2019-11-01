@@ -13,6 +13,7 @@ import com.romanpulov.violetnote.db.DateTimeFormatter;
 import com.romanpulov.violetnote.model.BasicHEventA;
 import com.romanpulov.violetnote.model.BasicHNoteCOItemA;
 
+import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -40,14 +41,15 @@ public class BasicHEventCOItemExpandableListViewAdapter extends BaseExpandableLi
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        BasicHEventA group = mHEventList.get(mHEventList.keyAt(groupPosition));
+        BasicHEventA group = (BasicHEventA)getGroup(groupPosition);
         List<BasicHNoteCOItemA> items = mHEventCOItemList.get(group.getId());
         return items == null ? 0 : items.size();
     }
 
     @Override
     public Object getGroup(int groupPosition) {
-        return mHEventList.get(mHEventList.keyAt(groupPosition));
+        //for descending order of events
+        return mHEventList.get(mHEventList.keyAt(mHEventList.size() - 1 - groupPosition));
     }
 
     @Override
@@ -82,7 +84,7 @@ public class BasicHEventCOItemExpandableListViewAdapter extends BaseExpandableLi
         }
         TextView groupTitle = convertView.findViewById(R.id.group_title);
         long eventTime = ((BasicHEventA)getGroup(groupPosition)).getEventTime();
-        String eventTimeString = mDTF.formatDateTimeDelimited(new Date(eventTime), " ");
+        String eventTimeString = DateFormat.getDateTimeInstance().format(new Date(eventTime));
         groupTitle.setText(eventTimeString);
 
         return convertView;
@@ -103,6 +105,6 @@ public class BasicHEventCOItemExpandableListViewAdapter extends BaseExpandableLi
 
     @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {
-        return false;
+        return true;
     }
 }
