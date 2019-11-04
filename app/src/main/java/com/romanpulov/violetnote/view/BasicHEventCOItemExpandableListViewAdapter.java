@@ -76,29 +76,55 @@ public class BasicHEventCOItemExpandableListViewAdapter extends BaseExpandableLi
         return false;
     }
 
+    private static final class GroupViewHolder {
+        final TextView mGroupTitle;
+
+        GroupViewHolder(View v) {
+            mGroupTitle = v.findViewById(R.id.group_title);
+        }
+    }
+
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
+        GroupViewHolder viewHolder;
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater)this.mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.expandable_list_h_event_group, null);
+            viewHolder = new GroupViewHolder(convertView);
+            convertView.setTag(viewHolder);
+        } else {
+            viewHolder = (GroupViewHolder) convertView.getTag();
         }
-        TextView groupTitle = convertView.findViewById(R.id.group_title);
+        //TextView groupTitle = convertView.findViewById(R.id.group_title);
         long eventTime = ((BasicHEventA)getGroup(groupPosition)).getEventTime();
         String eventTimeString = DateFormat.getDateTimeInstance().format(new Date(eventTime));
-        groupTitle.setText(eventTimeString);
+        viewHolder.mGroupTitle.setText(eventTimeString);
 
         return convertView;
     }
 
+    private static final class ChildViewHolder {
+        final TextView mItemTitle;
+
+        ChildViewHolder(View v) {
+            mItemTitle = v.findViewById(R.id.item_title);
+        }
+    }
+
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+        ChildViewHolder viewHolder;
+
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater)this.mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.expandable_list_h_event_list_item, null);
+            viewHolder = new ChildViewHolder(convertView);
+            convertView.setTag(viewHolder);
+        } else {
+            viewHolder = (ChildViewHolder)convertView.getTag();
         }
-        TextView itemTitle = convertView.findViewById(R.id.item_title);
         BasicHNoteCOItemA item = (BasicHNoteCOItemA)getChild(groupPosition, childPosition);
-        itemTitle.setText(item.getValue());
+        viewHolder.mItemTitle.setText(item.getValue());
 
         return convertView;
     }
