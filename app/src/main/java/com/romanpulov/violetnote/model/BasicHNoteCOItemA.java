@@ -62,6 +62,15 @@ public final class BasicHNoteCOItemA extends BasicEntityNoteA {
             }
             hItems.add(hNoteCOItem);
         }
+    }
 
+    @NonNull
+    @Override
+    public String toString() {
+        return "{" +
+                "[eventId=" + mEventId + "]," +
+                "[noteId=" + mNoteId + "]," +
+                "[value=" + mValue + "]" +
+                "}";
     }
 }
