@@ -15,23 +15,28 @@ import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
+import com.romanpulov.violetnote.view.core.ViewSelectorHelper;
 import com.romanpulov.violetnote.view.helper.PriorityDisplayHelper;
 
-public class BasicNoteCheckedItemRecyclerViewAdapter extends RecyclerView.Adapter<BasicNoteCheckedItemRecyclerViewAdapter.ViewHolder> {
+public class BasicNoteCheckedItemRecyclerViewAdapter extends RecyclerView.Adapter<BasicNoteCheckedItemRecyclerViewAdapter.ViewHolder> implements ViewSelectorHelper.ChangeNotificationListener {
+    @Override
+    public void notifySelectionChanged() {
+        this.notifyDataSetChanged();
+    }
 
     private final BasicNoteDataA mBasicNoteData;
     private final long mPriceNoteParamTypeId;
-    private final RecyclerViewHelper.RecyclerViewSelector mRecyclerViewSelector;
+    private final ViewSelectorHelper.AbstractViewSelector<Integer> mRecyclerViewSelector;
     private final BasicNoteCheckedItemFragment.OnBasicNoteCheckedItemFragmentInteractionListener mListener;
 
-    public RecyclerViewHelper.RecyclerViewSelector getRecyclerViewSelector() {
+    public ViewSelectorHelper.AbstractViewSelector getRecyclerViewSelector() {
         return mRecyclerViewSelector;
     }
 
     public BasicNoteCheckedItemRecyclerViewAdapter(BasicNoteDataA basicNoteData, long priceNoteParamTypeId, ActionMode.Callback actionModeCallback, BasicNoteCheckedItemFragment.OnBasicNoteCheckedItemFragmentInteractionListener listener) {
         mBasicNoteData = basicNoteData;
         mPriceNoteParamTypeId = priceNoteParamTypeId;
-        mRecyclerViewSelector = new RecyclerViewHelper.RecyclerViewSelectorMultiple(this, actionModeCallback);
+        mRecyclerViewSelector = new ViewSelectorHelper.ViewSelectorMultiple<>(this, actionModeCallback);
         mListener = listener;
     }
 
@@ -81,7 +86,7 @@ public class BasicNoteCheckedItemRecyclerViewAdapter extends RecyclerView.Adapte
         private final ImageView mPriorityView;
         private BasicNoteItemA mItem;
 
-        public ViewHolder(View view, RecyclerViewHelper.RecyclerViewSelector viewSelector) {
+        public ViewHolder(View view, ViewSelectorHelper.AbstractViewSelector viewSelector) {
             super(view, viewSelector);
             mCheckedView = view.findViewById(R.id.checked);
             mValueView = view.findViewById(R.id.value);

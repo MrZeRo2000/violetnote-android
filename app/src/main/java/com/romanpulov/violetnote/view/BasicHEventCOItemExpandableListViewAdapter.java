@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DateTimeFormatter;
@@ -105,9 +106,18 @@ public class BasicHEventCOItemExpandableListViewAdapter extends BaseExpandableLi
 
     private static final class ChildViewHolder {
         final TextView mItemTitle;
+        int mGroupPosition;
+        int mChildPosition;
 
         ChildViewHolder(View v) {
             mItemTitle = v.findViewById(R.id.item_title);
+            v.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    Toast.makeText(v.getContext(), "long click " + ((ChildViewHolder)v.getTag()).mItemTitle.getText(), Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+            });
         }
     }
 
@@ -124,6 +134,8 @@ public class BasicHEventCOItemExpandableListViewAdapter extends BaseExpandableLi
             viewHolder = (ChildViewHolder)convertView.getTag();
         }
         BasicHNoteCOItemA item = (BasicHNoteCOItemA)getChild(groupPosition, childPosition);
+        viewHolder.mGroupPosition = groupPosition;
+        viewHolder.mChildPosition = childPosition;
         viewHolder.mItemTitle.setText(item.getValue());
 
         return convertView;

@@ -12,20 +12,25 @@ import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.model.BasicNoteValueA;
 import com.romanpulov.violetnote.model.BasicNoteValueDataA;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
+import com.romanpulov.violetnote.view.core.ViewSelectorHelper;
 
-public class BasicNoteValueRecyclerViewAdapter extends RecyclerView.Adapter<BasicNoteValueRecyclerViewAdapter.ViewHolder> {
+public class BasicNoteValueRecyclerViewAdapter extends RecyclerView.Adapter<BasicNoteValueRecyclerViewAdapter.ViewHolder> implements ViewSelectorHelper.ChangeNotificationListener {
+    @Override
+    public void notifySelectionChanged() {
+        this.notifyDataSetChanged();
+    }
 
     private final BasicNoteValueDataA mBasicNoteValueDataA;
-    private final RecyclerViewHelper.RecyclerViewSelector mRecyclerViewSelector;
+    private final ViewSelectorHelper.AbstractViewSelector<Integer> mRecyclerViewSelector;
     private final BasicNoteValueFragment.OnNoteValueFragmentInteractionListener mListener;
 
-    public RecyclerViewHelper.RecyclerViewSelector getRecyclerViewSelector() {
+    public ViewSelectorHelper.AbstractViewSelector getRecyclerViewSelector() {
         return mRecyclerViewSelector;
     }
 
     public BasicNoteValueRecyclerViewAdapter(BasicNoteValueDataA basicNoteValueDataA, ActionMode.Callback actionModeCallback, BasicNoteValueFragment.OnNoteValueFragmentInteractionListener listener) {
         mBasicNoteValueDataA = basicNoteValueDataA;
-        mRecyclerViewSelector = new RecyclerViewHelper.RecyclerViewSelectorMultiple(this, actionModeCallback);
+        mRecyclerViewSelector = new ViewSelectorHelper.ViewSelectorMultiple<>(this, actionModeCallback);
         mListener = listener;
     }
 
@@ -55,7 +60,7 @@ public class BasicNoteValueRecyclerViewAdapter extends RecyclerView.Adapter<Basi
         public final TextView mValueView;
         public BasicNoteValueA mItem;
 
-        public ViewHolder(View view, RecyclerViewHelper.RecyclerViewSelector viewSelector) {
+        public ViewHolder(View view, ViewSelectorHelper.AbstractViewSelector viewSelector) {
             super(view, viewSelector);
             mValueView = view.findViewById(R.id.value);
         }

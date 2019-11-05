@@ -24,7 +24,7 @@ public abstract class BasicCommonNoteFragment extends Fragment {
     protected BottomToolbarHelper mBottomToolbarHelper;
 
     protected RecyclerView mRecyclerView;
-    protected RecyclerViewHelper.RecyclerViewSelector mRecyclerViewSelector;
+    protected ViewSelectorHelper.AbstractViewSelector<Integer> mRecyclerViewSelector;
 
     public abstract void refreshList(DBNoteManager noteManager);
 

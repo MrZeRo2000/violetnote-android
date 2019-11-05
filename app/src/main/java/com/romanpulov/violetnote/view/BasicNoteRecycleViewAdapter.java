@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
+import com.romanpulov.violetnote.view.core.ViewSelectorHelper;
 
 import java.util.List;
 
@@ -20,22 +21,27 @@ import java.util.List;
  * BasicNoteA recycler view adapter
  * Created by romanpulov on 18.08.2016.
  */
-public class BasicNoteRecycleViewAdapter extends RecyclerView.Adapter<BasicNoteRecycleViewAdapter.ViewHolder> {
+public class BasicNoteRecycleViewAdapter extends RecyclerView.Adapter<BasicNoteRecycleViewAdapter.ViewHolder> implements ViewSelectorHelper.ChangeNotificationListener {
     private static void log(String message) {
         Log.d("RecycleViewAdapter", message);
     }
 
+    @Override
+    public void notifySelectionChanged() {
+        this.notifyDataSetChanged();
+    }
+
     private final List<BasicNoteA> mItems;
-    private final RecyclerViewHelper.RecyclerViewSelector mRecyclerViewSelector;
+    private final ViewSelectorHelper.AbstractViewSelector mRecyclerViewSelector;
     private final BasicNoteFragment.OnBasicNoteFragmentInteractionListener mListener;
 
-    public RecyclerViewHelper.RecyclerViewSelector getRecyclerViewSelector() {
+    public ViewSelectorHelper.AbstractViewSelector getRecyclerViewSelector() {
         return mRecyclerViewSelector;
     }
 
     public BasicNoteRecycleViewAdapter(List<BasicNoteA> items, ActionMode.Callback actionModeCallback, BasicNoteFragment.OnBasicNoteFragmentInteractionListener listener) {
         mItems = items;
-        mRecyclerViewSelector = new RecyclerViewHelper.RecyclerViewSelectorMultiple(this, actionModeCallback);
+        mRecyclerViewSelector = new ViewSelectorHelper.ViewSelectorMultiple(this, actionModeCallback);
         mListener = listener;
     }
 
@@ -73,7 +79,7 @@ public class BasicNoteRecycleViewAdapter extends RecyclerView.Adapter<BasicNoteR
         final TextView mLastModified;
         final ImageView mEncryptedImage;
 
-        public ViewHolder(View view, RecyclerViewHelper.RecyclerViewSelector viewSelector) {
+        public ViewHolder(View view, ViewSelectorHelper.AbstractViewSelector viewSelector) {
             super(view, viewSelector);
             mTitle = view.findViewById(R.id.title);
             mItemCount = view.findViewById(R.id.item_count);

@@ -11,22 +11,27 @@ import android.widget.Button;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.model.BasicNoteGroupA;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
+import com.romanpulov.violetnote.view.core.ViewSelectorHelper;
 import com.romanpulov.violetnote.view.helper.DrawableSelectionHelper;
 
 import java.util.List;
 
-public class BasicNoteGroupItemRecyclerViewAdapter extends RecyclerView.Adapter<BasicNoteGroupItemRecyclerViewAdapter.ViewHolder> {
+public class BasicNoteGroupItemRecyclerViewAdapter extends RecyclerView.Adapter<BasicNoteGroupItemRecyclerViewAdapter.ViewHolder> implements ViewSelectorHelper.ChangeNotificationListener {
+    @Override
+    public void notifySelectionChanged() {
+        this.notifyDataSetChanged();
+    }
 
     private final List<BasicNoteGroupA> mBasicNoteGroupList;
-    private final RecyclerViewHelper.RecyclerViewSelector mRecyclerViewSelector;
+    private final ViewSelectorHelper.AbstractViewSelector mRecyclerViewSelector;
 
-    public RecyclerViewHelper.RecyclerViewSelector getRecyclerViewSelector() {
+    public ViewSelectorHelper.AbstractViewSelector getRecyclerViewSelector() {
         return mRecyclerViewSelector;
     }
 
     public BasicNoteGroupItemRecyclerViewAdapter(List<BasicNoteGroupA> basicNoteGroupList, ActionMode.Callback actionModeCallback) {
         this.mBasicNoteGroupList = basicNoteGroupList;
-        this.mRecyclerViewSelector = new RecyclerViewHelper.RecyclerViewSelectorSingle(this, actionModeCallback);
+        this.mRecyclerViewSelector = new ViewSelectorHelper.ViewSelectorSingle(this, actionModeCallback);
     }
 
     @NonNull
@@ -54,7 +59,7 @@ public class BasicNoteGroupItemRecyclerViewAdapter extends RecyclerView.Adapter<
     class ViewHolder extends RecyclerViewHelper.SelectableViewHolder {
         private final Button mButton;
 
-        public ViewHolder(View view, RecyclerViewHelper.RecyclerViewSelector viewSelector) {
+        public ViewHolder(View view, ViewSelectorHelper.AbstractViewSelector viewSelector) {
             super(view, viewSelector);
             mButton = view.findViewById(R.id.group_name);
         }

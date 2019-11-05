@@ -79,6 +79,7 @@ public class BasicHEventCOItemFragment extends Fragment {
         mExListView = view.findViewById(R.id.ex_list);
         mExListViewAdapter = new BasicHEventCOItemExpandableListViewAdapter(getContext(), mHEvents, mHEventCOItems);
         mExListView.setAdapter(mExListViewAdapter);
+        /*
         mExListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -99,6 +100,7 @@ public class BasicHEventCOItemFragment extends Fragment {
                 }
             }
         });
+         */
 
         return view;
     }
