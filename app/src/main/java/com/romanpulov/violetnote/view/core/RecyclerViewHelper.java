@@ -123,9 +123,9 @@ public class RecyclerViewHelper {
 
     public static abstract class SelectableViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener, View.OnClickListener {
         protected final View mView;
-        protected final ViewSelectorHelper.AbstractViewSelector mViewSelector;
+        protected final ViewSelectorHelper.AbstractViewSelector<Integer> mViewSelector;
 
-        public SelectableViewHolder(View view, ViewSelectorHelper.AbstractViewSelector viewSelector) {
+        public SelectableViewHolder(View view, ViewSelectorHelper.AbstractViewSelector<Integer> viewSelector) {
             super(view);
             mView = view;
             mViewSelector = viewSelector;
@@ -147,18 +147,7 @@ public class RecyclerViewHelper {
         }
 
         public void updateBackground() {
-            Collection<?> selectedItems = mViewSelector.getSelectedItems();
-            int bgResId;
-
-            if (selectedItems.size() == 0)
-                bgResId = R.drawable.list_selector;
-            else
-                if (selectedItems.contains(getAdapterPosition()))
-                    bgResId = R.color.colorAccent;
-                else
-                    bgResId = R.color.windowBackground;
-
-            mView.setBackgroundResource(bgResId);
+            ViewSelectorHelper.updateSelectedViewBackground(mView, mViewSelector, getAdapterPosition());
         }
     }
 

@@ -4,6 +4,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.view.View;
 
+import com.romanpulov.violetnote.R;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -13,6 +15,21 @@ public class ViewSelectorHelper {
 
     public interface ChangeNotificationListener {
         void notifySelectionChanged();
+    }
+
+    public static <T> void updateSelectedViewBackground(View v, AbstractViewSelector<T> selector, T position) {
+        Collection<T> selectedItems = selector.getSelectedItems();
+        int bgResId;
+
+        if (selectedItems.size() == 0)
+            bgResId = R.drawable.list_selector;
+        else
+        if (selectedItems.contains(position))
+            bgResId = R.color.colorAccent;
+        else
+            bgResId = R.color.windowBackground;
+
+        v.setBackgroundResource(bgResId);
     }
 
     public abstract static class AbstractViewSelector<T> {
