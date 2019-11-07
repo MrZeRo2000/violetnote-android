@@ -1,6 +1,7 @@
 package com.romanpulov.violetnote.view;
 
 import android.content.Context;
+import android.support.v7.view.ActionMode;
 import android.util.LongSparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,26 +14,34 @@ import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DateTimeFormatter;
 import com.romanpulov.violetnote.model.BasicHEventA;
 import com.romanpulov.violetnote.model.BasicHNoteCOItemA;
+import com.romanpulov.violetnote.view.core.ViewSelectorHelper;
 
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
 
-public class BasicHEventCOItemExpandableListViewAdapter extends BaseExpandableListAdapter {
+public class BasicHEventCOItemExpandableListViewAdapter extends BaseExpandableListAdapter implements ViewSelectorHelper.ChangeNotificationListener{
     private final Context mContext;
     private final LongSparseArray<BasicHEventA> mHEventList;
     private final LongSparseArray<List<BasicHNoteCOItemA>> mHEventCOItemList;
 
-    private final DateTimeFormatter mDTF;
+    private final ViewSelectorHelper.AbstractViewSelector<BasicHNoteCOItemA> mExViewSelector;
+
+    public ViewSelectorHelper.AbstractViewSelector<BasicHNoteCOItemA> getViewSelector() {
+        return mExViewSelector;
+    }
 
     public BasicHEventCOItemExpandableListViewAdapter(
             Context context,
             LongSparseArray<BasicHEventA> hEventList,
-            LongSparseArray<List<BasicHNoteCOItemA>> hEventCOItemList) {
+            LongSparseArray<List<BasicHNoteCOItemA>> hEventCOItemList,
+            ActionMode.Callback actionModeCallback
+            ) {
         mContext = context;
-        mDTF = new DateTimeFormatter(mContext);
         mHEventList = hEventList;
         mHEventCOItemList = hEventCOItemList;
+
+        mExViewSelector = new ViewSelectorHelper.ViewSelectorMultiple<>(this, actionModeCallback);
     }
 
     @Override
@@ -77,6 +86,11 @@ public class BasicHEventCOItemExpandableListViewAdapter extends BaseExpandableLi
         return false;
     }
 
+    @Override
+    public void notifySelectionChanged() {
+        this.notifyDataSetChanged();
+    }
+
     private static final class GroupViewHolder {
         final TextView mGroupTitle;
 
@@ -104,13 +118,19 @@ public class BasicHEventCOItemExpandableListViewAdapter extends BaseExpandableLi
         return convertView;
     }
 
-    private static final class ChildViewHolder {
+    private static final class ChildViewHolder implements View.OnLongClickListener, View.OnClickListener{
+        final View mView;
         final TextView mItemTitle;
-        int mGroupPosition;
-        int mChildPosition;
+        final ViewSelectorHelper.AbstractViewSelector<BasicHNoteCOItemA> mViewSelector;
+        BasicHNoteCOItemA mData;
 
-        ChildViewHolder(View v) {
+        ChildViewHolder(View v, ViewSelectorHelper.AbstractViewSelector<BasicHNoteCOItemA> viewSelector) {
+            this.mViewSelector = viewSelector;
+            mView = v;
             mItemTitle = v.findViewById(R.id.item_title);
+            v.setOnClickListener(this);
+            v.setOnLongClickListener(this);
+            /*
             v.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
@@ -118,6 +138,22 @@ public class BasicHEventCOItemExpandableListViewAdapter extends BaseExpandableLi
                     return false;
                 }
             });
+             */
+        }
+
+        @Override
+        public void onClick(View v) {
+            mViewSelector.setSelectedView(v, mData);
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            mViewSelector.startActionMode(v, mData);
+            return true;
+        }
+
+        public void updateBackground() {
+            ViewSelectorHelper.updateSelectedViewBackground(mView, mViewSelector, mData);
         }
     }
 
@@ -128,15 +164,15 @@ public class BasicHEventCOItemExpandableListViewAdapter extends BaseExpandableLi
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater)this.mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.expandable_list_h_event_list_item, null);
-            viewHolder = new ChildViewHolder(convertView);
+            viewHolder = new ChildViewHolder(convertView, mExViewSelector);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ChildViewHolder)convertView.getTag();
         }
         BasicHNoteCOItemA item = (BasicHNoteCOItemA)getChild(groupPosition, childPosition);
-        viewHolder.mGroupPosition = groupPosition;
-        viewHolder.mChildPosition = childPosition;
+        viewHolder.mData = item;
         viewHolder.mItemTitle.setText(item.getValue());
+        viewHolder.updateBackground();
 
         return convertView;
     }

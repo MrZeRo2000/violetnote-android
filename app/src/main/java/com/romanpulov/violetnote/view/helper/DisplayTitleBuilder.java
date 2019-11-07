@@ -38,4 +38,16 @@ public class DisplayTitleBuilder {
         }
         return title;
     }
+
+    public static String buildItemsTitle(Context context, Collection<? extends DisplayTitleProvider> selectedItems) {
+        String title = "";
+
+        if ((context != null) && (selectedItems != null)) {
+            title = selectedItems.size() == 1 ?
+                    selectedItems.iterator().next().getDisplayTitle() :
+                    context.getString(R.string.title_multiple_items_selected, selectedItems.size());
+        }
+
+        return title;
+    }
 }

@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * HNoteCOItem data class
  */
-public final class BasicHNoteCOItemA extends BasicEntityNoteA {
+public final class BasicHNoteCOItemA extends BasicEntityNoteA implements DisplayTitleProvider {
     private final long mEventId;
     public long getEventId() {
         return mEventId;
@@ -72,5 +72,10 @@ public final class BasicHNoteCOItemA extends BasicEntityNoteA {
                 "[noteId=" + mNoteId + "]," +
                 "[value=" + mValue + "]" +
                 "}";
+    }
+
+    @Override
+    public String getDisplayTitle() {
+        return mValue;
     }
 }

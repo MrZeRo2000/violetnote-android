@@ -1,11 +1,15 @@
 package com.romanpulov.violetnote.view;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.view.ActionMode;
 import android.util.LongSparseArray;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -18,8 +22,12 @@ import com.romanpulov.violetnote.db.manager.DBHManager;
 import com.romanpulov.violetnote.model.BasicHEventA;
 import com.romanpulov.violetnote.model.BasicHNoteCOItemA;
 import com.romanpulov.violetnote.model.BasicNoteA;
+import com.romanpulov.violetnote.view.core.ViewSelectorHelper;
+import com.romanpulov.violetnote.view.helper.ActionHelper;
+import com.romanpulov.violetnote.view.helper.DisplayTitleBuilder;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class BasicHEventCOItemFragment extends Fragment {
@@ -31,6 +39,7 @@ public class BasicHEventCOItemFragment extends Fragment {
     //controls
     private ExpandableListView mExListView;
     private BasicHEventCOItemExpandableListViewAdapter mExListViewAdapter;
+    private ViewSelectorHelper.AbstractViewSelector<BasicHNoteCOItemA> mViewSelector;
 
     public static BasicHEventCOItemFragment newInstance(BasicNoteA note) {
         BasicHEventCOItemFragment instance = new BasicHEventCOItemFragment();
@@ -77,8 +86,9 @@ public class BasicHEventCOItemFragment extends Fragment {
         refreshList(new DBHManager(view.getContext()));
 
         mExListView = view.findViewById(R.id.ex_list);
-        mExListViewAdapter = new BasicHEventCOItemExpandableListViewAdapter(getContext(), mHEvents, mHEventCOItems);
+        mExListViewAdapter = new BasicHEventCOItemExpandableListViewAdapter(getContext(), mHEvents, mHEventCOItems, new ActionBarCallBack());
         mExListView.setAdapter(mExListViewAdapter);
+        mViewSelector = mExListViewAdapter.getViewSelector();
         /*
         mExListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -104,4 +114,60 @@ public class BasicHEventCOItemFragment extends Fragment {
 
         return view;
     }
+
+    private void updateTitle(@NonNull ActionMode mode) {
+        mode.setTitle(DisplayTitleBuilder.buildItemsTitle(getContext(), mViewSelector.getSelectedItems()));
+    }
+
+
+    public class ActionBarCallBack implements ActionMode.Callback {
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            //hideAddLayout();
+            mode.getMenuInflater().inflate(R.menu.menu_listitem_minimal_actions, menu);
+            if (mViewSelector.isSelected()) {
+                updateTitle(mode);
+            }
+
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            //hideAddLayout();
+            //ActionHelper.updateActionMenu(menu, mViewSelector.getSelectedItems().size(), mBasicNoteValueData.getValues().size());
+            updateTitle(mode);
+            return false;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            Collection<BasicHNoteCOItemA> selectedNoteItems = mViewSelector.getSelectedItems();
+
+            if (selectedNoteItems.size() > 0) {
+                switch (item.getItemId()) {
+                    case R.id.select_all:
+                        //performSelectAll();
+                        break;
+                    case R.id.delete:
+                        //performDeleteAction(mode, selectedNoteItems);
+                        //hideAddLayout();
+                        break;
+                    case R.id.edit:
+                        //performEditAction(mode, selectedNoteItems.get(0));
+                        //mInputActionHelper.showLayout(selectedNoteItems.get(0).getValue(), InputActionHelper.INPUT_ACTION_TYPE_EDIT);
+                        break;
+                }
+            }
+            return false;
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            //hideAddLayout();
+            if (mViewSelector != null)
+                mViewSelector.destroyActionMode();
+        }
+    }
+
 }
