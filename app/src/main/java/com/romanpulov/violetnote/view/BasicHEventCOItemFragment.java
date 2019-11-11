@@ -31,6 +31,9 @@ import java.util.Collection;
 import java.util.List;
 
 public class BasicHEventCOItemFragment extends Fragment {
+    private static final String KEY_SELECTED_ITEMS_ARRAY = "selected items array";
+    private static final String KEY_SELECTION_TITLE = "selection title";
+
     //data
     private BasicNoteA mNote;
     private LongSparseArray<BasicHEventA> mHEvents = new LongSparseArray<>();
@@ -89,36 +92,29 @@ public class BasicHEventCOItemFragment extends Fragment {
         mExListViewAdapter = new BasicHEventCOItemExpandableListViewAdapter(getContext(), mHEvents, mHEventCOItems, new ActionBarCallBack());
         mExListView.setAdapter(mExListViewAdapter);
         mViewSelector = mExListViewAdapter.getViewSelector();
-        /*
-        mExListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                ExpandableListView exListView = (ExpandableListView) parent;
-                long pos = exListView.getExpandableListPosition(position);
 
-                int itemType = ExpandableListView.getPackedPositionType(pos);
-                int groupPos = ExpandableListView.getPackedPositionGroup(pos);
-                int childPos = ExpandableListView.getPackedPositionChild(pos);
-
-                if (itemType == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
-                    BasicHNoteCOItemA item = (BasicHNoteCOItemA)(exListView.getExpandableListAdapter()).getChild(groupPos, childPos);
-                    Toast.makeText(getContext(), "long clicked:" + item, Toast.LENGTH_SHORT).show();
-                    return true;
-                } else {
-                    //Toast.makeText(getContext(), "long click id=" + id + ", position=" + position, Toast.LENGTH_SHORT).show();
-                    return false;
-                }
-            }
-        });
-         */
+        mViewSelector.restoreSelectedItems(savedInstanceState, view);
 
         return view;
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        if (mViewSelector != null) {
+            ViewSelectorHelper.saveInstanceState(
+                    outState,
+                    mViewSelector.getSelectedItems().toArray(new BasicHNoteCOItemA[]{}),
+                    mViewSelector.getActionMode()
+            );
+
+        }
+
+        super.onSaveInstanceState(outState);
     }
 
     private void updateTitle(@NonNull ActionMode mode) {
         mode.setTitle(DisplayTitleBuilder.buildItemsTitle(getContext(), mViewSelector.getSelectedItems()));
     }
-
 
     public class ActionBarCallBack implements ActionMode.Callback {
         @Override

@@ -1,5 +1,8 @@
 package com.romanpulov.violetnote.view.core;
 
+import android.os.Bundle;
+import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.view.View;
@@ -12,6 +15,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class ViewSelectorHelper {
+    private static final String KEY_SELECTED_ITEMS_ARRAY = "selected items array";
+    private static final String KEY_SELECTION_TITLE = "selection title";
+
 
     public interface ChangeNotificationListener {
         void notifySelectionChanged();
@@ -30,6 +36,17 @@ public class ViewSelectorHelper {
             bgResId = R.color.windowBackground;
 
         v.setBackgroundResource(bgResId);
+    }
+
+    public static <T extends Parcelable> void saveInstanceState(Bundle outState, T[] items, ActionMode actionMode) {
+        if (items.length > 0) {
+            outState.putParcelableArray(KEY_SELECTED_ITEMS_ARRAY, items);
+
+            if (actionMode != null) {
+                String title = actionMode.getTitle() == null ? null : actionMode.getTitle().toString();
+                outState.putString(KEY_SELECTION_TITLE, title);
+            }
+        }
     }
 
     public abstract static class AbstractViewSelector<T> {
@@ -75,12 +92,16 @@ public class ViewSelectorHelper {
             mActionModeCallback = actionModeCallback;
         }
 
+        public void startActionModeForView(View v){
+            AppCompatActivity activity = (AppCompatActivity) v.getContext();
+            mActionMode = activity.startSupportActionMode(mActionModeCallback);
+        }
+
         public void startActionMode(View v, T position) {
             if (mSelectedItems.size() == 0) {
                 mSelectedItems.add(position);
                 selectionChanged();
-                AppCompatActivity activity = (AppCompatActivity) v.getContext();
-                mActionMode = activity.startSupportActionMode(mActionModeCallback);
+                startActionModeForView(v);
             } else
                 setSelectedView(v, position);
         }
@@ -100,6 +121,23 @@ public class ViewSelectorHelper {
             mActionMode = null;
             mChangeNotificationListener.notifySelectionChanged();
         }
+
+        public void restoreSelectedItems(Bundle savedInstanceState, View view) {
+            if (savedInstanceState != null) {
+                T[] savedSelectedItems = (T[])savedInstanceState.getParcelableArray(KEY_SELECTED_ITEMS_ARRAY);
+                if (savedSelectedItems != null) {
+                    setSelectedItems(savedSelectedItems);
+                    startActionModeForView(view);
+                }
+
+                ActionMode actionMode = getActionMode();
+                if (actionMode != null) {
+                    String defaultTitle = actionMode.getTitle() == null ? null : actionMode.getTitle().toString();
+                    actionMode.setTitle(savedInstanceState.getString(KEY_SELECTION_TITLE, defaultTitle));
+                }
+            }
+        }
+
     }
 
     public static class ViewSelectorMultiple<T> extends AbstractViewSelector<T> {

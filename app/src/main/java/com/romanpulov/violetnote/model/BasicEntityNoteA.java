@@ -26,4 +26,19 @@ public abstract class BasicEntityNoteA {
         }
         return -1;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        BasicEntityNoteA that = (BasicEntityNoteA) o;
+
+        return mId == that.mId;
+    }
+
+    @Override
+    public int hashCode() {
+        return (int) (mId ^ (mId >>> 32));
+    }
 }

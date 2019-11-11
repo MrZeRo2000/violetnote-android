@@ -24,7 +24,7 @@ public class BasicNoteValueRecyclerViewAdapter extends RecyclerView.Adapter<Basi
     private final ViewSelectorHelper.AbstractViewSelector<Integer> mRecyclerViewSelector;
     private final BasicNoteValueFragment.OnNoteValueFragmentInteractionListener mListener;
 
-    public ViewSelectorHelper.AbstractViewSelector getRecyclerViewSelector() {
+    public ViewSelectorHelper.AbstractViewSelector<Integer> getRecyclerViewSelector() {
         return mRecyclerViewSelector;
     }
 
