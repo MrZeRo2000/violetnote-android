@@ -120,7 +120,7 @@ public class BasicHEventCOItemFragment extends Fragment {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             //hideAddLayout();
-            mode.getMenuInflater().inflate(R.menu.menu_listitem_minimal_actions, menu);
+            mode.getMenuInflater().inflate(R.menu.menu_restore_action, menu);
             if (mViewSelector.isSelected()) {
                 updateTitle(mode);
             }
@@ -136,14 +136,19 @@ public class BasicHEventCOItemFragment extends Fragment {
             return false;
         }
 
+        private void performRestoreAction(Collection<BasicHNoteCOItemA> selectedNoteItems) {
+            Toast.makeText(getContext(), "Restore action", Toast.LENGTH_SHORT).show();
+        }
+
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             Collection<BasicHNoteCOItemA> selectedNoteItems = mViewSelector.getSelectedItems();
 
             if (selectedNoteItems.size() > 0) {
                 switch (item.getItemId()) {
-                    case R.id.select_all:
+                    case R.id.action_restore:
                         //performSelectAll();
+                        performRestoreAction(selectedNoteItems);
                         break;
                     case R.id.delete:
                         //performDeleteAction(mode, selectedNoteItems);

@@ -37,6 +37,7 @@
     <string name="action_select">Select</string>
     <string name="action_select_all">Select all</string>
     <string name="action_move_other">Move to other</string>
+    <string name="action_restore">Restore</string>
 
     <!-- Preferences -->
     <string name="pref_title_pass_note_data">Password Notes Data</string>
