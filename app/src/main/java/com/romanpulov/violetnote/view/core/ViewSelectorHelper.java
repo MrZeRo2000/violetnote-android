@@ -9,11 +9,15 @@ import android.view.View;
 
 import com.romanpulov.violetnote.R;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Helper class for view selection
+ */
 public class ViewSelectorHelper {
     private static final String KEY_SELECTED_ITEMS_ARRAY = "selected items array";
     private static final String KEY_SELECTION_TITLE = "selection title";
@@ -23,14 +27,14 @@ public class ViewSelectorHelper {
         void notifySelectionChanged();
     }
 
-    public static <T> void updateSelectedViewBackground(View v, AbstractViewSelector<T> selector, T position) {
+    public static <T> void updateSelectedViewBackground(@NonNull View v, @NonNull AbstractViewSelector<T> selector, @NonNull T item) {
         Collection<T> selectedItems = selector.getSelectedItems();
         int bgResId;
 
         if (selectedItems.size() == 0)
             bgResId = R.drawable.list_selector;
         else
-        if (selectedItems.contains(position))
+        if (selectedItems.contains(item))
             bgResId = R.color.colorAccent;
         else
             bgResId = R.color.windowBackground;
@@ -38,7 +42,7 @@ public class ViewSelectorHelper {
         v.setBackgroundResource(bgResId);
     }
 
-    public static <T extends Parcelable> void saveInstanceState(Bundle outState, T[] items, ActionMode actionMode) {
+    public static <T extends Parcelable> void saveInstanceState(@NonNull Bundle outState, @NonNull T[] items, ActionMode actionMode) {
         if (items.length > 0) {
             outState.putParcelableArray(KEY_SELECTED_ITEMS_ARRAY, items);
 
@@ -97,16 +101,16 @@ public class ViewSelectorHelper {
             mActionMode = activity.startSupportActionMode(mActionModeCallback);
         }
 
-        public void startActionMode(View v, T position) {
+        public void startActionMode(View v, T item) {
             if (mSelectedItems.size() == 0) {
-                mSelectedItems.add(position);
+                mSelectedItems.add(item);
                 selectionChanged();
                 startActionModeForView(v);
             } else
-                setSelectedView(v, position);
+                setSelectedView(v, item);
         }
 
-        public abstract void setSelectedView(View v, T position);
+        public abstract void setSelectedView(View v, T item);
 
         public void setSelectedItems(T[] items) {
             mSelectedItems.clear();
@@ -116,24 +120,40 @@ public class ViewSelectorHelper {
         }
 
         public void destroyActionMode() {
-            //mSelectedItemPos = -1;
             mSelectedItems.clear();
             mActionMode = null;
             mChangeNotificationListener.notifySelectionChanged();
         }
 
+        public void saveInstanceState(Bundle outState, Class<T> clazz) {
+            Collection<T> selectedItems = getSelectedItems();
+            if (selectedItems.size() > 0) {
+                @SuppressWarnings("unchecked")
+                T[] selectedItemsArray = selectedItems.toArray((T[]) Array.newInstance(clazz, 0));
+
+                outState.putParcelableArray(KEY_SELECTED_ITEMS_ARRAY, (Parcelable[]) selectedItemsArray);
+
+                if (mActionMode != null) {
+                    String title = mActionMode.getTitle() == null ? null : mActionMode.getTitle().toString();
+                    outState.putString(KEY_SELECTION_TITLE, title);
+                }
+            }
+        }
+
+
         public void restoreSelectedItems(Bundle savedInstanceState, View view) {
             if (savedInstanceState != null) {
+                @SuppressWarnings("unchecked")
                 T[] savedSelectedItems = (T[])savedInstanceState.getParcelableArray(KEY_SELECTED_ITEMS_ARRAY);
+
                 if (savedSelectedItems != null) {
                     setSelectedItems(savedSelectedItems);
                     startActionModeForView(view);
                 }
 
-                ActionMode actionMode = getActionMode();
-                if (actionMode != null) {
-                    String defaultTitle = actionMode.getTitle() == null ? null : actionMode.getTitle().toString();
-                    actionMode.setTitle(savedInstanceState.getString(KEY_SELECTION_TITLE, defaultTitle));
+                if (mActionMode!= null) {
+                    String defaultTitle = mActionMode.getTitle() == null ? null : mActionMode.getTitle().toString();
+                    mActionMode.setTitle(savedInstanceState.getString(KEY_SELECTION_TITLE, defaultTitle));
                 }
             }
         }
@@ -147,15 +167,15 @@ public class ViewSelectorHelper {
         }
 
         @Override
-        public void setSelectedView(View v, T position) {
+        public void setSelectedView(View v, T item) {
             if (mSelectedItems.size() > 0) {
-                if (mSelectedItems.contains(position)) {
-                    mSelectedItems.remove(position);
+                if (mSelectedItems.contains(item)) {
+                    mSelectedItems.remove(item);
                     if (mSelectedItems.size() == 0) {
                         finishActionMode();
                     }
                 } else
-                    mSelectedItems.add(position);
+                    mSelectedItems.add(item);
                 selectionChanged();
             }
         }
@@ -168,16 +188,16 @@ public class ViewSelectorHelper {
         }
 
         @Override
-        public void setSelectedView(View v, T position) {
+        public void setSelectedView(View v, T item) {
             if (mSelectedItems.size() > 0) {
-                if (mSelectedItems.contains(position)) {
-                    mSelectedItems.remove(position);
+                if (mSelectedItems.contains(item)) {
+                    mSelectedItems.remove(item);
                     if (mSelectedItems.size() == 0) {
                         finishActionMode();
                     }
                 } else {
                     mSelectedItems.clear();
-                    mSelectedItems.add(position);
+                    mSelectedItems.add(item);
                 }
                 selectionChanged();
             }

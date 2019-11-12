@@ -1,6 +1,5 @@
 package com.romanpulov.violetnote.view;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,8 +11,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
 
@@ -23,10 +20,8 @@ import com.romanpulov.violetnote.model.BasicHEventA;
 import com.romanpulov.violetnote.model.BasicHNoteCOItemA;
 import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.view.core.ViewSelectorHelper;
-import com.romanpulov.violetnote.view.helper.ActionHelper;
 import com.romanpulov.violetnote.view.helper.DisplayTitleBuilder;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -101,12 +96,7 @@ public class BasicHEventCOItemFragment extends Fragment {
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         if (mViewSelector != null) {
-            ViewSelectorHelper.saveInstanceState(
-                    outState,
-                    mViewSelector.getSelectedItems().toArray(new BasicHNoteCOItemA[]{}),
-                    mViewSelector.getActionMode()
-            );
-
+            mViewSelector.saveInstanceState(outState, BasicHNoteCOItemA.class);
         }
 
         super.onSaveInstanceState(outState);
@@ -119,7 +109,6 @@ public class BasicHEventCOItemFragment extends Fragment {
     public class ActionBarCallBack implements ActionMode.Callback {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            //hideAddLayout();
             mode.getMenuInflater().inflate(R.menu.menu_restore_action, menu);
             if (mViewSelector.isSelected()) {
                 updateTitle(mode);
@@ -130,8 +119,6 @@ public class BasicHEventCOItemFragment extends Fragment {
 
         @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            //hideAddLayout();
-            //ActionHelper.updateActionMenu(menu, mViewSelector.getSelectedItems().size(), mBasicNoteValueData.getValues().size());
             updateTitle(mode);
             return false;
         }
@@ -165,7 +152,6 @@ public class BasicHEventCOItemFragment extends Fragment {
 
         @Override
         public void onDestroyActionMode(ActionMode mode) {
-            //hideAddLayout();
             if (mViewSelector != null)
                 mViewSelector.destroyActionMode();
         }
