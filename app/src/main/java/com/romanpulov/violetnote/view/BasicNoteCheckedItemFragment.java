@@ -464,14 +464,12 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                     mInputActionHelper.setAutoCompleteList(mBasicNoteData.getNote().getValues());
                 break;
             case RESULT_CODE_HISTORY:
-                //TO-DO: processing history actions
-                Bundle bundle = data.getExtras();
-                if (bundle != null) {
-                    String[] selectedItemsArray = data.getExtras().getStringArray(KEY_SELECTED_ITEMS_RETURN_DATA);
+                Bundle bundle;
+                if ((data != null) && ((bundle = data.getExtras()) != null)) {
+                    String[] selectedItemsArray = bundle.getStringArray(KEY_SELECTED_ITEMS_RETURN_DATA);
                     if ((selectedItemsArray != null) && (selectedItemsArray.length > 0)) {
                         performAddListValuesAction(selectedItemsArray);
                     }
-
                 }
                 break;
         }

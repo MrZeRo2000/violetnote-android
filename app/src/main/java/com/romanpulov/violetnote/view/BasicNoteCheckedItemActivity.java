@@ -74,6 +74,11 @@ public class BasicNoteCheckedItemActivity extends BasicNoteDataPasswordActivity 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_checked_item, menu);
+
+        if (mBasicNoteData.getNote().isEncrypted()) {
+            menu.removeItem(R.id.action_history);
+        }
+
         return super.onCreateOptionsMenu(menu);
     }
 
