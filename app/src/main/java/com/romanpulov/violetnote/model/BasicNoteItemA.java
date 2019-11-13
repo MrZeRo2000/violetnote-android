@@ -145,6 +145,12 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
         return instance;
     }
 
+    public static @NonNull BasicNoteItemA newCheckedEditValueInstance(String value) {
+        BasicNoteItemA instance = new BasicNoteItemA();
+        instance.setValue(value);
+        return instance;
+    }
+
     public static @NonNull BasicNoteItemA newCheckedEditInstance(long noteItemParamTypeId, String value) {
         InputParser.FloatParamsResult floatParamsResult = InputParser.parseFloatParams(value);
         return fromFloatParams(noteItemParamTypeId, floatParamsResult);

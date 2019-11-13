@@ -30,6 +30,7 @@ import com.romanpulov.violetnote.model.BasicNoteValueA;
 import com.romanpulov.violetnote.model.BasicNoteValueDataA;
 import com.romanpulov.violetnote.model.InputParser;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutorHost;
+import com.romanpulov.violetnote.view.action.BasicNoteDataItemAddUniqueValuesAction;
 import com.romanpulov.violetnote.view.core.PassDataPasswordActivity;
 import com.romanpulov.violetnote.view.helper.BottomToolbarHelper;
 import com.romanpulov.violetnote.view.helper.DisplayTitleBuilder;
@@ -50,9 +51,11 @@ import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 
 import java.util.List;
 
+import static com.romanpulov.violetnote.view.core.ViewSelectorHelper.KEY_SELECTED_ITEMS_RETURN_DATA;
+
 public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
-    private static final int RESULT_CODE_VALUES = 0;
-    private static final int RESULT_CODE_HISTORY = 1;
+    public static final int RESULT_CODE_VALUES = 0;
+    public static final int RESULT_CODE_HISTORY = 1;
 
     private InputActionHelper mInputActionHelper;
     private CheckoutProgressHelper mCheckoutProgressHelper;
@@ -462,6 +465,14 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                 break;
             case RESULT_CODE_HISTORY:
                 //TO-DO: processing history actions
+                Bundle bundle = data.getExtras();
+                if (bundle != null) {
+                    String[] selectedItemsArray = data.getExtras().getStringArray(KEY_SELECTED_ITEMS_RETURN_DATA);
+                    if ((selectedItemsArray != null) && (selectedItemsArray.length > 0)) {
+                        performAddListValuesAction(selectedItemsArray);
+                    }
+
+                }
                 break;
         }
     }
@@ -525,6 +536,27 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                 ((BasicNoteCheckedItemActivity)activity).requestInvalidateFragment();
             }
         }
+    }
+
+    public void performAddListValuesAction(String[] values) {
+        // create executor
+        BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity(), mBasicNoteData);
+
+        // configure executor
+        executor.addAction(getString(R.string.caption_processing), new BasicNoteDataItemAddUniqueValuesAction(mBasicNoteData, values));
+        executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData).requireValues());
+
+        // on completion
+        executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
+            @Override
+            public void onExecutionCompleted(BasicNoteDataA basicNoteData, boolean result) {
+                afterExecutionCompleted();
+                RecyclerViewHelper.adapterNotifyDataSetChanged(mRecyclerView);
+            }
+        });
+
+        // execute
+        executeActions(executor);
     }
 
     public void setSwipeRefreshing(boolean value) {

@@ -1,9 +1,13 @@
 package com.romanpulov.violetnote.view;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.view.ActionMode;
 import android.util.LongSparseArray;
 import android.view.LayoutInflater;
@@ -12,22 +16,24 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
-import android.widget.Toast;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.manager.DBHManager;
 import com.romanpulov.violetnote.model.BasicHEventA;
 import com.romanpulov.violetnote.model.BasicHNoteCOItemA;
 import com.romanpulov.violetnote.model.BasicNoteA;
+import com.romanpulov.violetnote.view.core.AlertOkCancelSupportDialogFragment;
 import com.romanpulov.violetnote.view.core.ViewSelectorHelper;
 import com.romanpulov.violetnote.view.helper.DisplayTitleBuilder;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import static com.romanpulov.violetnote.view.core.ViewSelectorHelper.KEY_SELECTED_ITEMS_RETURN_DATA;
 
 public class BasicHEventCOItemFragment extends Fragment {
-    private static final String KEY_SELECTED_ITEMS_ARRAY = "selected items array";
-    private static final String KEY_SELECTION_TITLE = "selection title";
 
     //data
     private BasicNoteA mNote;
@@ -123,8 +129,35 @@ public class BasicHEventCOItemFragment extends Fragment {
             return false;
         }
 
-        private void performRestoreAction(Collection<BasicHNoteCOItemA> selectedNoteItems) {
-            Toast.makeText(getContext(), "Restore action", Toast.LENGTH_SHORT).show();
+
+
+        private void performRestoreAction(final Collection<BasicHNoteCOItemA> selectedNoteItems) {
+            String queryString = getString(R.string.ui_question_are_you_sure_restore_items, selectedNoteItems.size());
+            AlertOkCancelSupportDialogFragment dialog = AlertOkCancelSupportDialogFragment.newAlertOkCancelDialog(queryString);
+            dialog.setOkButtonClickListener(new AlertOkCancelSupportDialogFragment.OnClickListener() {
+                @Override
+                public void OnClick(DialogFragment dialog) {
+                    Set<String> selectedList = new HashSet<>();
+                    for (BasicHNoteCOItemA item : selectedNoteItems) {
+                        selectedList.add(item.getValue());
+                    }
+
+                    String[] selectedListArray = selectedList.toArray(new String[]{});
+
+                    Activity activity = getActivity();
+                    if (activity != null) {
+                        Intent intent = activity.getIntent();
+                        intent.putExtra(KEY_SELECTED_ITEMS_RETURN_DATA, selectedListArray);
+                        activity.setResult(Activity.RESULT_OK, intent);
+                        activity.finish();
+                    }
+                }
+            });
+
+            FragmentManager fragmentManager = getFragmentManager();
+            if (fragmentManager != null) {
+                dialog.show(fragmentManager, null);
+            }
         }
 
         @Override

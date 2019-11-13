@@ -225,7 +225,7 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
      * @param items items to delete
      */
     protected void performDeleteAction(final ActionMode mode, final List<BasicNoteItemA> items) {
-        AlertOkCancelSupportDialogFragment dialog = AlertOkCancelSupportDialogFragment.newAlertOkCancelDialog(getString(R.string.ui_question_are_you_sure));
+        AlertOkCancelSupportDialogFragment dialog = AlertOkCancelSupportDialogFragment.newAlertOkCancelDialog(getString(R.string.ui_question_delete_items_are_you_sure, items.size()));
         dialog.setOkButtonClickListener(new AlertOkCancelSupportDialogFragment.OnClickListener() {
             @Override
             public void OnClick(DialogFragment dialog) {

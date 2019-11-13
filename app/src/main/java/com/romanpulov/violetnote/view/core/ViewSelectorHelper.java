@@ -19,6 +19,8 @@ import java.util.Set;
  * Helper class for view selection
  */
 public class ViewSelectorHelper {
+    public static final String KEY_SELECTED_ITEMS_RETURN_DATA = "selected items return data";
+
     private static final String KEY_SELECTED_ITEMS_ARRAY = "selected items array";
     private static final String KEY_SELECTION_TITLE = "selection title";
 
@@ -96,12 +98,12 @@ public class ViewSelectorHelper {
             mActionModeCallback = actionModeCallback;
         }
 
-        public void startActionModeForView(View v){
+        public void startActionModeForView(@NonNull View v){
             AppCompatActivity activity = (AppCompatActivity) v.getContext();
             mActionMode = activity.startSupportActionMode(mActionModeCallback);
         }
 
-        public void startActionMode(View v, T item) {
+        public void startActionMode(@NonNull View v, @NonNull T item) {
             if (mSelectedItems.size() == 0) {
                 mSelectedItems.add(item);
                 selectionChanged();
@@ -139,7 +141,6 @@ public class ViewSelectorHelper {
                 }
             }
         }
-
 
         public void restoreSelectedItems(Bundle savedInstanceState, View view) {
             if (savedInstanceState != null) {
