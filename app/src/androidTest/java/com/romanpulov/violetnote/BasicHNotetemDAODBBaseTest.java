@@ -52,13 +52,14 @@ public class BasicHNotetemDAODBBaseTest extends DBBaseTest {
             Assert.assertNotNull(animalsNote);
 
             List<BasicHNoteCOItemA> hNoteCOItems = mDBHManager.mBasicHNoteCOItemDAO.getByNoteId(animalsNote.getId());
-            Assert.assertEquals(3, hNoteCOItems.size());
+            Assert.assertEquals(4, hNoteCOItems.size());
 
             List<BasicHEventA> hEvents = mDBHManager.mBasicHEventDAO.getByCOItemsNoteId(animalsNote.getId());
-            Assert.assertEquals(2, hEvents.size());
+            Assert.assertEquals(3, hEvents.size());
 
             Assert.assertEquals(1, hEvents.get(0).getItemCount());
-            Assert.assertEquals(2, hEvents.get(1).getItemCount());
+            Assert.assertEquals(1, hEvents.get(1).getItemCount());
+            Assert.assertEquals(2, hEvents.get(2).getItemCount());
         }
     }
 }

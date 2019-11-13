@@ -196,6 +196,7 @@ public class DataGenerator {
         BasicNoteItemA newNoteItem2 = insertCheckedNoteItem(noteManager, newNote, "Dog");
         BasicNoteItemA newNoteItem3 = insertCheckedNoteItem(noteManager, newNote, "Elephant");
         BasicNoteItemA newNoteItem4 = insertCheckedNoteItem(noteManager, newNote, "Crocodile");
+        BasicNoteItemA newNoteItem5 = insertCheckedNoteItem(noteManager, newNote, "Mouse");
 
         //update checked 1
         BasicNoteItemA[] notesToCheck = new BasicNoteItemA[] {newNoteItem1, newNoteItem2};
@@ -214,6 +215,20 @@ public class DataGenerator {
 
         //update checked 2
         assertNotEquals(0, noteManager.mBasicNoteItemDAO.updateCheckedList(Collections.singletonList(newNoteItem3), true));
+
+        //update note and checkout
+        noteManager.mBasicNoteItemDAO.fillNoteDataItemsWithSummary(newNote);
+        noteManager.mBasicNoteDAO.fillNoteValues(newNote);
+        noteManager.mBasicNoteDAO.checkOut(newNote);
+
+        try {
+            Thread.sleep(15000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        //update checked 3
+        assertNotEquals(0, noteManager.mBasicNoteItemDAO.updateCheckedList(Collections.singletonList(newNoteItem5), true));
 
         //update note and checkout
         noteManager.mBasicNoteItemDAO.fillNoteDataItemsWithSummary(newNote);
