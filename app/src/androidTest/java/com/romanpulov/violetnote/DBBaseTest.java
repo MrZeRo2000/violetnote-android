@@ -54,4 +54,8 @@ abstract class DBBaseTest {
             //do nothing
         }
     }
+
+    void closeDB() {
+        mDBHelper.closeDB();
+    }
 }

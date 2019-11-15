@@ -96,4 +96,24 @@ public class DBRawQueryRepository {
             "he.event_summary " +
             "ORDER BY he.event_time DESC"
             ;
+    
+    public static final String H_EVENT_ITEMS_TIME = 
+            "SELECT  " +
+            "  heci._id, " +
+            "  heci.event_id, " +
+            "  he.event_time " +
+            "FROM h_note_co_items heci " +
+            "INNER JOIN h_events he ON he._id = heci.event_id " +
+            "ORDER BY he.event_time ";
+
+    public static final String H_EVENT_DELETE_ORPHANED =
+            "DELETE FROM h_events WHERE _id NOT IN ( " +
+            "  SELECT  " +
+            "    event_id " +
+            "  FROM h_note_co_items " +
+            "  UNION   " +
+            "  SELECT " +
+            "    event_id " +
+            "  FROM h_note_items    " +
+            ")";
 }
