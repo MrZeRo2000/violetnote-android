@@ -119,8 +119,4 @@ public final class BasicHEventDAO extends AbstractDAO<BasicHEventA> {
 
         return result;
     }
-
-    public void deleteOrphaned() {
-        mDB.execSQL(DBRawQueryRepository.H_EVENT_DELETE_ORPHANED);
-    }
 }

@@ -1,5 +1,6 @@
 package com.romanpulov.violetnote;
 
+import com.romanpulov.violetnote.db.DBDataUpgradeManager;
 import com.romanpulov.violetnote.db.dao.BasicHNoteCOItemDAO;
 import com.romanpulov.violetnote.model.BasicHEventA;
 import com.romanpulov.violetnote.model.BasicHNoteCOItemA;
@@ -61,8 +62,7 @@ public class BasicHNotetemDAODBBaseTest extends DBBaseTest {
             Assert.assertEquals(1, hEvents.get(1).getItemCount());
             Assert.assertEquals(2, hEvents.get(2).getItemCount());
 
-            mDBHManager.mBasicHNoteCOItemDAO.collapseEvents(10000);
-            mDBHManager.mBasicHEventDAO.deleteOrphaned();
+            (new DBDataUpgradeManager(mDB)).upgradeData(4);
 
             hEvents = mDBHManager.mBasicHEventDAO.getByCOItemsNoteId(animalsNote.getId());
             Assert.assertEquals(2, hEvents.size());

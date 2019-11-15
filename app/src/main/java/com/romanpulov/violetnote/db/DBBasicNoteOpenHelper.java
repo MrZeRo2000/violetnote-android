@@ -43,7 +43,7 @@ public class DBBasicNoteOpenHelper extends SQLiteOpenHelper {
         }
         db.beginTransaction();
 
-        DBDataUpgradeManager.upgradeData(mContext, oldVersion);
+        (new DBDataUpgradeManager(db)).upgradeData(oldVersion);
     }
 
     @Override
