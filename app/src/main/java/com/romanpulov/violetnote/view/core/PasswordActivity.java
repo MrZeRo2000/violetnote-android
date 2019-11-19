@@ -3,6 +3,7 @@ package com.romanpulov.violetnote.view.core;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
@@ -81,6 +82,8 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
     private boolean mPasswordRequired = true;
     private boolean mCanceled = false;
 
+    abstract protected boolean isDataLoaded();
+
     private String getPassword() {
         if (mPasswordProvider != null)
             return mPasswordProvider.getPassword();
@@ -114,7 +117,7 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
         Fragment fragment = fm.findFragmentById(getFragmentContainerId());
         //remove fragments but leave progress
         if ((fragment != null) && !(fragment instanceof ProgressFragment)) {
-            fm.beginTransaction().remove(fragment).commit();
+            fm.beginTransaction().remove(fragment).commitNow();
         }
         return fm;
     }
@@ -134,9 +137,10 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
 
     protected abstract void refreshFragment();
 
-    protected void setLoadErrorFragment() {
-        LoadErrorFragment fragment = new LoadErrorFragment();
-        removeFragment().beginTransaction().add(getFragmentContainerId(), fragment).commit();
+    protected void setLoadErrorFragment(String errorText) {
+        LoadErrorFragment fragment = LoadErrorFragment.createWithText(errorText);
+        int result = removeFragment().beginTransaction().add(getFragmentContainerId(), fragment).commit();
+        mPasswordRequired = false;
     }
 
     public void reload() {
@@ -185,7 +189,7 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
                     processRequestPasswordInput(text);
                 } else {
                     setResult(RESULT_CANCELED);
-                    setLoadErrorFragment();
+                    setLoadErrorFragment(getString(R.string.error_load));
                 }
             }
         });
@@ -227,15 +231,20 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
     protected void onResume() {
         super.onResume();
         if (mIsPasswordProtected) {
-            if (mCanceled)
-                setLoadErrorFragment();
+            if (mCanceled) {
+                setLoadErrorFragment(getString(R.string.error_load));
+            }
             else {
                 if (mPasswordRequired) {
                     removeFragment();
                     requestPassword();
                 } else {
-                    internalRefreshFragment();
-                    mPasswordRequired = true;
+                    if (!isDataLoaded()) {
+                        setLoadErrorFragment(getString(R.string.error_load));
+                    } else {
+                        mPasswordRequired = true;
+                        internalRefreshFragment();
+                    }
                 }
             }
         }

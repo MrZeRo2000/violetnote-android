@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.view.core.PassDataPasswordActivity;
 import com.romanpulov.violetnote.view.core.PasswordActivity;
 import com.romanpulov.violetnote.model.PassDataA;
@@ -23,7 +24,7 @@ public class SearchResultActivity extends PassDataPasswordActivity implements On
 
     @Override
     protected void updatePassword(String password) {
-        setLoadErrorFragment();
+        setLoadErrorFragment(getString(R.string.error_load));
     }
 
     @Override

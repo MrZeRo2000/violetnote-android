@@ -28,7 +28,7 @@ public class DocumentPassDataLoader {
     public static final String DOCUMENT_FILE_NAME = "document.vnf";
 
     public static String getDocumentFileName(Context context) {
-        return context.getCacheDir() + File.separator + DOCUMENT_FILE_NAME;
+        return context.getFilesDir() + File.separator + DOCUMENT_FILE_NAME;
     }
 
     public static DocumentPassDataLoader newInstance(Context context) {

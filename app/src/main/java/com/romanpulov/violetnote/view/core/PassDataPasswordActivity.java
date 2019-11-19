@@ -19,4 +19,14 @@ public abstract class PassDataPasswordActivity extends PasswordActivity {
             mPassDataA = (PassDataA)mPasswordProvider;
         }
     }
+
+    @Override
+    protected void refreshFragment() {
+
+    }
+
+    @Override
+    protected boolean isDataLoaded() {
+        return mPassDataA != null;
+    }
 }

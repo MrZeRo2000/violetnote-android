@@ -49,7 +49,7 @@ public class CategoryActivity extends PassDataPasswordActivity implements PassDa
         try {
             removeProgressFragment();
             if (errorText != null)
-                setLoadErrorFragment();
+                setLoadErrorFragment(errorText);
             else {
                 refreshFragment();
                 PassDataPasswordActivity.getPasswordValidityChecker().startPeriod();

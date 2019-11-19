@@ -33,7 +33,7 @@ public abstract class BasicNoteDataPasswordActivity extends PasswordActivity imp
                 refreshFragment();
                 PassDataPasswordActivity.getPasswordValidityChecker().startPeriod();
             } else
-                setLoadErrorFragment();
+                setLoadErrorFragment(getString(R.string.error_load));
         } catch (Exception e) {
             requirePassword();
         }
@@ -96,5 +96,10 @@ public abstract class BasicNoteDataPasswordActivity extends PasswordActivity imp
     @Override
     public void onExecutionCompleted() {
         setProgress(false);
+    }
+
+    @Override
+    protected boolean isDataLoaded() {
+        return mBasicNoteData != null;
     }
 }

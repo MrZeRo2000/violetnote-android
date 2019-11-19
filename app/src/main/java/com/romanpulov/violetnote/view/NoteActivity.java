@@ -28,7 +28,7 @@ public class NoteActivity extends PassDataPasswordActivity implements OnPassNote
 
     @Override
     protected void updatePassword(String password) {
-        setLoadErrorFragment();
+        setLoadErrorFragment(getString(R.string.error_load));
     }
 
     @Override
