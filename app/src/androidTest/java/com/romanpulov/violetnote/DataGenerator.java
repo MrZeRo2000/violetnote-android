@@ -234,5 +234,40 @@ public class DataGenerator {
         noteManager.mBasicNoteItemDAO.fillNoteDataItemsWithSummary(newNote);
         noteManager.mBasicNoteDAO.fillNoteValues(newNote);
         noteManager.mBasicNoteDAO.checkOut(newNote);
+
+        //new named note
+        newNote = BasicNoteA.newEditInstance(newNoteGroupId, BasicNoteA.NOTE_TYPE_NAMED, "Metrics", false, null);
+        newNoteId = noteManager.mBasicNoteDAO.insert(newNote);
+        assertNotEquals(-1, newNoteGroupId);
+        newNote.setId(newNoteId);
+
+        newNoteItem1 = BasicNoteItemA.newNamedEditInstance("Weather", "Fine");
+        newNoteId = noteManager.mBasicNoteItemDAO.insertWithNote(newNote, newNoteItem1);
+        assertNotEquals(-1, newNoteId);
+        newNoteItem1.setId(newNoteId);
+
+        newNoteItem2 = BasicNoteItemA.newNamedEditInstance("Color", "Blue");
+        newNoteId = noteManager.mBasicNoteItemDAO.insertWithNote(newNote, newNoteItem2);
+        assertNotEquals(-1, newNoteId);
+        newNoteItem2.setId(newNoteId);
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        newNoteItem2.setValue("Red");
+        noteManager.mBasicNoteItemDAO.updateNameValue(newNoteItem2);
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        newNoteItem2.setValue("Green");
+        noteManager.mBasicNoteItemDAO.updateNameValue(newNoteItem2);
+
     }
 }

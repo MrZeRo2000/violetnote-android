@@ -1,11 +1,13 @@
 package com.romanpulov.violetnote.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
 /**
  * HNoteItem data class
  */
-public final class BasicHNoteItemA extends BasicEntityNoteA {
+public final class BasicHNoteItemA extends BasicEntityNoteA implements Parcelable {
     private final long mEventId;
     public long getEventId() {
         return mEventId;
@@ -26,9 +28,13 @@ public final class BasicHNoteItemA extends BasicEntityNoteA {
         return mValue;
     }
 
-    private BasicHNoteItemA(long id, long eventId, long noteItemId, String name, String value) {
+    // from event
+    private final long mEventTime;
+
+    private BasicHNoteItemA(long id, long eventId, long eventTime, long noteItemId, String name, String value) {
         setId(id);
         mEventId = eventId;
+        mEventTime = eventTime;
         mNoteItemId = noteItemId;
         mName = name;
         mValue = value;
@@ -36,7 +42,12 @@ public final class BasicHNoteItemA extends BasicEntityNoteA {
 
     @NonNull
     public static BasicHNoteItemA newInstance(long id, long eventId, long noteItemId, String name, String value) {
-        return new BasicHNoteItemA(id, eventId, noteItemId, name, value);
+        return new BasicHNoteItemA(id, eventId, 0, noteItemId, name, value);
+    }
+
+    @NonNull
+    public static BasicHNoteItemA newInstanceWithEventTime(long id, long eventId, long eventTime, long noteItemId, String name, String value) {
+        return new BasicHNoteItemA(id, eventId, eventTime, noteItemId, name, value);
     }
 
     @NonNull
@@ -49,4 +60,41 @@ public final class BasicHNoteItemA extends BasicEntityNoteA {
                 noteItem.getValue()
         );
     }
+
+    private BasicHNoteItemA(@NonNull Parcel in) {
+        setId(in.readLong());
+        mEventId = in.readLong();
+        mEventTime = in.readLong();
+        mNoteItemId = in.readLong();
+        mName = in.readString();
+        mValue = in.readString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(getId());
+        dest.writeLong(mEventId);
+        dest.writeLong(mEventTime);
+        dest.writeLong(mNoteItemId);
+        dest.writeString(mName);
+        dest.writeString(mValue);
+    }
+
+    public static final Parcelable.Creator<BasicHNoteItemA> CREATOR = new Parcelable.Creator<BasicHNoteItemA>() {
+        @Override
+        public BasicHNoteItemA createFromParcel(Parcel source) {
+            return new BasicHNoteItemA(source);
+        }
+
+        @Override
+        public BasicHNoteItemA[] newArray(int size) {
+            return new BasicHNoteItemA[size];
+        }
+    };
+
 }

@@ -1,7 +1,6 @@
 package com.romanpulov.violetnote.db;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
@@ -40,7 +39,7 @@ public class DBDataUpgradeManager {
 
         Cursor c = null;
         try {
-            c = mDB.rawQuery(DBRawQueryRepository.H_EVENT_ITEMS_TIME, new String[]{});
+            c = mDB.rawQuery(DBRawQueryRepository.H_EVENT_CO_ITEMS_TIME, new String[]{});
             for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
                 eventItemTimeData.add(new EventItemTime(
                         c.getLong(0),
