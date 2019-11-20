@@ -1,11 +1,15 @@
 package com.romanpulov.violetnote;
 
+import android.util.Log;
+
 import com.romanpulov.violetnote.db.DBDataUpgradeManager;
 import com.romanpulov.violetnote.db.dao.BasicHNoteCOItemDAO;
 import com.romanpulov.violetnote.model.BasicHEventA;
 import com.romanpulov.violetnote.model.BasicHNoteCOItemA;
+import com.romanpulov.violetnote.model.BasicHNoteItemA;
 import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteGroupA;
+import com.romanpulov.violetnote.model.BasicNoteItemA;
 
 import org.junit.Test;
 import org.junit.Assert;
@@ -13,6 +17,12 @@ import org.junit.Assert;
 import java.util.List;
 
 public class BasicHNotetemDAODBBaseTest extends DBBaseTest {
+    private final static String TAG = "BasicHNotetemDAODBBaseTest";
+
+    private static void log(String message) {
+        Log.d(TAG, message);
+    }
+
     @Override
     void prepareDatabase() {
         deleteDatabase();
@@ -23,6 +33,8 @@ public class BasicHNotetemDAODBBaseTest extends DBBaseTest {
     public void testMain() {
         synchronized (DBLock.instance) {
             initDB();
+
+            log("Getting event groups");
 
             // get all groups
             List<BasicNoteGroupA> noteGroups = mDBNoteManager.mBasicNoteGroupDAO.getAll();
@@ -39,14 +51,22 @@ public class BasicHNotetemDAODBBaseTest extends DBBaseTest {
             }
             Assert.assertNotNull(historyEventsGroup);
 
+            log("Getting animal notes");
+
             // get animals note
             List<BasicNoteA> notes = mDBNoteManager.mBasicNoteDAO.getByGroup(historyEventsGroup);
             Assert.assertNotEquals(0, notes.size());
 
             BasicNoteA animalsNote = null;
+            BasicNoteA metricsNote = null;
             for (BasicNoteA note : notes) {
                 if (note.getTitle().equals("Animals")) {
                     animalsNote = note;
+                } else if (note.getTitle().equals("Metrics")) {
+                    metricsNote = note;
+                }
+
+                if ((animalsNote != null) && (metricsNote != null)) {
                     break;
                 }
             }
@@ -66,6 +86,23 @@ public class BasicHNotetemDAODBBaseTest extends DBBaseTest {
 
             hEvents = mDBHManager.mBasicHEventDAO.getByCOItemsNoteId(animalsNote.getId());
             Assert.assertEquals(2, hEvents.size());
+
+            //HNoteItem
+
+            Assert.assertNotNull(metricsNote);
+
+            BasicNoteItemA colorNoteItem = null;
+            for (BasicNoteItemA item : mDBNoteManager.mBasicNoteItemDAO.getByNote(metricsNote)) {
+                if (item.getName().equals("Color")) {
+                    colorNoteItem = item;
+                    break;
+                }
+            }
+
+            Assert.assertNotNull(colorNoteItem);
+
+            List<BasicHNoteItemA> hNoteItems = mDBHManager.mBasicHNoteItemDAO.getByNoteItemIdWithEvents(colorNoteItem.getId());
+            Assert.assertEquals(3, hNoteItems.size());
 
             closeDB();
         }

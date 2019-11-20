@@ -122,6 +122,7 @@ public class DBRawQueryRepository {
             "  ni._id, " +
             "  he.event_type_id, " +
             "  he.event_time, " +
+            "  ni.note_item_id, " +
             "  ni.name, " +
             "  ni.value " +
             "FROM h_note_items ni " +

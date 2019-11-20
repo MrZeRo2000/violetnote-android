@@ -15,6 +15,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static com.romanpulov.violetnote.db.DBRawQueryRepository.H_NOTE_ITEM_EVENTS_BY_NOTE_ITEM_ID;
+
 /**
  * BasicHNoteItem DAO
  */
@@ -84,6 +86,34 @@ public final class BasicHNoteItemDAO extends AbstractBasicHEventItemDAO<BasicHNo
                         c.getLong(2),
                         c.getString(3),
                         c.getString(4)
+                ));
+            }
+        });
+
+        return result;
+    }
+
+    public List<BasicHNoteItemA> getByNoteItemIdWithEvents(final long noteItemId) {
+        final List<BasicHNoteItemA> result = new ArrayList<>();
+
+        readCursor(new CursorReaderHandler() {
+            @Override
+            public Cursor createCursor() {
+                return mDB.rawQuery(
+                        H_NOTE_ITEM_EVENTS_BY_NOTE_ITEM_ID,
+                        new String[]{String.valueOf(noteItemId)}
+                );
+            }
+
+            @Override
+            public void readFromCursor(Cursor c) {
+                result.add(BasicHNoteItemA.newInstanceWithEventTime(
+                        c.getLong(0),
+                        c.getLong(1),
+                        c.getLong(2),
+                        c.getLong(3),
+                        c.getString(4),
+                        c.getString(5)
                 ));
             }
         });

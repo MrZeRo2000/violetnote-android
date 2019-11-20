@@ -41,10 +41,22 @@ public class DataGenerator {
         deleteDatabase();
 
         DBBasicNoteHelper.getInstance(getTargetContext()).openDB();
+        DBNoteManager noteManager = new DBNoteManager(getTargetContext());
+
+        createNotes(noteManager);
+        createNoteGroup(noteManager);
+        createHistoryEvents(noteManager);
+
+        DBBasicNoteHelper.getInstance(getTargetContext()).closeDB();
+
+        log("************ Data Generator end");
+    }
+
+    private void createNotes(@NonNull DBNoteManager noteManager) {
         final long priceNoteParamTypeId = DBBasicNoteHelper.getInstance(getTargetContext()).getDBDictionaryCache().getPriceNoteParamTypeId();
 
-        log("Create notes");
-        DBNoteManager noteManager = new DBNoteManager(getTargetContext());
+        log("Creating notes");
+
         for (int i = 1; i <= MAX_NOTES; i++) {
             String titleFormat = "Note %2d";
             if (i == 3)
@@ -128,13 +140,13 @@ public class DataGenerator {
         assertEquals(noteList.size(), MAX_NOTES);
         log("Created " + MAX_NOTES + " notes");
 
-        createNoteGroup(noteManager);
-        createHistoryEvents(noteManager);
-
-        DBBasicNoteHelper.getInstance(getTargetContext()).closeDB();
+        log("Notes creation completed");
     }
 
     private void createNoteGroup(@NonNull DBNoteManager noteManager) {
+
+        log("Creating note groups");
+
         final long priceNoteParamTypeId = DBBasicNoteHelper.getInstance(getTargetContext()).getDBDictionaryCache().getPriceNoteParamTypeId();
 
         //new note group
@@ -166,6 +178,8 @@ public class DataGenerator {
         //new empty note group
         BasicNoteGroupA emptyNoteGroup = BasicNoteGroupA.newEditInstance(BasicNoteGroupA.BASIC_NOTE_GROUP_TYPE, "Empty group", 0);
         assertNotEquals(-1, noteManager.mBasicNoteGroupDAO.insert(emptyNoteGroup));
+
+        log("Note groups creation completed");
     }
 
     private BasicNoteItemA insertCheckedNoteItem(@NonNull DBNoteManager noteManager, @NonNull BasicNoteA note, String noteItemName) {
@@ -178,6 +192,9 @@ public class DataGenerator {
     }
 
     private void createHistoryEvents(@NonNull DBNoteManager noteManager) {
+
+        log("Creating history events");
+
         final long priceNoteParamTypeId = DBBasicNoteHelper.getInstance(getTargetContext()).getDBDictionaryCache().getPriceNoteParamTypeId();
 
         //new note group
@@ -207,6 +224,8 @@ public class DataGenerator {
         noteManager.mBasicNoteDAO.fillNoteValues(newNote);
         noteManager.mBasicNoteDAO.checkOut(newNote);
 
+        log("Performing short wait");
+
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
@@ -220,6 +239,8 @@ public class DataGenerator {
         noteManager.mBasicNoteItemDAO.fillNoteDataItemsWithSummary(newNote);
         noteManager.mBasicNoteDAO.fillNoteValues(newNote);
         noteManager.mBasicNoteDAO.checkOut(newNote);
+
+        log("Performing long wait");
 
         try {
             Thread.sleep(15000);
@@ -251,6 +272,8 @@ public class DataGenerator {
         assertNotEquals(-1, newNoteId);
         newNoteItem2.setId(newNoteId);
 
+        log("Performing wait for named note items");
+
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
@@ -269,5 +292,6 @@ public class DataGenerator {
         newNoteItem2.setValue("Green");
         noteManager.mBasicNoteItemDAO.updateNameValue(newNoteItem2);
 
+        log("History events creation completed");
     }
 }
