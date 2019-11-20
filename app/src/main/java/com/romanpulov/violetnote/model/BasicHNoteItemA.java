@@ -31,6 +31,10 @@ public final class BasicHNoteItemA extends BasicEntityNoteA implements Parcelabl
     // from event
     private final long mEventTime;
 
+    public long getEventTime() {
+        return mEventTime;
+    }
+
     private BasicHNoteItemA(long id, long eventId, long eventTime, long noteItemId, String name, String value) {
         setId(id);
         mEventId = eventId;

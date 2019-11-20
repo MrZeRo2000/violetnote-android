@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.ActionMenuView;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.romanpulov.violetnote.R;
@@ -32,7 +33,7 @@ public class BasicHEventNamedItemActivity extends ActionBarCompatActivity {
             bottomToolbar.setVisibility(View.GONE);
         }
 
-        BasicNoteItemA noteItem = getIntent().getParcelableExtra(BasicNoteItemA.class.getName());
+        BasicNoteItemA noteItem = getIntent().getParcelableExtra(getClass().getName());
         if (noteItem != null) {
             setTitle(getString(R.string.title_activity_basic_history_event_named_item, noteItem.getName()));
 
@@ -46,6 +47,18 @@ public class BasicHEventNamedItemActivity extends ActionBarCompatActivity {
                 fragment.refreshList(new DBHManager(this));
             }
         }
-
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch ((item.getItemId())) {
+            // Workaround for issue with back button in toolbar default behavior
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
 }

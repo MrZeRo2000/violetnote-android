@@ -219,7 +219,7 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
 
     public void startHEventHistoryActivity(BasicNoteItemA item) {
         Intent intent = new Intent(getActivity(), BasicHEventNamedItemActivity.class);
-        intent.putExtra(item.getClass().getName(), item);
+        intent.putExtra(BasicHEventNamedItemActivity.class.getName(), item);
         startActivity(intent);
     }
 

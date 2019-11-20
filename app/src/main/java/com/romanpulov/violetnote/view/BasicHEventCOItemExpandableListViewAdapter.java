@@ -24,6 +24,7 @@ public class BasicHEventCOItemExpandableListViewAdapter extends BaseExpandableLi
     private final Context mContext;
     private final LongSparseArray<BasicHEventA> mHEventList;
     private final LongSparseArray<List<BasicHNoteCOItemA>> mHEventCOItemList;
+    private final DateTimeFormatter mDTF;
 
     private final ViewSelectorHelper.AbstractViewSelector<BasicHNoteCOItemA> mExViewSelector;
 
@@ -40,6 +41,7 @@ public class BasicHEventCOItemExpandableListViewAdapter extends BaseExpandableLi
         mContext = context;
         mHEventList = hEventList;
         mHEventCOItemList = hEventCOItemList;
+        mDTF = new DateTimeFormatter(context);
 
         mExViewSelector = new ViewSelectorHelper.ViewSelectorMultiple<>(this, actionModeCallback);
     }
@@ -112,7 +114,8 @@ public class BasicHEventCOItemExpandableListViewAdapter extends BaseExpandableLi
         }
         //TextView groupTitle = convertView.findViewById(R.id.group_title);
         long eventTime = ((BasicHEventA)getGroup(groupPosition)).getEventTime();
-        String eventTimeString = DateFormat.getDateTimeInstance().format(new Date(eventTime));
+        //String eventTimeString = DateFormat.getDateTimeInstance().format(new Date(eventTime));
+        String eventTimeString = mDTF.formatDateTimeDelimited(new Date(eventTime), " ");
         viewHolder.mGroupTitle.setText(eventTimeString);
 
         return convertView;
