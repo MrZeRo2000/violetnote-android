@@ -33,6 +33,7 @@ public class ActionHelper {
                         break;
                     case R.id.edit_value:
                     case R.id.edit:
+                    case R.id.history:
                         isVisible = selectedCount == 1;
                         break;
                     case R.id.move_up:

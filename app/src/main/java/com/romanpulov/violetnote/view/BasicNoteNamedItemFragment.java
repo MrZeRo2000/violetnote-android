@@ -1,6 +1,7 @@
 package com.romanpulov.violetnote.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
@@ -13,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.model.BasicEntityNoteSelectionPosA;
@@ -215,6 +217,12 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
         mEditorDialog = dialog.getAlertDialog();
     }
 
+    public void startHEventHistoryActivity(BasicNoteItemA item) {
+        Intent intent = new Intent(getActivity(), BasicHEventNamedItemActivity.class);
+        intent.putExtra(item.getClass().getName(), item);
+        startActivity(intent);
+    }
+
     public class ActionBarCallBack implements ActionMode.Callback {
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
@@ -238,6 +246,12 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
                         break;
                     case R.id.edit:
                         performEditAction(mode, selectedNoteItems.get(0));
+                        break;
+                    case R.id.history:
+                        if (selectedNoteItems.size() == 1) {
+                            startHEventHistoryActivity(selectedNoteItems.get(0));
+                        }
+                        //Toast.makeText(getContext(), "History", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.move_up:
                         performMoveAction(new BasicItemsMoveUpAction<>(mBasicNoteData, selectedNoteItems), selectedNoteItems);
