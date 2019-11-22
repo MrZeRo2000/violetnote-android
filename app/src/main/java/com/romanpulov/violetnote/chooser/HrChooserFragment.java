@@ -194,11 +194,11 @@ public abstract class HrChooserFragment extends Fragment {
         requestChooseItem(item);
     }
 
-    public static class ChooseItemUpdaterTask extends AsyncTask<ChooseItem, Void, ChooseItem> {
+    private static class ChooseItemUpdaterTask extends AsyncTask<ChooseItem, Void, ChooseItem> {
 
         private final HrChooserFragment mHost;
 
-        public ChooseItemUpdaterTask(HrChooserFragment host) {
+        private ChooseItemUpdaterTask(HrChooserFragment host) {
             mHost = host;
         }
 
@@ -221,6 +221,11 @@ public abstract class HrChooserFragment extends Fragment {
                 mHost.updateChooseItem(chooseItem);
             }
         }
+    }
+
+    protected void startChooserUpdaterTask(ChooseItem item) {
+        mTask = new ChooseItemUpdaterTask(this);
+        mTask.execute(item);
     }
 
     @Override
