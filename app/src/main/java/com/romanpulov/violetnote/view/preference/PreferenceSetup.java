@@ -20,7 +20,7 @@ public abstract class PreferenceSetup {
         mPreferenceFragment = preferenceFragment;
         mPreference = preferenceFragment.findPreference(preferenceKey);
         mActivity = preferenceFragment.getActivity();
-        mContext = mPreference.getContext();
+        mContext = mPreference.getContext().getApplicationContext();
     }
 
     public abstract void execute();

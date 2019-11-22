@@ -20,6 +20,12 @@ import java.lang.ref.WeakReference;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class OneDriveHelper {
+    public static final int ONEDRIVE_ACTION_LOGIN = 0;
+    public static final int ONEDRIVE_ACTION_LOGOUT = 2;
+
+    public interface OnOneDriveActionListener {
+        void onActionCompleted(int action, boolean result, String message);
+    }
 
     //download:
     //item.children.getCurrentPage().get(1).getRawObject().get("@content.downloadUrl")
@@ -28,6 +34,12 @@ public class OneDriveHelper {
 
     public void setActivity(Activity activity) {
         mActivity = new WeakReference<>(activity);
+    }
+
+    private OnOneDriveActionListener mListener;
+
+    public void setOnOneDriveActionListener(OnOneDriveActionListener listener) {
+        this.mListener = listener;
     }
 
     /**
@@ -61,11 +73,17 @@ public class OneDriveHelper {
         @Override
         public void success(final IOneDriveClient result) {
             mClient.set(result);
+            if (mListener != null) {
+                mListener.onActionCompleted(ONEDRIVE_ACTION_LOGIN, true, null);
+            }
         }
 
         @Override
         public void failure(final ClientException error) {
             mClient.set(null);
+            if (mListener != null) {
+                mListener.onActionCompleted(ONEDRIVE_ACTION_LOGIN, false, error.getMessage());
+            }
         }
     };
 
@@ -110,11 +128,17 @@ public class OneDriveHelper {
         @Override
         public void success(final Void result) {
             mClient.set(null);
+            if (mListener != null) {
+                mListener.onActionCompleted(ONEDRIVE_ACTION_LOGOUT, true, null);
+            }
         }
 
         @Override
         public void failure(final ClientException error) {
-            //mClient.set(null);
+            mClient.set(null);
+            if (mListener != null) {
+                mListener.onActionCompleted(ONEDRIVE_ACTION_LOGOUT, false, error.getMessage());
+            }
         }
     };
 

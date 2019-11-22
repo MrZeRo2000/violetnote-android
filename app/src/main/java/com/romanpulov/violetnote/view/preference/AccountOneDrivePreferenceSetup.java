@@ -10,6 +10,9 @@ import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.onedrive.OneDriveHelper;
 import com.romanpulov.violetnote.view.SettingsActivity;
 
+import static com.romanpulov.violetnote.onedrive.OneDriveHelper.ONEDRIVE_ACTION_LOGIN;
+import static com.romanpulov.violetnote.onedrive.OneDriveHelper.ONEDRIVE_ACTION_LOGOUT;
+
 /**
  * Dropbox account configuration
  * Created by romanpulov on 08.09.2017.
@@ -20,6 +23,36 @@ public class AccountOneDrivePreferenceSetup extends PreferenceSetup {
     public AccountOneDrivePreferenceSetup(PreferenceFragment preferenceFragment) {
         super(preferenceFragment, PreferenceRepository.PREF_KEY_ACCOUNT_ONEDRIVE);
     }
+
+    private OneDriveHelper.OnOneDriveActionListener onOneDriveActionListener = new OneDriveHelper.OnOneDriveActionListener() {
+        @Override
+        public void onActionCompleted(int action, boolean result, String message) {
+            int successMessageId;
+            int failureMessageId;
+            int displayMessageId;
+
+            switch(action) {
+                case ONEDRIVE_ACTION_LOGIN:
+                    successMessageId = R.string.message_onedrive_successfully_logged_in;
+                    failureMessageId = R.string.error_onedrive_login;
+                    break;
+                case ONEDRIVE_ACTION_LOGOUT:
+                    successMessageId = R.string.message_onedrive_successfully_logged_out;
+                    failureMessageId = R.string.error_onedrive_logout;
+                    break;
+                default:
+                    return;
+            }
+
+            if (result) {
+                displayMessageId = successMessageId;
+            } else {
+                displayMessageId = failureMessageId;
+            }
+
+            PreferenceRepository.displayMessage(mContext, mContext.getString(displayMessageId));
+        }
+    };
 
     @Override
     public void execute() {
@@ -32,14 +65,18 @@ public class AccountOneDrivePreferenceSetup extends PreferenceSetup {
                         .setPositiveButton(R.string.ui_dialog_button_login, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                OneDriveHelper.getInstance().createClient(mActivity);
+                                OneDriveHelper oneDriveHelper = OneDriveHelper.getInstance();
+                                oneDriveHelper.setOnOneDriveActionListener(onOneDriveActionListener);
+                                oneDriveHelper.createClient(mActivity);
                             }
                         })
 
                         .setNegativeButton(R.string.ui_dialog_button_logout, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                OneDriveHelper.getInstance().logout(mActivity);
+                                OneDriveHelper oneDriveHelper = OneDriveHelper.getInstance();
+                                oneDriveHelper.setOnOneDriveActionListener(onOneDriveActionListener);
+                                oneDriveHelper.logout(mActivity);
                             }
                         })
                         .show();

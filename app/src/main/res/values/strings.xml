@@ -113,10 +113,18 @@
     <string name="error_load_process_running">Load process is running</string>
     <string name="error_internet_not_available">Internet connection is not available</string>
 
+    <!-- OneDrive errors -->
+    <string name="error_onedrive_login">Error logging in to OneDrive: %d</string>
+    <string name="error_onedrive_logout">Error logging out from OneDrive: %d</string>
+
     <!-- Messages -->
     <string name="message_backup_created">Successfully created backup at %s</string>
     <string name="message_backup_restored">Successfully restored backup from %s</string>
     <string name="message_backup_cloud_restored">Successfully restored backup from cloud</string>
+
+    <!-- OneDrive messages -->
+    <string name="message_onedrive_successfully_logged_in">Successfully logged in to OneDrive</string>
+    <string name="message_onedrive_successfully_logged_out">Successfully logged out from OneDrive</string>
 
     <!-- Notifications -->
     <string name="notification_dropbox_backup_completed">Dropbox backup has been completed</string>

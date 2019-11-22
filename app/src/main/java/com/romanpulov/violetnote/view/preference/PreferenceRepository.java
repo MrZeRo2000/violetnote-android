@@ -85,7 +85,11 @@ public class PreferenceRepository {
      * @param message Message to display
      */
     public static void displayMessage(Context context, CharSequence message) {
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+        try {
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
