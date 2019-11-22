@@ -21,10 +21,15 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class OneDriveHelper {
     public static final int ONEDRIVE_ACTION_LOGIN = 0;
-    public static final int ONEDRIVE_ACTION_LOGOUT = 2;
+    public static final int ONEDRIVE_ACTION_LOGOUT = 1;
 
     public interface OnOneDriveActionListener {
         void onActionCompleted(int action, boolean result, String message);
+    }
+
+    public interface OnOneDriveItemListener {
+        void onItemReceived(Item item);
+        void onItemFailure(ClientException ex);
     }
 
     //download:
@@ -36,10 +41,16 @@ public class OneDriveHelper {
         mActivity = new WeakReference<>(activity);
     }
 
-    private OnOneDriveActionListener mListener;
+    private OnOneDriveActionListener mActionListener;
 
     public void setOnOneDriveActionListener(OnOneDriveActionListener listener) {
-        this.mListener = listener;
+        this.mActionListener = listener;
+    }
+
+    private OnOneDriveItemListener mItemListener;
+
+    public void setOnOneDriveItemListener(OnOneDriveItemListener listener) {
+        this.mItemListener = listener;
     }
 
     /**
@@ -73,16 +84,16 @@ public class OneDriveHelper {
         @Override
         public void success(final IOneDriveClient result) {
             mClient.set(result);
-            if (mListener != null) {
-                mListener.onActionCompleted(ONEDRIVE_ACTION_LOGIN, true, null);
+            if (mActionListener != null) {
+                mActionListener.onActionCompleted(ONEDRIVE_ACTION_LOGIN, true, null);
             }
         }
 
         @Override
         public void failure(final ClientException error) {
             mClient.set(null);
-            if (mListener != null) {
-                mListener.onActionCompleted(ONEDRIVE_ACTION_LOGIN, false, error.getMessage());
+            if (mActionListener != null) {
+                mActionListener.onActionCompleted(ONEDRIVE_ACTION_LOGIN, false, error.getMessage());
             }
         }
     };
@@ -128,16 +139,16 @@ public class OneDriveHelper {
         @Override
         public void success(final Void result) {
             mClient.set(null);
-            if (mListener != null) {
-                mListener.onActionCompleted(ONEDRIVE_ACTION_LOGOUT, true, null);
+            if (mActionListener != null) {
+                mActionListener.onActionCompleted(ONEDRIVE_ACTION_LOGOUT, true, null);
             }
         }
 
         @Override
         public void failure(final ClientException error) {
             mClient.set(null);
-            if (mListener != null) {
-                mListener.onActionCompleted(ONEDRIVE_ACTION_LOGOUT, false, error.getMessage());
+            if (mActionListener != null) {
+                mActionListener.onActionCompleted(ONEDRIVE_ACTION_LOGOUT, false, error.getMessage());
             }
         }
     };
@@ -145,24 +156,15 @@ public class OneDriveHelper {
     private final ICallback<Item> itemCallback = new ICallback<Item>() {
         @Override
         public void success(Item item) {
-            String text = null;
-            try {
-                String rawString = item.getRawObject().toString();
-                final JSONObject object = new JSONObject(rawString);
-                final int intentSize = 3;
-                text = object.toString(intentSize);
-                if ((mActivity != null) && (mActivity.get() != null)) {
-                    Toast.makeText(mActivity.get() , "Navigated: " + item, Toast.LENGTH_SHORT).show();
-                }
-            } catch (final Exception e) {
-                Log.e(getClass().getName(), "Unable to parse the response body to json");
+            if (mItemListener!= null) {
+                mItemListener.onItemReceived(item);
             }
         }
 
         @Override
         public void failure(ClientException ex) {
-            if ((mActivity != null) && (mActivity.get() != null)) {
-                Toast.makeText(mActivity.get(), ex.getMessage(), Toast.LENGTH_SHORT).show();
+            if (mItemListener!= null) {
+                mItemListener.onItemFailure(ex);
             }
         }
     };
