@@ -173,6 +173,8 @@
     <string name="ui_dialog_title_info">Information</string>
     <string name="ui_dialog_title_error">Error</string>
     <string name="ui_dialog_title_confirmation">Confirmation</string>
+    <string name="ui_dialog_button_login">Login</string>
+    <string name="ui_dialog_button_logout">Logout</string>
     <string name="ui_question_are_you_sure">Are you sure?</string>
     <string name="ui_question_delete_item_are_you_sure">%s will be deleted!\nAre you sure?</string>
     <string name="ui_question_delete_items_are_you_sure">%1$d items will be deleted!\nAre you sure?</string>

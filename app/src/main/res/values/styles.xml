@@ -138,9 +138,16 @@
 
         <item name="android:background">@color/windowBackground</item>
 
+        <!--
         <item name="buttonBarPositiveButtonStyle">@style/ButtonBarButtonStyle</item>
         <item name="buttonBarNegativeButtonStyle">@style/ButtonBarButtonStyle</item>
+        <item name="buttonBarNeutralButtonStyle">@style/ButtonBarButtonStyle</item>
+        -->
+        <item name="buttonBarButtonStyle">@style/ButtonBarButtonStyle</item>
+        <item name="buttonStyle">@drawable/list_selector</item>
+
     </style>
+
 
     <!-- for Ok and Cancel button background -->
     <style name="ButtonBarButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
