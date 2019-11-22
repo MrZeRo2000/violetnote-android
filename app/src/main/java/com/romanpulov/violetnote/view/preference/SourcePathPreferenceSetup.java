@@ -16,6 +16,7 @@ import static com.romanpulov.violetnote.view.preference.PreferenceRepository.PRE
 import static com.romanpulov.violetnote.view.preference.PreferenceRepository.PREF_KEY_SOURCE_TYPE;
 import static com.romanpulov.violetnote.view.preference.PreferenceRepository.SOURCE_TYPE_DROPBOX;
 import static com.romanpulov.violetnote.view.preference.PreferenceRepository.SOURCE_TYPE_FILE;
+import static com.romanpulov.violetnote.view.preference.PreferenceRepository.SOURCE_TYPE_ONEDRIVE;
 
 /**
  * Source path preference setup
@@ -62,7 +63,14 @@ public class SourcePathPreferenceSetup extends PreferenceSetup {
                                 PreferenceRepository.displayMessage(mActivity, String.format(mActivity.getResources().getString(R.string.error_dropbox_other), e.getMessage()));
                             }
                         }
+                        return true;
+                    case SOURCE_TYPE_ONEDRIVE:
+                        if (!NetworkUtils.isNetworkAvailable(mContext))
+                            PreferenceRepository.displayMessage(mActivity,mActivity.getResources().getString(R.string.error_internet_not_available));
+                        else {
 
+                        }
+                        return true;
                     default:
                         return false;
                 }
