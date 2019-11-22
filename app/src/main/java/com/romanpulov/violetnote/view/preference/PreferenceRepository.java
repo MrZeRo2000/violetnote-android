@@ -39,6 +39,7 @@ public class PreferenceRepository {
     public static final String PREF_KEY_SOURCE_TYPE = "pref_source_type";
 
     public static final String PREF_KEY_ACCOUNT_DROPBOX = "pref_account_dropbox";
+    public static final String PREF_KEY_ACCOUNT_ONEDRIVE = "pref_account_onedrive";
 
     public static final String PREF_KEY_BASIC_NOTE_CLOUD_STORAGE =  "pref_basic_note_cloud_storage";
 

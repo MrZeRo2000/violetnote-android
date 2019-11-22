@@ -45,6 +45,16 @@ dependencies {
     implementation 'com.android.support:recyclerview-v7:28.0.0'
     implementation 'com.romanpulov.library.common:library:1.0.11'
     implementation 'com.romanpulov.library.dropbox:library:1.0.10'
+
+    // ** one drive configuration **
+    // Include the sdk as a dependency
+    implementation('com.onedrive.sdk:onedrive-sdk-android:+')
+    // Include the gson dependency
+    implementation 'com.google.code.gson:gson:2.8.5'
+    // Include supported authentication methods for your application
+    implementation 'com.microsoft.services.msa:msa-auth:0.8.4'
+    // ** one drive configuration **
+
     // Unit testing dependencies
     androidTestImplementation 'com.android.support:support-annotations:28.0.0'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'

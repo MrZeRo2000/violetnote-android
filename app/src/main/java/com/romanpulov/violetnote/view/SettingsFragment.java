@@ -37,6 +37,7 @@ import com.romanpulov.violetnote.service.LoaderService;
 import com.romanpulov.violetnote.service.LoaderServiceManager;
 import com.romanpulov.violetnote.view.helper.PermissionRequestHelper;
 import com.romanpulov.violetnote.view.preference.AccountDropboxPreferenceSetup;
+import com.romanpulov.violetnote.view.preference.AccountOneDrivePreferenceSetup;
 import com.romanpulov.violetnote.view.preference.BasicNoteGroupsPreferenceSetup;
 import com.romanpulov.violetnote.view.preference.CheckedUpdateIntervalPreferenceSetup;
 import com.romanpulov.violetnote.view.preference.CloudStorageTypePreferenceSetup;
@@ -116,6 +117,7 @@ public class SettingsFragment extends PreferenceFragment {
         new SourceTypePreferenceSetup(this).execute();
         new SourcePathPreferenceSetup(this).execute();
         new AccountDropboxPreferenceSetup(this).execute();
+        new AccountOneDrivePreferenceSetup(this).execute();
         new CloudStorageTypePreferenceSetup(this).execute();
         new CheckedUpdateIntervalPreferenceSetup(this).execute();
     }

@@ -78,5 +78,9 @@
             android:key="pref_account_dropbox"
             android:title="@string/pref_title_account_dropbox"
             />
+        <Preference
+            android:key="pref_account_onedrive"
+            android:title="@string/pref_title_account_onedrive"
+            />
     </PreferenceCategory>
 </PreferenceScreen>

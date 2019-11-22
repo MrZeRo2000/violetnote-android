@@ -139,6 +139,11 @@
             android:theme="@style/ToolBarTheme"
             />
 
+        <!-- for OneDrive, check if it is still needed -->
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+
     </application>
 
 </manifest>
