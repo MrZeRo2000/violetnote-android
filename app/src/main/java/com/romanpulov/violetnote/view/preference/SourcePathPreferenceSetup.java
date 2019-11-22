@@ -10,6 +10,7 @@ import com.romanpulov.violetnote.R;
 import com.romanpulov.library.dropbox.DropboxHelper;
 import com.romanpulov.violetnote.dropboxchooser.DropboxChooserActivity;
 import com.romanpulov.violetnote.filechooser.FileChooserActivity;
+import com.romanpulov.violetnote.onedrivechooser.OneDriveChooserActivity;
 
 import static com.romanpulov.violetnote.view.preference.PreferenceRepository.DEFAULT_SOURCE_TYPE;
 import static com.romanpulov.violetnote.view.preference.PreferenceRepository.PREF_KEY_SOURCE_PATH;
@@ -68,6 +69,10 @@ public class SourcePathPreferenceSetup extends PreferenceSetup {
                         if (!NetworkUtils.isNetworkAvailable(mContext))
                             PreferenceRepository.displayMessage(mActivity,mActivity.getResources().getString(R.string.error_internet_not_available));
                         else {
+                            intent = new Intent(mActivity, OneDriveChooserActivity.class);
+                            intent.putExtra(OneDriveChooserActivity.CHOOSER_INITIAL_PATH, mPreferenceFragment.getPreferenceManager().getSharedPreferences().getString(PREF_KEY_SOURCE_PATH, Environment.getRootDirectory().getAbsolutePath()));
+                            mPreferenceFragment.startActivityForResult(intent, 0);
+                            return true;
 
                         }
                         return true;

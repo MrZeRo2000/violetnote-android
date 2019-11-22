@@ -24,7 +24,9 @@ public abstract class AbstractHrChooserActivity extends ActionBarCompatActivity 
         if (fragment == null) {
             String initialPath = getIntent().getStringExtra(CHOOSER_INITIAL_PATH);
             fragment = createChooserFragment(initialPath);
-            fm.beginTransaction().add(android.R.id.content, fragment).commit();
+            if (fragment != null) {
+                fm.beginTransaction().add(android.R.id.content, fragment).commit();
+            }
         }
     }
 
