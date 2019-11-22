@@ -25,9 +25,6 @@ import java.util.List;
 public abstract class HrChooserFragment extends Fragment {
     protected static final String HR_CHOOSER_INITIAL_PATH = "InitialPath";
 
-    protected static final int HR_MODE_SYNC = 0;
-    protected static final int HR_MODE_ASYNC = 1;
-
     public interface OnChooserInteractionListener {
         void onChooserInteraction(ChooseItem item);
     }
@@ -38,14 +35,14 @@ public abstract class HrChooserFragment extends Fragment {
     private RecyclerView.Adapter mAdapter;
     private List<ChooseItem> mChooseItemList;
     private String mHeaderText;
-    private int mFillMode;
+
     private ChooseItemUpdaterTask mTask;
 
-    private OnChooserInteractionListener mListener;
-
-    public void setFillMode(int fillMode) {
-        mFillMode = fillMode;
+    public void setChooseItemUpdaterTask(ChooseItemUpdaterTask task) {
+        mTask = task;
     }
+
+    private OnChooserInteractionListener mListener;
 
     public static class ChooserAdapter extends RecyclerView.Adapter<ChooserAdapter.ViewHolder> {
         private final List<ChooseItem> mItems;
@@ -140,14 +137,23 @@ public abstract class HrChooserFragment extends Fragment {
         });
     }
 
+    protected void setHeaderInfo(String text) {
+        mHeader.setText(text);
+    }
+
+    protected void setProgress() {
+        mHeader.setText(R.string.caption_loading);
+    }
+
     protected abstract ChooseItem getChooseItem();
+    protected abstract void requestChooseItem(ChooseItem item);
 
     /**
      * Fills sub items for given item
      * @param item Initial item, may be empty
      * @return item with filled internal items
      */
-    private ChooseItem fillChooseItem (ChooseItem item) {
+    protected ChooseItem fillChooseItem (ChooseItem item) {
         ChooseItem result;
         if (item == null)
             result = getChooseItem();
@@ -161,7 +167,7 @@ public abstract class HrChooserFragment extends Fragment {
      * Update UI to reflect item change
      * @param item Item to reflect changes
      */
-    private void updateChooseItem(ChooseItem item) {
+    protected void updateChooseItem(ChooseItem item) {
         //header text
         if (item.getFillItemsError() != null) {
             mHeaderText = getText(R.string.error_load).toString();
@@ -174,7 +180,7 @@ public abstract class HrChooserFragment extends Fragment {
         Collections.sort(item.getItems(), new ChooseItemComparator());
 
         //update controls
-        mHeader.setText(mHeaderText);
+        setHeaderInfo(mHeaderText);
         mChooseItemList.clear();
         mChooseItemList.addAll(item.getItems());
         mAdapter.notifyDataSetChanged();
@@ -185,30 +191,23 @@ public abstract class HrChooserFragment extends Fragment {
      * @param item Item to process changes
      */
     private void chooseItemChanged(ChooseItem item) {
-        switch (mFillMode) {
-            case HR_MODE_SYNC:
-                updateChooseItem(fillChooseItem(item));
-                break;
-            case HR_MODE_ASYNC: {
-                mTask = new ChooseItemUpdaterTask(this);
-                mTask.execute(item);
-            }
-        }
+        requestChooseItem(item);
     }
 
-    private static class ChooseItemUpdaterTask extends AsyncTask<ChooseItem, Void, ChooseItem> {
+    public static class ChooseItemUpdaterTask extends AsyncTask<ChooseItem, Void, ChooseItem> {
 
         private final HrChooserFragment mHost;
 
-        ChooseItemUpdaterTask(HrChooserFragment host) {
+        public ChooseItemUpdaterTask(HrChooserFragment host) {
             mHost = host;
         }
 
         @Override
         protected void onPreExecute() {
             FragmentActivity activity = mHost.getActivity();
-            if (activity != null)
-                mHost.mHeader.setText(activity.getText(R.string.caption_loading));
+            if (activity != null) {
+                mHost.setProgress();
+            }
         }
 
         @Override
@@ -233,9 +232,9 @@ public abstract class HrChooserFragment extends Fragment {
         //UI components
         mHeader = v.findViewById(R.id.chooser_header);
         if ((mTask != null) && (mTask.getStatus() == AsyncTask.Status.RUNNING)) {
-            mHeader.setText(R.string.caption_loading);
+            setProgress();
         } else {
-            mHeader.setText(mHeaderText);
+            setHeaderInfo(mHeaderText);
         }
 
         RecyclerView recyclerView = v.findViewById(R.id.chooser_list);

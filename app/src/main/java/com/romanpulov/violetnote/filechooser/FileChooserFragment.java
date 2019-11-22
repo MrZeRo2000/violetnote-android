@@ -24,10 +24,14 @@ public class FileChooserFragment extends HrChooserFragment {
         return new FileChooseItem(file);
     }
 
+    @Override
+    protected void requestChooseItem(ChooseItem item) {
+        updateChooseItem(fillChooseItem(item));
+    }
+
     public FileChooserFragment() {
         super();
         setRetainInstance(true);
-        setFillMode(HR_MODE_SYNC);
     }
 
     public static HrChooserFragment newInstance(String initialPath) {

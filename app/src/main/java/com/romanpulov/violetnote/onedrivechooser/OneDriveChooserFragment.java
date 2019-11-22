@@ -11,6 +11,11 @@ public class OneDriveChooserFragment extends HrChooserFragment {
         return null;
     }
 
+    @Override
+    protected void requestChooseItem(ChooseItem item) {
+
+    }
+
     public OneDriveChooserFragment() {
         super();
         setRetainInstance(true);

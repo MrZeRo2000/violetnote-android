@@ -25,7 +25,13 @@ public class DropboxChooserFragment extends HrChooserFragment {
     public DropboxChooserFragment() {
         super();
         setRetainInstance(true);
-        setFillMode(HR_MODE_ASYNC);
+    }
+
+    @Override
+    protected void requestChooseItem(ChooseItem item) {
+        ChooseItemUpdaterTask task = new ChooseItemUpdaterTask(this);
+        setChooseItemUpdaterTask(task);
+        task.execute(item);
     }
 
     public static HrChooserFragment newInstance(String initialPath) {

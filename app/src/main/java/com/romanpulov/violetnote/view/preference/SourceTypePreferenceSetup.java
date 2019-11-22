@@ -44,7 +44,7 @@ public class SourceTypePreferenceSetup extends PreferenceSetup {
 
                 final SelectionResult result = new SelectionResult(preference.getPreferenceManager().getSharedPreferences().getInt(preference.getKey(), mDefaultValue));
 
-                final AlertDialog.Builder alert = new AlertDialog.Builder(mContext, R.style.AlertDialogTheme);
+                final AlertDialog.Builder alert = new AlertDialog.Builder(mActivity, R.style.AlertDialogTheme);
                 alert
                         .setTitle(R.string.pref_title_source_type)
                         .setSingleChoiceItems(R.array.pref_source_type_entries, result.which, new DialogInterface.OnClickListener() {
