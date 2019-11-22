@@ -87,6 +87,7 @@
     <string-array name="pref_source_type_entries">
         <item>Local storage</item>
         <item>Dropbox</item>
+        <item>OneDrive</item>
     </string-array>
     <string-array name="pref_cloud_storage_entries">
         <item>Dropbox</item>
