@@ -1,44 +1,94 @@
 package com.romanpulov.violetnote.onedrivechooser;
 
+import com.onedrive.sdk.extensions.Item;
 import com.romanpulov.violetnote.chooser.ChooseItem;
+import com.romanpulov.violetnote.chooser.ChooseItemUtils;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 public class OneDriveChooseItem implements ChooseItem {
+    private Item mOneDriveItem;
+    private String mErrorText;
+
+    private OneDriveChooseItem() {
+
+    }
+
     private List<ChooseItem> mItems;
 
     @Override
     public String getItemPath() {
-        return null;
+        String parentPath = mOneDriveItem.parentReference.path == null ? "" : mOneDriveItem.parentReference.path;
+        parentPath = parentPath.replace("/drive/root", "root");
+        if (parentPath.length() > 0) {
+            parentPath = parentPath + File.separator;
+        }
+        return parentPath + mOneDriveItem.name;
     }
 
     @Override
     public String getDisplayItemPath() {
-        return null;
+        return getItemPath().replace("root:", "");
     }
 
     @Override
     public String getItemName() {
-        return null;
+        return mOneDriveItem.name;
     }
 
     @Override
     public int getItemType() {
-        return 0;
+        if (mOneDriveItem.file != null) {
+            return ChooseItem.ITEM_FILE;
+        } else if (mOneDriveItem.folder != null) {
+            return ChooseItem.ITEM_DIRECTORY;
+        } else {
+            return ChooseItem.ITEM_UNKNOWN;
+        }
     }
 
     @Override
     public void fillItems() {
+        mItems = new ArrayList<>();
+        if (mOneDriveItem != null) {
+            List<Item> oneDriveItems = mOneDriveItem.children.getCurrentPage();
 
+            if (oneDriveItems.size() > 0) {
+                String parentPath = oneDriveItems.get(0).parentReference.path;
+                if (!(parentPath.equals("/drive/root:"))) {
+                    String parentItemPath = ChooseItemUtils.getParentItemPath(parentPath);
+                    mItems.add(OneDriveRootChooseItem.fromPath(parentItemPath));
+                }
+            }
+
+            for (Item item : oneDriveItems) {
+                mItems.add(fromOneDriveItem(item));
+            }
+        }
     }
 
     @Override
     public String getFillItemsError() {
-        return null;
+        return mErrorText;
     }
 
     @Override
     public List<ChooseItem> getItems() {
         return mItems;
     }
+
+    public static OneDriveChooseItem fromOneDriveItem(Item item) {
+        OneDriveChooseItem result = new OneDriveChooseItem();
+        result.mOneDriveItem = item;
+        return result;
+    }
+
+    public static OneDriveChooseItem createErrorItem(String errorText) {
+        OneDriveChooseItem result = new OneDriveChooseItem();
+        result.mErrorText = errorText;
+        return result;
+    }
+
 }

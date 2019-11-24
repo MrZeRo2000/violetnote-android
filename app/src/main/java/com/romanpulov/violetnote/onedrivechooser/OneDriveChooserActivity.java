@@ -7,6 +7,6 @@ import com.romanpulov.violetnote.chooser.AbstractHrChooserActivity;
 public class OneDriveChooserActivity extends AbstractHrChooserActivity {
     @Override
     protected Fragment createChooserFragment(String initialPath) {
-        return null;
+        return OneDriveChooserFragment.newInstance(initialPath);
     }
 }
