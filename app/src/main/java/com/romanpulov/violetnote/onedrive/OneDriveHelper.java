@@ -243,6 +243,7 @@ public class OneDriveHelper {
                     .buildRequest()
                     .expand(getExpansionOptions(mClient.get()))
                     .get(itemCallback);
+
         }
     }
 

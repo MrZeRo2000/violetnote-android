@@ -29,7 +29,7 @@ public class OneDriveRootChooseItem implements ChooseItem {
 
     @Override
     public String getItemName() {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -39,16 +39,16 @@ public class OneDriveRootChooseItem implements ChooseItem {
 
     @Override
     public void fillItems() {
-
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public String getFillItemsError() {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public List<ChooseItem> getItems() {
-        return null;
+        throw new UnsupportedOperationException();
     }
 }
