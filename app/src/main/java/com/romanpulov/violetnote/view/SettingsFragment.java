@@ -27,6 +27,8 @@ import com.romanpulov.violetnote.db.DBStorageManager;
 import com.romanpulov.violetnote.filechooser.FileChooserActivity;
 import com.romanpulov.library.dropbox.DropboxHelper;
 import com.romanpulov.library.common.loader.core.AbstractContextLoader;
+import com.romanpulov.violetnote.loader.account.AbstractAccountManager;
+import com.romanpulov.violetnote.loader.account.AccountManagerFactory;
 import com.romanpulov.violetnote.loader.dropbox.BackupDropboxUploader;
 import com.romanpulov.violetnote.loader.document.DocumentDropboxFileLoader;
 import com.romanpulov.violetnote.loader.document.DocumentLoaderFactory;
@@ -131,16 +133,39 @@ public class SettingsFragment extends PreferenceFragment {
         }
     }
 
+    private void startDocumentLoad(String className) {
+        mPreferenceDocumentLoaderProcessor.loaderPreExecute();
+        mLoaderServiceManager.startLoader(className);
+    }
+
     void executeDocumentLoad() {
         final Preference prefSourceType = findPreference(PreferenceRepository.PREF_KEY_SOURCE_TYPE);
         final SharedPreferences sharedPref = prefSourceType.getSharedPreferences();
         int type = sharedPref.getInt(prefSourceType.getKey(), PreferenceRepository.DEFAULT_SOURCE_TYPE);
 
-        Class<? extends AbstractContextLoader> loaderClass = DocumentLoaderFactory.classFromType(type);
+        final Class<? extends AbstractContextLoader> loaderClass = DocumentLoaderFactory.classFromType(type);
         if (loaderClass != null) {
             if (!LoaderHelper.isLoaderInternetConnectionRequired(loaderClass) || checkInternetConnection()) {
-                mPreferenceDocumentLoaderProcessor.loaderPreExecute();
-                mLoaderServiceManager.startLoader(loaderClass.getName());
+                //setup account if needed
+                AbstractAccountManager accountManager = AccountManagerFactory.fromType(getActivity(), type);
+                if (accountManager != null) {
+                    accountManager.setOnAccountSetupListener(new AbstractAccountManager.OnAccountSetupListener() {
+                        @Override
+                        public void onAccountSetupSuccess() {
+                            startDocumentLoad(loaderClass.getName());
+                        }
+
+                        @Override
+                        public void onAccountSetupFailure(String errorText) {
+                            PreferenceRepository.displayMessage(getActivity(), errorText);
+                        }
+                    });
+
+                    accountManager.setupAccount();
+                } else {
+                    //start directly if no account setup is required
+                    startDocumentLoad(loaderClass.getName());
+                }
             }
         }
     }
