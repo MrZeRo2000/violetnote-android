@@ -16,6 +16,7 @@ import com.onedrive.sdk.logger.LoggerLevel;
 
 import org.json.JSONObject;
 
+import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -247,7 +248,13 @@ public class OneDriveHelper {
         }
     }
 
-    private void test() {
+    public InputStream getInputStreamById(String itemId) {
+        return mClient.get()
+                .getDrive()
+                .getItems(itemId)
+                .getContent()
+                .buildRequest()
+                .get();
     }
 
 }

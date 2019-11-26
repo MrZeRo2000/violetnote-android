@@ -29,12 +29,15 @@ import com.romanpulov.library.dropbox.DropboxHelper;
 import com.romanpulov.library.common.loader.core.AbstractContextLoader;
 import com.romanpulov.violetnote.loader.account.AbstractAccountManager;
 import com.romanpulov.violetnote.loader.account.AccountManagerFactory;
+import com.romanpulov.violetnote.loader.document.DocumentLoadPathProvider;
+import com.romanpulov.violetnote.loader.document.DocumentOneDriveFileLoader;
 import com.romanpulov.violetnote.loader.dropbox.BackupDropboxUploader;
 import com.romanpulov.violetnote.loader.document.DocumentDropboxFileLoader;
 import com.romanpulov.violetnote.loader.document.DocumentLoaderFactory;
 import com.romanpulov.violetnote.loader.document.DocumentLocalFileLoader;
 import com.romanpulov.violetnote.loader.dropbox.RestoreDropboxFileLoader;
 import com.romanpulov.library.common.loader.core.LoaderHelper;
+import com.romanpulov.violetnote.loader.onedrive.OneDriveFileLoader;
 import com.romanpulov.violetnote.service.LoaderService;
 import com.romanpulov.violetnote.service.LoaderServiceManager;
 import com.romanpulov.violetnote.view.helper.PermissionRequestHelper;
@@ -97,6 +100,7 @@ public class SettingsFragment extends PreferenceFragment {
         mPreferenceDocumentLoaderProcessor = new PreferenceDocumentLoaderProcessor(this);
         mPreferenceLoadProcessors.put(DocumentLocalFileLoader.class.getName(), mPreferenceDocumentLoaderProcessor);
         mPreferenceLoadProcessors.put(DocumentDropboxFileLoader.class.getName(), mPreferenceDocumentLoaderProcessor);
+        mPreferenceLoadProcessors.put(DocumentOneDriveFileLoader.class.getName(), mPreferenceDocumentLoaderProcessor);
         setupPrefDocumentLoadService();
 
         mPreferenceBackupDropboxProcessor = new PreferenceBackupDropboxProcessor(this);
@@ -133,26 +137,27 @@ public class SettingsFragment extends PreferenceFragment {
         }
     }
 
-    private void startDocumentLoad(String className) {
+    private void startDocumentLoad(String className, Bundle bundle) {
         mPreferenceDocumentLoaderProcessor.loaderPreExecute();
-        mLoaderServiceManager.startLoader(className);
+        mLoaderServiceManager.startLoader(className, bundle);
     }
 
     void executeDocumentLoad() {
         final Preference prefSourceType = findPreference(PreferenceRepository.PREF_KEY_SOURCE_TYPE);
         final SharedPreferences sharedPref = prefSourceType.getSharedPreferences();
         int type = sharedPref.getInt(prefSourceType.getKey(), PreferenceRepository.DEFAULT_SOURCE_TYPE);
+        final String path = (new DocumentLoadPathProvider(getActivity())).getSourcePath();
 
         final Class<? extends AbstractContextLoader> loaderClass = DocumentLoaderFactory.classFromType(type);
         if (loaderClass != null) {
             if (!LoaderHelper.isLoaderInternetConnectionRequired(loaderClass) || checkInternetConnection()) {
                 //setup account if needed
-                AbstractAccountManager accountManager = AccountManagerFactory.fromType(getActivity(), type);
+                final AbstractAccountManager accountManager = AccountManagerFactory.fromType(getActivity(), type);
                 if (accountManager != null) {
                     accountManager.setOnAccountSetupListener(new AbstractAccountManager.OnAccountSetupListener() {
                         @Override
                         public void onAccountSetupSuccess() {
-                            startDocumentLoad(loaderClass.getName());
+                            accountManager.setupItemId(path);
                         }
 
                         @Override
@@ -160,11 +165,24 @@ public class SettingsFragment extends PreferenceFragment {
                             PreferenceRepository.displayMessage(getActivity(), errorText);
                         }
                     });
+                    accountManager.setOnAccountSetupItemListener(new AbstractAccountManager.OnAccountSetupItemListener() {
+                        @Override
+                        public void onSetupItemSuccess(String itemId) {
+                            Bundle bundle = new Bundle();
+                            bundle.putString("ItemId", itemId);
+                            startDocumentLoad(loaderClass.getName(), bundle);
+                        }
+
+                        @Override
+                        public void onSetupItemFailure(String errorText) {
+                            PreferenceRepository.displayMessage(getActivity(), errorText);
+                        }
+                    });
 
                     accountManager.setupAccount();
                 } else {
                     //start directly if no account setup is required
-                    startDocumentLoad(loaderClass.getName());
+                    startDocumentLoad(loaderClass.getName(), null);
                 }
             }
         }
@@ -211,7 +229,7 @@ public class SettingsFragment extends PreferenceFragment {
             PreferenceRepository.displayMessage(getActivity(), getString(R.string.error_backup));
         else {
             mPreferenceBackupDropboxProcessor.loaderPreExecute();
-            mLoaderServiceManager.startLoader(PreferenceBackupDropboxProcessor.getLoaderClass().getName());
+            mLoaderServiceManager.startLoader(PreferenceBackupDropboxProcessor.getLoaderClass().getName(), null);
         }
     }
 
@@ -249,7 +267,7 @@ public class SettingsFragment extends PreferenceFragment {
 
     void executeDropboxRestore() {
         mPreferenceRestoreDropboxProcessor.loaderPreExecute();
-        mLoaderServiceManager.startLoader(PreferenceRestoreDropboxProcessor.getLoaderClass().getName());
+        mLoaderServiceManager.startLoader(PreferenceRestoreDropboxProcessor.getLoaderClass().getName(), null);
     }
 
     /**
@@ -298,7 +316,7 @@ public class SettingsFragment extends PreferenceFragment {
 
     void executeLocalBackup() {
         mPreferenceBackupLocalProcessor.loaderPreExecute();
-        mLoaderServiceManager.startLoader(PreferenceBackupLocalProcessor.getLoaderClass().getName());
+        mLoaderServiceManager.startLoader(PreferenceBackupLocalProcessor.getLoaderClass().getName(), null);
     }
 
     private void setupPrefLocalBackupLoadService() {
@@ -327,7 +345,7 @@ public class SettingsFragment extends PreferenceFragment {
 
     public void executeLocalRestore() {
         mPreferenceRestoreLocalProcessor.loaderPreExecute();
-        mLoaderServiceManager.startLoader(PreferenceRestoreLocalProcessor.getLoaderClass().getName());
+        mLoaderServiceManager.startLoader(PreferenceRestoreLocalProcessor.getLoaderClass().getName(), null);
     }
 
     private void setupPrefLocalRestoreLoadService() {

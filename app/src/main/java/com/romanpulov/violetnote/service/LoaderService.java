@@ -3,6 +3,7 @@ package com.romanpulov.violetnote.service;
 import android.app.IntentService;
 import android.content.Intent;
 import android.os.Binder;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
@@ -21,6 +22,7 @@ import static com.romanpulov.violetnote.common.NotificationRepository.NOTIFICATI
 
 public class LoaderService extends IntentService {
     public static final String SERVICE_PARAM_LOADER_NAME = "LoaderService.LoaderName";
+    public static final String SERVICE_PARAM_BUNDLE = "LoaderService.Bundle";
     public static final String SERVICE_RESULT_INTENT_NAME = "LoaderServiceResult";
     public static final String SERVICE_RESULT_LOADER_NAME = "LoaderServiceResult.LoaderName";
     public static final String SERVICE_RESULT_ERROR_MESSAGE = "LoaderServiceResult.ErrorMessage";
@@ -44,6 +46,8 @@ public class LoaderService extends IntentService {
         if (intent != null) {
             LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(this);
             mLoaderClassName = intent.getStringExtra(SERVICE_PARAM_LOADER_NAME);
+            Bundle bundle = intent.getBundleExtra(SERVICE_PARAM_BUNDLE);
+
             String errorMessage = null;
             log("onHandleEvent : " + mLoaderClassName);
             try {
@@ -51,6 +55,7 @@ public class LoaderService extends IntentService {
                 if (loader != null) {
                     log("created loader : " + mLoaderClassName);
                     //Thread.sleep(5000);
+                    loader.setBundle(bundle);
                     loader.load();
                 } else
                     errorMessage = "Failed to create loader : " + mLoaderClassName;

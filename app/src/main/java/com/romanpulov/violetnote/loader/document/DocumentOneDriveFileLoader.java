@@ -2,21 +2,17 @@ package com.romanpulov.violetnote.loader.document;
 
 import android.content.Context;
 
+import com.romanpulov.library.common.loader.core.LoadPathProvider;
 import com.romanpulov.violetnote.R;
-import com.romanpulov.violetnote.loader.dropbox.DropboxFileLoader;
 import com.romanpulov.violetnote.loader.helper.LoaderNotificationHelper;
+import com.romanpulov.violetnote.loader.onedrive.OneDriveFileLoader;
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 
 import static com.romanpulov.violetnote.common.NotificationRepository.NOTIFICATION_ID_LOADER;
 
-/**
- * Document loader from dropbox
- * Created by romanpulov on 11.10.2017.
- */
+public class DocumentOneDriveFileLoader extends OneDriveFileLoader {
 
-public class DocumentDropboxFileLoader extends DropboxFileLoader {
-
-    public DocumentDropboxFileLoader(Context context) {
+    public DocumentOneDriveFileLoader(Context context) {
         super(context, new DocumentLoadPathProvider(context));
     }
 

@@ -24,19 +24,37 @@ public abstract class AbstractAccountManager <T>  {
         void onAccountSetupFailure(String errorText);
     }
 
-    protected OnAccountSetupListener mOnAccountSetupListener;
+    protected OnAccountSetupListener mAccountSetupListener;
+
+    public interface OnAccountSetupItemListener {
+        void onSetupItemSuccess(String itemId);
+        void onSetupItemFailure(String errorText);
+    }
+
+    protected OnAccountSetupItemListener mAccountSetupItemListener;
+
+    public void setOnAccountSetupItemListener(OnAccountSetupItemListener listener) {
+        this.mAccountSetupItemListener = listener;
+    }
 
     public void setOnAccountSetupListener(OnAccountSetupListener value) {
-        this.mOnAccountSetupListener = value;
+        this.mAccountSetupListener = value;
     }
 
     protected abstract void internalSetupAccount();
+    public void setupItemId(String path) {
+        if (mAccountSetupItemListener != null) {
+            mAccountSetupItemListener.onSetupItemSuccess(path);
+        }
+    }
 
     public void setupAccount() {
-        if (mOnAccountSetupListener != null) {
+        if (mAccountSetupListener != null) {
             internalSetupAccount();
         }
     };
+
+
 
     public AbstractAccountManager(Activity activity) {
         mActivity = activity;

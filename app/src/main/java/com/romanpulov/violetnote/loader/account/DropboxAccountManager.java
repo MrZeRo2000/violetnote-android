@@ -15,9 +15,9 @@ public class DropboxAccountManager extends AbstractAccountManager<DropboxHelper>
     protected void internalSetupAccount() {
         String accessToken = mAccountHolder.getAccessToken();
         if (accessToken == null) {
-            mOnAccountSetupListener.onAccountSetupFailure(mContext.getResources().getString(R.string.error_dropbox_auth));
+            mAccountSetupListener.onAccountSetupFailure(mContext.getResources().getString(R.string.error_dropbox_auth));
         } else {
-            mOnAccountSetupListener.onAccountSetupSuccess();
+            mAccountSetupListener.onAccountSetupSuccess();
         }
     }
 

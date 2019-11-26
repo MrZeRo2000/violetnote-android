@@ -71,7 +71,7 @@ public class SourcePathPreferenceSetup extends PreferenceSetup {
                         if (!NetworkUtils.isNetworkAvailable(mContext))
                             PreferenceRepository.displayMessage(mActivity,mActivity.getResources().getString(R.string.error_internet_not_available));
                         else {
-                            OneDriveAccountManager oneDriveAccountManager = new OneDriveAccountManager(mActivity);
+                            final OneDriveAccountManager oneDriveAccountManager = new OneDriveAccountManager(mActivity);
                             oneDriveAccountManager.setOnAccountSetupListener(new AbstractAccountManager.OnAccountSetupListener() {
                                 @Override
                                 public void onAccountSetupSuccess() {
@@ -85,6 +85,7 @@ public class SourcePathPreferenceSetup extends PreferenceSetup {
                                     PreferenceRepository.displayMessage(mActivity, errorText);
                                 }
                             });
+
                             oneDriveAccountManager.setupAccount();
 
                             return true;
