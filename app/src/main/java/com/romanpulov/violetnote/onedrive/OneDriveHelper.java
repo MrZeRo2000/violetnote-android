@@ -2,11 +2,10 @@ package com.romanpulov.violetnote.onedrive;
 
 import android.app.Activity;
 import android.support.annotation.NonNull;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.onedrive.sdk.authentication.MSAAuthenticator;
 import com.onedrive.sdk.concurrency.ICallback;
+import com.onedrive.sdk.concurrency.IProgressCallback;
 import com.onedrive.sdk.core.ClientException;
 import com.onedrive.sdk.core.DefaultClientConfig;
 import com.onedrive.sdk.core.IClientConfig;
@@ -14,8 +13,10 @@ import com.onedrive.sdk.extensions.IOneDriveClient;
 import com.onedrive.sdk.extensions.Item;
 import com.onedrive.sdk.logger.LoggerLevel;
 
-import org.json.JSONObject;
-
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.util.concurrent.atomic.AtomicReference;
@@ -29,7 +30,7 @@ public class OneDriveHelper {
     }
 
     public interface OnOneDriveItemListener {
-        void onItemReceived(Item item);
+        void onItemSuccess(Item item);
         void onItemFailure(ClientException ex);
     }
 
@@ -158,7 +159,7 @@ public class OneDriveHelper {
         @Override
         public void success(Item item) {
             if (mItemListener!= null) {
-                mItemListener.onItemReceived(item);
+                mItemListener.onItemSuccess(item);
             }
         }
 
@@ -167,6 +168,28 @@ public class OneDriveHelper {
             if (mItemListener!= null) {
                 mItemListener.onItemFailure(ex);
             }
+        }
+    };
+
+    private final IProgressCallback<Item> progressCallback = new IProgressCallback<Item>() {
+
+        @Override
+        public void success(Item item) {
+            if (mItemListener != null) {
+                mItemListener.onItemSuccess(item);
+            }
+        }
+
+        @Override
+        public void failure(ClientException ex) {
+            if (mItemListener != null) {
+                mItemListener.onItemFailure(ex);
+            }
+        }
+
+        @Override
+        public void progress(long current, long max) {
+            //not interesting
         }
     };
 
@@ -265,6 +288,35 @@ public class OneDriveHelper {
                 .getContent()
                 .buildRequest()
                 .get();
+    }
+
+    public void putFile(File file, String path) throws IOException {
+        InputStream inputStream = new FileInputStream(file);
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        byte[] buf = new byte[1024];
+        int len;
+        try {
+            while ((len = inputStream.read(buf)) > 0) {
+                outputStream.write(buf, 0, len);
+            }
+        } finally {
+            try {
+                outputStream.flush();
+                outputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        mClient.get()
+                .getDrive()
+                .getItems("root")
+                .getItemWithPath(path)
+                .getChildren()
+                .byId(file.getName())
+                .getContent()
+                .buildRequest()
+                .put(outputStream.toByteArray(), progressCallback);
     }
 
 }

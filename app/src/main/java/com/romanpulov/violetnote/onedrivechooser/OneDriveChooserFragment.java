@@ -18,7 +18,7 @@ public class OneDriveChooserFragment extends HrChooserFragment {
     {
         mOneDriveHelper.setOnOneDriveItemListener(new OneDriveHelper.OnOneDriveItemListener() {
             @Override
-            public void onItemReceived(Item item) {
+            public void onItemSuccess(Item item) {
                 updateChooseItem(fillChooseItem(OneDriveChooseItem.fromOneDriveItem(item)));
             }
 

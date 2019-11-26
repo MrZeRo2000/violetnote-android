@@ -32,7 +32,7 @@ public class OneDriveAccountManager extends AbstractAccountManager<OneDriveHelpe
     public void setupItemId(String path) {
         mAccountHolder.setOnOneDriveItemListener(new OneDriveHelper.OnOneDriveItemListener() {
             @Override
-            public void onItemReceived(Item item) {
+            public void onItemSuccess(Item item) {
                 if (mAccountSetupItemListener != null) {
                     mAccountSetupItemListener.onSetupItemSuccess(item.id);
                 }
