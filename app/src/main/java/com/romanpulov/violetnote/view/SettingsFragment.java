@@ -154,6 +154,8 @@ public class SettingsFragment extends PreferenceFragment {
                 //setup account if needed
                 final AbstractAccountManager accountManager = AccountManagerFactory.fromType(getActivity(), type);
                 if (accountManager != null) {
+                    mPreferenceDocumentLoaderProcessor.loaderPreExecute();
+
                     accountManager.setOnAccountSetupListener(new AbstractAccountManager.OnAccountSetupListener() {
                         @Override
                         public void onAccountSetupSuccess() {
@@ -162,7 +164,8 @@ public class SettingsFragment extends PreferenceFragment {
 
                         @Override
                         public void onAccountSetupFailure(String errorText) {
-                            PreferenceRepository.displayMessage(getActivity(), errorText);
+                            mPreferenceDocumentLoaderProcessor.loaderPostExecute(errorText);
+                            //PreferenceRepository.displayMessage(getActivity(), errorText);
                         }
                     });
                     accountManager.setOnAccountSetupItemListener(new AbstractAccountManager.OnAccountSetupItemListener() {
@@ -175,7 +178,8 @@ public class SettingsFragment extends PreferenceFragment {
 
                         @Override
                         public void onSetupItemFailure(String errorText) {
-                            PreferenceRepository.displayMessage(getActivity(), errorText);
+                            mPreferenceDocumentLoaderProcessor.loaderPostExecute(errorText);
+                            //PreferenceRepository.displayMessage(getActivity(), errorText);
                         }
                     });
 
