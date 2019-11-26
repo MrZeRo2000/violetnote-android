@@ -11,6 +11,8 @@ public class AccountManagerFactory {
                 return null;
             case PreferenceRepository.SOURCE_TYPE_DROPBOX:
                 return new DropboxAccountManager(activity);
+            case PreferenceRepository.SOURCE_TYPE_ONEDRIVE:
+                return new OneDriveAccountManager(activity);
             default:
                 return null;
         }
