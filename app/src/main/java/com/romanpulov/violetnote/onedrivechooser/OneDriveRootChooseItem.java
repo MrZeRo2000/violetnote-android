@@ -4,6 +4,9 @@ import com.romanpulov.violetnote.chooser.ChooseItem;
 
 import java.util.List;
 
+import static com.romanpulov.violetnote.onedrivechooser.OneDriveChooseItem.ROOT_FULL_PATH;
+import static com.romanpulov.violetnote.onedrivechooser.OneDriveChooseItem.ROOT_PATH;
+
 public class OneDriveRootChooseItem implements ChooseItem {
     private String mPath;
 
@@ -19,12 +22,12 @@ public class OneDriveRootChooseItem implements ChooseItem {
 
     @Override
     public String getItemPath() {
-        return mPath.replace("/drive/root", "root");
+        return mPath.replace(ROOT_FULL_PATH, ROOT_PATH);
     }
 
     @Override
     public String getDisplayItemPath() {
-        return getItemPath().replace("root:", "");
+        return getItemPath().replace(ROOT_PATH, "");
     }
 
     @Override

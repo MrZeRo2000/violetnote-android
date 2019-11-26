@@ -9,6 +9,10 @@ import com.romanpulov.violetnote.chooser.ChooseItem;
 import com.romanpulov.violetnote.chooser.HrChooserFragment;
 import com.romanpulov.violetnote.onedrive.OneDriveHelper;
 
+import java.io.File;
+
+import static com.romanpulov.violetnote.onedrivechooser.OneDriveChooseItem.ROOT_PATH;
+
 public class OneDriveChooserFragment extends HrChooserFragment {
     private final OneDriveHelper mOneDriveHelper = OneDriveHelper.getInstance();
     {
@@ -35,7 +39,16 @@ public class OneDriveChooserFragment extends HrChooserFragment {
         Activity activity = getActivity();
         if (activity != null){
             setProgress();
-            String path = item == null ? "root:" : item.getItemPath();
+
+            String path;
+            if (item == null) {
+                path = ROOT_PATH;
+            } else if (item.getItemPath().equals(ROOT_PATH)) {
+                path = ROOT_PATH;
+            } else {
+                path = ROOT_PATH + File.separator + item.getItemPath();
+            }
+
             mOneDriveHelper.listItems(activity, path);
         }
     }

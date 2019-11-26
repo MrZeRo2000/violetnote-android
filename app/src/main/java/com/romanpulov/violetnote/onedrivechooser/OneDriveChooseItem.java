@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OneDriveChooseItem implements ChooseItem {
+    public static final String ROOT_FULL_PATH = "/drive/root:";
+    public static final String ROOT_PATH = "root:";
+
     private Item mOneDriveItem;
     private String mErrorText;
 
@@ -21,7 +24,7 @@ public class OneDriveChooseItem implements ChooseItem {
     @Override
     public String getItemPath() {
         String parentPath = mOneDriveItem.parentReference.path == null ? "" : mOneDriveItem.parentReference.path;
-        parentPath = parentPath.replace("/drive/root", "root");
+        parentPath = parentPath.replace(ROOT_FULL_PATH, "");
         if (parentPath.length() > 0) {
             parentPath = parentPath + File.separator;
         }
@@ -30,7 +33,7 @@ public class OneDriveChooseItem implements ChooseItem {
 
     @Override
     public String getDisplayItemPath() {
-        return getItemPath().replace("root:", "");
+        return getItemPath();
     }
 
     @Override
@@ -57,7 +60,7 @@ public class OneDriveChooseItem implements ChooseItem {
 
             if (oneDriveItems.size() > 0) {
                 String parentPath = oneDriveItems.get(0).parentReference.path;
-                if (!(parentPath.equals("/drive/root:"))) {
+                if (!(parentPath.equals(ROOT_FULL_PATH))) {
                     String parentItemPath = ChooseItemUtils.getParentItemPath(parentPath);
                     mItems.add(OneDriveRootChooseItem.fromPath(parentItemPath));
                 }

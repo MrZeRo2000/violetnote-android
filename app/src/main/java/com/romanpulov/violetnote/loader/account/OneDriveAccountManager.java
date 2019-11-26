@@ -46,7 +46,8 @@ public class OneDriveAccountManager extends AbstractAccountManager<OneDriveHelpe
 
             }
         });
-        mAccountHolder.listItems(mActivity, path);
+        String listPath = path.startsWith("root:") ? path : "root:/" + path;
+        mAccountHolder.listItems(mActivity, listPath);
     }
 
 
