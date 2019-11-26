@@ -257,4 +257,14 @@ public class OneDriveHelper {
                 .get();
     }
 
+    public InputStream getInputStreamByPath(String path) {
+        return mClient.get()
+                .getDrive()
+                .getItems("root")
+                .getItemWithPath(path)
+                .getContent()
+                .buildRequest()
+                .get();
+    }
+
 }

@@ -137,9 +137,9 @@ public class SettingsFragment extends PreferenceFragment {
         }
     }
 
-    private void startDocumentLoad(String className, Bundle bundle) {
+    private void startDocumentLoad(String className) {
         mPreferenceDocumentLoaderProcessor.loaderPreExecute();
-        mLoaderServiceManager.startLoader(className, bundle);
+        mLoaderServiceManager.startLoader(className, null);
     }
 
     void executeDocumentLoad() {
@@ -159,34 +159,19 @@ public class SettingsFragment extends PreferenceFragment {
                     accountManager.setOnAccountSetupListener(new AbstractAccountManager.OnAccountSetupListener() {
                         @Override
                         public void onAccountSetupSuccess() {
-                            accountManager.setupItemId(path);
+                            startDocumentLoad(loaderClass.getName());
                         }
 
                         @Override
                         public void onAccountSetupFailure(String errorText) {
                             mPreferenceDocumentLoaderProcessor.loaderPostExecute(errorText);
-                            //PreferenceRepository.displayMessage(getActivity(), errorText);
-                        }
-                    });
-                    accountManager.setOnAccountSetupItemListener(new AbstractAccountManager.OnAccountSetupItemListener() {
-                        @Override
-                        public void onSetupItemSuccess(String itemId) {
-                            Bundle bundle = new Bundle();
-                            bundle.putString("ItemId", itemId);
-                            startDocumentLoad(loaderClass.getName(), bundle);
-                        }
-
-                        @Override
-                        public void onSetupItemFailure(String errorText) {
-                            mPreferenceDocumentLoaderProcessor.loaderPostExecute(errorText);
-                            //PreferenceRepository.displayMessage(getActivity(), errorText);
                         }
                     });
 
                     accountManager.setupAccount();
                 } else {
                     //start directly if no account setup is required
-                    startDocumentLoad(loaderClass.getName(), null);
+                    startDocumentLoad(loaderClass.getName());
                 }
             }
         }

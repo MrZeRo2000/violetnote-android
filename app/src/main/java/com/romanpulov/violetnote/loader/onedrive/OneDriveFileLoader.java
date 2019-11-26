@@ -18,12 +18,7 @@ public class OneDriveFileLoader extends FileLoader {
 
     @Override
     public void load() throws Exception {
-        String itemId = mBundle.getString("ItemId");
-        if (itemId == null) {
-            throw new Exception("ItemId not found");
-        }
-
-        InputStream inputStream = new BufferedInputStream(mOneDriveHelper.getInputStreamById(itemId));
+        InputStream inputStream = new BufferedInputStream(mOneDriveHelper.getInputStreamByPath(getLoadPathProvider().getSourcePath()));
         File mDestFile = new File(getLoadPathProvider().getDestPath());
         OutputStream outputStream = new FileOutputStream(mDestFile);
 
