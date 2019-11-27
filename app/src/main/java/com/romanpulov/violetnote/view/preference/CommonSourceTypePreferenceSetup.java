@@ -7,26 +7,14 @@ import android.support.v7.app.AlertDialog;
 
 import com.romanpulov.violetnote.R;
 
-import static com.romanpulov.violetnote.view.preference.PreferenceRepository.DEFAULT_SOURCE_TYPE;
-import static com.romanpulov.violetnote.view.preference.PreferenceRepository.PREF_KEY_SOURCE_TYPE;
-
-/**
- * Source type preference setup
- * Created by romanpulov on 06.09.2017.
- */
-
-public class SourceTypePreferenceSetup extends PreferenceSetup {
+public class CommonSourceTypePreferenceSetup extends PreferenceSetup {
+    private final int mSourceTypeEntriesId;
     private final int mDefaultValue;
-
-    public SourceTypePreferenceSetup(PreferenceFragment preferenceFragment) {
-        super(preferenceFragment, PREF_KEY_SOURCE_TYPE);
-        mDefaultValue = DEFAULT_SOURCE_TYPE;
-    }
 
     @Override
     public void execute() {
 
-        final String[] prefSourceTypeEntries = mContext.getResources().getStringArray(R.array.pref_source_type_entries);
+        final String[] prefSourceTypeEntries = mContext.getResources().getStringArray(mSourceTypeEntriesId);
 
         //Preference prefSourceType = findPreference(PREF_KEY_SOURCE_TYPE);
         mPreference.setSummary(prefSourceTypeEntries[mPreference.getPreferenceManager().getSharedPreferences().getInt(mPreference.getKey(), mDefaultValue)]);
@@ -47,7 +35,7 @@ public class SourceTypePreferenceSetup extends PreferenceSetup {
                 final AlertDialog.Builder alert = new AlertDialog.Builder(mActivity, R.style.AlertDialogTheme);
                 alert
                         .setTitle(R.string.pref_title_source_type)
-                        .setSingleChoiceItems(R.array.pref_source_type_entries, result.which, new DialogInterface.OnClickListener() {
+                        .setSingleChoiceItems(mSourceTypeEntriesId, result.which, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 result.which = which;
@@ -79,5 +67,16 @@ public class SourceTypePreferenceSetup extends PreferenceSetup {
             }
         });
 
+    }
+
+    public CommonSourceTypePreferenceSetup(
+            PreferenceFragment preferenceFragment,
+            String preferenceKey,
+            int sourceTypeEntriesId,
+            int defaultValue
+    ) {
+        super(preferenceFragment, preferenceKey);
+        this.mSourceTypeEntriesId = sourceTypeEntriesId;
+        this.mDefaultValue = defaultValue;
     }
 }

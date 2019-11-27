@@ -45,7 +45,7 @@ import com.romanpulov.violetnote.view.preference.AccountDropboxPreferenceSetup;
 import com.romanpulov.violetnote.view.preference.AccountOneDrivePreferenceSetup;
 import com.romanpulov.violetnote.view.preference.BasicNoteGroupsPreferenceSetup;
 import com.romanpulov.violetnote.view.preference.CheckedUpdateIntervalPreferenceSetup;
-import com.romanpulov.violetnote.view.preference.CloudStorageTypePreferenceSetup;
+import com.romanpulov.violetnote.view.preference.CommonSourceTypePreferenceSetup;
 import com.romanpulov.violetnote.view.preference.processor.PreferenceBackupDropboxProcessor;
 import com.romanpulov.violetnote.view.preference.processor.PreferenceBackupLocalProcessor;
 import com.romanpulov.violetnote.view.preference.processor.PreferenceDocumentLoaderProcessor;
@@ -53,11 +53,15 @@ import com.romanpulov.violetnote.view.preference.processor.PreferenceLoaderProce
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 import com.romanpulov.violetnote.view.preference.processor.PreferenceRestoreDropboxProcessor;
 import com.romanpulov.violetnote.view.preference.SourcePathPreferenceSetup;
-import com.romanpulov.violetnote.view.preference.SourceTypePreferenceSetup;
 import com.romanpulov.violetnote.view.preference.processor.PreferenceRestoreLocalProcessor;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.romanpulov.violetnote.view.preference.PreferenceRepository.DEFAULT_CLOUD_SOURCE_TYPE;
+import static com.romanpulov.violetnote.view.preference.PreferenceRepository.DEFAULT_SOURCE_TYPE;
+import static com.romanpulov.violetnote.view.preference.PreferenceRepository.PREF_KEY_BASIC_NOTE_CLOUD_STORAGE;
+import static com.romanpulov.violetnote.view.preference.PreferenceRepository.PREF_KEY_SOURCE_TYPE;
 
 public class SettingsFragment extends PreferenceFragment {
 
@@ -120,11 +124,11 @@ public class SettingsFragment extends PreferenceFragment {
         setupPrefLocalRestoreLoadService();
 
         new BasicNoteGroupsPreferenceSetup(this).execute();
-        new SourceTypePreferenceSetup(this).execute();
+        new CommonSourceTypePreferenceSetup(this, PREF_KEY_SOURCE_TYPE, R.array.pref_source_type_entries, DEFAULT_SOURCE_TYPE).execute();
         new SourcePathPreferenceSetup(this).execute();
         new AccountDropboxPreferenceSetup(this).execute();
         new AccountOneDrivePreferenceSetup(this).execute();
-        new CloudStorageTypePreferenceSetup(this).execute();
+        new CommonSourceTypePreferenceSetup(this, PREF_KEY_BASIC_NOTE_CLOUD_STORAGE, R.array.pref_cloud_storage_entries, DEFAULT_CLOUD_SOURCE_TYPE).execute();
         new CheckedUpdateIntervalPreferenceSetup(this).execute();
     }
 
@@ -143,7 +147,7 @@ public class SettingsFragment extends PreferenceFragment {
     }
 
     void executeDocumentLoad() {
-        final Preference prefSourceType = findPreference(PreferenceRepository.PREF_KEY_SOURCE_TYPE);
+        final Preference prefSourceType = findPreference(PREF_KEY_SOURCE_TYPE);
         final SharedPreferences sharedPref = prefSourceType.getSharedPreferences();
         int type = sharedPref.getInt(prefSourceType.getKey(), PreferenceRepository.DEFAULT_SOURCE_TYPE);
         final String path = (new DocumentLoadPathProvider(getActivity())).getSourcePath();
