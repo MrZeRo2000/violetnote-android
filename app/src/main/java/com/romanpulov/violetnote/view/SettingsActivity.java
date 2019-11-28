@@ -46,7 +46,7 @@ public class SettingsActivity extends ActionBarCompatActivity {
                     settingsFragment.executeDropboxRestore();
                     break;
                 case PERMISSION_REQUEST_DROPBOX_BACKUP:
-                    settingsFragment.executeDropboxBackup();
+                    settingsFragment.executeCloudBackup();
                 case PERMISSION_REQUEST_DOCUMENT_LOAD:
                     settingsFragment.executeDocumentLoad();
                 default:

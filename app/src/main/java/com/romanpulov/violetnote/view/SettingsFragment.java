@@ -29,15 +29,14 @@ import com.romanpulov.library.dropbox.DropboxHelper;
 import com.romanpulov.library.common.loader.core.AbstractContextLoader;
 import com.romanpulov.violetnote.loader.account.AbstractAccountManager;
 import com.romanpulov.violetnote.loader.account.AccountManagerFactory;
-import com.romanpulov.violetnote.loader.document.DocumentLoadPathProvider;
 import com.romanpulov.violetnote.loader.document.DocumentOneDriveFileLoader;
 import com.romanpulov.violetnote.loader.dropbox.BackupDropboxUploader;
 import com.romanpulov.violetnote.loader.document.DocumentDropboxFileLoader;
-import com.romanpulov.violetnote.loader.document.DocumentLoaderFactory;
+import com.romanpulov.violetnote.loader.factory.BackupUploaderFactory;
+import com.romanpulov.violetnote.loader.factory.DocumentLoaderFactory;
 import com.romanpulov.violetnote.loader.document.DocumentLocalFileLoader;
 import com.romanpulov.violetnote.loader.dropbox.RestoreDropboxFileLoader;
 import com.romanpulov.library.common.loader.core.LoaderHelper;
-import com.romanpulov.violetnote.loader.onedrive.OneDriveFileLoader;
 import com.romanpulov.violetnote.service.LoaderService;
 import com.romanpulov.violetnote.service.LoaderServiceManager;
 import com.romanpulov.violetnote.view.helper.PermissionRequestHelper;
@@ -46,7 +45,7 @@ import com.romanpulov.violetnote.view.preference.AccountOneDrivePreferenceSetup;
 import com.romanpulov.violetnote.view.preference.BasicNoteGroupsPreferenceSetup;
 import com.romanpulov.violetnote.view.preference.CheckedUpdateIntervalPreferenceSetup;
 import com.romanpulov.violetnote.view.preference.CommonSourceTypePreferenceSetup;
-import com.romanpulov.violetnote.view.preference.processor.PreferenceBackupDropboxProcessor;
+import com.romanpulov.violetnote.view.preference.processor.PreferenceBackupCloudProcessor;
 import com.romanpulov.violetnote.view.preference.processor.PreferenceBackupLocalProcessor;
 import com.romanpulov.violetnote.view.preference.processor.PreferenceDocumentLoaderProcessor;
 import com.romanpulov.violetnote.view.preference.processor.PreferenceLoaderProcessor;
@@ -66,7 +65,7 @@ import static com.romanpulov.violetnote.view.preference.PreferenceRepository.PRE
 public class SettingsFragment extends PreferenceFragment {
 
     private PreferenceDocumentLoaderProcessor mPreferenceDocumentLoaderProcessor;
-    private PreferenceBackupDropboxProcessor mPreferenceBackupDropboxProcessor;
+    private PreferenceBackupCloudProcessor mPreferenceBackupCloudProcessor;
     private PreferenceRestoreDropboxProcessor mPreferenceRestoreDropboxProcessor;
     private PreferenceBackupLocalProcessor mPreferenceBackupLocalProcessor;
     private PreferenceRestoreLocalProcessor mPreferenceRestoreLocalProcessor;
@@ -107,9 +106,9 @@ public class SettingsFragment extends PreferenceFragment {
         mPreferenceLoadProcessors.put(DocumentOneDriveFileLoader.class.getName(), mPreferenceDocumentLoaderProcessor);
         setupPrefDocumentLoadService();
 
-        mPreferenceBackupDropboxProcessor = new PreferenceBackupDropboxProcessor(this);
-        mPreferenceLoadProcessors.put(BackupDropboxUploader.class.getName(), mPreferenceBackupDropboxProcessor);
-        setupPrefDropboxBackupLoadService();
+        mPreferenceBackupCloudProcessor = new PreferenceBackupCloudProcessor(this);
+        mPreferenceLoadProcessors.put(BackupDropboxUploader.class.getName(), mPreferenceBackupCloudProcessor);
+        setupPrefCloudBackupLoadService();
 
         mPreferenceRestoreDropboxProcessor = new PreferenceRestoreDropboxProcessor(this);
         mPreferenceLoadProcessors.put(RestoreDropboxFileLoader.class.getName(), mPreferenceRestoreDropboxProcessor);
@@ -150,13 +149,11 @@ public class SettingsFragment extends PreferenceFragment {
         final Preference prefSourceType = findPreference(PREF_KEY_SOURCE_TYPE);
         final SharedPreferences sharedPref = prefSourceType.getSharedPreferences();
         int type = sharedPref.getInt(prefSourceType.getKey(), PreferenceRepository.DEFAULT_SOURCE_TYPE);
-        final String path = (new DocumentLoadPathProvider(getActivity())).getSourcePath();
 
         final Class<? extends AbstractContextLoader> loaderClass = DocumentLoaderFactory.classFromType(type);
         if (loaderClass != null) {
             if (!LoaderHelper.isLoaderInternetConnectionRequired(loaderClass) || checkInternetConnection()) {
-                //setup account if needed
-                final AbstractAccountManager accountManager = AccountManagerFactory.fromType(getActivity(), type);
+                final AbstractAccountManager accountManager = AccountManagerFactory.fromDocumentSourceType(getActivity(), type);
                 if (accountManager != null) {
                     mPreferenceDocumentLoaderProcessor.loaderPreExecute();
 
@@ -177,6 +174,7 @@ public class SettingsFragment extends PreferenceFragment {
                     //start directly if no account setup is required
                     startDocumentLoad(loaderClass.getName());
                 }
+                //setup account if needed
             }
         }
     }
@@ -214,22 +212,48 @@ public class SettingsFragment extends PreferenceFragment {
         });
     }
 
-    void executeDropboxBackup() {
-        DBStorageManager storageManager = new DBStorageManager(getActivity());
-        String backupResult = storageManager.createRollingLocalBackup();
+    void executeCloudBackup() {
+        final Preference prefSourceType = findPreference(PREF_KEY_BASIC_NOTE_CLOUD_STORAGE);
+        final SharedPreferences sharedPref = prefSourceType.getSharedPreferences();
+        int type = sharedPref.getInt(prefSourceType.getKey(), DEFAULT_CLOUD_SOURCE_TYPE);
 
-        if (backupResult == null)
-            PreferenceRepository.displayMessage(getActivity(), getString(R.string.error_backup));
-        else {
-            mPreferenceBackupDropboxProcessor.loaderPreExecute();
-            mLoaderServiceManager.startLoader(PreferenceBackupDropboxProcessor.getLoaderClass().getName(), null);
+        final Class<? extends AbstractContextLoader> loaderClass = BackupUploaderFactory.classFromCloudType(type);
+
+        if (loaderClass != null) {
+            final AbstractAccountManager accountManager = AccountManagerFactory.fromCloudSourceType(getActivity(), type);
+            if (accountManager != null) {
+                mPreferenceDocumentLoaderProcessor.loaderPreExecute();
+
+                accountManager.setOnAccountSetupListener(new AbstractAccountManager.OnAccountSetupListener() {
+                    @Override
+                    public void onAccountSetupSuccess() {
+                        DBStorageManager storageManager = new DBStorageManager(getActivity());
+                        String backupResult = storageManager.createRollingLocalBackup();
+
+                        if (backupResult == null)
+                            PreferenceRepository.displayMessage(getActivity(), getString(R.string.error_backup));
+                        else {
+                            mPreferenceBackupCloudProcessor.loaderPreExecute();
+                            mLoaderServiceManager.startLoader(loaderClass.getName(), null);
+                        }
+                    }
+
+                    @Override
+                    public void onAccountSetupFailure(String errorText) {
+                        mPreferenceDocumentLoaderProcessor.loaderPostExecute(errorText);
+                    }
+                });
+
+                accountManager.setupAccount();
+            }
+
         }
     }
 
     /**
      * Dropbox backup using service
      */
-    private void setupPrefDropboxBackupLoadService() {
+    private void setupPrefCloudBackupLoadService() {
         PreferenceRepository.updatePreferenceKeySummary(this, PreferenceRepository.PREF_KEY_BASIC_NOTE_CLOUD_BACKUP, PreferenceRepository.PREF_LOAD_CURRENT_VALUE);
 
         Preference pref = findPreference(PreferenceRepository.PREF_KEY_BASIC_NOTE_CLOUD_BACKUP);
@@ -247,7 +271,7 @@ public class SettingsFragment extends PreferenceFragment {
                         PreferenceRepository.displayMessage(getActivity(), getText(R.string.error_load_process_running));
                     else {
                         if (mWriteStorageRequestHelper.isPermissionGranted())
-                            executeDropboxBackup();
+                            executeCloudBackup();
                         else
                             mWriteStorageRequestHelper.requestPermission(SettingsActivity.PERMISSION_REQUEST_DROPBOX_BACKUP);
                     }

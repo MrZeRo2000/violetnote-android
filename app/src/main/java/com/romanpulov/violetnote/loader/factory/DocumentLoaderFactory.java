@@ -1,6 +1,9 @@
-package com.romanpulov.violetnote.loader.document;
+package com.romanpulov.violetnote.loader.factory;
 
 import com.romanpulov.library.common.loader.core.AbstractContextLoader;
+import com.romanpulov.violetnote.loader.document.DocumentDropboxFileLoader;
+import com.romanpulov.violetnote.loader.document.DocumentLocalFileLoader;
+import com.romanpulov.violetnote.loader.document.DocumentOneDriveFileLoader;
 import com.romanpulov.violetnote.loader.onedrive.OneDriveFileLoader;
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 

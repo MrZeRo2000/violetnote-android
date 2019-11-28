@@ -25,6 +25,9 @@ public class PreferenceRepository {
     public static final int SOURCE_TYPE_DROPBOX = 1;
     public static final int SOURCE_TYPE_ONEDRIVE = 2;
     public static final int DEFAULT_SOURCE_TYPE = 0;
+
+    public static final int CLOUD_SOURCE_TYPE_DROPBOX = 0;
+    public static final int CLOUD_SOURCE_TYPE_ONEDRIVE = 1;
     public static final int DEFAULT_CLOUD_SOURCE_TYPE = 0;
 
     public static final int DEFAULT_CHECKED_UPDATE_REFRESH_INTERVAL = 0;
