@@ -43,7 +43,7 @@ public class SettingsActivity extends ActionBarCompatActivity {
                     settingsFragment.executeLocalRestore();
                     break;
                 case PERMISSION_REQUEST_DROPBOX_RESTORE:
-                    settingsFragment.executeDropboxRestore();
+                    settingsFragment.executeCloudRestore();
                     break;
                 case PERMISSION_REQUEST_DROPBOX_BACKUP:
                     settingsFragment.executeCloudBackup();

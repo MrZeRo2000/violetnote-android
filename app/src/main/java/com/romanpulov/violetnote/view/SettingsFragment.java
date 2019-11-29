@@ -31,15 +31,16 @@ import com.romanpulov.violetnote.loader.account.AccountManagerFactory;
 import com.romanpulov.violetnote.loader.document.DocumentOneDriveFileLoader;
 import com.romanpulov.violetnote.loader.dropbox.BackupDropboxUploader;
 import com.romanpulov.violetnote.loader.document.DocumentDropboxFileLoader;
+import com.romanpulov.violetnote.loader.factory.BackupRestoreFactory;
 import com.romanpulov.violetnote.loader.factory.BackupUploaderFactory;
 import com.romanpulov.violetnote.loader.factory.DocumentLoaderFactory;
 import com.romanpulov.violetnote.loader.document.DocumentLocalFileLoader;
 import com.romanpulov.violetnote.loader.dropbox.RestoreDropboxFileLoader;
 import com.romanpulov.library.common.loader.core.LoaderHelper;
 import com.romanpulov.violetnote.loader.onedrive.BackupOneDriveUploader;
+import com.romanpulov.violetnote.loader.onedrive.RestoreOneDriveFileLoader;
 import com.romanpulov.violetnote.service.LoaderService;
 import com.romanpulov.violetnote.service.LoaderServiceManager;
-import com.romanpulov.violetnote.view.helper.PermissionRequestHelper;
 import com.romanpulov.violetnote.view.preference.AccountDropboxPreferenceSetup;
 import com.romanpulov.violetnote.view.preference.AccountOneDrivePreferenceSetup;
 import com.romanpulov.violetnote.view.preference.BasicNoteGroupsPreferenceSetup;
@@ -50,7 +51,7 @@ import com.romanpulov.violetnote.view.preference.processor.PreferenceBackupLocal
 import com.romanpulov.violetnote.view.preference.processor.PreferenceDocumentLoaderProcessor;
 import com.romanpulov.violetnote.view.preference.processor.PreferenceLoaderProcessor;
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
-import com.romanpulov.violetnote.view.preference.processor.PreferenceRestoreDropboxProcessor;
+import com.romanpulov.violetnote.view.preference.processor.PreferenceRestoreCloudProcessor;
 import com.romanpulov.violetnote.view.preference.SourcePathPreferenceSetup;
 import com.romanpulov.violetnote.view.preference.processor.PreferenceRestoreLocalProcessor;
 
@@ -67,7 +68,7 @@ public class SettingsFragment extends PreferenceFragment {
 
     private PreferenceDocumentLoaderProcessor mPreferenceDocumentLoaderProcessor;
     private PreferenceBackupCloudProcessor mPreferenceBackupCloudProcessor;
-    private PreferenceRestoreDropboxProcessor mPreferenceRestoreDropboxProcessor;
+    private PreferenceRestoreCloudProcessor mPreferenceRestoreCloudProcessor;
     private PreferenceBackupLocalProcessor mPreferenceBackupLocalProcessor;
     private PreferenceRestoreLocalProcessor mPreferenceRestoreLocalProcessor;
 
@@ -112,8 +113,9 @@ public class SettingsFragment extends PreferenceFragment {
         mPreferenceLoadProcessors.put(BackupOneDriveUploader.class.getName(), mPreferenceBackupCloudProcessor);
         setupPrefCloudBackupLoadService();
 
-        mPreferenceRestoreDropboxProcessor = new PreferenceRestoreDropboxProcessor(this);
-        mPreferenceLoadProcessors.put(RestoreDropboxFileLoader.class.getName(), mPreferenceRestoreDropboxProcessor);
+        mPreferenceRestoreCloudProcessor = new PreferenceRestoreCloudProcessor(this);
+        mPreferenceLoadProcessors.put(RestoreDropboxFileLoader.class.getName(), mPreferenceRestoreCloudProcessor);
+        mPreferenceLoadProcessors.put(RestoreOneDriveFileLoader.class.getName(), mPreferenceRestoreCloudProcessor);
         setupPrefDropboxRestoreLoadService();
 
         mPreferenceBackupLocalProcessor = new PreferenceBackupLocalProcessor(this);
@@ -295,9 +297,42 @@ public class SettingsFragment extends PreferenceFragment {
         });
     }
 
-    void executeDropboxRestore() {
-        mPreferenceRestoreDropboxProcessor.loaderPreExecute();
-        mLoaderServiceManager.startLoader(PreferenceRestoreDropboxProcessor.getLoaderClass().getName(), null);
+    void executeCloudRestore() {
+        /*
+        mPreferenceRestoreCloudProcessor.loaderPreExecute();
+        mLoaderServiceManager.startLoader(PreferenceRestoreCloudProcessor.getLoaderClass().getName(), null);
+
+         */
+        final Preference prefSourceType = findPreference(PREF_KEY_BASIC_NOTE_CLOUD_STORAGE);
+        final SharedPreferences sharedPref = prefSourceType.getSharedPreferences();
+        int type = sharedPref.getInt(prefSourceType.getKey(), DEFAULT_CLOUD_SOURCE_TYPE);
+
+        final Class<? extends AbstractContextLoader> loaderClass = BackupRestoreFactory.classFromCloudType(type);
+
+        if (loaderClass != null) {
+            final AbstractAccountManager accountManager = AccountManagerFactory.fromCloudSourceType(getActivity(), type);
+            if (accountManager != null) {
+                mPreferenceRestoreCloudProcessor.loaderPreExecute();
+
+                accountManager.setOnAccountSetupListener(new AbstractAccountManager.OnAccountSetupListener() {
+                    @Override
+                    public void onAccountSetupSuccess() {
+                        mPreferenceRestoreCloudProcessor.loaderPreExecute();
+                        mLoaderServiceManager.startLoader(loaderClass.getName(), null);
+                    }
+
+                    @Override
+                    public void onAccountSetupFailure(String errorText) {
+                        displayMessage(getActivity(), errorText);
+                        mPreferenceRestoreCloudProcessor.loaderPostExecute(errorText);
+                    }
+                });
+
+                accountManager.setupAccount();
+            }
+
+        }
+
     }
 
     /**
@@ -330,12 +365,12 @@ public class SettingsFragment extends PreferenceFragment {
                                     public void onClick(DialogInterface dialog, int which) {
                                         /*
                                         if (mWriteStorageRequestHelper.isPermissionGranted())
-                                            executeDropboxRestore();
+                                            executeCloudRestore();
                                         else
                                             mWriteStorageRequestHelper.requestPermission(SettingsActivity.PERMISSION_REQUEST_DROPBOX_RESTORE);
 
                                          */
-                                        executeDropboxRestore();
+                                        executeCloudRestore();
                                     }
                                 })
                                 .setNegativeButton(R.string.cancel, null)

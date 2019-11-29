@@ -1,4 +1,4 @@
-package com.romanpulov.violetnote.loader.dropbox;
+package com.romanpulov.violetnote.loader.cloud;
 
 import android.content.Context;
 
@@ -13,10 +13,10 @@ import java.io.File;
  * Created by romanpulov on 22.09.2017.
  */
 
-public class RestoreDropboxLoadPathProvider extends ContextLoadPathProvider {
+public class RestoreCloudLoadPathProvider extends ContextLoadPathProvider {
 
 
-    public RestoreDropboxLoadPathProvider(Context context) {
+    public RestoreCloudLoadPathProvider(Context context) {
         super(context);
     }
 

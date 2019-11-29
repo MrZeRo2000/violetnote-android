@@ -41,12 +41,6 @@ public class OneDriveHelper {
     //download:
     //item.children.getCurrentPage().get(1).getRawObject().get("@content.downloadUrl")
 
-    private WeakReference<Activity> mActivity;
-
-    public void setActivity(Activity activity) {
-        mActivity = new WeakReference<>(activity);
-    }
-
     private OnOneDriveActionListener mActionListener;
 
     public void setOnOneDriveActionListener(OnOneDriveActionListener listener) {

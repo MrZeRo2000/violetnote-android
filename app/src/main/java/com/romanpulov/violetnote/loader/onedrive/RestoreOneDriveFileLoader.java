@@ -1,4 +1,4 @@
-package com.romanpulov.violetnote.loader.dropbox;
+package com.romanpulov.violetnote.loader.onedrive;
 
 import android.content.Context;
 
@@ -13,14 +13,9 @@ import java.io.File;
 
 import static com.romanpulov.violetnote.common.NotificationRepository.NOTIFICATION_ID_LOADER;
 
-/**
- * Loader to restore from Dropbox
- * Created by romanpulov on 11.10.2017.
- */
+public class RestoreOneDriveFileLoader extends OneDriveFileLoader {
 
-public class RestoreDropboxFileLoader extends DropboxFileLoader {
-
-    public RestoreDropboxFileLoader(Context context) {
+    public RestoreOneDriveFileLoader(Context context) {
         super(context, new RestoreCloudLoadPathProvider(context));
     }
 
@@ -51,4 +46,5 @@ public class RestoreDropboxFileLoader extends DropboxFileLoader {
         LoaderNotificationHelper.notify(mContext, restoreMessage, NOTIFICATION_ID_LOADER,
                 isRestoreSuccess ? LoaderNotificationHelper.NOTIFICATION_TYPE_SUCCESS : LoaderNotificationHelper.NOTIFICATION_TYPE_FAILURE);
     }
+
 }
