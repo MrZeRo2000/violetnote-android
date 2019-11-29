@@ -61,6 +61,7 @@ import static com.romanpulov.violetnote.view.preference.PreferenceRepository.DEF
 import static com.romanpulov.violetnote.view.preference.PreferenceRepository.DEFAULT_SOURCE_TYPE;
 import static com.romanpulov.violetnote.view.preference.PreferenceRepository.PREF_KEY_BASIC_NOTE_CLOUD_STORAGE;
 import static com.romanpulov.violetnote.view.preference.PreferenceRepository.PREF_KEY_SOURCE_TYPE;
+import static com.romanpulov.violetnote.view.preference.PreferenceRepository.displayMessage;
 
 public class SettingsFragment extends PreferenceFragment {
 
@@ -166,7 +167,9 @@ public class SettingsFragment extends PreferenceFragment {
 
                         @Override
                         public void onAccountSetupFailure(String errorText) {
+                            displayMessage(getActivity(), errorText);
                             mPreferenceDocumentLoaderProcessor.loaderPostExecute(errorText);
+
                         }
                     });
 
@@ -245,7 +248,8 @@ public class SettingsFragment extends PreferenceFragment {
 
                     @Override
                     public void onAccountSetupFailure(String errorText) {
-                        mPreferenceDocumentLoaderProcessor.loaderPostExecute(errorText);
+                        displayMessage(getActivity(), errorText);
+                        mPreferenceBackupCloudProcessor.loaderPostExecute(errorText);
                     }
                 });
 
