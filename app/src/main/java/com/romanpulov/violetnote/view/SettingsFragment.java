@@ -1,6 +1,5 @@
 package com.romanpulov.violetnote.view;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -70,7 +69,7 @@ public class SettingsFragment extends PreferenceFragment {
     private PreferenceBackupLocalProcessor mPreferenceBackupLocalProcessor;
     private PreferenceRestoreLocalProcessor mPreferenceRestoreLocalProcessor;
 
-    private PermissionRequestHelper mWriteStorageRequestHelper;
+    //private PermissionRequestHelper mWriteStorageRequestHelper;
 
     private final Map<String, PreferenceLoaderProcessor> mPreferenceLoadProcessors = new HashMap<>();
 
@@ -98,7 +97,7 @@ public class SettingsFragment extends PreferenceFragment {
 
         addPreferencesFromResource(R.xml.preferences);
 
-        mWriteStorageRequestHelper = new PermissionRequestHelper(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        //mWriteStorageRequestHelper = new PermissionRequestHelper(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
         mPreferenceDocumentLoaderProcessor = new PreferenceDocumentLoaderProcessor(this);
         mPreferenceLoadProcessors.put(DocumentLocalFileLoader.class.getName(), mPreferenceDocumentLoaderProcessor);
@@ -200,10 +199,14 @@ public class SettingsFragment extends PreferenceFragment {
                     if (mLoaderServiceManager.isLoaderServiceRunning())
                         PreferenceRepository.displayMessage(getActivity(), getText(R.string.error_load_process_running));
                     else {
+                        executeDocumentLoad();
+                        /*
                         if (mWriteStorageRequestHelper.isPermissionGranted())
                             executeDocumentLoad();
                         else
                             mWriteStorageRequestHelper.requestPermission(SettingsActivity.PERMISSION_REQUEST_DOCUMENT_LOAD);
+
+                         */
                     }
 
                     return true;
@@ -270,10 +273,14 @@ public class SettingsFragment extends PreferenceFragment {
                     if (mLoaderServiceManager.isLoaderServiceRunning())
                         PreferenceRepository.displayMessage(getActivity(), getText(R.string.error_load_process_running));
                     else {
+                        executeCloudBackup();
+                        /*
                         if (mWriteStorageRequestHelper.isPermissionGranted())
                             executeCloudBackup();
                         else
                             mWriteStorageRequestHelper.requestPermission(SettingsActivity.PERMISSION_REQUEST_DROPBOX_BACKUP);
+
+                         */
                     }
 
                     return true;
@@ -315,10 +322,14 @@ public class SettingsFragment extends PreferenceFragment {
                                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
+                                        /*
                                         if (mWriteStorageRequestHelper.isPermissionGranted())
                                             executeDropboxRestore();
                                         else
                                             mWriteStorageRequestHelper.requestPermission(SettingsActivity.PERMISSION_REQUEST_DROPBOX_RESTORE);
+
+                                         */
+                                        executeDropboxRestore();
                                     }
                                 })
                                 .setNegativeButton(R.string.cancel, null)
@@ -349,10 +360,14 @@ public class SettingsFragment extends PreferenceFragment {
                     if (mLoaderServiceManager.isLoaderServiceRunning())
                         PreferenceRepository.displayMessage(getActivity(), getText(R.string.error_load_process_running));
                     else {
+                        executeLocalBackup();
+                        /*
                         if (mWriteStorageRequestHelper.isPermissionGranted())
                             executeLocalBackup();
                         else
                             mWriteStorageRequestHelper.requestPermission(SettingsActivity.PERMISSION_REQUEST_LOCAL_BACKUP);
+
+                         */
                     }
                     return true;
                 }
@@ -385,10 +400,14 @@ public class SettingsFragment extends PreferenceFragment {
                                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
+                                        /*
                                         if (mWriteStorageRequestHelper.isPermissionGranted())
                                             executeLocalRestore();
                                         else
                                             mWriteStorageRequestHelper.requestPermission(SettingsActivity.PERMISSION_REQUEST_LOCAL_RESTORE);
+
+                                         */
+                                        executeLocalRestore();
                                     }
                                 })
                                 .setNegativeButton(R.string.cancel, null)

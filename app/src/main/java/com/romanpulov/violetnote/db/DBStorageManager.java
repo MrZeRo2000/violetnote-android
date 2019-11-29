@@ -15,20 +15,39 @@ import java.io.File;
 
 public final class DBStorageManager {
     private static final String LOCAL_BACKUP_FOLDER_NAME = "VioletNoteBackup";
+    private static final String BACKUP_FOLDER_NAME = "backup";
     private static final String BACKUP_FILE_NAME = "violetnotedb_" + DBBasicNoteOpenHelper.DATABASE_VERSION;
 
     private final BackupUtils mBackupUtils;
     private final String mBackupFolderName;
     private final Context mContext;
 
+    private String initBackupFolderName(String backupFolderName) {
+        String result;
+
+        if (backupFolderName != null) {
+            result =  backupFolderName;
+        } else {
+            File f;
+            f = mContext.getExternalFilesDir(BACKUP_FOLDER_NAME);
+            if (f == null) {
+                f = new File(mContext.getFilesDir(), BACKUP_FOLDER_NAME);
+            }
+
+            result = f.getAbsolutePath();
+        }
+
+        return result;
+    }
+
     public DBStorageManager(Context context, String backupFolderName) {
         mContext = context;
-        mBackupFolderName = backupFolderName;
-        mBackupUtils = new BackupUtils(context.getDatabasePath(DBBasicNoteOpenHelper.DATABASE_NAME).toString(), backupFolderName, BACKUP_FILE_NAME);
+        mBackupFolderName = initBackupFolderName(backupFolderName);
+        mBackupUtils = new BackupUtils(context.getDatabasePath(DBBasicNoteOpenHelper.DATABASE_NAME).toString(), mBackupFolderName, BACKUP_FILE_NAME);
     }
 
     public DBStorageManager(Context context) {
-        this(context, Environment.getExternalStorageDirectory() + File.separator + LOCAL_BACKUP_FOLDER_NAME);
+        this(context, null);
     }
 
     /**
