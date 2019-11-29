@@ -22,7 +22,7 @@ public class OneDriveRootChooseItem implements ChooseItem {
 
     @Override
     public String getItemPath() {
-        return mPath.replace(ROOT_FULL_PATH, ROOT_PATH);
+        return mPath.replace(ROOT_FULL_PATH, "");
     }
 
     @Override
