@@ -36,6 +36,7 @@ import com.romanpulov.violetnote.loader.factory.DocumentLoaderFactory;
 import com.romanpulov.violetnote.loader.document.DocumentLocalFileLoader;
 import com.romanpulov.violetnote.loader.dropbox.RestoreDropboxFileLoader;
 import com.romanpulov.library.common.loader.core.LoaderHelper;
+import com.romanpulov.violetnote.loader.onedrive.BackupOneDriveUploader;
 import com.romanpulov.violetnote.service.LoaderService;
 import com.romanpulov.violetnote.service.LoaderServiceManager;
 import com.romanpulov.violetnote.view.helper.PermissionRequestHelper;
@@ -107,6 +108,7 @@ public class SettingsFragment extends PreferenceFragment {
 
         mPreferenceBackupCloudProcessor = new PreferenceBackupCloudProcessor(this);
         mPreferenceLoadProcessors.put(BackupDropboxUploader.class.getName(), mPreferenceBackupCloudProcessor);
+        mPreferenceLoadProcessors.put(BackupOneDriveUploader.class.getName(), mPreferenceBackupCloudProcessor);
         setupPrefCloudBackupLoadService();
 
         mPreferenceRestoreDropboxProcessor = new PreferenceRestoreDropboxProcessor(this);
@@ -225,7 +227,7 @@ public class SettingsFragment extends PreferenceFragment {
         if (loaderClass != null) {
             final AbstractAccountManager accountManager = AccountManagerFactory.fromCloudSourceType(getActivity(), type);
             if (accountManager != null) {
-                mPreferenceDocumentLoaderProcessor.loaderPreExecute();
+                mPreferenceBackupCloudProcessor.loaderPreExecute();
 
                 accountManager.setOnAccountSetupListener(new AbstractAccountManager.OnAccountSetupListener() {
                     @Override
