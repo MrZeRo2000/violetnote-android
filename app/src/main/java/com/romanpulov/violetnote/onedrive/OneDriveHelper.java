@@ -9,6 +9,7 @@ import com.onedrive.sdk.concurrency.IProgressCallback;
 import com.onedrive.sdk.core.ClientException;
 import com.onedrive.sdk.core.DefaultClientConfig;
 import com.onedrive.sdk.core.IClientConfig;
+import com.onedrive.sdk.extensions.Folder;
 import com.onedrive.sdk.extensions.IOneDriveClient;
 import com.onedrive.sdk.extensions.Item;
 import com.onedrive.sdk.logger.LoggerLevel;
@@ -24,6 +25,9 @@ import java.util.concurrent.atomic.AtomicReference;
 public class OneDriveHelper {
     public static final int ONEDRIVE_ACTION_LOGIN = 0;
     public static final int ONEDRIVE_ACTION_LOGOUT = 1;
+
+    public static final String ROOT_FULL_PATH = "/drive/root:";
+    public static final String ROOT_PATH = "root:";
 
     public interface OnOneDriveActionListener {
         void onActionCompleted(int action, boolean result, String message);
@@ -319,4 +323,16 @@ public class OneDriveHelper {
                 .put(outputStream.toByteArray(), progressCallback);
     }
 
+    public void createFolder(String folderName) {
+        Item folderItem = new Item();
+        folderItem.name = folderName;
+        folderItem.folder = new Folder();
+
+        mClient.get()
+                .getDrive()
+                .getItems("root")
+                .getChildren()
+                .buildRequest()
+                .post(folderItem, itemCallback);
+    }
 }

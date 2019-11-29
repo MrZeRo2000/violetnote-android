@@ -8,6 +8,7 @@ import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBStorageManager;
 import com.romanpulov.library.dropbox.DropboxHelper;
 import com.romanpulov.library.common.loader.core.AbstractContextLoader;
+import com.romanpulov.violetnote.loader.cloud.CloudLoaderRepository;
 import com.romanpulov.violetnote.loader.helper.LoaderNotificationHelper;
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 
@@ -48,7 +49,7 @@ public class BackupDropboxUploader extends AbstractContextLoader {
             String remoteFileName = f.getName();
             InputStream inputStream = new FileInputStream(f);
             try {
-                client.files().uploadBuilder(DropboxLoaderRepository.REMOTE_PATH + remoteFileName).withMode(WriteMode.OVERWRITE).uploadAndFinish(inputStream);
+                client.files().uploadBuilder(File.separator + CloudLoaderRepository.REMOTE_PATH + File.separator + remoteFileName).withMode(WriteMode.OVERWRITE).uploadAndFinish(inputStream);
             } finally {
                 try {
                     inputStream.close();

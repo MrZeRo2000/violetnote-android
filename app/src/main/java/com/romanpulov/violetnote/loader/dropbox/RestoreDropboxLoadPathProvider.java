@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.romanpulov.violetnote.db.DBStorageManager;
 import com.romanpulov.library.common.loader.core.ContextLoadPathProvider;
+import com.romanpulov.violetnote.loader.cloud.CloudLoaderRepository;
 
 import java.io.File;
 
@@ -21,7 +22,7 @@ public class RestoreDropboxLoadPathProvider extends ContextLoadPathProvider {
 
     @Override
     public String getSourcePath() {
-        return DropboxLoaderRepository.REMOTE_PATH + DBStorageManager.getBackupZipFileName();
+        return CloudLoaderRepository.REMOTE_PATH + DBStorageManager.getBackupZipFileName();
     }
 
     @Override
