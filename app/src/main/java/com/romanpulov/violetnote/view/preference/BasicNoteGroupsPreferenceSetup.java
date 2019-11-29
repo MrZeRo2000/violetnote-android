@@ -17,7 +17,7 @@ public class BasicNoteGroupsPreferenceSetup extends PreferenceSetup {
         mPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                mContext.startActivity(new Intent(mActivity, BasicNoteGroupActivity.class));
+                mActivity.startActivity(new Intent(mActivity, BasicNoteGroupActivity.class));
                 return true;
             }
         });

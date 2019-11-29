@@ -22,7 +22,7 @@ public class RestoreDropboxLoadPathProvider extends ContextLoadPathProvider {
 
     @Override
     public String getSourcePath() {
-        return CloudLoaderRepository.REMOTE_PATH + DBStorageManager.getBackupZipFileName();
+        return File.separator + CloudLoaderRepository.REMOTE_PATH + File.separator + DBStorageManager.getBackupZipFileName();
     }
 
     @Override
