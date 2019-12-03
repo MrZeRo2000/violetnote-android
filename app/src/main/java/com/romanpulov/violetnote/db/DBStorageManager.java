@@ -51,6 +51,24 @@ public final class DBStorageManager {
     }
 
     /**
+     * Restores from backup
+     * @param context Context
+     * @param path Path with backup file
+     * @return restore status
+     */
+    public static boolean restoreFromBackupPath(Context context, String path) {
+        File file = new File(path);
+        if (file.exists()) {
+            DBStorageManager storageManager = new DBStorageManager(context, file.getParent());
+            String restoreResult = storageManager.restoreLocalBackup();
+
+            return  restoreResult != null;
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * Returns list of local backup files
      * @return Files
      */

@@ -23,22 +23,7 @@ public class RestoreOneDriveFileLoader extends OneDriveFileLoader {
     public void load() throws Exception {
         super.load();
 
-        boolean isRestoreSuccess;
-
-        File file = new File(getLoadPathProvider().getDestPath());
-
-        if (file.exists()) {
-            DBBasicNoteHelper.getInstance(mContext).closeDB();
-
-            DBStorageManager storageManager = new DBStorageManager(mContext, file.getParent());
-            String restoreResult = storageManager.restoreLocalBackup();
-
-            isRestoreSuccess = restoreResult != null;
-
-            DBBasicNoteHelper.getInstance(mContext).openDB();
-        } else {
-            isRestoreSuccess = false;
-        }
+        boolean isRestoreSuccess = DBStorageManager.restoreFromBackupPath(mContext, getLoadPathProvider().getDestPath());
 
         String restoreMessage = mContext.getString(isRestoreSuccess ? R.string.message_backup_cloud_restored : R.string.error_restore);
 
