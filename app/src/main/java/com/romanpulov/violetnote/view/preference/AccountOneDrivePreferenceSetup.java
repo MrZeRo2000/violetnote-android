@@ -5,19 +5,16 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.support.v7.app.AlertDialog;
 
-import com.romanpulov.library.dropbox.DropboxHelper;
+import com.romanpulov.library.onedrive.OneDriveHelper;
 import com.romanpulov.violetnote.R;
-import com.romanpulov.violetnote.onedrive.OneDriveHelper;
-import com.romanpulov.violetnote.view.SettingsActivity;
 
-import static com.romanpulov.violetnote.onedrive.OneDriveHelper.ONEDRIVE_ACTION_LOGIN;
-import static com.romanpulov.violetnote.onedrive.OneDriveHelper.ONEDRIVE_ACTION_LOGOUT;
+import static com.romanpulov.library.onedrive.OneDriveHelper.ONEDRIVE_ACTION_LOGIN;
+import static com.romanpulov.library.onedrive.OneDriveHelper.ONEDRIVE_ACTION_LOGOUT;
 
 /**
- * Dropbox account configuration
- * Created by romanpulov on 08.09.2017.
+ * OneDrive account configuration
+ * Created by romanpulov on 21.11.2019.
  */
-
 public class AccountOneDrivePreferenceSetup extends PreferenceSetup {
 
     public AccountOneDrivePreferenceSetup(PreferenceFragment preferenceFragment) {

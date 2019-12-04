@@ -3,7 +3,7 @@ package com.romanpulov.violetnote.onedrivechooser;
 import com.onedrive.sdk.extensions.Item;
 import com.romanpulov.violetnote.chooser.ChooseItem;
 import com.romanpulov.violetnote.chooser.ChooseItemUtils;
-import com.romanpulov.violetnote.onedrive.OneDriveHelper;
+import com.romanpulov.library.onedrive.OneDriveHelper;
 
 import java.io.File;
 import java.util.ArrayList;

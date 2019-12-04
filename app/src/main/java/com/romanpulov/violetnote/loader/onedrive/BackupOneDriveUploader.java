@@ -9,7 +9,7 @@ import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBStorageManager;
 import com.romanpulov.violetnote.loader.cloud.CloudLoaderRepository;
 import com.romanpulov.violetnote.loader.helper.LoaderNotificationHelper;
-import com.romanpulov.violetnote.onedrive.OneDriveHelper;
+import com.romanpulov.library.onedrive.OneDriveHelper;
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 
 import java.io.File;

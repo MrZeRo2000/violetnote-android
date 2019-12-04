@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.romanpulov.library.common.loader.core.LoadPathProvider;
 import com.romanpulov.library.common.loader.file.FileLoader;
-import com.romanpulov.violetnote.onedrive.OneDriveHelper;
+import com.romanpulov.library.onedrive.OneDriveHelper;
 
 import java.io.BufferedInputStream;
 import java.io.File;

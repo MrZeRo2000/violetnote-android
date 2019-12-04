@@ -7,11 +7,11 @@ import com.onedrive.sdk.core.ClientException;
 import com.onedrive.sdk.extensions.Item;
 import com.romanpulov.violetnote.chooser.ChooseItem;
 import com.romanpulov.violetnote.chooser.HrChooserFragment;
-import com.romanpulov.violetnote.onedrive.OneDriveHelper;
+import com.romanpulov.library.onedrive.OneDriveHelper;
 
 import java.io.File;
 
-import static com.romanpulov.violetnote.onedrive.OneDriveHelper.ROOT_PATH;
+import static com.romanpulov.library.onedrive.OneDriveHelper.ROOT_PATH;
 
 public class OneDriveChooserFragment extends HrChooserFragment {
     private final OneDriveHelper mOneDriveHelper = OneDriveHelper.getInstance();

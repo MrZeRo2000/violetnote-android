@@ -4,7 +4,7 @@ import android.app.Activity;
 
 import com.onedrive.sdk.core.ClientException;
 import com.onedrive.sdk.extensions.Item;
-import com.romanpulov.violetnote.onedrive.OneDriveHelper;
+import com.romanpulov.library.onedrive.OneDriveHelper;
 
 public class OneDriveAccountManager extends AbstractAccountManager<OneDriveHelper> {
 

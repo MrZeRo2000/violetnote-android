@@ -4,8 +4,8 @@ import com.romanpulov.violetnote.chooser.ChooseItem;
 
 import java.util.List;
 
-import static com.romanpulov.violetnote.onedrive.OneDriveHelper.ROOT_FULL_PATH;
-import static com.romanpulov.violetnote.onedrive.OneDriveHelper.ROOT_PATH;
+import static com.romanpulov.library.onedrive.OneDriveHelper.ROOT_FULL_PATH;
+import static com.romanpulov.library.onedrive.OneDriveHelper.ROOT_PATH;
 
 public class OneDriveRootChooseItem implements ChooseItem {
     private String mPath;
