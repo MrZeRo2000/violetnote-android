@@ -10,7 +10,7 @@ import com.romanpulov.violetnote.R;
 import com.romanpulov.library.dropbox.DropboxHelper;
 import com.romanpulov.violetnote.dropboxchooser.DropboxChooserActivity;
 import com.romanpulov.violetnote.filechooser.FileChooserActivity;
-import com.romanpulov.violetnote.loader.account.AbstractCloudAccountManager;
+import com.romanpulov.library.common.account.AbstractCloudAccountManager;
 import com.romanpulov.violetnote.loader.account.OneDriveCloudAccountManager;
 import com.romanpulov.violetnote.onedrivechooser.OneDriveChooserActivity;
 

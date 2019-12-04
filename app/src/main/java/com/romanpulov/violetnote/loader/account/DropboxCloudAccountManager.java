@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import com.romanpulov.library.dropbox.DropboxHelper;
 import com.romanpulov.violetnote.R;
+import com.romanpulov.library.common.account.AbstractCloudAccountManager;
 
 public class DropboxCloudAccountManager extends AbstractCloudAccountManager<DropboxHelper> {
     @Override

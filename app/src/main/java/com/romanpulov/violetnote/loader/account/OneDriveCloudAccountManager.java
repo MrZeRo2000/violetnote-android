@@ -5,6 +5,7 @@ import android.app.Activity;
 import com.onedrive.sdk.core.ClientException;
 import com.onedrive.sdk.extensions.Item;
 import com.romanpulov.library.onedrive.OneDriveHelper;
+import com.romanpulov.library.common.account.AbstractCloudAccountManager;
 
 public class OneDriveCloudAccountManager extends AbstractCloudAccountManager<OneDriveHelper> {
 

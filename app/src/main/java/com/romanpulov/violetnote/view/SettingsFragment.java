@@ -26,7 +26,7 @@ import com.romanpulov.violetnote.db.DBStorageManager;
 import com.romanpulov.violetnote.filechooser.FileChooserActivity;
 import com.romanpulov.library.dropbox.DropboxHelper;
 import com.romanpulov.library.common.loader.core.AbstractContextLoader;
-import com.romanpulov.violetnote.loader.account.AbstractCloudAccountManager;
+import com.romanpulov.library.common.account.AbstractCloudAccountManager;
 import com.romanpulov.violetnote.loader.account.CloudAccountManagerFactory;
 import com.romanpulov.violetnote.loader.document.DocumentOneDriveFileLoader;
 import com.romanpulov.violetnote.loader.dropbox.BackupDropboxUploader;

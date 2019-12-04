@@ -2,6 +2,7 @@ package com.romanpulov.violetnote.loader.account;
 
 import android.app.Activity;
 
+import com.romanpulov.library.common.account.AbstractCloudAccountManager;
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 
 public class CloudAccountManagerFactory {
