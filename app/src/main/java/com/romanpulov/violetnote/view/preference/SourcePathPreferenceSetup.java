@@ -10,8 +10,8 @@ import com.romanpulov.violetnote.R;
 import com.romanpulov.library.dropbox.DropboxHelper;
 import com.romanpulov.violetnote.dropboxchooser.DropboxChooserActivity;
 import com.romanpulov.violetnote.filechooser.FileChooserActivity;
-import com.romanpulov.violetnote.loader.account.AbstractAccountManager;
-import com.romanpulov.violetnote.loader.account.OneDriveAccountManager;
+import com.romanpulov.violetnote.loader.account.AbstractCloudAccountManager;
+import com.romanpulov.violetnote.loader.account.OneDriveCloudAccountManager;
 import com.romanpulov.violetnote.onedrivechooser.OneDriveChooserActivity;
 
 import static com.romanpulov.violetnote.view.preference.PreferenceRepository.DEFAULT_SOURCE_TYPE;
@@ -71,8 +71,8 @@ public class SourcePathPreferenceSetup extends PreferenceSetup {
                         if (!NetworkUtils.isNetworkAvailable(mContext))
                             PreferenceRepository.displayMessage(mActivity,mActivity.getResources().getString(R.string.error_internet_not_available));
                         else {
-                            final OneDriveAccountManager oneDriveAccountManager = new OneDriveAccountManager(mActivity);
-                            oneDriveAccountManager.setOnAccountSetupListener(new AbstractAccountManager.OnAccountSetupListener() {
+                            final OneDriveCloudAccountManager oneDriveAccountManager = new OneDriveCloudAccountManager(mActivity);
+                            oneDriveAccountManager.setOnAccountSetupListener(new AbstractCloudAccountManager.OnAccountSetupListener() {
                                 @Override
                                 public void onAccountSetupSuccess() {
                                     Intent intent = new Intent(mActivity, OneDriveChooserActivity.class);

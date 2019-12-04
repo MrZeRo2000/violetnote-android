@@ -3,7 +3,7 @@ package com.romanpulov.violetnote.loader.account;
 import android.app.Activity;
 import android.content.Context;
 
-public abstract class AbstractAccountManager <T>  {
+public abstract class AbstractCloudAccountManager<T>  {
     protected T mAccountHolder;
 
     protected final Activity mActivity;
@@ -42,6 +42,7 @@ public abstract class AbstractAccountManager <T>  {
     }
 
     protected abstract void internalSetupAccount();
+
     public void setupItemId(String path) {
         if (mAccountSetupItemListener != null) {
             mAccountSetupItemListener.onSetupItemSuccess(path);
@@ -54,9 +55,7 @@ public abstract class AbstractAccountManager <T>  {
         }
     };
 
-
-
-    public AbstractAccountManager(Activity activity) {
+    public AbstractCloudAccountManager(Activity activity) {
         mActivity = activity;
         mContext = activity.getApplicationContext();
         mAccountHolder = createAccountHolder();

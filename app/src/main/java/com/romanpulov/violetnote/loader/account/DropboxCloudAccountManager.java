@@ -5,7 +5,7 @@ import android.app.Activity;
 import com.romanpulov.library.dropbox.DropboxHelper;
 import com.romanpulov.violetnote.R;
 
-public class DropboxAccountManager extends AbstractAccountManager<DropboxHelper> {
+public class DropboxCloudAccountManager extends AbstractCloudAccountManager<DropboxHelper> {
     @Override
     protected DropboxHelper createAccountHolder() {
         return DropboxHelper.getInstance(mActivity.getApplicationContext());
@@ -21,7 +21,7 @@ public class DropboxAccountManager extends AbstractAccountManager<DropboxHelper>
         }
     }
 
-    public DropboxAccountManager(Activity activity) {
+    public DropboxCloudAccountManager(Activity activity) {
         super(activity);
     }
 }

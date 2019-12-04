@@ -6,7 +6,7 @@ import com.onedrive.sdk.core.ClientException;
 import com.onedrive.sdk.extensions.Item;
 import com.romanpulov.library.onedrive.OneDriveHelper;
 
-public class OneDriveAccountManager extends AbstractAccountManager<OneDriveHelper> {
+public class OneDriveCloudAccountManager extends AbstractCloudAccountManager<OneDriveHelper> {
 
     @Override
     protected OneDriveHelper createAccountHolder() {
@@ -51,7 +51,7 @@ public class OneDriveAccountManager extends AbstractAccountManager<OneDriveHelpe
     }
 
 
-    public OneDriveAccountManager(Activity activity) {
+    public OneDriveCloudAccountManager(Activity activity) {
         super(activity);
     }
 }

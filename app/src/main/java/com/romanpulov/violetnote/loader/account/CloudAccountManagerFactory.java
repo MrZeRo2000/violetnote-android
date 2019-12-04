@@ -4,26 +4,27 @@ import android.app.Activity;
 
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 
-public class AccountManagerFactory {
-    public static AbstractAccountManager fromDocumentSourceType(Activity activity, int type) {
+public class CloudAccountManagerFactory {
+
+    public static AbstractCloudAccountManager fromDocumentSourceType(Activity activity, int type) {
         switch (type) {
             case PreferenceRepository.SOURCE_TYPE_FILE:
                 return null;
             case PreferenceRepository.SOURCE_TYPE_DROPBOX:
-                return new DropboxAccountManager(activity);
+                return new DropboxCloudAccountManager(activity);
             case PreferenceRepository.SOURCE_TYPE_ONEDRIVE:
-                return new OneDriveAccountManager(activity);
+                return new OneDriveCloudAccountManager(activity);
             default:
                 return null;
         }
     }
 
-    public static AbstractAccountManager fromCloudSourceType(Activity activity, int type) {
+    public static AbstractCloudAccountManager fromCloudSourceType(Activity activity, int type) {
         switch (type) {
             case PreferenceRepository.CLOUD_SOURCE_TYPE_DROPBOX:
-                return new DropboxAccountManager(activity);
+                return new DropboxCloudAccountManager(activity);
             case PreferenceRepository.CLOUD_SOURCE_TYPE_ONEDRIVE:
-                return new OneDriveAccountManager(activity);
+                return new OneDriveCloudAccountManager(activity);
             default:
                 return null;
         }

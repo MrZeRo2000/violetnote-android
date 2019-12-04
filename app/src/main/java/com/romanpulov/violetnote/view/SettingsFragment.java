@@ -26,8 +26,8 @@ import com.romanpulov.violetnote.db.DBStorageManager;
 import com.romanpulov.violetnote.filechooser.FileChooserActivity;
 import com.romanpulov.library.dropbox.DropboxHelper;
 import com.romanpulov.library.common.loader.core.AbstractContextLoader;
-import com.romanpulov.violetnote.loader.account.AbstractAccountManager;
-import com.romanpulov.violetnote.loader.account.AccountManagerFactory;
+import com.romanpulov.violetnote.loader.account.AbstractCloudAccountManager;
+import com.romanpulov.violetnote.loader.account.CloudAccountManagerFactory;
 import com.romanpulov.violetnote.loader.document.DocumentOneDriveFileLoader;
 import com.romanpulov.violetnote.loader.dropbox.BackupDropboxUploader;
 import com.romanpulov.violetnote.loader.document.DocumentDropboxFileLoader;
@@ -157,11 +157,11 @@ public class SettingsFragment extends PreferenceFragment {
         final Class<? extends AbstractContextLoader> loaderClass = DocumentLoaderFactory.classFromType(type);
         if (loaderClass != null) {
             if (!LoaderHelper.isLoaderInternetConnectionRequired(loaderClass) || checkInternetConnection()) {
-                final AbstractAccountManager accountManager = AccountManagerFactory.fromDocumentSourceType(getActivity(), type);
+                final AbstractCloudAccountManager accountManager = CloudAccountManagerFactory.fromDocumentSourceType(getActivity(), type);
                 if (accountManager != null) {
                     mPreferenceDocumentLoaderProcessor.loaderPreExecute();
 
-                    accountManager.setOnAccountSetupListener(new AbstractAccountManager.OnAccountSetupListener() {
+                    accountManager.setOnAccountSetupListener(new AbstractCloudAccountManager.OnAccountSetupListener() {
                         @Override
                         public void onAccountSetupSuccess() {
                             startDocumentLoad(loaderClass.getName());
@@ -230,11 +230,11 @@ public class SettingsFragment extends PreferenceFragment {
         final Class<? extends AbstractContextLoader> loaderClass = BackupUploaderFactory.classFromCloudType(type);
 
         if (loaderClass != null) {
-            final AbstractAccountManager accountManager = AccountManagerFactory.fromCloudSourceType(getActivity(), type);
+            final AbstractCloudAccountManager accountManager = CloudAccountManagerFactory.fromCloudSourceType(getActivity(), type);
             if (accountManager != null) {
                 mPreferenceBackupCloudProcessor.loaderPreExecute();
 
-                accountManager.setOnAccountSetupListener(new AbstractAccountManager.OnAccountSetupListener() {
+                accountManager.setOnAccountSetupListener(new AbstractCloudAccountManager.OnAccountSetupListener() {
                     @Override
                     public void onAccountSetupSuccess() {
                         DBStorageManager storageManager = new DBStorageManager(getActivity());
@@ -310,11 +310,11 @@ public class SettingsFragment extends PreferenceFragment {
         final Class<? extends AbstractContextLoader> loaderClass = BackupRestoreFactory.classFromCloudType(type);
 
         if (loaderClass != null) {
-            final AbstractAccountManager accountManager = AccountManagerFactory.fromCloudSourceType(getActivity(), type);
+            final AbstractCloudAccountManager accountManager = CloudAccountManagerFactory.fromCloudSourceType(getActivity(), type);
             if (accountManager != null) {
                 mPreferenceRestoreCloudProcessor.loaderPreExecute();
 
-                accountManager.setOnAccountSetupListener(new AbstractAccountManager.OnAccountSetupListener() {
+                accountManager.setOnAccountSetupListener(new AbstractCloudAccountManager.OnAccountSetupListener() {
                     @Override
                     public void onAccountSetupSuccess() {
                         mPreferenceRestoreCloudProcessor.loaderPreExecute();
