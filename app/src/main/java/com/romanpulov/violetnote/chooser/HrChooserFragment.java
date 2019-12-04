@@ -26,14 +26,14 @@ public abstract class HrChooserFragment extends Fragment {
     protected static final String HR_CHOOSER_INITIAL_PATH = "InitialPath";
 
     public interface OnChooserInteractionListener {
-        void onChooserInteraction(ChooseItem item);
+        void onChooserInteraction(AbstractChooseItem item);
     }
 
     protected String mInitialPath;
 
     private TextView mHeader;
     private RecyclerView.Adapter mAdapter;
-    private List<ChooseItem> mChooseItemList;
+    private List<AbstractChooseItem> mChooseItemList;
     private String mHeaderText;
 
     private ChooseItemUpdaterTask mTask;
@@ -45,10 +45,10 @@ public abstract class HrChooserFragment extends Fragment {
     private OnChooserInteractionListener mListener;
 
     public static class ChooserAdapter extends RecyclerView.Adapter<ChooserAdapter.ViewHolder> {
-        private final List<ChooseItem> mItems;
+        private final List<AbstractChooseItem> mItems;
         private final OnChooserInteractionListener mListener;
 
-        ChooserAdapter(List<ChooseItem> items, OnChooserInteractionListener listener) {
+        ChooserAdapter(List<AbstractChooseItem> items, OnChooserInteractionListener listener) {
             mItems = items;
             mListener = listener;
         }
@@ -63,15 +63,15 @@ public abstract class HrChooserFragment extends Fragment {
         @Override
         public void onBindViewHolder(final @NonNull ViewHolder holder, final int position) {
             switch (mItems.get(position).getItemType()) {
-                case ChooseItem.ITEM_PARENT:
+                case AbstractChooseItem.ITEM_PARENT:
                     holder.mTextView.setText(null);
                     holder.mTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_more_horiz, 0, 0, 0);
                     break;
-                case ChooseItem.ITEM_DIRECTORY:
+                case AbstractChooseItem.ITEM_DIRECTORY:
                     holder.mTextView.setText(mItems.get(position).getItemName());
                     holder.mTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_folder_closed, 0, 0, 0);
                     break;
-                case ChooseItem.ITEM_FILE:
+                case AbstractChooseItem.ITEM_FILE:
                     holder.mTextView.setText(mItems.get(position).getItemName());
                     holder.mTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_document, 0, 0, 0);
                     break;
@@ -122,14 +122,14 @@ public abstract class HrChooserFragment extends Fragment {
 
         mAdapter = new ChooserAdapter(mChooseItemList, new OnChooserInteractionListener() {
             @Override
-            public void onChooserInteraction(ChooseItem item) {
+            public void onChooserInteraction(AbstractChooseItem item) {
                 switch (item.getItemType()) {
-                    case ChooseItem.ITEM_FILE:
+                    case AbstractChooseItem.ITEM_FILE:
                         if (mListener != null)
                             mListener.onChooserInteraction(item);
                         break;
-                    case ChooseItem.ITEM_DIRECTORY:
-                    case ChooseItem.ITEM_PARENT:
+                    case AbstractChooseItem.ITEM_DIRECTORY:
+                    case AbstractChooseItem.ITEM_PARENT:
                         chooseItemChanged(item);
                         break;
                 }
@@ -145,16 +145,16 @@ public abstract class HrChooserFragment extends Fragment {
         mHeader.setText(R.string.caption_loading);
     }
 
-    protected abstract ChooseItem getChooseItem();
-    protected abstract void requestChooseItem(ChooseItem item);
+    protected abstract AbstractChooseItem getChooseItem();
+    protected abstract void requestChooseItem(AbstractChooseItem item);
 
     /**
      * Fills sub items for given item
      * @param item Initial item, may be empty
      * @return item with filled internal items
      */
-    protected ChooseItem fillChooseItem (ChooseItem item) {
-        ChooseItem result;
+    protected AbstractChooseItem fillChooseItem (AbstractChooseItem item) {
+        AbstractChooseItem result;
         if (item == null)
             result = getChooseItem();
         else
@@ -167,7 +167,7 @@ public abstract class HrChooserFragment extends Fragment {
      * Update UI to reflect item change
      * @param item Item to reflect changes
      */
-    protected void updateChooseItem(ChooseItem item) {
+    protected void updateChooseItem(AbstractChooseItem item) {
         //header text
         if (item.getFillItemsError() != null) {
             mHeaderText = getText(R.string.error_load).toString();
@@ -190,11 +190,11 @@ public abstract class HrChooserFragment extends Fragment {
      * Handles item changed event depending on FillMode ; sync or async
      * @param item Item to process changes
      */
-    private void chooseItemChanged(ChooseItem item) {
+    private void chooseItemChanged(AbstractChooseItem item) {
         requestChooseItem(item);
     }
 
-    private static class ChooseItemUpdaterTask extends AsyncTask<ChooseItem, Void, ChooseItem> {
+    private static class ChooseItemUpdaterTask extends AsyncTask<AbstractChooseItem, Void, AbstractChooseItem> {
 
         private final HrChooserFragment mHost;
 
@@ -211,19 +211,19 @@ public abstract class HrChooserFragment extends Fragment {
         }
 
         @Override
-        protected ChooseItem doInBackground(ChooseItem... params) {
+        protected AbstractChooseItem doInBackground(AbstractChooseItem... params) {
             return mHost.fillChooseItem(params[0]);
         }
 
         @Override
-        protected void onPostExecute(ChooseItem chooseItem) {
+        protected void onPostExecute(AbstractChooseItem chooseItem) {
             if (mHost.isAdded()) {
                 mHost.updateChooseItem(chooseItem);
             }
         }
     }
 
-    protected void startChooserUpdaterTask(ChooseItem item) {
+    protected void startChooserUpdaterTask(AbstractChooseItem item) {
         mTask = new ChooseItemUpdaterTask(this);
         mTask.execute(item);
     }

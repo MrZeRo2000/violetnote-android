@@ -2,7 +2,7 @@ package com.romanpulov.violetnote.filechooser;
 
 import android.os.Bundle;
 
-import com.romanpulov.violetnote.chooser.ChooseItem;
+import com.romanpulov.violetnote.chooser.AbstractChooseItem;
 import com.romanpulov.violetnote.chooser.HrChooserFragment;
 
 import java.io.File;
@@ -14,7 +14,7 @@ import java.io.File;
 public class FileChooserFragment extends HrChooserFragment {
 
     @Override
-    protected ChooseItem getChooseItem() {
+    protected AbstractChooseItem getChooseItem() {
         File file = new File(mInitialPath);
         if (file.isFile()) {
             File parentFile = file.getParentFile();
@@ -25,7 +25,7 @@ public class FileChooserFragment extends HrChooserFragment {
     }
 
     @Override
-    protected void requestChooseItem(ChooseItem item) {
+    protected void requestChooseItem(AbstractChooseItem item) {
         updateChooseItem(fillChooseItem(item));
     }
 

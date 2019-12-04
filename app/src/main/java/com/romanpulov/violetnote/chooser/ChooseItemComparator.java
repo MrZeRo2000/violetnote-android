@@ -6,9 +6,9 @@ import java.util.Comparator;
  * Created by rpulov on 07.06.2016.
  * Choose item comparator used for sorting choose items
  */
-class ChooseItemComparator implements Comparator<ChooseItem> {
+class ChooseItemComparator implements Comparator<AbstractChooseItem> {
     @Override
-    public int compare(ChooseItem o1, ChooseItem o2) {
+    public int compare(AbstractChooseItem o1, AbstractChooseItem o2) {
         if (o1 == o2)
             return 0;
         if (o1 == null)

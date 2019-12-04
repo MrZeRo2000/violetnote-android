@@ -1,24 +1,21 @@
 package com.romanpulov.violetnote.onedrivechooser;
 
 import com.onedrive.sdk.extensions.Item;
-import com.romanpulov.violetnote.chooser.ChooseItem;
-import com.romanpulov.violetnote.chooser.ChooseItemUtils;
+import com.romanpulov.violetnote.chooser.AbstractChooseItem;
 import com.romanpulov.library.onedrive.OneDriveHelper;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OneDriveChooseItem implements ChooseItem {
+public class OneDriveChooseItem extends AbstractChooseItem {
 
     private Item mOneDriveItem;
-    private String mErrorText;
 
-    private OneDriveChooseItem() {
-
+    private OneDriveChooseItem(Item item) {
+        super(getItemTypeFromItem(item));
+        mOneDriveItem = item;
     }
-
-    private List<ChooseItem> mItems;
 
     @Override
     public String getItemPath() {
@@ -40,14 +37,15 @@ public class OneDriveChooseItem implements ChooseItem {
         return mOneDriveItem.name;
     }
 
-    @Override
-    public int getItemType() {
-        if (mOneDriveItem.file != null) {
-            return ChooseItem.ITEM_FILE;
-        } else if (mOneDriveItem.folder != null) {
-            return ChooseItem.ITEM_DIRECTORY;
+    private static int getItemTypeFromItem(Item item) {
+        if (item == null) {
+            return AbstractChooseItem.ITEM_UNKNOWN;
+        } else if (item.file != null) {
+            return AbstractChooseItem.ITEM_FILE;
+        } else if (item.folder != null) {
+            return AbstractChooseItem.ITEM_DIRECTORY;
         } else {
-            return ChooseItem.ITEM_UNKNOWN;
+            return AbstractChooseItem.ITEM_UNKNOWN;
         }
     }
 
@@ -60,7 +58,7 @@ public class OneDriveChooseItem implements ChooseItem {
             if (oneDriveItems.size() > 0) {
                 String parentPath = oneDriveItems.get(0).parentReference.path;
                 if (!(parentPath.equals(OneDriveHelper.ROOT_FULL_PATH))) {
-                    String parentItemPath = ChooseItemUtils.getParentItemPath(parentPath);
+                    String parentItemPath = AbstractChooseItem.getParentItemPath(parentPath);
                     mItems.add(OneDriveRootChooseItem.fromPath(parentItemPath));
                 }
             }
@@ -71,25 +69,13 @@ public class OneDriveChooseItem implements ChooseItem {
         }
     }
 
-    @Override
-    public String getFillItemsError() {
-        return mErrorText;
-    }
-
-    @Override
-    public List<ChooseItem> getItems() {
-        return mItems;
-    }
-
     public static OneDriveChooseItem fromOneDriveItem(Item item) {
-        OneDriveChooseItem result = new OneDriveChooseItem();
-        result.mOneDriveItem = item;
-        return result;
+        return new OneDriveChooseItem(item);
     }
 
     public static OneDriveChooseItem createErrorItem(String errorText) {
-        OneDriveChooseItem result = new OneDriveChooseItem();
-        result.mErrorText = errorText;
+        OneDriveChooseItem result = new OneDriveChooseItem(null);
+        result.mFillItemsError = errorText;
         return result;
     }
 

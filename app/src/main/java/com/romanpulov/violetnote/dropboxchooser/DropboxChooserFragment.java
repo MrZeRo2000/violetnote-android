@@ -3,7 +3,7 @@ package com.romanpulov.violetnote.dropboxchooser;
 import android.app.Activity;
 import android.os.Bundle;
 
-import com.romanpulov.violetnote.chooser.ChooseItem;
+import com.romanpulov.violetnote.chooser.AbstractChooseItem;
 import com.romanpulov.violetnote.chooser.HrChooserFragment;
 import com.romanpulov.library.dropbox.DropboxHelper;
 
@@ -14,7 +14,7 @@ import com.romanpulov.library.dropbox.DropboxHelper;
 public class DropboxChooserFragment extends HrChooserFragment {
 
     @Override
-    protected ChooseItem getChooseItem() {
+    protected AbstractChooseItem getChooseItem() {
         Activity activity = getActivity();
         if (activity == null)
             throw new RuntimeException("No context for " + this);
@@ -28,7 +28,7 @@ public class DropboxChooserFragment extends HrChooserFragment {
     }
 
     @Override
-    protected void requestChooseItem(ChooseItem item) {
+    protected void requestChooseItem(AbstractChooseItem item) {
         startChooserUpdaterTask(item);
     }
 

@@ -4,7 +4,7 @@ import com.dropbox.core.DbxException;
 import com.dropbox.core.v2.DbxClientV2;
 import com.dropbox.core.v2.files.FileMetadata;
 import com.dropbox.core.v2.files.FolderMetadata;
-import com.romanpulov.violetnote.chooser.ChooseItem;
+import com.romanpulov.violetnote.chooser.AbstractChooseItem;
 
 import com.dropbox.core.v2.files.Metadata;
 
@@ -12,29 +12,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * ChooseItem implementation for DropBox
+ * AbstractChooseItem implementation for DropBox
  * Created by romanpulov on 01.07.2016.
  */
-public class DropboxChooseItem implements ChooseItem {
+public class DropboxChooseItem extends AbstractChooseItem {
     private final DbxClientV2 mClient;
     private final Metadata mMetaData;
-    private List<ChooseItem> mItems;
-    private int mItemType;
-    private String mFillItemsError;
+
+
+    private static int getItemTypeFromMetaData(Metadata metaData) {
+        if (metaData == null) {
+            return AbstractChooseItem.ITEM_DIRECTORY;
+        }
+        else if (metaData instanceof FileMetadata) {
+            return AbstractChooseItem.ITEM_FILE;
+        }
+        else if (metaData instanceof FolderMetadata) {
+            return AbstractChooseItem.ITEM_DIRECTORY;
+        }
+        else {
+            return AbstractChooseItem.ITEM_UNKNOWN;
+        }
+    }
 
     private DropboxChooseItem(DbxClientV2 client, Metadata metaData) {
+        super(getItemTypeFromMetaData(metaData));
         mClient = client;
         mMetaData = metaData;
-
-        if (mMetaData == null)
-            mItemType = ChooseItem.ITEM_DIRECTORY;
-
-        if (mMetaData instanceof FileMetadata)
-            mItemType = ChooseItem.ITEM_FILE;
-        else if (mMetaData instanceof FolderMetadata)
-            mItemType = ChooseItem.ITEM_DIRECTORY;
-        else
-            mItemType = ChooseItem.ITEM_UNKNOWN;
     }
 
     @Override
@@ -44,7 +48,7 @@ public class DropboxChooseItem implements ChooseItem {
         // for non root folder
         if (mMetaData != null) {
             DropboxChooseItem newItem = (DropboxChooseItem)getParentItem();
-            newItem.mItemType = ChooseItem.ITEM_PARENT;
+            newItem.mItemType = AbstractChooseItem.ITEM_PARENT;
             mItems.add(newItem);
         }
 
@@ -56,11 +60,6 @@ public class DropboxChooseItem implements ChooseItem {
             e.printStackTrace();
             mFillItemsError = e.getMessage();
         }
-    }
-
-    @Override
-    public String getFillItemsError() {
-        return mFillItemsError;
     }
 
     @Override
@@ -87,16 +86,6 @@ public class DropboxChooseItem implements ChooseItem {
             return mMetaData.getName();
     }
 
-    @Override
-    public int getItemType() {
-        return  mItemType;
-    }
-
-    @Override
-    public List<ChooseItem> getItems() {
-        return mItems;
-    }
-
     public static String getParentItemPath(String path) {
         int iPath = path.lastIndexOf("/");
         if (iPath>-1)
@@ -105,12 +94,12 @@ public class DropboxChooseItem implements ChooseItem {
             return "";
     }
 
-    private ChooseItem getParentItem() {
+    private AbstractChooseItem getParentItem() {
         String parentItemPath = getParentItemPath(getItemPath());
         return fromPath(mClient, parentItemPath);
     }
 
-    public static ChooseItem fromPath(DbxClientV2 client, String path) {
+    public static AbstractChooseItem fromPath(DbxClientV2 client, String path) {
         Metadata metadata = null;
 
         if (!path.isEmpty()) {

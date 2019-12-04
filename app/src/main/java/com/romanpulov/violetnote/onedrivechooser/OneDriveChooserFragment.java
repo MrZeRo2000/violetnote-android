@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import com.onedrive.sdk.core.ClientException;
 import com.onedrive.sdk.extensions.Item;
-import com.romanpulov.violetnote.chooser.ChooseItem;
+import com.romanpulov.violetnote.chooser.AbstractChooseItem;
 import com.romanpulov.violetnote.chooser.HrChooserFragment;
 import com.romanpulov.library.onedrive.OneDriveHelper;
 
@@ -30,12 +30,12 @@ public class OneDriveChooserFragment extends HrChooserFragment {
     }
 
     @Override
-    protected ChooseItem getChooseItem() {
+    protected AbstractChooseItem getChooseItem() {
         return null;
     }
 
     @Override
-    protected void requestChooseItem(ChooseItem item) {
+    protected void requestChooseItem(AbstractChooseItem item) {
         Activity activity = getActivity();
         if (activity != null){
             setProgress();

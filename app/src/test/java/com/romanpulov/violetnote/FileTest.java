@@ -1,6 +1,6 @@
 package com.romanpulov.violetnote;
 
-import com.romanpulov.violetnote.chooser.ChooseItem;
+import com.romanpulov.violetnote.chooser.AbstractChooseItem;
 import com.romanpulov.violetnote.filechooser.FileChooseItem;
 
 import org.junit.Test;
@@ -25,7 +25,7 @@ public class FileTest {
     public void FileChooseItemTest() {
         FileChooseItem i1 = new FileChooseItem(new File("../data"));
         i1.fillItems();
-        for (ChooseItem i : i1.getItems()) {
+        for (AbstractChooseItem i : i1.getItems()) {
             System.out.println(i.toString());
         }
     }

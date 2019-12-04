@@ -1,17 +1,17 @@
 package com.romanpulov.violetnote.onedrivechooser;
 
-import com.romanpulov.violetnote.chooser.ChooseItem;
+import com.romanpulov.violetnote.chooser.AbstractChooseItem;
 
 import java.util.List;
 
 import static com.romanpulov.library.onedrive.OneDriveHelper.ROOT_FULL_PATH;
 import static com.romanpulov.library.onedrive.OneDriveHelper.ROOT_PATH;
 
-public class OneDriveRootChooseItem implements ChooseItem {
+public class OneDriveRootChooseItem extends AbstractChooseItem {
     private String mPath;
 
     private OneDriveRootChooseItem() {
-
+        super(AbstractChooseItem.ITEM_PARENT);
     }
 
     public static OneDriveRootChooseItem fromPath(String path) {
@@ -36,22 +36,7 @@ public class OneDriveRootChooseItem implements ChooseItem {
     }
 
     @Override
-    public int getItemType() {
-        return ChooseItem.ITEM_PARENT;
-    }
-
-    @Override
     public void fillItems() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public String getFillItemsError() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public List<ChooseItem> getItems() {
         throw new UnsupportedOperationException();
     }
 }

@@ -31,7 +31,7 @@ public abstract class AbstractHrChooserActivity extends ActionBarCompatActivity 
     }
 
     @Override
-    public void onChooserInteraction(ChooseItem item) {
+    public void onChooserInteraction(AbstractChooseItem item) {
         Intent resultIntent = new Intent();
         resultIntent.putExtra(CHOOSER_RESULT_PATH, item.getItemPath());
         resultIntent.putExtra(CHOOSER_RESULT_NAME, item.getItemName());
