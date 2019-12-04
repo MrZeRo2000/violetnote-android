@@ -3,7 +3,7 @@ package com.romanpulov.violetnote.db.dao;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.romanpulov.violetnote.db.tabledef.HNoteCOItemParamsTableDef;
 import com.romanpulov.violetnote.model.BasicHNoteCOItemParam;

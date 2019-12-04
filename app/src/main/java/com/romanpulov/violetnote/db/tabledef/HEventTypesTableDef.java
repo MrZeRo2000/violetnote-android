@@ -1,6 +1,6 @@
 package com.romanpulov.violetnote.db.tabledef;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import com.romanpulov.violetnote.model.BasicHEventTypeA;
 

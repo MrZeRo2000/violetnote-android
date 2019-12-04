@@ -3,7 +3,7 @@ package com.romanpulov.violetnote.view.preference;
 import android.content.DialogInterface;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import android.support.v7.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
 
 import com.romanpulov.library.onedrive.OneDriveHelper;
 import com.romanpulov.violetnote.R;

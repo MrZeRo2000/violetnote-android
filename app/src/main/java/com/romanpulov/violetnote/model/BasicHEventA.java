@@ -1,6 +1,6 @@
 package com.romanpulov.violetnote.model;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.LongSparseArray;
 
 import java.util.List;

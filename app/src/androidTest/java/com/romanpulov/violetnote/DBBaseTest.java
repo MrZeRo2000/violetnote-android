@@ -9,7 +9,7 @@ import com.romanpulov.violetnote.db.manager.DBHManager;
 import com.romanpulov.violetnote.db.manager.DBNoteManager;
 import com.romanpulov.violetnote.db.DBStorageManager;
 
-import static android.support.test.InstrumentationRegistry.getTargetContext;
+import static androidx.test.platform.app.InstrumentationRegistry.getTargetContext;
 
 /**
  * Base class for DB tests

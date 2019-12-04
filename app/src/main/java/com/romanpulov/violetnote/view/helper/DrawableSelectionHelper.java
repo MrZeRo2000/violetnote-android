@@ -1,6 +1,6 @@
 package com.romanpulov.violetnote.view.helper;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.model.BasicNoteGroupA;

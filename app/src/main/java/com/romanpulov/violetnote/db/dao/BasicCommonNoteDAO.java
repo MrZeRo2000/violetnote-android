@@ -1,7 +1,7 @@
 package com.romanpulov.violetnote.db.dao;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.romanpulov.violetnote.db.provider.DBManagementProvider;
 import com.romanpulov.violetnote.model.BasicCommonNoteA;

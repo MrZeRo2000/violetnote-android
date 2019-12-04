@@ -1,9 +1,9 @@
 package com.romanpulov.violetnote.view;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.widget.ActionMenuView;
-import android.support.v7.widget.Toolbar;
+import androidx.fragment.app.FragmentManager;
+import androidx.appcompat.widget.ActionMenuView;
+import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 

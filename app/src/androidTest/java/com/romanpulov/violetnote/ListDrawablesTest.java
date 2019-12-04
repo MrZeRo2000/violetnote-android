@@ -2,14 +2,14 @@ package com.romanpulov.violetnote;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.support.test.filters.SmallTest;
+import androidx.test.filters.SmallTest;
 import android.util.Log;
 
 import org.junit.Test;
 
 import java.lang.reflect.Field;
 
-import static android.support.test.InstrumentationRegistry.getTargetContext;
+import static androidx.test.platform.app.InstrumentationRegistry.getTargetContext;
 
 @SmallTest
 public class ListDrawablesTest {

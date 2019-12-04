@@ -1,6 +1,6 @@
 package com.romanpulov.violetnote;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.romanpulov.violetnote.model.BasicOrderedEntityNoteA;
 
@@ -8,11 +8,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 /**
  * Created by romanpulov on 26.06.2017.

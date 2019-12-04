@@ -3,7 +3,7 @@ package com.romanpulov.violetnote;
 import android.os.Parcel;
 import android.util.Log;
 
-import android.support.test.filters.SmallTest;
+import androidx.test.filters.SmallTest;
 import android.util.LongSparseArray;
 
 import org.junit.*;

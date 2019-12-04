@@ -1,15 +1,13 @@
 package com.romanpulov.violetnote;
 
-import android.provider.Settings;
 import android.text.format.DateFormat;
 import android.util.Log;
 import java.util.Date;
 
-import android.support.test.filters.SmallTest;
+import androidx.test.filters.SmallTest;
 import org.junit.*;
-import static android.support.test.InstrumentationRegistry.getTargetContext;
-import static android.support.test.InstrumentationRegistry.getContext;
-import static org.junit.Assert.*;
+import static androidx.test.platform.app.InstrumentationRegistry.getTargetContext;
+import static androidx.test.platform.app.InstrumentationRegistry.getContext;
 
 /**
  * Created by romanpulov on 25.08.2016.

@@ -1,6 +1,6 @@
 package com.romanpulov.violetnote;
 
-import android.support.test.filters.SmallTest;
+import androidx.test.filters.SmallTest;
 
 import com.romanpulov.violetnote.db.DBBasicNoteHelper;
 import com.romanpulov.violetnote.model.BasicNoteA;
@@ -9,7 +9,7 @@ import com.romanpulov.violetnote.model.BasicNoteGroupA;
 
 import org.junit.Test;
 
-import static android.support.test.InstrumentationRegistry.getTargetContext;
+import static androidx.test.platform.app.InstrumentationRegistry.getTargetContext;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 

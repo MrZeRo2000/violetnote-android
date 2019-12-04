@@ -1,14 +1,13 @@
 package com.romanpulov.violetnote.view;
 
 import android.content.Context;
-import android.support.v7.view.ActionMode;
+import androidx.appcompat.view.ActionMode;
 import android.util.LongSparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DateTimeFormatter;
@@ -16,7 +15,6 @@ import com.romanpulov.violetnote.model.BasicHEventA;
 import com.romanpulov.violetnote.model.BasicHNoteCOItemA;
 import com.romanpulov.violetnote.view.core.ViewSelectorHelper;
 
-import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
 

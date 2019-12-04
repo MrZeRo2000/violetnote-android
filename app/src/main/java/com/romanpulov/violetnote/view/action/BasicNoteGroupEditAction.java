@@ -1,6 +1,6 @@
 package com.romanpulov.violetnote.view.action;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.romanpulov.violetnote.db.manager.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicNoteGroupA;

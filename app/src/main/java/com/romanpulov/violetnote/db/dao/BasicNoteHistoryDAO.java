@@ -2,7 +2,7 @@ package com.romanpulov.violetnote.db.dao;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.romanpulov.violetnote.db.tabledef.NoteItemsHistoryTableDef;
 import com.romanpulov.violetnote.model.BasicNoteA;

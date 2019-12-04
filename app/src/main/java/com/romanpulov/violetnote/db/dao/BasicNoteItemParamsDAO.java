@@ -3,7 +3,7 @@ package com.romanpulov.violetnote.db.dao;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.LongSparseArray;
 
 import com.romanpulov.violetnote.db.DBRawQueryRepository;

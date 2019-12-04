@@ -2,7 +2,7 @@ package com.romanpulov.violetnote.model.vo;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 public final class BasicNoteItemParamValueA implements Parcelable {
     public final long noteItemParamTypeId;

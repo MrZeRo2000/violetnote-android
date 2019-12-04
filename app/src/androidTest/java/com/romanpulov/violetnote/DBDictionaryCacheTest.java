@@ -1,12 +1,12 @@
 package com.romanpulov.violetnote;
 
-import android.support.test.filters.SmallTest;
+import androidx.test.filters.SmallTest;
 import android.util.Log;
 
 import com.romanpulov.violetnote.db.DBDictionaryCache;
 
 import org.junit.*;
-import static android.support.test.InstrumentationRegistry.getTargetContext;
+import static androidx.test.platform.app.InstrumentationRegistry.getTargetContext;
 import static org.junit.Assert.*;
 
 @SmallTest

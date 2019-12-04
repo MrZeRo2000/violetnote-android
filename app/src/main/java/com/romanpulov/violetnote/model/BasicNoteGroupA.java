@@ -2,7 +2,7 @@ package com.romanpulov.violetnote.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.romanpulov.violetnote.db.provider.BasicNoteGroupDBManagementProvider;
 import com.romanpulov.violetnote.model.vo.BasicNoteGroupDisplayOptions;

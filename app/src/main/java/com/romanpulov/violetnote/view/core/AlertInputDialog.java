@@ -1,6 +1,6 @@
 package com.romanpulov.violetnote.view.core;
 
-import android.support.v7.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
 
 /**
  * Input dialog base class

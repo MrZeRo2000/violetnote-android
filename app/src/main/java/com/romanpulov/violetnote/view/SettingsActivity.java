@@ -2,7 +2,7 @@ package com.romanpulov.violetnote.view;
 
 import android.app.Fragment;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.romanpulov.violetnote.view.core.ActionBarCompatActivity;
 import com.romanpulov.violetnote.view.helper.PermissionRequestHelper;

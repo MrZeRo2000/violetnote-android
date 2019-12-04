@@ -1,12 +1,11 @@
 package com.romanpulov.violetnote.filechooser;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.romanpulov.violetnote.chooser.AbstractChooseItem;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * AbstractChooseItem implementation for choosing file on device

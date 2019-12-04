@@ -1,7 +1,7 @@
 package com.romanpulov.violetnote.dropboxchooser;
 
 import com.romanpulov.violetnote.chooser.AbstractHrChooserActivity;
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 
 /**
  * Activity for choosing file from Dropbox

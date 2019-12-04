@@ -15,7 +15,7 @@ tools:context="com.romanpulov.violetnote.chooser.HrChooserFragment">
     android:padding="@dimen/text_margin_half"
     android:background="@color/windowBackgroundLight"
     />
-<android.support.v7.widget.RecyclerView
+<androidx.recyclerview.widget.RecyclerView
     android:id="@+id/chooser_list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
