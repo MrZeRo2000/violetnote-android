@@ -68,7 +68,7 @@
             android:name=".view.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:parentActivityName=".view.CategoryActivity"
-            android:theme="@style/PreferencesTheme"
+            android:theme="@style/PreferencesAppTheme"
             />
         <activity
             android:name=".filechooser.FileChooserActivity"

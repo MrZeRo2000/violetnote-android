@@ -53,6 +53,7 @@ import com.romanpulov.violetnote.loader.onedrive.BackupOneDriveUploader;
 import com.romanpulov.violetnote.loader.onedrive.RestoreOneDriveFileLoader;
 import com.romanpulov.violetnote.service.LoaderService;
 import com.romanpulov.violetnote.service.LoaderServiceManager;
+import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 import com.romanpulov.violetnote.view.preference.AccountDropboxPreferenceSetup;
 import com.romanpulov.violetnote.view.preference.AccountOneDrivePreferenceSetup;
 import com.romanpulov.violetnote.view.preference.BasicNoteGroupsPreferenceSetup;
@@ -555,18 +556,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View v = super.onCreateView(inflater, container, savedInstanceState);
-        if(v != null) {
-            View lv = v.findViewById(android.R.id.list);
-            if (lv == null) {
-                lv = getListView();
-            }
-            if (lv != null) {
-                lv.setPadding(0, 0, 0, 0);
-            }
-        }
-        return v;
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        getListView().addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(getActivity(), RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_white_black_gradient));
     }
 }

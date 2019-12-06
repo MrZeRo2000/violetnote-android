@@ -42,8 +42,6 @@
         <item name="android:windowAnimationStyle">@style/AnimationStyle</item>
         <!-- Hardware Options menu -->
         <item name="actionBarPopupTheme">@style/ActionBarPopupTheme</item>
-        <!-- Preference Theme -->
-        <item name="preferenceTheme">@style/PreferenceListTheme</item>
     </style>
 
     <style name="ToolBarTheme" parent="AppTheme">
@@ -182,18 +180,28 @@
     </style>
 
     <!-- Preferences/Theme -->
-    <style name="PreferencesTheme" parent="@style/MainAppTheme">
+    <style name="PreferencesAppTheme" parent="@style/MainAppTheme">
+        <item name="preferenceTheme">@style/PreferenceTheme</item>
+
         <item name="android:textColor">@color/brightTextColor</item>
-        <item name="android:textColorSecondary">@color/brightTextColor</item>
+        <item name="android:textColorSecondary">@color/dimTextColor</item>
+        <item name="android:selectableItemBackground">@drawable/list_selector</item>
     </style>
 
     <!-- For list in Preferences -->
-    <style name="PreferenceListTheme" parent="@style/MainAppTheme">
-        <item name="android:paddingLeft">0px</item>
-        <item name="android:layout_marginStart">0px</item>
-        <item name="android:layout_marginLeft">0px</item>
-        <item name="android:background">@drawable/list_selector</item>
-        <item name="android:divider">@drawable/divider_white_black_gradient</item>
+    <style name="PreferenceTheme" parent="PreferenceThemeOverlay">
+        <item name="checkBoxPreferenceStyle">@style/CheckBoxPreferenceStyle</item>
+        <item name="preferenceStyle">@style/PreferenceStyle</item>
+    </style>
+
+    <!-- For checkbox preference -->
+    <style name="CheckBoxPreferenceStyle" parent="@style/Preference.CheckBoxPreference.Material">
+        <item name="iconSpaceReserved">false</item>
+    </style>
+
+    <!-- For generic preference -->
+    <style name="PreferenceStyle" parent="@style/Preference.Material">
+        <item name="iconSpaceReserved">false</item>
     </style>
 
     <!-- Preferences/Category Divider -->
