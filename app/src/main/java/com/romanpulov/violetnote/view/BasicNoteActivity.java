@@ -105,6 +105,8 @@ public class BasicNoteActivity extends ActionBarCompatActivity implements BasicN
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
         if ((data != null) && (data.getComponent() != null) && (data.getComponent().getClassName().equals(BasicNoteEditActivity.class.getName()))) {
             BasicNoteA newNote = data.getParcelableExtra(NOTE);
             if (newNote != null) {
