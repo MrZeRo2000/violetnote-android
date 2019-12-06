@@ -1,7 +1,7 @@
 package com.romanpulov.violetnote.view.preference;
 
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.library.dropbox.DropboxHelper;
@@ -13,7 +13,7 @@ import com.romanpulov.library.dropbox.DropboxHelper;
 
 public class AccountDropboxPreferenceSetup extends PreferenceSetup {
 
-    public AccountDropboxPreferenceSetup(PreferenceFragment preferenceFragment) {
+    public AccountDropboxPreferenceSetup(PreferenceFragmentCompat preferenceFragment) {
         super(preferenceFragment, PreferenceRepository.PREF_KEY_ACCOUNT_DROPBOX);
     }
 

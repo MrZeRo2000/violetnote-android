@@ -2,8 +2,8 @@ package com.romanpulov.violetnote.view.preference;
 
 import android.app.Activity;
 import android.content.Context;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
 
 /**
  * Root abstract class for preference configuration
@@ -11,12 +11,12 @@ import android.preference.PreferenceFragment;
  */
 
 public abstract class PreferenceSetup {
-    final PreferenceFragment mPreferenceFragment;
+    final PreferenceFragmentCompat mPreferenceFragment;
     final Preference mPreference;
     final Activity mActivity;
     final Context mContext;
 
-    public PreferenceSetup(PreferenceFragment preferenceFragment, String preferenceKey) {
+    public PreferenceSetup(PreferenceFragmentCompat preferenceFragment, String preferenceKey) {
         mPreferenceFragment = preferenceFragment;
         mPreference = preferenceFragment.findPreference(preferenceKey);
         mActivity = preferenceFragment.getActivity();

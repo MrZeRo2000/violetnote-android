@@ -1,6 +1,6 @@
 package com.romanpulov.violetnote.view.preference.processor;
 
-import android.preference.PreferenceFragment;
+import androidx.preference.PreferenceFragmentCompat;
 
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 
@@ -13,7 +13,7 @@ public class PreferenceDocumentLoaderProcessor extends PreferenceLoaderProcessor
 
     private static final String PREF_KEY_NAME = PreferenceRepository.PREF_KEY_DOCUMENT_LOAD;
 
-    public PreferenceDocumentLoaderProcessor(PreferenceFragment preferenceFragment) {
+    public PreferenceDocumentLoaderProcessor(PreferenceFragmentCompat preferenceFragment) {
         super(preferenceFragment);
     }
 

@@ -1,9 +1,11 @@
 package com.romanpulov.violetnote.view;
 
-import android.app.Fragment;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 
+import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.view.core.ActionBarCompatActivity;
 import com.romanpulov.violetnote.view.helper.PermissionRequestHelper;
 
@@ -15,17 +17,16 @@ public class SettingsActivity extends ActionBarCompatActivity {
     public final static int PERMISSION_REQUEST_DOCUMENT_LOAD = 105;
 
     private Fragment getSettingsFragment() {
-        return getFragmentManager().findFragmentById(android.R.id.content);
+        return getSupportFragmentManager().findFragmentById(android.R.id.content);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Display the fragment as the main content.
-
+        // Display the fragment as the main content./
         if (getSettingsFragment() == null)
-            getFragmentManager().beginTransaction()
+            getSupportFragmentManager().beginTransaction()
                 .replace(android.R.id.content, new SettingsFragment())
                 .commit();
     }

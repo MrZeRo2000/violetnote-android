@@ -1,7 +1,7 @@
 package com.romanpulov.violetnote.view.preference.processor;
 
 import android.content.Context;
-import android.preference.PreferenceFragment;
+import androidx.preference.PreferenceFragmentCompat;
 
 /**
  * Base class for preference loader
@@ -9,10 +9,10 @@ import android.preference.PreferenceFragment;
  */
 
 public abstract class PreferenceLoaderProcessor {
-    protected final PreferenceFragment mPreferenceFragment;
+    protected final PreferenceFragmentCompat mPreferenceFragment;
     protected final Context mContext;
 
-    public PreferenceLoaderProcessor(PreferenceFragment preferenceFragment) {
+    public PreferenceLoaderProcessor(PreferenceFragmentCompat preferenceFragment) {
         mPreferenceFragment = preferenceFragment;
         mContext = preferenceFragment.getActivity();
     }

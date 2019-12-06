@@ -2,8 +2,8 @@ package com.romanpulov.violetnote.view.preference;
 
 import android.content.Intent;
 import android.os.Environment;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
 
 import com.romanpulov.library.common.network.NetworkUtils;
 import com.romanpulov.violetnote.R;
@@ -28,7 +28,7 @@ import static com.romanpulov.violetnote.view.preference.PreferenceRepository.SOU
 
 public class SourcePathPreferenceSetup extends PreferenceSetup {
 
-    public SourcePathPreferenceSetup (PreferenceFragment preferenceFragment) {
+    public SourcePathPreferenceSetup (PreferenceFragmentCompat preferenceFragment) {
         super(preferenceFragment, PREF_KEY_SOURCE_PATH);
     }
 

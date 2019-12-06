@@ -1,8 +1,9 @@
 package com.romanpulov.violetnote.view.preference;
 
 import android.content.DialogInterface;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
+
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
 import androidx.appcompat.app.AlertDialog;
 
 import com.romanpulov.violetnote.R;
@@ -70,7 +71,7 @@ public class CommonSourceTypePreferenceSetup extends PreferenceSetup {
     }
 
     public CommonSourceTypePreferenceSetup(
-            PreferenceFragment preferenceFragment,
+            PreferenceFragmentCompat preferenceFragment,
             String preferenceKey,
             int sourceTypeEntriesId,
             int defaultValue

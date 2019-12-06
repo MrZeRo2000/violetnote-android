@@ -1,7 +1,9 @@
 package com.romanpulov.violetnote.view.core;
 
 import android.content.Context;
-import android.preference.Preference;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceViewHolder;
+
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -21,9 +23,9 @@ public class ProgressPreference extends Preference {
     }
 
     @Override
-    protected void onBindView(View view) {
-        super.onBindView(view);
-        mProgressBar = view.findViewById(R.id.progress_bar);
+    public void onBindViewHolder(PreferenceViewHolder holder) {
+        super.onBindViewHolder(holder);
+        mProgressBar = (ProgressBar) holder.findViewById(R.id.progress_bar);
         setProgressVisibility(mIsVisible);
     }
 

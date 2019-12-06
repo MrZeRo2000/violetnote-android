@@ -1,8 +1,8 @@
 package com.romanpulov.violetnote.view.preference;
 
 import android.content.DialogInterface;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
 import androidx.appcompat.app.AlertDialog;
 
 import com.romanpulov.library.onedrive.OneDriveHelper;
@@ -17,7 +17,7 @@ import static com.romanpulov.library.onedrive.OneDriveHelper.ONEDRIVE_ACTION_LOG
  */
 public class AccountOneDrivePreferenceSetup extends PreferenceSetup {
 
-    public AccountOneDrivePreferenceSetup(PreferenceFragment preferenceFragment) {
+    public AccountOneDrivePreferenceSetup(PreferenceFragmentCompat preferenceFragment) {
         super(preferenceFragment, PreferenceRepository.PREF_KEY_ACCOUNT_ONEDRIVE);
     }
 

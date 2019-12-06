@@ -3,7 +3,7 @@ package com.romanpulov.violetnote.db.dao;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 import androidx.annotation.NonNull;
 import android.util.LongSparseArray;
 

@@ -1,5 +1,6 @@
 package com.romanpulov.violetnote.view;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -9,15 +10,26 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceCategory;
+import androidx.preference.PreferenceFragmentCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.appcompat.app.AlertDialog;
+import androidx.preference.PreferenceGroupAdapter;
+import androidx.preference.PreferenceScreen;
+import androidx.preference.PreferenceViewHolder;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.romanpulov.library.common.network.NetworkUtils;
@@ -64,7 +76,7 @@ import static com.romanpulov.violetnote.view.preference.PreferenceRepository.PRE
 import static com.romanpulov.violetnote.view.preference.PreferenceRepository.PREF_KEY_SOURCE_TYPE;
 import static com.romanpulov.violetnote.view.preference.PreferenceRepository.displayMessage;
 
-public class SettingsFragment extends PreferenceFragment {
+public class SettingsFragment extends PreferenceFragmentCompat {
 
     private PreferenceDocumentLoaderProcessor mPreferenceDocumentLoaderProcessor;
     private PreferenceBackupCloudProcessor mPreferenceBackupCloudProcessor;
@@ -96,6 +108,10 @@ public class SettingsFragment extends PreferenceFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setRetainInstance(true);
 
         addPreferencesFromResource(R.xml.preferences);
@@ -543,9 +559,13 @@ public class SettingsFragment extends PreferenceFragment {
                              Bundle savedInstanceState) {
         View v = super.onCreateView(inflater, container, savedInstanceState);
         if(v != null) {
-            ListView lv = v.findViewById(android.R.id.list);
-            if (lv != null)
+            View lv = v.findViewById(android.R.id.list);
+            if (lv == null) {
+                lv = getListView();
+            }
+            if (lv != null) {
                 lv.setPadding(0, 0, 0, 0);
+            }
         }
         return v;
     }

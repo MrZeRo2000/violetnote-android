@@ -1,14 +1,14 @@
 package com.romanpulov.violetnote.view.preference;
 
 import android.content.Intent;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
 
 import com.romanpulov.violetnote.view.BasicNoteGroupActivity;
 
 public class BasicNoteGroupsPreferenceSetup extends PreferenceSetup {
 
-    public BasicNoteGroupsPreferenceSetup(PreferenceFragment preferenceFragment) {
+    public BasicNoteGroupsPreferenceSetup(PreferenceFragmentCompat preferenceFragment) {
         super(preferenceFragment, PreferenceRepository.PREF_INTERFACE_BASIC_NOTE_GROUPS);
     }
 

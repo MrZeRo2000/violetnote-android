@@ -1,8 +1,8 @@
 package com.romanpulov.violetnote.view.preference;
 
 import android.content.DialogInterface;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
 import androidx.appcompat.app.AlertDialog;
 
 import com.romanpulov.violetnote.R;
@@ -12,7 +12,7 @@ import static com.romanpulov.violetnote.view.preference.PreferenceRepository.PRE
 
 public class CheckedUpdateIntervalPreferenceSetup extends PreferenceSetup {
 
-    public CheckedUpdateIntervalPreferenceSetup(PreferenceFragment preferenceFragment) {
+    public CheckedUpdateIntervalPreferenceSetup(PreferenceFragmentCompat preferenceFragment) {
         super(preferenceFragment, PREF_KEY_INTERFACE_CHECKED_UPDATE_INTERVAL);
     }
 

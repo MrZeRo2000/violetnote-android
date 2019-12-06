@@ -1,6 +1,6 @@
 package com.romanpulov.violetnote.view.preference.processor;
 
-import android.preference.PreferenceFragment;
+import androidx.preference.PreferenceFragmentCompat;
 
 import com.romanpulov.library.common.loader.core.AbstractContextLoader;
 import com.romanpulov.violetnote.R;
@@ -19,7 +19,7 @@ public class PreferenceBackupLocalProcessor extends PreferenceLoaderProcessor {
 
     private static final String PREF_KEY_NAME = PreferenceRepository.PREF_KEY_BASIC_NOTE_LOCAL_BACKUP;
 
-    public PreferenceBackupLocalProcessor(PreferenceFragment preferenceFragment) {
+    public PreferenceBackupLocalProcessor(PreferenceFragmentCompat preferenceFragment) {
         super(preferenceFragment);
     }
 

@@ -2,9 +2,10 @@ package com.romanpulov.violetnote.view.preference;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragment;
+import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceManager;
 import android.widget.Toast;
 
 import com.romanpulov.violetnote.R;
@@ -78,7 +79,7 @@ public class PreferenceRepository {
      * @param value new value to set
      *
      */
-    public static void setSourcePathPreferenceValue(PreferenceFragment preferenceFragment, String value) {
+    public static void setSourcePathPreferenceValue(PreferenceFragmentCompat preferenceFragment, String value) {
         preferenceFragment.getPreferenceManager().getSharedPreferences().edit().putString(PREF_KEY_SOURCE_PATH, value).commit();
         preferenceFragment.findPreference(PREF_KEY_SOURCE_PATH).setSummary(value);
     }
@@ -103,7 +104,7 @@ public class PreferenceRepository {
      * @param preferenceLastLoadedKey preference last loaded time
      * @param value value to update
      */
-    public static void updateLoadPreferenceSummary(PreferenceFragment preferenceFragment, String preferenceKey, String preferenceLastLoadedKey, long value) {
+    public static void updateLoadPreferenceSummary(PreferenceFragmentCompat preferenceFragment, String preferenceKey, String preferenceLastLoadedKey, long value) {
         Preference prefLoad = preferenceFragment.findPreference(preferenceKey);
 
         if (value == PREF_LOAD_LOADING)
@@ -135,7 +136,7 @@ public class PreferenceRepository {
      * @param preferenceKey preference key
      * @param value value to set
      */
-    public static void updatePreferenceKeySummary(PreferenceFragment preferenceFragment, String preferenceKey, long value) {
+    public static void updatePreferenceKeySummary(PreferenceFragmentCompat preferenceFragment, String preferenceKey, long value) {
         updateLoadPreferenceSummary(preferenceFragment, preferenceKey, PREF_KEYS_LAST_LOADED.get(preferenceKey), value);
     }
 
@@ -165,7 +166,7 @@ public class PreferenceRepository {
      * @param preferenceKey preference key
      * @param v visibility value
      */
-    public static void setProgressPreferenceVisibility(PreferenceFragment preferenceFragment, String preferenceKey, boolean v) {
+    public static void setProgressPreferenceVisibility(PreferenceFragmentCompat preferenceFragment, String preferenceKey, boolean v) {
         Preference preference = preferenceFragment.findPreference(preferenceKey);
         if (preference instanceof ProgressPreference) {
             ProgressPreference progressPreference = (ProgressPreference) preference;

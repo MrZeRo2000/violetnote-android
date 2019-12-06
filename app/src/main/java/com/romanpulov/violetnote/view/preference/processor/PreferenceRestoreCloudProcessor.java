@@ -1,6 +1,6 @@
 package com.romanpulov.violetnote.view.preference.processor;
 
-import android.preference.PreferenceFragment;
+import androidx.preference.PreferenceFragmentCompat;
 
 import com.romanpulov.library.common.loader.core.AbstractContextLoader;
 import com.romanpulov.violetnote.loader.dropbox.RestoreDropboxFileLoader;
@@ -14,7 +14,7 @@ public class PreferenceRestoreCloudProcessor extends PreferenceLoaderProcessor {
 
     private static final String PREF_KEY_NAME = PreferenceRepository.PREF_KEY_BASIC_NOTE_CLOUD_RESTORE;
 
-    public PreferenceRestoreCloudProcessor(PreferenceFragment preferenceFragment) {
+    public PreferenceRestoreCloudProcessor(PreferenceFragmentCompat preferenceFragment) {
         super(preferenceFragment);
     }
 

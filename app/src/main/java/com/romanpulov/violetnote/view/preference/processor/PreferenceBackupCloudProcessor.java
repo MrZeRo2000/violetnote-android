@@ -1,6 +1,6 @@
 package com.romanpulov.violetnote.view.preference.processor;
 
-import android.preference.PreferenceFragment;
+import androidx.preference.PreferenceFragmentCompat;
 
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 
@@ -12,7 +12,7 @@ public class PreferenceBackupCloudProcessor extends PreferenceLoaderProcessor{
 
     private static final String PREF_KEY_NAME = PreferenceRepository.PREF_KEY_BASIC_NOTE_CLOUD_BACKUP;
 
-    public PreferenceBackupCloudProcessor(PreferenceFragment preferenceFragment) {
+    public PreferenceBackupCloudProcessor(PreferenceFragmentCompat preferenceFragment) {
         super(preferenceFragment);
     }
 

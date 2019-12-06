@@ -1,6 +1,6 @@
 package com.romanpulov.violetnote.view.preference;
 
-import android.preference.PreferenceFragment;
+import androidx.preference.PreferenceFragmentCompat;
 
 import com.romanpulov.violetnote.R;
 
@@ -15,7 +15,7 @@ import static com.romanpulov.violetnote.view.preference.PreferenceRepository.DEF
 public class CloudStorageTypePreferenceSetup extends PreferenceSetup {
     private final int mDefaultValue;
 
-    public CloudStorageTypePreferenceSetup(PreferenceFragment preferenceFragment) {
+    public CloudStorageTypePreferenceSetup(PreferenceFragmentCompat preferenceFragment) {
         super(preferenceFragment, PreferenceRepository.PREF_KEY_BASIC_NOTE_CLOUD_STORAGE);
         mDefaultValue = DEFAULT_CLOUD_SOURCE_TYPE;
     }
