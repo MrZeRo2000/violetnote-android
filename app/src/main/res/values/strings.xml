@@ -1,7 +1,9 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Violet Note</string>
     <!-- DropBox -->
     <string name="app_key">lnxj3kbbxeetpa8</string>
+    <!-- OneDrive -->
+    <string name="onedrive_client_id" tools:ignore="TypographyDashes">8ed347b1-d21c-4f8d-bdc4-6e53e17f120d</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="password_required">Password required</string>
