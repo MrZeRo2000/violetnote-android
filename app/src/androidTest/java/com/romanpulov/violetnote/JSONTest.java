@@ -4,7 +4,6 @@ import android.util.Log;
 
 import androidx.test.filters.SmallTest;
 import org.junit.*;
-import static androidx.test.platform.app.InstrumentationRegistry.getTargetContext;
 import static org.junit.Assert.*;
 
 import org.json.JSONException;

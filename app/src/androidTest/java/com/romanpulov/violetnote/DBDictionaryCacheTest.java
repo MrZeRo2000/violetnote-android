@@ -1,16 +1,23 @@
 package com.romanpulov.violetnote;
 
 import androidx.test.filters.SmallTest;
+
+import android.content.Context;
 import android.util.Log;
 
 import com.romanpulov.violetnote.db.DBDictionaryCache;
 
 import org.junit.*;
-import static androidx.test.platform.app.InstrumentationRegistry.getTargetContext;
+
+import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.junit.Assert.*;
 
 @SmallTest
 public class DBDictionaryCacheTest {
+    private Context getTargetContext() {
+        return getInstrumentation().getTargetContext();
+    }
+
     private final static String TAG = "DBDictionaryCacheTest";
 
     @Test

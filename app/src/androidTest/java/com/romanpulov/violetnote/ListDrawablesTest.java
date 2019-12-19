@@ -3,16 +3,21 @@ package com.romanpulov.violetnote;
 import android.content.Context;
 import android.content.res.Resources;
 import androidx.test.filters.SmallTest;
+
 import android.util.Log;
 
 import org.junit.Test;
 
 import java.lang.reflect.Field;
 
-import static androidx.test.platform.app.InstrumentationRegistry.getTargetContext;
+import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 
 @SmallTest
 public class ListDrawablesTest {
+
+    private Context getTargetContext() {
+        return getInstrumentation().getTargetContext();
+    }
 
     @Test
     public void test1() {

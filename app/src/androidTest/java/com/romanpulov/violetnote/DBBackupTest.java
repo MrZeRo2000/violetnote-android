@@ -1,10 +1,13 @@
 package com.romanpulov.violetnote;
 
+import android.content.Context;
 import android.util.Log;
 
 import androidx.test.filters.SmallTest;
+
 import org.junit.*;
-import static androidx.test.platform.app.InstrumentationRegistry.getTargetContext;
+
+import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.junit.Assert.*;
 
 import com.romanpulov.violetnote.db.DBBasicNoteHelper;
@@ -21,6 +24,10 @@ public class DBBackupTest {
 
     private static void log(String message) {
         Log.d(TAG, message);
+    }
+
+    private Context getTargetContext() {
+        return getInstrumentation().getTargetContext();
     }
 
     @Test

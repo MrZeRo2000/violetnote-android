@@ -1,6 +1,9 @@
 package com.romanpulov.violetnote;
 
+import android.content.Context;
+
 import androidx.test.filters.SmallTest;
+import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.romanpulov.violetnote.db.DBBasicNoteHelper;
 import com.romanpulov.violetnote.model.BasicNoteA;
@@ -9,12 +12,15 @@ import com.romanpulov.violetnote.model.BasicNoteGroupA;
 
 import org.junit.Test;
 
-import static androidx.test.platform.app.InstrumentationRegistry.getTargetContext;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
 @SmallTest
 public final class DBNoteItemPriceTest extends DBBaseTest {
+    private Context getTargetContext() {
+        return InstrumentationRegistry.getInstrumentation().getTargetContext();
+    }
+
     @Override
     void prepareDatabase() {
         deleteDatabase();

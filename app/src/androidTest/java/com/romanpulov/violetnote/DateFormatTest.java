@@ -1,13 +1,15 @@
 package com.romanpulov.violetnote;
 
+import android.content.Context;
 import android.text.format.DateFormat;
 import android.util.Log;
 import java.util.Date;
 
 import androidx.test.filters.SmallTest;
+
 import org.junit.*;
-import static androidx.test.platform.app.InstrumentationRegistry.getTargetContext;
-import static androidx.test.platform.app.InstrumentationRegistry.getContext;
+
+import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 
 /**
  * Created by romanpulov on 25.08.2016.
@@ -17,6 +19,10 @@ public class DateFormatTest {
     private final static String TAG = "DateFormatTest";
     private static void log(String message) {
         Log.d(TAG, message);
+    }
+
+    private Context getTargetContext() {
+        return getInstrumentation().getTargetContext();
     }
 
     @Test

@@ -3,13 +3,15 @@ package com.romanpulov.violetnote;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
+import androidx.test.platform.app.InstrumentationRegistry;
+
 import com.romanpulov.violetnote.db.DBBasicNoteHelper;
 import com.romanpulov.violetnote.db.DBBasicNoteOpenHelper;
 import com.romanpulov.violetnote.db.manager.DBHManager;
 import com.romanpulov.violetnote.db.manager.DBNoteManager;
 import com.romanpulov.violetnote.db.DBStorageManager;
 
-import static androidx.test.platform.app.InstrumentationRegistry.getTargetContext;
+
 
 /**
  * Base class for DB tests
@@ -20,6 +22,10 @@ abstract class DBBaseTest {
     DBHManager mDBHManager;
     DBNoteManager mDBNoteManager;
     Context mContext;
+
+    private Context getTargetContext() {
+        return InstrumentationRegistry.getInstrumentation().getTargetContext();
+    }
 
     abstract void prepareDatabase();
 

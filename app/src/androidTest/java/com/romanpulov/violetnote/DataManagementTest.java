@@ -1,5 +1,6 @@
 package com.romanpulov.violetnote;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
@@ -10,7 +11,8 @@ import java.util.List;
 import androidx.test.filters.SmallTest;
 
 import org.junit.*;
-import static androidx.test.platform.app.InstrumentationRegistry.getTargetContext;
+
+import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.junit.Assert.*;
 
 import com.romanpulov.violetnote.db.DBBasicNoteHelper;
@@ -30,6 +32,10 @@ public class DataManagementTest extends DBBaseTest {
 
     private static void log(String message) {
         Log.d(TAG, message);
+    }
+
+    private Context getTargetContext() {
+        return getInstrumentation().getTargetContext();
     }
 
     @Override

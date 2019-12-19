@@ -1,6 +1,8 @@
 package com.romanpulov.violetnote;
 
 import androidx.annotation.NonNull;
+
+import android.content.Context;
 import android.util.Log;
 
 import java.util.Arrays;
@@ -8,7 +10,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import static androidx.test.platform.app.InstrumentationRegistry.getTargetContext;
+import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.junit.Assert.*;
 
 import com.romanpulov.violetnote.db.DBBasicNoteHelper;
@@ -27,6 +29,10 @@ public class DataGenerator {
 
     private static void log(String message) {
         Log.d(TAG, message);
+    }
+
+    private Context getTargetContext() {
+        return getInstrumentation().getTargetContext();
     }
 
     public void deleteDatabase() {

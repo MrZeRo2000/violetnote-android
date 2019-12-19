@@ -101,20 +101,25 @@ public class BasicHEventCOItemExpandableListViewAdapter extends BaseExpandableLi
 
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-        GroupViewHolder viewHolder;
+        GroupViewHolder viewHolder = null;
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater)this.mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.expandable_list_h_event_group, null);
-            viewHolder = new GroupViewHolder(convertView);
-            convertView.setTag(viewHolder);
+            if (inflater != null) {
+                convertView = inflater.inflate(R.layout.expandable_list_h_event_group, parent, false);
+                viewHolder = new GroupViewHolder(convertView);
+                convertView.setTag(viewHolder);
+            }
         } else {
             viewHolder = (GroupViewHolder) convertView.getTag();
         }
-        //TextView groupTitle = convertView.findViewById(R.id.group_title);
-        long eventTime = ((BasicHEventA)getGroup(groupPosition)).getEventTime();
-        //String eventTimeString = DateFormat.getDateTimeInstance().format(new Date(eventTime));
-        String eventTimeString = mDTF.formatDateTimeDelimited(new Date(eventTime), " ");
-        viewHolder.mGroupTitle.setText(eventTimeString);
+
+        if (viewHolder != null) {
+            //TextView groupTitle = convertView.findViewById(R.id.group_title);
+            long eventTime = ((BasicHEventA) getGroup(groupPosition)).getEventTime();
+            //String eventTimeString = DateFormat.getDateTimeInstance().format(new Date(eventTime));
+            String eventTimeString = mDTF.formatDateTimeDelimited(new Date(eventTime), " ");
+            viewHolder.mGroupTitle.setText(eventTimeString);
+        }
 
         return convertView;
     }

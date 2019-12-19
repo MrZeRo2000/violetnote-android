@@ -1,11 +1,13 @@
 package com.romanpulov.violetnote;
 
+import android.content.Context;
 import android.util.Log;
 import java.util.List;
 
 import androidx.test.filters.SmallTest;
+import androidx.test.platform.app.InstrumentationRegistry;
+
 import org.junit.*;
-import static androidx.test.platform.app.InstrumentationRegistry.getTargetContext;
 import static org.junit.Assert.*;
 
 import com.romanpulov.violetnote.db.DBBasicNoteOpenHelper;
@@ -17,6 +19,11 @@ import com.romanpulov.violetnote.model.BasicNoteGroupA;
 @SmallTest
 public class ApplicationTest {
     private final static String TAG = "ApplicationTest";
+
+    private Context getTargetContext() {
+        return InstrumentationRegistry.getInstrumentation().getTargetContext();
+    }
+
 
     private static void log(String message) {
         Log.d(TAG, message);
