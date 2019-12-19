@@ -2,6 +2,8 @@ package com.romanpulov.violetnote.view;
 
 import android.content.Context;
 import androidx.appcompat.view.ActionMode;
+import androidx.core.content.ContextCompat;
+
 import android.util.LongSparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +17,7 @@ import com.romanpulov.violetnote.model.BasicHEventA;
 import com.romanpulov.violetnote.model.BasicHNoteCOItemA;
 import com.romanpulov.violetnote.view.core.ViewSelectorHelper;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -22,6 +25,10 @@ public class BasicHEventCOItemExpandableListViewAdapter extends BaseExpandableLi
     private final Context mContext;
     private final LongSparseArray<BasicHEventA> mHEventList;
     private final LongSparseArray<List<BasicHNoteCOItemA>> mHEventCOItemList;
+    private final Collection<String> mValues;
+    private final int mDimColor;
+    private final int mBrightColor;
+
     private final DateTimeFormatter mDTF;
 
     private final ViewSelectorHelper.AbstractViewSelector<BasicHNoteCOItemA> mExViewSelector;
@@ -34,11 +41,17 @@ public class BasicHEventCOItemExpandableListViewAdapter extends BaseExpandableLi
             Context context,
             LongSparseArray<BasicHEventA> hEventList,
             LongSparseArray<List<BasicHNoteCOItemA>> hEventCOItemList,
+            Collection<String> values,
             ActionMode.Callback actionModeCallback
             ) {
         mContext = context;
         mHEventList = hEventList;
         mHEventCOItemList = hEventCOItemList;
+        mValues = values;
+
+        mDimColor = ContextCompat.getColor(context, R.color.dimTextColor);
+        mBrightColor = ContextCompat.getColor(context, R.color.brightTextColor);
+
         mDTF = new DateTimeFormatter(context);
 
         mExViewSelector = new ViewSelectorHelper.ViewSelectorMultiple<>(this, actionModeCallback);
@@ -165,20 +178,33 @@ public class BasicHEventCOItemExpandableListViewAdapter extends BaseExpandableLi
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        ChildViewHolder viewHolder;
+        ChildViewHolder viewHolder = null;
 
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater)this.mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.expandable_list_h_event_list_item, null);
-            viewHolder = new ChildViewHolder(convertView, mExViewSelector);
-            convertView.setTag(viewHolder);
+            if (inflater != null) {
+                convertView = inflater.inflate(R.layout.expandable_list_h_event_list_item, null);
+                viewHolder = new ChildViewHolder(convertView, mExViewSelector);
+                convertView.setTag(viewHolder);
+            }
         } else {
             viewHolder = (ChildViewHolder)convertView.getTag();
         }
-        BasicHNoteCOItemA item = (BasicHNoteCOItemA)getChild(groupPosition, childPosition);
-        viewHolder.mData = item;
-        viewHolder.mItemTitle.setText(item.getValue());
-        viewHolder.updateBackground();
+
+        if (viewHolder != null) {
+            BasicHNoteCOItemA item = (BasicHNoteCOItemA) getChild(groupPosition, childPosition);
+            viewHolder.mData = item;
+
+            String itemValue = item.getValue();
+            viewHolder.mItemTitle.setText(itemValue);
+            if (mValues.contains(itemValue)) {
+                viewHolder.mItemTitle.setTextColor(mDimColor);
+            } else {
+                viewHolder.mItemTitle.setTextColor(mBrightColor);
+            }
+
+            viewHolder.updateBackground();
+        }
 
         return convertView;
     }

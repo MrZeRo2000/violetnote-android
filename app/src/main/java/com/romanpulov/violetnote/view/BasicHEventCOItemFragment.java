@@ -22,6 +22,7 @@ import com.romanpulov.violetnote.db.manager.DBHManager;
 import com.romanpulov.violetnote.model.BasicHEventA;
 import com.romanpulov.violetnote.model.BasicHNoteCOItemA;
 import com.romanpulov.violetnote.model.BasicNoteA;
+import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.view.core.AlertOkCancelSupportDialogFragment;
 import com.romanpulov.violetnote.view.core.ViewSelectorHelper;
 import com.romanpulov.violetnote.view.helper.DisplayTitleBuilder;
@@ -90,7 +91,13 @@ public class BasicHEventCOItemFragment extends Fragment {
         refreshList(new DBHManager(view.getContext()));
 
         mExListView = view.findViewById(R.id.ex_list);
-        mExListViewAdapter = new BasicHEventCOItemExpandableListViewAdapter(getContext(), mHEvents, mHEventCOItems, new ActionBarCallBack());
+        mExListViewAdapter = new BasicHEventCOItemExpandableListViewAdapter(
+                getContext(),
+                mHEvents,
+                mHEventCOItems,
+                BasicNoteItemA.getBasicNoteItemValues(mNote.getItems()),
+                new ActionBarCallBack()
+        );
         mExListView.setAdapter(mExListViewAdapter);
         mViewSelector = mExListViewAdapter.getViewSelector();
 

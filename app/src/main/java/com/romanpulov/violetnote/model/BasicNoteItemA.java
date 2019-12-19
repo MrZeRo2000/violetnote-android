@@ -8,6 +8,7 @@ import com.romanpulov.violetnote.db.provider.BasicNoteItemDBManagementProvider;
 import com.romanpulov.violetnote.model.vo.BasicParamValueA;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -100,6 +101,17 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
 
         return result;
     }
+
+    public static <T extends BasicNoteItemA> List<String> getBasicNoteItemValues(Collection<T> items) {
+        List<String> result = new ArrayList<>();
+
+        for (T item: items) {
+            result.add(item.getValue());
+        }
+
+        return result;
+    }
+
 
     @Override
     public String getDisplayTitle() {
