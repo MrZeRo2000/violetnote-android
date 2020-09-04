@@ -2,15 +2,14 @@ package com.romanpulov.violetnote;
 
 import com.romanpulov.violetnote.model.PassCategoryA;
 import com.romanpulov.violetnote.model.PassDataA;
-import com.romanpulov.violetnote.model.PassDataExp;
 import com.romanpulov.violetnote.model.PassDataReader;
-import com.romanpulov.violetnotecore.Model.PassCategory;
-import com.romanpulov.violetnotecore.Model.PassData;
-import com.romanpulov.violetnotecore.Model.PassNote;
+import com.romanpulov.violetnotecore.Model.PassCategory2;
+import com.romanpulov.violetnotecore.Model.PassData2;
+import com.romanpulov.violetnotecore.Model.PassNote2;
 
 import org.junit.Test;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -22,57 +21,45 @@ import static org.junit.Assert.assertTrue;
  */
 public class DataModelTest {
 
-    private PassData createTestPassData() {
-        PassData result = new PassData();
+    private PassData2 createTestPassData() {
+        PassData2 result = new PassData2();
+        result.setCategoryList(new ArrayList<PassCategory2>());
 
-        PassCategory pc = new PassCategory("Category 1");
-        result.getPassCategoryList().add(pc);
+        PassCategory2 pc = new PassCategory2("Category 1");
+        pc.setNoteList(new ArrayList<PassNote2>());
 
-        PassNote pn = new PassNote(pc, "System 1", "Alexander", "Password 1", null, null, null);
-        result.getPassNoteList().add(pn);
-        pn = new PassNote(pc, "System 12", "Michael", "Password 12", null, null, null);
-        result.getPassNoteList().add(pn);
-        pn = new PassNote(pc, "System 13", "George", "Password 13", null, null, null);
-        result.getPassNoteList().add(pn);
+        result.getCategoryList().add(pc);
 
-        pc = new PassCategory("Category 2");
-        result.getPassCategoryList().add(pc);
+        PassNote2 pn = new PassNote2("System 1", "Alexander", "Password 1", null, null, null, null);
+        pc.getNoteList().add(pn);
+        pn = new PassNote2("System 12", "Michael", "Password 12", null, null, null, null);
+        pc.getNoteList().add(pn);
+        pn = new PassNote2("System 13", "George", "Password 13", null, null, null, null);
+        pc.getNoteList().add(pn);
 
-        pn = new PassNote(pc, "System 2", "User 2", "Password 2", null, null, null);
-        result.getPassNoteList().add(pn);
+        pc = new PassCategory2("Category 2");
+        pc.setNoteList(new ArrayList<PassNote2>());
+
+        result.getCategoryList().add(pc);
+
+        pn = new PassNote2("System 2", "User 2", "Password 2", null, null, null, null);
+        pc.getNoteList().add(pn);
 
         return result;
     }
 
     private PassDataA createTestPassDataA() {
-        PassData pd = createTestPassData();
+        PassData2 pd = createTestPassData();
         return PassDataA.newInstance(null, pd);
     }
 
     @Test
-    public void Test1() {
-
-        PassData pd = createTestPassData();
-        PassDataExp pde = PassDataExp.newInstance(pd);
-
-        assertEquals(pd.getPassCategoryList().size(), pde.getPassCategoryList().size());
-
-        long totalSize = 0;
-        for (List<?> list : pde.getPassNoteList().values()) {
-            totalSize = totalSize + list.size();
-        }
-
-        assertEquals(pd.getPassNoteList().size(), totalSize);
-    }
-
-    @Test
     public void PassDataReaderTest() {
-        PassData pd = createTestPassData();
+        PassData2 pd = createTestPassData();
         PassDataReader pdr = new PassDataReader(pd);
-        pdr.readCategoryData();
-        pdr.readNoteData();
+        pdr.readPassData();
 
-        assertEquals(pd.getPassCategoryList().size(),  pdr.getPassCategoryDataA().size());
+        assertEquals(pd.getCategoryList().size(),  pdr.getPassCategoryDataA().size());
         for (PassCategoryA p : pdr.getPassCategoryDataA()) {
             System.out.println(p);
         }

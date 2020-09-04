@@ -1,20 +1,30 @@
 package com.romanpulov.violetnote.model;
 
 import com.romanpulov.violetnotecore.Model.PassCategory;
+import com.romanpulov.violetnotecore.Model.PassCategory2;
 import com.romanpulov.violetnotecore.Model.PassData;
+import com.romanpulov.violetnotecore.Model.PassData2;
 import com.romanpulov.violetnotecore.Model.PassNote;
+import com.romanpulov.violetnotecore.Model.PassNote2;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.romanpulov.violetnotecore.Model.PassNote2.ATTR_INFO;
+import static com.romanpulov.violetnotecore.Model.PassNote2.ATTR_PASSWORD;
+import static com.romanpulov.violetnotecore.Model.PassNote2.ATTR_SYSTEM;
+import static com.romanpulov.violetnotecore.Model.PassNote2.ATTR_URL;
+import static com.romanpulov.violetnotecore.Model.PassNote2.ATTR_USER;
 
 /**
  * PassDataA reader from PassData
  * Created by rpulov on 25.04.2016.
  */
 public class PassDataReader {
-    private final PassData mPassData;
+    private final PassData2 mPassData2;
 
     private List<PassCategoryA> mPassCategoryDataA;
 
@@ -28,52 +38,33 @@ public class PassDataReader {
         return mPassNoteDataA;
     }
 
-    private PassCategoryA findSourcePassCategory(PassCategory passCategory) {
-        for (PassCategoryA p : mPassCategoryDataA) {
-            if (p.getSourcePassCategory().equals(passCategory))
-                return p;
-        }
-        return null;
+    public PassDataReader(PassData2 passData2) {
+        mPassData2 = passData2;
     }
 
-    public PassDataReader(PassData passData) {
-        mPassData = passData;
-    }
+    public void readPassData() {
+        mPassCategoryDataA = new ArrayList<>(mPassData2.getCategoryList().size());
+        mPassNoteDataA = new ArrayList<>();
 
-    public void readCategoryData() {
-        if (mPassData != null) {
-            mPassCategoryDataA = new ArrayList<>(mPassData.getPassCategoryList().size());
-            for (PassCategory p : mPassData.getPassCategoryList()) {
-                mPassCategoryDataA.add(new PassCategoryA(p));
-            }
-        } else
-            mPassCategoryDataA = new ArrayList<>();
-    }
+        if (mPassData2 != null) {
 
-    public void readNoteData() {
-        if (mPassData != null) {
-            mPassNoteDataA = new ArrayList<>(mPassData.getPassNoteList().size());
-            Map<PassCategoryA, Integer> noteCount = new HashMap<>();
-            for (PassNote p : mPassData.getPassNoteList()) {
-                PassCategoryA categoryA = findSourcePassCategory(p.getPassCategory());
-                if (categoryA != null) {
-                    Integer oldNoteCount = noteCount.get(categoryA);
-                    if (oldNoteCount == null)
-                        noteCount.put(categoryA, 1);
-                    else
-                        noteCount.put(categoryA, oldNoteCount + 1);
-                    mPassNoteDataA.add(new PassNoteA(categoryA, p.getNoteAttr()));
+            for (PassCategory2 passCategory2 : mPassData2.getCategoryList()) {
+                PassCategoryA passCategoryA = new PassCategoryA(passCategory2.getCategoryName());
+                passCategoryA.setNotesCount(passCategory2.getNoteList().size());
+                mPassCategoryDataA.add(passCategoryA);
+
+                for (PassNote2 passNote2 : passCategory2.getNoteList()) {
+                    Map<String, String> passNoteAttr = new LinkedHashMap<>();
+                    passNoteAttr.put(ATTR_SYSTEM, passNote2.getSystem());
+                    passNoteAttr.put(ATTR_USER, passNote2.getUser());
+                    passNoteAttr.put(ATTR_PASSWORD, passNote2.getPassword());
+                    passNoteAttr.put(ATTR_URL, passNote2.getUser());
+                    passNoteAttr.put(ATTR_INFO, passNote2.getInfo());
+
+                    mPassNoteDataA.add(new PassNoteA(passCategoryA, passNoteAttr));
                 }
             }
 
-            for (PassCategoryA p : mPassCategoryDataA) {
-                Integer count = noteCount.get(p);
-                if (count != null)
-                    p.setNotesCount(count);
-            }
-
-        } else {
-            mPassNoteDataA = new ArrayList<>();
         }
     }
 }

@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.romanpulov.violetnotecore.Model.PassData;
+import com.romanpulov.violetnotecore.Model.PassData2;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -53,10 +54,9 @@ public class PassDataA implements Parcelable, PasswordProvider {
         mPassword = password;
     }
 
-    public static PassDataA newInstance(String password, PassData passData) {
-        PassDataReader reader = new PassDataReader(passData);
-        reader.readCategoryData();
-        reader.readNoteData();
+    public static PassDataA newInstance(String password, PassData2 passData2) {
+        PassDataReader reader = new PassDataReader(passData2);
+        reader.readPassData();
 
         PassDataA newPassDataA = new PassDataA(password);
         newPassDataA.mPassCategoryDataA = reader.getPassCategoryDataA();

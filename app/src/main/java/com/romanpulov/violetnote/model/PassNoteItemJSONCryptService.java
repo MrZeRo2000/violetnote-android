@@ -1,6 +1,7 @@
 package com.romanpulov.violetnote.model;
 
 import com.romanpulov.violetnotecore.AESCrypt.AESCryptService;
+import com.romanpulov.violetnotecore.Service.StringCryptService;
 
 import org.json.JSONObject;
 
@@ -22,7 +23,7 @@ public class PassNoteItemJSONCryptService {
             if ((item.getValue() != null) && (!item.getValue().isEmpty()))
                 jsonObject.put(JSON_VALUE, item.getValue());
 
-            String encryptedJSON = AESCryptService.encryptString(jsonObject.toString(), password);
+            String encryptedJSON = StringCryptService.encryptStringAES128(jsonObject.toString(), password);
             item.setName("");
             item.setValue(encryptedJSON);
 
@@ -35,7 +36,7 @@ public class PassNoteItemJSONCryptService {
     public static boolean decryptBasicNoteItem(BasicNoteItemA item, String password) {
         try {
             String encryptedJSON = item.getValue();
-            JSONObject jsonObject = new JSONObject(AESCryptService.decryptString(encryptedJSON, password));
+            JSONObject jsonObject = new JSONObject(StringCryptService.decryptStringAES128(encryptedJSON, password));
 
             item.setName(jsonObject.optString(JSON_NAME));
             item.setValue(jsonObject.optString(JSON_VALUE));

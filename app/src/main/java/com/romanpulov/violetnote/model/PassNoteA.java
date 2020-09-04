@@ -13,7 +13,7 @@ import java.util.Map;
  * Created by rpulov on 26.04.2016.
  */
 public class PassNoteA implements Parcelable {
-    private final static int ATTR_COUNT = 6;
+    private final static int ATTR_COUNT = 5;
 
     private PassCategoryA mCategory;
 

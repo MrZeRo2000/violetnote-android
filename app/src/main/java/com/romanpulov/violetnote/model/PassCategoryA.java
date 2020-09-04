@@ -4,19 +4,11 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import androidx.annotation.NonNull;
 
-import com.romanpulov.violetnotecore.Model.PassCategory;
-
 /**
  * PassCategory data
  * Created by rpulov on 25.04.2016.
  */
 public class PassCategoryA implements Parcelable {
-    private PassCategory mSourcePassCategory;
-
-    public PassCategory getSourcePassCategory() {
-        return mSourcePassCategory;
-    }
-
     private final String mCategoryName;
 
     public String getCategoryName() {
@@ -66,8 +58,7 @@ public class PassCategoryA implements Parcelable {
         mNotesCount = in.readInt();
     }
 
-    public PassCategoryA(PassCategory sourcePassCategory) {
-        mSourcePassCategory = sourcePassCategory;
-        mCategoryName = sourcePassCategory.getCategoryName();
+    public PassCategoryA(String categoryName) {
+        mCategoryName = categoryName;
     }
 }

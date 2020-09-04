@@ -7,10 +7,14 @@ import com.romanpulov.violetnote.model.PassDataA;
 import com.romanpulov.violetnotecore.AESCrypt.AESCryptException;
 import com.romanpulov.violetnotecore.AESCrypt.AESCryptService;
 import com.romanpulov.violetnotecore.Model.PassCategory;
+import com.romanpulov.violetnotecore.Model.PassCategory2;
 import com.romanpulov.violetnotecore.Model.PassData;
+import com.romanpulov.violetnotecore.Model.PassData2;
 import com.romanpulov.violetnotecore.Model.PassNote;
+import com.romanpulov.violetnotecore.Model.PassNote2;
 import com.romanpulov.violetnotecore.Processor.Exception.DataReadWriteException;
 import com.romanpulov.violetnotecore.Processor.XMLPassDataReader;
+import com.romanpulov.violetnotecore.Service.PassData2ReaderServiceV2;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -53,12 +57,13 @@ public class DocumentPassDataLoader {
         try {
             File f = new File(fileName);
             if (f.exists()) {
-                InputStream input = AESCryptService.generateCryptInputStream(new FileInputStream(f), masterPass);
-                PassData pd =  (new XMLPassDataReader()).readStream(input);
-                if (pd != null)
-                    return PassDataA.newInstance(masterPass, pd);
-                else
-                    return null;
+                try (InputStream inputStream = new FileInputStream(f)) {
+                    PassData2 pd = PassData2ReaderServiceV2.fromStream(inputStream, masterPass);
+                    if (pd != null)
+                        return PassDataA.newInstance(masterPass, pd);
+                    else
+                        return null;
+                }
             } else
                 throw new FileNotFoundException();
         }
@@ -81,26 +86,31 @@ public class DocumentPassDataLoader {
     }
 
     public static PassDataA loadSamplePassData() {
-        PassData pd = new PassData();
+        PassData2 pd = new PassData2();
+        pd.setCategoryList(new ArrayList<PassCategory2>());
 
-        PassCategory pc = new PassCategory("Category 1");
-        pd.getPassCategoryList().add(pc);
+        PassCategory2 pc = new PassCategory2("Category 1");
+        pc.setNoteList(new ArrayList<PassNote2>());
 
-        PassNote pn = new PassNote(pc, "System 1", "User 1", "Password 1", null, null, null);
-        pd.getPassNoteList().add(pn);
-        pn = new PassNote(pc, "System 12", "User 12", "Password 12", null, null, null);
-        pd.getPassNoteList().add(pn);
-        pn = new PassNote(pc, "System 13", "User 13", "Password 13", null, null, null);
-        pd.getPassNoteList().add(pn);
+        pd.getCategoryList().add(pc);
 
-        pc = new PassCategory("Category 2");
-        pd.getPassCategoryList().add(pc);
+        PassNote2 pn = new PassNote2( "System 1", "User 1", "Password 1", null, null, null, null);
+        pc.getNoteList().add(pn);
+        pn = new PassNote2( "System 12", "User 12", "Password 12", null, null, null, null);
+        pc.getNoteList().add(pn);
+        pn = new PassNote2("System 13", "User 13", "Password 13", null, null, null, null);
+        pc.getNoteList().add(pn);
 
-        pn = new PassNote(pc, "System 2", "User 2", "Password 2", null, null, null);
-        pd.getPassNoteList().add(pn);
+        pc = new PassCategory2("Category 2");
+        pc.setNoteList(new ArrayList<PassNote2>());
+
+        pd.getCategoryList().add(pc);
+
+        pn = new PassNote2("System 2", "User 2", "Password 2", null, null, null, null);
+        pc.getNoteList().add(pn);
 
         for (int i = 3; i < 30; i ++) {
-            pd.getPassCategoryList().add(new PassCategory("Category " + i));
+            pd.getCategoryList().add(new PassCategory2("Category " + i));
         }
 
         return PassDataA.newInstance(null, pd);
