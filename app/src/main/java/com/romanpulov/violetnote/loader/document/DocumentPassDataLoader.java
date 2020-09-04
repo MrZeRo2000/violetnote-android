@@ -110,7 +110,9 @@ public class DocumentPassDataLoader {
         pc.getNoteList().add(pn);
 
         for (int i = 3; i < 30; i ++) {
-            pd.getCategoryList().add(new PassCategory2("Category " + i));
+            PassCategory2 passCategory2 = new PassCategory2("Category " + i);
+            passCategory2.setNoteList(new ArrayList<PassNote2>());
+            pd.getCategoryList().add(passCategory2);
         }
 
         return PassDataA.newInstance(null, pd);

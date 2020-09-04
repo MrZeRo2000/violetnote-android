@@ -13,36 +13,44 @@ import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentat
 import static org.junit.Assert.*;
 
 @SmallTest
-public class DBDictionaryCacheTest {
+public class DBDictionaryCacheTest extends DBBaseTest {
     private Context getTargetContext() {
         return getInstrumentation().getTargetContext();
+    }
+
+    @Override
+    void prepareDatabase() {
+        deleteDatabase();
     }
 
     private final static String TAG = "DBDictionaryCacheTest";
 
     @Test
     public void testMain() {
-        DBDictionaryCache dc = new DBDictionaryCache();
-        long id;
+        synchronized (DBLock.instance) {
+            initDB();
 
-        try {
+            DBDictionaryCache dc = new DBDictionaryCache();
+            long id;
+
+            try {
+                id = dc.getPriceNoteParamTypeId();
+                fail("Returned id from empty cache");
+            } catch (Exception e) {
+            }
+
+            dc.load(getTargetContext());
             id = dc.getPriceNoteParamTypeId();
-            fail("Returned id from empty cache");
-        } catch (Exception e) {
+            Log.d(TAG, "id=" + id);
+            assertNotEquals(0, id);
+
+            dc.invalidate();
+
+            try {
+                id = dc.getPriceNoteParamTypeId();
+                fail("Returned id from empty cache after invalidating");
+            } catch (Exception e) {
+            }
         }
-
-        dc.load(getTargetContext());
-        id = dc.getPriceNoteParamTypeId();
-        Log.d(TAG, "id=" + id);
-        assertNotEquals(0, id);
-
-        dc.invalidate();
-
-        try {
-            id = dc.getPriceNoteParamTypeId();
-            fail("Returned id from empty cache after invalidating");
-        } catch (Exception e) {
-        }
-
     }
 }
