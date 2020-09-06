@@ -13,8 +13,6 @@ import java.util.Map;
  * Created by rpulov on 26.04.2016.
  */
 public class PassNoteA implements Parcelable {
-    private final static int ATTR_COUNT = 5;
-
     private PassCategoryA mCategory;
 
     public void setCategory(PassCategoryA category) {
@@ -70,6 +68,7 @@ public class PassNoteA implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(mCategoryName);
+        dest.writeInt(mNoteAttr.size());
         for (String s : mNoteAttr.keySet()) {
             dest.writeString(s);
             dest.writeString(mNoteAttr.get(s));
@@ -89,8 +88,9 @@ public class PassNoteA implements Parcelable {
 
     private PassNoteA(Parcel in) {
         mCategoryName = in.readString();
+        final int attrCount = in.readInt();
         mNoteAttr = new LinkedHashMap<>();
-        for (int i = 0; i < ATTR_COUNT; i ++) {
+        for (int i = 0; i < attrCount; i ++) {
             String name = in.readString();
             String value = in.readString();
             mNoteAttr.put(name, value);
