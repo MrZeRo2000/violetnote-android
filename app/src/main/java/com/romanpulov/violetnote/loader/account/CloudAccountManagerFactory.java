@@ -7,7 +7,7 @@ import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 
 public class CloudAccountManagerFactory {
 
-    public static AbstractCloudAccountManager fromDocumentSourceType(Activity activity, int type) {
+    public static AbstractCloudAccountManager<?> fromDocumentSourceType(Activity activity, int type) {
         switch (type) {
             case PreferenceRepository.SOURCE_TYPE_FILE:
                 return null;
@@ -20,7 +20,7 @@ public class CloudAccountManagerFactory {
         }
     }
 
-    public static AbstractCloudAccountManager fromCloudSourceType(Activity activity, int type) {
+    public static AbstractCloudAccountManager<?> fromCloudSourceType(Activity activity, int type) {
         switch (type) {
             case PreferenceRepository.CLOUD_SOURCE_TYPE_DROPBOX:
                 return new DropboxCloudAccountManager(activity);

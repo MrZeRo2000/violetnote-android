@@ -27,6 +27,7 @@ import static com.romanpulov.violetnote.view.preference.PreferenceRepository.SOU
  */
 
 public class SourcePathPreferenceSetup extends PreferenceSetup {
+    public static final int OPEN_SOURCE_RESULT_CODE = 100;
 
     public SourcePathPreferenceSetup (PreferenceFragmentCompat preferenceFragment) {
         super(preferenceFragment, PREF_KEY_SOURCE_PATH);
@@ -45,9 +46,15 @@ public class SourcePathPreferenceSetup extends PreferenceSetup {
                 Intent intent;
                 switch (sourceType) {
                     case SOURCE_TYPE_FILE:
+                        /*
                         intent =  new Intent(mActivity, FileChooserActivity.class);
                         intent.putExtra(FileChooserActivity.CHOOSER_INITIAL_PATH, mPreferenceFragment.getPreferenceManager().getSharedPreferences().getString(PREF_KEY_SOURCE_PATH, Environment.getRootDirectory().getAbsolutePath()));
                         mPreferenceFragment.startActivityForResult(intent, 0);
+                         */
+                        intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                        intent.addCategory(Intent.CATEGORY_OPENABLE);
+                        intent.setType("*/*");
+                        mPreferenceFragment.startActivityForResult(intent, OPEN_SOURCE_RESULT_CODE);
                         return true;
                     case SOURCE_TYPE_DROPBOX:
                         if (!NetworkUtils.isNetworkAvailable(mContext))

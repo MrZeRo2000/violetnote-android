@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -68,6 +69,7 @@ import com.romanpulov.violetnote.view.preference.processor.PreferenceRestoreClou
 import com.romanpulov.violetnote.view.preference.SourcePathPreferenceSetup;
 import com.romanpulov.violetnote.view.preference.processor.PreferenceRestoreLocalProcessor;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -76,6 +78,7 @@ import static com.romanpulov.violetnote.view.preference.PreferenceRepository.DEF
 import static com.romanpulov.violetnote.view.preference.PreferenceRepository.PREF_KEY_BASIC_NOTE_CLOUD_STORAGE;
 import static com.romanpulov.violetnote.view.preference.PreferenceRepository.PREF_KEY_SOURCE_TYPE;
 import static com.romanpulov.violetnote.view.preference.PreferenceRepository.displayMessage;
+import static com.romanpulov.violetnote.view.preference.SourcePathPreferenceSetup.OPEN_SOURCE_RESULT_CODE;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
 
@@ -174,7 +177,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         final Class<? extends AbstractContextLoader> loaderClass = DocumentLoaderFactory.classFromType(type);
         if (loaderClass != null) {
             if (!LoaderHelper.isLoaderInternetConnectionRequired(loaderClass) || checkInternetConnection()) {
-                final AbstractCloudAccountManager accountManager = CloudAccountManagerFactory.fromDocumentSourceType(getActivity(), type);
+                final AbstractCloudAccountManager<?> accountManager = CloudAccountManagerFactory.fromDocumentSourceType(getActivity(), type);
                 if (accountManager != null) {
                     mPreferenceDocumentLoaderProcessor.loaderPreExecute();
 
@@ -543,9 +546,22 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if ((data != null) && (data.hasExtra(FileChooserActivity.CHOOSER_RESULT_PATH))) {
-            String resultPath = data.getStringExtra(FileChooserActivity.CHOOSER_RESULT_PATH);
-            PreferenceRepository.setSourcePathPreferenceValue(this, resultPath);
+        switch (requestCode) {
+            case 0:
+                if ((data != null) && (data.hasExtra(FileChooserActivity.CHOOSER_RESULT_PATH))) {
+                    String resultPath = data.getStringExtra(FileChooserActivity.CHOOSER_RESULT_PATH);
+                    PreferenceRepository.setSourcePathPreferenceValue(this, resultPath);
+                }
+                break;
+            case OPEN_SOURCE_RESULT_CODE:
+                if (resultCode == Activity.RESULT_OK) {
+                    Uri uri = data.getData();
+                    if (uri != null) {
+                        PreferenceRepository.setSourcePathPreferenceValue(this, uri.toString());
+                        Uri newUri = Uri.parse(Uri.decode(uri.toString()));
+                    }
+                }
+                break;
         }
     }
 
