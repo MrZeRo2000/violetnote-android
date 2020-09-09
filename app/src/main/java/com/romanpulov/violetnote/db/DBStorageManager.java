@@ -1,10 +1,9 @@
 package com.romanpulov.violetnote.db;
 
 import android.content.Context;
-import android.os.Environment;
 
-import com.romanpulov.library.common.io.ZipFileUtils;
-import com.romanpulov.library.common.storage.BackupUtils;
+import com.romanpulov.jutilscore.io.ZipFileUtils;
+import com.romanpulov.jutilscore.storage.BackupUtils;
 
 import java.io.File;
 

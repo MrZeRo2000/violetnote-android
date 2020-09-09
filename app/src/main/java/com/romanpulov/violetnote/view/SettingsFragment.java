@@ -42,6 +42,7 @@ import com.romanpulov.library.common.loader.core.AbstractContextLoader;
 import com.romanpulov.library.common.account.AbstractCloudAccountManager;
 import com.romanpulov.violetnote.loader.account.CloudAccountManagerFactory;
 import com.romanpulov.violetnote.loader.document.DocumentOneDriveFileLoader;
+import com.romanpulov.violetnote.loader.document.DocumentUriFileLoader;
 import com.romanpulov.violetnote.loader.dropbox.BackupDropboxUploader;
 import com.romanpulov.violetnote.loader.document.DocumentDropboxFileLoader;
 import com.romanpulov.violetnote.loader.factory.BackupRestoreFactory;
@@ -123,6 +124,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         //mWriteStorageRequestHelper = new PermissionRequestHelper(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
         mPreferenceDocumentLoaderProcessor = new PreferenceDocumentLoaderProcessor(this);
+        mPreferenceLoadProcessors.put(DocumentUriFileLoader.class.getName(), mPreferenceDocumentLoaderProcessor);
         mPreferenceLoadProcessors.put(DocumentLocalFileLoader.class.getName(), mPreferenceDocumentLoaderProcessor);
         mPreferenceLoadProcessors.put(DocumentDropboxFileLoader.class.getName(), mPreferenceDocumentLoaderProcessor);
         mPreferenceLoadProcessors.put(DocumentOneDriveFileLoader.class.getName(), mPreferenceDocumentLoaderProcessor);
@@ -558,7 +560,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     Uri uri = data.getData();
                     if (uri != null) {
                         PreferenceRepository.setSourcePathPreferenceValue(this, uri.toString());
-                        Uri newUri = Uri.parse(Uri.decode(uri.toString()));
                     }
                 }
                 break;
