@@ -1,6 +1,5 @@
 package com.romanpulov.violetnote.view;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -11,27 +10,16 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.preference.Preference;
-import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.appcompat.app.AlertDialog;
-import androidx.preference.PreferenceGroupAdapter;
-import androidx.preference.PreferenceScreen;
-import androidx.preference.PreferenceViewHolder;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 
 import com.romanpulov.library.common.network.NetworkUtils;
 import com.romanpulov.violetnote.R;
@@ -70,7 +58,6 @@ import com.romanpulov.violetnote.view.preference.processor.PreferenceRestoreClou
 import com.romanpulov.violetnote.view.preference.SourcePathPreferenceSetup;
 import com.romanpulov.violetnote.view.preference.processor.PreferenceRestoreLocalProcessor;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -252,15 +239,14 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         final Class<? extends AbstractContextLoader> loaderClass = BackupUploaderFactory.classFromCloudType(type);
 
         if (loaderClass != null) {
-            final AbstractCloudAccountManager accountManager = CloudAccountManagerFactory.fromCloudSourceType(getActivity(), type);
+            final AbstractCloudAccountManager<?> accountManager = CloudAccountManagerFactory.fromCloudSourceType(getActivity(), type);
             if (accountManager != null) {
                 mPreferenceBackupCloudProcessor.loaderPreExecute();
 
                 accountManager.setOnAccountSetupListener(new AbstractCloudAccountManager.OnAccountSetupListener() {
                     @Override
                     public void onAccountSetupSuccess() {
-                        DBStorageManager storageManager = new DBStorageManager(getActivity());
-                        String backupResult = storageManager.createRollingLocalBackup();
+                        String backupResult = DBStorageManager.getDBBackupManager(getActivity()).createLocalBackup();
 
                         if (backupResult == null)
                             PreferenceRepository.displayMessage(getActivity(), getString(R.string.error_backup));
@@ -332,7 +318,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         final Class<? extends AbstractContextLoader> loaderClass = BackupRestoreFactory.classFromCloudType(type);
 
         if (loaderClass != null) {
-            final AbstractCloudAccountManager accountManager = CloudAccountManagerFactory.fromCloudSourceType(getActivity(), type);
+            final AbstractCloudAccountManager<?> accountManager = CloudAccountManagerFactory.fromCloudSourceType(getActivity(), type);
             if (accountManager != null) {
                 mPreferenceRestoreCloudProcessor.loaderPreExecute();
 
@@ -509,12 +495,12 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         }
     };
 
-    void doBindService(Activity activity) {
+    void doBindService(Context context) {
         // Establish a connection with the service.  We use an explicit
         // class name because we want a specific service implementation that
         // we know will be running in our own process (and thus won't be
         // supporting component replacement by other applications).
-        mIsBound = activity.bindService(new Intent(activity,
+        mIsBound = context.bindService(new Intent(context,
                 LoaderService.class), mConnection, 0);
     }
 
@@ -526,13 +512,12 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         }
     }
 
-
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        LocalBroadcastManager.getInstance(activity).registerReceiver(mLoaderServiceBroadcastReceiver, new IntentFilter(LoaderService.SERVICE_RESULT_INTENT_NAME));
-        mLoaderServiceManager = new LoaderServiceManager(activity);
-        doBindService(activity);
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        LocalBroadcastManager.getInstance(context).registerReceiver(mLoaderServiceBroadcastReceiver, new IntentFilter(LoaderService.SERVICE_RESULT_INTENT_NAME));
+        mLoaderServiceManager = new LoaderServiceManager(context);
+        doBindService(context);
         /*
         if (mLoaderServiceManager.isLoaderServiceRunning())
             doBindService(activity);

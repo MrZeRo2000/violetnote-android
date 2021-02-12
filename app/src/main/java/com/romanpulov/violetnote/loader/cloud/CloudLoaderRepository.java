@@ -6,5 +6,5 @@ package com.romanpulov.violetnote.loader.cloud;
  */
 
 public class CloudLoaderRepository {
-    public static final String REMOTE_PATH = "AndroidBackup";
+    public static final String REMOTE_PATH = "/AndroidBackup/";
 }

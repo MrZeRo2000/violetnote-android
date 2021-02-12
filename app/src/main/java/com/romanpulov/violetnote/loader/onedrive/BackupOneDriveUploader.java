@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.onedrive.sdk.core.ClientException;
 import com.onedrive.sdk.extensions.Item;
+import com.romanpulov.library.common.db.DBBackupManager;
 import com.romanpulov.library.common.loader.core.AbstractContextLoader;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBStorageManager;
@@ -12,8 +13,9 @@ import com.romanpulov.violetnote.loader.helper.LoaderNotificationHelper;
 import com.romanpulov.library.onedrive.OneDriveHelper;
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -21,21 +23,22 @@ import static com.romanpulov.violetnote.common.NotificationRepository.NOTIFICATI
 
 public class BackupOneDriveUploader extends AbstractContextLoader {
     private final OneDriveHelper mOneDriveHelper;
-    private final DBStorageManager mDBStorageManager;
-    private CountDownLatch mLocker = new CountDownLatch(1);
+    private final CountDownLatch mLocker = new CountDownLatch(1);
 
     public BackupOneDriveUploader(Context context) {
         super(context);
         mOneDriveHelper = OneDriveHelper.getInstance();
-        mDBStorageManager = new DBStorageManager(context);
     }
 
     @Override
     public void load() throws Exception {
-        final File[] files = mDBStorageManager.getLocalBackupFiles();
+        final DBBackupManager backupManager =  DBStorageManager.getDBBackupManager(mContext);
+
+        final List<String> fileNames = backupManager.getDatabaseBackupFiles();
+
         final AtomicReference<Exception> mException = new AtomicReference<>();
         final AtomicReference<Integer> mFileCounter = new AtomicReference<>();
-        mFileCounter.set(files.length);
+        mFileCounter.set(fileNames.size());
 
         mOneDriveHelper.setOnOneDriveItemListener(new OneDriveHelper.OnOneDriveItemListener() {
             @Override
@@ -57,8 +60,10 @@ public class BackupOneDriveUploader extends AbstractContextLoader {
                 });
 
                 try {
-                    for (File f : files) {
-                        mOneDriveHelper.putFile(f, CloudLoaderRepository.REMOTE_PATH);
+                    for (String fileName: fileNames) {
+                        try (InputStream inputStream = backupManager.createBackupInputStream(fileName)) {
+                            mOneDriveHelper.putStream(inputStream, CloudLoaderRepository.REMOTE_PATH, fileName);
+                        }
                     }
                 } catch (IOException e) {
                     mException.set(e);

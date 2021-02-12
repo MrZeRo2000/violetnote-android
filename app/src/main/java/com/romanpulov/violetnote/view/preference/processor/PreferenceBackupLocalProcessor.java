@@ -2,6 +2,7 @@ package com.romanpulov.violetnote.view.preference.processor;
 
 import androidx.preference.PreferenceFragmentCompat;
 
+import com.romanpulov.jutilscore.storage.BackupProcessor;
 import com.romanpulov.library.common.loader.core.AbstractContextLoader;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBStorageManager;
@@ -34,7 +35,9 @@ public class PreferenceBackupLocalProcessor extends PreferenceLoaderProcessor {
             long loadedTime = System.currentTimeMillis();
             PreferenceRepository.updatePreferenceKeySummary(mPreferenceFragment, PREF_KEY_NAME, loadedTime);
 
-            String backupMessage = String.format(Locale.getDefault(), mContext.getString(R.string.message_backup_created), (new DBStorageManager(mContext)).getBackupFolderName());
+            BackupProcessor bp = DBStorageManager.getDBBackupManager(mContext).getBackupProcessor();
+
+            String backupMessage = mContext.getString(R.string.message_backup_created, bp == null? "" : bp.getBackupFolderName());
             PreferenceRepository.displayMessage(mContext, backupMessage);
         } else {
             PreferenceRepository.displayMessage(mContext, result);

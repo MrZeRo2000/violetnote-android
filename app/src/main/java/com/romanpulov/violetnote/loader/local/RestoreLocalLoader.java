@@ -19,8 +19,7 @@ public class RestoreLocalLoader extends AbstractContextLoader {
 
     @Override
     public void load() throws Exception {
-        DBStorageManager storageManager = new DBStorageManager(mContext);
-        String restoreResult = storageManager.restoreLocalBackup();
+        String restoreResult = DBStorageManager.getDBBackupManager(mContext).restoreLocalBackup();
 
         if (restoreResult == null)
             throw new Exception(mContext.getString(R.string.error_restore));

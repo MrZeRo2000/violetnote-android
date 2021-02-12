@@ -18,8 +18,7 @@ public class BackupLocalLoader extends AbstractContextLoader {
 
     @Override
     public void load() throws Exception {
-        DBStorageManager storageManager = new DBStorageManager(mContext);
-        String backupResult = storageManager.createRollingLocalBackup();
+        String backupResult = DBStorageManager.getDBBackupManager(mContext).createLocalBackup();
 
         if (backupResult == null)
             throw new Exception(mContext.getString(R.string.error_backup));

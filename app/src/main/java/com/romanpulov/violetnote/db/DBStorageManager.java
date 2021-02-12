@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.romanpulov.jutilscore.io.ZipFileUtils;
 import com.romanpulov.jutilscore.storage.BackupUtils;
+import com.romanpulov.library.common.db.DBBackupManager;
 
 import java.io.File;
 
@@ -13,90 +14,38 @@ import java.io.File;
  */
 
 public final class DBStorageManager {
-    private static final String LOCAL_BACKUP_FOLDER_NAME = "VioletNoteBackup";
-    private static final String BACKUP_FOLDER_NAME = "backup";
-    private static final String BACKUP_FILE_NAME = "violetnotedb_" + DBBasicNoteOpenHelper.DATABASE_VERSION;
+    private static DBStorageManager mInstance = null;
 
-    private final BackupUtils mBackupUtils;
-    private final String mBackupFolderName;
+    private static final String LOCAL_BACKUP_FOLDER_NAME = "VioletNoteBackup";
+    private static final String LOCAL_BACKUP_FILE_NAME = "violetnotedb_" + DBBasicNoteOpenHelper.DATABASE_VERSION;
+
     private final Context mContext;
 
-    private String initBackupFolderName(String backupFolderName) {
-        String result;
-
-        if (backupFolderName != null) {
-            result =  backupFolderName;
-        } else {
-            File f;
-            f = mContext.getExternalFilesDir(BACKUP_FOLDER_NAME);
-            if (f == null) {
-                f = new File(mContext.getFilesDir(), BACKUP_FOLDER_NAME);
-            }
-
-            result = f.getAbsolutePath();
+    public static DBStorageManager getInstance(Context context) {
+        if (null == mInstance) {
+            mInstance = new DBStorageManager(context);
         }
-
-        return result;
+        return mInstance;
     }
 
-    public DBStorageManager(Context context, String backupFolderName) {
+    private final DBBackupManager mDBBackupManager;
+
+    private DBStorageManager(Context context) {
         mContext = context;
-        mBackupFolderName = initBackupFolderName(backupFolderName);
-        mBackupUtils = new BackupUtils(context.getDatabasePath(DBBasicNoteOpenHelper.DATABASE_NAME).toString(), mBackupFolderName, BACKUP_FILE_NAME);
+        mDBBackupManager = new DBBackupManager(
+                context,
+                LOCAL_BACKUP_FOLDER_NAME,
+                LOCAL_BACKUP_FILE_NAME,
+                DBBasicNoteHelper.getInstance(context)
+        );
     }
 
-    public DBStorageManager(Context context) {
-        this(context, null);
+    public DBBackupManager getDBBackupManager() {
+        return mDBBackupManager;
     }
 
-    /**
-     * Restores from backup
-     * @param context Context
-     * @param path Path with backup file
-     * @return restore status
-     */
-    public static boolean restoreFromBackupPath(Context context, String path) {
-        File file = new File(path);
-        if (file.exists()) {
-            DBStorageManager storageManager = new DBStorageManager(context, file.getParent());
-            String restoreResult = storageManager.restoreLocalBackup();
-
-            return  restoreResult != null;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * Returns list of local backup files
-     * @return Files
-     */
-    public File[] getLocalBackupFiles() {
-        return mBackupUtils.getBackupFiles();
-    }
-
-    /**
-     * Creates local backup with versions
-     * @return Backup file if successful
-     */
-    public String createRollingLocalBackup() {
-        DBBasicNoteHelper.getInstance(mContext).closeDB();
-        String result = mBackupUtils.createRollingLocalBackup();
-        DBBasicNoteHelper.getInstance(mContext).openDB();
-
-        return result;
-    }
-
-    /**
-     * Restores local backup
-     * @return Restored file name if successful
-     */
-    public String restoreLocalBackup() {
-        DBBasicNoteHelper.getInstance(mContext).closeDB();
-        String result = mBackupUtils.restoreBackup();
-        DBBasicNoteHelper.getInstance(mContext).openDB();
-
-        return result;
+    public static DBBackupManager getDBBackupManager(Context context) {
+        return getInstance(context).getDBBackupManager();
     }
 
     /**
@@ -104,14 +53,6 @@ public final class DBStorageManager {
      * @return Zip file name
      */
     public static String getBackupZipFileName() {
-        return ZipFileUtils.getZipFileName(BACKUP_FILE_NAME);
-    }
-
-    /**
-     * Returns backup folder name
-     * @return backup folder name
-     */
-    public String getBackupFolderName() {
-        return mBackupFolderName;
+        return ZipFileUtils.getZipFileName(LOCAL_BACKUP_FILE_NAME);
     }
 }

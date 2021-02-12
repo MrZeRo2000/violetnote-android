@@ -28,7 +28,7 @@ public class RestoreDropboxFileLoader extends DropboxFileLoader {
     public void load() throws Exception {
         super.load();
 
-        boolean isRestoreSuccess = DBStorageManager.restoreFromBackupPath(mContext, getLoadPathProvider().getDestPath());
+        boolean isRestoreSuccess = DBStorageManager.getDBBackupManager(mContext).restoreFromBackupPath(getLoadPathProvider().getDestPath());
 
         String restoreMessage = mContext.getString(isRestoreSuccess ? R.string.message_backup_cloud_restored : R.string.error_restore);
 

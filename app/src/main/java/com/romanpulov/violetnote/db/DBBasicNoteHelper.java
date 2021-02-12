@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.romanpulov.library.common.db.DBController;
 import com.romanpulov.violetnote.db.tabledef.DBCommonDef;
 import com.romanpulov.violetnote.db.tabledef.NoteItemsTableDef;
 import com.romanpulov.violetnote.db.tabledef.NotesTableDef;
@@ -13,7 +14,7 @@ import com.romanpulov.violetnote.db.tabledef.NotesTableDef;
  * Database BasicNote operations helper class
  * Created by romanpulov on 16.08.2016.
  */
-public class DBBasicNoteHelper {
+public class DBBasicNoteHelper implements DBController {
     public static final String MAX_AGGREGATE_FUNCTION_NAME = "MAX";
     public static final String MIN_AGGREGATE_FUNCTION_NAME = "MIN";
 
@@ -46,11 +47,13 @@ public class DBBasicNoteHelper {
         openDB();
     }
 
+    @Override
     public void openDB() {
         if (mDB == null)
             mDB = mDBOpenHelper.getWritableDatabase();
     }
 
+    @Override
     public void closeDB() {
         if (mDB != null) {
             mDB.close();
@@ -59,6 +62,16 @@ public class DBBasicNoteHelper {
                 mDBDictionaryCache.invalidate();
             }
         }
+    }
+
+    @Override
+    public void dbDataChanged() {
+
+    }
+
+    @Override
+    public String getDBName() {
+        return DBBasicNoteOpenHelper.DATABASE_NAME;
     }
 
     public SQLiteDatabase getDB() {
