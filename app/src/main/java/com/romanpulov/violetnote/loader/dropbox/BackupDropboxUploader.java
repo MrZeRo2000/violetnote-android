@@ -42,7 +42,7 @@ public class BackupDropboxUploader extends AbstractContextLoader {
 
         for (String backupFileName: backupManager.getDatabaseBackupFiles()) {
             try (InputStream inputStream = backupManager.createBackupInputStream(backupFileName)) {
-                mDropboxHelper.putStream(inputStream, CloudLoaderRepository.REMOTE_PATH + backupFileName);
+                mDropboxHelper.putStream(inputStream, "/" + CloudLoaderRepository.REMOTE_PATH + "/" + backupFileName);
             }
         }
 
