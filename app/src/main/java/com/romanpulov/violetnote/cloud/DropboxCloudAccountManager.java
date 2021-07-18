@@ -1,4 +1,4 @@
-package com.romanpulov.violetnote.loader.account;
+package com.romanpulov.violetnote.cloud;
 
 import android.app.Activity;
 
