@@ -1,8 +1,11 @@
 package com.romanpulov.violetnote.cloud;
 
+import androidx.annotation.NonNull;
+
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 
 public class CloudAccountFacadeFactory {
+    @NonNull
     public static CloudAccountFacade fromDocumentSourceType(int type) {
         switch (type) {
             case PreferenceRepository.SOURCE_TYPE_DROPBOX:
@@ -12,10 +15,11 @@ public class CloudAccountFacadeFactory {
             case PreferenceRepository.SOURCE_TYPE_MSGRAPH:
                 return new MSGraphAccountFacade();
             default:
-                return null;
+                throw new NullPointerException();
         }
     }
 
+    @NonNull
     public static CloudAccountFacade fromCloudSourceType(int type) {
         switch (type) {
             case PreferenceRepository.CLOUD_SOURCE_TYPE_DROPBOX:
@@ -25,7 +29,7 @@ public class CloudAccountFacadeFactory {
             case PreferenceRepository.CLOUD_SOURCE_TYPE_MSGRAPH:
                 return new MSGraphAccountFacade();
             default:
-                return null;
+                throw new NullPointerException();
         }
     }
 }

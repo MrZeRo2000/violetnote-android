@@ -22,8 +22,8 @@ public class AccountDropboxPreferenceSetup extends PreferenceSetup {
         mPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                Objects.requireNonNull(CloudAccountFacadeFactory
-                        .fromCloudSourceType(PreferenceRepository.CLOUD_SOURCE_TYPE_DROPBOX))
+                CloudAccountFacadeFactory
+                        .fromCloudSourceType(PreferenceRepository.CLOUD_SOURCE_TYPE_DROPBOX)
                         .interactiveSetupAccount(mActivity);
                 return true;
             }

@@ -141,12 +141,12 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         new SourcePathPreferenceSetup(this).execute();
         //new AccountDropboxPreferenceSetup(this).execute();
         new CloudAccountPreferenceSetup(this,
-                Objects.requireNonNull(CloudAccountFacadeFactory.fromCloudSourceType(PreferenceRepository.CLOUD_SOURCE_TYPE_DROPBOX))).execute();
+                CloudAccountFacadeFactory.fromCloudSourceType(PreferenceRepository.CLOUD_SOURCE_TYPE_DROPBOX)).execute();
         // new AccountOneDrivePreferenceSetup(this).execute();
         new CloudAccountPreferenceSetup(this,
-                Objects.requireNonNull(CloudAccountFacadeFactory.fromCloudSourceType(PreferenceRepository.CLOUD_SOURCE_TYPE_ONEDRIVE))).execute();
+                CloudAccountFacadeFactory.fromCloudSourceType(PreferenceRepository.CLOUD_SOURCE_TYPE_ONEDRIVE)).execute();
         new CloudAccountPreferenceSetup(this,
-                Objects.requireNonNull(CloudAccountFacadeFactory.fromCloudSourceType(PreferenceRepository.CLOUD_SOURCE_TYPE_MSGRAPH))).execute();
+                CloudAccountFacadeFactory.fromCloudSourceType(PreferenceRepository.CLOUD_SOURCE_TYPE_MSGRAPH)).execute();
         new CommonSourceTypePreferenceSetup(this, PREF_KEY_BASIC_NOTE_CLOUD_STORAGE, R.array.pref_cloud_storage_entries, DEFAULT_CLOUD_SOURCE_TYPE).execute();
         new CheckedUpdateIntervalPreferenceSetup(this).execute();
     }
