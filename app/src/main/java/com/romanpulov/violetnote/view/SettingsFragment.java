@@ -23,6 +23,7 @@ import android.view.View;
 
 import com.romanpulov.library.common.network.NetworkUtils;
 import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.cloud.CloudAccountFacadeFactory;
 import com.romanpulov.violetnote.db.DBStorageManager;
 import com.romanpulov.violetnote.filechooser.FileChooserActivity;
 import com.romanpulov.library.dropbox.DropboxHelper;
@@ -44,10 +45,9 @@ import com.romanpulov.violetnote.loader.onedrive.RestoreOneDriveFileLoader;
 import com.romanpulov.violetnote.service.LoaderService;
 import com.romanpulov.violetnote.service.LoaderServiceManager;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
-import com.romanpulov.violetnote.view.preference.AccountDropboxPreferenceSetup;
-import com.romanpulov.violetnote.view.preference.AccountOneDrivePreferenceSetup;
 import com.romanpulov.violetnote.view.preference.BasicNoteGroupsPreferenceSetup;
 import com.romanpulov.violetnote.view.preference.CheckedUpdateIntervalPreferenceSetup;
+import com.romanpulov.violetnote.view.preference.CloudAccountPreferenceSetup;
 import com.romanpulov.violetnote.view.preference.CommonSourceTypePreferenceSetup;
 import com.romanpulov.violetnote.view.preference.processor.PreferenceBackupCloudProcessor;
 import com.romanpulov.violetnote.view.preference.processor.PreferenceBackupLocalProcessor;
@@ -60,6 +60,7 @@ import com.romanpulov.violetnote.view.preference.processor.PreferenceRestoreLoca
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import static com.romanpulov.violetnote.view.preference.PreferenceRepository.DEFAULT_CLOUD_SOURCE_TYPE;
 import static com.romanpulov.violetnote.view.preference.PreferenceRepository.DEFAULT_SOURCE_TYPE;
@@ -138,14 +139,20 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         new BasicNoteGroupsPreferenceSetup(this).execute();
         new CommonSourceTypePreferenceSetup(this, PREF_KEY_SOURCE_TYPE, R.array.pref_source_type_entries, DEFAULT_SOURCE_TYPE).execute();
         new SourcePathPreferenceSetup(this).execute();
-        new AccountDropboxPreferenceSetup(this).execute();
-        new AccountOneDrivePreferenceSetup(this).execute();
+        //new AccountDropboxPreferenceSetup(this).execute();
+        new CloudAccountPreferenceSetup(this,
+                Objects.requireNonNull(CloudAccountFacadeFactory.fromCloudSourceType(PreferenceRepository.CLOUD_SOURCE_TYPE_DROPBOX))).execute();
+        // new AccountOneDrivePreferenceSetup(this).execute();
+        new CloudAccountPreferenceSetup(this,
+                Objects.requireNonNull(CloudAccountFacadeFactory.fromCloudSourceType(PreferenceRepository.CLOUD_SOURCE_TYPE_ONEDRIVE))).execute();
+        new CloudAccountPreferenceSetup(this,
+                Objects.requireNonNull(CloudAccountFacadeFactory.fromCloudSourceType(PreferenceRepository.CLOUD_SOURCE_TYPE_MSGRAPH))).execute();
         new CommonSourceTypePreferenceSetup(this, PREF_KEY_BASIC_NOTE_CLOUD_STORAGE, R.array.pref_cloud_storage_entries, DEFAULT_CLOUD_SOURCE_TYPE).execute();
         new CheckedUpdateIntervalPreferenceSetup(this).execute();
     }
 
     private boolean checkInternetConnection() {
-        if (NetworkUtils.isNetworkAvailable(getActivity()))
+        if (NetworkUtils.isNetworkAvailable(requireActivity()))
             return true;
         else {
             PreferenceRepository.displayMessage(getActivity(), getString(R.string.error_internet_not_available));

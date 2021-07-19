@@ -43,7 +43,7 @@
                     note that the leading "/" is required for android:path
                 -->
                 <data
-                    android:host="com.romanpulov.symphonytimer"
+                    android:host="com.romanpulov.violetnote"
                     android:path="/pkFHBjmk5yNkPHiCqIVwIffqv54="
                     android:scheme="msauth" />
             </intent-filter>

@@ -21,8 +21,7 @@ public class MSGraphAccountFacade implements CloudAccountFacade {
 
     @Override
     public void interactiveSetupAccount(final Activity activity) {
-        final AlertDialog.Builder alert = new AlertDialog.Builder(activity);
-
+        final AlertDialog.Builder alert = new AlertDialog.Builder(activity, R.style.AlertDialogTheme);
         alert
                 .setTitle(R.string.ui_dialog_title_confirmation)
                 .setPositiveButton(R.string.ui_dialog_button_login, new DialogInterface.OnClickListener() {
@@ -84,5 +83,10 @@ public class MSGraphAccountFacade implements CloudAccountFacade {
     @Override
     public String getDocumentLoaderClassName() {
         return null;
+    }
+
+    @Override
+    public String getPreferenceAccountKey() {
+        return PreferenceRepository.PREF_KEY_ACCOUNT_MSGRAPH;
     }
 }

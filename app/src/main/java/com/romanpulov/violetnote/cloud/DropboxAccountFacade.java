@@ -8,6 +8,7 @@ import com.romanpulov.violetnote.loader.document.DocumentDropboxFileLoader;
 import com.romanpulov.violetnote.loader.dropbox.BackupDropboxUploader;
 import com.romanpulov.violetnote.loader.dropbox.RestoreDropboxFileLoader;
 import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 
 public class DropboxAccountFacade implements CloudAccountFacade {
     @Override
@@ -33,5 +34,10 @@ public class DropboxAccountFacade implements CloudAccountFacade {
     @Override
     public String getDocumentLoaderClassName() {
         return DocumentDropboxFileLoader.class.getName();
+    }
+
+    @Override
+    public String getPreferenceAccountKey() {
+        return PreferenceRepository.PREF_KEY_ACCOUNT_DROPBOX;
     }
 }

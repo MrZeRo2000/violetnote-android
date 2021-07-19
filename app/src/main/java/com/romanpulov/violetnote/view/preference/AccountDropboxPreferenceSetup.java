@@ -2,9 +2,9 @@ package com.romanpulov.violetnote.view.preference;
 
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+import com.romanpulov.violetnote.cloud.CloudAccountFacadeFactory;
 
-import com.romanpulov.violetnote.R;
-import com.romanpulov.library.dropbox.DropboxHelper;
+import java.util.Objects;
 
 /**
  * Dropbox account configuration
@@ -22,7 +22,9 @@ public class AccountDropboxPreferenceSetup extends PreferenceSetup {
         mPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                DropboxHelper.getInstance(mActivity.getApplicationContext()).invokeAuthActivity(mActivity.getResources().getString(R.string.app_key));
+                Objects.requireNonNull(CloudAccountFacadeFactory
+                        .fromCloudSourceType(PreferenceRepository.CLOUD_SOURCE_TYPE_DROPBOX))
+                        .interactiveSetupAccount(mActivity);
                 return true;
             }
         });

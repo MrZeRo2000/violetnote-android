@@ -10,4 +10,5 @@ public interface CloudAccountFacade {
     String getBackupLoaderClassName();
     String getRestoreLoaderClassName();
     String getDocumentLoaderClassName();
+    String getPreferenceAccountKey();
 }
