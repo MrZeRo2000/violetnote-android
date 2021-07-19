@@ -23,6 +23,7 @@ import android.view.View;
 
 import com.romanpulov.library.common.network.NetworkUtils;
 import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.cloud.CloudAccountFacade;
 import com.romanpulov.violetnote.cloud.CloudAccountFacadeFactory;
 import com.romanpulov.violetnote.db.DBStorageManager;
 import com.romanpulov.violetnote.filechooser.FileChooserActivity;
@@ -32,16 +33,12 @@ import com.romanpulov.library.common.account.AbstractCloudAccountManager;
 import com.romanpulov.violetnote.cloud.CloudAccountManagerFactory;
 import com.romanpulov.violetnote.loader.document.DocumentOneDriveFileLoader;
 import com.romanpulov.violetnote.loader.document.DocumentUriFileLoader;
-import com.romanpulov.violetnote.loader.dropbox.BackupDropboxUploader;
 import com.romanpulov.violetnote.loader.document.DocumentDropboxFileLoader;
 import com.romanpulov.violetnote.loader.factory.BackupRestoreFactory;
 import com.romanpulov.violetnote.loader.factory.BackupUploaderFactory;
 import com.romanpulov.violetnote.loader.factory.DocumentLoaderFactory;
 import com.romanpulov.violetnote.loader.document.DocumentLocalFileLoader;
-import com.romanpulov.violetnote.loader.dropbox.RestoreDropboxFileLoader;
 import com.romanpulov.library.common.loader.core.LoaderHelper;
-import com.romanpulov.violetnote.loader.onedrive.BackupOneDriveUploader;
-import com.romanpulov.violetnote.loader.onedrive.RestoreOneDriveFileLoader;
 import com.romanpulov.violetnote.service.LoaderService;
 import com.romanpulov.violetnote.service.LoaderServiceManager;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
@@ -59,6 +56,7 @@ import com.romanpulov.violetnote.view.preference.SourcePathPreferenceSetup;
 import com.romanpulov.violetnote.view.preference.processor.PreferenceRestoreLocalProcessor;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -118,15 +116,23 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         mPreferenceLoadProcessors.put(DocumentOneDriveFileLoader.class.getName(), mPreferenceDocumentLoaderProcessor);
         setupPrefDocumentLoadService();
 
+        List<CloudAccountFacade> cloudAccountFacadeList = CloudAccountFacadeFactory.getCloudAccountFacadeList();
+
         mPreferenceBackupCloudProcessor = new PreferenceBackupCloudProcessor(this);
-        mPreferenceLoadProcessors.put(BackupDropboxUploader.class.getName(), mPreferenceBackupCloudProcessor);
-        mPreferenceLoadProcessors.put(BackupOneDriveUploader.class.getName(), mPreferenceBackupCloudProcessor);
+        for (CloudAccountFacade cloudAccountFacade: cloudAccountFacadeList) {
+            mPreferenceLoadProcessors.put(cloudAccountFacade.getBackupLoaderClassName(), mPreferenceBackupCloudProcessor);
+        }
+        //mPreferenceLoadProcessors.put(BackupDropboxUploader.class.getName(), mPreferenceBackupCloudProcessor);
+        //mPreferenceLoadProcessors.put(BackupOneDriveUploader.class.getName(), mPreferenceBackupCloudProcessor);
         setupPrefCloudBackupLoadService();
 
         mPreferenceRestoreCloudProcessor = new PreferenceRestoreCloudProcessor(this);
-        mPreferenceLoadProcessors.put(RestoreDropboxFileLoader.class.getName(), mPreferenceRestoreCloudProcessor);
-        mPreferenceLoadProcessors.put(RestoreOneDriveFileLoader.class.getName(), mPreferenceRestoreCloudProcessor);
-        setupPrefDropboxRestoreLoadService();
+        for (CloudAccountFacade cloudAccountFacade: cloudAccountFacadeList) {
+            mPreferenceLoadProcessors.put(cloudAccountFacade.getRestoreLoaderClassName(), mPreferenceRestoreCloudProcessor);
+        }
+        //mPreferenceLoadProcessors.put(RestoreDropboxFileLoader.class.getName(), mPreferenceRestoreCloudProcessor);
+        //mPreferenceLoadProcessors.put(RestoreOneDriveFileLoader.class.getName(), mPreferenceRestoreCloudProcessor);
+        setupPrefCloudRestoreLoadService();
 
         mPreferenceBackupLocalProcessor = new PreferenceBackupLocalProcessor(this);
         mPreferenceLoadProcessors.put(PreferenceBackupLocalProcessor.getLoaderClass().getName(), mPreferenceBackupLocalProcessor);
@@ -277,12 +283,12 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     }
 
     /**
-     * Dropbox backup using service
+     * Cloud backup using service
      */
     private void setupPrefCloudBackupLoadService() {
         PreferenceRepository.updatePreferenceKeySummary(this, PreferenceRepository.PREF_KEY_BASIC_NOTE_CLOUD_BACKUP, PreferenceRepository.PREF_LOAD_CURRENT_VALUE);
 
-        Preference pref = findPreference(PreferenceRepository.PREF_KEY_BASIC_NOTE_CLOUD_BACKUP);
+        Preference pref = Objects.requireNonNull(findPreference(PreferenceRepository.PREF_KEY_BASIC_NOTE_CLOUD_BACKUP));
         pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
@@ -351,12 +357,12 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     }
 
     /**
-     * Dropbox restore using service
+     * Cloud restore using service
      */
-    private void setupPrefDropboxRestoreLoadService() {
+    private void setupPrefCloudRestoreLoadService() {
         PreferenceRepository.updatePreferenceKeySummary(this, PreferenceRepository.PREF_KEY_BASIC_NOTE_CLOUD_RESTORE, PreferenceRepository.PREF_LOAD_CURRENT_VALUE);
 
-        Preference pref = findPreference(PreferenceRepository.PREF_KEY_BASIC_NOTE_CLOUD_RESTORE);
+        Preference pref = Objects.requireNonNull(findPreference(PreferenceRepository.PREF_KEY_BASIC_NOTE_CLOUD_RESTORE));
 
         pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -372,7 +378,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     if (mLoaderServiceManager.isLoaderServiceRunning())
                         PreferenceRepository.displayMessage(getActivity(), getText(R.string.error_load_process_running));
                     else {
-                        final AlertDialog.Builder alert = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
+                        final AlertDialog.Builder alert = new AlertDialog.Builder(requireActivity(), R.style.AlertDialogTheme);
                         alert
                                 .setTitle(R.string.ui_question_are_you_sure)
                                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
@@ -406,7 +412,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     private void setupPrefLocalBackupLoadService() {
         PreferenceRepository.updatePreferenceKeySummary(this, PreferenceRepository.PREF_KEY_BASIC_NOTE_LOCAL_BACKUP, PreferenceRepository.PREF_LOAD_CURRENT_VALUE);
 
-        Preference pref = findPreference(PreferenceRepository.PREF_KEY_BASIC_NOTE_LOCAL_BACKUP);
+        Preference pref = Objects.requireNonNull(findPreference(PreferenceRepository.PREF_KEY_BASIC_NOTE_LOCAL_BACKUP));
         pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {

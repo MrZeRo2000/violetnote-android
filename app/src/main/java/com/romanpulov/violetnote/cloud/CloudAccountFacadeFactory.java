@@ -4,6 +4,10 @@ import androidx.annotation.NonNull;
 
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 public class CloudAccountFacadeFactory {
     @NonNull
     public static CloudAccountFacade fromDocumentSourceType(int type) {
@@ -31,5 +35,13 @@ public class CloudAccountFacadeFactory {
             default:
                 throw new NullPointerException();
         }
+    }
+
+    public static List<CloudAccountFacade> getCloudAccountFacadeList() {
+        return Collections.unmodifiableList(Arrays.asList(
+                new DropboxAccountFacade(),
+                new OneDriveAccountFacade(),
+                new MSGraphAccountFacade()
+        ));
     }
 }
