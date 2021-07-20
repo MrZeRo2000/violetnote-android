@@ -28,6 +28,10 @@ public class PreferenceRepository {
     public static final int SOURCE_TYPE_MSGRAPH = 3;
     public static final int DEFAULT_SOURCE_TYPE = 0;
 
+    public static boolean isCloudSourceType(int sourceType) {
+        return sourceType != SOURCE_TYPE_FILE;
+    }
+
     public static final int CLOUD_SOURCE_TYPE_DROPBOX = 0;
     public static final int CLOUD_SOURCE_TYPE_ONEDRIVE = 1;
     public static final int CLOUD_SOURCE_TYPE_MSGRAPH = 2;

@@ -34,8 +34,6 @@ import com.romanpulov.violetnote.cloud.CloudAccountManagerFactory;
 import com.romanpulov.violetnote.loader.document.DocumentOneDriveFileLoader;
 import com.romanpulov.violetnote.loader.document.DocumentUriFileLoader;
 import com.romanpulov.violetnote.loader.document.DocumentDropboxFileLoader;
-import com.romanpulov.violetnote.loader.factory.BackupRestoreFactory;
-import com.romanpulov.violetnote.loader.factory.BackupUploaderFactory;
 import com.romanpulov.violetnote.loader.factory.DocumentLoaderFactory;
 import com.romanpulov.violetnote.loader.document.DocumentLocalFileLoader;
 import com.romanpulov.library.common.loader.core.LoaderHelper;
@@ -107,16 +105,19 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         addPreferencesFromResource(R.xml.preferences);
 
+        List<CloudAccountFacade> cloudAccountFacadeList = CloudAccountFacadeFactory.getCloudAccountFacadeList();
+
         //mWriteStorageRequestHelper = new PermissionRequestHelper(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
         mPreferenceDocumentLoaderProcessor = new PreferenceDocumentLoaderProcessor(this);
+        // local
         mPreferenceLoadProcessors.put(DocumentUriFileLoader.class.getName(), mPreferenceDocumentLoaderProcessor);
         mPreferenceLoadProcessors.put(DocumentLocalFileLoader.class.getName(), mPreferenceDocumentLoaderProcessor);
-        mPreferenceLoadProcessors.put(DocumentDropboxFileLoader.class.getName(), mPreferenceDocumentLoaderProcessor);
-        mPreferenceLoadProcessors.put(DocumentOneDriveFileLoader.class.getName(), mPreferenceDocumentLoaderProcessor);
+        // cloud
+        for (CloudAccountFacade cloudAccountFacade: cloudAccountFacadeList) {
+            mPreferenceLoadProcessors.put(cloudAccountFacade.getDocumentLoaderClassName(), mPreferenceDocumentLoaderProcessor);
+        }
         setupPrefDocumentLoadService();
-
-        List<CloudAccountFacade> cloudAccountFacadeList = CloudAccountFacadeFactory.getCloudAccountFacadeList();
 
         mPreferenceBackupCloudProcessor = new PreferenceBackupCloudProcessor(this);
         for (CloudAccountFacade cloudAccountFacade: cloudAccountFacadeList) {
@@ -171,39 +172,45 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         mLoaderServiceManager.startLoader(className, null);
     }
 
+    void executeLocalDocumentLoad() {
+        startDocumentLoad(DocumentUriFileLoader.class.getName());
+    }
+
+    void executeCloudDocumentLoad(int type) {
+        final CloudAccountFacade cloudAccountFacade = CloudAccountFacadeFactory.fromCloudSourceType(type);
+
+        final AbstractCloudAccountManager<?> accountManager = cloudAccountFacade.getAccountManager(getActivity());
+
+        if (accountManager != null) {
+            mPreferenceDocumentLoaderProcessor.loaderPreExecute();
+
+            accountManager.setOnAccountSetupListener(new AbstractCloudAccountManager.OnAccountSetupListener() {
+                @Override
+                public void onAccountSetupSuccess() {
+                    startDocumentLoad(cloudAccountFacade.getDocumentLoaderClassName());
+                }
+
+                @Override
+                public void onAccountSetupFailure(String errorText) {
+                    displayMessage(getActivity(), errorText);
+                    mPreferenceDocumentLoaderProcessor.loaderPostExecute(errorText);
+
+                }
+            });
+
+            accountManager.setupAccount();
+        }
+    }
+
     void executeDocumentLoad() {
-        final Preference prefSourceType = findPreference(PREF_KEY_SOURCE_TYPE);
+        final Preference prefSourceType = Objects.requireNonNull(findPreference(PREF_KEY_SOURCE_TYPE));
         final SharedPreferences sharedPref = prefSourceType.getSharedPreferences();
         int type = sharedPref.getInt(prefSourceType.getKey(), PreferenceRepository.DEFAULT_SOURCE_TYPE);
 
-        final Class<? extends AbstractContextLoader> loaderClass = DocumentLoaderFactory.classFromType(type);
-        if (loaderClass != null) {
-            if (!LoaderHelper.isLoaderInternetConnectionRequired(loaderClass) || checkInternetConnection()) {
-                final AbstractCloudAccountManager<?> accountManager = CloudAccountManagerFactory.fromDocumentSourceType(getActivity(), type);
-                if (accountManager != null) {
-                    mPreferenceDocumentLoaderProcessor.loaderPreExecute();
-
-                    accountManager.setOnAccountSetupListener(new AbstractCloudAccountManager.OnAccountSetupListener() {
-                        @Override
-                        public void onAccountSetupSuccess() {
-                            startDocumentLoad(loaderClass.getName());
-                        }
-
-                        @Override
-                        public void onAccountSetupFailure(String errorText) {
-                            displayMessage(getActivity(), errorText);
-                            mPreferenceDocumentLoaderProcessor.loaderPostExecute(errorText);
-
-                        }
-                    });
-
-                    accountManager.setupAccount();
-                } else {
-                    //start directly if no account setup is required
-                    startDocumentLoad(loaderClass.getName());
-                }
-                //setup account if needed
-            }
+        if (PreferenceRepository.isCloudSourceType(type)) {
+            executeCloudDocumentLoad(type);
+        } else if (checkInternetConnection()) {
+            executeLocalDocumentLoad();
         }
     }
 
@@ -213,7 +220,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     private void setupPrefDocumentLoadService() {
         PreferenceRepository.updatePreferenceKeySummary(this, PreferenceRepository.PREF_KEY_DOCUMENT_LOAD, PreferenceRepository.PREF_LOAD_CURRENT_VALUE);
 
-        final Preference pref = findPreference(PreferenceRepository.PREF_KEY_DOCUMENT_LOAD);
+        final Preference pref = Objects.requireNonNull(findPreference(PreferenceRepository.PREF_KEY_DOCUMENT_LOAD));
         final SharedPreferences sharedPref = pref.getSharedPreferences();
         pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
