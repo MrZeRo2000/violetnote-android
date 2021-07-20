@@ -245,40 +245,37 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     }
 
     void executeCloudBackup() {
-        final Preference prefSourceType = findPreference(PREF_KEY_BASIC_NOTE_CLOUD_STORAGE);
+        final Preference prefSourceType = Objects.requireNonNull(findPreference(PREF_KEY_BASIC_NOTE_CLOUD_STORAGE));
         final SharedPreferences sharedPref = prefSourceType.getSharedPreferences();
         int type = sharedPref.getInt(prefSourceType.getKey(), DEFAULT_CLOUD_SOURCE_TYPE);
 
-        final Class<? extends AbstractContextLoader> loaderClass = BackupUploaderFactory.classFromCloudType(type);
+        final CloudAccountFacade cloudAccountFacade = CloudAccountFacadeFactory.fromCloudSourceType(type);
 
-        if (loaderClass != null) {
-            final AbstractCloudAccountManager<?> accountManager = CloudAccountManagerFactory.fromCloudSourceType(getActivity(), type);
-            if (accountManager != null) {
-                mPreferenceBackupCloudProcessor.loaderPreExecute();
+        final AbstractCloudAccountManager<?> accountManager = cloudAccountFacade.getAccountManager(getActivity());
+        if (accountManager != null) {
+            mPreferenceBackupCloudProcessor.loaderPreExecute();
 
-                accountManager.setOnAccountSetupListener(new AbstractCloudAccountManager.OnAccountSetupListener() {
-                    @Override
-                    public void onAccountSetupSuccess() {
-                        String backupResult = DBStorageManager.getDBBackupManager(getActivity()).createLocalBackup();
+            accountManager.setOnAccountSetupListener(new AbstractCloudAccountManager.OnAccountSetupListener() {
+                @Override
+                public void onAccountSetupSuccess() {
+                    String backupResult = DBStorageManager.getDBBackupManager(getActivity()).createLocalBackup();
 
-                        if (backupResult == null)
-                            PreferenceRepository.displayMessage(getActivity(), getString(R.string.error_backup));
-                        else {
-                            mPreferenceBackupCloudProcessor.loaderPreExecute();
-                            mLoaderServiceManager.startLoader(loaderClass.getName(), null);
-                        }
+                    if (backupResult == null)
+                        PreferenceRepository.displayMessage(getActivity(), getString(R.string.error_backup));
+                    else {
+                        mPreferenceBackupCloudProcessor.loaderPreExecute();
+                        mLoaderServiceManager.startLoader(cloudAccountFacade.getBackupLoaderClassName(), null);
                     }
+                }
 
-                    @Override
-                    public void onAccountSetupFailure(String errorText) {
-                        displayMessage(getActivity(), errorText);
-                        mPreferenceBackupCloudProcessor.loaderPostExecute(errorText);
-                    }
-                });
+                @Override
+                public void onAccountSetupFailure(String errorText) {
+                    displayMessage(getActivity(), errorText);
+                    mPreferenceBackupCloudProcessor.loaderPostExecute(errorText);
+                }
+            });
 
-                accountManager.setupAccount();
-            }
-
+            accountManager.setupAccount();
         }
     }
 
@@ -286,7 +283,11 @@ public class SettingsFragment extends PreferenceFragmentCompat {
      * Cloud backup using service
      */
     private void setupPrefCloudBackupLoadService() {
-        PreferenceRepository.updatePreferenceKeySummary(this, PreferenceRepository.PREF_KEY_BASIC_NOTE_CLOUD_BACKUP, PreferenceRepository.PREF_LOAD_CURRENT_VALUE);
+        PreferenceRepository.updatePreferenceKeySummary(
+                this,
+                PreferenceRepository.PREF_KEY_BASIC_NOTE_CLOUD_BACKUP,
+                PreferenceRepository.PREF_LOAD_CURRENT_VALUE
+        );
 
         Preference pref = Objects.requireNonNull(findPreference(PreferenceRepository.PREF_KEY_BASIC_NOTE_CLOUD_BACKUP));
         pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -296,24 +297,14 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 if (!checkInternetConnection())
                     return true;
 
-                if (mLoaderServiceManager == null)
-                    return true;
-                else {
+                if (mLoaderServiceManager != null) {
                     if (mLoaderServiceManager.isLoaderServiceRunning())
                         PreferenceRepository.displayMessage(getActivity(), getText(R.string.error_load_process_running));
                     else {
                         executeCloudBackup();
-                        /*
-                        if (mWriteStorageRequestHelper.isPermissionGranted())
-                            executeCloudBackup();
-                        else
-                            mWriteStorageRequestHelper.requestPermission(SettingsActivity.PERMISSION_REQUEST_DROPBOX_BACKUP);
-
-                         */
                     }
-
-                    return true;
                 }
+                return true;
             }
         });
     }

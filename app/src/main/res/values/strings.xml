@@ -91,10 +91,12 @@
         <item>Local storage</item>
         <item>Dropbox</item>
         <item>OneDrive</item>
+        <item>MSGraph</item>
     </string-array>
     <string-array name="pref_cloud_storage_entries">
         <item>Dropbox</item>
         <item>OneDrive</item>
+        <item>MSGraph</item>
     </string-array>
     <string name="pref_message_last_loaded_never">Last loaded: Never</string>
     <string name="pref_message_last_loaded_format">Last loaded: %s</string>
