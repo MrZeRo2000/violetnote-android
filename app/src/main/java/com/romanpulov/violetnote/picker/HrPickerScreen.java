@@ -36,7 +36,7 @@ public class HrPickerScreen implements HrPickerNavigationProcessor {
         return mParentPath;
     }
 
-    private List<HrPickerItem> mItems = new ArrayList<>();
+    private final List<HrPickerItem> mItems = new ArrayList<>();
 
     public List<HrPickerItem> getItems() {
         return mItems;
@@ -130,5 +130,18 @@ public class HrPickerScreen implements HrPickerNavigationProcessor {
         return ((item == null) || (item.itemType == HrPickerItem.ITEM_TYPE_PARENT)) ?
                 path :
                 path + (path.endsWith("/") ? "" : "/") + item.name;
+    }
+
+    @Override
+    public String toString() {
+        return "HrPickerScreen{" +
+                "mStatus=" + mStatus + "(" +
+                (mStatus == 0 ? "Ready" : mStatus == 1 ? "Loading" : mStatus == 2 ? "Error" : "Unknown" )
+                + ")" +
+                ", mCurrentPath='" + mCurrentPath + '\'' +
+                ", mParentPath='" + mParentPath + '\'' +
+                ", mItems=" + mItems +
+                ", mErrorMessage='" + mErrorMessage + '\'' +
+                '}';
     }
 }

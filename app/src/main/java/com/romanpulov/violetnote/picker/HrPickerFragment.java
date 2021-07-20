@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.List;
@@ -36,10 +37,10 @@ public class HrPickerFragment extends Fragment implements HrPickerScreen.OnHrPic
 
     // TODO: Rename and change types of parameters
     private String mInitialPath;
-    private boolean mIsEmpty = true;
 
-
-    private TextView mHeader;
+    private TextView mHeaderTextView;
+    private ProgressBar mProgressBar;
+    private RecyclerView mPickerListView;
     private RecyclerView.Adapter<?> mAdapter;
 
 
@@ -82,16 +83,16 @@ public class HrPickerFragment extends Fragment implements HrPickerScreen.OnHrPic
         public void onBindViewHolder(final @NonNull ViewHolder holder, final int position) {
             switch (mItems.get(position).itemType) {
                 case HrPickerItem.ITEM_TYPE_PARENT:
-                    holder.mTextView.setText("parent");
-                    //holder.mTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_more_horiz, 0, 0, 0);
+                    holder.mTextView.setText(null);
+                    holder.mTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_more_horiz, 0, 0, 0);
                     break;
                 case HrPickerItem.ITEM_TYPE_FOLDER:
                     holder.mTextView.setText(mItems.get(position).name);
-                    //holder.mTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_folder_closed, 0, 0, 0);
+                    holder.mTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_folder_closed, 0, 0, 0);
                     break;
                 case HrPickerItem.ITEM_TYPE_FILE:
                     holder.mTextView.setText(mItems.get(position).name);
-                    // holder.mTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_document, 0, 0, 0);
+                    holder.mTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_document, 0, 0, 0);
                     break;
                 default:
                     holder.mTextView.setText(mItems.get(position).name);
@@ -135,9 +136,15 @@ public class HrPickerFragment extends Fragment implements HrPickerScreen.OnHrPic
 
     @Override
     public void onUpdate(HrPickerScreen hrPickerScreen) {
-        Log.d(TAG, "onUpdate");
+        Log.d(TAG, "onUpdate, screen info:" + hrPickerScreen);
+
+        mProgressBar.setVisibility(hrPickerScreen.getStatus() ==
+                HrPickerScreen.PICKER_SCREEN_STATUS_LOADING ? View.VISIBLE : View.GONE);
+
         mAdapter.notifyDataSetChanged();
-        mIsEmpty = false;
+
+        mPickerListView.setVisibility(hrPickerScreen.getStatus() ==
+                HrPickerScreen.PICKER_SCREEN_STATUS_READY ? View.VISIBLE : View.GONE);
     }
 
     public HrPickerFragment() {
@@ -170,12 +177,15 @@ public class HrPickerFragment extends Fragment implements HrPickerScreen.OnHrPic
         // Inflate the layout for this fragment
         View v =  inflater.inflate(R.layout.fragment_hr_picker, container, false);
 
-        RecyclerView recyclerView = v.findViewById(R.id.picker_list);
+        mHeaderTextView = v.findViewById(R.id.picker_header);
+        mProgressBar = v.findViewById(R.id.indeterminateBar);
+
+        mPickerListView = v.findViewById(R.id.picker_list);
         if (getActivity() != null) {
-            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            mPickerListView.setLayoutManager(new LinearLayoutManager(getActivity()));
         }
 
-        recyclerView.setAdapter(mAdapter);
+        mPickerListView.setAdapter(mAdapter);
 
         return v;
     }
@@ -186,9 +196,13 @@ public class HrPickerFragment extends Fragment implements HrPickerScreen.OnHrPic
 
         mPickerScreen.setPickerScreenUpdateListener(this);
 
-        if (mIsEmpty && getContext() != null) {
+        if ((savedInstanceState == null) && getContext() != null) {
             Log.d(TAG, "The fragment is empty, navigating");
+            mPickerListView.setVisibility(View.GONE);
+            mProgressBar.setVisibility(View.VISIBLE);
             mPickerScreen.navigate(getContext(), mPickerScreen.getCurrentPath(), null);
+        } else {
+            mProgressBar.setVisibility(View.GONE);
         }
 
     }

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HrPickerFragment">
+    tools:context=".picker.HrPickerFragment">
 
     <TextView
         android:id="@+id/picker_header"
@@ -15,11 +15,20 @@
         android:padding="@dimen/text_margin_half"
         android:background="@color/windowBackgroundLight"
         />
+
+    <ProgressBar
+        android:id="@+id/indeterminateBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/picker_header"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/picker_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/picker_header"
+        android:layout_below="@+id/indeterminateBar"
         />
 
 </RelativeLayout>
