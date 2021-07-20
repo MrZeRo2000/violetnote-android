@@ -1,11 +1,9 @@
 package com.romanpulov.violetnote.view;
 
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 
-import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.view.core.ActionBarCompatActivity;
 import com.romanpulov.violetnote.view.helper.PermissionRequestHelper;
 

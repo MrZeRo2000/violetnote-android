@@ -13,6 +13,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.preference.Preference;
@@ -28,15 +32,10 @@ import com.romanpulov.violetnote.cloud.CloudAccountFacadeFactory;
 import com.romanpulov.violetnote.db.DBStorageManager;
 import com.romanpulov.violetnote.filechooser.FileChooserActivity;
 import com.romanpulov.library.dropbox.DropboxHelper;
-import com.romanpulov.library.common.loader.core.AbstractContextLoader;
 import com.romanpulov.library.common.account.AbstractCloudAccountManager;
-import com.romanpulov.violetnote.cloud.CloudAccountManagerFactory;
-import com.romanpulov.violetnote.loader.document.DocumentOneDriveFileLoader;
 import com.romanpulov.violetnote.loader.document.DocumentUriFileLoader;
-import com.romanpulov.violetnote.loader.document.DocumentDropboxFileLoader;
-import com.romanpulov.violetnote.loader.factory.DocumentLoaderFactory;
 import com.romanpulov.violetnote.loader.document.DocumentLocalFileLoader;
-import com.romanpulov.library.common.loader.core.LoaderHelper;
+import com.romanpulov.violetnote.picker.HrPickerActivity;
 import com.romanpulov.violetnote.service.LoaderService;
 import com.romanpulov.violetnote.service.LoaderServiceManager;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
@@ -63,7 +62,6 @@ import static com.romanpulov.violetnote.view.preference.PreferenceRepository.DEF
 import static com.romanpulov.violetnote.view.preference.PreferenceRepository.PREF_KEY_BASIC_NOTE_CLOUD_STORAGE;
 import static com.romanpulov.violetnote.view.preference.PreferenceRepository.PREF_KEY_SOURCE_TYPE;
 import static com.romanpulov.violetnote.view.preference.PreferenceRepository.displayMessage;
-import static com.romanpulov.violetnote.view.preference.SourcePathPreferenceSetup.OPEN_SOURCE_RESULT_CODE;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
 
@@ -95,7 +93,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
@@ -106,8 +104,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         addPreferencesFromResource(R.xml.preferences);
 
         List<CloudAccountFacade> cloudAccountFacadeList = CloudAccountFacadeFactory.getCloudAccountFacadeList();
-
-        //mWriteStorageRequestHelper = new PermissionRequestHelper(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
         mPreferenceDocumentLoaderProcessor = new PreferenceDocumentLoaderProcessor(this);
         // local
@@ -236,13 +232,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                         PreferenceRepository.displayMessage(getActivity(), getText(R.string.error_load_process_running));
                     else {
                         executeDocumentLoad();
-                        /*
-                        if (mWriteStorageRequestHelper.isPermissionGranted())
-                            executeDocumentLoad();
-                        else
-                            mWriteStorageRequestHelper.requestPermission(SettingsActivity.PERMISSION_REQUEST_DOCUMENT_LOAD);
-
-                         */
                     }
 
                     return true;
@@ -538,7 +527,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     PreferenceRepository.setSourcePathPreferenceValue(this, resultPath);
                 }
                 break;
-            case OPEN_SOURCE_RESULT_CODE:
+            case SourcePathPreferenceSetup.OPEN_SOURCE_RESULT_CODE:
                 if (resultCode == Activity.RESULT_OK) {
                     Uri uri = data.getData();
                     if (uri != null) {
