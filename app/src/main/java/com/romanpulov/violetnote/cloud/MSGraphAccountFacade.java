@@ -9,6 +9,7 @@ import com.romanpulov.library.common.account.AbstractCloudAccountManager;
 import com.romanpulov.library.msgraph.OnMSActionListener;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.loader.msgraph.BackupMSGraphUploader;
+import com.romanpulov.violetnote.loader.msgraph.RestoreMSGraphDownloader;
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 
 public class MSGraphAccountFacade implements CloudAccountFacade {
@@ -78,7 +79,7 @@ public class MSGraphAccountFacade implements CloudAccountFacade {
 
     @Override
     public String getRestoreLoaderClassName() {
-        return null;
+        return RestoreMSGraphDownloader.class.getName();
     }
 
     @Override

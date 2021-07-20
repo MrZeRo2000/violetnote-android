@@ -310,51 +310,45 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     }
 
     void executeCloudRestore() {
-        /*
-        mPreferenceRestoreCloudProcessor.loaderPreExecute();
-        mLoaderServiceManager.startLoader(PreferenceRestoreCloudProcessor.getLoaderClass().getName(), null);
-
-         */
-        final Preference prefSourceType = findPreference(PREF_KEY_BASIC_NOTE_CLOUD_STORAGE);
+        final Preference prefSourceType = Objects.requireNonNull(findPreference(PREF_KEY_BASIC_NOTE_CLOUD_STORAGE));
         final SharedPreferences sharedPref = prefSourceType.getSharedPreferences();
         int type = sharedPref.getInt(prefSourceType.getKey(), DEFAULT_CLOUD_SOURCE_TYPE);
 
-        final Class<? extends AbstractContextLoader> loaderClass = BackupRestoreFactory.classFromCloudType(type);
+        final CloudAccountFacade cloudAccountFacade = CloudAccountFacadeFactory.fromCloudSourceType(type);
+        final AbstractCloudAccountManager<?> accountManager = cloudAccountFacade.getAccountManager(getActivity());
 
-        if (loaderClass != null) {
-            final AbstractCloudAccountManager<?> accountManager = CloudAccountManagerFactory.fromCloudSourceType(getActivity(), type);
-            if (accountManager != null) {
-                mPreferenceRestoreCloudProcessor.loaderPreExecute();
+        if (accountManager != null) {
+            mPreferenceRestoreCloudProcessor.loaderPreExecute();
 
-                accountManager.setOnAccountSetupListener(new AbstractCloudAccountManager.OnAccountSetupListener() {
-                    @Override
-                    public void onAccountSetupSuccess() {
-                        mPreferenceRestoreCloudProcessor.loaderPreExecute();
-                        mLoaderServiceManager.startLoader(loaderClass.getName(), null);
-                    }
+            accountManager.setOnAccountSetupListener(new AbstractCloudAccountManager.OnAccountSetupListener() {
+                @Override
+                public void onAccountSetupSuccess() {
+                    mPreferenceRestoreCloudProcessor.loaderPreExecute();
+                    mLoaderServiceManager.startLoader(cloudAccountFacade.getRestoreLoaderClassName(), null);
+                }
 
-                    @Override
-                    public void onAccountSetupFailure(String errorText) {
-                        displayMessage(getActivity(), errorText);
-                        mPreferenceRestoreCloudProcessor.loaderPostExecute(errorText);
-                    }
-                });
+                @Override
+                public void onAccountSetupFailure(String errorText) {
+                    displayMessage(getActivity(), errorText);
+                    mPreferenceRestoreCloudProcessor.loaderPostExecute(errorText);
+                }
+            });
 
-                accountManager.setupAccount();
-            }
-
+            accountManager.setupAccount();
         }
-
     }
 
     /**
      * Cloud restore using service
      */
     private void setupPrefCloudRestoreLoadService() {
-        PreferenceRepository.updatePreferenceKeySummary(this, PreferenceRepository.PREF_KEY_BASIC_NOTE_CLOUD_RESTORE, PreferenceRepository.PREF_LOAD_CURRENT_VALUE);
+        PreferenceRepository.updatePreferenceKeySummary(
+                this,
+                PreferenceRepository.PREF_KEY_BASIC_NOTE_CLOUD_RESTORE,
+                PreferenceRepository.PREF_LOAD_CURRENT_VALUE
+        );
 
         Preference pref = Objects.requireNonNull(findPreference(PreferenceRepository.PREF_KEY_BASIC_NOTE_CLOUD_RESTORE));
-
         pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
@@ -375,13 +369,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        /*
-                                        if (mWriteStorageRequestHelper.isPermissionGranted())
-                                            executeCloudRestore();
-                                        else
-                                            mWriteStorageRequestHelper.requestPermission(SettingsActivity.PERMISSION_REQUEST_DROPBOX_RESTORE);
-
-                                         */
                                         executeCloudRestore();
                                     }
                                 })
