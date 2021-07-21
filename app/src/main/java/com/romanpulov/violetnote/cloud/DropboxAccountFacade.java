@@ -24,7 +24,7 @@ public class DropboxAccountFacade implements CloudAccountFacade {
 
     @Override
     public HrPickerNavigator getHrPickerNavigator() {
-        return null;
+        return new DropBoxNavigatorHelper();
     }
 
     @Override

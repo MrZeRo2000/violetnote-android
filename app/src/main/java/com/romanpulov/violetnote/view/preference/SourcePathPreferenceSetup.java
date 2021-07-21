@@ -99,7 +99,7 @@ public class SourcePathPreferenceSetup extends PreferenceSetup {
                         //mPreferenceFragment.startActivityForResult(intent, OPEN_SOURCE_RESULT_CODE);
                         mOpenDocumentResult.launch(intent);
                         return true;
-                    case SOURCE_TYPE_DROPBOX:
+                    case SOURCE_TYPE_DROPBOX + 100:
                         if (!NetworkUtils.isNetworkAvailable(mContext))
                             PreferenceRepository.displayMessage(mActivity,mActivity.getResources().getString(R.string.error_internet_not_available));
                         else {
@@ -143,6 +143,7 @@ public class SourcePathPreferenceSetup extends PreferenceSetup {
                         }
                         return true;
                     case SOURCE_TYPE_MSGRAPH:
+                    case SOURCE_TYPE_DROPBOX:
                         if (!NetworkUtils.isNetworkAvailable(mContext))
                             PreferenceRepository.displayMessage(mActivity,mActivity.getResources().getString(R.string.error_internet_not_available));
                         else {
