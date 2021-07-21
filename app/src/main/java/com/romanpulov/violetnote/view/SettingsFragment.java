@@ -519,26 +519,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case 0:
-                if ((data != null) && (data.hasExtra(FileChooserActivity.CHOOSER_RESULT_PATH))) {
-                    String resultPath = data.getStringExtra(FileChooserActivity.CHOOSER_RESULT_PATH);
-                    PreferenceRepository.setSourcePathPreferenceValue(this, resultPath);
-                }
-                break;
-            case SourcePathPreferenceSetup.OPEN_SOURCE_RESULT_CODE:
-                if (resultCode == Activity.RESULT_OK) {
-                    Uri uri = data.getData();
-                    if (uri != null) {
-                        PreferenceRepository.setSourcePathPreferenceValue(this, uri.toString());
-                    }
-                }
-                break;
-        }
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
         DropboxHelper.getInstance(getActivity().getApplicationContext()).refreshAccessToken();
