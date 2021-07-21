@@ -16,10 +16,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class DropBoxNavigatorHelper implements HrPickerNavigator {
 
     private Executor mExecutor;
+
+    private final AtomicBoolean mNavigating = new AtomicBoolean(false);
 
     private static int getItemTypeFromMetaData(Metadata metaData) {
         if (metaData == null) {
@@ -41,49 +44,54 @@ public class DropBoxNavigatorHelper implements HrPickerNavigator {
     }
 
     @Override
-    public void onNavigate(final Context context, final String path, final HrPickerNavigationProcessor processor) {
-        if (mExecutor == null) {
-            mExecutor = Executors.newSingleThreadExecutor();
-        }
+    synchronized public void onNavigate(final Context context, final String path, final HrPickerNavigationProcessor processor) {
+        if (!mNavigating.get()) {
+            mNavigating.set(true);
 
-        mExecutor.execute(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    final List<HrPickerItem> items = new ArrayList<>();
-
-                    for (Metadata m : DropboxHelper
-                            .getInstance(context)
-                            .getClient()
-                            .files()
-                            .listFolder(getNavigationPath(path))
-                            .getEntries()) {
-                        items.add(HrPickerItem.createItem(getItemTypeFromMetaData(m), m.getName()));
-                    }
-
-                    new Handler(Looper.getMainLooper()).post(new Runnable() {
-                        @Override
-                        public void run() {
-                            // Code here will run in UI thread
-                            processor.onNavigationSuccess(path, items);
-                        }
-                    });
-
-
-                } catch (final Exception e) {
-
-                    new Handler(Looper.getMainLooper()).post(new Runnable() {
-                        @Override
-                        public void run() {
-                            // Code here will run in UI thread
-                            processor.onNavigationFailure(path, e.getMessage());
-                        }
-                    });
-
-                    e.printStackTrace();
-                }
+            if (mExecutor == null) {
+                mExecutor = Executors.newSingleThreadExecutor();
             }
-        });
 
+            mExecutor.execute(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        final List<HrPickerItem> items = new ArrayList<>();
+
+                        for (Metadata m : DropboxHelper
+                                .getInstance(context)
+                                .getClient()
+                                .files()
+                                .listFolder(getNavigationPath(path))
+                                .getEntries()) {
+                            items.add(HrPickerItem.createItem(getItemTypeFromMetaData(m), m.getName()));
+                        }
+
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                // Code here will run in UI thread
+                                processor.onNavigationSuccess(path, items);
+                            }
+                        });
+
+
+                    } catch (final Exception e) {
+
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                // Code here will run in UI thread
+                                processor.onNavigationFailure(path, e.getMessage());
+                            }
+                        });
+
+                        e.printStackTrace();
+                    } finally {
+                        mNavigating.set(false);
+                    }
+                }
+            });
+        }
     }
 }
