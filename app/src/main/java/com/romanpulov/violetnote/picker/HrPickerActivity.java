@@ -10,11 +10,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.romanpulov.violetnote.cloud.MSGraphHelper;
+import com.romanpulov.violetnote.cloud.CloudAccountFacadeFactory;
 
 public class HrPickerActivity extends AppCompatActivity {
     public static final String TAG = HrPickerActivity.class.getSimpleName();
 
+    public static final String PICKER_SOURCE_TYPE = "PickerSourceType";
     public static final String PICKER_INITIAL_PATH = "PickerInitialPath";
     public static final String PICKER_RESULT = "PickerResult";
 
@@ -43,14 +44,14 @@ public class HrPickerActivity extends AppCompatActivity {
         Fragment fragment = fm.findFragmentById(android.R.id.content);
         if (fragment == null) {
             String initialPath = getIntent().getStringExtra(PICKER_INITIAL_PATH);
+            int sourceType = getIntent().getIntExtra(PICKER_SOURCE_TYPE, 0);
 
             HrPickerFragment hrPickerFragment = HrPickerFragment.newInstance("/");
 
-            hrPickerFragment.getPickerScreen().setNavigator(MSGraphHelper.getInstance());
+            HrPickerNavigator hrPickerNavigator = CloudAccountFacadeFactory.fromDocumentSourceType(sourceType).getHrPickerNavigator();
+            hrPickerFragment.getPickerScreen().setNavigator(hrPickerNavigator);
 
-            if (hrPickerFragment != null) {
-                fm.beginTransaction().add(android.R.id.content, hrPickerFragment).commit();
-            }
+            fm.beginTransaction().add(android.R.id.content, hrPickerFragment).commit();
         }
     }
 }

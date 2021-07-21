@@ -11,6 +11,7 @@ import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.loader.document.DocumentOneDriveFileLoader;
 import com.romanpulov.violetnote.loader.onedrive.BackupOneDriveUploader;
 import com.romanpulov.violetnote.loader.onedrive.RestoreOneDriveFileLoader;
+import com.romanpulov.violetnote.picker.HrPickerNavigator;
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 
 import static com.romanpulov.library.onedrive.OneDriveHelper.ONEDRIVE_ACTION_LOGIN;
@@ -75,6 +76,11 @@ public class OneDriveAccountFacade implements CloudAccountFacade {
     @Override
     public AbstractCloudAccountManager<?> getAccountManager(Activity activity) {
         return new OneDriveCloudAccountManager(activity);
+    }
+
+    @Override
+    public HrPickerNavigator getHrPickerNavigator() {
+        return null;
     }
 
     @Override

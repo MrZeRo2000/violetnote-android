@@ -83,7 +83,7 @@ public class SourcePathPreferenceSetup extends PreferenceSetup {
         mPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                int sourceType = preference.getPreferenceManager().getSharedPreferences().getInt(PREF_KEY_SOURCE_TYPE, DEFAULT_SOURCE_TYPE);
+                final int sourceType = preference.getPreferenceManager().getSharedPreferences().getInt(PREF_KEY_SOURCE_TYPE, DEFAULT_SOURCE_TYPE);
 
                 Intent intent;
                 switch (sourceType) {
@@ -156,6 +156,10 @@ public class SourcePathPreferenceSetup extends PreferenceSetup {
                                         intent.putExtra(
                                                 HrPickerActivity.PICKER_INITIAL_PATH,
                                                 mPreferenceFragment.getPreferenceManager().getSharedPreferences().getString(PREF_KEY_SOURCE_PATH, "/")
+                                        );
+                                        intent.putExtra(
+                                                HrPickerActivity.PICKER_SOURCE_TYPE,
+                                                sourceType
                                         );
                                         mPickerResult.launch(intent);
                                     }

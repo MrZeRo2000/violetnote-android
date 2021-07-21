@@ -8,6 +8,7 @@ import com.romanpulov.violetnote.loader.document.DocumentDropboxFileLoader;
 import com.romanpulov.violetnote.loader.dropbox.BackupDropboxUploader;
 import com.romanpulov.violetnote.loader.dropbox.RestoreDropboxFileLoader;
 import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.picker.HrPickerNavigator;
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 
 public class DropboxAccountFacade implements CloudAccountFacade {
@@ -19,6 +20,11 @@ public class DropboxAccountFacade implements CloudAccountFacade {
     @Override
     public AbstractCloudAccountManager<?> getAccountManager(Activity activity) {
         return new DropboxCloudAccountManager(activity);
+    }
+
+    @Override
+    public HrPickerNavigator getHrPickerNavigator() {
+        return null;
     }
 
     @Override
