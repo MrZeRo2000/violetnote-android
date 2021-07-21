@@ -117,12 +117,14 @@ public class HrPickerFragment extends Fragment implements HrPickerScreen.OnHrPic
                                     HrPickerFragment.this.mPickerScreen.getParentPath(),
                                     selectedItem
                                     );
+                            break;
                         case HrPickerItem.ITEM_TYPE_FOLDER:
                             HrPickerFragment.this.mPickerScreen.navigate(
                                     getContext(),
                                     HrPickerFragment.this.mPickerScreen.getCurrentPath(),
                                     selectedItem
                             );
+                            break;
                     }
                 }
             });
