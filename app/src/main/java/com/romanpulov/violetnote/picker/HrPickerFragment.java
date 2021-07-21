@@ -39,6 +39,7 @@ public class HrPickerFragment extends Fragment implements HrPickerScreen.OnHrPic
     private String mInitialPath;
 
     private TextView mHeaderTextView;
+    private TextView mErrorTextView;
     private ProgressBar mProgressBar;
     private RecyclerView mPickerListView;
     private RecyclerView.Adapter<?> mAdapter;
@@ -102,7 +103,7 @@ public class HrPickerFragment extends Fragment implements HrPickerScreen.OnHrPic
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    HrPickerItem selectedItem = mItems.get(holder.getAdapterPosition());
+                    HrPickerItem selectedItem = mItems.get(holder.getBindingAdapterPosition());
 
                     switch (selectedItem.itemType) {
                         case HrPickerItem.ITEM_TYPE_FILE:
@@ -141,10 +142,16 @@ public class HrPickerFragment extends Fragment implements HrPickerScreen.OnHrPic
         mProgressBar.setVisibility(hrPickerScreen.getStatus() ==
                 HrPickerScreen.PICKER_SCREEN_STATUS_LOADING ? View.VISIBLE : View.GONE);
 
+        mErrorTextView.setText(hrPickerScreen.getErrorMessage());
+        mErrorTextView.setVisibility(hrPickerScreen.getStatus() ==
+                HrPickerScreen.PICKER_SCREEN_STATUS_ERROR ? View.VISIBLE : View.GONE);
+
+        mHeaderTextView.setText(hrPickerScreen.getCurrentPath());
+
         mAdapter.notifyDataSetChanged();
 
         mPickerListView.setVisibility(hrPickerScreen.getStatus() ==
-                HrPickerScreen.PICKER_SCREEN_STATUS_READY ? View.VISIBLE : View.GONE);
+                HrPickerScreen.PICKER_SCREEN_STATUS_LOADING ? View.GONE : View.VISIBLE);
     }
 
     public HrPickerFragment() {
@@ -179,6 +186,7 @@ public class HrPickerFragment extends Fragment implements HrPickerScreen.OnHrPic
 
         mHeaderTextView = v.findViewById(R.id.picker_header);
         mProgressBar = v.findViewById(R.id.indeterminateBar);
+        mErrorTextView = v.findViewById(R.id.picker_error_text);
 
         mPickerListView = v.findViewById(R.id.picker_list);
         if (getActivity() != null) {
@@ -195,6 +203,8 @@ public class HrPickerFragment extends Fragment implements HrPickerScreen.OnHrPic
         super.onViewCreated(view, savedInstanceState);
 
         mPickerScreen.setPickerScreenUpdateListener(this);
+
+        mErrorTextView.setVisibility(View.GONE);
 
         if ((savedInstanceState == null) && getContext() != null) {
             Log.d(TAG, "The fragment is empty, navigating");

@@ -9,17 +9,14 @@ import androidx.fragment.app.FragmentResultListener;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.romanpulov.violetnote.cloud.MSGraphHelper;
 
 public class HrPickerActivity extends AppCompatActivity {
     public static final String TAG = HrPickerActivity.class.getSimpleName();
 
-    public static final String PICKER_INITIAL_PATH = "ChooserInitialPath";
+    public static final String PICKER_INITIAL_PATH = "PickerInitialPath";
     public static final String PICKER_RESULT = "PickerResult";
-    public static final int PICKER_RESULT_CODE = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +32,6 @@ public class HrPickerActivity extends AppCompatActivity {
                     public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle bundle) {
                         if (requestKey.equals(HrPickerFragment.RESULT_KEY)) {
                             String result = bundle.getString(HrPickerFragment.RESULT_VALUE_KEY);
-                            Log.d(TAG, "Obtained result: " + result);
-                            Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
                             Intent resultIntent = new Intent();
                             resultIntent.putExtra(PICKER_RESULT, result);
                             setResult(Activity.RESULT_OK, resultIntent);

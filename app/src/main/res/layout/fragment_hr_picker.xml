@@ -16,11 +16,22 @@
         android:background="@color/windowBackgroundLight"
         />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/text_margin_half"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/picker_error_text"
+        android:textColor="@color/colorError"
+        android:textAppearance="@style/Header3Text"
+        android:layout_below="@+id/picker_header"
+        />
+
     <ProgressBar
         android:id="@+id/indeterminateBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/picker_header"
+        android:layout_below="@+id/picker_error_text"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center" />
 
