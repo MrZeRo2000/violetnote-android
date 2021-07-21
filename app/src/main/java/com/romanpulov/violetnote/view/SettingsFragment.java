@@ -173,7 +173,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     }
 
     void executeCloudDocumentLoad(int type) {
-        final CloudAccountFacade cloudAccountFacade = CloudAccountFacadeFactory.fromCloudSourceType(type);
+        final CloudAccountFacade cloudAccountFacade = CloudAccountFacadeFactory.fromDocumentSourceType(type);
 
         final AbstractCloudAccountManager<?> accountManager = cloudAccountFacade.getAccountManager(getActivity());
 
