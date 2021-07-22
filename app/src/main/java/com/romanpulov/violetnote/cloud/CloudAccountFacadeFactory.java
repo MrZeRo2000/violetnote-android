@@ -14,8 +14,6 @@ public class CloudAccountFacadeFactory {
         switch (type) {
             case PreferenceRepository.SOURCE_TYPE_DROPBOX:
                 return new DropboxAccountFacade();
-            case PreferenceRepository.SOURCE_TYPE_ONEDRIVE:
-                return new OneDriveAccountFacade();
             case PreferenceRepository.SOURCE_TYPE_MSGRAPH:
                 return new MSGraphAccountFacade();
             default:
@@ -28,8 +26,6 @@ public class CloudAccountFacadeFactory {
         switch (type) {
             case PreferenceRepository.CLOUD_SOURCE_TYPE_DROPBOX:
                 return new DropboxAccountFacade();
-            case PreferenceRepository.CLOUD_SOURCE_TYPE_ONEDRIVE:
-                return new OneDriveAccountFacade();
             case PreferenceRepository.CLOUD_SOURCE_TYPE_MSGRAPH:
                 return new MSGraphAccountFacade();
             default:
@@ -40,7 +36,6 @@ public class CloudAccountFacadeFactory {
     public static List<CloudAccountFacade> getCloudAccountFacadeList() {
         return Collections.unmodifiableList(Arrays.asList(
                 new DropboxAccountFacade(),
-                new OneDriveAccountFacade(),
                 new MSGraphAccountFacade()
         ));
     }

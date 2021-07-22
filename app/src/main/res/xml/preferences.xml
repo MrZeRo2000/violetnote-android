@@ -82,9 +82,5 @@
             android:key="pref_account_onedrive"
             android:title="@string/pref_title_account_onedrive"
             />
-        <Preference
-            android:key="pref_account_msgraph"
-            android:title="@string/pref_title_account_msgraph"
-            />
     </PreferenceCategory>
 </PreferenceScreen>

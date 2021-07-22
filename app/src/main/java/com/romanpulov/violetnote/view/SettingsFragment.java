@@ -1,6 +1,5 @@
 package com.romanpulov.violetnote.view;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -9,14 +8,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.preference.Preference;
@@ -30,12 +24,9 @@ import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.cloud.CloudAccountFacade;
 import com.romanpulov.violetnote.cloud.CloudAccountFacadeFactory;
 import com.romanpulov.violetnote.db.DBStorageManager;
-import com.romanpulov.violetnote.filechooser.FileChooserActivity;
 import com.romanpulov.library.dropbox.DropboxHelper;
 import com.romanpulov.library.common.account.AbstractCloudAccountManager;
-import com.romanpulov.violetnote.loader.document.DocumentUriFileLoader;
-import com.romanpulov.violetnote.loader.document.DocumentLocalFileLoader;
-import com.romanpulov.violetnote.picker.HrPickerActivity;
+import com.romanpulov.violetnote.loader.local.DocumentUriFileLoader;
 import com.romanpulov.violetnote.service.LoaderService;
 import com.romanpulov.violetnote.service.LoaderServiceManager;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
@@ -108,7 +99,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         mPreferenceDocumentLoaderProcessor = new PreferenceDocumentLoaderProcessor(this);
         // local
         mPreferenceLoadProcessors.put(DocumentUriFileLoader.class.getName(), mPreferenceDocumentLoaderProcessor);
-        mPreferenceLoadProcessors.put(DocumentLocalFileLoader.class.getName(), mPreferenceDocumentLoaderProcessor);
         // cloud
         for (CloudAccountFacade cloudAccountFacade: cloudAccountFacadeList) {
             mPreferenceLoadProcessors.put(cloudAccountFacade.getDocumentLoaderClassName(), mPreferenceDocumentLoaderProcessor);
@@ -142,14 +132,12 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         new BasicNoteGroupsPreferenceSetup(this).execute();
         new CommonSourceTypePreferenceSetup(this, PREF_KEY_SOURCE_TYPE, R.array.pref_source_type_entries, DEFAULT_SOURCE_TYPE).execute();
         new SourcePathPreferenceSetup(this).execute();
-        //new AccountDropboxPreferenceSetup(this).execute();
+
         new CloudAccountPreferenceSetup(this,
                 CloudAccountFacadeFactory.fromCloudSourceType(PreferenceRepository.CLOUD_SOURCE_TYPE_DROPBOX)).execute();
-        // new AccountOneDrivePreferenceSetup(this).execute();
-        new CloudAccountPreferenceSetup(this,
-                CloudAccountFacadeFactory.fromCloudSourceType(PreferenceRepository.CLOUD_SOURCE_TYPE_ONEDRIVE)).execute();
         new CloudAccountPreferenceSetup(this,
                 CloudAccountFacadeFactory.fromCloudSourceType(PreferenceRepository.CLOUD_SOURCE_TYPE_MSGRAPH)).execute();
+
         new CommonSourceTypePreferenceSetup(this, PREF_KEY_BASIC_NOTE_CLOUD_STORAGE, R.array.pref_cloud_storage_entries, DEFAULT_CLOUD_SOURCE_TYPE).execute();
         new CheckedUpdateIntervalPreferenceSetup(this).execute();
     }

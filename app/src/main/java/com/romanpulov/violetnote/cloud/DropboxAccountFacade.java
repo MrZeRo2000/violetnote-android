@@ -4,7 +4,7 @@ import android.app.Activity;
 
 import com.romanpulov.library.common.account.AbstractCloudAccountManager;
 import com.romanpulov.library.dropbox.DropboxHelper;
-import com.romanpulov.violetnote.loader.document.DocumentDropboxFileLoader;
+import com.romanpulov.violetnote.loader.dropbox.DocumentDropboxFileLoader;
 import com.romanpulov.violetnote.loader.dropbox.BackupDropboxUploader;
 import com.romanpulov.violetnote.loader.dropbox.RestoreDropboxFileLoader;
 import com.romanpulov.violetnote.R;

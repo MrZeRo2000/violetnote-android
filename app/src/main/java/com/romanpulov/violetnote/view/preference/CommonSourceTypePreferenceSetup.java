@@ -17,7 +17,12 @@ public class CommonSourceTypePreferenceSetup extends PreferenceSetup {
 
         final String[] prefSourceTypeEntries = mContext.getResources().getStringArray(mSourceTypeEntriesId);
 
-        //Preference prefSourceType = findPreference(PREF_KEY_SOURCE_TYPE);
+        // fix non existent values
+        int entryId = mPreference.getPreferenceManager().getSharedPreferences().getInt(mPreference.getKey(), mDefaultValue);
+        if (entryId > prefSourceTypeEntries.length - 1) {
+            mPreference.getPreferenceManager().getSharedPreferences().edit().putInt(mPreference.getKey(), prefSourceTypeEntries.length - 1).commit();
+        }
+
         mPreference.setSummary(prefSourceTypeEntries[mPreference.getPreferenceManager().getSharedPreferences().getInt(mPreference.getKey(), mDefaultValue)]);
 
         mPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {

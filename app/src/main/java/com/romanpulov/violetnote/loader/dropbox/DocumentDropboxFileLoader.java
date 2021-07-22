@@ -1,8 +1,9 @@
-package com.romanpulov.violetnote.loader.document;
+package com.romanpulov.violetnote.loader.dropbox;
 
 import android.content.Context;
 
 import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.loader.document.DocumentLoadPathProvider;
 import com.romanpulov.violetnote.loader.dropbox.DropboxFileLoader;
 import com.romanpulov.violetnote.loader.helper.LoaderNotificationHelper;
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;

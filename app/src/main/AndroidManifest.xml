@@ -95,22 +95,6 @@
             android:theme="@style/MainAppTheme"
             />
         <activity
-            android:name=".filechooser.FileChooserActivity"
-            android:label="@string/title_activity_file_chooser"
-            android:parentActivityName=".view.SettingsActivity"
-            android:theme="@style/MainAppTheme"
-            />
-        <activity
-            android:name=".dropboxchooser.DropboxChooserActivity"
-            android:parentActivityName=".view.SettingsActivity"
-            android:theme="@style/MainAppTheme"
-            />
-        <activity
-            android:name=".onedrivechooser.OneDriveChooserActivity"
-            android:parentActivityName=".view.SettingsActivity"
-            android:theme="@style/MainAppTheme"
-            />
-        <activity
             android:name=".view.BasicNoteGroupActivity"
             android:label="@string/title_activity_basic_note_group"
             android:parentActivityName=".view.SettingsActivity"

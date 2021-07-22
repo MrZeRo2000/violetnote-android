@@ -5,15 +5,10 @@ import android.content.Context;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.model.PassDataA;
 import com.romanpulov.violetnotecore.AESCrypt.AESCryptException;
-import com.romanpulov.violetnotecore.AESCrypt.AESCryptService;
-import com.romanpulov.violetnotecore.Model.PassCategory;
 import com.romanpulov.violetnotecore.Model.PassCategory2;
-import com.romanpulov.violetnotecore.Model.PassData;
 import com.romanpulov.violetnotecore.Model.PassData2;
-import com.romanpulov.violetnotecore.Model.PassNote;
 import com.romanpulov.violetnotecore.Model.PassNote2;
 import com.romanpulov.violetnotecore.Processor.Exception.DataReadWriteException;
-import com.romanpulov.violetnotecore.Processor.XMLPassDataReader;
 import com.romanpulov.violetnotecore.Service.PassData2ReaderServiceV2;
 
 import java.io.File;

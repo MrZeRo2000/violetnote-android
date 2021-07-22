@@ -1,8 +1,9 @@
-package com.romanpulov.violetnote.loader.document;
+package com.romanpulov.violetnote.loader.local;
 
 import android.content.Context;
 
 import com.romanpulov.library.common.loader.file.UriFileLoader;
+import com.romanpulov.violetnote.loader.document.DocumentLoadPathProvider;
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 
 public class DocumentUriFileLoader extends UriFileLoader {
