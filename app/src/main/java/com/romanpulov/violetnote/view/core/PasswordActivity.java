@@ -4,9 +4,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.os.PersistableBundle;
+import android.util.Log;
 import android.view.View;
 
 import com.romanpulov.violetnote.R;
@@ -27,6 +30,8 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
      * Checks validity period for user actions     *
      */
     public static class ValidityPeriodChecker {
+        private final String TAG = ValidityPeriodChecker.class.getName();
+
         private final long mValidityPeriod;
         private long mValidTimeStamp;
 
@@ -35,15 +40,19 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
         }
 
         public void startPeriod() {
+            Log.d(TAG, "Started period");
             mValidTimeStamp = System.currentTimeMillis();
         }
 
         public void resetPeriod() {
+            Log.d(TAG, "Period reset");
             mValidTimeStamp = 0;
         }
 
         public boolean isValid() {
-            return (System.currentTimeMillis() - mValidTimeStamp) < mValidityPeriod;
+            boolean result = ((System.currentTimeMillis() - mValidTimeStamp) < mValidityPeriod);
+            Log.d(TAG, "Validity returned:" + result);
+            return result;
         }
     }
 
@@ -186,9 +195,11 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
 
                 //process input
                 if (text != null) {
+                    mCanceled = false;
                     processRequestPasswordInput(text);
                 } else {
                     setResult(RESULT_CANCELED);
+                    mCanceled = true;
                     setLoadErrorFragment(getString(R.string.error_load));
                 }
             }
