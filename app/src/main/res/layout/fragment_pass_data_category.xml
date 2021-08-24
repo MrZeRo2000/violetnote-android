@@ -11,4 +11,10 @@
         layout="@layout/content_password_input"
         />
 
+    <include
+        android:id="@+id/include_indeterminate_progress"
+        layout="@layout/content_indeterminate_progress"
+        android:visibility="gone"
+        />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

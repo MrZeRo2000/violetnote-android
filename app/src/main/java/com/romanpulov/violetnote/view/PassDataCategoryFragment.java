@@ -41,6 +41,8 @@ public class PassDataCategoryFragment extends Fragment {
                 if (actionId == EditorInfo.IME_ACTION_GO) {
                     Toast.makeText(getContext(), "Go:" + v.getText(), Toast.LENGTH_SHORT).show();
                     InputManagerHelper.hideInput(v);
+                    binding.includePasswordInput.getRoot().setVisibility(View.GONE);
+                    binding.includeIndeterminateProgress.getRoot().setVisibility(View.VISIBLE);
                     return true;
                 }
                 return false;
