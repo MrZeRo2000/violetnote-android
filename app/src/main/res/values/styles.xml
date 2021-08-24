@@ -121,6 +121,16 @@
 
     </style>
 
+    <!-- Main activity theme without action bar for navigation host -->
+    <style name="MainAppNavTheme" parent="MainAppTheme">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="MainAppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="MainAppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
     <!-- Details activity theme -->
     <style name="DetailsAppTheme" parent="MainAppTheme">
 

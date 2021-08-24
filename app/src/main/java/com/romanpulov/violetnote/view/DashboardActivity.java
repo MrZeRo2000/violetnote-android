@@ -58,7 +58,7 @@ public class DashboardActivity extends ActionBarCompatActivity implements OnBasi
     @Override
     public void onBasicGroupSelection(BasicNoteGroupA item) {
         if (item.getGroupType() == BasicNoteGroupA.PASSWORD_NOTE_GROUP_TYPE) {
-            startActivity(new Intent(this, CategoryActivity.class));
+            startActivity(new Intent(this, PassDataHostActivity.class));
         } else if (item.getGroupType() == BasicNoteGroupA.BASIC_NOTE_GROUP_TYPE) {
             Intent intent = new Intent(this, BasicNoteActivity.class);
             intent.putExtra(BasicNoteGroupA.BASIC_NOTE_GROUP_DATA, item);
