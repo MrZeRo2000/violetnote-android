@@ -41,7 +41,8 @@ public class PassDataCategoryFragment extends Fragment {
         model = new ViewModelProvider(requireActivity()).get(PassDataViewModel.class);
         model.getPassData().observe(getViewLifecycleOwner(), passDataA -> {
             Toast.makeText(getContext(), "PassData observed:" + (passDataA == null ? "null" : passDataA.toString()), Toast.LENGTH_SHORT).show();
-            if ((passDataA == null) && (model.getLoadErrorText() != null)) {
+            if ((passDataA == null) && (model.getLoadErrorText().getValue() != null)) {
+                binding.includePasswordInput.editTextPassword.setError(model.getLoadErrorText().getValue());
                 binding.includePasswordInput.getRoot().setVisibility(View.VISIBLE);
                 binding.includeIndeterminateProgress.getRoot().setVisibility(View.GONE);
             }

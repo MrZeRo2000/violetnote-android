@@ -21,6 +21,8 @@ public class PassDataViewModel extends AndroidViewModel {
 
     private final Context mContext;
 
+    private ExecutorService mExecutorService;
+
     private String mPassword;
 
     public void setPassword(String password) {
@@ -28,9 +30,9 @@ public class PassDataViewModel extends AndroidViewModel {
     }
 
     private MutableLiveData<PassDataA> mPassData = new MutableLiveData<>();
-    private String mLoadErrorText;
+    private MutableLiveData<String> mLoadErrorText = new MutableLiveData<>();
 
-    public String getLoadErrorText() {
+    public MutableLiveData<String> getLoadErrorText() {
         return mLoadErrorText;
     }
 
@@ -43,25 +45,36 @@ public class PassDataViewModel extends AndroidViewModel {
     }
 
     public void loadPassData() {
-        ExecutorService executorService = Executors.newFixedThreadPool(1);
-        executorService.submit(() -> {
+        if (mExecutorService == null) {
+            mExecutorService = Executors.newFixedThreadPool(1);
+        }
+
+        mExecutorService.submit(() -> {
             File file = new File(DocumentPassDataLoader.getDocumentFileName(mContext));
             if (file.exists()) {
                 PassDataA passData = documentPassDataLoader.loadPassDataA(file.getAbsolutePath(), mPassword);
-                mPassData.postValue(passData);
                 if (documentPassDataLoader.getLoadErrorList().size() > 0) {
-                    mLoadErrorText = documentPassDataLoader.getLoadErrorList().get(0);
+                    mLoadErrorText.postValue(documentPassDataLoader.getLoadErrorList().get(0));
                 } else {
-                    mLoadErrorText = null;
+                    mLoadErrorText.postValue(null);
                 }
+                mPassData.postValue(passData);
             } else {
                 mPassData.postValue(null);
-                mLoadErrorText = mContext.getString(R.string.error_file_not_found);
+                mLoadErrorText.setValue(mContext.getString(R.string.error_file_not_found));
             }
         });
     }
 
     public LiveData<PassDataA> getPassData() {
         return mPassData;
+    }
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        if (mExecutorService != null) {
+            mExecutorService.shutdown();
+        }
     }
 }
