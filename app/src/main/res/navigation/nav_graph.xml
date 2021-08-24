@@ -3,8 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/FirstFragment">
+    app:startDestination="@id/PassDataCategoryFragment">
 
+    <fragment
+        android:id="@+id/PassDataCategoryFragment"
+        android:name="com.romanpulov.violetnote.view.PassDataCategoryFragment"
+        android:label="@string/title_activity_password_category"
+        tools:layout="@layout/fragment_pass_data_category">
+    </fragment>
+
+    <!--
     <fragment
         android:id="@+id/FirstFragment"
         android:name="com.romanpulov.violetnote.view.FirstFragment"
@@ -25,4 +33,5 @@
             android:id="@+id/action_SecondFragment_to_FirstFragment"
             app:destination="@id/FirstFragment" />
     </fragment>
+    -->
 </navigation>
