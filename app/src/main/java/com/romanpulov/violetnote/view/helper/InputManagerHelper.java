@@ -42,6 +42,31 @@ public class InputManagerHelper {
     }
 
     /**
+     * Show input from view with delay
+     * @param v View
+     */
+    public static void showInputDelayed(View v) {
+        if (v != null) {
+            v.postDelayed(() -> {
+                InputMethodManager inputMethodManager = (InputMethodManager) v.getContext().getSystemService(INPUT_METHOD_SERVICE);
+                if (inputMethodManager != null)
+                    inputMethodManager.showSoftInput(v, InputMethodManager.SHOW_IMPLICIT);
+            }, 500);
+        }
+    }
+
+    /**
+     * Focus input and show with delay
+     * @param v View
+     */
+    public static void focusAndShowDelayed(View v) {
+        if ((v != null) && v.requestFocus()) {
+            showInputDelayed(v);
+        }
+    }
+
+
+    /**
      * Toggle force input
      * @param context Context
      */

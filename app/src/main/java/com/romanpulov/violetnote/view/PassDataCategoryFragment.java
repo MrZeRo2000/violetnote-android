@@ -40,6 +40,7 @@ public class PassDataCategoryFragment extends Fragment {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_GO) {
                     Toast.makeText(getContext(), "Go:" + v.getText(), Toast.LENGTH_SHORT).show();
+                    InputManagerHelper.hideInput(v);
                     return true;
                 }
                 return false;
@@ -52,11 +53,9 @@ public class PassDataCategoryFragment extends Fragment {
             actionBar.setDisplayShowHomeEnabled(true);
         }
 
-
-        if (binding.includePasswordInput.editTextPassword.requestFocus()) {
-            InputManagerHelper.showWindowInput(requireActivity().getWindow());
-        }
+        InputManagerHelper.focusAndShowDelayed(binding.includePasswordInput.editTextPassword);
     }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
