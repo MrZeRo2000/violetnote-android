@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -58,6 +59,10 @@ public class PassDataCategoryFragment extends Fragment {
         );
         binding.includeCategoryList.getRoot().setVisibility(dataState == DATA_STATE_LOADED ? View.VISIBLE : View.GONE);
         setHasOptionsMenu(dataState == DATA_STATE_LOADED);
+        if (dataState == DATA_STATE_PASSWORD_REQUIRED) {
+            Log.d(TAG, "Show keyboard on updateStateUI");
+            InputManagerHelper.focusAndShowDelayed(binding.includePasswordInput.editTextPassword);
+        }
     }
 
     @Override
@@ -79,11 +84,11 @@ public class PassDataCategoryFragment extends Fragment {
 
             //binding.includeIndeterminateProgress.getRoot().setVisibility(View.GONE);
             if (passDataResult.getPassData() == null) {
-                setDataState(DATA_STATE_LOAD_ERROR);
+                if (passDataResult.getLoadErrorText() == null) {
+                    setDataState(DATA_STATE_PASSWORD_REQUIRED);
+                } else {
+                    setDataState(DATA_STATE_LOAD_ERROR);
 
-                //binding.includePasswordInput.getRoot().setVisibility(View.VISIBLE);
-
-                if (passDataResult.getLoadErrorText() != null) {
                     Snackbar.make(view, passDataResult.getLoadErrorText(), 2000)
                             .setTextColor(getResources().getColor(R.color.colorError))
                             .show();
@@ -103,6 +108,25 @@ public class PassDataCategoryFragment extends Fragment {
 
                 // add decoration
                 recyclerView.addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(getActivity(), RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_white_black_gradient));
+
+                recyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+                    @Override
+                    public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+                        Log.d(TAG, "Touching recycler view");
+                        model.enableDataExpiration();
+                        return false;
+                    }
+
+                    @Override
+                    public void onTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+
+                    }
+
+                    @Override
+                    public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+                    }
+                });
             }
         });
 
@@ -137,7 +161,7 @@ public class PassDataCategoryFragment extends Fragment {
 
         if ((model.getPassDataResult().getValue() == null) || (model.getPassDataResult().getValue().getPassData() == null)) {
             setDataState(DATA_STATE_PASSWORD_REQUIRED);
-            InputManagerHelper.focusAndShowDelayed(binding.includePasswordInput.editTextPassword);
+            // InputManagerHelper.focusAndShowDelayed(binding.includePasswordInput.editTextPassword);
         }
     }
 

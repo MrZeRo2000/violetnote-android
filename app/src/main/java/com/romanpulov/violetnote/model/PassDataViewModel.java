@@ -44,7 +44,7 @@ public class PassDataViewModel extends AndroidViewModel {
     }
 
     private ExecutorService mLoadExecutorService;
-    private ScheduledExecutorService mTimerService;
+    private ScheduledExecutorService mTimerExecutorService;
 
     private String mPassword;
     private boolean mDataExpired = false;
@@ -67,8 +67,8 @@ public class PassDataViewModel extends AndroidViewModel {
             mLoadExecutorService = Executors.newFixedThreadPool(1);
         }
 
-        if (mTimerService != null) {
-            mTimerService.shutdownNow();
+        if (mTimerExecutorService != null) {
+            mTimerExecutorService.shutdownNow();
         }
 
         mDataExpired = false;
@@ -85,19 +85,44 @@ public class PassDataViewModel extends AndroidViewModel {
 
                 mPassDataResult.postValue(new PassDataResult(passData, loadErrorText));
 
-                if (mTimerService == null) {
-                    mTimerService = Executors.newSingleThreadScheduledExecutor();
-                    mTimerService.schedule(() -> {
-                        // mPassDataResult.postValue(new PassDataResult(null, null));
-                        Log.d(TAG, "Data expired");
-                        mDataExpired = true;
-                    }, 10, TimeUnit.SECONDS);
-                }
+                enableDataExpiration();
 
             } else {
                 mPassDataResult.postValue(new PassDataResult(null, getContext().getString(R.string.error_file_not_found)));
             }
         });
+    }
+
+    private void scheduleDataExpiration() {
+        mTimerExecutorService.schedule(() -> {
+            // mPassDataResult.postValue(new PassDataResult(null, null));
+            Log.d(TAG, "Data expired");
+            mDataExpired = true;
+        }, 10, TimeUnit.SECONDS);
+    }
+
+    public void enableDataExpiration() {
+        if (!mDataExpired) {
+            if (mTimerExecutorService == null) {
+                Log.d(TAG, "Creating new timer executor");
+                mTimerExecutorService = Executors.newSingleThreadScheduledExecutor();
+                scheduleDataExpiration();
+            } else {
+                Log.d(TAG, "Shutting down expiration timer");
+                mTimerExecutorService.shutdownNow();
+                try {
+                    if (mTimerExecutorService.awaitTermination(1, TimeUnit.SECONDS)) {
+                        Log.d(TAG, "Timer shut down, scheduling");
+                        mTimerExecutorService = Executors.newSingleThreadScheduledExecutor();
+                        scheduleDataExpiration();
+                    } else {
+                        Log.d(TAG, "Timer did not shut down");
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     public void checkDataExpired() {
@@ -114,8 +139,8 @@ public class PassDataViewModel extends AndroidViewModel {
     @Override
     protected void onCleared() {
         super.onCleared();
-        if (mTimerService != null) {
-            mTimerService.shutdownNow();
+        if (mTimerExecutorService != null) {
+            mTimerExecutorService.shutdownNow();
         }
         if (mLoadExecutorService != null) {
             mLoadExecutorService.shutdownNow();
