@@ -17,4 +17,10 @@
         android:visibility="gone"
         />
 
+    <include
+        android:id="@+id/include_category_list"
+        layout="@layout/fragment_category_list"
+        android:visibility="gone"
+        />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

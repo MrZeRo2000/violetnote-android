@@ -2,6 +2,7 @@ package com.romanpulov.violetnote.model;
 
 import android.app.Application;
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -12,69 +13,112 @@ import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.loader.document.DocumentPassDataLoader;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class PassDataViewModel extends AndroidViewModel {
+    private static final String TAG = PassDataViewModel.class.getSimpleName();
 
-    private final Context mContext;
+    public static final class PassDataResult {
+        private final PassDataA mPassData;
+        private final String mLoadErrorText;
 
-    private ExecutorService mExecutorService;
+        public PassDataA getPassData() {
+            return mPassData;
+        }
+
+        public String getLoadErrorText() {
+            return mLoadErrorText;
+        }
+
+        public PassDataResult(PassDataA passData, String loadErrorText) {
+            this.mPassData = passData;
+            this.mLoadErrorText = loadErrorText;
+        }
+    }
+
+    private Context getContext() {
+        return getApplication().getApplicationContext();
+    }
+
+    private ExecutorService mLoadExecutorService;
+    private ScheduledExecutorService mTimerService;
 
     private String mPassword;
+    private boolean mDataExpired = false;
 
     public void setPassword(String password) {
         this.mPassword = password;
     }
 
-    private MutableLiveData<PassDataA> mPassData = new MutableLiveData<>();
-    private MutableLiveData<String> mLoadErrorText = new MutableLiveData<>();
+    private final MutableLiveData<PassDataResult> mPassDataResult = new MutableLiveData<>();
 
-    public MutableLiveData<String> getLoadErrorText() {
-        return mLoadErrorText;
-    }
-
-    private DocumentPassDataLoader documentPassDataLoader;
+    private final DocumentPassDataLoader documentPassDataLoader;
 
     public PassDataViewModel(@NonNull Application application) {
         super(application);
-        mContext = application.getApplicationContext();
         documentPassDataLoader = DocumentPassDataLoader.newInstance(application);
     }
 
     public void loadPassData() {
-        if (mExecutorService == null) {
-            mExecutorService = Executors.newFixedThreadPool(1);
+        if (mLoadExecutorService == null) {
+            mLoadExecutorService = Executors.newFixedThreadPool(1);
         }
 
-        mExecutorService.submit(() -> {
-            File file = new File(DocumentPassDataLoader.getDocumentFileName(mContext));
+        if (mTimerService != null) {
+            mTimerService.shutdownNow();
+        }
+
+        mDataExpired = false;
+
+        mLoadExecutorService.submit(() -> {
+            File file = new File(DocumentPassDataLoader.getDocumentFileName(getContext()));
             if (file.exists()) {
                 PassDataA passData = documentPassDataLoader.loadPassDataA(file.getAbsolutePath(), mPassword);
+
+                String loadErrorText = null;
                 if (documentPassDataLoader.getLoadErrorList().size() > 0) {
-                    mLoadErrorText.postValue(documentPassDataLoader.getLoadErrorList().get(0));
-                } else {
-                    mLoadErrorText.postValue(null);
+                    loadErrorText = documentPassDataLoader.getLoadErrorList().get(0);
                 }
-                mPassData.postValue(passData);
+
+                mPassDataResult.postValue(new PassDataResult(passData, loadErrorText));
+
+                if (mTimerService == null) {
+                    mTimerService = Executors.newSingleThreadScheduledExecutor();
+                    mTimerService.schedule(() -> {
+                        // mPassDataResult.postValue(new PassDataResult(null, null));
+                        Log.d(TAG, "Data expired");
+                        mDataExpired = true;
+                    }, 10, TimeUnit.SECONDS);
+                }
+
             } else {
-                mPassData.postValue(null);
-                mLoadErrorText.setValue(mContext.getString(R.string.error_file_not_found));
+                mPassDataResult.postValue(new PassDataResult(null, getContext().getString(R.string.error_file_not_found)));
             }
         });
     }
 
-    public LiveData<PassDataA> getPassData() {
-        return mPassData;
+    public void checkDataExpired() {
+        if (mDataExpired) {
+            Log.d(TAG, "Clear data as expired");
+            mPassDataResult.setValue(new PassDataResult(null, null));
+        }
+    }
+
+    public LiveData<PassDataResult> getPassDataResult() {
+        return mPassDataResult;
     }
 
     @Override
     protected void onCleared() {
         super.onCleared();
-        if (mExecutorService != null) {
-            mExecutorService.shutdown();
+        if (mTimerService != null) {
+            mTimerService.shutdownNow();
+        }
+        if (mLoadExecutorService != null) {
+            mLoadExecutorService.shutdownNow();
         }
     }
 }
