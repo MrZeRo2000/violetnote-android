@@ -10,7 +10,23 @@
         android:name="com.romanpulov.violetnote.view.PassDataCategoryFragment"
         android:label="@string/title_activity_password_category"
         tools:layout="@layout/fragment_pass_data_category">
+
+        <action
+            android:id="@+id/action_PassDataCategoryFragment_to_PassDataNoteFragment"
+            app:destination="@id/PassDataNoteFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/PassDataNoteFragment"
+        android:name="com.romanpulov.violetnote.view.PassDataNoteFragment"
+        android:label="@string/title_activity_password_note"
+        tools:layout="@layout/fragment_pass_data_note">
+
+        <action
+            android:id="@+id/action_PassDataNoteFragment_to_PassDataCategoryFragment"
+            app:destination="@id/PassDataCategoryFragment" />
+    </fragment>
+
 
     <!--
     <fragment

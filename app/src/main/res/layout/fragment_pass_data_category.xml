@@ -18,7 +18,7 @@
         />
 
     <include
-        android:id="@+id/include_category_list"
+        android:id="@+id/include_data_list"
         layout="@layout/fragment_category_list"
         android:visibility="gone"
         />

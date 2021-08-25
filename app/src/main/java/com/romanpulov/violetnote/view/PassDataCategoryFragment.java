@@ -6,83 +6,33 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
-import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.romanpulov.violetnote.R;
-import com.romanpulov.violetnote.databinding.FragmentPassDataCategoryBinding;
-import com.romanpulov.violetnote.model.PassDataViewModel;
+import com.romanpulov.violetnote.view.core.PassDataBaseFragment;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
-import com.romanpulov.violetnote.view.helper.InputManagerHelper;
 
-public class PassDataCategoryFragment extends Fragment {
+public class PassDataCategoryFragment extends PassDataBaseFragment {
     private final static String TAG = PassDataCategoryFragment.class.getSimpleName();
 
-    private final static int DATA_STATE_PASSWORD_REQUIRED = 0;
-    private final static int DATA_STATE_LOADING = 1;
-    private final static int DATA_STATE_LOADED = 2;
-    private final static int DATA_STATE_LOAD_ERROR = 3;
-
-    private FragmentPassDataCategoryBinding binding;
-    private PassDataViewModel model;
-    private int mDataState;
-
-    protected int getDataState() {
-        return mDataState;
-    }
-
-    protected void setDataState(int value) {
-        mDataState = value;
-        updateStateUI(value);
-    }
-
-    protected void updateStateUI(int dataState) {
-        binding.includeIndeterminateProgress.getRoot().setVisibility(dataState == DATA_STATE_LOADING ? View.VISIBLE : View.GONE);
-        binding.includePasswordInput.getRoot().setVisibility(
-                dataState == DATA_STATE_PASSWORD_REQUIRED || dataState == DATA_STATE_LOAD_ERROR ? View.VISIBLE : View.GONE
-        );
-        binding.includeCategoryList.getRoot().setVisibility(dataState == DATA_STATE_LOADED ? View.VISIBLE : View.GONE);
-        setHasOptionsMenu(dataState == DATA_STATE_LOADED);
-        if (dataState == DATA_STATE_PASSWORD_REQUIRED) {
-            Log.d(TAG, "Show keyboard on updateStateUI");
-            InputManagerHelper.focusAndShowDelayed(binding.includePasswordInput.editTextPassword);
-        }
-    }
-
     @Override
-    public View onCreateView(
-            @NonNull LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState
-    ) {
-        binding = FragmentPassDataCategoryBinding.inflate(inflater, container, false);
-        return binding.getRoot();
-
+    protected int getViewLayoutId() {
+        return R.layout.fragment_pass_data_category;
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        model = new ViewModelProvider(requireActivity()).get(PassDataViewModel.class);
         model.getPassDataResult().observe(getViewLifecycleOwner(), passDataResult -> {
-            //Toast.makeText(getContext(), "PassData observed:" + (passDataResult.getPassData() == null ? "null" : passDataResult.getPassData().toString()), Toast.LENGTH_SHORT).show();
-
-            //binding.includeIndeterminateProgress.getRoot().setVisibility(View.GONE);
             if (passDataResult.getPassData() == null) {
                 if (passDataResult.getLoadErrorText() == null) {
                     setDataState(DATA_STATE_PASSWORD_REQUIRED);
@@ -109,47 +59,8 @@ public class PassDataCategoryFragment extends Fragment {
                 // add decoration
                 recyclerView.addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(getActivity(), RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_white_black_gradient));
 
-                recyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
-                    @Override
-                    public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
-                        Log.d(TAG, "Touching recycler view");
-                        model.enableDataExpiration();
-                        return false;
-                    }
-
-                    @Override
-                    public void onTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
-
-                    }
-
-                    @Override
-                    public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
-                    }
-                });
-            }
-        });
-
-        binding.includePasswordInput.editTextPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if ((v.getText().length() > 0) && (actionId == EditorInfo.IME_ACTION_GO)) {
-                    //get the data
-                    String password = v.getText().toString();
-
-                    // update UI
-                    InputManagerHelper.hideInput(v);
-                    v.setText(null);
-
-                    setDataState(DATA_STATE_LOADING);
-
-                    // request data from model
-                    model.setPassword(password);
-                    model.loadPassData();
-
-                    return true;
-                }
-                return false;
+                // add data expiration handler
+                recyclerView.addOnItemTouchListener(mRecyclerViewTouchListenerForDataExpiration);
             }
         });
 
@@ -157,11 +68,6 @@ public class PassDataCategoryFragment extends Fragment {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowHomeEnabled(true);
-        }
-
-        if ((model.getPassDataResult().getValue() == null) || (model.getPassDataResult().getValue().getPassData() == null)) {
-            setDataState(DATA_STATE_PASSWORD_REQUIRED);
-            // InputManagerHelper.focusAndShowDelayed(binding.includePasswordInput.editTextPassword);
         }
     }
 
@@ -180,17 +86,4 @@ public class PassDataCategoryFragment extends Fragment {
             return super.onOptionsItemSelected(item);
         }
     }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        model.checkDataExpired();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
-    }
-
 }

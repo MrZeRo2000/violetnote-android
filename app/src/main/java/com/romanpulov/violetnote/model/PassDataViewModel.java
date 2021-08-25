@@ -39,6 +39,24 @@ public class PassDataViewModel extends AndroidViewModel {
         }
     }
 
+    public static final class PassDataLoaded {
+        private final PassDataA mPassData;
+        private final String mPassword;
+
+        public PassDataA getPassData() {
+            return mPassData;
+        }
+
+        public String getPassword() {
+            return mPassword;
+        }
+
+        public PassDataLoaded(PassDataA mPassData, String mPassword) {
+            this.mPassData = mPassData;
+            this.mPassword = mPassword;
+        }
+    }
+
     private Context getContext() {
         return getApplication().getApplicationContext();
     }
@@ -48,6 +66,7 @@ public class PassDataViewModel extends AndroidViewModel {
 
     private String mPassword;
     private boolean mDataExpired = false;
+    private PassDataLoaded mPassDataLoaded;
 
     public void setPassword(String password) {
         this.mPassword = password;
@@ -63,34 +82,53 @@ public class PassDataViewModel extends AndroidViewModel {
     }
 
     public void loadPassData() {
-        if (mLoadExecutorService == null) {
-            mLoadExecutorService = Executors.newFixedThreadPool(1);
-        }
-
-        if (mTimerExecutorService != null) {
-            mTimerExecutorService.shutdownNow();
-        }
-
         mDataExpired = false;
 
-        mLoadExecutorService.submit(() -> {
-            File file = new File(DocumentPassDataLoader.getDocumentFileName(getContext()));
-            if (file.exists()) {
-                PassDataA passData = documentPassDataLoader.loadPassDataA(file.getAbsolutePath(), mPassword);
-
-                String loadErrorText = null;
-                if (documentPassDataLoader.getLoadErrorList().size() > 0) {
-                    loadErrorText = documentPassDataLoader.getLoadErrorList().get(0);
-                }
-
-                mPassDataResult.postValue(new PassDataResult(passData, loadErrorText));
-
-                enableDataExpiration();
-
-            } else {
-                mPassDataResult.postValue(new PassDataResult(null, getContext().getString(R.string.error_file_not_found)));
+        if (mPassDataLoaded == null) {
+            if (mLoadExecutorService == null) {
+                mLoadExecutorService = Executors.newFixedThreadPool(1);
             }
-        });
+
+            if (mTimerExecutorService != null) {
+                mTimerExecutorService.shutdownNow();
+                try {
+                    if (!mTimerExecutorService.awaitTermination(1, TimeUnit.SECONDS)) {
+                        Log.d(TAG, "Timer did not shut down");
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            mLoadExecutorService.submit(() -> {
+                File file = new File(DocumentPassDataLoader.getDocumentFileName(getContext()));
+                if (file.exists()) {
+                    mPassDataLoaded = new PassDataLoaded(
+                            documentPassDataLoader.loadPassDataA(file.getAbsolutePath(), mPassword),
+                            mPassword
+                    );
+
+                    String loadErrorText = null;
+                    if (documentPassDataLoader.getLoadErrorList().size() > 0) {
+                        loadErrorText = documentPassDataLoader.getLoadErrorList().get(0);
+                    }
+
+                    mPassDataResult.postValue(new PassDataResult(mPassDataLoaded.getPassData(), loadErrorText));
+
+                    enableDataExpiration();
+
+                } else {
+                    mPassDataResult.postValue(new PassDataResult(null, getContext().getString(R.string.error_file_not_found)));
+                }
+            });
+        } else {
+            if (mPassDataLoaded.getPassword().equals(mPassword)) {
+                mPassDataResult.setValue(new PassDataResult(mPassDataLoaded.getPassData(), null));
+                enableDataExpiration();
+            } else {
+                mPassDataResult.setValue(new PassDataResult(null, getContext().getString(R.string.ui_error_wrong_password)));
+            }
+        }
     }
 
     private void scheduleDataExpiration() {
