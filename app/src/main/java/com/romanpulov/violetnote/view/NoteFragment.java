@@ -96,7 +96,7 @@ public class NoteFragment extends Fragment {
                 startActivityForResult(intent, 0);
             }
         });
-        mSearchActionHelper.setOnSearchConditionChangedListeber(new SearchActionHelper.OnSearchConditionChangedListener() {
+        mSearchActionHelper.setOnSearchConditionChangedListener(new SearchActionHelper.OnSearchConditionChangedListener() {
             @Override
             public void onSearchConditionChanged(boolean isSearchSystem, boolean isSearchUser) {
                 mSearchActionHelper.setAutoCompleteList(mPassDataA.getSearchValues(isSearchSystem, isSearchUser));

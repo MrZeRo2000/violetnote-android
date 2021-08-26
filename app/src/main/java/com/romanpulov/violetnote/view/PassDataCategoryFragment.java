@@ -14,16 +14,17 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.view.core.PassDataBaseFragment;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
+import com.romanpulov.violetnote.view.helper.SearchActionHelper;
 
 public class PassDataCategoryFragment extends PassDataBaseFragment {
     private final static String TAG = PassDataCategoryFragment.class.getSimpleName();
+
+    private SearchActionHelper mSearchActionHelper;
 
     @Override
     protected int getViewLayoutId() {
@@ -67,6 +68,23 @@ public class PassDataCategoryFragment extends PassDataBaseFragment {
 
                 // add data expiration handler
                 recyclerView.addOnItemTouchListener(mRecyclerViewTouchListenerForDataExpiration);
+
+                // setup search action helper
+                if (mSearchActionHelper == null) {
+                    mSearchActionHelper = new SearchActionHelper(view, SearchActionHelper.DISPLAY_TYPE_SYSTEM_USER);
+                    mSearchActionHelper.setOnSearchInteractionListener((searchText, isSearchSystem, isSearchUser) -> {
+                        //TODO search result reaction
+                        Log.d(TAG, "Search text:" + searchText);
+                    });
+
+                    // setup search action helper
+                    mSearchActionHelper.setAutoCompleteList(passDataResult.getPassData().getSearchValues(true, true));
+                    mSearchActionHelper.setOnSearchConditionChangedListener((isSearchSystem, isSearchUser) -> {
+                        mSearchActionHelper.setAutoCompleteList(passDataResult.getPassData().getSearchValues(isSearchSystem, isSearchUser));
+                    });
+                } else {
+                    mSearchActionHelper.hideLayout();
+                }
             }
         });
 
@@ -75,6 +93,13 @@ public class PassDataCategoryFragment extends PassDataBaseFragment {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowHomeEnabled(true);
         }
+    }
+
+    @Override
+    public void onPause() {
+        if (mSearchActionHelper != null)
+            mSearchActionHelper.hideLayout();
+        super.onPause();
     }
 
     @Override
@@ -87,6 +112,9 @@ public class PassDataCategoryFragment extends PassDataBaseFragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.action_search) {
             Log.d(TAG, "requested search");
+            if (mSearchActionHelper != null) {
+                mSearchActionHelper.showLayout();
+            }
             return true;
         } else {
             return super.onOptionsItemSelected(item);

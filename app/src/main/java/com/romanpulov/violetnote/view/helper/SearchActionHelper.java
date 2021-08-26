@@ -19,7 +19,7 @@ import java.util.Collection;
  * Search action helper class
  * Created by romanpulov on 08.08.2016.
  */
-public class SearchActionHelper implements CompoundButton.OnCheckedChangeListener {
+public class SearchActionHelper {
     public final static int DISPLAY_TYPE_SYSTEM_USER = 1;
 
     private final View mSearchView;
@@ -34,7 +34,7 @@ public class SearchActionHelper implements CompoundButton.OnCheckedChangeListene
         mSearchListener = listener;
     }
 
-    public void setOnSearchConditionChangedListeber(OnSearchConditionChangedListener listener) {
+    public void setOnSearchConditionChangedListener(OnSearchConditionChangedListener listener) {
         mSearchConditionChangedListener = listener;
     }
 
@@ -52,17 +52,21 @@ public class SearchActionHelper implements CompoundButton.OnCheckedChangeListene
 
     private void setupCancelButton() {
         ImageButton searchCancelButton = mSearchView.findViewById(R.id.cancel_button);
-        searchCancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                hideLayout();
-            }
-        });
+        searchCancelButton.setOnClickListener(view -> hideLayout());
     }
 
     private void setupSearchOptions() {
-        mSearchSystemCheckBox.setOnCheckedChangeListener(this);
-        mSearchUserCheckBox.setOnCheckedChangeListener(this);
+        CompoundButton.OnCheckedChangeListener onCheckedChangeListener = (buttonView, isChecked) -> {
+            if (mSearchConditionChangedListener != null) {
+                mSearchConditionChangedListener.onSearchConditionChanged(
+                        mSearchSystemCheckBox.isChecked(),
+                        mSearchUserCheckBox.isChecked()
+                );
+            }
+        };
+
+        mSearchSystemCheckBox.setOnCheckedChangeListener(onCheckedChangeListener);
+        mSearchUserCheckBox.setOnCheckedChangeListener(onCheckedChangeListener);
     }
 
     private void setupEditText() {
@@ -71,16 +75,23 @@ public class SearchActionHelper implements CompoundButton.OnCheckedChangeListene
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 if (
                     // editor with action
-                        (i == EditorInfo.IME_ACTION_SEARCH) ||
-                                // editor with Enter button
-                                ((i == EditorInfo.IME_ACTION_UNSPECIFIED) && (keyEvent != null) && (keyEvent.getAction() == KeyEvent.ACTION_DOWN))
-                        ) {
-                    hideLayout();
+                    (i == EditorInfo.IME_ACTION_SEARCH) ||
+                    // editor with Enter button
+                    ((i == EditorInfo.IME_ACTION_UNSPECIFIED) && (keyEvent != null) && (keyEvent.getAction() == KeyEvent.ACTION_DOWN))
+                )
+                {
+                    // get search text
+                    String searchText = textView.getText().toString();
 
-                    if (mSearchListener != null)
-                        mSearchListener.onSearchFragmentInteraction(textView.getText().toString(), mSearchSystemCheckBox.isChecked(), mSearchUserCheckBox.isChecked());
-                    //clear search text for future
+                    // update UI
+                    hideLayout();
                     mSearchEditText.setText(null);
+
+                    // return data
+                    if (mSearchListener != null) {
+                        mSearchListener.onSearchFragmentInteraction(searchText, mSearchSystemCheckBox.isChecked(), mSearchUserCheckBox.isChecked());
+                    }
+
                     return true;
                 }
                 return false;
@@ -89,7 +100,11 @@ public class SearchActionHelper implements CompoundButton.OnCheckedChangeListene
     }
 
     public void setAutoCompleteList(Collection<String> autoCompleteList) {
-        ArrayAdapter<?> adapter = new ArrayAdapter<>(mSearchEditText.getContext(), android.R.layout.simple_dropdown_item_1line, autoCompleteList.toArray(new String[0]));
+        ArrayAdapter<?> adapter = new ArrayAdapter<>(
+                mSearchEditText.getContext(),
+                android.R.layout.simple_dropdown_item_1line,
+                autoCompleteList.toArray(new String[0])
+        );
         mSearchEditText.setAdapter(adapter);
     }
 
@@ -100,19 +115,13 @@ public class SearchActionHelper implements CompoundButton.OnCheckedChangeListene
             mSearchView.findViewById(R.id.search_user_check).setVisibility(View.GONE);
         }
         mSearchView.setVisibility(View.VISIBLE);
-        if (mSearchEditText.requestFocus())
-            InputManagerHelper.showInput(mSearchEditText);
+
+        InputManagerHelper.focusAndShowInput(mSearchEditText);
     }
 
     public void hideLayout() {
         InputManagerHelper.hideInput(mSearchEditText);
         mSearchView.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if (mSearchConditionChangedListener != null)
-            mSearchConditionChangedListener.onSearchConditionChanged(mSearchSystemCheckBox.isChecked(), mSearchUserCheckBox.isChecked());
     }
 
     public interface OnSearchConditionChangedListener {

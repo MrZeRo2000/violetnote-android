@@ -42,6 +42,16 @@ public class InputManagerHelper {
     }
 
     /**
+     * Request focus and show input from view
+     * @param v View
+     */
+    public static void focusAndShowInput(View v) {
+        if ((v != null) && (v.requestFocus())) {
+            showInput(v);
+        }
+    }
+
+    /**
      * Show input from view with delay
      * @param v View
      */

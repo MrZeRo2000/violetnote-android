@@ -78,7 +78,7 @@ public class CategoryFragment extends Fragment {
         mSearchActionHelper.setOnSearchInteractionListener(mSearchListener);
         if (passDataA != null)
             mSearchActionHelper.setAutoCompleteList(passDataA.getSearchValues(true, true));
-        mSearchActionHelper.setOnSearchConditionChangedListeber(new SearchActionHelper.OnSearchConditionChangedListener() {
+        mSearchActionHelper.setOnSearchConditionChangedListener(new SearchActionHelper.OnSearchConditionChangedListener() {
             @Override
             public void onSearchConditionChanged(boolean isSearchSystem, boolean isSearchUser) {
                 if (passDataA != null)
