@@ -8,6 +8,7 @@
     <include
         android:id="@+id/include_password_input"
         layout="@layout/content_password_input"
+        android:visibility="gone"
         />
 
     <include

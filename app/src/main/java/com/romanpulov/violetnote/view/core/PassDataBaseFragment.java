@@ -16,7 +16,9 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.model.PassDataExpireViewModel;
 import com.romanpulov.violetnote.model.PassDataViewModel;
 import com.romanpulov.violetnote.view.helper.InputManagerHelper;
 
@@ -34,6 +36,8 @@ public abstract class PassDataBaseFragment extends Fragment {
     private EditText mEditTextPassword;
 
     protected PassDataViewModel model;
+    protected PassDataExpireViewModel expireModel;
+
     private int mDataState;
 
     protected int getDataState() {
@@ -68,10 +72,12 @@ public abstract class PassDataBaseFragment extends Fragment {
 
     protected abstract int getViewLayoutId();
 
+    protected abstract void loadModelData();
+
     protected RecyclerView.OnItemTouchListener mRecyclerViewTouchListenerForDataExpiration = new RecyclerView.OnItemTouchListener() {
         @Override
         public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
-            model.enableDataExpiration();
+            expireModel.prolongDataExpiration();
             return false;
         }
 
@@ -100,6 +106,7 @@ public abstract class PassDataBaseFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         model = new ViewModelProvider(requireActivity()).get(PassDataViewModel.class);
+        expireModel = new ViewModelProvider(requireActivity()).get(PassDataExpireViewModel.class);
 
         mEditTextPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -116,7 +123,8 @@ public abstract class PassDataBaseFragment extends Fragment {
 
                     // request data from model
                     model.setPassword(password);
-                    model.loadPassData();
+
+                    loadModelData();
 
                     return true;
                 }
@@ -132,6 +140,29 @@ public abstract class PassDataBaseFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        model.checkDataExpired();
+        if (!expireModel.checkDataExpired()) {
+            expireModel.prolongDataExpiration();
+        }
+    }
+
+    protected boolean validatePassDataResult(View view, PassDataViewModel.PassDataResult passDataResult) {
+        if (passDataResult == null) {
+            setDataState(DATA_STATE_PASSWORD_REQUIRED);
+            return false;
+        } else if (passDataResult.getPassData() == null) {
+            if (passDataResult.getLoadErrorText() == null) {
+                setDataState(DATA_STATE_PASSWORD_REQUIRED);
+                return false;
+            } else {
+                setDataState(DATA_STATE_LOAD_ERROR);
+
+                Snackbar.make(view, passDataResult.getLoadErrorText(), 2000)
+                        .setTextColor(getResources().getColor(R.color.colorError))
+                        .show();
+                return false;
+            }
+        } else {
+            return true;
+        }
     }
 }

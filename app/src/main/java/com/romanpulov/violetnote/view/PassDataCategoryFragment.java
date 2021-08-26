@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -29,22 +30,22 @@ public class PassDataCategoryFragment extends PassDataBaseFragment {
         return R.layout.fragment_pass_data_category;
     }
 
+    @Override
+    protected void loadModelData() {
+        model.loadPassData();
+    }
+
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        model.getPassDataResult().observe(getViewLifecycleOwner(), passDataResult -> {
-            if (passDataResult.getPassData() == null) {
-                if (passDataResult.getLoadErrorText() == null) {
-                    setDataState(DATA_STATE_PASSWORD_REQUIRED);
-                } else {
-                    setDataState(DATA_STATE_LOAD_ERROR);
+        expireModel.setLiveData(model.getPassDataResult());
 
-                    Snackbar.make(view, passDataResult.getLoadErrorText(), 2000)
-                            .setTextColor(getResources().getColor(R.color.colorError))
-                            .show();
-                }
-            } else {
+        model.getPassDataResult().observe(getViewLifecycleOwner(), passDataResult -> {
+            if (validatePassDataResult(view, passDataResult)) {
                 setDataState(DATA_STATE_LOADED);
+
+                // got the data, setting expiration
+                expireModel.initDataExpiration();
 
                 RecyclerView recyclerView = view.findViewById(R.id.list);
 
@@ -53,7 +54,12 @@ public class PassDataCategoryFragment extends PassDataBaseFragment {
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
                 recyclerView.setAdapter(new CategoryRecyclerViewAdapter(passDataResult.getPassData().getPassCategoryData(), item -> {
-
+                    if (!expireModel.checkDataExpired()) {
+                        model.selectPassDataByCategory(item);
+                        NavHostFragment.findNavController(PassDataCategoryFragment.this)
+                                .navigate(R.id.action_PassDataCategoryFragment_to_PassDataNoteFragment);
+                        expireModel.prolongDataExpiration();
+                    }
                 }));
 
                 // add decoration
