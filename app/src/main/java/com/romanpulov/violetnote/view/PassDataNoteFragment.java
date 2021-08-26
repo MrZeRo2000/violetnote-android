@@ -6,6 +6,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -40,16 +42,22 @@ public class PassDataNoteFragment extends PassDataBaseFragment {
                 // got the data, setting expiration
                 expireModel.initDataExpiration();
 
+                // TODO remove headerTextView from the layout
                 TextView headerTextView = view.findViewById(R.id.headerTextView);
-                headerTextView.setText(passDataResult.getPassData().getPassCategoryData().get(0).getCategoryName());
+                // headerTextView.setText(passDataResult.getPassData().getPassCategoryData().get(0).getCategoryName());
+                headerTextView.setVisibility(View.GONE);
 
+                // set title
+                setActivityTitle(passDataResult.getPassData().getPassCategoryData().get(0).getCategoryName());
+
+                // setup RecycleView
                 RecyclerView recyclerView = view.findViewById(R.id.list);
 
                 // Set the adapter
                 Context context = view.getContext();
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
                 recyclerView.setAdapter(new NoteRecyclerViewAdapter(passDataResult.getPassData().getPassNoteData(), item -> {
-
+                    //TODO select note action
                 }));
 
                 // add decoration

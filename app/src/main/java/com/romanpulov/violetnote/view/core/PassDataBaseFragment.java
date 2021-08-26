@@ -12,6 +12,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
@@ -163,6 +165,15 @@ public abstract class PassDataBaseFragment extends Fragment {
             }
         } else {
             return true;
+        }
+    }
+
+    protected void setActivityTitle(String title) {
+        if ((getActivity() instanceof AppCompatActivity)){
+            ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setTitle(title);
+            }
         }
     }
 }
