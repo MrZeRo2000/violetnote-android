@@ -60,12 +60,13 @@ public class PassDataViewModel extends AndroidViewModel {
     private ExecutorService mLoadExecutorService;
 
     private String mPassword;
-    private PassDataLoaded mPassDataLoaded;
-    private PassDataA mPassDataSelectedByCategory;
 
     public void setPassword(String password) {
         this.mPassword = password;
     }
+
+    // PassData loaded from file
+    private PassDataLoaded mPassDataLoaded;
 
     private final MutableLiveData<PassDataResult> mPassDataResult = new MutableLiveData<>();
 
@@ -73,15 +74,48 @@ public class PassDataViewModel extends AndroidViewModel {
         return mPassDataResult;
     }
 
+    // PassData selected by category
+    private PassDataA mPassDataSelectedByCategory;
+
     private final MutableLiveData<PassDataResult> mPassDataSelectedByCategoryResult = new MutableLiveData<>();
+
+    public MutableLiveData<PassDataResult> getPassDataSelectedByCategory() {
+        return mPassDataSelectedByCategoryResult;
+    }
 
     public void selectPassDataByCategory(PassCategoryA passCategory) {
         mPassDataSelectedByCategory = PassDataA.newCategoryInstance(mPassDataLoaded.getPassData(), passCategory);
         mPassDataSelectedByCategoryResult.setValue(new PassDataResult(mPassDataSelectedByCategory, null));
     }
 
-    public MutableLiveData<PassDataResult> getPassDataSelectedByCategory() {
-        return mPassDataSelectedByCategoryResult;
+    public void loadPassDataSelectedByCategory() {
+        if ((mPassDataLoaded != null) && (mPassDataLoaded.getPassword().equals(mPassword))) {
+            mPassDataSelectedByCategoryResult.setValue(new PassDataResult(mPassDataSelectedByCategory, null));
+        } else {
+            mPassDataSelectedByCategoryResult.setValue(new PassDataResult(null, getContext().getString(R.string.ui_error_wrong_password)));
+        }
+    }
+
+    // PassData search result
+    private PassDataA mPassDataSearch;
+
+    private final MutableLiveData<PassDataResult> mPassDataSearchResult = new MutableLiveData<>();
+
+    public MutableLiveData<PassDataResult> getPassDataSearchResult() {
+        return mPassDataSearchResult;
+    }
+
+    public void searchPassData(String searchString, boolean isSearchSystem, boolean isSearchUser) {
+        mPassDataSearch = PassDataA.newSearchInstance(mPassDataLoaded.getPassData(), searchString, isSearchSystem, isSearchUser);
+        mPassDataSearchResult.setValue(new PassDataResult(mPassDataSearch, null));
+    }
+
+    public void loadSearchPassData() {
+        if ((mPassDataLoaded != null) && (mPassDataLoaded.getPassword().equals(mPassword))) {
+            mPassDataSearchResult.setValue(new PassDataResult(mPassDataSearch, null));
+        } else {
+            mPassDataSearchResult.setValue(new PassDataResult(null, getContext().getString(R.string.ui_error_wrong_password)));
+        }
     }
 
     private final DocumentPassDataLoader documentPassDataLoader;
@@ -122,14 +156,6 @@ public class PassDataViewModel extends AndroidViewModel {
             } else {
                 mPassDataResult.setValue(new PassDataResult(null, getContext().getString(R.string.ui_error_wrong_password)));
             }
-        }
-    }
-
-    public void loadPassDataSelectedByCategory() {
-        if ((mPassDataLoaded != null) && (mPassDataLoaded.getPassword().equals(mPassword))) {
-            mPassDataSelectedByCategoryResult.setValue(new PassDataResult(mPassDataSelectedByCategory, null));
-        } else {
-            mPassDataSelectedByCategoryResult.setValue(new PassDataResult(null, getContext().getString(R.string.ui_error_wrong_password)));
         }
     }
 

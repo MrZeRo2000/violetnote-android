@@ -24,8 +24,6 @@ import com.romanpulov.violetnote.view.helper.SearchActionHelper;
 public class PassDataCategoryFragment extends PassDataBaseFragment {
     private final static String TAG = PassDataCategoryFragment.class.getSimpleName();
 
-    private SearchActionHelper mSearchActionHelper;
-
     @Override
     protected int getViewLayoutId() {
         return R.layout.fragment_pass_data_category;
@@ -70,21 +68,12 @@ public class PassDataCategoryFragment extends PassDataBaseFragment {
                 recyclerView.addOnItemTouchListener(mRecyclerViewTouchListenerForDataExpiration);
 
                 // setup search action helper
-                if (mSearchActionHelper == null) {
-                    mSearchActionHelper = new SearchActionHelper(view, SearchActionHelper.DISPLAY_TYPE_SYSTEM_USER);
-                    mSearchActionHelper.setOnSearchInteractionListener((searchText, isSearchSystem, isSearchUser) -> {
-                        //TODO search result reaction
-                        Log.d(TAG, "Search text:" + searchText);
-                    });
-
-                    // setup search action helper
-                    mSearchActionHelper.setAutoCompleteList(passDataResult.getPassData().getSearchValues(true, true));
-                    mSearchActionHelper.setOnSearchConditionChangedListener((isSearchSystem, isSearchUser) -> {
-                        mSearchActionHelper.setAutoCompleteList(passDataResult.getPassData().getSearchValues(isSearchSystem, isSearchUser));
-                    });
-                } else {
-                    mSearchActionHelper.hideLayout();
-                }
+                setupSearchActionHelper(view, passDataResult.getPassData(), (searchText, isSearchSystem, isSearchUser) -> {
+                    model.searchPassData(searchText, isSearchSystem, isSearchUser);
+                    NavHostFragment.findNavController(PassDataCategoryFragment.this)
+                            .navigate(R.id.action_PassDataCategoryFragment_to_PassDataSearchResultFragment);
+                    expireModel.prolongDataExpiration();
+                });
             }
         });
 
@@ -93,13 +82,6 @@ public class PassDataCategoryFragment extends PassDataBaseFragment {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowHomeEnabled(true);
         }
-    }
-
-    @Override
-    public void onPause() {
-        if (mSearchActionHelper != null)
-            mSearchActionHelper.hideLayout();
-        super.onPause();
     }
 
     @Override

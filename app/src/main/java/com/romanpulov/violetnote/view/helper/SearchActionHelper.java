@@ -22,6 +22,12 @@ import java.util.Collection;
 public class SearchActionHelper {
     public final static int DISPLAY_TYPE_SYSTEM_USER = 1;
 
+    private final View mRootView;
+
+    public View getRootView() {
+        return mRootView;
+    }
+
     private final View mSearchView;
     private final AutoCompleteTextView mSearchEditText;
     private final CheckBox mSearchSystemCheckBox;
@@ -39,6 +45,7 @@ public class SearchActionHelper {
     }
 
     public SearchActionHelper(View rootView, int displayType) {
+        mRootView = rootView;
         mSearchView = rootView.findViewById(R.id.search_layout_include);
         mSearchEditText = mSearchView.findViewById(R.id.search_edit_text);
         mSearchSystemCheckBox = mSearchView.findViewById(R.id.search_system_check);

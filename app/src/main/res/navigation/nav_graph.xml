@@ -14,6 +14,9 @@
         <action
             android:id="@+id/action_PassDataCategoryFragment_to_PassDataNoteFragment"
             app:destination="@id/PassDataNoteFragment" />
+        <action
+            android:id="@+id/action_PassDataCategoryFragment_to_PassDataSearchResultFragment"
+            app:destination="@id/PassDataSearchResultFragment" />
     </fragment>
 
     <fragment
@@ -23,9 +26,18 @@
         tools:layout="@layout/fragment_pass_data_note">
 
         <action
-            android:id="@+id/action_PassDataNoteFragment_to_PassDataCategoryFragment"
-            app:destination="@id/PassDataCategoryFragment" />
+            android:id="@+id/action_PassDataNoteFragment_to_PassDataSearchResultFragment"
+            app:destination="@id/PassDataSearchResultFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/PassDataSearchResultFragment"
+        android:name="com.romanpulov.violetnote.view.PassDataSearchResultFragment"
+        android:label="@string/title_activity_password_note_search"
+        tools:layout="@layout/fragment_pass_data_note">
+
+    </fragment>
+
 
 
     <!--

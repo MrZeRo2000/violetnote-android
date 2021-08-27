@@ -20,9 +20,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.model.PassDataA;
 import com.romanpulov.violetnote.model.PassDataExpireViewModel;
 import com.romanpulov.violetnote.model.PassDataViewModel;
+import com.romanpulov.violetnote.view.OnSearchInteractionListener;
 import com.romanpulov.violetnote.view.helper.InputManagerHelper;
+import com.romanpulov.violetnote.view.helper.SearchActionHelper;
 
 public abstract class PassDataBaseFragment extends Fragment {
     private final static String TAG = PassDataBaseFragment.class.getSimpleName();
@@ -31,6 +34,8 @@ public abstract class PassDataBaseFragment extends Fragment {
     public final static int DATA_STATE_LOADING = 1;
     public final static int DATA_STATE_LOADED = 2;
     public final static int DATA_STATE_LOAD_ERROR = 3;
+
+    protected SearchActionHelper mSearchActionHelper;
 
     private View mIncludePasswordInput;
     private View mIncludeIndeterminateProgress;
@@ -140,6 +145,13 @@ public abstract class PassDataBaseFragment extends Fragment {
     }
 
     @Override
+    public void onPause() {
+        if (mSearchActionHelper != null)
+            mSearchActionHelper.hideLayout();
+        super.onPause();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         if (!expireModel.checkDataExpired()) {
@@ -174,6 +186,21 @@ public abstract class PassDataBaseFragment extends Fragment {
             if (actionBar != null) {
                 actionBar.setTitle(title);
             }
+        }
+    }
+
+    protected void setupSearchActionHelper(View view, PassDataA passDataA, OnSearchInteractionListener listener) {
+        if ((mSearchActionHelper == null) || (mSearchActionHelper.getRootView() != view)) {
+            mSearchActionHelper = new SearchActionHelper(view, SearchActionHelper.DISPLAY_TYPE_SYSTEM_USER);
+            mSearchActionHelper.setOnSearchInteractionListener(listener);
+
+            // setup search action helper
+            mSearchActionHelper.setAutoCompleteList(passDataA.getSearchValues(true, true));
+            mSearchActionHelper.setOnSearchConditionChangedListener((isSearchSystem, isSearchUser) -> {
+                mSearchActionHelper.setAutoCompleteList(passDataA.getSearchValues(isSearchSystem, isSearchUser));
+            });
+        } else {
+            mSearchActionHelper.hideLayout();
         }
     }
 }
