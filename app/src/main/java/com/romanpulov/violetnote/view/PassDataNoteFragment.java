@@ -60,7 +60,10 @@ public class PassDataNoteFragment extends PassDataBaseFragment {
                 Context context = view.getContext();
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
                 recyclerView.setAdapter(new NoteRecyclerViewAdapter(passDataResult.getPassData().getPassNoteData(), item -> {
-                    //TODO select note action
+                    model.selectPassDataNote(item);
+                    NavHostFragment.findNavController(PassDataNoteFragment.this)
+                            .navigate(R.id.action_PassDataNoteFragment_to_PassDataNoteDetailsFragment);
+                    expireModel.prolongDataExpiration();
                 }));
 
                 // add decoration

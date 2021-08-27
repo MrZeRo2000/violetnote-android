@@ -149,6 +149,28 @@ public class PassDataViewModel extends AndroidViewModel {
         }
     }
 
+    // PassData note
+    private PassDataA mPassDataNote;
+
+    private final MutableLiveData<PassDataResult> mPassDataNoteResult = new MutableLiveData<>();
+
+    public MutableLiveData<PassDataResult> getPassDataNoteResult() {
+        return mPassDataNoteResult;
+    }
+
+    public void selectPassDataNote(PassNoteA passNote) {
+        mPassDataNote = PassDataA.newNoteInstance(mPassDataLoaded.getPassData(), passNote);
+        mPassDataNoteResult.setValue(new PassDataResult(mPassDataNote, null));
+    }
+
+    public void loadPassDataNote() {
+        if ((mPassDataLoaded != null) && (mPassDataLoaded.getPassword().equals(mPassword))) {
+            mPassDataNoteResult.setValue(new PassDataResult(mPassDataNote, null));
+        } else {
+            mPassDataNoteResult.setValue(new SearchPassDataResult(null, getContext().getString(R.string.ui_error_wrong_password), null));
+        }
+    }
+
     private final DocumentPassDataLoader documentPassDataLoader;
 
     public PassDataViewModel(@NonNull Application application) {

@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 public class PassDataExpireViewModel extends ViewModel {
     private static final String TAG = PassDataExpireViewModel.class.getSimpleName();
-    public static final int EXPIRATION_DELAY = 10000;
+    public static final int EXPIRATION_DELAY = 10;
 
     private boolean mDataExpired = false;
 
