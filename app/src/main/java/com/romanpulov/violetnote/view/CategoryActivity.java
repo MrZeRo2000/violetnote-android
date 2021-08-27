@@ -80,6 +80,11 @@ public class CategoryActivity extends PassDataPasswordActivity implements PassDa
     }
 
     @Override
+    public void onSearchUserActivity() {
+
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null) {

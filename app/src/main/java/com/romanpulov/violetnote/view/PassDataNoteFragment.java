@@ -73,12 +73,21 @@ public class PassDataNoteFragment extends PassDataBaseFragment {
                 recyclerView.addOnItemTouchListener(mRecyclerViewTouchListenerForDataExpiration);
 
                 // setup search action helper
-                setupSearchActionHelper(view, passDataResult.getPassData(), (searchText, isSearchSystem, isSearchUser) -> {
-                    model.searchPassData(searchText, isSearchSystem, isSearchUser);
-                    NavHostFragment.findNavController(PassDataNoteFragment.this)
-                            .navigate(R.id.action_PassDataNoteFragment_to_PassDataSearchResultFragment);
-                    expireModel.prolongDataExpiration();
-                });
+                setupSearchActionHelper(view, passDataResult.getPassData(), new OnSearchInteractionListener() {
+                            @Override
+                            public void onSearchFragmentInteraction(String searchText, boolean isSearchSystem, boolean isSearchUser) {
+                                model.searchPassData(searchText, isSearchSystem, isSearchUser);
+                                NavHostFragment.findNavController(PassDataNoteFragment.this)
+                                        .navigate(R.id.action_PassDataNoteFragment_to_PassDataSearchResultFragment);
+                                expireModel.prolongDataExpiration();
+                            }
+
+                            @Override
+                            public void onSearchUserActivity() {
+                                expireModel.prolongDataExpiration();
+                            }
+                        }
+                );
             }
         });
     }

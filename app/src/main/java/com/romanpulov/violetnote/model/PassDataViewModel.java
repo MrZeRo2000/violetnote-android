@@ -171,11 +171,8 @@ public class PassDataViewModel extends AndroidViewModel {
         }
     }
 
-    private final DocumentPassDataLoader documentPassDataLoader;
-
     public PassDataViewModel(@NonNull Application application) {
         super(application);
-        documentPassDataLoader = DocumentPassDataLoader.newInstance(application);
     }
 
     public void loadPassData() {
@@ -185,23 +182,15 @@ public class PassDataViewModel extends AndroidViewModel {
             }
 
             mLoadExecutorService.submit(() -> {
-                File file = new File(DocumentPassDataLoader.getDocumentFileName(getContext()));
-                if (file.exists()) {
-                    mPassDataLoaded = new PassDataLoaded(
-                            documentPassDataLoader.loadPassDataA(file.getAbsolutePath(), mPassword),
-                            mPassword
-                    );
+                DocumentPassDataLoader.DocumentPassDataLoadResult passDataLoadResult =
+                        DocumentPassDataLoader.loadPassData(getContext(), mPassword);
 
-                    String loadErrorText = null;
-                    if (documentPassDataLoader.getLoadErrorList().size() > 0) {
-                        loadErrorText = documentPassDataLoader.getLoadErrorList().get(0);
-                    }
-
-                    mPassDataResult.postValue(new PassDataResult(mPassDataLoaded.getPassData(), loadErrorText));
-
-                } else {
-                    mPassDataResult.postValue(new PassDataResult(null, getContext().getString(R.string.error_file_not_found)));
+                if (passDataLoadResult.getPassData() != null) {
+                    mPassDataLoaded = new PassDataLoaded(passDataLoadResult.getPassData(), mPassword);
                 }
+
+                mPassDataResult.postValue(new PassDataResult(passDataLoadResult.getPassData(), passDataLoadResult.getErrorMessage()));
+
             });
         } else {
             if (mPassDataLoaded.getPassword().equals(mPassword)) {

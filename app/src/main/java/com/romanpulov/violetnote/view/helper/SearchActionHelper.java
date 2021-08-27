@@ -1,5 +1,7 @@
 package com.romanpulov.violetnote.view.helper;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -64,6 +66,9 @@ public class SearchActionHelper {
 
     private void setupSearchOptions() {
         CompoundButton.OnCheckedChangeListener onCheckedChangeListener = (buttonView, isChecked) -> {
+            if (mSearchListener != null) {
+                mSearchListener.onSearchUserActivity();
+            }
             if (mSearchConditionChangedListener != null) {
                 mSearchConditionChangedListener.onSearchConditionChanged(
                         mSearchSystemCheckBox.isChecked(),
@@ -77,6 +82,25 @@ public class SearchActionHelper {
     }
 
     private void setupEditText() {
+        mSearchEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (mSearchListener != null) {
+                    mSearchListener.onSearchUserActivity();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
         mSearchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
@@ -129,6 +153,10 @@ public class SearchActionHelper {
     public void hideLayout() {
         InputManagerHelper.hideInput(mSearchEditText);
         mSearchView.setVisibility(View.GONE);
+    }
+
+    public void clearSearchText() {
+        mSearchEditText.setText(null);
     }
 
     public interface OnSearchConditionChangedListener {

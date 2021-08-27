@@ -95,6 +95,11 @@ public class NoteFragment extends Fragment {
                 intent.putExtra(SearchResultActivity.SEARCH_TEXT, searchText);
                 startActivityForResult(intent, 0);
             }
+
+            @Override
+            public void onSearchUserActivity() {
+
+            }
         });
         mSearchActionHelper.setOnSearchConditionChangedListener(new SearchActionHelper.OnSearchConditionChangedListener() {
             @Override

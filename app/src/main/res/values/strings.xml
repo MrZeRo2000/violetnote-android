@@ -103,6 +103,7 @@
     <string name="pref_interface_hide_category_details">Hide category details</string>
 
     <!-- Exceptions errors -->
+    <string name="error_empty_password">Empty password</string>
     <string name="error_file_not_found">File not found</string>
     <string name="error_io">I/O error</string>
     <string name="error_crypt">Cryptography error</string>

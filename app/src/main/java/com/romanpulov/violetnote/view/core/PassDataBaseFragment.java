@@ -201,6 +201,7 @@ public abstract class PassDataBaseFragment extends Fragment {
             });
         } else {
             mSearchActionHelper.hideLayout();
+            mSearchActionHelper.clearSearchText();
         }
     }
 }

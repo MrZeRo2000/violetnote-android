@@ -68,12 +68,21 @@ public class PassDataCategoryFragment extends PassDataBaseFragment {
                 recyclerView.addOnItemTouchListener(mRecyclerViewTouchListenerForDataExpiration);
 
                 // setup search action helper
-                setupSearchActionHelper(view, passDataResult.getPassData(), (searchText, isSearchSystem, isSearchUser) -> {
-                    model.searchPassData(searchText, isSearchSystem, isSearchUser);
-                    NavHostFragment.findNavController(PassDataCategoryFragment.this)
-                            .navigate(R.id.action_PassDataCategoryFragment_to_PassDataSearchResultFragment);
-                    expireModel.prolongDataExpiration();
-                });
+                setupSearchActionHelper(view, passDataResult.getPassData(), new OnSearchInteractionListener() {
+                            @Override
+                            public void onSearchFragmentInteraction(String searchText, boolean isSearchSystem, boolean isSearchUser) {
+                                model.searchPassData(searchText, isSearchSystem, isSearchUser);
+                                NavHostFragment.findNavController(PassDataCategoryFragment.this)
+                                        .navigate(R.id.action_PassDataCategoryFragment_to_PassDataSearchResultFragment);
+                                expireModel.prolongDataExpiration();
+                            }
+
+                            @Override
+                            public void onSearchUserActivity() {
+                                expireModel.prolongDataExpiration();
+                            }
+                        }
+                );
             }
         });
 
@@ -94,7 +103,7 @@ public class PassDataCategoryFragment extends PassDataBaseFragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.action_search) {
             Log.d(TAG, "requested search");
-            if (mSearchActionHelper != null) {
+            if ((mSearchActionHelper != null) && (!expireModel.checkDataExpired())) {
                 mSearchActionHelper.showLayout();
             }
             return true;

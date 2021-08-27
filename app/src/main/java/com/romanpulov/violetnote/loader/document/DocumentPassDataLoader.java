@@ -2,6 +2,9 @@ package com.romanpulov.violetnote.loader.document;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.model.PassDataA;
 import com.romanpulov.violetnotecore.AESCrypt.AESCryptException;
@@ -26,12 +29,89 @@ import java.util.List;
 public class DocumentPassDataLoader {
     public static final String DOCUMENT_FILE_NAME = "document.vnf";
 
+    /**
+     * Returns document file name by context
+     * @param context Context to get file name
+     * @return document file name
+     */
     public static String getDocumentFileName(Context context) {
         return context.getFilesDir() + File.separator + DOCUMENT_FILE_NAME;
     }
 
+    /**
+     * Returns document file if it exists, otherwise null
+     * @param context Context to get file name
+     * @return file if it exists
+     */
+    @Nullable
+    public static File getDocumentFile(Context context) {
+        File file = new File(getDocumentFileName(context));
+        return file.exists() ? file : null;
+    }
+
     public static DocumentPassDataLoader newInstance(Context context) {
         return new DocumentPassDataLoader(context.getApplicationContext());
+    }
+
+    public static class DocumentPassDataLoadResult {
+        private final PassDataA mPassData;
+        private final String mErrorMessage;
+
+        public PassDataA getPassData() {
+            return mPassData;
+        }
+
+        public String getErrorMessage() {
+            return mErrorMessage;
+        }
+
+        public DocumentPassDataLoadResult(PassDataA mPassData, String mErrorMessage) {
+            this.mPassData = mPassData;
+            this.mErrorMessage = mErrorMessage;
+        }
+
+        public static DocumentPassDataLoadResult fromErrorMessage(String errorMessage) {
+            return new DocumentPassDataLoadResult(null, errorMessage);
+        }
+
+        public static DocumentPassDataLoadResult fromPassData(PassDataA passData) {
+            return new DocumentPassDataLoadResult(passData, null);
+        }
+    }
+
+    @NonNull
+    public static DocumentPassDataLoadResult loadPassData(Context context, String password) {
+
+        if (password == null) {
+            return DocumentPassDataLoadResult.fromErrorMessage(context.getResources().getString(R.string.error_empty_password));
+        }
+
+        File file = getDocumentFile(context);
+        if (file == null) {
+            return DocumentPassDataLoadResult.fromErrorMessage(context.getResources().getString(R.string.error_file_not_found));
+        }
+
+        try {
+            try (InputStream inputStream = new FileInputStream(file)) {
+                PassData2 pd = PassData2ReaderServiceV2.fromStream(inputStream, password);
+                if (pd != null)
+                    return DocumentPassDataLoadResult.fromPassData(PassDataA.newInstance(password, pd));
+                else
+                    return DocumentPassDataLoadResult.fromErrorMessage(context.getResources().getString(R.string.error_read));
+            }
+        }
+        catch(FileNotFoundException e) {
+            return DocumentPassDataLoadResult.fromErrorMessage(context.getResources().getString(R.string.error_file_not_found));
+        }
+        catch (IOException e) {
+            return DocumentPassDataLoadResult.fromErrorMessage(context.getResources().getString(R.string.error_io));
+        }
+        catch (AESCryptException e) {
+            return DocumentPassDataLoadResult.fromErrorMessage(context.getResources().getString(R.string.error_crypt));
+        }
+        catch(DataReadWriteException e) {
+            return DocumentPassDataLoadResult.fromErrorMessage(context.getResources().getString(R.string.error_read));
+        }
     }
 
     private final Context mContext;

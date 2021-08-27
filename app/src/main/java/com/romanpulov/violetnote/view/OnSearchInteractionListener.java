@@ -6,4 +6,5 @@ package com.romanpulov.violetnote.view;
  */
 public interface OnSearchInteractionListener {
     void onSearchFragmentInteraction(String searchText, boolean isSearchSystem, boolean isSearchUser);
+    void onSearchUserActivity();
 }
