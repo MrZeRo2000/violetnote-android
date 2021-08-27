@@ -17,7 +17,7 @@ import java.util.concurrent.Executors;
 public class PassDataViewModel extends AndroidViewModel {
     private static final String TAG = PassDataViewModel.class.getSimpleName();
 
-    public static final class PassDataResult {
+    public static class PassDataResult {
         private final PassDataA mPassData;
         private final String mLoadErrorText;
 
@@ -32,6 +32,19 @@ public class PassDataViewModel extends AndroidViewModel {
         public PassDataResult(PassDataA passData, String loadErrorText) {
             this.mPassData = passData;
             this.mLoadErrorText = loadErrorText;
+        }
+    }
+
+    public static final class SearchPassDataResult extends PassDataResult {
+        private final String mSearchText;
+
+        public String getSearchText() {
+            return mSearchText;
+        }
+
+        public SearchPassDataResult(PassDataA passData, String loadErrorText, String mSearchText) {
+            super(passData, loadErrorText);
+            this.mSearchText = mSearchText;
         }
     }
 
@@ -96,25 +109,43 @@ public class PassDataViewModel extends AndroidViewModel {
         }
     }
 
+    public static final class PassDataSearch {
+        private final PassDataA mPassData;
+        private final String mSearchText;
+
+        public PassDataA getPassData() {
+            return mPassData;
+        }
+
+        public String getSearchText() {
+            return mSearchText;
+        }
+
+        public PassDataSearch(PassDataA mPassData, String mSearchText) {
+            this.mPassData = mPassData;
+            this.mSearchText = mSearchText;
+        }
+    }
+
     // PassData search result
-    private PassDataA mPassDataSearch;
+    private PassDataSearch mPassDataSearch;
 
-    private final MutableLiveData<PassDataResult> mPassDataSearchResult = new MutableLiveData<>();
+    private final MutableLiveData<SearchPassDataResult> mPassDataSearchResult = new MutableLiveData<>();
 
-    public MutableLiveData<PassDataResult> getPassDataSearchResult() {
+    public MutableLiveData<SearchPassDataResult> getPassDataSearchResult() {
         return mPassDataSearchResult;
     }
 
     public void searchPassData(String searchString, boolean isSearchSystem, boolean isSearchUser) {
-        mPassDataSearch = PassDataA.newSearchInstance(mPassDataLoaded.getPassData(), searchString, isSearchSystem, isSearchUser);
-        mPassDataSearchResult.setValue(new PassDataResult(mPassDataSearch, null));
+        mPassDataSearch = new PassDataSearch(PassDataA.newSearchInstance(mPassDataLoaded.getPassData(), searchString, isSearchSystem, isSearchUser), searchString);
+        mPassDataSearchResult.setValue(new SearchPassDataResult(mPassDataSearch.getPassData(), null, mPassDataSearch.getSearchText()));
     }
 
     public void loadSearchPassData() {
         if ((mPassDataLoaded != null) && (mPassDataLoaded.getPassword().equals(mPassword))) {
-            mPassDataSearchResult.setValue(new PassDataResult(mPassDataSearch, null));
+            mPassDataSearchResult.setValue(new SearchPassDataResult(mPassDataSearch.getPassData(), null, mPassDataSearch.getSearchText()));
         } else {
-            mPassDataSearchResult.setValue(new PassDataResult(null, getContext().getString(R.string.ui_error_wrong_password)));
+            mPassDataSearchResult.setValue(new SearchPassDataResult(null, getContext().getString(R.string.ui_error_wrong_password), null));
         }
     }
 

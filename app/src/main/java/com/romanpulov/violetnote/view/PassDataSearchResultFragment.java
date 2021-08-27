@@ -42,8 +42,8 @@ public class PassDataSearchResultFragment extends PassDataBaseFragment {
                 // headerTextView.setText(passDataResult.getPassData().getPassCategoryData().get(0).getCategoryName());
                 headerTextView.setVisibility(View.GONE);
 
-                // TODO select the title to show up
-                //setActivityTitle(passDataResult.getPassData().getPassCategoryData().get(0).getCategoryName());
+                // search text title
+                setActivityTitle(getString(R.string.ui_search_text_display_format, passDataResult.getSearchText()));
 
                 // setup RecycleView
                 RecyclerView recyclerView = view.findViewById(R.id.list);
