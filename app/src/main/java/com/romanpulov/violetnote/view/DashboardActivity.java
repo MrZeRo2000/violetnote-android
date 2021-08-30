@@ -10,6 +10,7 @@ import android.view.MenuItem;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.manager.DBNoteManager;
+import com.romanpulov.violetnote.loader.document.DocumentPassDataLoader;
 import com.romanpulov.violetnote.model.BasicNoteGroupA;
 import com.romanpulov.violetnote.view.core.ActionBarCompatActivity;
 
@@ -34,7 +35,9 @@ public class DashboardActivity extends ActionBarCompatActivity implements OnBasi
     protected void onResume() {
         super.onResume();
         DBNoteManager noteManager = new DBNoteManager(this);
-        List<BasicNoteGroupA> basicNoteGroupList = noteManager.mBasicNoteGroupDAO.getAllWithTotals();
+        List<BasicNoteGroupA> basicNoteGroupList = noteManager.mBasicNoteGroupDAO.getAllWithTotals(
+                DocumentPassDataLoader.getDocumentFile(this) == null
+        );
         mRecyclerView.setAdapter(new DashboardItemRecyclerViewAdapter(basicNoteGroupList, this));
     }
 

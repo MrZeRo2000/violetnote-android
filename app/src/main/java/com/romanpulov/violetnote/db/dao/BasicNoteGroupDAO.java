@@ -73,14 +73,19 @@ public class BasicNoteGroupDAO extends AbstractDAO<BasicNoteGroupA> {
         return result;
     }
 
-    public List<BasicNoteGroupA> getAllWithTotals() {
+    public List<BasicNoteGroupA> getAllWithTotals(boolean excludePasswordGroup) {
         final List<BasicNoteGroupA> result = new ArrayList<>();
+
+        String predicate = excludePasswordGroup ? "g.note_group_type != 1" : "1 = 1";
 
         readCursor(new CursorReaderHandler() {
             @Override
             public Cursor createCursor() {
                 return mDB.rawQuery(
-                        DBRawQueryRepository.NOTE_GROUPS_WITH_TOTALS_WITH_CHECKED,
+                        DBRawQueryRepository.NOTE_GROUPS_WITH_TOTALS_WITH_CHECKED.replace(
+                                DBRawQueryRepository.PREDICATE_PLACEHOLDER,
+                                predicate
+                        ),
                         null
                 );
             }

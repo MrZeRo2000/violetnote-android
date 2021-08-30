@@ -6,6 +6,7 @@ package com.romanpulov.violetnote.db;
  */
 
 public class DBRawQueryRepository {
+    public static final String PREDICATE_PLACEHOLDER = "%PREDICATE%";
 
     public static final String NOTE_GROUPS_WITH_TOTALS_WITH_CHECKED =
         "SELECT " +
@@ -21,6 +22,7 @@ public class DBRawQueryRepository {
         "FROM note_groups g " +
         "LEFT OUTER JOIN notes n ON n.group_id = g._id " +
         "LEFT OUTER JOIN note_items ni ON ni.note_id = n._id " +
+        "WHERE " + PREDICATE_PLACEHOLDER + " " +
         "GROUP BY " +
         "g._id, " +
         "g.note_group_type, " +
@@ -28,7 +30,7 @@ public class DBRawQueryRepository {
         "g.note_group_icon, " +
         "g.order_id, " +
         "g.note_group_display_options " +
-        "ORDER BY g.order_id";
+        "ORDER BY g.note_group_type, g.order_id";
 
     public static final String NOTE_GROUPS_WITH_TOTALS =
         "SELECT " +

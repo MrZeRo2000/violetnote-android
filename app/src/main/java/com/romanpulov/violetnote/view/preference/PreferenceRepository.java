@@ -55,7 +55,7 @@ public class PreferenceRepository {
     public static final String PREF_KEY_BASIC_NOTE_CLOUD_STORAGE =  "pref_basic_note_cloud_storage";
 
     public static final String PREF_KEY_DOCUMENT_LOAD = "pref_load";
-    private static final String PREF_KEY_DOCUMENT_LAST_LOADED = "pref_last_loaded";
+    public static final String PREF_KEY_DOCUMENT_LAST_LOADED = "pref_last_loaded";
 
     public static final String PREF_KEY_DOCUMENT_DELETE = "pref_delete";
 

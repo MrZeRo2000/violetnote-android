@@ -233,11 +233,12 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     private void setupPrefDocumentDelete() {
         final Preference pref = Objects.requireNonNull(findPreference(PreferenceRepository.PREF_KEY_DOCUMENT_DELETE));
-        final File documentFile = DocumentPassDataLoader.getDocumentFile(pref.getContext());
-        final boolean documentExists = documentFile != null;
-        pref.setVisible(documentExists);
+        pref.setVisible(DocumentPassDataLoader.getDocumentFile(pref.getContext()) != null);
 
         pref.setOnPreferenceClickListener(preference -> {
+            File documentFile = DocumentPassDataLoader.getDocumentFile(pref.getContext());
+            boolean documentExists = documentFile != null;
+
             if (documentExists) {
                 final AlertDialog.Builder alert = new AlertDialog.Builder(requireActivity(), R.style.AlertDialogTheme);
                 alert
@@ -248,6 +249,11 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                                 if (documentFile.delete()) {
                                     PreferenceRepository.displayMessage(requireContext(), getText(R.string.ui_info_file_deleted));
                                     pref.setVisible(false);
+                                    PreferenceRepository.setPreferenceKeyLastLoadedTime(
+                                            getContext(),
+                                            PreferenceRepository.PREF_KEY_DOCUMENT_LOAD,
+                                            0
+                                    );
                                     PreferenceRepository.updatePreferenceKeySummary(
                                             SettingsFragment.this,
                                             PreferenceRepository.PREF_KEY_DOCUMENT_LOAD,
