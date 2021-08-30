@@ -3,13 +3,10 @@ package com.romanpulov.violetnote.loader.dropbox;
 import android.content.Context;
 
 import com.romanpulov.violetnote.R;
-import com.romanpulov.violetnote.db.DBBasicNoteHelper;
 import com.romanpulov.violetnote.db.DBStorageManager;
 import com.romanpulov.violetnote.loader.cloud.RestoreCloudLoadPathProvider;
 import com.romanpulov.violetnote.loader.helper.LoaderNotificationHelper;
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
-
-import java.io.File;
 
 import static com.romanpulov.violetnote.common.NotificationRepository.NOTIFICATION_ID_LOADER;
 

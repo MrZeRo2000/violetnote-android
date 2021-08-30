@@ -2,7 +2,6 @@ package com.romanpulov.violetnote.loader.msgraph;
 
 import android.content.Context;
 
-import com.romanpulov.library.common.loader.core.LoadPathProvider;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBStorageManager;
 import com.romanpulov.violetnote.loader.cloud.RestoreCloudLoadPathProvider;

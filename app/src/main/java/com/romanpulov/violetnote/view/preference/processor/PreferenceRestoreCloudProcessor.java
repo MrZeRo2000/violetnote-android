@@ -2,8 +2,6 @@ package com.romanpulov.violetnote.view.preference.processor;
 
 import androidx.preference.PreferenceFragmentCompat;
 
-import com.romanpulov.library.common.loader.core.AbstractContextLoader;
-import com.romanpulov.violetnote.loader.dropbox.RestoreDropboxFileLoader;
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 
 /**

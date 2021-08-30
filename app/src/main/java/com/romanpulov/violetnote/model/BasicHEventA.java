@@ -9,7 +9,7 @@ import java.util.List;
  * HEvent data class
  */
 public final class BasicHEventA extends BasicEntityNoteA {
-    private static long UNKNOWN_ITEM_COUNT = -1;
+    private static final long UNKNOWN_ITEM_COUNT = -1;
 
     private final long mEventTypeId;
 
@@ -30,7 +30,7 @@ public final class BasicHEventA extends BasicEntityNoteA {
     }
 
     //calculated
-    private long mItemCount;
+    private final long mItemCount;
 
     public long getItemCount() {
         return mItemCount;

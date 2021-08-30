@@ -12,8 +12,6 @@ import com.romanpulov.violetnote.view.core.ActionBarCompatActivity;
 import com.romanpulov.violetnote.view.helper.DrawableSelectionHelper;
 import com.romanpulov.violetnote.view.helper.InputManagerHelper;
 
-import java.util.Arrays;
-
 public class BasicNoteGroupEditActivity extends ActionBarCompatActivity {
 
     private BasicNoteGroupA mNoteGroup;

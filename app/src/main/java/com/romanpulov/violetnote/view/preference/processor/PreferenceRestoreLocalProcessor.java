@@ -9,8 +9,6 @@ import com.romanpulov.violetnote.db.DBStorageManager;
 import com.romanpulov.violetnote.loader.local.RestoreLocalLoader;
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 
-import java.util.Locale;
-
 /**
  * Local restore executor class
  * Created by romanpulov on 15.12.2017.

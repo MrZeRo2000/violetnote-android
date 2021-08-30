@@ -3,10 +3,7 @@ package com.romanpulov.violetnote.db;
 import android.content.Context;
 
 import com.romanpulov.jutilscore.io.ZipFileUtils;
-import com.romanpulov.jutilscore.storage.BackupUtils;
 import com.romanpulov.library.common.db.DBBackupManager;
-
-import java.io.File;
 
 /**
  * Facade for BackupUtils

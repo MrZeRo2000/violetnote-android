@@ -1,6 +1,5 @@
 package com.romanpulov.violetnote.model;
 
-import com.romanpulov.violetnotecore.AESCrypt.AESCryptService;
 import com.romanpulov.violetnotecore.Service.StringCryptService;
 
 import org.json.JSONObject;

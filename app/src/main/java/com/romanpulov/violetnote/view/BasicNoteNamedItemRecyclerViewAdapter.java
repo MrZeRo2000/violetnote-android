@@ -26,7 +26,7 @@ public class BasicNoteNamedItemRecyclerViewAdapter extends RecyclerView.Adapter<
     private final ViewSelectorHelper.AbstractViewSelector<Integer> mRecyclerViewSelector;
     private final BasicNoteCheckedItemFragment.OnBasicNoteItemFragmentInteractionListener mListener;
 
-    public ViewSelectorHelper.AbstractViewSelector getRecyclerViewSelector() {
+    public ViewSelectorHelper.AbstractViewSelector<Integer> getRecyclerViewSelector() {
         return mRecyclerViewSelector;
     }
 
@@ -70,7 +70,7 @@ public class BasicNoteNamedItemRecyclerViewAdapter extends RecyclerView.Adapter<
         private final ImageView mPriorityView;
         private BasicNoteItemA mItem;
 
-        public ViewHolder(View view, ViewSelectorHelper.AbstractViewSelector viewSelector) {
+        public ViewHolder(View view, ViewSelectorHelper.AbstractViewSelector<Integer> viewSelector) {
             super(view, viewSelector);
             mNameView = view.findViewById(R.id.name);
             mValueView = view.findViewById(R.id.value);
@@ -81,8 +81,8 @@ public class BasicNoteNamedItemRecyclerViewAdapter extends RecyclerView.Adapter<
         @Override
         public void onClick(View v) {
             super.onClick(v);
-            if ((!mRecyclerViewSelector.isSelected()) && (mListener != null) && (getAdapterPosition() != -1))
-                mListener.onBasicNoteItemFragmentInteraction(mBasicNoteData.getNote().getItems().get(getAdapterPosition()), getAdapterPosition());
+            if ((!mRecyclerViewSelector.isSelected()) && (mListener != null) && (getBindingAdapterPosition() != -1))
+                mListener.onBasicNoteItemFragmentInteraction(mBasicNoteData.getNote().getItems().get(getBindingAdapterPosition()), getBindingAdapterPosition());
         }
 
         @Override

@@ -23,15 +23,15 @@ public class BasicNoteGroupItemRecyclerViewAdapter extends RecyclerView.Adapter<
     }
 
     private final List<BasicNoteGroupA> mBasicNoteGroupList;
-    private final ViewSelectorHelper.AbstractViewSelector mRecyclerViewSelector;
+    private final ViewSelectorHelper.AbstractViewSelector<Integer> mRecyclerViewSelector;
 
-    public ViewSelectorHelper.AbstractViewSelector getRecyclerViewSelector() {
+    public ViewSelectorHelper.AbstractViewSelector<Integer> getRecyclerViewSelector() {
         return mRecyclerViewSelector;
     }
 
     public BasicNoteGroupItemRecyclerViewAdapter(List<BasicNoteGroupA> basicNoteGroupList, ActionMode.Callback actionModeCallback) {
         this.mBasicNoteGroupList = basicNoteGroupList;
-        this.mRecyclerViewSelector = new ViewSelectorHelper.ViewSelectorSingle(this, actionModeCallback);
+        this.mRecyclerViewSelector = new ViewSelectorHelper.ViewSelectorSingle<>(this, actionModeCallback);
     }
 
     @NonNull
@@ -56,10 +56,10 @@ public class BasicNoteGroupItemRecyclerViewAdapter extends RecyclerView.Adapter<
         return mBasicNoteGroupList.size();
     }
 
-    class ViewHolder extends RecyclerViewHelper.SelectableViewHolder {
+    static class ViewHolder extends RecyclerViewHelper.SelectableViewHolder {
         private final Button mButton;
 
-        public ViewHolder(View view, ViewSelectorHelper.AbstractViewSelector viewSelector) {
+        public ViewHolder(View view, ViewSelectorHelper.AbstractViewSelector<Integer> viewSelector) {
             super(view, viewSelector);
             mButton = view.findViewById(R.id.group_name);
         }

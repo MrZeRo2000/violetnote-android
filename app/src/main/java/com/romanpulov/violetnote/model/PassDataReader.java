@@ -1,14 +1,10 @@
 package com.romanpulov.violetnote.model;
 
-import com.romanpulov.violetnotecore.Model.PassCategory;
 import com.romanpulov.violetnotecore.Model.PassCategory2;
-import com.romanpulov.violetnotecore.Model.PassData;
 import com.romanpulov.violetnotecore.Model.PassData2;
-import com.romanpulov.violetnotecore.Model.PassNote;
 import com.romanpulov.violetnotecore.Model.PassNote2;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;

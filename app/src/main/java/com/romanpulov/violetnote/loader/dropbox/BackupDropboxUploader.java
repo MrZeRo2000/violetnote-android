@@ -2,7 +2,6 @@ package com.romanpulov.violetnote.loader.dropbox;
 
 import android.content.Context;
 
-import com.dropbox.core.v2.DbxClientV2;
 import com.romanpulov.library.common.db.DBBackupManager;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBStorageManager;

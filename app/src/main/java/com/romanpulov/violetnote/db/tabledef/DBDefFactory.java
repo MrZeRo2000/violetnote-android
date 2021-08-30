@@ -12,10 +12,7 @@ public class DBDefFactory {
     private static DBCommonDef.TableDefSQLProvider createInstance(@NonNull Class<? extends DBCommonDef.TableDefSQLProvider> clazzProvider) {
         try {
             return clazzProvider.newInstance();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-            return null;
-        } catch (InstantiationException e) {
+        } catch (IllegalAccessException | InstantiationException e) {
             e.printStackTrace();
             return null;
         }

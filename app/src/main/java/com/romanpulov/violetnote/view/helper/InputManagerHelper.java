@@ -1,7 +1,7 @@
 package com.romanpulov.violetnote.view.helper;
 
 import android.content.Context;
-import androidx.annotation.NonNull;
+
 import androidx.annotation.Nullable;
 import android.view.View;
 import android.view.Window;

@@ -60,7 +60,7 @@ public class BasicNoteValueRecyclerViewAdapter extends RecyclerView.Adapter<Basi
         public final TextView mValueView;
         public BasicNoteValueA mItem;
 
-        public ViewHolder(View view, ViewSelectorHelper.AbstractViewSelector viewSelector) {
+        public ViewHolder(View view, ViewSelectorHelper.AbstractViewSelector<Integer> viewSelector) {
             super(view, viewSelector);
             mValueView = view.findViewById(R.id.value);
         }
@@ -68,8 +68,8 @@ public class BasicNoteValueRecyclerViewAdapter extends RecyclerView.Adapter<Basi
         @Override
         public void onClick(View v) {
             super.onClick(v);
-            if ((!mRecyclerViewSelector.isSelected()) && (mListener != null) && (getAdapterPosition() != -1))
-                mListener.onNoteValueClicked(mBasicNoteValueDataA.getValues().get(getAdapterPosition()), getAdapterPosition());
+            if ((!mRecyclerViewSelector.isSelected()) && (mListener != null) && (getBindingAdapterPosition() != -1))
+                mListener.onNoteValueClicked(mBasicNoteValueDataA.getValues().get(getBindingAdapterPosition()), getBindingAdapterPosition());
         }
 
         @Override

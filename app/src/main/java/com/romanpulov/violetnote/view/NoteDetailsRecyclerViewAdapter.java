@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.romanpulov.violetnote.view.NoteDetailsFragment.OnNoteDetailsInteractionListener;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.model.PassNoteA;
 import com.romanpulov.violetnote.view.helper.ClipboardHelper;
@@ -21,7 +20,7 @@ public class NoteDetailsRecyclerViewAdapter extends RecyclerView.Adapter<NoteDet
     private final List<PassNoteA.AttrItem> mValues;
     private final OnNoteDetailsInteractionListener mListener;
 
-    public NoteDetailsRecyclerViewAdapter(List<PassNoteA.AttrItem> items, OnNoteDetailsInteractionListener listener) {
+    public NoteDetailsRecyclerViewAdapter(List<PassNoteA.AttrItem> items, com.romanpulov.violetnote.view.OnNoteDetailsInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -68,7 +67,7 @@ public class NoteDetailsRecyclerViewAdapter extends RecyclerView.Adapter<NoteDet
         return mValues.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView mNameView;
         public final TextView mValueView;

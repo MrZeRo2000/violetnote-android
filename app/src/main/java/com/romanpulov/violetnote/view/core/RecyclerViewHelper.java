@@ -17,13 +17,13 @@ import android.view.View;
 public class RecyclerViewHelper {
 
     public static void adapterNotifyDataSetChanged(@NonNull RecyclerView recyclerView) {
-        RecyclerView.Adapter adapter = recyclerView.getAdapter();
+        RecyclerView.Adapter<?> adapter = recyclerView.getAdapter();
         if (adapter != null)
             adapter.notifyDataSetChanged();
     }
 
     public static void adapterNotifyItemChanged(@NonNull RecyclerView recyclerView, int position) {
-        RecyclerView.Adapter adapter = recyclerView.getAdapter();
+        RecyclerView.Adapter<?> adapter = recyclerView.getAdapter();
         if (adapter != null)
             adapter.notifyItemChanged(position);
     }
@@ -50,9 +50,6 @@ public class RecyclerViewHelper {
         private int mOrientation;
 
         public DividerItemDecoration(Context context, int orientation, int drawableId) {
-            //final TypedArray a = context.obtainStyledAttributes(ATTRS);
-            //mDivider = a.getDrawable(0);
-            //a.recycle();
             setOrientation(orientation);
             mDivider = ContextCompat.getDrawable(context, drawableId);
         }
@@ -133,17 +130,17 @@ public class RecyclerViewHelper {
 
         @Override
         public boolean onLongClick(View v) {
-            mViewSelector.startActionMode(v, getAdapterPosition());
+            mViewSelector.startActionMode(v, getBindingAdapterPosition());
             return true;
         }
 
         @Override
         public void onClick(View v) {
-            mViewSelector.setSelectedView(v, getAdapterPosition());
+            mViewSelector.setSelectedView(v, getBindingAdapterPosition());
         }
 
         public void updateBackground() {
-            ViewSelectorHelper.updateSelectedViewBackground(mView, mViewSelector, getAdapterPosition());
+            ViewSelectorHelper.updateSelectedViewBackground(mView, mViewSelector, getBindingAdapterPosition());
         }
     }
 

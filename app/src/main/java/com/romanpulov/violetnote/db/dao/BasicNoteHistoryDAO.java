@@ -6,11 +6,12 @@ import androidx.annotation.NonNull;
 
 import com.romanpulov.violetnote.db.tabledef.NoteItemsHistoryTableDef;
 import com.romanpulov.violetnote.model.BasicNoteA;
+import com.romanpulov.violetnote.model.BasicNoteHistoryItemA;
 
 /**
  * BasicNoteHistory DAO
  */
-public final class BasicNoteHistoryDAO extends AbstractDAO {
+public final class BasicNoteHistoryDAO extends AbstractDAO<BasicNoteHistoryItemA> {
 
     public BasicNoteHistoryDAO(Context context) {
         super(context);

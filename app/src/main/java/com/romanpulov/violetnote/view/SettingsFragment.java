@@ -112,16 +112,12 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         for (CloudAccountFacade cloudAccountFacade: cloudAccountFacadeList) {
             mPreferenceLoadProcessors.put(cloudAccountFacade.getBackupLoaderClassName(), mPreferenceBackupCloudProcessor);
         }
-        //mPreferenceLoadProcessors.put(BackupDropboxUploader.class.getName(), mPreferenceBackupCloudProcessor);
-        //mPreferenceLoadProcessors.put(BackupOneDriveUploader.class.getName(), mPreferenceBackupCloudProcessor);
         setupPrefCloudBackupLoadService();
 
         mPreferenceRestoreCloudProcessor = new PreferenceRestoreCloudProcessor(this);
         for (CloudAccountFacade cloudAccountFacade: cloudAccountFacadeList) {
             mPreferenceLoadProcessors.put(cloudAccountFacade.getRestoreLoaderClassName(), mPreferenceRestoreCloudProcessor);
         }
-        //mPreferenceLoadProcessors.put(RestoreDropboxFileLoader.class.getName(), mPreferenceRestoreCloudProcessor);
-        //mPreferenceLoadProcessors.put(RestoreOneDriveFileLoader.class.getName(), mPreferenceRestoreCloudProcessor);
         setupPrefCloudRestoreLoadService();
 
         mPreferenceBackupLocalProcessor = new PreferenceBackupLocalProcessor(this);
@@ -430,13 +426,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                         PreferenceRepository.displayMessage(getActivity(), getText(R.string.error_load_process_running));
                     else {
                         executeLocalBackup();
-                        /*
-                        if (mWriteStorageRequestHelper.isPermissionGranted())
-                            executeLocalBackup();
-                        else
-                            mWriteStorageRequestHelper.requestPermission(SettingsActivity.PERMISSION_REQUEST_LOCAL_BACKUP);
-
-                         */
                     }
                     return true;
                 }
@@ -469,13 +458,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        /*
-                                        if (mWriteStorageRequestHelper.isPermissionGranted())
-                                            executeLocalRestore();
-                                        else
-                                            mWriteStorageRequestHelper.requestPermission(SettingsActivity.PERMISSION_REQUEST_LOCAL_RESTORE);
-
-                                         */
                                         executeLocalRestore();
                                     }
                                 })
@@ -538,10 +520,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         LocalBroadcastManager.getInstance(context).registerReceiver(mLoaderServiceBroadcastReceiver, new IntentFilter(LoaderService.SERVICE_RESULT_INTENT_NAME));
         mLoaderServiceManager = new LoaderServiceManager(context);
         doBindService(context);
-        /*
-        if (mLoaderServiceManager.isLoaderServiceRunning())
-            doBindService(activity);
-            */
     }
 
     @Override

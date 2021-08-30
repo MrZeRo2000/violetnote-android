@@ -45,29 +45,6 @@ public abstract class BasicNoteDataPasswordActivity extends PasswordActivity imp
         executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData, password));
         execute(executor);
 
-        /*
-        BasicNoteDataProgressFragment basicNoteDataProgressFragment = BasicNoteDataProgressFragment.newInstance();
-        removeFragment().beginTransaction().add(getFragmentContainerId(), basicNoteDataProgressFragment).commit();
-        basicNoteDataProgressFragment.execute(executor);
-        setProgress(true);
-        */
-
-        /*
-        executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
-            @Override
-            public void onExecutionCompleted(BasicNoteDataA basicNoteData, boolean result) {
-                if (result) {
-                    mBasicNoteData.setPassword(password);
-                    refreshFragment();
-                    PassDataPasswordActivity.getPasswordValidityChecker().startPeriod();
-                }
-                else
-                    setLoadErrorFragment();
-            }
-        });
-
-        executor.execute();
-        */
     }
 
     @Override

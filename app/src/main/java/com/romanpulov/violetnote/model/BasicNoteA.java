@@ -89,7 +89,7 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
     }
 
     public void setItems(List<BasicNoteItemA> items) {
-        mItems = items == null ? new ArrayList<BasicNoteItemA>() : items;
+        mItems = items == null ? new ArrayList<>() : items;
     }
 
     private Set<String> mValues = new HashSet<>();
@@ -99,7 +99,7 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
     }
 
     public void setValues(Collection<String> values) {
-        mValues = values == null ?  new HashSet<String>() : new HashSet<>(values);
+        mValues = values == null ? new HashSet<>() : new HashSet<>(values);
     }
 
     private final List<BasicNoteHistoryItemA> mHistoryItems = new ArrayList<>();

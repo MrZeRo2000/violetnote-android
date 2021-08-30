@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.view.core.PassDataBaseFragment;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
-import com.romanpulov.violetnote.view.helper.SearchActionHelper;
 
 public class PassDataNoteFragment extends PassDataBaseFragment {
     private final String TAG = PassDataNoteFragment.class.getSimpleName();

@@ -162,10 +162,10 @@ public class DocumentPassDataLoader {
 
     public static PassDataA loadSamplePassData() {
         PassData2 pd = new PassData2();
-        pd.setCategoryList(new ArrayList<PassCategory2>());
+        pd.setCategoryList(new ArrayList<>());
 
         PassCategory2 pc = new PassCategory2("Category 1");
-        pc.setNoteList(new ArrayList<PassNote2>());
+        pc.setNoteList(new ArrayList<>());
 
         pd.getCategoryList().add(pc);
 
@@ -177,7 +177,7 @@ public class DocumentPassDataLoader {
         pc.getNoteList().add(pn);
 
         pc = new PassCategory2("Category 2");
-        pc.setNoteList(new ArrayList<PassNote2>());
+        pc.setNoteList(new ArrayList<>());
 
         pd.getCategoryList().add(pc);
 
@@ -186,7 +186,7 @@ public class DocumentPassDataLoader {
 
         for (int i = 3; i < 30; i ++) {
             PassCategory2 passCategory2 = new PassCategory2("Category " + i);
-            passCategory2.setNoteList(new ArrayList<PassNote2>());
+            passCategory2.setNoteList(new ArrayList<>());
             pd.getCategoryList().add(passCategory2);
         }
 

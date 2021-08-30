@@ -46,7 +46,7 @@ public class BasicHEventNamedItemRecyclerViewAdapter extends RecyclerView.Adapte
         return mItemList.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView mValueTextView;
         private final TextView mEventTimeTextView;
 

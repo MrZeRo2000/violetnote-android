@@ -8,7 +8,7 @@
     android:orientation="vertical"
     >
 
-    <androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list"
         android:name="com.romanpulov.violetnote.view.BasicNoteNamedItemFragment"
         android:layout_width="match_parent"

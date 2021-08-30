@@ -38,8 +38,8 @@ public class BasicHEventCOItemFragment extends Fragment {
 
     //data
     private BasicNoteA mNote;
-    private LongSparseArray<BasicHEventA> mHEvents = new LongSparseArray<>();
-    private LongSparseArray<List<BasicHNoteCOItemA>> mHEventCOItems = new LongSparseArray<>();
+    private final LongSparseArray<BasicHEventA> mHEvents = new LongSparseArray<>();
+    private final LongSparseArray<List<BasicHNoteCOItemA>> mHEventCOItems = new LongSparseArray<>();
 
     //controls
     private ExpandableListView mExListView;
@@ -178,12 +178,8 @@ public class BasicHEventCOItemFragment extends Fragment {
                         performRestoreAction(selectedNoteItems);
                         break;
                     case R.id.delete:
-                        //performDeleteAction(mode, selectedNoteItems);
-                        //hideAddLayout();
                         break;
                     case R.id.edit:
-                        //performEditAction(mode, selectedNoteItems.get(0));
-                        //mInputActionHelper.showLayout(selectedNoteItems.get(0).getValue(), InputActionHelper.INPUT_ACTION_TYPE_EDIT);
                         break;
                 }
             }

@@ -47,7 +47,7 @@ public class BasicNoteGroupA extends BasicCommonNoteA implements Parcelable {
     }
 
     //calculated
-    private BasicNoteGroupSummary mBasicNoteGroupSummary = BasicNoteGroupSummary.createEmpty();;
+    private BasicNoteGroupSummary mBasicNoteGroupSummary = BasicNoteGroupSummary.createEmpty();
 
     public BasicNoteGroupSummary getSummary() {
         return mBasicNoteGroupSummary;

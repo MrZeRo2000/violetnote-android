@@ -104,7 +104,7 @@ public class DashboardItemRecyclerViewAdapter extends RecyclerView.Adapter<Dashb
         return mBasicNoteGroupList.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
         private final Button mButton;
         private final TextView mItemCountView;
         private final TextView mItemUncheckedCountView;

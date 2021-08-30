@@ -149,15 +149,6 @@ public class BasicHEventCOItemExpandableListViewAdapter extends BaseExpandableLi
             mItemTitle = v.findViewById(R.id.item_title);
             v.setOnClickListener(this);
             v.setOnLongClickListener(this);
-            /*
-            v.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    Toast.makeText(v.getContext(), "long click " + ((ChildViewHolder)v.getTag()).mItemTitle.getText(), Toast.LENGTH_SHORT).show();
-                    return false;
-                }
-            });
-             */
         }
 
         @Override

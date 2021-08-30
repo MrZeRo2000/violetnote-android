@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.romanpulov.violetnote.view.CategoryFragment.OnPassCategoryInteractionListener;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.model.PassCategoryA;
 
@@ -54,7 +53,7 @@ public class CategoryRecyclerViewAdapter extends RecyclerView.Adapter<CategoryRe
         return mValues.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView mCategoryName;
         public final TextView mCategoryDescription;

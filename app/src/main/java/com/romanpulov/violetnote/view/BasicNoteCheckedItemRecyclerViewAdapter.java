@@ -29,7 +29,7 @@ public class BasicNoteCheckedItemRecyclerViewAdapter extends RecyclerView.Adapte
     private final ViewSelectorHelper.AbstractViewSelector<Integer> mRecyclerViewSelector;
     private final BasicNoteCheckedItemFragment.OnBasicNoteCheckedItemFragmentInteractionListener mListener;
 
-    public ViewSelectorHelper.AbstractViewSelector getRecyclerViewSelector() {
+    public ViewSelectorHelper.AbstractViewSelector<Integer> getRecyclerViewSelector() {
         return mRecyclerViewSelector;
     }
 
@@ -86,7 +86,7 @@ public class BasicNoteCheckedItemRecyclerViewAdapter extends RecyclerView.Adapte
         private final ImageView mPriorityView;
         private BasicNoteItemA mItem;
 
-        public ViewHolder(View view, ViewSelectorHelper.AbstractViewSelector viewSelector) {
+        public ViewHolder(View view, ViewSelectorHelper.AbstractViewSelector<Integer> viewSelector) {
             super(view, viewSelector);
             mCheckedView = view.findViewById(R.id.checked);
             mValueView = view.findViewById(R.id.value);
@@ -95,8 +95,8 @@ public class BasicNoteCheckedItemRecyclerViewAdapter extends RecyclerView.Adapte
             mPriceView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if ((!mRecyclerViewSelector.isSelected()) && (mListener != null) && (getAdapterPosition() != -1))
-                        mListener.onBasicNoteItemPriceClick(mBasicNoteData.getNote().getItems().get(getAdapterPosition()), getAdapterPosition());
+                    if ((!mRecyclerViewSelector.isSelected()) && (mListener != null) && (getBindingAdapterPosition() != -1))
+                        mListener.onBasicNoteItemPriceClick(mBasicNoteData.getNote().getItems().get(getBindingAdapterPosition()), getBindingAdapterPosition());
                 }
             });
         }
@@ -104,8 +104,8 @@ public class BasicNoteCheckedItemRecyclerViewAdapter extends RecyclerView.Adapte
         @Override
         public void onClick(View v) {
             super.onClick(v);
-            if ((!mRecyclerViewSelector.isSelected()) && (mListener != null) && (getAdapterPosition() != -1))
-                mListener.onBasicNoteItemFragmentInteraction(mBasicNoteData.getNote().getItems().get(getAdapterPosition()), getAdapterPosition());
+            if ((!mRecyclerViewSelector.isSelected()) && (mListener != null) && (getBindingAdapterPosition() != -1))
+                mListener.onBasicNoteItemFragmentInteraction(mBasicNoteData.getNote().getItems().get(getBindingAdapterPosition()), getBindingAdapterPosition());
         }
 
         @Override

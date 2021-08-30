@@ -24,7 +24,7 @@ public final class BasicNoteItemParams implements Parcelable, Iterable<BasicPara
 
     @NonNull
     public static BasicNoteItemParams createEmpty() {
-        return new BasicNoteItemParams(new LongSparseArray<BasicParamValueA>());
+        return new BasicNoteItemParams(new LongSparseArray<>());
     }
 
     private class BasicParamValueIterator implements Iterator<BasicParamValueA> {

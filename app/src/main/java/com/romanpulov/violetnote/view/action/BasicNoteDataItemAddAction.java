@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class BasicNoteDataItemAddAction extends BasicItemsAction<BasicNoteDataA, BasicNoteItemA> {
 
     public BasicNoteDataItemAddAction(BasicNoteDataA basicNoteData, BasicNoteItemA item) {
-        super(basicNoteData, new ArrayList<BasicNoteItemA>());
+        super(basicNoteData, new ArrayList<>());
         mItems.add(item);
     }
 

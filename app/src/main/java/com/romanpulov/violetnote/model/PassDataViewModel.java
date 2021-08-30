@@ -10,7 +10,6 @@ import androidx.lifecycle.MutableLiveData;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.loader.document.DocumentPassDataLoader;
 
-import java.io.File;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 

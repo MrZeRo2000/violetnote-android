@@ -23,7 +23,7 @@ import java.util.List;
 public class BasicHEventNamedItemFragment extends Fragment {
 
     private BasicNoteItemA mNoteItem;
-    private List<BasicHNoteItemA> mHNoteItemList = new ArrayList<>();
+    private final List<BasicHNoteItemA> mHNoteItemList = new ArrayList<>();
 
     public static BasicHEventNamedItemFragment newInstance(BasicNoteItemA noteItem) {
         BasicHEventNamedItemFragment instance = new BasicHEventNamedItemFragment();

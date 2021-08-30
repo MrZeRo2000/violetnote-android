@@ -3,7 +3,6 @@ package com.romanpulov.violetnote.view.preference;
 import android.content.Context;
 import android.content.res.Resources;
 import androidx.preference.Preference;
-import androidx.preference.PreferenceFragment;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 import android.widget.Toast;
@@ -201,7 +200,7 @@ public class PreferenceRepository {
         }
 
         if (intervalResourceValue != null) {
-            return Integer.valueOf(intervalResourceValue);
+            return Integer.parseInt(intervalResourceValue);
         } else {
             return 0;
         }

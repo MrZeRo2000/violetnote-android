@@ -32,16 +32,16 @@ public class BasicNoteRecycleViewAdapter extends RecyclerView.Adapter<BasicNoteR
     }
 
     private final List<BasicNoteA> mItems;
-    private final ViewSelectorHelper.AbstractViewSelector mRecyclerViewSelector;
+    private final ViewSelectorHelper.AbstractViewSelector<Integer> mRecyclerViewSelector;
     private final BasicNoteFragment.OnBasicNoteFragmentInteractionListener mListener;
 
-    public ViewSelectorHelper.AbstractViewSelector getRecyclerViewSelector() {
+    public ViewSelectorHelper.AbstractViewSelector<Integer> getRecyclerViewSelector() {
         return mRecyclerViewSelector;
     }
 
     public BasicNoteRecycleViewAdapter(List<BasicNoteA> items, ActionMode.Callback actionModeCallback, BasicNoteFragment.OnBasicNoteFragmentInteractionListener listener) {
         mItems = items;
-        mRecyclerViewSelector = new ViewSelectorHelper.ViewSelectorMultiple(this, actionModeCallback);
+        mRecyclerViewSelector = new ViewSelectorHelper.ViewSelectorMultiple<>(this, actionModeCallback);
         mListener = listener;
     }
 
@@ -79,7 +79,7 @@ public class BasicNoteRecycleViewAdapter extends RecyclerView.Adapter<BasicNoteR
         final TextView mLastModified;
         final ImageView mEncryptedImage;
 
-        public ViewHolder(View view, ViewSelectorHelper.AbstractViewSelector viewSelector) {
+        public ViewHolder(View view, ViewSelectorHelper.AbstractViewSelector<Integer> viewSelector) {
             super(view, viewSelector);
             mTitle = view.findViewById(R.id.title);
             mItemCount = view.findViewById(R.id.item_count);
@@ -90,8 +90,8 @@ public class BasicNoteRecycleViewAdapter extends RecyclerView.Adapter<BasicNoteR
         @Override
         public void onClick(View v) {
             super.onClick(v);
-            if ((!mViewSelector.isSelected()) && (mListener != null) && (getAdapterPosition() != -1)) {
-                mListener.onBasicNoteFragmentInteraction(mItems.get(getAdapterPosition()));
+            if ((!mViewSelector.isSelected()) && (mListener != null) && (getBindingAdapterPosition() != -1)) {
+                mListener.onBasicNoteFragmentInteraction(mItems.get(getBindingAdapterPosition()));
             }
         }
     }

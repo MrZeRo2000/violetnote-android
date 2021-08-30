@@ -3,7 +3,6 @@ package com.romanpulov.violetnote.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.romanpulov.violetnotecore.Model.PassData;
 import com.romanpulov.violetnotecore.Model.PassData2;
 
 import java.util.ArrayList;

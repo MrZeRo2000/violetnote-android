@@ -35,7 +35,7 @@ public class BackupMSGraphUploader extends AbstractContextLoader {
             // log("Putting file:" + fileName);
             try (
                     InputStream inputStream = backupManager.createBackupInputStream(fileName);
-                    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                    ByteArrayOutputStream outputStream = new ByteArrayOutputStream()
             ) {
                 FileUtils.copyStream(inputStream, outputStream);
                 MSActionExecutor.executeSync(
