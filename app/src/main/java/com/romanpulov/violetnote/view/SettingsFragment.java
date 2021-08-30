@@ -26,6 +26,7 @@ import com.romanpulov.violetnote.cloud.CloudAccountFacadeFactory;
 import com.romanpulov.violetnote.db.DBStorageManager;
 import com.romanpulov.library.dropbox.DropboxHelper;
 import com.romanpulov.library.common.account.AbstractCloudAccountManager;
+import com.romanpulov.violetnote.loader.document.DocumentPassDataLoader;
 import com.romanpulov.violetnote.loader.local.DocumentUriFileLoader;
 import com.romanpulov.violetnote.service.LoaderService;
 import com.romanpulov.violetnote.service.LoaderServiceManager;
@@ -43,6 +44,7 @@ import com.romanpulov.violetnote.view.preference.processor.PreferenceRestoreClou
 import com.romanpulov.violetnote.view.preference.SourcePathPreferenceSetup;
 import com.romanpulov.violetnote.view.preference.processor.PreferenceRestoreLocalProcessor;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -104,6 +106,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             mPreferenceLoadProcessors.put(cloudAccountFacade.getDocumentLoaderClassName(), mPreferenceDocumentLoaderProcessor);
         }
         setupPrefDocumentLoadService();
+        setupPrefDocumentDelete();
 
         mPreferenceBackupCloudProcessor = new PreferenceBackupCloudProcessor(this);
         for (CloudAccountFacade cloudAccountFacade: cloudAccountFacadeList) {
@@ -224,6 +227,42 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
                     return true;
                 }
+            }
+        });
+    }
+
+    private void setupPrefDocumentDelete() {
+        final Preference pref = Objects.requireNonNull(findPreference(PreferenceRepository.PREF_KEY_DOCUMENT_DELETE));
+        final File documentFile = DocumentPassDataLoader.getDocumentFile(pref.getContext());
+        final boolean documentExists = documentFile != null;
+        pref.setVisible(documentExists);
+
+        pref.setOnPreferenceClickListener(preference -> {
+            if (documentExists) {
+                final AlertDialog.Builder alert = new AlertDialog.Builder(requireActivity(), R.style.AlertDialogTheme);
+                alert
+                        .setTitle(R.string.ui_question_are_you_sure)
+                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (documentFile.delete()) {
+                                    PreferenceRepository.displayMessage(requireContext(), getText(R.string.ui_info_file_deleted));
+                                    pref.setVisible(false);
+                                    PreferenceRepository.updatePreferenceKeySummary(
+                                            SettingsFragment.this,
+                                            PreferenceRepository.PREF_KEY_DOCUMENT_LOAD,
+                                            PreferenceRepository.PREF_LOAD_NEVER);
+                                } else {
+                                    PreferenceRepository.displayMessage(requireContext(), getText(R.string.ui_error_file_not_deleted));
+                                }
+                            }
+                        })
+                        .setNegativeButton(R.string.cancel, null)
+                        .show();
+
+                return true;
+            } else {
+                return false;
             }
         });
     }

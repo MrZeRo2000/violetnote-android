@@ -88,6 +88,7 @@
     <string name="pref_title_source_type">Source type</string>
     <string name="pref_title_source_path">Remote path</string>
     <string name="pref_title_load">Load</string>
+    <string name="pref_title_delete">Delete</string>
     <string-array name="pref_source_type_entries">
         <item>Local storage</item>
         <item>Dropbox</item>
@@ -202,7 +203,9 @@
     <string name="ui_error_empty_password">Password should not be empty</string>
     <string name="ui_error_note_already_exists">Note %s already exists</string>
     <string name="ui_error_group_delete_contain_notes">%s will not be deleted because it contains notes.</string>
+    <string name="ui_error_file_not_deleted">File was not deleted</string>
     <string name="ui_info_copy_to_clipboard">%s copied to clipboard</string>
+    <string name="ui_info_file_deleted">File successfully deleted</string>
     <string name="ui_search_text_display_format"> ..%s..</string>
 
     <string name="ui_display_options_show_total">Show total</string>

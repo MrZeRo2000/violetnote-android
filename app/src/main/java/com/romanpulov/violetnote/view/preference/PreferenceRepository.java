@@ -57,6 +57,8 @@ public class PreferenceRepository {
     public static final String PREF_KEY_DOCUMENT_LOAD = "pref_load";
     private static final String PREF_KEY_DOCUMENT_LAST_LOADED = "pref_last_loaded";
 
+    public static final String PREF_KEY_DOCUMENT_DELETE = "pref_delete";
+
     public static final String PREF_KEY_BASIC_NOTE_LOCAL_BACKUP = "pref_basic_note_local_backup";
     private static final String PREF_KEY_BASIC_NOTE_LOCAL_BACKUP_LAST_LOADED = "pref_basic_note_local_backup_last_loaded";
 
@@ -112,16 +114,21 @@ public class PreferenceRepository {
     public static void updateLoadPreferenceSummary(PreferenceFragmentCompat preferenceFragment, String preferenceKey, String preferenceLastLoadedKey, long value) {
         Preference prefLoad = preferenceFragment.findPreference(preferenceKey);
 
-        if (value == PREF_LOAD_LOADING)
-            prefLoad.setSummary(R.string.caption_loading);
-        else {
-            long displayValue = prefLoad.getPreferenceManager().getSharedPreferences().getLong(preferenceLastLoadedKey, PreferenceRepository.PREF_LOAD_NEVER);
-            if (displayValue == PREF_LOAD_NEVER)
+        if (prefLoad != null) {
+            if (value == PREF_LOAD_NEVER) {
                 prefLoad.setSummary(R.string.pref_message_last_loaded_never);
-            else
-                prefLoad.setSummary(String.format(
-                        prefLoad.getContext().getResources().getString(R.string.pref_message_last_loaded_format),
-                        DateFormat.getDateTimeInstance().format(new Date(displayValue))));
+            } else if (value == PREF_LOAD_LOADING) {
+                prefLoad.setSummary(R.string.caption_loading);
+            }
+            else {
+                long displayValue = prefLoad.getPreferenceManager().getSharedPreferences().getLong(preferenceLastLoadedKey, PreferenceRepository.PREF_LOAD_NEVER);
+                if (displayValue == PREF_LOAD_NEVER)
+                    prefLoad.setSummary(R.string.pref_message_last_loaded_never);
+                else
+                    prefLoad.setSummary(String.format(
+                            prefLoad.getContext().getResources().getString(R.string.pref_message_last_loaded_format),
+                            DateFormat.getDateTimeInstance().format(new Date(displayValue))));
+            }
         }
     }
 

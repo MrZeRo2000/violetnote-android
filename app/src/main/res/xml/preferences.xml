@@ -34,6 +34,10 @@
             android:key="pref_load"
             android:title="@string/pref_title_load"
             />
+        <Preference
+            android:key="pref_delete"
+            android:title="@string/pref_title_delete"
+            />
     </PreferenceCategory>
     <PreferenceCategory
         android:title="@string/pref_title_local_backup"

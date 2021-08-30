@@ -1,8 +1,11 @@
 package com.romanpulov.violetnote.view.preference.processor;
 
+import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
+
+import java.util.Objects;
 
 /**
  * Loader processes executor class
@@ -29,6 +32,8 @@ public class PreferenceDocumentLoaderProcessor extends PreferenceLoaderProcessor
         if (result == null) {
             long loadedTime = System.currentTimeMillis();
             PreferenceRepository.updatePreferenceKeySummary(mPreferenceFragment, PREF_KEY_NAME, loadedTime);
+            final Preference deletePref = Objects.requireNonNull(mPreferenceFragment.findPreference(PreferenceRepository.PREF_KEY_DOCUMENT_DELETE));
+            deletePref.setVisible(true);
         } else
             PreferenceRepository.updatePreferenceKeySummary(mPreferenceFragment, PREF_KEY_NAME, PreferenceRepository.PREF_LOAD_CURRENT_VALUE);
     }
