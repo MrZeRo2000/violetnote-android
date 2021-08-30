@@ -31,11 +31,8 @@ public class HrPickerFragment extends Fragment implements HrPickerScreen.OnHrPic
     public static final String RESULT_KEY = HrPickerFragment.class.getSimpleName() + "_RESULT";
     public static final String RESULT_VALUE_KEY = HrPickerFragment.class.getSimpleName() + "_RESULT_VALUE";
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String INITIAL_PATH = "INITIAL_PATH";
 
-    // TODO: Rename and change types of parameters
     private String mInitialPath;
 
     private TextView mHeaderTextView;
@@ -159,7 +156,7 @@ public class HrPickerFragment extends Fragment implements HrPickerScreen.OnHrPic
     public HrPickerFragment() {
         // Required empty public constructor
     }
-    // TODO: Rename and change types and number of parameters
+
     public static HrPickerFragment newInstance(String initialPath) {
         HrPickerFragment fragment = new HrPickerFragment();
         Bundle args = new Bundle();

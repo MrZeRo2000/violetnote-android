@@ -292,7 +292,6 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnNoteValueFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onNoteValueClicked(BasicNoteValueA item, int adapterPosition);
     }
 }
