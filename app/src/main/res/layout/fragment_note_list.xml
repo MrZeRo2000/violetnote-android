@@ -15,18 +15,6 @@
         android:visibility="gone"
         />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/text_margin_half"
-        android:layout_marginBottom="@dimen/text_margin_half"
-        android:padding="@dimen/text_margin_half"
-        android:id="@+id/headerTextView"
-        android:layout_below="@+id/search_layout_include"
-        android:textAppearance="@style/Header1Text"
-        android:background="@color/windowBackgroundLight"
-        />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list"
         android:layout_width="match_parent"
@@ -34,7 +22,7 @@
 
         android:layout_marginLeft="0dp"
         android:layout_marginRight="0dp"
-        android:layout_below="@+id/headerTextView"
+        android:layout_below="@+id/search_layout_include"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/fragment_note"
         />

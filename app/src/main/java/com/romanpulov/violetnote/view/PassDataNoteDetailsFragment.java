@@ -36,10 +36,6 @@ public class PassDataNoteDetailsFragment extends PassDataBaseFragment {
                 // got the data, setting expiration
                 expireModel.initDataExpiration();
 
-                // TODO remove headerTextView from the layout
-                TextView headerTextView = view.findViewById(R.id.headerTextView);
-                headerTextView.setVisibility(View.GONE);
-
                 RecyclerView recyclerView = view.findViewById(R.id.list);
 
                 // Set the adapter

@@ -38,11 +38,6 @@ public class PassDataSearchResultFragment extends PassDataBaseFragment {
                 // got the data, setting expiration
                 expireModel.initDataExpiration();
 
-                // TODO remove headerTextView from the layout
-                TextView headerTextView = view.findViewById(R.id.headerTextView);
-                // headerTextView.setText(passDataResult.getPassData().getPassCategoryData().get(0).getCategoryName());
-                headerTextView.setVisibility(View.GONE);
-
                 // search text title
                 setActivityTitle(getString(R.string.ui_search_text_display_format, passDataResult.getSearchText()));
 
