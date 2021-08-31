@@ -46,13 +46,6 @@ abstract class DBBaseTest {
         mDBHManager = new DBHManager(mContext);
     }
 
-    void backupDB() {
-        mDBHelper.closeDB();
-        DBStorageManager storageManager = new DBStorageManager(mContext);
-        storageManager.createRollingLocalBackup();
-        mDBHelper.openDB();
-    }
-
     void sleep(long millis) {
         try {
             Thread.sleep(millis);

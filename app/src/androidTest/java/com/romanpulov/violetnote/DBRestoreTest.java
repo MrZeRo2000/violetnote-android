@@ -40,9 +40,9 @@ public class DBRestoreTest {
     public void testLocalRestore() {
         DBBasicNoteHelper.getInstance(getTargetContext()).closeDB();
 
-        DBStorageManager storageManager = new DBStorageManager(getTargetContext());
+        DBStorageManager storageManager = DBStorageManager.getInstance(getTargetContext());
 
-        String dbFileName = storageManager.restoreLocalBackup();
+        String dbFileName = storageManager.getDBBackupManager().restoreLocalBackup();
         assertNotNull(dbFileName);
 
         log(dbFileName);

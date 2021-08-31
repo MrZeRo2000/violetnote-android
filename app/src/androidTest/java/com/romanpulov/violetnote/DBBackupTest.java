@@ -40,10 +40,10 @@ public class DBBackupTest {
     public void testLocalBackup() {
         DBBasicNoteHelper.getInstance(getTargetContext()).closeDB();
 
-        DBStorageManager storageManager = new DBStorageManager(getTargetContext());
+        DBStorageManager storageManager = DBStorageManager.getInstance(getTargetContext());
 
         //assertNotNull(storageManager.createLocalBackup());
-        assertNotNull(storageManager.createRollingLocalBackup());
+        assertNotNull(storageManager.getDBBackupManager().createLocalBackup());
 
         DBBasicNoteHelper.getInstance(getTargetContext()).openDB();
     }
