@@ -61,6 +61,7 @@
     <string name="pref_title_account_dropbox">Dropbox</string>
     <string name="pref_title_account_onedrive">OneDrive</string>
     <string name="pref_title_account_msgraph">MSGraph</string>
+    <string name="pref_title_account_gdrive">Google Drive</string>
     <string name="pref_title_interface">Interface</string>
     <string name="pref_title_interface_basic_note_groups">Basic note groups</string>
     <string name="pref_title_interface_checked_last">Display checked items last</string>
@@ -97,6 +98,7 @@
     <string-array name="pref_cloud_storage_entries">
         <item>Dropbox</item>
         <item>OneDrive</item>
+        <item>Google Drive</item>
     </string-array>
     <string name="pref_message_last_loaded_never">Last loaded: Never</string>
     <string name="pref_message_last_loaded_format">Last loaded: %s</string>
@@ -124,6 +126,10 @@
     <string name="error_onedrive_login">Error logging in to OneDrive: %s</string>
     <string name="error_onedrive_logout">Error logging out from OneDrive: %s</string>
 
+    <!-- GDrive errors -->
+    <string name="error_gdrive_login">Error logging in to Google Drive: %s</string>
+    <string name="error_gdrive_logout">Error logging out from Google Drive: %s</string>
+
     <!-- Messages -->
     <string name="message_backup_created">Successfully created backup at %s</string>
     <string name="message_backup_restored">Successfully restored backup from %s</string>
@@ -132,6 +138,10 @@
     <!-- OneDrive messages -->
     <string name="message_onedrive_successfully_logged_in">Successfully logged in to OneDrive</string>
     <string name="message_onedrive_successfully_logged_out">Successfully logged out from OneDrive</string>
+
+    <!-- GDrive messages -->
+    <string name="message_gdrive_successfully_logged_in">Successfully logged in to Google Drive</string>
+    <string name="message_gdrive_successfully_logged_out">Successfully logged out from Google Drive</string>
 
     <!-- Notifications -->
     <string name="notification_dropbox_backup_completed">Dropbox backup has been completed</string>

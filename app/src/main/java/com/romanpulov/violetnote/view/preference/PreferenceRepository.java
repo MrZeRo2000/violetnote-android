@@ -33,6 +33,7 @@ public class PreferenceRepository {
 
     public static final int CLOUD_SOURCE_TYPE_DROPBOX = 0;
     public static final int CLOUD_SOURCE_TYPE_MSGRAPH = 1;
+    public static final int CLOUD_SOURCE_TYPE_GDRIVE = 2;
     public static final int DEFAULT_CLOUD_SOURCE_TYPE = 0;
 
     public static final int DEFAULT_CHECKED_UPDATE_REFRESH_INTERVAL = 0;
@@ -50,6 +51,7 @@ public class PreferenceRepository {
 
     public static final String PREF_KEY_ACCOUNT_DROPBOX = "pref_account_dropbox";
     public static final String PREF_KEY_ACCOUNT_MSGRAPH = "pref_account_onedrive";
+    public static final String PREF_KEY_ACCOUNT_GD = "pref_account_gdrive";
 
     public static final String PREF_KEY_BASIC_NOTE_CLOUD_STORAGE =  "pref_basic_note_cloud_storage";
 

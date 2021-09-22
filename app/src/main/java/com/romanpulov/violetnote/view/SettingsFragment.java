@@ -136,6 +136,9 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 CloudAccountFacadeFactory.fromCloudSourceType(PreferenceRepository.CLOUD_SOURCE_TYPE_DROPBOX)).execute();
         new CloudAccountPreferenceSetup(this,
                 CloudAccountFacadeFactory.fromCloudSourceType(PreferenceRepository.CLOUD_SOURCE_TYPE_MSGRAPH)).execute();
+        new CloudAccountPreferenceSetup(this,
+                CloudAccountFacadeFactory.fromCloudSourceType(PreferenceRepository.CLOUD_SOURCE_TYPE_GDRIVE)).execute();
+
 
         new CommonSourceTypePreferenceSetup(this, PREF_KEY_BASIC_NOTE_CLOUD_STORAGE, R.array.pref_cloud_storage_entries, DEFAULT_CLOUD_SOURCE_TYPE).execute();
         new CheckedUpdateIntervalPreferenceSetup(this).execute();

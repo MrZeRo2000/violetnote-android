@@ -28,6 +28,8 @@ public class CloudAccountFacadeFactory {
                 return new DropboxAccountFacade();
             case PreferenceRepository.CLOUD_SOURCE_TYPE_MSGRAPH:
                 return new MSGraphAccountFacade();
+            case PreferenceRepository.CLOUD_SOURCE_TYPE_GDRIVE:
+                return new GDAccountFacade();
             default:
                 throw new NullPointerException();
         }
@@ -36,7 +38,8 @@ public class CloudAccountFacadeFactory {
     public static List<CloudAccountFacade> getCloudAccountFacadeList() {
         return Collections.unmodifiableList(Arrays.asList(
                 new DropboxAccountFacade(),
-                new MSGraphAccountFacade()
+                new MSGraphAccountFacade(),
+                new GDAccountFacade()
         ));
     }
 }
