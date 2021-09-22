@@ -8,6 +8,7 @@ import androidx.appcompat.app.AlertDialog;
 import com.romanpulov.library.common.account.AbstractCloudAccountManager;
 import com.romanpulov.library.gdrive.OnGDActionListener;
 import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.loader.gdrive.BackupGDriveUploader;
 import com.romanpulov.violetnote.picker.HrPickerNavigator;
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 
@@ -68,7 +69,7 @@ public class GDAccountFacade implements CloudAccountFacade{
 
     @Override
     public String getBackupLoaderClassName() {
-        return null;
+        return BackupGDriveUploader.class.getName();
     }
 
     @Override

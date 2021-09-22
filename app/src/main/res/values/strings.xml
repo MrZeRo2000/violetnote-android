@@ -146,6 +146,7 @@
     <!-- Notifications -->
     <string name="notification_dropbox_backup_completed">Dropbox backup has been completed</string>
     <string name="notification_onedrive_backup_completed">OneDrive backup has been completed</string>
+    <string name="notification_gdrive_backup_completed">Google Drive backup has been completed</string>
     <string name="notification_password_notes_data_load_completed">Password notes data has been successfully loaded</string>
     <string name="notification_load_operation_error">Load operation error : %s</string>
     <string name="notification_success_channel_name">Load process</string>
