@@ -7,8 +7,6 @@ import android.content.Context;
 import com.romanpulov.jutilscore.io.FileUtils;
 import com.romanpulov.library.common.db.DBBackupManager;
 import com.romanpulov.library.common.loader.core.AbstractContextLoader;
-import com.romanpulov.library.msgraph.MSALPutBytesByPathAction;
-import com.romanpulov.library.msgraph.MSActionExecutor;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.cloud.GDHelper;
 import com.romanpulov.violetnote.db.DBStorageManager;
@@ -38,7 +36,7 @@ public class BackupGDriveUploader extends AbstractContextLoader {
                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream()
             ) {
                 FileUtils.copyStream(inputStream, outputStream);
-                GDHelper.getInstance().putBytesByPath(mContext, CloudLoaderRepository.REMOTE_PATH, fileName, outputStream.toByteArray());
+                GDHelper.getInstance().putBytesByPath(mContext, CloudLoaderRepository.REMOTE_PATH + File.separator + fileName, outputStream.toByteArray());
             }
         }
 

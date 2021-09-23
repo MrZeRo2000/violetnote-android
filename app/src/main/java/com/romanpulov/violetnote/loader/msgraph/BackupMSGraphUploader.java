@@ -8,6 +8,7 @@ import com.romanpulov.library.common.loader.core.AbstractContextLoader;
 import com.romanpulov.library.msgraph.MSALPutBytesByPathAction;
 import com.romanpulov.library.msgraph.MSActionExecutor;
 import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.cloud.MSGraphHelper;
 import com.romanpulov.violetnote.db.DBStorageManager;
 import com.romanpulov.violetnote.loader.cloud.CloudLoaderRepository;
 import com.romanpulov.violetnote.loader.helper.LoaderNotificationHelper;
@@ -38,14 +39,10 @@ public class BackupMSGraphUploader extends AbstractContextLoader {
                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream()
             ) {
                 FileUtils.copyStream(inputStream, outputStream);
-                MSActionExecutor.executeSync(
-                        new MSALPutBytesByPathAction(
-                                mContext,
-                                "/" + CloudLoaderRepository.REMOTE_PATH + "/" + fileName,
-                                outputStream.toByteArray(),
-                                null
-                        )
-                );
+                MSGraphHelper.getInstance().putBytesByPath(
+                        mContext,
+                        "/" + CloudLoaderRepository.REMOTE_PATH + "/" + fileName,
+                        outputStream.toByteArray());
             }
         }
 

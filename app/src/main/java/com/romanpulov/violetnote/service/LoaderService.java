@@ -50,17 +50,21 @@ public class LoaderService extends IntentService {
 
             String errorMessage = null;
             log("onHandleEvent : " + mLoaderClassName);
-            try {
-                Loader loader = LoaderFactory.fromClassName(this, mLoaderClassName);
-                if (loader != null) {
-                    log("created loader : " + mLoaderClassName);
-                    //Thread.sleep(5000);
-                    loader.setBundle(bundle);
-                    loader.load();
-                } else
-                    errorMessage = "Failed to create loader : " + mLoaderClassName;
-            } catch (Exception e) {
-                errorMessage = e.getMessage();
+            if (mLoaderClassName == null) {
+                errorMessage = "Class name not set up for loader";
+            } else {
+                try {
+                    Loader loader = LoaderFactory.fromClassName(this, mLoaderClassName);
+                    if (loader != null) {
+                        log("created loader : " + mLoaderClassName);
+                        //Thread.sleep(5000);
+                        loader.setBundle(bundle);
+                        loader.load();
+                    } else
+                        errorMessage = "Failed to create loader : " + mLoaderClassName;
+                } catch (Exception e) {
+                    errorMessage = e.getMessage();
+                }
             }
             log("onHandleEvent completed");
             Intent resultIntent = new Intent(SERVICE_RESULT_INTENT_NAME);
