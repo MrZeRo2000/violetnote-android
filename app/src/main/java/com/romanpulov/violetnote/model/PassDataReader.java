@@ -42,25 +42,21 @@ public class PassDataReader {
         mPassCategoryDataA = new ArrayList<>(mPassData2.getCategoryList().size());
         mPassNoteDataA = new ArrayList<>();
 
-        if (mPassData2 != null) {
+        for (PassCategory2 passCategory2 : mPassData2.getCategoryList()) {
+            PassCategoryA passCategoryA = new PassCategoryA(passCategory2.getCategoryName());
+            passCategoryA.setNotesCount(passCategory2.getNoteList().size());
+            mPassCategoryDataA.add(passCategoryA);
 
-            for (PassCategory2 passCategory2 : mPassData2.getCategoryList()) {
-                PassCategoryA passCategoryA = new PassCategoryA(passCategory2.getCategoryName());
-                passCategoryA.setNotesCount(passCategory2.getNoteList().size());
-                mPassCategoryDataA.add(passCategoryA);
+            for (PassNote2 passNote2 : passCategory2.getNoteList()) {
+                Map<String, String> passNoteAttr = new LinkedHashMap<>();
+                passNoteAttr.put(ATTR_SYSTEM, passNote2.getSystem());
+                passNoteAttr.put(ATTR_USER, passNote2.getUser());
+                passNoteAttr.put(ATTR_PASSWORD, passNote2.getPassword());
+                passNoteAttr.put(ATTR_URL, passNote2.getUrl());
+                passNoteAttr.put(ATTR_INFO, passNote2.getInfo());
 
-                for (PassNote2 passNote2 : passCategory2.getNoteList()) {
-                    Map<String, String> passNoteAttr = new LinkedHashMap<>();
-                    passNoteAttr.put(ATTR_SYSTEM, passNote2.getSystem());
-                    passNoteAttr.put(ATTR_USER, passNote2.getUser());
-                    passNoteAttr.put(ATTR_PASSWORD, passNote2.getPassword());
-                    passNoteAttr.put(ATTR_URL, passNote2.getUser());
-                    passNoteAttr.put(ATTR_INFO, passNote2.getInfo());
-
-                    mPassNoteDataA.add(new PassNoteA(passCategoryA, passNoteAttr));
-                }
+                mPassNoteDataA.add(new PassNoteA(passCategoryA, passNoteAttr));
             }
-
         }
     }
 }
