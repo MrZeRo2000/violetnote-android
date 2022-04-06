@@ -38,6 +38,11 @@ public class DropboxAccountFacade implements CloudAccountFacade {
     }
 
     @Override
+    public String getSilentBackupLoaderClassName() {
+        return null;
+    }
+
+    @Override
     public String getDocumentLoaderClassName() {
         return DocumentDropboxFileLoader.class.getName();
     }

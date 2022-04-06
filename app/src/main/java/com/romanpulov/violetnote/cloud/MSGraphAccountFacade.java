@@ -85,6 +85,11 @@ public class MSGraphAccountFacade implements CloudAccountFacade {
     }
 
     @Override
+    public String getSilentBackupLoaderClassName() {
+        return null;
+    }
+
+    @Override
     public String getRestoreLoaderClassName() {
         return RestoreMSGraphDownloader.class.getName();
     }

@@ -10,6 +10,7 @@ public interface CloudAccountFacade {
     AbstractCloudAccountManager<?> getAccountManager(Activity activity);
     HrPickerNavigator getHrPickerNavigator();
     String getBackupLoaderClassName();
+    String getSilentBackupLoaderClassName();
     String getRestoreLoaderClassName();
     String getDocumentLoaderClassName();
     String getPreferenceAccountKey();
