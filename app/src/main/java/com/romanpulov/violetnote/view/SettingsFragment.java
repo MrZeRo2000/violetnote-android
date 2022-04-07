@@ -43,6 +43,7 @@ import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 import com.romanpulov.violetnote.view.preference.processor.PreferenceRestoreCloudProcessor;
 import com.romanpulov.violetnote.view.preference.SourcePathPreferenceSetup;
 import com.romanpulov.violetnote.view.preference.processor.PreferenceRestoreLocalProcessor;
+import com.romanpulov.violetnote.worker.LoaderWorker;
 
 import java.io.File;
 import java.util.HashMap;
@@ -293,6 +294,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     else {
                         mPreferenceBackupCloudProcessor.loaderPreExecute();
                         mLoaderServiceManager.startLoader(cloudAccountFacade.getBackupLoaderClassName(), null);
+                        LoaderWorker.scheduleWorker(getContext(), cloudAccountFacade.getSilentBackupLoaderClassName());
                     }
                 }
 
