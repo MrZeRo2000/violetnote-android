@@ -19,13 +19,16 @@ import com.romanpulov.violetnote.view.core.ViewSelectorHelper;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class BasicHEventCOItemExpandableListViewAdapter extends BaseExpandableListAdapter implements ViewSelectorHelper.ChangeNotificationListener{
     private final Context mContext;
     private final LongSparseArray<BasicHEventA> mHEventList;
     private final LongSparseArray<List<BasicHNoteCOItemA>> mHEventCOItemList;
-    private final Collection<String> mValues;
+    private final Set<String> mValues;
+    private final Set<String> mSelectedValues = new HashSet<>();
     private final int mDimColor;
     private final int mBrightColor;
 
@@ -47,7 +50,7 @@ public class BasicHEventCOItemExpandableListViewAdapter extends BaseExpandableLi
         mContext = context;
         mHEventList = hEventList;
         mHEventCOItemList = hEventCOItemList;
-        mValues = values;
+        mValues = new HashSet<>(values);
 
         mDimColor = ContextCompat.getColor(context, R.color.dimTextColor);
         mBrightColor = ContextCompat.getColor(context, R.color.brightTextColor);
@@ -141,30 +144,69 @@ public class BasicHEventCOItemExpandableListViewAdapter extends BaseExpandableLi
         final View mView;
         final TextView mItemTitle;
         final ViewSelectorHelper.AbstractViewSelector<BasicHNoteCOItemA> mViewSelector;
+        final Set<String> mValues;
+        final Set<String> mSelectedValues;
         BasicHNoteCOItemA mData;
 
-        ChildViewHolder(View v, ViewSelectorHelper.AbstractViewSelector<BasicHNoteCOItemA> viewSelector) {
-            this.mViewSelector = viewSelector;
+        ChildViewHolder(
+                View v,
+                ViewSelectorHelper.AbstractViewSelector<BasicHNoteCOItemA> viewSelector,
+                Set<String> values,
+                Set<String> selectedValues
+        ) {
+            mViewSelector = viewSelector;
             mView = v;
             mItemTitle = v.findViewById(R.id.item_title);
+            mValues = values;
+            mSelectedValues = selectedValues;
             v.setOnClickListener(this);
             v.setOnLongClickListener(this);
         }
 
+        private void updateSelectedValues() {
+            mSelectedValues.clear();
+            for (BasicHNoteCOItemA item: mViewSelector.getSelectedItems()) {
+                mSelectedValues.add(item.getValue());
+            }
+        }
+
+        private boolean clickAllowed() {
+            return !((mValues.contains(mData.getValue())) ||
+                    (mSelectedValues.contains(mData.getValue()) && !(mViewSelector.getSelectedItems().contains(mData)))
+            );
+        }
+
         @Override
         public void onClick(View v) {
-            mViewSelector.setSelectedView(v, mData);
+            if (clickAllowed()) {
+                mViewSelector.setSelectedView(v, mData);
+                updateSelectedValues();
+            }
         }
 
         @Override
         public boolean onLongClick(View v) {
-            mViewSelector.startActionMode(v, mData);
-            return true;
+            if (clickAllowed()) {
+                mViewSelector.startActionMode(v, mData);
+                updateSelectedValues();
+                return true;
+            } else {
+                return false;
+            }
         }
 
         public void updateBackground() {
             ViewSelectorHelper.updateSelectedViewBackground(mView, mViewSelector, mData);
         }
+    }
+
+    private boolean selectorContainsValue(String value) {
+        for (BasicHNoteCOItemA item : mExViewSelector.getSelectedItems()) {
+            if (item.getValue().equals(value)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -175,7 +217,7 @@ public class BasicHEventCOItemExpandableListViewAdapter extends BaseExpandableLi
             LayoutInflater inflater = (LayoutInflater)this.mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             if (inflater != null) {
                 convertView = inflater.inflate(R.layout.expandable_list_h_event_list_item, null);
-                viewHolder = new ChildViewHolder(convertView, mExViewSelector);
+                viewHolder = new ChildViewHolder(convertView, mExViewSelector, mValues, mSelectedValues);
                 convertView.setTag(viewHolder);
             }
         } else {
@@ -188,7 +230,7 @@ public class BasicHEventCOItemExpandableListViewAdapter extends BaseExpandableLi
 
             String itemValue = item.getValue();
             viewHolder.mItemTitle.setText(itemValue);
-            if (mValues.contains(itemValue)) {
+            if (mValues.contains(itemValue) || selectorContainsValue(itemValue))  {
                 viewHolder.mItemTitle.setTextColor(mDimColor);
             } else {
                 viewHolder.mItemTitle.setTextColor(mBrightColor);
