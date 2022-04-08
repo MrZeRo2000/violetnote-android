@@ -7,6 +7,7 @@ import com.romanpulov.library.common.loader.core.AbstractContextLoader;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBStorageManager;
 import com.romanpulov.violetnote.loader.local.RestoreLocalLoader;
+import com.romanpulov.violetnote.view.helper.DisplayMessageHelper;
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 
 /**
@@ -33,12 +34,12 @@ public class PreferenceRestoreLocalProcessor extends PreferenceLoaderProcessor {
             long loadedTime = System.currentTimeMillis();
             PreferenceRepository.updatePreferenceKeySummary(mPreferenceFragment, PREF_KEY_NAME, loadedTime);
 
-            BackupProcessor bp = DBStorageManager.getDBBackupManager(mContext).getBackupProcessor();
+            BackupProcessor bp = DBStorageManager.getDBBackupManager(mActivity).getBackupProcessor();
 
-            String restoreMessage = mContext.getString(R.string.message_backup_restored, bp == null? "" : bp.getBackupFolderName());
-            PreferenceRepository.displayMessage(mContext, restoreMessage);
+            String restoreMessage = mActivity.getString(R.string.message_backup_restored, bp == null? "" : bp.getBackupFolderName());
+            DisplayMessageHelper.displayInfoMessage(mActivity, restoreMessage);
         } else {
-            PreferenceRepository.displayMessage(mContext, result);
+            DisplayMessageHelper.displayErrorMessage(mActivity, result);
             PreferenceRepository.updatePreferenceKeySummary(mPreferenceFragment, PREF_KEY_NAME, PreferenceRepository.PREF_LOAD_CURRENT_VALUE);
         }
     }

@@ -13,15 +13,16 @@ import com.romanpulov.violetnote.loader.msgraph.DocumentMSGraphFileLoader;
 import com.romanpulov.violetnote.loader.msgraph.RestoreMSGraphDownloader;
 import com.romanpulov.violetnote.loader.msgraph.SilentBackupMSGraphUploader;
 import com.romanpulov.violetnote.picker.HrPickerNavigator;
+import com.romanpulov.violetnote.view.helper.DisplayMessageHelper;
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 
 public class MSGraphAccountFacade implements CloudAccountFacade {
     private void displayMessage(Activity activity, int displayMessageId) {
-        PreferenceRepository.displayMessage(activity, activity.getString(displayMessageId));
+        DisplayMessageHelper.displayInfoMessage(activity, activity.getString(displayMessageId));
     }
 
     private void displayMessage(Activity activity, int displayMessageId, String message) {
-        PreferenceRepository.displayMessage(activity, activity.getString(displayMessageId, message));
+        DisplayMessageHelper.displayInfoMessage(activity, activity.getString(displayMessageId, message));
     }
 
     @Override

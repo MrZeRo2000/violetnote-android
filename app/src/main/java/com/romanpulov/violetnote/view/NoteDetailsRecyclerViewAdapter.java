@@ -7,11 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.model.PassNoteA;
 import com.romanpulov.violetnote.view.helper.ClipboardHelper;
+import com.romanpulov.violetnote.view.helper.DisplayMessageHelper;
 
 import java.util.List;
 
@@ -53,10 +53,10 @@ public class NoteDetailsRecyclerViewAdapter extends RecyclerView.Adapter<NoteDet
         holder.mView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Context context = holder.mView.getContext();
+                Context context = v.getContext();
                 String message = context.getString(R.string.ui_info_copy_to_clipboard, holder.mItem.mName);
                 ClipboardHelper.copyPlainText(context, holder.mItem.mValue);
-                Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+                DisplayMessageHelper.displayInfoMessage(v, message);
                 return true;
             }
         });

@@ -1,5 +1,6 @@
 package com.romanpulov.violetnote.view;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -31,6 +32,7 @@ import com.romanpulov.violetnote.view.action.BasicNoteRefreshAction;
 import com.romanpulov.violetnote.view.core.TextEditDialogBuilder;
 import com.romanpulov.violetnote.view.core.TextInputDialog;
 import com.romanpulov.violetnote.view.helper.BottomToolbarHelper;
+import com.romanpulov.violetnote.view.helper.DisplayMessageHelper;
 import com.romanpulov.violetnote.view.helper.DisplayTitleBuilder;
 import com.romanpulov.violetnote.view.action.BasicItemsMoveAction;
 import com.romanpulov.violetnote.view.action.BasicItemsMoveBottomAction;
@@ -42,7 +44,6 @@ import com.romanpulov.violetnote.view.core.BasicCommonNoteFragment;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 import com.romanpulov.violetnote.view.helper.InputActionHelper;
 import com.romanpulov.violetnote.view.helper.InputManagerHelper;
-import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -201,10 +202,8 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
                     // finish anyway
                     mode.finish();
                 } else {
-                    Context context = getContext();
-                    if (context != null) {
-                        PreferenceRepository.displayMessage(context, context.getString(R.string.ui_error_note_already_exists, text));
-                    }
+                    Activity activity = requireActivity();
+                    DisplayMessageHelper.displayInfoMessage(activity, activity.getString(R.string.ui_error_note_already_exists, text));
                 }
             }
         });

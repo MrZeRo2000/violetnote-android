@@ -3,7 +3,6 @@ package com.romanpulov.violetnote.view;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.navigation.fragment.NavHostFragment;

@@ -5,7 +5,6 @@ import android.content.res.Resources;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
-import android.widget.Toast;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.view.core.ProgressPreference;
@@ -90,19 +89,6 @@ public class PreferenceRepository {
     public static void setSourcePathPreferenceValue(PreferenceFragmentCompat preferenceFragment, String value) {
         preferenceFragment.getPreferenceManager().getSharedPreferences().edit().putString(PREF_KEY_SOURCE_PATH, value).commit();
         preferenceFragment.findPreference(PREF_KEY_SOURCE_PATH).setSummary(value);
-    }
-
-    /**
-     * Display message common routine
-     * @param context Context
-     * @param message Message to display
-     */
-    public static void displayMessage(Context context, CharSequence message) {
-        try {
-            Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     /**

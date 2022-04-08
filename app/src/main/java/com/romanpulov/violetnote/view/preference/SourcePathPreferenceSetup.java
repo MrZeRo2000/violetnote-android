@@ -17,6 +17,7 @@ import com.romanpulov.violetnote.cloud.CloudAccountFacade;
 import com.romanpulov.violetnote.cloud.CloudAccountFacadeFactory;
 import com.romanpulov.library.common.account.AbstractCloudAccountManager;
 import com.romanpulov.violetnote.picker.HrPickerActivity;
+import com.romanpulov.violetnote.view.helper.DisplayMessageHelper;
 
 import static com.romanpulov.violetnote.view.preference.PreferenceRepository.DEFAULT_SOURCE_TYPE;
 import static com.romanpulov.violetnote.view.preference.PreferenceRepository.PREF_KEY_SOURCE_PATH;
@@ -76,7 +77,7 @@ public class SourcePathPreferenceSetup extends PreferenceSetup {
 
                 if (PreferenceRepository.isCloudSourceType(sourceType)) {
                     if (!NetworkUtils.isNetworkAvailable(mContext))
-                        PreferenceRepository.displayMessage(mActivity,mActivity.getResources().getString(R.string.error_internet_not_available));
+                        DisplayMessageHelper.displayErrorMessage(mActivity,mActivity.getResources().getString(R.string.error_internet_not_available));
                     else {
                         final CloudAccountFacade cloudAccountFacade = CloudAccountFacadeFactory.fromDocumentSourceType(sourceType);
                         final AbstractCloudAccountManager<?> accountManager = cloudAccountFacade.getAccountManager(mActivity);
@@ -98,7 +99,7 @@ public class SourcePathPreferenceSetup extends PreferenceSetup {
 
                                 @Override
                                 public void onAccountSetupFailure(String errorText) {
-                                    PreferenceRepository.displayMessage(mActivity, errorText);
+                                    DisplayMessageHelper.displayErrorMessage(mActivity, errorText);
                                 }
                             });
 

@@ -250,7 +250,6 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
                         if (selectedNoteItems.size() == 1) {
                             startHEventHistoryActivity(selectedNoteItems.get(0));
                         }
-                        //Toast.makeText(getContext(), "History", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.move_up:
                         performMoveAction(new BasicItemsMoveUpAction<>(mBasicNoteData, selectedNoteItems), selectedNoteItems);

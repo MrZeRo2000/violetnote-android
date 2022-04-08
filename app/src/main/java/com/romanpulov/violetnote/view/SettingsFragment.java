@@ -31,6 +31,7 @@ import com.romanpulov.violetnote.loader.local.DocumentUriFileLoader;
 import com.romanpulov.violetnote.service.LoaderService;
 import com.romanpulov.violetnote.service.LoaderServiceManager;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
+import com.romanpulov.violetnote.view.helper.DisplayMessageHelper;
 import com.romanpulov.violetnote.view.preference.BasicNoteGroupsPreferenceSetup;
 import com.romanpulov.violetnote.view.preference.CheckedUpdateIntervalPreferenceSetup;
 import com.romanpulov.violetnote.view.preference.CloudAccountPreferenceSetup;
@@ -55,7 +56,7 @@ import static com.romanpulov.violetnote.view.preference.PreferenceRepository.DEF
 import static com.romanpulov.violetnote.view.preference.PreferenceRepository.DEFAULT_SOURCE_TYPE;
 import static com.romanpulov.violetnote.view.preference.PreferenceRepository.PREF_KEY_BASIC_NOTE_CLOUD_STORAGE;
 import static com.romanpulov.violetnote.view.preference.PreferenceRepository.PREF_KEY_SOURCE_TYPE;
-import static com.romanpulov.violetnote.view.preference.PreferenceRepository.displayMessage;
+
 
 public class SettingsFragment extends PreferenceFragmentCompat {
 
@@ -149,7 +150,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         if (NetworkUtils.isNetworkAvailable(requireActivity()))
             return true;
         else {
-            PreferenceRepository.displayMessage(getActivity(), getString(R.string.error_internet_not_available));
+            DisplayMessageHelper.displayErrorMessage(getActivity(), getString(R.string.error_internet_not_available));
             return false;
         }
     }
@@ -179,7 +180,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
                 @Override
                 public void onAccountSetupFailure(String errorText) {
-                    displayMessage(getActivity(), errorText);
+                    DisplayMessageHelper.displayErrorMessage(requireActivity(), errorText);
                     mPreferenceDocumentLoaderProcessor.loaderPostExecute(errorText);
 
                 }
@@ -215,12 +216,12 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 if (mLoaderServiceManager == null) {
                     return true;
                 } else if (!sharedPref.contains(PreferenceRepository.PREF_KEY_SOURCE_PATH)) {
-                    PreferenceRepository.displayMessage(getActivity(), getText(R.string.error_load_remote_path_empty));
+                    DisplayMessageHelper.displayErrorMessage(requireActivity(), getText(R.string.error_load_remote_path_empty));
                     return true;
                 }
                 else {
                     if (mLoaderServiceManager.isLoaderServiceRunning())
-                        PreferenceRepository.displayMessage(getActivity(), getText(R.string.error_load_process_running));
+                        DisplayMessageHelper.displayInfoMessage(getActivity(), getText(R.string.error_load_process_running));
                     else {
                         executeDocumentLoad();
                     }
@@ -247,7 +248,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 if (documentFile.delete()) {
-                                    PreferenceRepository.displayMessage(requireContext(), getText(R.string.ui_info_file_deleted));
+                                    DisplayMessageHelper.displayInfoMessage(requireActivity(), getText(R.string.ui_info_file_deleted));
                                     pref.setVisible(false);
                                     PreferenceRepository.setPreferenceKeyLastLoadedTime(
                                             getContext(),
@@ -259,7 +260,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                                             PreferenceRepository.PREF_KEY_DOCUMENT_LOAD,
                                             PreferenceRepository.PREF_LOAD_NEVER);
                                 } else {
-                                    PreferenceRepository.displayMessage(requireContext(), getText(R.string.ui_error_file_not_deleted));
+                                    DisplayMessageHelper.displayErrorMessage(requireActivity(), getText(R.string.ui_error_file_not_deleted));
                                 }
                             }
                         })
@@ -290,7 +291,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     String backupResult = DBStorageManager.getDBBackupManager(getActivity()).createLocalBackup();
 
                     if (backupResult == null)
-                        PreferenceRepository.displayMessage(getActivity(), getString(R.string.error_backup));
+                        DisplayMessageHelper.displayErrorMessage(getActivity(), getString(R.string.error_backup));
                     else {
                         mPreferenceBackupCloudProcessor.loaderPreExecute();
                         mLoaderServiceManager.startLoader(cloudAccountFacade.getBackupLoaderClassName(), null);
@@ -300,7 +301,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
                 @Override
                 public void onAccountSetupFailure(String errorText) {
-                    displayMessage(getActivity(), errorText);
+                    DisplayMessageHelper.displayErrorMessage(getActivity(), errorText);
                     mPreferenceBackupCloudProcessor.loaderPostExecute(errorText);
                 }
             });
@@ -329,7 +330,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
                 if (mLoaderServiceManager != null) {
                     if (mLoaderServiceManager.isLoaderServiceRunning())
-                        PreferenceRepository.displayMessage(getActivity(), getText(R.string.error_load_process_running));
+                        DisplayMessageHelper.displayErrorMessage(requireActivity(), getText(R.string.error_load_process_running));
                     else {
                         executeCloudBackup();
                     }
@@ -359,7 +360,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
                 @Override
                 public void onAccountSetupFailure(String errorText) {
-                    displayMessage(getActivity(), errorText);
+                    DisplayMessageHelper.displayErrorMessage(requireActivity(), errorText);
                     mPreferenceRestoreCloudProcessor.loaderPostExecute(errorText);
                 }
             });
@@ -391,7 +392,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 else {
 
                     if (mLoaderServiceManager.isLoaderServiceRunning())
-                        PreferenceRepository.displayMessage(getActivity(), getText(R.string.error_load_process_running));
+                        DisplayMessageHelper.displayErrorMessage(requireActivity(), getText(R.string.error_load_process_running));
                     else {
                         final AlertDialog.Builder alert = new AlertDialog.Builder(requireActivity(), R.style.AlertDialogTheme);
                         alert
@@ -428,7 +429,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     return true;
                 else {
                     if (mLoaderServiceManager.isLoaderServiceRunning())
-                        PreferenceRepository.displayMessage(getActivity(), getText(R.string.error_load_process_running));
+                        DisplayMessageHelper.displayErrorMessage(requireActivity(), getText(R.string.error_load_process_running));
                     else {
                         executeLocalBackup();
                     }
@@ -454,10 +455,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     return true;
                 else {
                     if (mLoaderServiceManager.isLoaderServiceRunning())
-                        PreferenceRepository.displayMessage(getActivity(), getText(R.string.error_load_process_running));
+                        DisplayMessageHelper.displayErrorMessage(requireActivity(), getText(R.string.error_load_process_running));
                     else {
 
-                        final AlertDialog.Builder alert = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
+                        final AlertDialog.Builder alert = new AlertDialog.Builder(requireActivity(), R.style.AlertDialogTheme);
                         alert
                                 .setTitle(R.string.ui_question_are_you_sure)
                                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
