@@ -15,6 +15,7 @@ import androidx.work.WorkerParameters;
 
 import com.romanpulov.library.common.loader.core.Loader;
 import com.romanpulov.library.common.loader.core.LoaderFactory;
+import com.romanpulov.violetnote.view.helper.LoggerHelper;
 
 import java.util.concurrent.TimeUnit;
 
@@ -24,13 +25,6 @@ public class LoaderWorker extends Worker {
     private static final String WORKER_PARAM_LOADER_NAME = LoaderWorker.class.getSimpleName() + "LoaderName";
     private final static String TAG = LoaderWorker.class.getSimpleName();
 
-    private static final boolean DEBUGGING = false;
-
-    private static void log(String message) {
-        if (DEBUGGING)
-            Log.d(TAG, message);
-    }
-
     public LoaderWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
     }
@@ -38,24 +32,25 @@ public class LoaderWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-        log("Work started");
+        LoggerHelper.logContext(getApplicationContext(), TAG, "Work started");
         final String loaderClassName = getInputData().getString(WORKER_PARAM_LOADER_NAME);
 
         if (loaderClassName == null) {
-            log("Loader class name not provided");
+            LoggerHelper.logContext(getApplicationContext(), TAG, "Loader class name not provided");
             return Result.failure();
         } else {
             Loader loader = LoaderFactory.fromClassName(getApplicationContext(), loaderClassName);
             if (loader == null) {
-                log("Failed to create loader " + loaderClassName);
+                LoggerHelper.logContext(getApplicationContext(), TAG, "Failed to create loader " + loaderClassName);
                 return Result.failure();
             } else {
-                log("Created loader " + loaderClassName);
+                LoggerHelper.logContext(getApplicationContext(), TAG, "Created loader " + loaderClassName);
                 try {
                     loader.load();
+                    LoggerHelper.logContext(getApplicationContext(), TAG, "Loaded successfully");
                     return Result.success();
                 } catch (Exception e) {
-                    log("Error loading:" + e.getMessage());
+                    LoggerHelper.logContext(getApplicationContext(), TAG, "Error loading:" + e.getMessage());
                     e.printStackTrace();
                     return Result.failure();
                 }
@@ -64,13 +59,10 @@ public class LoaderWorker extends Worker {
     }
 
     public static void scheduleWorker(Context context, String loaderClassName) {
-        // cancel any old works
-        WorkManager.getInstance(context).cancelUniqueWork(WORKER_NAME);
-        WorkManager.getInstance(context).cancelAllWorkByTag(WORKER_TAG);
-        log("Old works cancelled");
+        LoggerHelper.logContext(context, TAG, "Scheduling work");
 
         if (loaderClassName == null) {
-            log("Loaded class name empty, worker is not scheduled");
+            LoggerHelper.logContext(context, TAG, "Loaded class name empty, worker is not scheduled");
         } else {
 
             Data inputData = (new Data.Builder()).putString(WORKER_PARAM_LOADER_NAME, loaderClassName).build();
@@ -79,20 +71,20 @@ public class LoaderWorker extends Worker {
                     .setRequiredNetworkType(NetworkType.NOT_ROAMING)
                     .build();
 
-            PeriodicWorkRequest request = new PeriodicWorkRequest.Builder(LoaderWorker.class, 14, TimeUnit.DAYS)
+            PeriodicWorkRequest request = new PeriodicWorkRequest.Builder(LoaderWorker.class, 1, TimeUnit.HOURS)
                     .addTag(WORKER_TAG)
                     .setInputData(inputData)
                     .setConstraints(constraints)
-                    .setInitialDelay(14, TimeUnit.DAYS)
+                    .setInitialDelay(1, TimeUnit.HOURS)
                     .build();
 
             WorkManager.getInstance(context)
                     .enqueueUniquePeriodicWork(
                             WORKER_NAME,
-                            ExistingPeriodicWorkPolicy.KEEP,
+                            ExistingPeriodicWorkPolicy.REPLACE,
                             request
                     );
-            log("Work scheduled");
+            LoggerHelper.logContext(context, TAG, "Work scheduled");
         }
     }
 }

@@ -81,6 +81,8 @@ public class PreferenceRepository {
         PREF_KEYS_LAST_LOADED.put(PREF_KEY_BASIC_NOTE_CLOUD_RESTORE, PREF_KEY_BASIC_NOTE_CLOUD_RESTORE_LAST_LOADED);
     }
 
+    public static final String PREF_KEY_LOGGING = "pref_logging";
+
     /**
      * Sets and commits Source Path Preference value
      * @param value new value to set

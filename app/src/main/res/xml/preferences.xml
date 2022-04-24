@@ -91,4 +91,14 @@
             android:title="@string/pref_title_account_gdrive"
             />
     </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/pref_title_miscellaneous"
+        android:layout="@layout/preferences_category"
+        >
+        <CheckBoxPreference
+            android:key="pref_logging"
+            android:title="@string/pref_title_miscellaneous_logging"
+            android:defaultValue="false"
+            />
+    </PreferenceCategory>
 </PreferenceScreen>

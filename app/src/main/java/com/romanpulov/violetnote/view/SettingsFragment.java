@@ -13,6 +13,7 @@ import android.os.IBinder;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.preference.CheckBoxPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -32,6 +33,7 @@ import com.romanpulov.violetnote.service.LoaderService;
 import com.romanpulov.violetnote.service.LoaderServiceManager;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 import com.romanpulov.violetnote.view.helper.DisplayMessageHelper;
+import com.romanpulov.violetnote.view.helper.LoggerHelper;
 import com.romanpulov.violetnote.view.preference.BasicNoteGroupsPreferenceSetup;
 import com.romanpulov.violetnote.view.preference.CheckedUpdateIntervalPreferenceSetup;
 import com.romanpulov.violetnote.view.preference.CloudAccountPreferenceSetup;
@@ -144,6 +146,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         new CommonSourceTypePreferenceSetup(this, PREF_KEY_BASIC_NOTE_CLOUD_STORAGE, R.array.pref_cloud_storage_entries, DEFAULT_CLOUD_SOURCE_TYPE).execute();
         new CheckedUpdateIntervalPreferenceSetup(this).execute();
+
+        setupPrefLogging();
     }
 
     private boolean checkInternetConnection() {
@@ -476,6 +480,17 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         });
     }
 
+    private void setupPrefLogging() {
+        Preference pref = findPreference(PreferenceRepository.PREF_KEY_LOGGING);
+        if (pref instanceof CheckBoxPreference) {
+            pref.setOnPreferenceChangeListener((preference, newValue) -> {
+                if (newValue instanceof Boolean) {
+                    LoggerHelper.getInstance(requireContext()).setEnableLogging((Boolean)newValue);
+                }
+                return true;
+            });
+        }
+    }
 
     private LoaderService mBoundService;
     private boolean mIsBound;
