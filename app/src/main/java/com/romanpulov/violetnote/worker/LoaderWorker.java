@@ -7,7 +7,9 @@ import androidx.annotation.NonNull;
 import androidx.work.Constraints;
 import androidx.work.Data;
 import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.ExistingWorkPolicy;
 import androidx.work.NetworkType;
+import androidx.work.OneTimeWorkRequest;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 import androidx.work.Worker;
@@ -19,6 +21,8 @@ import com.romanpulov.library.common.network.NetworkUtils;
 import com.romanpulov.violetnote.view.helper.LoggerHelper;
 
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class LoaderWorker extends Worker {
@@ -37,17 +41,19 @@ public class LoaderWorker extends Worker {
         LoggerHelper.logContext(getApplicationContext(), TAG, "Work started");
         final String loaderClassName = getInputData().getString(WORKER_PARAM_LOADER_NAME);
 
+        boolean isSuccessful;
+
         if (!NetworkUtils.isNetworkAvailable(getApplicationContext())) {
             LoggerHelper.logContext(getApplicationContext(), TAG, "Internet connection not available");
-            return Result.failure();
+            isSuccessful = true;
         } else if (loaderClassName == null) {
             LoggerHelper.logContext(getApplicationContext(), TAG, "Loader class name not provided");
-            return Result.failure();
+            isSuccessful = false;
         } else {
             Loader loader = LoaderFactory.fromClassName(getApplicationContext(), loaderClassName);
             if (loader == null) {
                 LoggerHelper.logContext(getApplicationContext(), TAG, "Failed to create loader " + loaderClassName);
-                return Result.failure();
+                isSuccessful = false;
             } else {
                 LoggerHelper.logContext(getApplicationContext(), TAG, "Created loader " + loaderClassName);
                 try {
@@ -57,22 +63,23 @@ public class LoaderWorker extends Worker {
                     LoggerHelper.logContext(getApplicationContext(), TAG, "Error loading:" + e.getMessage());
                     e.printStackTrace();
                 }
-                return Result.success();
+                isSuccessful = true;
             }
         }
+        LoggerHelper.logContext(getApplicationContext(), TAG, "Successful:" + isSuccessful);
+
+        WorkManager.getInstance(getApplicationContext())
+                .getWorkInfoById(getId())
+                .addListener(() -> {
+                    LoggerHelper.logContext(getApplicationContext(), TAG, "Scheduling next execution");
+                    internalScheduleWorker(getApplicationContext(), loaderClassName);
+                    LoggerHelper.logContext(getApplicationContext(), TAG, "Scheduled next execution");
+                }, Executors.newFixedThreadPool(1));
+
+        return isSuccessful ? Result.success() : Result.failure();
     }
 
-    public static void scheduleWorker(Context context, String loaderClassName) {
-        // https://stackoverflow.com/questions/54456396/android-workmanager-doesnt-trigger-one-of-the-two-scheduled-workers
-        LoggerHelper.logContext(context, TAG, "Cancelling old works");
-        try {
-            WorkManager.getInstance(context).cancelAllWork().getResult().get();
-            WorkManager.getInstance(context).pruneWork().getResult().get();
-        } catch (InterruptedException | ExecutionException e) {
-            LoggerHelper.logContext(context, TAG, "Error cancelling old works:" + e.getMessage());
-            e.printStackTrace();
-        }
-
+    private static void internalScheduleWorker(Context context, String loaderClassName) {
         LoggerHelper.logContext(context, TAG, "Scheduling work");
 
         if (loaderClassName == null) {
@@ -83,6 +90,9 @@ public class LoaderWorker extends Worker {
             Constraints constraints = (new Constraints.Builder())
                     .setRequiredNetworkType(NetworkType.NOT_ROAMING)
                     .build();
+
+            /*
+
 
             PeriodicWorkRequest request = new PeriodicWorkRequest.Builder(LoaderWorker.class, 1, TimeUnit.HOURS)
                     .addTag(WORKER_TAG)
@@ -97,7 +107,39 @@ public class LoaderWorker extends Worker {
                             ExistingPeriodicWorkPolicy.REPLACE,
                             request
                     );
+
+             */
+
+            OneTimeWorkRequest oneTimeWorkRequest = new OneTimeWorkRequest.Builder(LoaderWorker.class)
+                    .addTag(WORKER_TAG)
+                    .setInputData(inputData)
+                    .setConstraints(constraints)
+                    .setInitialDelay(20, TimeUnit.MINUTES)
+                    .build();
+
+            WorkManager.getInstance(context)
+                    .enqueueUniqueWork(
+                            WORKER_NAME,
+                            ExistingWorkPolicy.KEEP,
+                            oneTimeWorkRequest
+                    );
+
+
             LoggerHelper.logContext(context, TAG, "Work scheduled");
         }
+    }
+
+    public static void scheduleWorker(Context context, String loaderClassName) {
+        // https://stackoverflow.com/questions/54456396/android-workmanager-doesnt-trigger-one-of-the-two-scheduled-workers
+        LoggerHelper.logContext(context, TAG, "Cancelling old works");
+        try {
+            WorkManager.getInstance(context).cancelAllWork().getResult().get();
+            WorkManager.getInstance(context).pruneWork().getResult().get();
+        } catch (InterruptedException | ExecutionException e) {
+            LoggerHelper.logContext(context, TAG, "Error cancelling old works:" + e.getMessage());
+            e.printStackTrace();
+        }
+
+        internalScheduleWorker(context, loaderClassName);
     }
 }
