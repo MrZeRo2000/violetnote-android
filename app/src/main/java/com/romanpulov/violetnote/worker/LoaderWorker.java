@@ -15,8 +15,10 @@ import androidx.work.WorkerParameters;
 
 import com.romanpulov.library.common.loader.core.Loader;
 import com.romanpulov.library.common.loader.core.LoaderFactory;
+import com.romanpulov.library.common.network.NetworkUtils;
 import com.romanpulov.violetnote.view.helper.LoggerHelper;
 
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 public class LoaderWorker extends Worker {
@@ -35,7 +37,10 @@ public class LoaderWorker extends Worker {
         LoggerHelper.logContext(getApplicationContext(), TAG, "Work started");
         final String loaderClassName = getInputData().getString(WORKER_PARAM_LOADER_NAME);
 
-        if (loaderClassName == null) {
+        if (!NetworkUtils.isNetworkAvailable(getApplicationContext())) {
+            LoggerHelper.logContext(getApplicationContext(), TAG, "Internet connection not available");
+            return Result.failure();
+        } else if (loaderClassName == null) {
             LoggerHelper.logContext(getApplicationContext(), TAG, "Loader class name not provided");
             return Result.failure();
         } else {
@@ -48,17 +53,26 @@ public class LoaderWorker extends Worker {
                 try {
                     loader.load();
                     LoggerHelper.logContext(getApplicationContext(), TAG, "Loaded successfully");
-                    return Result.success();
                 } catch (Exception e) {
                     LoggerHelper.logContext(getApplicationContext(), TAG, "Error loading:" + e.getMessage());
                     e.printStackTrace();
-                    return Result.failure();
                 }
+                return Result.success();
             }
         }
     }
 
     public static void scheduleWorker(Context context, String loaderClassName) {
+        // https://stackoverflow.com/questions/54456396/android-workmanager-doesnt-trigger-one-of-the-two-scheduled-workers
+        LoggerHelper.logContext(context, TAG, "Cancelling old works");
+        try {
+            WorkManager.getInstance(context).cancelAllWork().getResult().get();
+            WorkManager.getInstance(context).pruneWork().getResult().get();
+        } catch (InterruptedException | ExecutionException e) {
+            LoggerHelper.logContext(context, TAG, "Error cancelling old works:" + e.getMessage());
+            e.printStackTrace();
+        }
+
         LoggerHelper.logContext(context, TAG, "Scheduling work");
 
         if (loaderClassName == null) {
@@ -67,7 +81,6 @@ public class LoaderWorker extends Worker {
 
             Data inputData = (new Data.Builder()).putString(WORKER_PARAM_LOADER_NAME, loaderClassName).build();
             Constraints constraints = (new Constraints.Builder())
-                    .setRequiredNetworkType(NetworkType.CONNECTED)
                     .setRequiredNetworkType(NetworkType.NOT_ROAMING)
                     .build();
 
