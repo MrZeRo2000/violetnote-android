@@ -12,8 +12,11 @@ import android.util.Log;
 import com.romanpulov.library.common.loader.core.Loader;
 import com.romanpulov.library.common.loader.core.LoaderFactory;
 import com.romanpulov.violetnote.loader.helper.LoaderNotificationHelper;
+import com.romanpulov.violetnote.view.helper.LoggerHelper;
 
 import static com.romanpulov.violetnote.common.NotificationRepository.NOTIFICATION_ID_LOADER;
+
+import java.util.logging.Logger;
 
 /**
  * Loader service
@@ -27,18 +30,13 @@ public class LoaderService extends IntentService {
     public static final String SERVICE_RESULT_LOADER_NAME = "LoaderServiceResult.LoaderName";
     public static final String SERVICE_RESULT_ERROR_MESSAGE = "LoaderServiceResult.ErrorMessage";
 
-    private static final boolean DEBUGGING = false;
-
-    private static void log(String message) {
-        if (DEBUGGING)
-            Log.d("LoaderService", message);
-    }
+    private static final String TAG = LoaderService.class.getSimpleName();
 
     private String mLoaderClassName;
 
     public LoaderService() {
         super("Loader service");
-        log("Started service");
+        LoggerHelper.logContext(getApplicationContext(), TAG, "Started service");
     }
 
     @Override
@@ -49,24 +47,25 @@ public class LoaderService extends IntentService {
             Bundle bundle = intent.getBundleExtra(SERVICE_PARAM_BUNDLE);
 
             String errorMessage = null;
-            log("onHandleEvent : " + mLoaderClassName);
+            LoggerHelper.logContext(getApplicationContext(), TAG, "onHandleEvent : " + mLoaderClassName);
             if (mLoaderClassName == null) {
                 errorMessage = "Class name not set up for loader";
             } else {
                 try {
                     Loader loader = LoaderFactory.fromClassName(this, mLoaderClassName);
                     if (loader != null) {
-                        log("created loader : " + mLoaderClassName);
+                        LoggerHelper.logContext(getApplicationContext(), TAG, "created loader : " + mLoaderClassName);
                         //Thread.sleep(5000);
                         loader.setBundle(bundle);
                         loader.load();
-                    } else
+                    } else {
                         errorMessage = "Failed to create loader : " + mLoaderClassName;
+                    }
                 } catch (Exception e) {
                     errorMessage = e.getMessage();
                 }
             }
-            log("onHandleEvent completed");
+            LoggerHelper.logContext(getApplicationContext(), TAG, "onHandleEvent completed");
             Intent resultIntent = new Intent(SERVICE_RESULT_INTENT_NAME);
             resultIntent.putExtra(SERVICE_RESULT_LOADER_NAME, mLoaderClassName);
 
@@ -81,19 +80,19 @@ public class LoaderService extends IntentService {
 
     @Override
     public void onStart(@Nullable Intent intent, int startId) {
-        log("onStart service");
+        LoggerHelper.logContext(getApplicationContext(), TAG, "onStart service");
         super.onStart(intent, startId);
     }
 
     @Override
     public void onCreate() {
-        log("onCreate service");
+        LoggerHelper.logContext(getApplicationContext(), TAG, "onCreate service");
         super.onCreate();
     }
 
     @Override
     public void onDestroy() {
-        log("Destroying service");
+        LoggerHelper.logContext(getApplicationContext(), TAG, "Destroying service");
         super.onDestroy();
     }
 
@@ -107,7 +106,7 @@ public class LoaderService extends IntentService {
 
     @Override
     public IBinder onBind(Intent intent) {
-        log("onBind service");
+        LoggerHelper.logContext(getApplicationContext(), TAG, "onBind service");
         return mBinder;
     }
 

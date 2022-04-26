@@ -13,28 +13,22 @@ import com.romanpulov.library.common.service.ServiceUtils;
 
 public class LoaderServiceManager {
 
-    private final Context mContext;
-
-    public LoaderServiceManager(Context context) {
-        mContext = context;
-    }
-
-    public boolean startLoader(String loaderClassName, Bundle bundle) {
-        if (isLoaderServiceRunning()) {
+    public static boolean startLoader(Context context, String loaderClassName, Bundle bundle) {
+        if (isLoaderServiceRunning(context)) {
             return false;
         }
         else {
-            Intent serviceIntent = new Intent(mContext, LoaderService.class);
+            Intent serviceIntent = new Intent(context, LoaderService.class);
             serviceIntent.putExtra(LoaderService.SERVICE_PARAM_LOADER_NAME, loaderClassName);
             if (bundle != null) {
                 serviceIntent.putExtra(LoaderService.SERVICE_PARAM_BUNDLE, bundle);
             }
-            mContext.startService(serviceIntent);
+            context.startService(serviceIntent);
             return true;
         }
     }
 
-    public boolean isLoaderServiceRunning() {
-        return ServiceUtils.isServiceRunning(mContext, LoaderService.class.getName());
+    public static boolean isLoaderServiceRunning(Context context) {
+        return ServiceUtils.isServiceRunning(context, LoaderService.class.getName());
     }
 }

@@ -10,6 +10,9 @@ import com.romanpulov.library.common.logger.BaseLoggerHelper;
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 
 public class LoggerHelper extends BaseLoggerHelper {
+    static {
+        BaseLoggerHelper.configure("VioletNote", "Log");
+    }
 
     @SuppressLint("StaticFieldLeak")
     private static LoggerHelper INSTANCE;

@@ -129,17 +129,21 @@ public class LoaderWorker extends Worker {
         }
     }
 
-    public static void scheduleWorker(Context context, String loaderClassName) {
+    public static void cancelAllWorkers(Context context) {
         // https://stackoverflow.com/questions/54456396/android-workmanager-doesnt-trigger-one-of-the-two-scheduled-workers
         LoggerHelper.logContext(context, TAG, "Cancelling old works");
         try {
             WorkManager.getInstance(context).cancelAllWork().getResult().get();
             WorkManager.getInstance(context).pruneWork().getResult().get();
+            LoggerHelper.logContext(context, TAG, "Works cancelled successfully");
         } catch (InterruptedException | ExecutionException e) {
             LoggerHelper.logContext(context, TAG, "Error cancelling old works:" + e.getMessage());
             e.printStackTrace();
         }
+    }
 
+    public static void scheduleWorker(Context context, String loaderClassName) {
+        cancelAllWorkers(context);
         internalScheduleWorker(context, loaderClassName);
     }
 }

@@ -46,7 +46,6 @@ import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 import com.romanpulov.violetnote.view.preference.processor.PreferenceRestoreCloudProcessor;
 import com.romanpulov.violetnote.view.preference.SourcePathPreferenceSetup;
 import com.romanpulov.violetnote.view.preference.processor.PreferenceRestoreLocalProcessor;
-import com.romanpulov.violetnote.worker.LoaderWorker;
 
 import java.io.File;
 import java.util.HashMap;
@@ -72,7 +71,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     private final Map<String, PreferenceLoaderProcessor> mPreferenceLoadProcessors = new HashMap<>();
 
-    private LoaderServiceManager mLoaderServiceManager;
     private final BroadcastReceiver mLoaderServiceBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -161,7 +159,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     private void startDocumentLoad(String className) {
         mPreferenceDocumentLoaderProcessor.loaderPreExecute();
-        mLoaderServiceManager.startLoader(className, null);
+        LoaderServiceManager.startLoader(requireContext(), className, null);
     }
 
     void executeLocalDocumentLoad() {
@@ -216,22 +214,18 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         final SharedPreferences sharedPref = pref.getSharedPreferences();
         pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
-            public boolean onPreferenceClick(Preference preference) {
-                if (mLoaderServiceManager == null) {
-                    return true;
-                } else if (!sharedPref.contains(PreferenceRepository.PREF_KEY_SOURCE_PATH)) {
+            public boolean onPreferenceClick(@NonNull Preference preference) {
+                if (sharedPref != null && !sharedPref.contains(PreferenceRepository.PREF_KEY_SOURCE_PATH)) {
                     DisplayMessageHelper.displayErrorMessage(requireActivity(), getText(R.string.error_load_remote_path_empty));
-                    return true;
                 }
                 else {
-                    if (mLoaderServiceManager.isLoaderServiceRunning())
-                        DisplayMessageHelper.displayInfoMessage(getActivity(), getText(R.string.error_load_process_running));
+                    if (LoaderServiceManager.isLoaderServiceRunning(requireContext()))
+                        DisplayMessageHelper.displayInfoMessage(requireActivity(), getText(R.string.error_load_process_running));
                     else {
                         executeDocumentLoad();
                     }
-
-                    return true;
                 }
+                return true;
             }
         });
     }
@@ -295,17 +289,20 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     String backupResult = DBStorageManager.getDBBackupManager(getActivity()).createLocalBackup();
 
                     if (backupResult == null)
-                        DisplayMessageHelper.displayErrorMessage(getActivity(), getString(R.string.error_backup));
+                        DisplayMessageHelper.displayErrorMessage(requireActivity(), getString(R.string.error_backup));
                     else {
                         mPreferenceBackupCloudProcessor.loaderPreExecute();
-                        mLoaderServiceManager.startLoader(cloudAccountFacade.getBackupLoaderClassName(), null);
-                        LoaderWorker.scheduleWorker(getContext(), cloudAccountFacade.getSilentBackupLoaderClassName());
+                        LoaderServiceManager.startLoader(
+                                requireContext(),
+                                cloudAccountFacade.getBackupLoaderClassName(),
+                                null
+                        );
                     }
                 }
 
                 @Override
                 public void onAccountSetupFailure(String errorText) {
-                    DisplayMessageHelper.displayErrorMessage(getActivity(), errorText);
+                    DisplayMessageHelper.displayErrorMessage(requireActivity(), errorText);
                     mPreferenceBackupCloudProcessor.loaderPostExecute(errorText);
                 }
             });
@@ -332,12 +329,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 if (!checkInternetConnection())
                     return true;
 
-                if (mLoaderServiceManager != null) {
-                    if (mLoaderServiceManager.isLoaderServiceRunning())
-                        DisplayMessageHelper.displayErrorMessage(requireActivity(), getText(R.string.error_load_process_running));
-                    else {
-                        executeCloudBackup();
-                    }
+                if (LoaderServiceManager.isLoaderServiceRunning(requireContext()))
+                    DisplayMessageHelper.displayErrorMessage(requireActivity(), getText(R.string.error_load_process_running));
+                else {
+                    executeCloudBackup();
                 }
                 return true;
             }
@@ -359,7 +354,11 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 @Override
                 public void onAccountSetupSuccess() {
                     mPreferenceRestoreCloudProcessor.loaderPreExecute();
-                    mLoaderServiceManager.startLoader(cloudAccountFacade.getRestoreLoaderClassName(), null);
+                    LoaderServiceManager.startLoader(
+                            requireContext(),
+                            cloudAccountFacade.getRestoreLoaderClassName(),
+                            null
+                    );
                 }
 
                 @Override
@@ -391,25 +390,20 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 if (!checkInternetConnection())
                     return true;
 
-                if (mLoaderServiceManager == null)
-                    return true;
+                if (LoaderServiceManager.isLoaderServiceRunning(requireContext()))
+                    DisplayMessageHelper.displayErrorMessage(requireActivity(), getText(R.string.error_load_process_running));
                 else {
-
-                    if (mLoaderServiceManager.isLoaderServiceRunning())
-                        DisplayMessageHelper.displayErrorMessage(requireActivity(), getText(R.string.error_load_process_running));
-                    else {
-                        final AlertDialog.Builder alert = new AlertDialog.Builder(requireActivity(), R.style.AlertDialogTheme);
-                        alert
-                                .setTitle(R.string.ui_question_are_you_sure)
-                                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        executeCloudRestore();
-                                    }
-                                })
-                                .setNegativeButton(R.string.cancel, null)
-                                .show();
-                    }
+                    final AlertDialog.Builder alert = new AlertDialog.Builder(requireActivity(), R.style.AlertDialogTheme);
+                    alert
+                            .setTitle(R.string.ui_question_are_you_sure)
+                            .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    executeCloudRestore();
+                                }
+                            })
+                            .setNegativeButton(R.string.cancel, null)
+                            .show();
                 }
 
                 return true;
@@ -419,7 +413,11 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     void executeLocalBackup() {
         mPreferenceBackupLocalProcessor.loaderPreExecute();
-        mLoaderServiceManager.startLoader(PreferenceBackupLocalProcessor.getLoaderClass().getName(), null);
+        LoaderServiceManager.startLoader(
+                requireContext(),
+                PreferenceBackupLocalProcessor.getLoaderClass().getName(),
+                null
+        );
     }
 
     private void setupPrefLocalBackupLoadService() {
@@ -428,54 +426,50 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         Preference pref = Objects.requireNonNull(findPreference(PreferenceRepository.PREF_KEY_BASIC_NOTE_LOCAL_BACKUP));
         pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
-            public boolean onPreferenceClick(Preference preference) {
-                if (mLoaderServiceManager == null)
-                    return true;
+            public boolean onPreferenceClick(@NonNull Preference preference) {
+                if (LoaderServiceManager.isLoaderServiceRunning(requireContext()))
+                    DisplayMessageHelper.displayErrorMessage(requireActivity(), getText(R.string.error_load_process_running));
                 else {
-                    if (mLoaderServiceManager.isLoaderServiceRunning())
-                        DisplayMessageHelper.displayErrorMessage(requireActivity(), getText(R.string.error_load_process_running));
-                    else {
-                        executeLocalBackup();
-                    }
-                    return true;
+                    executeLocalBackup();
                 }
+                return true;
             }
         });
     }
 
     public void executeLocalRestore() {
         mPreferenceRestoreLocalProcessor.loaderPreExecute();
-        mLoaderServiceManager.startLoader(PreferenceRestoreLocalProcessor.getLoaderClass().getName(), null);
+        LoaderServiceManager.startLoader(
+                requireContext(),
+                PreferenceRestoreLocalProcessor.getLoaderClass().getName(),
+                null
+        );
     }
 
     private void setupPrefLocalRestoreLoadService() {
         PreferenceRepository.updatePreferenceKeySummary(this, PreferenceRepository.PREF_KEY_BASIC_NOTE_LOCAL_RESTORE, PreferenceRepository.PREF_LOAD_CURRENT_VALUE);
 
         Preference pref = findPreference(PreferenceRepository.PREF_KEY_BASIC_NOTE_LOCAL_RESTORE);
-        pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        Objects.requireNonNull(pref).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
-            public boolean onPreferenceClick(Preference preference) {
-                if (mLoaderServiceManager == null)
-                    return true;
+            public boolean onPreferenceClick(@NonNull Preference preference) {
+                if (LoaderServiceManager.isLoaderServiceRunning(requireContext()))
+                    DisplayMessageHelper.displayErrorMessage(requireActivity(), getText(R.string.error_load_process_running));
                 else {
-                    if (mLoaderServiceManager.isLoaderServiceRunning())
-                        DisplayMessageHelper.displayErrorMessage(requireActivity(), getText(R.string.error_load_process_running));
-                    else {
 
-                        final AlertDialog.Builder alert = new AlertDialog.Builder(requireActivity(), R.style.AlertDialogTheme);
-                        alert
-                                .setTitle(R.string.ui_question_are_you_sure)
-                                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        executeLocalRestore();
-                                    }
-                                })
-                                .setNegativeButton(R.string.cancel, null)
-                                .show();
-                    }
-                    return true;
+                    final AlertDialog.Builder alert = new AlertDialog.Builder(requireActivity(), R.style.AlertDialogTheme);
+                    alert
+                            .setTitle(R.string.ui_question_are_you_sure)
+                            .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    executeLocalRestore();
+                                }
+                            })
+                            .setNegativeButton(R.string.cancel, null)
+                            .show();
                 }
+                return true;
             }
         });
     }
@@ -530,7 +524,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     void doUnbindService() {
         if (mIsBound) {
             // Detach our existing connection.
-            getActivity().unbindService(mConnection);
+            requireActivity().unbindService(mConnection);
             mIsBound = false;
         }
     }
@@ -539,13 +533,12 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         LocalBroadcastManager.getInstance(context).registerReceiver(mLoaderServiceBroadcastReceiver, new IntentFilter(LoaderService.SERVICE_RESULT_INTENT_NAME));
-        mLoaderServiceManager = new LoaderServiceManager(context);
         doBindService(context);
     }
 
     @Override
     public void onDetach() {
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mLoaderServiceBroadcastReceiver);
+        LocalBroadcastManager.getInstance(requireActivity()).unregisterReceiver(mLoaderServiceBroadcastReceiver);
         doUnbindService();
         super.onDetach();
     }
@@ -553,7 +546,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     @Override
     public void onResume() {
         super.onResume();
-        DropboxHelper.getInstance(getActivity().getApplicationContext()).refreshAccessToken();
+        DropboxHelper.getInstance(requireContext()).refreshAccessToken();
     }
 
     @Override

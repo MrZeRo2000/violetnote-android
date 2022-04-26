@@ -132,6 +132,20 @@ public class PreferenceRepository {
     }
 
     /**
+     * Gets preference long value
+     * @param context Context
+     * @param preferenceKey preference key
+     * @param defaultValue  default value
+     */
+    private static long getPreferenceLong(Context context, String preferenceKey, long defaultValue) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getLong(preferenceKey, defaultValue);
+    }
+
+    public static int getPreferenceCloudType(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getInt(PREF_KEY_BASIC_NOTE_CLOUD_STORAGE, DEFAULT_CLOUD_SOURCE_TYPE);
+    }
+
+    /**
      * Updates last loaded time by preference key
      * @param preferenceFragment PreferenceFragment
      * @param preferenceKey preference key
@@ -139,6 +153,15 @@ public class PreferenceRepository {
      */
     public static void updatePreferenceKeySummary(PreferenceFragmentCompat preferenceFragment, String preferenceKey, long value) {
         updateLoadPreferenceSummary(preferenceFragment, preferenceKey, PREF_KEYS_LAST_LOADED.get(preferenceKey), value);
+    }
+
+    /**
+     * Gets preference last loaded time
+     * @param context Context
+     * @param preferenceKey preference key
+     */
+    public static long getPreferenceKeyLastLoadedTime(Context context, String preferenceKey) {
+       return getPreferenceLong(context, PREF_KEYS_LAST_LOADED.get(preferenceKey), PREF_LOAD_NEVER);
     }
 
     /**
