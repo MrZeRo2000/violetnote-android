@@ -114,7 +114,7 @@ public class LoaderWorker extends Worker {
                     .addTag(WORKER_TAG)
                     .setInputData(inputData)
                     .setConstraints(constraints)
-                    .setInitialDelay(20, TimeUnit.MINUTES)
+                    .setInitialDelay(1, TimeUnit.HOURS)
                     .build();
 
             WorkManager.getInstance(context)
