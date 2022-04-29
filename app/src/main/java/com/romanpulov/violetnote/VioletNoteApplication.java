@@ -50,11 +50,8 @@ public class VioletNoteApplication extends Application {
                 if (NetworkUtils.isNetworkAvailable(getApplicationContext())) {
                     LoggerHelper.logContext(getApplicationContext(), TAG, "Internet available, starting");
                     final CloudAccountFacade cloudAccountFacade = CloudAccountFacadeFactory.fromCloudSourceType(cloudType);
-                    LoaderServiceManager.startLoader(
-                            getApplicationContext(),
-                            cloudAccountFacade.getSilentBackupLoaderClassName(),
-                            null
-                    );
+
+                    LoaderWorker.scheduleWorker(getApplicationContext(), cloudAccountFacade.getSilentBackupLoaderClassName());
                 } else {
                     LoggerHelper.logContext(getApplicationContext(), TAG, "Internet not available");
                 }

@@ -15,6 +15,9 @@ import androidx.work.WorkManager;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.internal.Storage;
 import com.romanpulov.library.common.loader.core.Loader;
 import com.romanpulov.library.common.loader.core.LoaderFactory;
 import com.romanpulov.library.common.network.NetworkUtils;
@@ -68,6 +71,8 @@ public class LoaderWorker extends Worker {
         }
         LoggerHelper.logContext(getApplicationContext(), TAG, "Successful:" + isSuccessful);
 
+        /*
+
         WorkManager.getInstance(getApplicationContext())
                 .getWorkInfoById(getId())
                 .addListener(() -> {
@@ -75,6 +80,8 @@ public class LoaderWorker extends Worker {
                     internalScheduleWorker(getApplicationContext(), loaderClassName);
                     LoggerHelper.logContext(getApplicationContext(), TAG, "Scheduled next execution");
                 }, Executors.newFixedThreadPool(1));
+
+         */
 
         return isSuccessful ? Result.success() : Result.failure();
     }
@@ -114,7 +121,6 @@ public class LoaderWorker extends Worker {
                     .addTag(WORKER_TAG)
                     .setInputData(inputData)
                     .setConstraints(constraints)
-                    .setInitialDelay(1, TimeUnit.HOURS)
                     .build();
 
             WorkManager.getInstance(context)
