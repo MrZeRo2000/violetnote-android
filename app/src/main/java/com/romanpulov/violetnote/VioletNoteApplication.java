@@ -6,7 +6,6 @@ import android.net.ConnectivityManager;
 import com.romanpulov.library.common.network.NetworkUtils;
 import com.romanpulov.violetnote.cloud.CloudAccountFacade;
 import com.romanpulov.violetnote.cloud.CloudAccountFacadeFactory;
-import com.romanpulov.violetnote.service.LoaderServiceManager;
 import com.romanpulov.violetnote.view.helper.LoggerHelper;
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 import com.romanpulov.violetnote.worker.LoaderWorker;
@@ -29,8 +28,7 @@ public class VioletNoteApplication extends Application {
 
     private void setupNetworkMonitoring() {
 
-        ConnectivityManager connectivityManager =
-                (ConnectivityManager) (getApplicationContext().getSystemService(ConnectivityManager.class));
+        ConnectivityManager connectivityManager = getApplicationContext().getSystemService(ConnectivityManager.class);
 
         NetworkUtils.ConnectivityMonitor connectivityMonitor = new NetworkUtils.ConnectivityMonitor();
         connectivityMonitor.registerOnInternetAvailableListener(networkCapabilities -> {
@@ -43,7 +41,7 @@ public class VioletNoteApplication extends Application {
             long daysSinceLastBackup = TimeUnit.DAYS.convert(System.currentTimeMillis() - lastLoadedTime, TimeUnit.MILLISECONDS);
             LoggerHelper.logContext(getApplicationContext(), TAG, "Since last backup:" + daysSinceLastBackup);
 
-            if (daysSinceLastBackup > 1) {
+            if (daysSinceLastBackup > 6) {
                 int cloudType = PreferenceRepository.getPreferenceCloudType(getApplicationContext());
                 LoggerHelper.logContext(getApplicationContext(), TAG, "Cloud type:" + cloudType);
 
