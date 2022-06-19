@@ -68,7 +68,7 @@ public class PassDataA implements Parcelable, PasswordProvider {
         final int max_attr_count = 2;
 
         Set<PassCategoryA> categorySet = new HashSet<>();
-        List<PassNoteA> noteList = null;
+        List<PassNoteA> noteList = new ArrayList<>();
 
         for (PassNoteA note : source.getPassNoteData()) {
             int attrCount = 0;
@@ -79,8 +79,6 @@ public class PassDataA implements Parcelable, PasswordProvider {
                     //check if matches expression
                     String av = note.getNoteAttr().get(a);
                     if ((av != null) && (av.matches(searchRegExpString))) {
-                        if (noteList == null)
-                            noteList = new ArrayList<>();
                         noteList.add(note);
                         categorySet.add(note.getCategory());
                         break;
@@ -93,9 +91,11 @@ public class PassDataA implements Parcelable, PasswordProvider {
             }
         }
 
-        List<PassCategoryA> categoryList = null;
-        if (noteList != null) {
+        List<PassCategoryA> categoryList;
+        if (noteList.size() > 0) {
             categoryList = new ArrayList<>(categorySet);
+        } else {
+            categoryList = new ArrayList<>();
         }
 
         PassDataA searchInstance = new PassDataA(source.mPassword);

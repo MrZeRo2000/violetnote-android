@@ -135,9 +135,11 @@ public class PassDataViewModel extends AndroidViewModel {
         return mPassDataSearchResult;
     }
 
-    public void searchPassData(String searchString, boolean isSearchSystem, boolean isSearchUser) {
+    public boolean searchPassData(String searchString, boolean isSearchSystem, boolean isSearchUser) {
         mPassDataSearch = new PassDataSearch(PassDataA.newSearchInstance(mPassDataLoaded.getPassData(), searchString, isSearchSystem, isSearchUser), searchString);
-        mPassDataSearchResult.setValue(new SearchPassDataResult(mPassDataSearch.getPassData(), null, mPassDataSearch.getSearchText()));
+        SearchPassDataResult searchPassDataResult = new SearchPassDataResult(mPassDataSearch.getPassData(), null, mPassDataSearch.getSearchText());
+        mPassDataSearchResult.setValue(searchPassDataResult);
+        return (searchPassDataResult.getPassData() != null) && (searchPassDataResult.getPassData().getPassNoteData().size() > 0);
     }
 
     public void loadSearchPassData() {
