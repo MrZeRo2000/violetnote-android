@@ -97,29 +97,28 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
     protected boolean processMoveMenuItemClick(MenuItem menuItem) {
         List<BasicNoteItemA> selectedNoteItems = getSelectedNoteItems();
 
-        if (selectedNoteItems.size() > 0) {
-            switch (menuItem.getItemId()) {
-                case R.id.move_up:
-                    performMoveAction(new BasicItemsMoveUpAction<>(mBasicNoteData, selectedNoteItems), selectedNoteItems);
-                    return true;
-                case R.id.move_top:
-                    performMoveAction(new BasicItemsMoveTopAction<>(mBasicNoteData, selectedNoteItems), selectedNoteItems);
-                    return true;
-                case R.id.move_down:
-                    performMoveAction(new BasicItemsMoveDownAction<>(mBasicNoteData, selectedNoteItems), selectedNoteItems);
-                    return true;
-                case R.id.move_bottom:
-                    performMoveAction(new BasicItemsMoveBottomAction<>(mBasicNoteData, selectedNoteItems), selectedNoteItems);
-                    return true;
-                case R.id.priority_up:
-                    performMoveAction(new BasicItemsMovePriorityUpAction<>(mBasicNoteData, selectedNoteItems), selectedNoteItems);
-                    return true;
-                case R.id.priority_down:
-                    performMoveAction(new BasicItemsMovePriorityDownAction<>(mBasicNoteData, selectedNoteItems), selectedNoteItems);
-                    return true;
-                default:
-                    return false;
+        if (!selectedNoteItems.isEmpty()) {
+            int itemId = menuItem.getItemId();
+            if (itemId == R.id.move_up) {
+                performMoveAction(new BasicItemsMoveUpAction<>(mBasicNoteData, selectedNoteItems), selectedNoteItems);
+                return true;
+            } else if (itemId == R.id.move_top) {
+                performMoveAction(new BasicItemsMoveTopAction<>(mBasicNoteData, selectedNoteItems), selectedNoteItems);
+                return true;
+            } else if (itemId == R.id.move_down) {
+                performMoveAction(new BasicItemsMoveDownAction<>(mBasicNoteData, selectedNoteItems), selectedNoteItems);
+                return true;
+            } else if (itemId == R.id.move_bottom) {
+                performMoveAction(new BasicItemsMoveBottomAction<>(mBasicNoteData, selectedNoteItems), selectedNoteItems);
+                return true;
+            } else if (itemId == R.id.priority_up) {
+                performMoveAction(new BasicItemsMovePriorityUpAction<>(mBasicNoteData, selectedNoteItems), selectedNoteItems);
+                return true;
+            } else if (itemId == R.id.priority_down) {
+                performMoveAction(new BasicItemsMovePriorityDownAction<>(mBasicNoteData, selectedNoteItems), selectedNoteItems);
+                return true;
             }
+            return false;
         } else
             return false;
     }

@@ -82,23 +82,22 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
     protected boolean processMoveMenuItemClick(MenuItem menuItem) {
         List<BasicNoteGroupA> selectedNoteItems = BasicEntityNoteSelectionPosA.getItemsByPositions(mBasicNoteGroupList, mRecyclerViewSelector.getSelectedItems());
 
-        if (selectedNoteItems.size() > 0) {
-            switch (menuItem.getItemId()) {
-                case R.id.move_up:
-                    performMoveAction(new BasicItemsMoveUpAction<>(mBasicNoteGroupList, selectedNoteItems), selectedNoteItems);
-                    return true;
-                case R.id.move_top:
-                    performMoveAction(new BasicItemsMoveTopAction<>(mBasicNoteGroupList, selectedNoteItems), selectedNoteItems);
-                    return true;
-                case R.id.move_down:
-                    performMoveAction(new BasicItemsMoveDownAction<>(mBasicNoteGroupList, selectedNoteItems), selectedNoteItems);
-                    return true;
-                case R.id.move_bottom:
-                    performMoveAction(new BasicItemsMoveBottomAction<>(mBasicNoteGroupList, selectedNoteItems), selectedNoteItems);
-                    return true;
-                default:
-                    return false;
+        if (!selectedNoteItems.isEmpty()) {
+            int itemId = menuItem.getItemId();
+            if (itemId == R.id.move_up) {
+                performMoveAction(new BasicItemsMoveUpAction<>(mBasicNoteGroupList, selectedNoteItems), selectedNoteItems);
+                return true;
+            } else if (itemId == R.id.move_top) {
+                performMoveAction(new BasicItemsMoveTopAction<>(mBasicNoteGroupList, selectedNoteItems), selectedNoteItems);
+                return true;
+            } else if (itemId == R.id.move_down) {
+                performMoveAction(new BasicItemsMoveDownAction<>(mBasicNoteGroupList, selectedNoteItems), selectedNoteItems);
+                return true;
+            } else if (itemId == R.id.move_bottom) {
+                performMoveAction(new BasicItemsMoveBottomAction<>(mBasicNoteGroupList, selectedNoteItems), selectedNoteItems);
+                return true;
             }
+            return false;
         } else
             return false;
     }
@@ -254,25 +253,11 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
 
             //int selectedItemPos = mRecyclerViewSelector.getSelectedItemPos();
             if (selectedNoteItems.size() == 1) {
-                switch (item.getItemId()) {
-                    case R.id.delete:
-                        performDeleteAction(mode, selectedNoteItems);
-                        break;
-                    case R.id.edit:
-                        performEditAction(mode, selectedNoteItems);
-                        break;
-                    case R.id.move_up:
-                        //performMoveAction(new BasicItemsMoveUpAction<BasicNoteA>(), selectedNoteItems);
-                        break;
-                    case R.id.move_top:
-                        //performMoveAction(new BasicItemsMoveTopAction<BasicNoteA>(), selectedNoteItems);
-                        break;
-                    case R.id.move_down:
-                        //performMoveAction(new BasicItemsMoveDownAction<BasicNoteA>(), selectedNoteItems);
-                        break;
-                    case R.id.move_bottom:
-                        //performMoveAction(new BasicItemsMoveBottomAction<BasicNoteA>(), selectedNoteItems);
-                        break;
+                int itemId = item.getItemId();
+                if (itemId == R.id.delete) {
+                    performDeleteAction(mode, selectedNoteItems);
+                } else if (itemId == R.id.edit) {
+                    performEditAction(mode, selectedNoteItems);
                 }
             }
             return false;

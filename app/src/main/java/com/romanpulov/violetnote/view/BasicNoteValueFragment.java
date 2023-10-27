@@ -173,19 +173,15 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             List<BasicNoteValueA> selectedNoteItems = getSelectedNoteItems();
 
-            if (selectedNoteItems.size() > 0) {
-                switch (item.getItemId()) {
-                    case R.id.select_all:
-                        performSelectAll();
-                        break;
-                    case R.id.delete:
-                        performDeleteAction(mode, selectedNoteItems);
-                        hideAddLayout();
-                        break;
-                    case R.id.edit:
-                        //performEditAction(mode, selectedNoteItems.get(0));
-                        mInputActionHelper.showLayout(selectedNoteItems.get(0).getValue(), InputActionHelper.INPUT_ACTION_TYPE_EDIT);
-                        break;
+            if (!selectedNoteItems.isEmpty()) {
+                int itemId = item.getItemId();
+                if (itemId == R.id.select_all) {
+                    performSelectAll();
+                } else if (itemId == R.id.delete) {
+                    performDeleteAction(mode, selectedNoteItems);
+                    hideAddLayout();
+                } else if (itemId == R.id.edit) {//performEditAction(mode, selectedNoteItems.get(0));
+                    mInputActionHelper.showLayout(selectedNoteItems.get(0).getValue(), InputActionHelper.INPUT_ACTION_TYPE_EDIT);
                 }
             }
             return false;

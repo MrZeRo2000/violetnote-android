@@ -102,20 +102,20 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
         List<BasicNoteA> selectedNotes = getSelectedNotes();
 
         //int selectedItemPos = mRecyclerViewSelector.getSelectedItemPos();
-        if (selectedNotes.size() > 0) {
-            switch (menuItem.getItemId()) {
-                case R.id.move_up:
-                    performMoveAction(new BasicItemsMoveUpAction<>(mNoteGroup, selectedNotes), selectedNotes);
-                    return true;
-                case R.id.move_top:
-                    performMoveAction(new BasicItemsMoveTopAction<>(mNoteGroup, selectedNotes), selectedNotes);
-                    return true;
-                case R.id.move_down:
-                    performMoveAction(new BasicItemsMoveDownAction<>(mNoteGroup, selectedNotes), selectedNotes);
-                    return true;
-                case R.id.move_bottom:
-                    performMoveAction(new BasicItemsMoveBottomAction<>(mNoteGroup, selectedNotes), selectedNotes);
-                    return true;
+        if (!selectedNotes.isEmpty()) {
+            int itemId = menuItem.getItemId();
+            if (itemId == R.id.move_up) {
+                performMoveAction(new BasicItemsMoveUpAction<>(mNoteGroup, selectedNotes), selectedNotes);
+                return true;
+            } else if (itemId == R.id.move_top) {
+                performMoveAction(new BasicItemsMoveTopAction<>(mNoteGroup, selectedNotes), selectedNotes);
+                return true;
+            } else if (itemId == R.id.move_down) {
+                performMoveAction(new BasicItemsMoveDownAction<>(mNoteGroup, selectedNotes), selectedNotes);
+                return true;
+            } else if (itemId == R.id.move_bottom) {
+                performMoveAction(new BasicItemsMoveBottomAction<>(mNoteGroup, selectedNotes), selectedNotes);
+                return true;
             }
         }
         return false;
@@ -298,22 +298,19 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             List<BasicNoteA> selectedNotes = getSelectedNotes();
 
-            if (selectedNotes.size() > 0) {
+            if (!selectedNotes.isEmpty()) {
                 if ((item.getGroupId() == MENU_GROUP_OTHER_ITEMS) && (mRelatedNoteGroupList != null)) {
                     // move to other items
                     BasicNoteGroupA otherNoteGroup = mRelatedNoteGroupList.get(item.getItemId());
                     performMoveToOtherNoteGroupAction(mode, selectedNotes, otherNoteGroup);
                 } else {
-                    switch (item.getItemId()) {
-                        case R.id.delete:
-                            performDeleteAction(mode, selectedNotes);
-                            break;
-                        case R.id.edit:
-                            mInputActionHelper.showLayout(selectedNotes.get(0).getTitle(), InputActionHelper.INPUT_ACTION_TYPE_EDIT);
-                            break;
-                        case R.id.duplicate:
-                            performDuplicateAction(mode, selectedNotes.get(0));
-                            break;
+                    int itemId = item.getItemId();
+                    if (itemId == R.id.delete) {
+                        performDeleteAction(mode, selectedNotes);
+                    } else if (itemId == R.id.edit) {
+                        mInputActionHelper.showLayout(selectedNotes.get(0).getTitle(), InputActionHelper.INPUT_ACTION_TYPE_EDIT);
+                    } else if (itemId == R.id.duplicate) {
+                        performDuplicateAction(mode, selectedNotes.get(0));
                     }
                 }
             }

@@ -227,51 +227,42 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             List<BasicNoteItemA> selectedNoteItems = BasicEntityNoteSelectionPosA.getItemsByPositions(mBasicNoteData.getNote().getItems(), mRecyclerViewSelector.getSelectedItems());
 
-            if (selectedNoteItems.size() > 0) {
+            if (!selectedNoteItems.isEmpty()) {
                 if ((item.getGroupId() == MENU_GROUP_OTHER_ITEMS) && (mRelatedNotes != null)) {
                     // move to other items
                     BasicNoteA otherNote = mRelatedNotes.get(item.getItemId());
                     performMoveToOtherNoteAction(mode, selectedNoteItems, otherNote);
                 } else
                     // regular menu
-                    switch (item.getItemId()) {
-                    case R.id.delete:
+                {
+                    int itemId = item.getItemId();
+                    if (itemId == R.id.delete) {
                         performDeleteAction(mode, selectedNoteItems);
-                        break;
-                    case R.id.edit_value:
+                    } else if (itemId == R.id.edit_value) {
                         //performEditValueAction(mode, selectedNoteItems.get(0));
                         mInputActionHelper.showLayout(selectedNoteItems.get(0).getValue(),
                                 InputActionHelper.INPUT_ACTION_TYPE_EDIT);
-                        break;
-                    case R.id.edit:
+                    } else if (itemId == R.id.edit) {
                         performEditAction(mode, selectedNoteItems.get(0));
-                        break;
-                    case R.id.history:
+                    } else if (itemId == R.id.history) {
                         if (selectedNoteItems.size() == 1) {
                             startHEventHistoryActivity(selectedNoteItems.get(0));
                         }
-                        break;
-                    case R.id.move_up:
+                    } else if (itemId == R.id.move_up) {
                         performMoveAction(new BasicItemsMoveUpAction<>(mBasicNoteData, selectedNoteItems), selectedNoteItems);
-                        break;
-                    case R.id.move_top:
+                    } else if (itemId == R.id.move_top) {
                         performMoveAction(new BasicItemsMoveTopAction<>(mBasicNoteData, selectedNoteItems), selectedNoteItems);
-                        break;
-                    case R.id.move_down:
+                    } else if (itemId == R.id.move_down) {
                         performMoveAction(new BasicItemsMoveDownAction<>(mBasicNoteData, selectedNoteItems), selectedNoteItems);
-                        break;
-                    case R.id.move_bottom:
+                    } else if (itemId == R.id.move_bottom) {
                         performMoveAction(new BasicItemsMoveBottomAction<>(mBasicNoteData, selectedNoteItems), selectedNoteItems);
-                        break;
-                    case R.id.priority_up:
+                    } else if (itemId == R.id.priority_up) {
                         performMoveAction(new BasicItemsMovePriorityUpAction<>(mBasicNoteData, selectedNoteItems), selectedNoteItems);
-                        break;
-                    case R.id.priority_down:
+                    } else if (itemId == R.id.priority_down) {
                         performMoveAction(new BasicItemsMovePriorityDownAction<>(mBasicNoteData, selectedNoteItems), selectedNoteItems);
-                        break;
-                    case R.id.select_all:
+                    } else if (itemId == R.id.select_all) {
                         performSelectAll();
-                        break;
+                    }
                 }
             }
             return false;

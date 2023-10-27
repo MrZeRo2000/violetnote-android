@@ -171,16 +171,11 @@ public class BasicHEventCOItemFragment extends Fragment {
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             Collection<BasicHNoteCOItemA> selectedNoteItems = mViewSelector.getSelectedItems();
 
-            if (selectedNoteItems.size() > 0) {
-                switch (item.getItemId()) {
-                    case R.id.action_restore:
-                        //performSelectAll();
-                        performRestoreAction(selectedNoteItems);
-                        break;
-                    case R.id.delete:
-                        break;
-                    case R.id.edit:
-                        break;
+            if (!selectedNoteItems.isEmpty()) {
+                int itemId = item.getItemId();
+                if (itemId == R.id.action_restore) {
+                    //performSelectAll();
+                    performRestoreAction(selectedNoteItems);
                 }
             }
             return false;

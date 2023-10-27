@@ -41,17 +41,15 @@ public class BasicNoteValueActivity extends ActionBarCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch ((item.getItemId())) {
-            // Workaround for issue with back button in toolbar default behavior
-            case android.R.id.home:
-                finish();
-                return true;
+        int itemId = (item.getItemId());// Workaround for issue with back button in toolbar default behavior
+        if (itemId == android.R.id.home) {
+            finish();
+            return true;
             // add action
-            case R.id.action_add:
-                mFragment.showAddLayout();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        } else if (itemId == R.id.action_add) {
+            mFragment.showAddLayout();
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -92,15 +92,13 @@ public class BasicNoteActivity extends ActionBarCompatActivity implements BasicN
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_add:
-                Intent intent = new Intent(this, BasicNoteEditActivity.class);
-                intent.putExtra(BasicNoteGroupA.BASIC_NOTE_GROUP_DATA, mBasicNoteGroup);
-                startActivityForResult(intent, 0);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        if (item.getItemId() == R.id.action_add) {
+            Intent intent = new Intent(this, BasicNoteEditActivity.class);
+            intent.putExtra(BasicNoteGroupA.BASIC_NOTE_GROUP_DATA, mBasicNoteGroup);
+            startActivityForResult(intent, 0);
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

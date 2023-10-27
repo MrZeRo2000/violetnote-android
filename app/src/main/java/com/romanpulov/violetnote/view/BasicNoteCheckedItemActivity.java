@@ -91,29 +91,28 @@ public class BasicNoteCheckedItemActivity extends BasicNoteDataPasswordActivity 
             Fragment fragment = getFragment();
             if (fragment instanceof BasicNoteCheckedItemFragment) {
                 BasicNoteCheckedItemFragment basicNoteCheckedItemFragment = (BasicNoteCheckedItemFragment) fragment;
-                switch (item.getItemId()) {
-                    case R.id.action_add:
-                        basicNoteCheckedItemFragment.showAddLayout();
-                        return true;
-                    case R.id.action_check_all:
-                        basicNoteCheckedItemFragment.performUpdateChecked(true);
-                        return true;
-                    case R.id.action_uncheck_all:
-                        basicNoteCheckedItemFragment.performUpdateChecked(false);
-                        return true;
-                    case R.id.action_checkout:
-                        basicNoteCheckedItemFragment.checkOut();
-                        return true;
-                    case R.id.action_history:
-                        basicNoteCheckedItemFragment.startHEventHistoryActivity();
-                        return true;
-                    case R.id.action_refresh:
-                        basicNoteCheckedItemFragment.setSwipeRefreshing(true);
-                        basicNoteCheckedItemFragment.performRefresh();
-                        return true;
-                    default:
-                        return super.onOptionsItemSelected(item);
+                int itemId = item.getItemId();
+                if (itemId == R.id.action_add) {
+                    basicNoteCheckedItemFragment.showAddLayout();
+                    return true;
+                } else if (itemId == R.id.action_check_all) {
+                    basicNoteCheckedItemFragment.performUpdateChecked(true);
+                    return true;
+                } else if (itemId == R.id.action_uncheck_all) {
+                    basicNoteCheckedItemFragment.performUpdateChecked(false);
+                    return true;
+                } else if (itemId == R.id.action_checkout) {
+                    basicNoteCheckedItemFragment.checkOut();
+                    return true;
+                } else if (itemId == R.id.action_history) {
+                    basicNoteCheckedItemFragment.startHEventHistoryActivity();
+                    return true;
+                } else if (itemId == R.id.action_refresh) {
+                    basicNoteCheckedItemFragment.setSwipeRefreshing(true);
+                    basicNoteCheckedItemFragment.performRefresh();
+                    return true;
                 }
+                return super.onOptionsItemSelected(item);
             } else
                 return super.onOptionsItemSelected(item);
         }

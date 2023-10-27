@@ -27,25 +27,15 @@ public class ActionHelper {
             if (menuItem != null) {
                 boolean isVisible;
 
-                switch (menuItem.getItemId()) {
-                    case R.id.select_all:
-                        isVisible = !((selectedCount == totalCount));
-                        break;
-                    case R.id.edit_value:
-                    case R.id.edit:
-                    case R.id.history:
-                        isVisible = selectedCount == 1;
-                        break;
-                    case R.id.move_up:
-                    case R.id.move_down:
-                    case R.id.move_top:
-                    case R.id.move_bottom:
-                    case R.id.priority_up:
-                    case R.id.priority_down:
-                        isVisible = selectedCount != totalCount;
-                        break;
-                    default:
-                        isVisible = menuItem.isVisible();
+                int itemId = menuItem.getItemId();
+                if (itemId == R.id.select_all) {
+                    isVisible = !((selectedCount == totalCount));
+                } else if (itemId == R.id.edit_value || itemId == R.id.edit || itemId == R.id.history) {
+                    isVisible = selectedCount == 1;
+                } else if (itemId == R.id.move_up || itemId == R.id.move_down || itemId == R.id.move_top || itemId == R.id.move_bottom || itemId == R.id.priority_up || itemId == R.id.priority_down) {
+                    isVisible = selectedCount != totalCount;
+                } else {
+                    isVisible = menuItem.isVisible();
                 }
 
                 menuItem.setVisible(isVisible);

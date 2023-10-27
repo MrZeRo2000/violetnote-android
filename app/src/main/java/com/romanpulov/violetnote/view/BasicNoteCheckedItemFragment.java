@@ -241,25 +241,24 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             List<BasicNoteItemA> selectedNoteItems = getSelectedNoteItems();
 
-            if (selectedNoteItems.size() > 0) {
+            if (!selectedNoteItems.isEmpty()) {
                 if ((item.getGroupId() == MENU_GROUP_OTHER_ITEMS) && (mRelatedNotes != null)) {
                     // move to other items
                     BasicNoteA otherNote = mRelatedNotes.get(item.getItemId());
                     performMoveToOtherNoteAction(mode, selectedNoteItems, otherNote);
                 } else
                     // regular menu
-                    switch (item.getItemId()) {
-                        case R.id.delete:
-                            performDeleteAction(mode, selectedNoteItems);
-                            break;
-                        case R.id.edit_value:
-                            mInputActionHelper.showLayout(selectedNoteItems.get(0).getValueWithFloatParams(mPriceNoteParamTypeId),
-                                    InputActionHelper.INPUT_ACTION_TYPE_EDIT);
-                            break;
-                        case R.id.select_all:
-                            performSelectAll();
-                            break;
+                {
+                    int itemId = item.getItemId();
+                    if (itemId == R.id.delete) {
+                        performDeleteAction(mode, selectedNoteItems);
+                    } else if (itemId == R.id.edit_value) {
+                        mInputActionHelper.showLayout(selectedNoteItems.get(0).getValueWithFloatParams(mPriceNoteParamTypeId),
+                                InputActionHelper.INPUT_ACTION_TYPE_EDIT);
+                    } else if (itemId == R.id.select_all) {
+                        performSelectAll();
                     }
+                }
             }
             return false;
         }
