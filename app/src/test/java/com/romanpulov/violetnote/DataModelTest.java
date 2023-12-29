@@ -1,5 +1,9 @@
 package com.romanpulov.violetnote;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import com.romanpulov.violetnote.model.PassCategoryA;
 import com.romanpulov.violetnote.model.PassDataA;
 import com.romanpulov.violetnote.model.PassDataReader;
@@ -11,11 +15,6 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
 /**
  * Created by rpulov on 04.04.2016.
  */
@@ -23,10 +22,10 @@ public class DataModelTest {
 
     private PassData2 createTestPassData() {
         PassData2 result = new PassData2();
-        result.setCategoryList(new ArrayList<PassCategory2>());
+        result.setCategoryList(new ArrayList<>());
 
         PassCategory2 pc = new PassCategory2("Category 1");
-        pc.setNoteList(new ArrayList<PassNote2>());
+        pc.setNoteList(new ArrayList<>());
 
         result.getCategoryList().add(pc);
 
@@ -38,7 +37,7 @@ public class DataModelTest {
         pc.getNoteList().add(pn);
 
         pc = new PassCategory2("Category 2");
-        pc.setNoteList(new ArrayList<PassNote2>());
+        pc.setNoteList(new ArrayList<>());
 
         result.getCategoryList().add(pc);
 
@@ -92,8 +91,8 @@ public class DataModelTest {
         assertEquals(sda.getPassCategoryData().size(), 1);
 
         sda = PassDataA.newSearchInstance(pda, "xxx", true, true);
-        assertNull(sda.getPassCategoryData());
-        assertNull(sda.getPassNoteData());
+        assertEquals(sda.getPassCategoryData().size(), 0);
+        assertEquals(sda.getPassNoteData().size(), 0);
     }
 
 }

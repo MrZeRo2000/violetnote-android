@@ -31,6 +31,8 @@
 -dontwarn javax.servlet.**
 
 # This is generated automatically by the Android Gradle plugin.
+# Please add these rules to your existing keep rules in order to suppress warnings.
+# This is generated automatically by the Android Gradle plugin.
 -dontwarn com.google.crypto.tink.subtle.Ed25519Sign$KeyPair
 -dontwarn com.google.crypto.tink.subtle.Ed25519Sign
 -dontwarn com.google.crypto.tink.subtle.Ed25519Verify
@@ -52,6 +54,11 @@
 -dontwarn org.bouncycastle.openssl.PEMKeyPair
 -dontwarn org.bouncycastle.openssl.PEMParser
 -dontwarn org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter
+-dontwarn com.google.auto.value.AutoValue
+-dontwarn edu.umd.cs.findbugs.annotations.NonNull
+-dontwarn edu.umd.cs.findbugs.annotations.Nullable
+-dontwarn edu.umd.cs.findbugs.annotations.SuppressFBWarnings
+-dontwarn org.bouncycastle.jcajce.provider.BouncyCastleFipsProvider
 
 # loader classes created by reflection
 -keepclassmembers class com.romanpulov.violetnote.loader.** { *; }
