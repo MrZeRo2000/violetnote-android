@@ -14,8 +14,8 @@ import com.romanpulov.violetnote.view.helper.PermissionRequestHelper;
 public class SettingsActivity extends ActionBarCompatActivity {
     public final static int PERMISSION_REQUEST_LOCAL_BACKUP = 101;
     public final static int PERMISSION_REQUEST_LOCAL_RESTORE = 102;
-    public final static int PERMISSION_REQUEST_DROPBOX_RESTORE = 103;
-    public final static int PERMISSION_REQUEST_DROPBOX_BACKUP = 104;
+    public final static int PERMISSION_REQUEST_CLOUD_RESTORE = 103;
+    public final static int PERMISSION_REQUEST_CLOUD_BACKUP = 104;
     public final static int PERMISSION_REQUEST_DOCUMENT_LOAD = 105;
 
     private Fragment getSettingsFragment() {
@@ -45,10 +45,10 @@ public class SettingsActivity extends ActionBarCompatActivity {
                 case PERMISSION_REQUEST_LOCAL_RESTORE:
                     settingsFragment.executeLocalRestore();
                     break;
-                case PERMISSION_REQUEST_DROPBOX_RESTORE:
+                case PERMISSION_REQUEST_CLOUD_RESTORE:
                     settingsFragment.executeCloudRestore();
                     break;
-                case PERMISSION_REQUEST_DROPBOX_BACKUP:
+                case PERMISSION_REQUEST_CLOUD_BACKUP:
                     settingsFragment.executeCloudBackup();
                 case PERMISSION_REQUEST_DOCUMENT_LOAD:
                     settingsFragment.executeDocumentLoad();
