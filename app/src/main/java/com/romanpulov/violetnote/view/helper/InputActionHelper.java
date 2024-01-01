@@ -7,7 +7,6 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
-import android.widget.TextView;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.model.InputParser;
@@ -32,19 +31,20 @@ public class InputActionHelper implements AutoCompleteArrayAdapter.OnAutoComplet
     private int mActionType;
     private Collection<String> mAutoCompleteList;
 
-    private OnAddInteractionListener mAddListener;
+    private OnInputInteractionListener mAddListener;
     private View.OnClickListener mListClickListener;
 
-    public void setOnAddInteractionListener(OnAddInteractionListener listener) {
+    public void setOnAddInteractionListener(OnInputInteractionListener listener) {
         mAddListener = listener;
     }
 
     public void setOnListClickListener(View.OnClickListener listener) {
         mListClickListener = listener;
-        if (mListClickListener != null)
+        if (mListClickListener != null) {
             mListButton.setVisibility(View.VISIBLE);
-        else
+        } else {
             mListButton.setVisibility(View.GONE);
+        }
     }
 
     public InputActionHelper(View actionView) {
@@ -75,47 +75,34 @@ public class InputActionHelper implements AutoCompleteArrayAdapter.OnAutoComplet
     }
 
     private void setupListButton() {
-        mListButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mListClickListener != null) {
-                    mListClickListener.onClick(v);
-                }
+        mListButton.setOnClickListener(v -> {
+            if (mListClickListener != null) {
+                mListClickListener.onClick(v);
             }
         });
     }
 
     private void setupCancelButton() {
-        mCancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                hideLayout();
-            }
-        });
+        mCancelButton.setOnClickListener(view -> hideLayout());
     }
 
     private void setupEditText() {
-        mInputEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                if (
-                    // editor with action
-                        (i == EditorInfo.IME_ACTION_SEARCH) ||
-                                // editor with Enter button
-                                ((i == EditorInfo.IME_ACTION_UNSPECIFIED) && (keyEvent != null) && (keyEvent.getAction() == KeyEvent.ACTION_DOWN))
-                        ) {
+        mInputEditText.setOnEditorActionListener((textView, i, keyEvent) -> {
+            if (
+                // editor with action
+                (i == EditorInfo.IME_ACTION_GO) ||
+                // editor with Enter button
+                ((keyEvent != null) && (keyEvent.getAction() == KeyEvent.ACTION_DOWN))) {
                     acceptText(textView.getText().toString());
-
                     return true;
-                }
-                return false;
             }
+            return false;
         });
     }
 
     private void acceptText(String text) {
         if ((mAddListener != null) && (text != null) && (text.trim().length() > 0))
-            mAddListener.onAddFragmentInteraction(mActionType, text);
+            mAddListener.onInputFragmentInteraction(mActionType, text.trim());
         //clear search text for future
         mInputEditText.setText(null);
     }
@@ -124,20 +111,27 @@ public class InputActionHelper implements AutoCompleteArrayAdapter.OnAutoComplet
         showLayout(null, INPUT_ACTION_TYPE_ADD);
     }
 
+    public void showEditLayout(String text) {
+        showLayout(text, INPUT_ACTION_TYPE_EDIT);
+    }
+
     public void showEditNumberLayout(long number) {
         showLayout(number == 0 ? null : InputParser.getFloatDisplayValue(number), INPUT_ACTION_TYPE_NUMBER);
     }
 
-    public void showLayout(String text, int actionType) {
+    private void showLayout(String text, int actionType) {
         mActionType = actionType;
 
         mInputEditText.setText(text);
 
         switch (actionType) {
             case INPUT_ACTION_TYPE_ADD:
-            case INPUT_ACTION_TYPE_EDIT:
                 mInputEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
                 prepareAutoCompleteList();
+                break;
+            case INPUT_ACTION_TYPE_EDIT:
+                mInputEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+                clearAutoCompleteList();
                 break;
             case INPUT_ACTION_TYPE_NUMBER:
                 mInputEditText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
@@ -148,12 +142,14 @@ public class InputActionHelper implements AutoCompleteArrayAdapter.OnAutoComplet
         String[] hints = mInputEditText.getContext().getResources().getStringArray(R.array.hint_action_entries);
         mInputEditText.setHint(hints[mActionType]);
 
-        if (text != null)
+        if (text != null) {
             mInputEditText.setSelection(text.length());
+        }
 
         mActionView.setVisibility(View.VISIBLE);
-        if (mInputEditText.requestFocus())
+        if (mInputEditText.requestFocus()) {
             InputManagerHelper.toggleInputForced(mInputEditText.getContext());
+        }
     }
 
     public void hideLayout() {
@@ -166,8 +162,9 @@ public class InputActionHelper implements AutoCompleteArrayAdapter.OnAutoComplet
     @Override
     public void onSelectText(String text) {
         mInputEditText.setText(text);
-        if (text != null)
+        if (text != null) {
             mInputEditText.setSelection(text.length());
+        }
         mInputEditText.dismissDropDown();
     }
 
@@ -177,7 +174,7 @@ public class InputActionHelper implements AutoCompleteArrayAdapter.OnAutoComplet
         mInputEditText.dismissDropDown();
     }
 
-    public interface OnAddInteractionListener {
-        void onAddFragmentInteraction(int actionType, String text);
+    public interface OnInputInteractionListener {
+        void onInputFragmentInteraction(int actionType, String text);
     }
 }

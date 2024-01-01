@@ -10,7 +10,6 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.view.ActionMode;
 import androidx.appcompat.widget.ActionMenuView;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -42,9 +41,7 @@ import com.romanpulov.violetnote.view.action.BasicNoteDataRefreshAction;
 import com.romanpulov.violetnote.view.core.AlertOkCancelSupportDialogFragment;
 import com.romanpulov.violetnote.view.core.PasswordActivity;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
-import com.romanpulov.violetnote.view.core.TextInputDialog;
 import com.romanpulov.violetnote.view.helper.InputActionHelper;
-import com.romanpulov.violetnote.view.core.TextEditDialogBuilder;
 import com.romanpulov.violetnote.view.helper.CheckoutProgressHelper;
 import com.romanpulov.violetnote.view.helper.InputManagerHelper;
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
@@ -66,16 +63,13 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
 
     public static final Handler mRefreshHandler = new Handler();
 
-    private final Runnable mRefreshRunnable = new Runnable() {
-        @Override
-        public void run() {
-            Context context = getContext();
-            if (context != null) {
-                try {
-                    refreshListWithView();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+    private final Runnable mRefreshRunnable = () -> {
+        Context context = getContext();
+        if (context != null) {
+            try {
+                refreshListWithView();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     };
@@ -98,7 +92,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         mPriceNoteParamTypeId = DBBasicNoteHelper.getInstance(context).getDBDictionaryCache().getPriceNoteParamTypeId();
         if (PreferenceRepository.isInterfaceCheckedLast(context)) {
@@ -163,7 +157,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
     private void refreshCheckedItemsDisplay() {
         if (mCheckedUpdateInterval > 0) {
             mRefreshHandler.removeMessages(0);
-            mRefreshHandler.postDelayed(mRefreshRunnable, mCheckedUpdateInterval * 1000);
+            mRefreshHandler.postDelayed(mRefreshRunnable, mCheckedUpdateInterval * 1000L);
         }
     }
 
@@ -196,44 +190,11 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         }
     }
 
-
-    private void performEditValueAction(final ActionMode mode, final BasicNoteItemA item) {
-        TextEditDialogBuilder textEditDialogBuilder = (new TextEditDialogBuilder(getActivity(), getString(R.string.ui_note_value),
-                item.getValueWithFloatParams(mPriceNoteParamTypeId)))
-                .setNonEmptyErrorMessage(getString(R.string.error_field_not_empty))
-                .setSelectEnd(true);
-
-        final AlertDialog alertDialog = textEditDialogBuilder.execute();
-
-        textEditDialogBuilder.setOnTextInputListener(new TextInputDialog.OnTextInputListener() {
-            @Override
-            public void onTextInput(final String text) {
-                if (!text.equals(item.getValueWithFloatParams(mPriceNoteParamTypeId))) {
-                    //hide editor
-                    View focusedView = alertDialog.getCurrentFocus();
-                    InputManagerHelper.hideInput(focusedView);
-
-                    //change
-                    performEditAction(text, new NoteItemDataUpdater() {
-                        @Override
-                        public void updateNoteItemData(BasicNoteItemA item) {
-                            item.setValueWithParams(
-                                    mPriceNoteParamTypeId,
-                                    text);
-                        }
-                    });
-
-                    // finish anyway
-                    mode.finish();
-                }
-            }
-        });
-
-        mEditorDialog = alertDialog;
-    }
-
     private void updateTitle(ActionMode mode) {
-        mode.setTitle(DisplayTitleBuilder.buildItemsDisplayTitle(getActivity(), mBasicNoteData.getNote().getItems(), mRecyclerViewSelector.getSelectedItems()));
+        mode.setTitle(DisplayTitleBuilder.buildItemsDisplayTitle(
+                getActivity(),
+                mBasicNoteData.getNote().getItems(),
+                mRecyclerViewSelector.getSelectedItems()));
     }
 
     public class ActionBarCallBack implements ActionMode.Callback {
@@ -253,8 +214,8 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                     if (itemId == R.id.delete) {
                         performDeleteAction(mode, selectedNoteItems);
                     } else if (itemId == R.id.edit_value) {
-                        mInputActionHelper.showLayout(selectedNoteItems.get(0).getValueWithFloatParams(mPriceNoteParamTypeId),
-                                InputActionHelper.INPUT_ACTION_TYPE_EDIT);
+                        mInputActionHelper.showEditLayout(
+                            selectedNoteItems.get(0).getValueWithFloatParams(mPriceNoteParamTypeId));
                     } else if (itemId == R.id.select_all) {
                         performSelectAll();
                     }
@@ -298,12 +259,15 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
             }
 
             if (mBottomToolbarHelper != null) {
-                mBottomToolbarHelper.showLayout(mRecyclerViewSelector.getSelectedItems().size(), mBasicNoteData.getNote().getSummary().getItemCount());
+                mBottomToolbarHelper.showLayout(
+                        mRecyclerViewSelector.getSelectedItems().size(),
+                        mBasicNoteData.getNote().getSummary().getItemCount());
             }
 
             List<BasicNoteItemA> selectedNoteItems = getSelectedNoteItems();
             if (selectedNoteItems.size() == 1) {
-                mRecyclerView.scrollToPosition(mBasicNoteData.getNote().getItems().indexOf(selectedNoteItems.get(0)));
+                mRecyclerView.scrollToPosition(
+                        mBasicNoteData.getNote().getItems().indexOf(selectedNoteItems.get(0)));
             }
 
             updateActionMenu(menu);
@@ -349,7 +313,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                     @Override
                     public void onBasicNoteItemPriceClick(BasicNoteItemA item, int position) {
                         if (mRecyclerViewSelector.getActionMode() == null) {
-                            mRecyclerViewSelector.startActionMode(getView(), position);
+                            mRecyclerViewSelector.startActionMode(requireView(), position);
                             mInputActionHelper.showEditNumberLayout(item.getParamLong(mPriceNoteParamTypeId));
                         }
                     }
@@ -358,7 +322,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         mRecyclerViewSelector = recyclerViewAdapter.getRecyclerViewSelector();
         mRecyclerView.setAdapter(recyclerViewAdapter);
 
-        //swite refresh
+        //swipe refresh
         mSwipeRefreshLayout = view.findViewById(R.id.swiperefresh);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -371,9 +335,9 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
 
         //add action panel
         mInputActionHelper = new InputActionHelper(view.findViewById(R.id.add_panel_include));
-        mInputActionHelper.setOnAddInteractionListener(new InputActionHelper.OnAddInteractionListener() {
+        mInputActionHelper.setOnAddInteractionListener(new InputActionHelper.OnInputInteractionListener() {
             @Override
-            public void onAddFragmentInteraction(final int actionType, final String text) {
+            public void onInputFragmentInteraction(final int actionType, final String text) {
                 if (mBasicNoteData.getNote().isEncrypted()) {
                     InputManagerHelper.hideInput(view);
                 }

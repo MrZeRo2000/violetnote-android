@@ -181,7 +181,7 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
                     performDeleteAction(mode, selectedNoteItems);
                     hideAddLayout();
                 } else if (itemId == R.id.edit) {//performEditAction(mode, selectedNoteItems.get(0));
-                    mInputActionHelper.showLayout(selectedNoteItems.get(0).getValue(), InputActionHelper.INPUT_ACTION_TYPE_EDIT);
+                    mInputActionHelper.showEditLayout(selectedNoteItems.get(0).getValue());
                 }
             }
             return false;
@@ -250,9 +250,9 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
 
         //add action panel
         mInputActionHelper = new InputActionHelper(view.findViewById(R.id.add_panel_include));
-        mInputActionHelper.setOnAddInteractionListener(new InputActionHelper.OnAddInteractionListener() {
+        mInputActionHelper.setOnAddInteractionListener(new InputActionHelper.OnInputInteractionListener() {
             @Override
-            public void onAddFragmentInteraction(final int actionType, final String text) {
+            public void onInputFragmentInteraction(final int actionType, final String text) {
                 switch (actionType) {
                     case InputActionHelper.INPUT_ACTION_TYPE_ADD:
                         performAddAction(BasicNoteValueA.newEditInstance(text));

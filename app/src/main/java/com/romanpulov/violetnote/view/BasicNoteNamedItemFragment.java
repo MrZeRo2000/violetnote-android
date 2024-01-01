@@ -240,8 +240,7 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
                         performDeleteAction(mode, selectedNoteItems);
                     } else if (itemId == R.id.edit_value) {
                         //performEditValueAction(mode, selectedNoteItems.get(0));
-                        mInputActionHelper.showLayout(selectedNoteItems.get(0).getValue(),
-                                InputActionHelper.INPUT_ACTION_TYPE_EDIT);
+                        mInputActionHelper.showEditLayout(selectedNoteItems.get(0).getValue());
                     } else if (itemId == R.id.edit) {
                         performEditAction(mode, selectedNoteItems.get(0));
                     } else if (itemId == R.id.history) {
@@ -340,9 +339,9 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
 
         //add action panel
         mInputActionHelper = new InputActionHelper(view.findViewById(R.id.add_panel_include));
-        mInputActionHelper.setOnAddInteractionListener(new InputActionHelper.OnAddInteractionListener() {
+        mInputActionHelper.setOnAddInteractionListener(new InputActionHelper.OnInputInteractionListener() {
             @Override
-            public void onAddFragmentInteraction(int actionType, String text) {
+            public void onInputFragmentInteraction(int actionType, String text) {
                 switch (actionType) {
                     case InputActionHelper.INPUT_ACTION_TYPE_EDIT:
                         hideInputActionLayout();
