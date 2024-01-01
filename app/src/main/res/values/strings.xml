@@ -1,7 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Violet Note</string>
-    <!-- DropBox -->
-    <string name="app_key">lnxj3kbbxeetpa8</string>
     <!-- OneDrive -->
     <string name="onedrive_client_id" tools:ignore="TypographyDashes">8ed347b1-d21c-4f8d-bdc4-6e53e17f120d</string>
     <string name="ok">OK</string>
@@ -58,7 +56,6 @@
     <string name="pref_title_basic_note_cloud_restore">Restore</string>
     <string name="pref_summary_basic_note_cloud_restore">Restore from cloud</string>
     <string name="pref_title_account">Account</string>
-    <string name="pref_title_account_dropbox">Dropbox</string>
     <string name="pref_title_account_onedrive">OneDrive</string>
     <string name="pref_title_account_msgraph">MSGraph</string>
     <string name="pref_title_account_gdrive">Google Drive</string>
@@ -94,11 +91,9 @@
     <string name="pref_title_delete">Delete</string>
     <string-array name="pref_source_type_entries">
         <item>Local storage</item>
-        <item>Dropbox</item>
         <item>OneDrive</item>
     </string-array>
     <string-array name="pref_cloud_storage_entries">
-        <item>Dropbox</item>
         <item>OneDrive</item>
         <item>Google Drive</item>
     </string-array>
@@ -115,9 +110,6 @@
     <string name="error_read">Data read error</string>
     <string name="error_load">Load error</string>
     <string name="error_load_remote_path_empty">Remote path is empty</string>
-    <string name="error_dropbox_auth">Invalid access token. Please, authenticate</string>
-    <string name="error_dropbox_other">Dropbox error: %s</string>
-    <string name="error_dropbox_load_file_data">No information for file : %s</string>
     <string name="error_field_not_empty">Field should not be empty</string>
     <string name="error_backup">Error creating backup</string>
     <string name="error_restore">Error restoring backup</string>
@@ -146,7 +138,6 @@
     <string name="message_gdrive_successfully_logged_out">Successfully logged out from Google Drive</string>
 
     <!-- Notifications -->
-    <string name="notification_dropbox_backup_completed">Dropbox backup has been completed</string>
     <string name="notification_onedrive_backup_completed">OneDrive backup has been completed</string>
     <string name="notification_gdrive_backup_completed">Google Drive backup has been completed</string>
     <string name="notification_password_notes_data_load_completed">Password notes data has been successfully loaded</string>

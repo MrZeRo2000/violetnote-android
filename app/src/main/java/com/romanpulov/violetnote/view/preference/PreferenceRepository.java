@@ -21,8 +21,7 @@ import java.util.Map;
 
 public class PreferenceRepository {
     public static final int SOURCE_TYPE_FILE = 0;
-    public static final int SOURCE_TYPE_DROPBOX = 1;
-    public static final int SOURCE_TYPE_MSGRAPH = 2;
+    public static final int SOURCE_TYPE_MSGRAPH = 1;
 
     public static final int DEFAULT_SOURCE_TYPE = 0;
 
@@ -30,9 +29,8 @@ public class PreferenceRepository {
         return sourceType != SOURCE_TYPE_FILE;
     }
 
-    public static final int CLOUD_SOURCE_TYPE_DROPBOX = 0;
-    public static final int CLOUD_SOURCE_TYPE_MSGRAPH = 1;
-    public static final int CLOUD_SOURCE_TYPE_GDRIVE = 2;
+    public static final int CLOUD_SOURCE_TYPE_MSGRAPH = 0;
+    public static final int CLOUD_SOURCE_TYPE_GDRIVE = 1;
     public static final int DEFAULT_CLOUD_SOURCE_TYPE = 0;
 
     public static final int DEFAULT_CHECKED_UPDATE_REFRESH_INTERVAL = 0;
@@ -48,7 +46,6 @@ public class PreferenceRepository {
     public static final String PREF_KEY_SOURCE_PATH = "pref_source_path";
     public static final String PREF_KEY_SOURCE_TYPE = "pref_source_type";
 
-    public static final String PREF_KEY_ACCOUNT_DROPBOX = "pref_account_dropbox";
     public static final String PREF_KEY_ACCOUNT_MSGRAPH = "pref_account_onedrive";
     public static final String PREF_KEY_ACCOUNT_GD = "pref_account_gdrive";
 

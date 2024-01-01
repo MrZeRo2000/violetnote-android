@@ -5,7 +5,7 @@ import androidx.preference.PreferenceFragmentCompat;
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 
 /**
- * Preference backup to Dropbox processor
+ * Preference backup to Cloud processor
  * Created by romanpulov on 14.09.2017.
  */
 public class PreferenceBackupCloudProcessor extends PreferenceLoaderProcessor{

@@ -25,7 +25,6 @@ import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.cloud.CloudAccountFacade;
 import com.romanpulov.violetnote.cloud.CloudAccountFacadeFactory;
 import com.romanpulov.violetnote.db.DBStorageManager;
-import com.romanpulov.library.dropbox.DropboxHelper;
 import com.romanpulov.library.common.account.AbstractCloudAccountManager;
 import com.romanpulov.violetnote.loader.document.DocumentPassDataLoader;
 import com.romanpulov.violetnote.loader.local.DocumentUriFileLoader;
@@ -135,12 +134,9 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         new SourcePathPreferenceSetup(this).execute();
 
         new CloudAccountPreferenceSetup(this,
-                CloudAccountFacadeFactory.fromCloudSourceType(PreferenceRepository.CLOUD_SOURCE_TYPE_DROPBOX)).execute();
-        new CloudAccountPreferenceSetup(this,
                 CloudAccountFacadeFactory.fromCloudSourceType(PreferenceRepository.CLOUD_SOURCE_TYPE_MSGRAPH)).execute();
         new CloudAccountPreferenceSetup(this,
                 CloudAccountFacadeFactory.fromCloudSourceType(PreferenceRepository.CLOUD_SOURCE_TYPE_GDRIVE)).execute();
-
 
         new CommonSourceTypePreferenceSetup(this, PREF_KEY_BASIC_NOTE_CLOUD_STORAGE, R.array.pref_cloud_storage_entries, DEFAULT_CLOUD_SOURCE_TYPE).execute();
         new CheckedUpdateIntervalPreferenceSetup(this).execute();
@@ -541,12 +537,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         LocalBroadcastManager.getInstance(requireActivity()).unregisterReceiver(mLoaderServiceBroadcastReceiver);
         doUnbindService();
         super.onDetach();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        DropboxHelper.getInstance(requireContext()).refreshAccessToken();
     }
 
     @Override

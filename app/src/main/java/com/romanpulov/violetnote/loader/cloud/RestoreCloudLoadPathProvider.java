@@ -2,14 +2,13 @@ package com.romanpulov.violetnote.loader.cloud;
 
 import android.content.Context;
 
-import com.romanpulov.violetnote.db.DBStorageManager;
 import com.romanpulov.library.common.loader.core.ContextLoadPathProvider;
-import com.romanpulov.violetnote.loader.cloud.CloudLoaderRepository;
+import com.romanpulov.violetnote.db.DBStorageManager;
 
 import java.io.File;
 
 /**
- * Load path provider for Dropbox restore
+ * Load path provider for Cloud restore
  * Created by romanpulov on 22.09.2017.
  */
 

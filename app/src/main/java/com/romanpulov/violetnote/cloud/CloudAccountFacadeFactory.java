@@ -12,8 +12,6 @@ public class CloudAccountFacadeFactory {
     @NonNull
     public static CloudAccountFacade fromDocumentSourceType(int type) {
         switch (type) {
-            case PreferenceRepository.SOURCE_TYPE_DROPBOX:
-                return new DropboxAccountFacade();
             case PreferenceRepository.SOURCE_TYPE_MSGRAPH:
                 return new MSGraphAccountFacade();
             default:
@@ -24,8 +22,6 @@ public class CloudAccountFacadeFactory {
     @NonNull
     public static CloudAccountFacade fromCloudSourceType(int type) {
         switch (type) {
-            case PreferenceRepository.CLOUD_SOURCE_TYPE_DROPBOX:
-                return new DropboxAccountFacade();
             case PreferenceRepository.CLOUD_SOURCE_TYPE_MSGRAPH:
                 return new MSGraphAccountFacade();
             case PreferenceRepository.CLOUD_SOURCE_TYPE_GDRIVE:
@@ -37,7 +33,6 @@ public class CloudAccountFacadeFactory {
 
     public static List<CloudAccountFacade> getCloudAccountFacadeList() {
         return Collections.unmodifiableList(Arrays.asList(
-                new DropboxAccountFacade(),
                 new MSGraphAccountFacade(),
                 new GDAccountFacade()
         ));

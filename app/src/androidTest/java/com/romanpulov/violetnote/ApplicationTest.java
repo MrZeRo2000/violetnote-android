@@ -12,7 +12,6 @@ import static org.junit.Assert.*;
 
 import com.romanpulov.violetnote.db.DBBasicNoteOpenHelper;
 import com.romanpulov.violetnote.db.manager.DBNoteManager;
-import com.romanpulov.library.dropbox.DropboxHelper;
 import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteGroupA;
 
@@ -32,13 +31,6 @@ public class ApplicationTest {
     @Test
     public void test1() {
         log("Test message");
-        assertEquals(1, 1);
-    }
-
-    @Test
-    public void test2() {
-        DropboxHelper dh = DropboxHelper.getInstance(getTargetContext());
-        log("Token: " + dh.getAccessToken());
         assertEquals(1, 1);
     }
 

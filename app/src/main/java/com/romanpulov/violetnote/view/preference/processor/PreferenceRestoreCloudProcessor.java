@@ -5,7 +5,7 @@ import androidx.preference.PreferenceFragmentCompat;
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 
 /**
- * Restore from DropBox processor
+ * Restore from Cloud processor
  * Created by romanpulov on 20.09.2017.
  */
 public class PreferenceRestoreCloudProcessor extends PreferenceLoaderProcessor {
