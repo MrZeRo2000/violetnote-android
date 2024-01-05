@@ -66,8 +66,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     private PreferenceBackupLocalProcessor mPreferenceBackupLocalProcessor;
     private PreferenceRestoreLocalProcessor mPreferenceRestoreLocalProcessor;
 
-    //private PermissionRequestHelper mWriteStorageRequestHelper;
-
     private final Map<String, PreferenceLoaderProcessor> mPreferenceLoadProcessors = new HashMap<>();
 
     private final BroadcastReceiver mLoaderServiceBroadcastReceiver = new BroadcastReceiver() {
@@ -148,7 +146,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         if (NetworkUtils.isNetworkAvailable(requireActivity()))
             return true;
         else {
-            DisplayMessageHelper.displayErrorMessage(getActivity(), getString(R.string.error_internet_not_available));
+            DisplayMessageHelper.displayErrorMessage(requireActivity(), getString(R.string.error_internet_not_available));
             return false;
         }
     }

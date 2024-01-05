@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class DisplayMessageHelper {
 
-    private static enum MessageType {
+    private enum MessageType {
         MT_INFO,
         MT_ERROR
     }
@@ -38,7 +38,7 @@ public class DisplayMessageHelper {
         if (snackBarView != null) {
             Integer colorResource = MESSAGE_COLORS.get(messageType);
             if (colorResource != null) {
-                int textColor = snackBarView.getContext().getResources().getColor(colorResource);
+                int textColor = snackBarView.getContext().getColor(colorResource);
                 Snackbar.make(snackBarView, text, BaseTransientBottomBar.LENGTH_SHORT)
                         .setTextColor(textColor)
                         .show();
@@ -48,16 +48,14 @@ public class DisplayMessageHelper {
 
     public static void displayInfoMessage(@NonNull View view, @NonNull CharSequence text) {
         displayMessage(null, view, MessageType.MT_INFO, text);
-
     }
 
     public static void displayInfoMessage(@NonNull Activity activity, @NonNull CharSequence text) {
         displayMessage(activity, null, MessageType.MT_INFO, text);
     }
 
-    public static void displayErrorMessage(@NonNull View view, @NonNull CharSequence text) {
-        displayMessage(null, view, MessageType.MT_ERROR, text);
-
+    public static void displayInfoMessage(@NonNull Activity activity, int resId) {
+        displayMessage(activity, null, MessageType.MT_INFO, activity.getText(resId));
     }
 
     public static void displayErrorMessage(@NonNull Activity activity, @NonNull CharSequence text) {

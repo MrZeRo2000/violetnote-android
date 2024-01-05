@@ -210,6 +210,7 @@
     <string name="ui_error_file_not_deleted">File was not deleted</string>
     <string name="ui_info_copy_to_clipboard">%s copied to clipboard</string>
     <string name="ui_info_file_deleted">File successfully deleted</string>
+    <string name="ui_info_notification_permissions_granted">Notification permissions have been granted</string>
     <string name="ui_search_text_display_format"> ..%s..</string>
 
     <string name="ui_display_options_show_total">Show total</string>
