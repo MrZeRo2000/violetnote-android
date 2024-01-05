@@ -216,7 +216,7 @@ public class BasicHEventCOItemExpandableListViewAdapter extends BaseExpandableLi
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater)this.mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             if (inflater != null) {
-                convertView = inflater.inflate(R.layout.expandable_list_h_event_list_item, null);
+                convertView = inflater.inflate(R.layout.expandable_list_h_event_list_item, parent, false);
                 viewHolder = new ChildViewHolder(convertView, mExViewSelector, mValues, mSelectedValues);
                 convertView.setTag(viewHolder);
             }

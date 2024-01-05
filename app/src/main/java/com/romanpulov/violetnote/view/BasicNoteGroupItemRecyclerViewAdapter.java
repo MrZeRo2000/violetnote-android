@@ -56,7 +56,7 @@ public class BasicNoteGroupItemRecyclerViewAdapter extends RecyclerView.Adapter<
         return mBasicNoteGroupList.size();
     }
 
-    static class ViewHolder extends RecyclerViewHelper.SelectableViewHolder {
+    public static class ViewHolder extends RecyclerViewHelper.SelectableViewHolder {
         private final Button mButton;
 
         public ViewHolder(View view, ViewSelectorHelper.AbstractViewSelector<Integer> viewSelector) {

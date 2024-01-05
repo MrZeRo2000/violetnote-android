@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 
+import androidx.appcompat.content.res.AppCompatResources;
 import com.romanpulov.violetnote.R;
 
 public class BasicNoteGroupImageAdapter extends ArrayAdapter<Integer> {
@@ -20,25 +21,25 @@ public class BasicNoteGroupImageAdapter extends ArrayAdapter<Integer> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        return internalGetView(position, convertView);
+        return internalGetView(position, convertView, parent);
     }
 
     @NonNull
     @Override
     public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        return internalGetView(position, convertView);
+        return internalGetView(position, convertView, parent);
     }
 
     @NonNull
-    private View internalGetView(int position, View convertView) {
+    private View internalGetView(int position, View convertView, @NonNull ViewGroup parent) {
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.view_img_selector_spinner, null);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.view_img_selector_spinner, parent, false);
         }
 
         Integer imageId = getItem(position);
         if (imageId != null) {
             ImageView imgSelectorView = convertView.findViewById(R.id.img_selector_view);
-            imgSelectorView.setImageDrawable(getContext().getResources().getDrawable(imageId));
+            imgSelectorView.setImageDrawable(AppCompatResources.getDrawable(getContext(), imageId));
         }
 
         return convertView;

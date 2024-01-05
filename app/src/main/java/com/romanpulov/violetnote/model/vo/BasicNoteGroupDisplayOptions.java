@@ -56,16 +56,17 @@ public class BasicNoteGroupDisplayOptions implements Parcelable {
     public static BasicNoteGroupDisplayOptions fromJSONString(String jsonString) {
         BasicNoteGroupDisplayOptions instance = createWithDefaults();
 
-        if ((jsonString != null) && !(jsonString.isEmpty()))
-        try {
-            JSONObject jo = new JSONObject(jsonString);
-            JSONObject jo_indicators = jo.getJSONObject(INDICATORS);
+        if ((jsonString != null) && !(jsonString.isEmpty())) {
+            try {
+                JSONObject jo = new JSONObject(jsonString);
+                JSONObject jo_indicators = jo.getJSONObject(INDICATORS);
 
-            instance.mTotalFlag = jo_indicators.optBoolean(TOTAL_FLAG);
-            instance.mUncheckedFlag = jo_indicators.optBoolean(UNCHECKED_FLAG);
-            instance.mCheckedFlag = jo_indicators.optBoolean(CHECKED_FLAG);
-        } catch (JSONException e) {
-            e.printStackTrace();
+                instance.mTotalFlag = jo_indicators.optBoolean(TOTAL_FLAG);
+                instance.mUncheckedFlag = jo_indicators.optBoolean(UNCHECKED_FLAG);
+                instance.mCheckedFlag = jo_indicators.optBoolean(CHECKED_FLAG);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
 
         return instance;
