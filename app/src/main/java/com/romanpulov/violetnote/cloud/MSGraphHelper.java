@@ -80,7 +80,7 @@ public class MSGraphHelper extends MSGraphBaseHelper implements HrPickerNavigato
                             try {
                                 processor.onNavigationSuccess(path, parseJSONObject(data));
                             } catch (JSONException e) {
-                                processor.onNavigationFailure(path, "Error parsing response: " + e.getMessage());
+                                processor.onNavigationFailure("Error parsing response: " + e.getMessage());
                             }
                         }
 
@@ -88,7 +88,7 @@ public class MSGraphHelper extends MSGraphBaseHelper implements HrPickerNavigato
                         public void onActionFailure(int action, String errorMessage) {
                             //Log.d(TAG, "Navigation error, passing error message: " + errorMessage);
                             mNavigating.set(false);
-                            processor.onNavigationFailure(path, errorMessage);
+                            processor.onNavigationFailure(errorMessage);
                         }
                     });
         }

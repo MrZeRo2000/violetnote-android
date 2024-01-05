@@ -28,11 +28,6 @@ public class TextEditDialogBuilder {
         return this;
     }
 
-    public TextEditDialogBuilder setSelectEnd(boolean value) {
-        mSelectEnd = value;
-        return this;
-    }
-
     public TextEditDialogBuilder setShowInput(boolean value) {
         mShowInput = value;
         return this;

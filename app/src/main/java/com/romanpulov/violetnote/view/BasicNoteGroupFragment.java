@@ -46,7 +46,6 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
     public static final int ACTIVITY_REQUEST_EDIT = 1;
 
     private final List<BasicNoteGroupA> mBasicNoteGroupList = new ArrayList<>();
-    private OnBasicNoteGroupFragmentInteractionListener mListener;
     private DBNoteManager mDBNoteManager;
 
     public static BasicNoteGroupFragment newInstance() {
@@ -303,27 +302,5 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
         mRecyclerView.addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(getActivity(), RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_white_black_gradient));
 
         return view;
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnBasicNoteGroupFragmentInteractionListener) {
-            mListener = (OnBasicNoteGroupFragmentInteractionListener) context;
-        }
-        else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnBasicNoteGroupFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    public interface OnBasicNoteGroupFragmentInteractionListener {
-        void onBasicNoteGroupFragmentInteraction(BasicNoteGroupA item);
     }
 }

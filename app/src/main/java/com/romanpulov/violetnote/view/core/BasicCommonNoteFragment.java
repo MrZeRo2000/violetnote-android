@@ -58,7 +58,7 @@ public abstract class BasicCommonNoteFragment extends Fragment {
                     if (i == 0)
                         mRecyclerViewSelector.startActionMode(view, savedSelectedItems[i]);
                     else
-                        mRecyclerViewSelector.setSelectedView(view, savedSelectedItems[i]);
+                        mRecyclerViewSelector.setSelectedView(savedSelectedItems[i]);
                 }
 
                 ActionMode actionMode = mRecyclerViewSelector.getActionMode();

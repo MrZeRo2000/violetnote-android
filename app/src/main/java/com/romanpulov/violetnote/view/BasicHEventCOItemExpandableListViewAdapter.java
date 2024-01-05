@@ -179,7 +179,7 @@ public class BasicHEventCOItemExpandableListViewAdapter extends BaseExpandableLi
         @Override
         public void onClick(View v) {
             if (clickAllowed()) {
-                mViewSelector.setSelectedView(v, mData);
+                mViewSelector.setSelectedView(mData);
                 updateSelectedValues();
             }
         }

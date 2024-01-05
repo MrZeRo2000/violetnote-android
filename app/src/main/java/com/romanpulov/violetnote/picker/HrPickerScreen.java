@@ -49,19 +49,11 @@ public class HrPickerScreen implements HrPickerNavigationProcessor {
 
     private HrPickerNavigator mNavigator;
 
-    public HrPickerNavigator getNavigator() {
-        return mNavigator;
-    }
-
     public void setNavigator(HrPickerNavigator mNavigator) {
         this.mNavigator = mNavigator;
     }
 
     private OnHrPickerScreenUpdateListener mPickerScreenUpdateListener;
-
-    public OnHrPickerScreenUpdateListener getPickerScreenUpdateListener() {
-        return mPickerScreenUpdateListener;
-    }
 
     public void setPickerScreenUpdateListener(OnHrPickerScreenUpdateListener mPickerScreenUpdateListener) {
         this.mPickerScreenUpdateListener = mPickerScreenUpdateListener;
@@ -105,7 +97,7 @@ public class HrPickerScreen implements HrPickerNavigationProcessor {
     }
 
     @Override
-    public void onNavigationFailure(String path, String errorMessage) {
+    public void onNavigationFailure(String errorMessage) {
         mStatus = HrPickerScreen.PICKER_SCREEN_STATUS_ERROR;
         mErrorMessage = errorMessage;
 

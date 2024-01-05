@@ -79,7 +79,7 @@ public abstract class PassDataBaseFragment extends Fragment {
 
     protected abstract void loadModelData();
 
-    protected RecyclerView.OnItemTouchListener mRecyclerViewTouchListenerForDataExpiration = new RecyclerView.OnItemTouchListener() {
+    protected final RecyclerView.OnItemTouchListener mRecyclerViewTouchListenerForDataExpiration = new RecyclerView.OnItemTouchListener() {
         @Override
         public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
             expireModel.prolongDataExpiration();

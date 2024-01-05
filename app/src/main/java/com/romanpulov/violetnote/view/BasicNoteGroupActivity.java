@@ -18,18 +18,13 @@ import com.romanpulov.violetnote.view.core.ActionBarCompatActivity;
 
 import java.util.List;
 
-public class BasicNoteGroupActivity extends ActionBarCompatActivity implements BasicNoteGroupFragment.OnBasicNoteGroupFragmentInteractionListener, BottomToolbarProvider {
+public class BasicNoteGroupActivity extends ActionBarCompatActivity implements BottomToolbarProvider {
 
     private ActionMenuView mBottomToolbar;
 
     private List<BasicNoteGroupA> mBasicNoteGroupList;
     private DBNoteManager mNoteManager;
     private RecyclerView mRecyclerView;
-
-    @Override
-    public void onBasicNoteGroupFragmentInteraction(BasicNoteGroupA item) {
-
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

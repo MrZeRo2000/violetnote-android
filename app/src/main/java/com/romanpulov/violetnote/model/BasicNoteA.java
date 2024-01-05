@@ -84,7 +84,7 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
 
     private List<BasicNoteItemA> mItems = new ArrayList<>();
 
-    public final List<BasicNoteItemA> getItems() {
+    public List<BasicNoteItemA> getItems() {
         return mItems;
     }
 

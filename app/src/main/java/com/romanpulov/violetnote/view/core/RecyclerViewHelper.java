@@ -37,10 +37,6 @@ public class RecyclerViewHelper {
 
     public static class DividerItemDecoration extends RecyclerView.ItemDecoration {
 
-        private static final int[] ATTRS = new int[]{
-                android.R.attr.listDivider
-        };
-
         public static final int HORIZONTAL_LIST = LinearLayoutManager.HORIZONTAL;
 
         public static final int VERTICAL_LIST = LinearLayoutManager.VERTICAL;
@@ -136,7 +132,7 @@ public class RecyclerViewHelper {
 
         @Override
         public void onClick(View v) {
-            mViewSelector.setSelectedView(v, getBindingAdapterPosition());
+            mViewSelector.setSelectedView(getBindingAdapterPosition());
         }
 
         public void updateBackground() {

@@ -33,7 +33,7 @@ public class ViewSelectorHelper {
         Collection<T> selectedItems = selector.getSelectedItems();
         int bgResId;
 
-        if (selectedItems.size() == 0)
+        if (selectedItems.isEmpty())
             bgResId = R.drawable.list_selector;
         else
         if (selectedItems.contains(item))
@@ -42,17 +42,6 @@ public class ViewSelectorHelper {
             bgResId = R.color.windowBackground;
 
         v.setBackgroundResource(bgResId);
-    }
-
-    public static <T extends Parcelable> void saveInstanceState(@NonNull Bundle outState, @NonNull T[] items, ActionMode actionMode) {
-        if (items.length > 0) {
-            outState.putParcelableArray(KEY_SELECTED_ITEMS_ARRAY, items);
-
-            if (actionMode != null) {
-                String title = actionMode.getTitle() == null ? null : actionMode.getTitle().toString();
-                outState.putString(KEY_SELECTION_TITLE, title);
-            }
-        }
     }
 
     public abstract static class AbstractViewSelector<T> {
@@ -104,15 +93,15 @@ public class ViewSelectorHelper {
         }
 
         public void startActionMode(@NonNull View v, @NonNull T item) {
-            if (mSelectedItems.size() == 0) {
+            if (mSelectedItems.isEmpty()) {
                 mSelectedItems.add(item);
                 selectionChanged();
                 startActionModeForView(v);
             } else
-                setSelectedView(v, item);
+                setSelectedView(item);
         }
 
-        public abstract void setSelectedView(View v, T item);
+        public abstract void setSelectedView(T item);
 
         public void setSelectedItems(T[] items) {
             mSelectedItems.clear();
@@ -168,11 +157,11 @@ public class ViewSelectorHelper {
         }
 
         @Override
-        public void setSelectedView(View v, T item) {
-            if (mSelectedItems.size() > 0) {
+        public void setSelectedView(T item) {
+            if (!mSelectedItems.isEmpty()) {
                 if (mSelectedItems.contains(item)) {
                     mSelectedItems.remove(item);
-                    if (mSelectedItems.size() == 0) {
+                    if (mSelectedItems.isEmpty()) {
                         finishActionMode();
                     }
                 } else
@@ -189,11 +178,11 @@ public class ViewSelectorHelper {
         }
 
         @Override
-        public void setSelectedView(View v, T item) {
-            if (mSelectedItems.size() > 0) {
+        public void setSelectedView(T item) {
+            if (!mSelectedItems.isEmpty()) {
                 if (mSelectedItems.contains(item)) {
                     mSelectedItems.remove(item);
-                    if (mSelectedItems.size() == 0) {
+                    if (mSelectedItems.isEmpty()) {
                         finishActionMode();
                     }
                 } else {

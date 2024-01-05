@@ -51,16 +51,6 @@ public class InputParser {
             return String.format(Locale.ENGLISH, "{Text=%s, FloatValue=%d}", mText, mLongValue );
         }
 
-        public String compose() {
-            String result;
-            if (hasValue()) {
-                result = String.format(Locale.ENGLISH, FLOAT_PARAMS_FORMAT, mText, (double)mLongValue / 100d);
-            } else {
-                result = mText;
-            }
-
-            return result;
-        }
     }
 
     public static FloatParamsResult parseFloatParams(String inputString) {
