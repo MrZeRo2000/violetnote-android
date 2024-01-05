@@ -51,12 +51,9 @@ public class TextEditDialogBuilder {
         if (mNonEmptyErrorMessage != null)
             dialog.setNonEmptyErrorMessage(mNonEmptyErrorMessage);
 
-        dialog.setOnTextInputListener(new TextInputDialog.OnTextInputListener() {
-            @Override
-            public void onTextInput(String text) {
-                if ((text != null) && (mListener != null)) {
-                    mListener.onTextInput(text);
-                }
+        dialog.setOnTextInputListener(text -> {
+            if ((text != null) && (mListener != null)) {
+                mListener.onTextInput(text);
             }
         });
         dialog.show();

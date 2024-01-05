@@ -1,7 +1,6 @@
 package com.romanpulov.violetnote.view.core;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import androidx.appcompat.app.AlertDialog;
 import android.text.InputType;
 import android.util.AttributeSet;
@@ -104,48 +103,35 @@ public class TextInputDialog extends AlertInputDialog {
         alert.setNegativeButton(R.string.cancel, null);
 
         if (mNonEmptyErrorMessage == null) {
-            alert.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    String password = input.getText().toString();
-                    if (password.isEmpty())
-                        input.setError("Should not be empty");
-                    else if (mOnTextInputListener != null)
-                        mOnTextInputListener.onTextInput(password);
-                }
+            alert.setPositiveButton(R.string.ok, (dialog, which) -> {
+                String password = input.getText().toString();
+                if (password.isEmpty())
+                    input.setError("Should not be empty");
+                else if (mOnTextInputListener != null)
+                    mOnTextInputListener.onTextInput(password);
             });
         }
 
-        alert.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (mOnTextInputListener != null)
-                    mOnTextInputListener.onTextInput(null);
-            }
+        alert.setNegativeButton(R.string.cancel, (dialog, which) -> {
+            if (mOnTextInputListener != null)
+                mOnTextInputListener.onTextInput(null);
         });
 
         mAlertDialog = alert.create();
 
         if (mNonEmptyErrorMessage != null) {
-            mAlertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
-                @Override
-                public void onShow(DialogInterface dialogInterface) {
-                    Button b = mAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
-                    b.setOnClickListener(new View.OnClickListener() {
-
-                        @Override
-                        public void onClick(View view) {
-                            String password = input.getText().toString();
-                            if (password.isEmpty())
-                                input.setError(mNonEmptyErrorMessage);
-                            else {
-                                if (mOnTextInputListener != null)
-                                    mOnTextInputListener.onTextInput(password);
-                                mAlertDialog.dismiss();
-                            }
-                        }
-                    });
-                }
+            mAlertDialog.setOnShowListener(dialogInterface -> {
+                Button b = mAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                b.setOnClickListener(view -> {
+                    String password = input.getText().toString();
+                    if (password.isEmpty())
+                        input.setError(mNonEmptyErrorMessage);
+                    else {
+                        if (mOnTextInputListener != null)
+                            mOnTextInputListener.onTextInput(password);
+                        mAlertDialog.dismiss();
+                    }
+                });
             });
         }
 

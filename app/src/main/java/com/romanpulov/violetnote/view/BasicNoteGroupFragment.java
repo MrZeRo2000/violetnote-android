@@ -6,11 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.appcompat.view.ActionMode;
-import androidx.appcompat.widget.ActionMenuView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -70,12 +68,7 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
     private void setupBottomToolbarHelper() {
         FragmentActivity activity = getActivity();
         if (activity != null) {
-            mBottomToolbarHelper = BottomToolbarHelper.fromContext(activity, new ActionMenuView.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem menuItem) {
-                    return processMoveMenuItemClick(menuItem);
-                }
-            });
+            mBottomToolbarHelper = BottomToolbarHelper.fromContext(activity, this::processMoveMenuItemClick);
         }
     }
 
@@ -111,16 +104,13 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
         executor.addAction(getString(R.string.caption_loading), new BasicNoteGroupRefreshAction(mBasicNoteGroupList));
 
         //on complete
-        executor.setOnExecutionCompletedListener(new BasicActionExecutor.OnExecutionCompletedListener<List<BasicNoteGroupA>>() {
-            @Override
-            public void onExecutionCompleted(List<BasicNoteGroupA> data, boolean result) {
-                BasicEntityNoteSelectionPosA selectionPos = new BasicEntityNoteSelectionPosA(mBasicNoteGroupList, items);
-                int selectionScrollPos = selectionPos.getDirectionPos(action.getDirection());
+        executor.setOnExecutionCompletedListener((data, result) -> {
+            BasicEntityNoteSelectionPosA selectionPos = new BasicEntityNoteSelectionPosA(mBasicNoteGroupList, items);
+            int selectionScrollPos = selectionPos.getDirectionPos(action.getDirection());
 
-                if (selectionScrollPos != -1) {
-                    mRecyclerViewSelector.setSelectedItems(selectionPos.getSelectedItemsPositions());
-                    mRecyclerView.scrollToPosition(selectionScrollPos);
-                }
+            if (selectionScrollPos != -1) {
+                mRecyclerViewSelector.setSelectedItems(selectionPos.getSelectedItemsPositions());
+                mRecyclerView.scrollToPosition(selectionScrollPos);
             }
         });
 
@@ -133,18 +123,15 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
         BasicActionExecutor<List<BasicNoteGroupA>> executor = new BasicActionExecutor<>(getContext(), items);
         executor.addAction(getString(R.string.caption_processing), new BasicNoteGroupAddAction(items));
         executor.addAction(getString(R.string.caption_loading), new BasicNoteGroupRefreshAction(mBasicNoteGroupList));
-        executor.setOnExecutionCompletedListener(new BasicActionExecutor.OnExecutionCompletedListener<List<BasicNoteGroupA>>() {
-            @Override
-            public void onExecutionCompleted(List<BasicNoteGroupA> data, boolean result) {
-                if (result) {
-                    RecyclerViewHelper.adapterNotifyDataSetChanged(mRecyclerView);
+        executor.setOnExecutionCompletedListener((data, result) -> {
+            if (result) {
+                RecyclerViewHelper.adapterNotifyDataSetChanged(mRecyclerView);
 
-                    int position = mBasicNoteGroupList.size() - 1;
+                int position = mBasicNoteGroupList.size() - 1;
 
-                    if (position > -1)
-                        mRecyclerView.scrollToPosition(position);
+                if (position > -1)
+                    mRecyclerView.scrollToPosition(position);
 
-                }
             }
         });
         executor.execute();
@@ -161,31 +148,25 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
         AlertOkCancelSupportDialogFragment dialog;
 
         // check notes
-        if (mDBNoteManager.mBasicNoteDAO.getByGroup(item).size() > 0) {
+        if (!mDBNoteManager.mBasicNoteDAO.getByGroup(item).isEmpty()) {
             dialog = AlertOkCancelSupportDialogFragment.newAlertOkInfoDialog(getString(R.string.ui_error_group_delete_contain_notes, item.getDisplayTitle()));
         } else {
             dialog = AlertOkCancelSupportDialogFragment.newAlertOkCancelDialog(getString(R.string.ui_question_delete_item_are_you_sure, item.getDisplayTitle()));
-            dialog.setOkButtonClickListener(new AlertOkCancelSupportDialogFragment.OnClickListener() {
-                @Override
-                public void OnClick(DialogFragment dialog) {
-                    BasicActionExecutor<List<BasicNoteGroupA>> executor = new BasicActionExecutor<>(getContext(), items);
-                    executor.addAction(getString(R.string.caption_processing), new BasicNoteGroupDeleteAction(mBasicNoteGroupList, items));
-                    executor.addAction(getString(R.string.caption_loading), new BasicNoteGroupRefreshAction(mBasicNoteGroupList));
-                    executor.setOnExecutionCompletedListener(new BasicActionExecutor.OnExecutionCompletedListener<List<BasicNoteGroupA>>() {
-                        @Override
-                        public void onExecutionCompleted(List<BasicNoteGroupA> data, boolean result) {
-                            if (result) {
-                                mode.finish();
-                            }
-                            if (mDialogFragment != null) {
-                                mDialogFragment.dismiss();
-                                mDialogFragment = null;
-                            }
+            dialog.setOkButtonClickListener(dialog1 -> {
+                BasicActionExecutor<List<BasicNoteGroupA>> executor = new BasicActionExecutor<>(getContext(), items);
+                executor.addAction(getString(R.string.caption_processing), new BasicNoteGroupDeleteAction(mBasicNoteGroupList, items));
+                executor.addAction(getString(R.string.caption_loading), new BasicNoteGroupRefreshAction(mBasicNoteGroupList));
+                executor.setOnExecutionCompletedListener((data, result) -> {
+                    if (result) {
+                        mode.finish();
+                    }
+                    if (mDialogFragment != null) {
+                        mDialogFragment.dismiss();
+                        mDialogFragment = null;
+                    }
 
-                        }
-                    });
-                    executor.execute();
-                }
+                });
+                executor.execute();
             });
         }
 
@@ -221,17 +202,14 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
             executor.addAction(getString(R.string.caption_loading), new BasicNoteGroupRefreshAction(mBasicNoteGroupList));
 
             //on complete
-            executor.setOnExecutionCompletedListener(new BasicActionExecutor.OnExecutionCompletedListener<List<BasicNoteGroupA>>() {
-                @Override
-                public void onExecutionCompleted(List<BasicNoteGroupA> data, boolean result) {
-                    if (result) {
-                        int position = mBasicNoteGroupList.indexOf(noteGroup);
-                        if (mRecyclerView != null) {
-                            RecyclerViewHelper.adapterNotifyItemChanged(mRecyclerView, position);
-                        }
-
-                        updateTitle(mRecyclerViewSelector.getActionMode());
+            executor.setOnExecutionCompletedListener((data1, result) -> {
+                if (result) {
+                    int position = mBasicNoteGroupList.indexOf(noteGroup);
+                    if (mRecyclerView != null) {
+                        RecyclerViewHelper.adapterNotifyItemChanged(mRecyclerView, position);
                     }
+
+                    updateTitle(mRecyclerViewSelector.getActionMode());
                 }
             });
 

@@ -1,6 +1,5 @@
 package com.romanpulov.violetnote.view.preference;
 
-import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
 import com.romanpulov.violetnote.cloud.CloudAccountFacade;
@@ -15,12 +14,9 @@ public class CloudAccountPreferenceSetup extends PreferenceSetup {
 
     @Override
     public void execute() {
-        mPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                mCloudAccountFacade.interactiveSetupAccount(mActivity);
-                return true;
-            }
+        mPreference.setOnPreferenceClickListener(preference -> {
+            mCloudAccountFacade.interactiveSetupAccount(mActivity);
+            return true;
         });
     }
 }

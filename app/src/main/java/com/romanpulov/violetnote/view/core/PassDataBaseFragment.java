@@ -2,14 +2,12 @@ package com.romanpulov.violetnote.view.core;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -115,28 +113,25 @@ public abstract class PassDataBaseFragment extends Fragment {
         model = new ViewModelProvider(requireActivity()).get(PassDataViewModel.class);
         expireModel = new ViewModelProvider(requireActivity()).get(PassDataExpireViewModel.class);
 
-        mEditTextPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if ((v.getText().length() > 0) && (actionId == EditorInfo.IME_ACTION_GO)) {
-                    //get the data
-                    String password = v.getText().toString();
+        mEditTextPassword.setOnEditorActionListener((v, actionId, event) -> {
+            if ((v.getText().length() > 0) && (actionId == EditorInfo.IME_ACTION_GO)) {
+                //get the data
+                String password = v.getText().toString();
 
-                    // update UI
-                    InputManagerHelper.hideInput(v);
-                    v.setText(null);
+                // update UI
+                InputManagerHelper.hideInput(v);
+                v.setText(null);
 
-                    setDataState(DATA_STATE_LOADING);
+                setDataState(DATA_STATE_LOADING);
 
-                    // request data from model
-                    model.setPassword(password);
+                // request data from model
+                model.setPassword(password);
 
-                    loadModelData();
+                loadModelData();
 
-                    return true;
-                }
-                return false;
+                return true;
             }
+            return false;
         });
 
         if ((model.getPassDataResult().getValue() == null) || (model.getPassDataResult().getValue().getPassData() == null)) {
@@ -196,9 +191,8 @@ public abstract class PassDataBaseFragment extends Fragment {
 
             // setup search action helper
             mSearchActionHelper.setAutoCompleteList(passDataA.getSearchValues(true, true));
-            mSearchActionHelper.setOnSearchConditionChangedListener((isSearchSystem, isSearchUser) -> {
-                mSearchActionHelper.setAutoCompleteList(passDataA.getSearchValues(isSearchSystem, isSearchUser));
-            });
+            mSearchActionHelper.setOnSearchConditionChangedListener((isSearchSystem, isSearchUser) ->
+                    mSearchActionHelper.setAutoCompleteList(passDataA.getSearchValues(isSearchSystem, isSearchUser)));
         } else {
             mSearchActionHelper.hideLayout();
             mSearchActionHelper.clearSearchText();

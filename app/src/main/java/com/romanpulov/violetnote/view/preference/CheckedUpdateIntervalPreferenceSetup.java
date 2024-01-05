@@ -1,6 +1,5 @@
 package com.romanpulov.violetnote.view.preference;
 
-import android.content.DialogInterface;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.appcompat.app.AlertDialog;
@@ -42,21 +41,13 @@ public class CheckedUpdateIntervalPreferenceSetup extends PreferenceSetup {
                 final AlertDialog.Builder alert = new AlertDialog.Builder(mActivity, R.style.AlertDialogTheme);
                 alert
                         .setTitle(R.string.pref_title_interface_checked_update_interval)
-                        .setSingleChoiceItems(R.array.pref_checked_update_interval_entries, result.which, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                result.which = which;
-                            }
-                        })
-                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                int oldValue = getPreferenceValue(preference);
+                        .setSingleChoiceItems(R.array.pref_checked_update_interval_entries, result.which, (dialog, which) -> result.which = which)
+                        .setPositiveButton(R.string.ok, (dialog, which) -> {
+                            int oldValue = getPreferenceValue(preference);
 
-                                if (oldValue != result.which) {
-                                    preference.getPreferenceManager().getSharedPreferences().edit().putInt(PREF_KEY_INTERFACE_CHECKED_UPDATE_INTERVAL, result.which).apply();
-                                    preference.setSummary(entries[result.which]);
-                                }
+                            if (oldValue != result.which) {
+                                preference.getPreferenceManager().getSharedPreferences().edit().putInt(PREF_KEY_INTERFACE_CHECKED_UPDATE_INTERVAL, result.which).apply();
+                                preference.setSummary(entries[result.which]);
                             }
                         })
                         .setNegativeButton(R.string.cancel, null)

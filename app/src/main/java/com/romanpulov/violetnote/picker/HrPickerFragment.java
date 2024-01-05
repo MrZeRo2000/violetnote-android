@@ -97,32 +97,29 @@ public class HrPickerFragment extends Fragment implements HrPickerScreen.OnHrPic
                     break;
             }
 
-            holder.mView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    HrPickerItem selectedItem = mItems.get(holder.getBindingAdapterPosition());
+            holder.mView.setOnClickListener(view -> {
+                HrPickerItem selectedItem = mItems.get(holder.getBindingAdapterPosition());
 
-                    switch (selectedItem.itemType) {
-                        case HrPickerItem.ITEM_TYPE_FILE:
-                            Bundle result = new Bundle();
-                            result.putString(RESULT_VALUE_KEY, HrPickerScreen.combinePath(mPickerScreen.getCurrentPath(), selectedItem));
-                            HrPickerFragment.this.getParentFragmentManager().setFragmentResult(RESULT_KEY, result);
-                            break;
-                        case HrPickerItem.ITEM_TYPE_PARENT:
-                            HrPickerFragment.this.mPickerScreen.navigate(
-                                    getContext(),
-                                    HrPickerFragment.this.mPickerScreen.getParentPath(),
-                                    selectedItem
-                                    );
-                            break;
-                        case HrPickerItem.ITEM_TYPE_FOLDER:
-                            HrPickerFragment.this.mPickerScreen.navigate(
-                                    getContext(),
-                                    HrPickerFragment.this.mPickerScreen.getCurrentPath(),
-                                    selectedItem
-                            );
-                            break;
-                    }
+                switch (selectedItem.itemType) {
+                    case HrPickerItem.ITEM_TYPE_FILE:
+                        Bundle result = new Bundle();
+                        result.putString(RESULT_VALUE_KEY, HrPickerScreen.combinePath(mPickerScreen.getCurrentPath(), selectedItem));
+                        HrPickerFragment.this.getParentFragmentManager().setFragmentResult(RESULT_KEY, result);
+                        break;
+                    case HrPickerItem.ITEM_TYPE_PARENT:
+                        HrPickerFragment.this.mPickerScreen.navigate(
+                                getContext(),
+                                HrPickerFragment.this.mPickerScreen.getParentPath(),
+                                selectedItem
+                                );
+                        break;
+                    case HrPickerItem.ITEM_TYPE_FOLDER:
+                        HrPickerFragment.this.mPickerScreen.navigate(
+                                getContext(),
+                                HrPickerFragment.this.mPickerScreen.getCurrentPath(),
+                                selectedItem
+                        );
+                        break;
                 }
             });
         }

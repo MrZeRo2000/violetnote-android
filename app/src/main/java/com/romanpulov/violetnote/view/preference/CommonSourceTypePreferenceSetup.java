@@ -1,7 +1,5 @@
 package com.romanpulov.violetnote.view.preference;
 
-import android.content.DialogInterface;
-
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.appcompat.app.AlertDialog;
@@ -41,31 +39,18 @@ public class CommonSourceTypePreferenceSetup extends PreferenceSetup {
                 final AlertDialog.Builder alert = new AlertDialog.Builder(mActivity, R.style.AlertDialogTheme);
                 alert
                         .setTitle(R.string.pref_title_source_type)
-                        .setSingleChoiceItems(mSourceTypeEntriesId, result.which, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                result.which = which;
-                            }
-                        })
-                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                int oldSourceType = preference.getPreferenceManager().getSharedPreferences().getInt(preference.getKey(), mDefaultValue);
-                                int newSourceType = result.which;
+                        .setSingleChoiceItems(mSourceTypeEntriesId, result.which, (dialog, which) -> result.which = which)
+                        .setPositiveButton(R.string.ok, (dialog, which) -> {
+                            int oldSourceType = preference.getPreferenceManager().getSharedPreferences().getInt(preference.getKey(), mDefaultValue);
+                            int newSourceType = result.which;
 
-                                if (oldSourceType != newSourceType) {
-                                    preference.getPreferenceManager().getSharedPreferences().edit().putInt(preference.getKey(), newSourceType).commit();
-                                    preference.setSummary(prefSourceTypeEntries[preference.getPreferenceManager().getSharedPreferences().getInt(preference.getKey(), mDefaultValue)]);
-                                    PreferenceRepository.setSourcePathPreferenceValue(mPreferenceFragment, null);
-                                }
+                            if (oldSourceType != newSourceType) {
+                                preference.getPreferenceManager().getSharedPreferences().edit().putInt(preference.getKey(), newSourceType).commit();
+                                preference.setSummary(prefSourceTypeEntries[preference.getPreferenceManager().getSharedPreferences().getInt(preference.getKey(), mDefaultValue)]);
+                                PreferenceRepository.setSourcePathPreferenceValue(mPreferenceFragment, null);
                             }
                         })
-                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                            }
-                        })
+                        .setNegativeButton(R.string.cancel, (dialog, which) -> {})
                         .create()
                         .show();
 

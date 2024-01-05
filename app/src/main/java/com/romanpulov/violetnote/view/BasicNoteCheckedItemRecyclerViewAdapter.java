@@ -92,12 +92,9 @@ public class BasicNoteCheckedItemRecyclerViewAdapter extends RecyclerView.Adapte
             mValueView = view.findViewById(R.id.value);
             mPriceView = view.findViewById(R.id.price);
             mPriorityView = view.findViewById(R.id.priority);
-            mPriceView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if ((!mRecyclerViewSelector.isSelected()) && (mListener != null) && (getBindingAdapterPosition() != -1))
-                        mListener.onBasicNoteItemPriceClick(mBasicNoteData.getNote().getItems().get(getBindingAdapterPosition()), getBindingAdapterPosition());
-                }
+            mPriceView.setOnClickListener(v -> {
+                if ((!mRecyclerViewSelector.isSelected()) && (mListener != null) && (getBindingAdapterPosition() != -1))
+                    mListener.onBasicNoteItemPriceClick(mBasicNoteData.getNote().getItems().get(getBindingAdapterPosition()), getBindingAdapterPosition());
             });
         }
 

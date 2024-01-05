@@ -47,9 +47,7 @@ public class GDHelper extends GDBaseHelper {
                         GDHelper.displayMessage(activity, R.string.message_gdrive_successfully_logged_in);
                         GDHelper.getInstance().setServerAuthCode(account.getServerAuthCode());
                     })
-                    .addOnFailureListener(e -> {
-                        GDHelper.displayMessage(activity, R.string.error_onedrive_login, e.getMessage());
-                    });
+                    .addOnFailureListener(e -> GDHelper.displayMessage(activity, R.string.error_onedrive_login, e.getMessage()));
         }
     }
 }

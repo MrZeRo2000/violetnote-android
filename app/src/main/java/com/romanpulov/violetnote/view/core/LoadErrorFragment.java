@@ -56,12 +56,9 @@ public class LoadErrorFragment extends Fragment {
 
         //setup reload button
         Button reloadButton = view.findViewById(R.id.reload);
-        reloadButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (getActivity() instanceof PasswordActivity)
-                    ((PasswordActivity)getActivity()).reload();
-            }
+        reloadButton.setOnClickListener(v -> {
+            if (getActivity() instanceof PasswordActivity)
+                ((PasswordActivity)getActivity()).reload();
         });
 
         return view;

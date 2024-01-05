@@ -1,32 +1,23 @@
 package com.romanpulov.violetnote.worker;
 
 import android.content.Context;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.work.Constraints;
 import androidx.work.Data;
-import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.ExistingWorkPolicy;
 import androidx.work.NetworkType;
 import androidx.work.OneTimeWorkRequest;
-import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.internal.Storage;
 import com.romanpulov.library.common.loader.core.Loader;
 import com.romanpulov.library.common.loader.core.LoaderFactory;
 import com.romanpulov.library.common.network.NetworkUtils;
 import com.romanpulov.violetnote.view.helper.LoggerHelper;
 
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 public class LoaderWorker extends Worker {
     private static final String WORKER_TAG = LoaderWorker.class.getSimpleName() + "TAG";

@@ -1,7 +1,6 @@
 package com.romanpulov.violetnote.view.core;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
@@ -103,12 +102,9 @@ public class AlertOkCancelSupportDialogFragment extends DialogFragment {
         dialogBuilder
                 .setMessage(mMessage)
                 .setPositiveButton(R.string.ok,
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                if (null != mOkButtonClickListener)
-                                    mOkButtonClickListener.OnClick(AlertOkCancelSupportDialogFragment.this);
-                            }
+                        (dialog, which) -> {
+                            if (null != mOkButtonClickListener)
+                                mOkButtonClickListener.OnClick(AlertOkCancelSupportDialogFragment.this);
                         }
                 )
                 .setTitle(titleId)

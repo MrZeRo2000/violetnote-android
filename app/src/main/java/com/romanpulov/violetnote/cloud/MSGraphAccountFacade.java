@@ -1,7 +1,6 @@
 package com.romanpulov.violetnote.cloud;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 
 import androidx.appcompat.app.AlertDialog;
 
@@ -30,44 +29,34 @@ public class MSGraphAccountFacade implements CloudAccountFacade {
         final AlertDialog.Builder alert = new AlertDialog.Builder(activity, R.style.AlertDialogTheme);
         alert
                 .setTitle(R.string.ui_dialog_title_confirmation)
-                .setPositiveButton(R.string.ui_dialog_button_login, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        MSGraphHelper.getInstance().login(
-                                activity,
-                                new OnMSActionListener<String>() {
-                                    @Override
-                                    public void onActionSuccess(int action, String data) {
-                                        displayMessage(activity, R.string.message_onedrive_successfully_logged_in);
-                                    }
+                .setPositiveButton(R.string.ui_dialog_button_login, (dialog, which) -> MSGraphHelper.getInstance().login(
+                        activity,
+                        new OnMSActionListener<String>() {
+                            @Override
+                            public void onActionSuccess(int action, String data) {
+                                displayMessage(activity, R.string.message_onedrive_successfully_logged_in);
+                            }
 
-                                    @Override
-                                    public void onActionFailure(int action, String errorMessage) {
-                                        displayMessage(activity, R.string.error_onedrive_login, errorMessage);
-                                    }
-                                }
-                        );
-                    }
-                })
-                .setNegativeButton(R.string.ui_dialog_button_logout, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        MSGraphHelper.getInstance().logout(
-                                activity,
-                                new OnMSActionListener<Void>() {
-                                    @Override
-                                    public void onActionSuccess(int action, Void data) {
-                                        displayMessage(activity, R.string.message_onedrive_successfully_logged_out);
-                                    }
+                            @Override
+                            public void onActionFailure(int action, String errorMessage) {
+                                displayMessage(activity, R.string.error_onedrive_login, errorMessage);
+                            }
+                        }
+                ))
+                .setNegativeButton(R.string.ui_dialog_button_logout, (dialog, which) -> MSGraphHelper.getInstance().logout(
+                        activity,
+                        new OnMSActionListener<Void>() {
+                            @Override
+                            public void onActionSuccess(int action, Void data) {
+                                displayMessage(activity, R.string.message_onedrive_successfully_logged_out);
+                            }
 
-                                    @Override
-                                    public void onActionFailure(int action, String errorMessage) {
-                                        displayMessage(activity, R.string.error_onedrive_logout, errorMessage);
-                                    }
-                                }
-                        );
-                    }
-                })
+                            @Override
+                            public void onActionFailure(int action, String errorMessage) {
+                                displayMessage(activity, R.string.error_onedrive_logout, errorMessage);
+                            }
+                        }
+                ))
                 .show();
     }
 

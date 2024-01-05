@@ -1,7 +1,6 @@
 package com.romanpulov.violetnote.cloud;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 
 import androidx.appcompat.app.AlertDialog;
 
@@ -20,42 +19,32 @@ public class GDAccountFacade implements CloudAccountFacade{
         final AlertDialog.Builder alert = new AlertDialog.Builder(activity, R.style.AlertDialogTheme);
         alert
                 .setTitle(R.string.ui_dialog_title_confirmation)
-                .setPositiveButton(R.string.ui_dialog_button_login, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        GDHelper.getInstance().login(
-                                activity, new OnGDActionListener<Void>() {
-                                    @Override
-                                    public void onActionSuccess(Void unused) {
+                .setPositiveButton(R.string.ui_dialog_button_login, (dialog, which) -> GDHelper.getInstance().login(
+                        activity, new OnGDActionListener<Void>() {
+                            @Override
+                            public void onActionSuccess(Void unused) {
 
-                                    }
+                            }
 
-                                    @Override
-                                    public void onActionFailure(Exception e) {
+                            @Override
+                            public void onActionFailure(Exception e) {
 
-                                    }
-                                }
-                        );
-                    }
-                })
-                .setNegativeButton(R.string.ui_dialog_button_logout, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        GDHelper.getInstance().logout(
-                                activity, new OnGDActionListener<Void>() {
-                                    @Override
-                                    public void onActionSuccess(Void unused) {
-                                        GDHelper.displayMessage(activity, R.string.message_gdrive_successfully_logged_out);
-                                    }
+                            }
+                        }
+                ))
+                .setNegativeButton(R.string.ui_dialog_button_logout, (dialog, which) -> GDHelper.getInstance().logout(
+                        activity, new OnGDActionListener<Void>() {
+                            @Override
+                            public void onActionSuccess(Void unused) {
+                                GDHelper.displayMessage(activity, R.string.message_gdrive_successfully_logged_out);
+                            }
 
-                                    @Override
-                                    public void onActionFailure(Exception e) {
-                                        GDHelper.displayMessage(activity, R.string.error_gdrive_logout, e.getMessage());
-                                    }
-                                }
-                        );
-                    }
-                })
+                            @Override
+                            public void onActionFailure(Exception e) {
+                                GDHelper.displayMessage(activity, R.string.error_gdrive_logout, e.getMessage());
+                            }
+                        }
+                ))
                 .show();
     }
 

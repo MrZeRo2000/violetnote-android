@@ -10,7 +10,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
-import android.widget.TextView;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.view.OnSearchInteractionListener;
@@ -101,32 +100,29 @@ public class SearchActionHelper {
             }
         });
 
-        mSearchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                if (
-                    // editor with action
-                    (i == EditorInfo.IME_ACTION_SEARCH) ||
-                    // editor with Enter button
-                    ((i == EditorInfo.IME_ACTION_UNSPECIFIED) && (keyEvent != null) && (keyEvent.getAction() == KeyEvent.ACTION_DOWN))
-                )
-                {
-                    // get search text
-                    String searchText = textView.getText().toString();
+        mSearchEditText.setOnEditorActionListener((textView, i, keyEvent) -> {
+            if (
+                // editor with action
+                (i == EditorInfo.IME_ACTION_SEARCH) ||
+                // editor with Enter button
+                ((i == EditorInfo.IME_ACTION_UNSPECIFIED) && (keyEvent != null) && (keyEvent.getAction() == KeyEvent.ACTION_DOWN))
+            )
+            {
+                // get search text
+                String searchText = textView.getText().toString();
 
-                    // update UI
-                    hideLayout();
-                    mSearchEditText.setText(null);
+                // update UI
+                hideLayout();
+                mSearchEditText.setText(null);
 
-                    // return data
-                    if (mSearchListener != null) {
-                        mSearchListener.onSearchFragmentInteraction(searchText, mSearchSystemCheckBox.isChecked(), mSearchUserCheckBox.isChecked());
-                    }
-
-                    return true;
+                // return data
+                if (mSearchListener != null) {
+                    mSearchListener.onSearchFragmentInteraction(searchText, mSearchSystemCheckBox.isChecked(), mSearchUserCheckBox.isChecked());
                 }
-                return false;
+
+                return true;
             }
+            return false;
         });
     }
 

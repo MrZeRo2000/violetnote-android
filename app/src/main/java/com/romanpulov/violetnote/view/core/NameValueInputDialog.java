@@ -1,7 +1,6 @@
 package com.romanpulov.violetnote.view.core;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import androidx.appcompat.app.AlertDialog;
 import android.view.View;
 import android.widget.Button;
@@ -65,32 +64,26 @@ public class NameValueInputDialog extends AlertInputDialog {
         //create
         mAlertDialog = alert.create();
 
-        mAlertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialogInterface) {
-                Button b = mAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
-                b.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        String name = nameEditText.getText().toString();
-                        String value = valueEditText.getText().toString();
+        mAlertDialog.setOnShowListener(dialogInterface -> {
+            Button b = mAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            b.setOnClickListener(view -> {
+                String name = nameEditText.getText().toString();
+                String value = valueEditText.getText().toString();
 
-                        if (name.isEmpty())
-                            nameEditText.setError(mContext.getString(R.string.error_field_not_empty));
-                        else
-                            if (value.isEmpty())
-                                valueEditText.setError(mContext.getString(R.string.error_field_not_empty));
-                            else {
-                                //hide editor
-                                InputManagerHelper.hideInput(valueEditText);
+                if (name.isEmpty())
+                    nameEditText.setError(mContext.getString(R.string.error_field_not_empty));
+                else
+                    if (value.isEmpty())
+                        valueEditText.setError(mContext.getString(R.string.error_field_not_empty));
+                    else {
+                        //hide editor
+                        InputManagerHelper.hideInput(valueEditText);
 
-                                if (mOnNameValueInputListener != null)
-                                    mOnNameValueInputListener.onNameValueInput(name, value);
-                                mAlertDialog.dismiss();
-                            }
+                        if (mOnNameValueInputListener != null)
+                            mOnNameValueInputListener.onNameValueInput(name, value);
+                        mAlertDialog.dismiss();
                     }
-                });
-            }
+            });
         });
 
         mAlertDialog.show();

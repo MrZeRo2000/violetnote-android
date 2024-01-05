@@ -1,8 +1,5 @@
 package com.romanpulov.violetnote.model;
 
-import androidx.annotation.NonNull;
-
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -55,30 +52,12 @@ public class BasicOrderedEntityNoteA extends BasicModifiableEntityNoteA{
         return (this.mOrderId == object.mOrderId) && (this.mPriority == object.mPriority);
     }
 
-    public int compareTo(@NonNull BasicOrderedEntityNoteA another) {
-        if (this == another)
-            return 0;
-
-        if (this.mPriority < another.mPriority)
-            return 1;
-        else if (this.mPriority > another.mPriority)
-            return -1;
-        else {
-            if (this.mOrderId > another.mOrderId)
-                return 1;
-            else if (this.mOrderId < another.mOrderId)
-                return -1;
-            else
-                return 0;
-        }
-    }
-
     /**
      * Ascending sorting by orderId
      * @param list sorted list
      */
     public static void sortAsc(List<? extends BasicOrderedEntityNoteA> list) {
-        Collections.sort(list, new BasicOrderedEntityNoteA.BasicOrderedEntityNoteAscComparator());
+        list.sort(new BasicOrderedEntityNoteAscComparator());
     }
 
     /**
@@ -86,7 +65,7 @@ public class BasicOrderedEntityNoteA extends BasicModifiableEntityNoteA{
      * @param list sorted list
      */
     public static void sortDesc(List<? extends BasicOrderedEntityNoteA> list) {
-        Collections.sort(list, new BasicOrderedEntityNoteA.BasicOrderedEntityNoteDescComparator());
+        list.sort(new BasicOrderedEntityNoteDescComparator());
     }
 
     /**
@@ -103,12 +82,7 @@ public class BasicOrderedEntityNoteA extends BasicModifiableEntityNoteA{
             else if (lhs.mPriority > rhs.mPriority)
                 return -1;
             else {
-                if (lhs.mOrderId > rhs.mOrderId)
-                    return 1;
-                else if (lhs.mOrderId < rhs.mOrderId)
-                    return -1;
-                else
-                    return 0;
+                return Long.compare(lhs.mOrderId, rhs.mOrderId);
             }
         }
     }
@@ -127,12 +101,7 @@ public class BasicOrderedEntityNoteA extends BasicModifiableEntityNoteA{
             else if (lhs.mPriority > rhs.mPriority)
                 return 1;
             else {
-                if (lhs.mOrderId > rhs.mOrderId)
-                    return -1;
-                else if (lhs.mOrderId < rhs.mOrderId)
-                    return 1;
-                else
-                    return 0;
+                return Long.compare(rhs.mOrderId, lhs.mOrderId);
             }
         }
     }

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.appcompat.view.ActionMode;
@@ -141,23 +140,20 @@ public class BasicHEventCOItemFragment extends Fragment {
         private void performRestoreAction(final Collection<BasicHNoteCOItemA> selectedNoteItems) {
             String queryString = getString(R.string.ui_question_are_you_sure_restore_items, selectedNoteItems.size());
             AlertOkCancelSupportDialogFragment dialog = AlertOkCancelSupportDialogFragment.newAlertOkCancelDialog(queryString);
-            dialog.setOkButtonClickListener(new AlertOkCancelSupportDialogFragment.OnClickListener() {
-                @Override
-                public void OnClick(DialogFragment dialog) {
-                    Set<String> selectedList = new HashSet<>();
-                    for (BasicHNoteCOItemA item : selectedNoteItems) {
-                        selectedList.add(item.getValue());
-                    }
+            dialog.setOkButtonClickListener(dialog1 -> {
+                Set<String> selectedList = new HashSet<>();
+                for (BasicHNoteCOItemA item : selectedNoteItems) {
+                    selectedList.add(item.getValue());
+                }
 
-                    String[] selectedListArray = selectedList.toArray(new String[]{});
+                String[] selectedListArray = selectedList.toArray(new String[]{});
 
-                    Activity activity = getActivity();
-                    if (activity != null) {
-                        Intent intent = activity.getIntent();
-                        intent.putExtra(KEY_SELECTED_ITEMS_RETURN_DATA, selectedListArray);
-                        activity.setResult(Activity.RESULT_OK, intent);
-                        activity.finish();
-                    }
+                Activity activity = getActivity();
+                if (activity != null) {
+                    Intent intent = activity.getIntent();
+                    intent.putExtra(KEY_SELECTED_ITEMS_RETURN_DATA, selectedListArray);
+                    activity.setResult(Activity.RESULT_OK, intent);
+                    activity.finish();
                 }
             });
 

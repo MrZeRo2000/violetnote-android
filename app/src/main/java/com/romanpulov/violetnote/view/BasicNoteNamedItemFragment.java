@@ -7,7 +7,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.view.ActionMode;
-import androidx.appcompat.widget.ActionMenuView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -36,7 +35,6 @@ import com.romanpulov.violetnote.view.core.NameValueInputDialog;
 import com.romanpulov.violetnote.view.core.PasswordActivity;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 import com.romanpulov.violetnote.view.core.TextEditDialogBuilder;
-import com.romanpulov.violetnote.view.core.TextInputDialog;
 import com.romanpulov.violetnote.view.helper.InputActionHelper;
 import com.romanpulov.violetnote.view.helper.InputManagerHelper;
 
@@ -65,12 +63,7 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
     private void setupBottomToolbarHelper() {
         FragmentActivity activity = getActivity();
         if (activity != null) {
-            mBottomToolbarHelper = BottomToolbarHelper.fromContext(activity, new ActionMenuView.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem menuItem) {
-                    return processMoveMenuItemClick(menuItem);
-                }
-            });
+            mBottomToolbarHelper = BottomToolbarHelper.fromContext(activity, this::processMoveMenuItemClick);
         }
     }
 
@@ -87,12 +80,9 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
 
     public void performAddAction() {
         NameValueInputDialog dialog = new NameValueInputDialog(getActivity(), getString(R.string.ui_name_value_title));
-        dialog.setOnNameValueInputListener(new NameValueInputDialog.OnNameValueInputListener() {
-            @Override
-            public void onNameValueInput(String name, String value) {
-                if ((name != null) && (value != null)) {
-                    performAddAction(BasicNoteItemA.newNamedEditInstance(name, value));
-                }
+        dialog.setOnNameValueInputListener((name, value) -> {
+            if ((name != null) && (value != null)) {
+                performAddAction(BasicNoteItemA.newNamedEditInstance(name, value));
             }
         });
         dialog.show();
@@ -114,16 +104,13 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
                 BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity(), mBasicNoteData);
                 executor.addAction(getString(R.string.caption_processing), new BasicNoteDataItemEditNameValueAction(mBasicNoteData, item));
                 executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData));
-                executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
-                    @Override
-                    public void onExecutionCompleted(BasicNoteDataA basicNoteData, boolean result) {
-                        mBasicNoteData = basicNoteData;
+                executor.setOnExecutionCompletedListener((BasicNoteDataActionExecutor.OnExecutionCompletedListener) (basicNoteData, result) -> {
+                    mBasicNoteData = basicNoteData;
 
-                        //clear editor reference
-                        if (mEditorDialog != null) {
-                            mEditorDialog.dismiss();
-                            mEditorDialog = null;
-                        }
+                    //clear editor reference
+                    if (mEditorDialog != null) {
+                        mEditorDialog.dismiss();
+                        mEditorDialog = null;
                     }
                 });
                 executeActions(executor);
@@ -137,37 +124,31 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
 
         final AlertDialog alertDialog = textEditDialogBuilder.execute();
 
-        textEditDialogBuilder.setOnTextInputListener(new TextInputDialog.OnTextInputListener() {
-            @Override
-            public void onTextInput(String text) {
-                if (!text.equals(item.getValue())) {
-                    //hide editor
-                    View focusedView = alertDialog.getCurrentFocus();
-                    InputManagerHelper.hideInput(focusedView);
+        textEditDialogBuilder.setOnTextInputListener(text -> {
+            if (!text.equals(item.getValue())) {
+                //hide editor
+                View focusedView = alertDialog.getCurrentFocus();
+                InputManagerHelper.hideInput(focusedView);
 
-                    //change
-                    item.setValue(text);
+                //change
+                item.setValue(text);
 
-                    // finish anyway
-                    mode.finish();
+                // finish anyway
+                mode.finish();
 
-                    BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity(), mBasicNoteData);
-                    executor.addAction(getString(R.string.caption_processing), new BasicNoteDataItemEditNameValueAction(mBasicNoteData, item));
-                    executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData));
-                    executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
-                        @Override
-                        public void onExecutionCompleted(BasicNoteDataA basicNoteData, boolean result) {
-                            mBasicNoteData = basicNoteData;
+                BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity(), mBasicNoteData);
+                executor.addAction(getString(R.string.caption_processing), new BasicNoteDataItemEditNameValueAction(mBasicNoteData, item));
+                executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData));
+                executor.setOnExecutionCompletedListener((BasicNoteDataActionExecutor.OnExecutionCompletedListener) (basicNoteData, result) -> {
+                    mBasicNoteData = basicNoteData;
 
-                            //clear editor reference
-                            if (mEditorDialog != null) {
-                                mEditorDialog.dismiss();
-                                mEditorDialog = null;
-                            }
-                        }
-                    });
-                    executeActions(executor);
-                }
+                    //clear editor reference
+                    if (mEditorDialog != null) {
+                        mEditorDialog.dismiss();
+                        mEditorDialog = null;
+                    }
+                });
+                executeActions(executor);
             }
         });
 
@@ -178,39 +159,33 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
     private void performEditAction(final ActionMode mode, final BasicNoteItemA item) {
         NameValueInputDialog dialog = new NameValueInputDialog(getActivity(), getString(R.string.ui_name_value_title));
         dialog.setNameValue(item.getName(), item.getValue());
-        dialog.setOnNameValueInputListener(new NameValueInputDialog.OnNameValueInputListener() {
-            @Override
-            public void onNameValueInput(String name, String value) {
-                if (!name.equals(item.getName()) || !value.equals(item.getValue())) {
-                    //change
-                    item.setName(name);
-                    item.setValue(value);
+        dialog.setOnNameValueInputListener((name, value) -> {
+            if (!name.equals(item.getName()) || !value.equals(item.getValue())) {
+                //change
+                item.setName(name);
+                item.setValue(value);
 
-                    BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity(), mBasicNoteData);
-                    executor.addAction(getString(R.string.caption_processing), new BasicNoteDataItemEditNameValueAction(mBasicNoteData, item));
-                    executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData));
-                    executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
-                        @Override
-                        public void onExecutionCompleted(BasicNoteDataA basicNoteData, boolean result) {
-                            mBasicNoteData = basicNoteData;
+                BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity(), mBasicNoteData);
+                executor.addAction(getString(R.string.caption_processing), new BasicNoteDataItemEditNameValueAction(mBasicNoteData, item));
+                executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData));
+                executor.setOnExecutionCompletedListener((BasicNoteDataActionExecutor.OnExecutionCompletedListener) (basicNoteData, result) -> {
+                    mBasicNoteData = basicNoteData;
 
-                            // finish anyway
-                            mode.finish();
+                    // finish anyway
+                    mode.finish();
 
-                            //clear editor reference
-                            if (mEditorDialog != null) {
-                                mEditorDialog.dismiss();
-                                mEditorDialog = null;
-                            }
-                        }
-                    });
-                    executeActions(executor);
-                }
-                // finish anyway
-                mode.finish();
-                //
-                mEditorDialog = null;
+                    //clear editor reference
+                    if (mEditorDialog != null) {
+                        mEditorDialog.dismiss();
+                        mEditorDialog = null;
+                    }
+                });
+                executeActions(executor);
             }
+            // finish anyway
+            mode.finish();
+            //
+            mEditorDialog = null;
         });
         dialog.show();
         mEditorDialog = dialog.getAlertDialog();
@@ -326,12 +301,9 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
 
         BasicNoteNamedItemRecyclerViewAdapter recyclerViewAdapter = new BasicNoteNamedItemRecyclerViewAdapter(mBasicNoteData, new ActionBarCallBack(),
-                new OnBasicNoteItemFragmentInteractionListener() {
-                    @Override
-                    public void onBasicNoteItemFragmentInteraction(BasicNoteItemA item, int position) {
-                        // no action currently required
-                        //placeholder for future
-                    }
+                (item, position) -> {
+                    // no action currently required
+                    //placeholder for future
                 }
         );
         mRecyclerViewSelector = recyclerViewAdapter.getRecyclerViewSelector();
@@ -339,15 +311,12 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
 
         //add action panel
         mInputActionHelper = new InputActionHelper(view.findViewById(R.id.add_panel_include));
-        mInputActionHelper.setOnAddInteractionListener(new InputActionHelper.OnInputInteractionListener() {
-            @Override
-            public void onInputFragmentInteraction(int actionType, String text) {
-                switch (actionType) {
-                    case InputActionHelper.INPUT_ACTION_TYPE_EDIT:
-                        hideInputActionLayout();
-                        performEditValueAction(text);
-                        break;
-                }
+        mInputActionHelper.setOnAddInteractionListener((actionType, text) -> {
+            switch (actionType) {
+                case InputActionHelper.INPUT_ACTION_TYPE_EDIT:
+                    hideInputActionLayout();
+                    performEditValueAction(text);
+                    break;
             }
         });
 

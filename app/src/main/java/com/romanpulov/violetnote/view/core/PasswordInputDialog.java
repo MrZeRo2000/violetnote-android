@@ -2,7 +2,6 @@ package com.romanpulov.violetnote.view.core;
 
 import android.content.Context;
 import android.text.InputType;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -24,14 +23,11 @@ public class PasswordInputDialog extends TextInputDialog {
         super.show();
 
         // make input focused with shown keyboard
-        mInputView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    Window window = mAlertDialog.getWindow();
-                    if (window != null) {
-                        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-                    }
+        mInputView.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                Window window = mAlertDialog.getWindow();
+                if (window != null) {
+                    window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
                 }
             }
         });

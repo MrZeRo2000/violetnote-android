@@ -2,7 +2,6 @@ package com.romanpulov.violetnote.view;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.appcompat.view.ActionMode;
@@ -162,20 +161,17 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
         BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(activity.getApplicationContext(), mBasicNoteData);
         executor.addAction(getString(R.string.caption_processing), new BasicNoteDataItemAddAction(mBasicNoteData, item));
         executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData));
-        executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
-            @Override
-            public void onExecutionCompleted(BasicNoteDataA basicNoteData, boolean result) {
-                if (result) {
-                    afterExecutionCompleted();
+        executor.setOnExecutionCompletedListener((BasicNoteDataActionExecutor.OnExecutionCompletedListener) (basicNoteData, result) -> {
+            if (result) {
+                afterExecutionCompleted();
 
-                    //mBasicNoteData = basicNoteData;
+                //mBasicNoteData = basicNoteData;
 
-                    RecyclerViewHelper.adapterNotifyDataSetChanged(mRecyclerView);
-                    int position = mBasicNoteData.getNote().getLastNoteItemPriorityPosition(item.getPriority());
+                RecyclerViewHelper.adapterNotifyDataSetChanged(mRecyclerView);
+                int position = mBasicNoteData.getNote().getLastNoteItemPriorityPosition(item.getPriority());
 
-                    if (position > -1)
-                        mRecyclerView.scrollToPosition(position);
-                }
+                if (position > -1)
+                    mRecyclerView.scrollToPosition(position);
             }
         });
 
@@ -185,30 +181,24 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
     protected void performMoveToOtherNoteAction(final ActionMode mode, final List<BasicNoteItemA> items, final BasicNoteA otherNote) {
         String confirmationQuestion = getString(R.string.ui_question_selected_note_items_move_to_other_note, items.size(), otherNote.getTitle());
         AlertOkCancelSupportDialogFragment dialog = AlertOkCancelSupportDialogFragment.newAlertOkCancelDialog(confirmationQuestion);
-        dialog.setOkButtonClickListener(new AlertOkCancelSupportDialogFragment.OnClickListener() {
-            @Override
-            public void OnClick(DialogFragment dialog) {
-                BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity(), mBasicNoteData);
-                executor.addAction(getString(R.string.caption_processing), new BasicNoteMoveToOtherNoteAction<>(mBasicNoteData, items, otherNote));
-                executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData));
-                executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
-                    @Override
-                    public void onExecutionCompleted(BasicNoteDataA basicNoteData, boolean result) {
-                        if (result) {
-                            afterExecutionCompleted();
-                            mode.finish();
-                        }
+        dialog.setOkButtonClickListener(dialog1 -> {
+            BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity(), mBasicNoteData);
+            executor.addAction(getString(R.string.caption_processing), new BasicNoteMoveToOtherNoteAction<>(mBasicNoteData, items, otherNote));
+            executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData));
+            executor.setOnExecutionCompletedListener((BasicNoteDataActionExecutor.OnExecutionCompletedListener) (basicNoteData, result) -> {
+                if (result) {
+                    afterExecutionCompleted();
+                    mode.finish();
+                }
 
-                        mBasicNoteData = basicNoteData;
+                mBasicNoteData = basicNoteData;
 
-                        if (mDialogFragment != null) {
-                            mDialogFragment.dismiss();
-                            mDialogFragment = null;
-                        }
-                    }
-                });
-                executeActions(executor);
-            }
+                if (mDialogFragment != null) {
+                    mDialogFragment.dismiss();
+                    mDialogFragment = null;
+                }
+            });
+            executeActions(executor);
         });
 
         FragmentManager fragmentManager = getFragmentManager();
@@ -225,30 +215,24 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
      */
     protected void performDeleteAction(final ActionMode mode, final List<BasicNoteItemA> items) {
         AlertOkCancelSupportDialogFragment dialog = AlertOkCancelSupportDialogFragment.newAlertOkCancelDialog(getString(R.string.ui_question_delete_items_are_you_sure, items.size()));
-        dialog.setOkButtonClickListener(new AlertOkCancelSupportDialogFragment.OnClickListener() {
-            @Override
-            public void OnClick(DialogFragment dialog) {
-                BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity(), mBasicNoteData);
-                executor.addAction(getString(R.string.caption_processing), new BasicNoteItemDeleteAction(mBasicNoteData, items));
-                executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData));
-                executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
-                    @Override
-                    public void onExecutionCompleted(BasicNoteDataA basicNoteData, boolean result) {
-                        if (result) {
-                            afterExecutionCompleted();
-                            mode.finish();
-                        }
+        dialog.setOkButtonClickListener(dialog1 -> {
+            BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity(), mBasicNoteData);
+            executor.addAction(getString(R.string.caption_processing), new BasicNoteItemDeleteAction(mBasicNoteData, items));
+            executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData));
+            executor.setOnExecutionCompletedListener((BasicNoteDataActionExecutor.OnExecutionCompletedListener) (basicNoteData, result) -> {
+                if (result) {
+                    afterExecutionCompleted();
+                    mode.finish();
+                }
 
-                        mBasicNoteData = basicNoteData;
+                mBasicNoteData = basicNoteData;
 
-                        if (mDialogFragment != null) {
-                            mDialogFragment.dismiss();
-                            mDialogFragment = null;
-                        }
-                    }
-                });
-                executeActions(executor);
-            }
+                if (mDialogFragment != null) {
+                    mDialogFragment.dismiss();
+                    mDialogFragment = null;
+                }
+            });
+            executeActions(executor);
         });
 
         FragmentManager fragmentManager = getFragmentManager();
@@ -272,21 +256,18 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
         executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData));
 
         //on complete
-        executor.setOnExecutionCompletedListener(new BasicNoteDataActionExecutor.OnExecutionCompletedListener() {
-            @Override
-            public void onExecutionCompleted(BasicNoteDataA basicNoteData, boolean result) {
-                if (result)
-                    afterExecutionCompleted();
+        executor.setOnExecutionCompletedListener((BasicNoteDataActionExecutor.OnExecutionCompletedListener) (basicNoteData, result) -> {
+            if (result)
+                afterExecutionCompleted();
 
-                mBasicNoteData = basicNoteData;
+            mBasicNoteData = basicNoteData;
 
-                BasicEntityNoteSelectionPosA selectionPos = new BasicEntityNoteSelectionPosA(mBasicNoteData.getNote().getItems(), items);
-                int selectionScrollPos = selectionPos.getDirectionPos(action.getDirection());
+            BasicEntityNoteSelectionPosA selectionPos = new BasicEntityNoteSelectionPosA(mBasicNoteData.getNote().getItems(), items);
+            int selectionScrollPos = selectionPos.getDirectionPos(action.getDirection());
 
-                if (selectionScrollPos != -1) {
-                    mRecyclerViewSelector.setSelectedItems(selectionPos.getSelectedItemsPositions());
-                    mRecyclerView.scrollToPosition(selectionScrollPos);
-                }
+            if (selectionScrollPos != -1) {
+                mRecyclerViewSelector.setSelectedItems(selectionPos.getSelectedItemsPositions());
+                mRecyclerView.scrollToPosition(selectionScrollPos);
             }
         });
 

@@ -5,12 +5,10 @@ import android.content.Context;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.view.ActionMode;
-import androidx.appcompat.widget.ActionMenuView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -30,7 +28,6 @@ import com.romanpulov.violetnote.view.action.BasicActionExecutor;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveToOtherNoteGroupAction;
 import com.romanpulov.violetnote.view.action.BasicNoteRefreshAction;
 import com.romanpulov.violetnote.view.core.TextEditDialogBuilder;
-import com.romanpulov.violetnote.view.core.TextInputDialog;
 import com.romanpulov.violetnote.view.helper.BottomToolbarHelper;
 import com.romanpulov.violetnote.view.helper.DisplayMessageHelper;
 import com.romanpulov.violetnote.view.helper.DisplayTitleBuilder;
@@ -84,12 +81,7 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
     private void setupBottomToolbarHelper() {
         FragmentActivity activity = getActivity();
         if (activity != null) {
-            mBottomToolbarHelper = BottomToolbarHelper.fromContext(activity, new ActionMenuView.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem menuItem) {
-                    return processMoveMenuItemClick(menuItem);
-                }
-            });
+            mBottomToolbarHelper = BottomToolbarHelper.fromContext(activity, this::processMoveMenuItemClick);
         }
     }
 
@@ -134,21 +126,18 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
 
     private void performDeleteAction(final ActionMode mode, final List<BasicNoteA> items) {
         AlertOkCancelSupportDialogFragment dialog = AlertOkCancelSupportDialogFragment.newAlertOkCancelDialog(getString(R.string.ui_question_are_you_sure));
-        dialog.setOkButtonClickListener(new AlertOkCancelSupportDialogFragment.OnClickListener() {
-            @Override
-            public void OnClick(DialogFragment dialog) {
-                // delete item
-                DBNoteManager mNoteManager = new DBNoteManager(getActivity());
+        dialog.setOkButtonClickListener(dialog1 -> {
+            // delete item
+            DBNoteManager mNoteManager = new DBNoteManager(getActivity());
 
-                for (BasicNoteA item : items)
-                    mNoteManager.mBasicNoteDAO.delete(item);
+            for (BasicNoteA item : items)
+                mNoteManager.mBasicNoteDAO.delete(item);
 
-                // refresh list
-                refreshList(mNoteManager);
+            // refresh list
+            refreshList(mNoteManager);
 
-                //finish action
-                mode.finish();
-            }
+            //finish action
+            mode.finish();
         });
 
         FragmentManager fragmentManager = getFragmentManager();
@@ -165,46 +154,43 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
         final AlertDialog alertDialog = textEditDialogBuilder.execute();
         alertDialog.setTitle(R.string.ui_note_title);
 
-        textEditDialogBuilder.setOnTextInputListener(new TextInputDialog.OnTextInputListener() {
-            @Override
-            public void onTextInput(final String text) {
-                //hide editor
-                View focusedView = alertDialog.getCurrentFocus();
-                InputManagerHelper.hideInput(focusedView);
+        textEditDialogBuilder.setOnTextInputListener(text -> {
+            //hide editor
+            View focusedView = alertDialog.getCurrentFocus();
+            InputManagerHelper.hideInput(focusedView);
 
-                if (BasicNoteA.findByTitle(mNoteList, text) == null) {
-                    //add
-                    BasicNoteA newNote = ParcelableUtils.duplicateParcelableObject(item, BasicNoteA.CREATOR);
-                    newNote.setTitle(text);
+            if (BasicNoteA.findByTitle(mNoteList, text) == null) {
+                //add
+                BasicNoteA newNote = ParcelableUtils.duplicateParcelableObject(item, BasicNoteA.CREATOR);
+                newNote.setTitle(text);
 
-                    //persist
-                    DBNoteManager mNoteManager = new DBNoteManager(getActivity());
+                //persist
+                DBNoteManager mNoteManager = new DBNoteManager(getActivity());
 
-                    //get items
-                    mNoteManager.mBasicNoteItemDAO.fillNoteDataItemsWithSummary(newNote);
+                //get items
+                mNoteManager.mBasicNoteItemDAO.fillNoteDataItemsWithSummary(newNote);
 
-                    //get new id
-                    long newItemId = mNoteManager.mBasicNoteDAO.insert(newNote);
-                    if (newItemId != -1) {
-                        //insert items ignoring any errors
-                        for (BasicNoteItemA noteItem : newNote.getItems()) {
-                            noteItem.setNoteId(newItemId);
-                            mNoteManager.mBasicNoteItemDAO.insert(noteItem);
-                        }
-
-                        // refresh list
-                        refreshList(mNoteManager);
-
-                        //scroll to bottom
-                        mRecyclerView.scrollToPosition(mNoteList.size() - 1);
+                //get new id
+                long newItemId = mNoteManager.mBasicNoteDAO.insert(newNote);
+                if (newItemId != -1) {
+                    //insert items ignoring any errors
+                    for (BasicNoteItemA noteItem : newNote.getItems()) {
+                        noteItem.setNoteId(newItemId);
+                        mNoteManager.mBasicNoteItemDAO.insert(noteItem);
                     }
 
-                    // finish anyway
-                    mode.finish();
-                } else {
-                    Activity activity = requireActivity();
-                    DisplayMessageHelper.displayInfoMessage(activity, activity.getString(R.string.ui_error_note_already_exists, text));
+                    // refresh list
+                    refreshList(mNoteManager);
+
+                    //scroll to bottom
+                    mRecyclerView.scrollToPosition(mNoteList.size() - 1);
                 }
+
+                // finish anyway
+                mode.finish();
+            } else {
+                Activity activity = requireActivity();
+                DisplayMessageHelper.displayInfoMessage(activity, activity.getString(R.string.ui_error_note_already_exists, text));
             }
         });
     }
@@ -234,36 +220,30 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
     private void performMoveToOtherNoteGroupAction(final ActionMode mode, @NonNull final List<BasicNoteA> items, @NonNull final BasicNoteGroupA otherNoteGroup) {
         String confirmationQuestion = getString(R.string.ui_question_selected_note_move_to_other_note_group, items.size(), otherNoteGroup.getDisplayTitle());
         AlertOkCancelSupportDialogFragment dialog = AlertOkCancelSupportDialogFragment.newAlertOkCancelDialog(confirmationQuestion);
-        dialog.setOkButtonClickListener(new AlertOkCancelSupportDialogFragment.OnClickListener() {
-            @Override
-            public void OnClick(DialogFragment dialog) {
-                //executor
-                BasicActionExecutor<List<BasicNoteA>> executor = new BasicActionExecutor<>(getContext(), mNoteList);
+        dialog.setOkButtonClickListener(dialog1 -> {
+            //executor
+            BasicActionExecutor<List<BasicNoteA>> executor = new BasicActionExecutor<>(getContext(), mNoteList);
 
-                //actions
-                executor.addAction(getString(R.string.caption_processing), new BasicNoteMoveToOtherNoteGroupAction(items, otherNoteGroup));
-                executor.addAction(getString(R.string.caption_loading), new BasicNoteRefreshAction(mNoteList, mNoteGroup));
+            //actions
+            executor.addAction(getString(R.string.caption_processing), new BasicNoteMoveToOtherNoteGroupAction(items, otherNoteGroup));
+            executor.addAction(getString(R.string.caption_loading), new BasicNoteRefreshAction(mNoteList, mNoteGroup));
 
-                //on completed
-                executor.setOnExecutionCompletedListener(new BasicActionExecutor.OnExecutionCompletedListener<List<BasicNoteA>>() {
-                    @Override
-                    public void onExecutionCompleted(List<BasicNoteA> data, boolean result) {
-                        mode.finish();
+            //on completed
+            executor.setOnExecutionCompletedListener((data, result) -> {
+                mode.finish();
 
-                        if (result) {
-                            RecyclerViewHelper.adapterNotifyDataSetChanged(mRecyclerView);
-                        }
+                if (result) {
+                    RecyclerViewHelper.adapterNotifyDataSetChanged(mRecyclerView);
+                }
 
-                        if (mDialogFragment != null) {
-                            mDialogFragment.dismiss();
-                            mDialogFragment = null;
-                        }
-                    }
-                });
+                if (mDialogFragment != null) {
+                    mDialogFragment.dismiss();
+                    mDialogFragment = null;
+                }
+            });
 
-                //execute
-                executor.execute();
-            }
+            //execute
+            executor.execute();
         });
 
         FragmentManager fragmentManager = getFragmentManager();
@@ -441,15 +421,12 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
 
         //add action panel
         mInputActionHelper = new InputActionHelper(view.findViewById(R.id.add_panel_include));
-        mInputActionHelper.setOnAddInteractionListener(new InputActionHelper.OnInputInteractionListener() {
-            @Override
-            public void onInputFragmentInteraction(int actionType, String text) {
-                hideAddLayout();
+        mInputActionHelper.setOnAddInteractionListener((actionType, text) -> {
+            hideAddLayout();
 
-                performEditAction(text);
+            performEditAction(text);
 
-                mRecyclerViewSelector.finishActionMode();
-            }
+            mRecyclerViewSelector.finishActionMode();
         });
 
         return view;

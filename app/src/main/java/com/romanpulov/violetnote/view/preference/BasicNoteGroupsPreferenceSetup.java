@@ -1,7 +1,6 @@
 package com.romanpulov.violetnote.view.preference;
 
 import android.content.Intent;
-import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
 import com.romanpulov.violetnote.view.BasicNoteGroupActivity;
@@ -14,12 +13,9 @@ public class BasicNoteGroupsPreferenceSetup extends PreferenceSetup {
 
     @Override
     public void execute() {
-        mPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                mActivity.startActivity(new Intent(mActivity, BasicNoteGroupActivity.class));
-                return true;
-            }
+        mPreference.setOnPreferenceClickListener(preference -> {
+            mActivity.startActivity(new Intent(mActivity, BasicNoteGroupActivity.class));
+            return true;
         });
     }
 }

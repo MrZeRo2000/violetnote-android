@@ -3,7 +3,6 @@ package com.romanpulov.violetnote.view;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
@@ -206,21 +205,18 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         final Preference pref = Objects.requireNonNull(findPreference(PreferenceRepository.PREF_KEY_DOCUMENT_LOAD));
         final SharedPreferences sharedPref = pref.getSharedPreferences();
-        pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(@NonNull Preference preference) {
-                if (sharedPref != null && !sharedPref.contains(PreferenceRepository.PREF_KEY_SOURCE_PATH)) {
-                    DisplayMessageHelper.displayErrorMessage(requireActivity(), getText(R.string.error_load_remote_path_empty));
-                }
-                else {
-                    if (LoaderServiceManager.isLoaderServiceRunning(requireContext()))
-                        DisplayMessageHelper.displayInfoMessage(requireActivity(), getText(R.string.error_load_process_running));
-                    else {
-                        executeDocumentLoad();
-                    }
-                }
-                return true;
+        pref.setOnPreferenceClickListener(preference -> {
+            if (sharedPref != null && !sharedPref.contains(PreferenceRepository.PREF_KEY_SOURCE_PATH)) {
+                DisplayMessageHelper.displayErrorMessage(requireActivity(), getText(R.string.error_load_remote_path_empty));
             }
+            else {
+                if (LoaderServiceManager.isLoaderServiceRunning(requireContext()))
+                    DisplayMessageHelper.displayInfoMessage(requireActivity(), getText(R.string.error_load_process_running));
+                else {
+                    executeDocumentLoad();
+                }
+            }
+            return true;
         });
     }
 
@@ -236,24 +232,21 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 final AlertDialog.Builder alert = new AlertDialog.Builder(requireActivity(), R.style.AlertDialogTheme);
                 alert
                         .setTitle(R.string.ui_question_are_you_sure)
-                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                if (documentFile.delete()) {
-                                    DisplayMessageHelper.displayInfoMessage(requireActivity(), getText(R.string.ui_info_file_deleted));
-                                    pref.setVisible(false);
-                                    PreferenceRepository.setPreferenceKeyLastLoadedTime(
-                                            getContext(),
-                                            PreferenceRepository.PREF_KEY_DOCUMENT_LOAD,
-                                            0
-                                    );
-                                    PreferenceRepository.updatePreferenceKeySummary(
-                                            SettingsFragment.this,
-                                            PreferenceRepository.PREF_KEY_DOCUMENT_LOAD,
-                                            PreferenceRepository.PREF_LOAD_NEVER);
-                                } else {
-                                    DisplayMessageHelper.displayErrorMessage(requireActivity(), getText(R.string.ui_error_file_not_deleted));
-                                }
+                        .setPositiveButton(R.string.ok, (dialog, which) -> {
+                            if (documentFile.delete()) {
+                                DisplayMessageHelper.displayInfoMessage(requireActivity(), getText(R.string.ui_info_file_deleted));
+                                pref.setVisible(false);
+                                PreferenceRepository.setPreferenceKeyLastLoadedTime(
+                                        getContext(),
+                                        PreferenceRepository.PREF_KEY_DOCUMENT_LOAD,
+                                        0
+                                );
+                                PreferenceRepository.updatePreferenceKeySummary(
+                                        SettingsFragment.this,
+                                        PreferenceRepository.PREF_KEY_DOCUMENT_LOAD,
+                                        PreferenceRepository.PREF_LOAD_NEVER);
+                            } else {
+                                DisplayMessageHelper.displayErrorMessage(requireActivity(), getText(R.string.ui_error_file_not_deleted));
                             }
                         })
                         .setNegativeButton(R.string.cancel, null)
@@ -316,20 +309,17 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         );
 
         Preference pref = Objects.requireNonNull(findPreference(PreferenceRepository.PREF_KEY_BASIC_NOTE_CLOUD_BACKUP));
-        pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                //check if internet is available
-                if (!checkInternetConnection())
-                    return true;
-
-                if (LoaderServiceManager.isLoaderServiceRunning(requireContext()))
-                    DisplayMessageHelper.displayErrorMessage(requireActivity(), getText(R.string.error_load_process_running));
-                else {
-                    executeCloudBackup();
-                }
+        pref.setOnPreferenceClickListener(preference -> {
+            //check if internet is available
+            if (!checkInternetConnection())
                 return true;
+
+            if (LoaderServiceManager.isLoaderServiceRunning(requireContext()))
+                DisplayMessageHelper.displayErrorMessage(requireActivity(), getText(R.string.error_load_process_running));
+            else {
+                executeCloudBackup();
             }
+            return true;
         });
     }
 
@@ -377,31 +367,23 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         );
 
         Preference pref = Objects.requireNonNull(findPreference(PreferenceRepository.PREF_KEY_BASIC_NOTE_CLOUD_RESTORE));
-        pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                //check if internet is available
-                if (!checkInternetConnection())
-                    return true;
-
-                if (LoaderServiceManager.isLoaderServiceRunning(requireContext()))
-                    DisplayMessageHelper.displayErrorMessage(requireActivity(), getText(R.string.error_load_process_running));
-                else {
-                    final AlertDialog.Builder alert = new AlertDialog.Builder(requireActivity(), R.style.AlertDialogTheme);
-                    alert
-                            .setTitle(R.string.ui_question_are_you_sure)
-                            .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    executeCloudRestore();
-                                }
-                            })
-                            .setNegativeButton(R.string.cancel, null)
-                            .show();
-                }
-
+        pref.setOnPreferenceClickListener(preference -> {
+            //check if internet is available
+            if (!checkInternetConnection())
                 return true;
+
+            if (LoaderServiceManager.isLoaderServiceRunning(requireContext()))
+                DisplayMessageHelper.displayErrorMessage(requireActivity(), getText(R.string.error_load_process_running));
+            else {
+                final AlertDialog.Builder alert = new AlertDialog.Builder(requireActivity(), R.style.AlertDialogTheme);
+                alert
+                        .setTitle(R.string.ui_question_are_you_sure)
+                        .setPositiveButton(R.string.ok, (dialog, which) -> executeCloudRestore())
+                        .setNegativeButton(R.string.cancel, null)
+                        .show();
             }
+
+            return true;
         });
     }
 
@@ -418,16 +400,13 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         PreferenceRepository.updatePreferenceKeySummary(this, PreferenceRepository.PREF_KEY_BASIC_NOTE_LOCAL_BACKUP, PreferenceRepository.PREF_LOAD_CURRENT_VALUE);
 
         Preference pref = Objects.requireNonNull(findPreference(PreferenceRepository.PREF_KEY_BASIC_NOTE_LOCAL_BACKUP));
-        pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(@NonNull Preference preference) {
-                if (LoaderServiceManager.isLoaderServiceRunning(requireContext()))
-                    DisplayMessageHelper.displayErrorMessage(requireActivity(), getText(R.string.error_load_process_running));
-                else {
-                    executeLocalBackup();
-                }
-                return true;
+        pref.setOnPreferenceClickListener(preference -> {
+            if (LoaderServiceManager.isLoaderServiceRunning(requireContext()))
+                DisplayMessageHelper.displayErrorMessage(requireActivity(), getText(R.string.error_load_process_running));
+            else {
+                executeLocalBackup();
             }
+            return true;
         });
     }
 
@@ -444,27 +423,19 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         PreferenceRepository.updatePreferenceKeySummary(this, PreferenceRepository.PREF_KEY_BASIC_NOTE_LOCAL_RESTORE, PreferenceRepository.PREF_LOAD_CURRENT_VALUE);
 
         Preference pref = findPreference(PreferenceRepository.PREF_KEY_BASIC_NOTE_LOCAL_RESTORE);
-        Objects.requireNonNull(pref).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(@NonNull Preference preference) {
-                if (LoaderServiceManager.isLoaderServiceRunning(requireContext()))
-                    DisplayMessageHelper.displayErrorMessage(requireActivity(), getText(R.string.error_load_process_running));
-                else {
+        Objects.requireNonNull(pref).setOnPreferenceClickListener(preference -> {
+            if (LoaderServiceManager.isLoaderServiceRunning(requireContext()))
+                DisplayMessageHelper.displayErrorMessage(requireActivity(), getText(R.string.error_load_process_running));
+            else {
 
-                    final AlertDialog.Builder alert = new AlertDialog.Builder(requireActivity(), R.style.AlertDialogTheme);
-                    alert
-                            .setTitle(R.string.ui_question_are_you_sure)
-                            .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    executeLocalRestore();
-                                }
-                            })
-                            .setNegativeButton(R.string.cancel, null)
-                            .show();
-                }
-                return true;
+                final AlertDialog.Builder alert = new AlertDialog.Builder(requireActivity(), R.style.AlertDialogTheme);
+                alert
+                        .setTitle(R.string.ui_question_are_you_sure)
+                        .setPositiveButton(R.string.ok, (dialog, which) -> executeLocalRestore())
+                        .setNegativeButton(R.string.cancel, null)
+                        .show();
             }
+            return true;
         });
     }
 

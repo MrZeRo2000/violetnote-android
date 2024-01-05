@@ -39,26 +39,20 @@ public class NoteDetailsRecyclerViewAdapter extends RecyclerView.Adapter<NoteDet
         holder.mNameView.setText(holder.mItem.mName);
         holder.mValueView.setText(holder.mItem.mValue);
 
-        holder.mView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
-                    mListener.onAttrItemSelection(holder.mItem);
-                }
+        holder.mView.setOnClickListener(v -> {
+            if (null != mListener) {
+                // Notify the active callbacks interface (the activity, if the
+                // fragment is attached to one) that an item has been selected.
+                mListener.onAttrItemSelection(holder.mItem);
             }
         });
 
-        holder.mView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                Context context = v.getContext();
-                String message = context.getString(R.string.ui_info_copy_to_clipboard, holder.mItem.mName);
-                ClipboardHelper.copyPlainText(context, holder.mItem.mValue);
-                DisplayMessageHelper.displayInfoMessage(v, message);
-                return true;
-            }
+        holder.mView.setOnLongClickListener(v -> {
+            Context context = v.getContext();
+            String message = context.getString(R.string.ui_info_copy_to_clipboard, holder.mItem.mName);
+            ClipboardHelper.copyPlainText(context, holder.mItem.mValue);
+            DisplayMessageHelper.displayInfoMessage(v, message);
+            return true;
         });
     }
 

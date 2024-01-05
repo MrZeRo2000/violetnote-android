@@ -4,7 +4,6 @@ import android.content.Context;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class HrPickerScreen implements HrPickerNavigationProcessor {
@@ -98,7 +97,7 @@ public class HrPickerScreen implements HrPickerNavigationProcessor {
             mItems.add(new HrPickerItem(HrPickerItem.ITEM_TYPE_PARENT, null));
         }
         mItems.addAll(items);
-        Collections.sort(mItems, new HrPickerItemComparator());
+        mItems.sort(new HrPickerItemComparator());
 
         if (mPickerScreenUpdateListener != null) {
             mPickerScreenUpdateListener.onUpdate(this);

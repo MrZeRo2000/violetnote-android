@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.appcompat.view.ActionMode;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -90,20 +89,17 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
 
     private void performDeleteAction(final ActionMode mode, final List<BasicNoteValueA> items) {
         AlertOkCancelSupportDialogFragment dialog = AlertOkCancelSupportDialogFragment.newAlertOkCancelDialog(getString(R.string.ui_question_are_you_sure));
-        dialog.setOkButtonClickListener(new AlertOkCancelSupportDialogFragment.OnClickListener() {
-            @Override
-            public void OnClick(DialogFragment dialog) {
-                DBNoteManager noteManager = new DBNoteManager(getActivity());
+        dialog.setOkButtonClickListener(dialog1 -> {
+            DBNoteManager noteManager = new DBNoteManager(getActivity());
 
-                //delete
-                for (BasicNoteValueA item : items)
-                    noteManager.mBasicNoteValueDAO.delete(item);
+            //delete
+            for (BasicNoteValueA item : items)
+                noteManager.mBasicNoteValueDAO.delete(item);
 
-                refreshList(noteManager);
+            refreshList(noteManager);
 
-                //finish action
-                mode.finish();
-            }
+            //finish action
+            mode.finish();
         });
 
         FragmentManager fragmentManager = getFragmentManager();
@@ -250,22 +246,19 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
 
         //add action panel
         mInputActionHelper = new InputActionHelper(view.findViewById(R.id.add_panel_include));
-        mInputActionHelper.setOnAddInteractionListener(new InputActionHelper.OnInputInteractionListener() {
-            @Override
-            public void onInputFragmentInteraction(final int actionType, final String text) {
-                switch (actionType) {
-                    case InputActionHelper.INPUT_ACTION_TYPE_ADD:
-                        performAddAction(BasicNoteValueA.newEditInstance(text));
-                        break;
-                    case InputActionHelper.INPUT_ACTION_TYPE_EDIT:
-                        //performEditAction();
-                        performEditAction(text);
-                        hideAddLayout();
-                        mRecyclerViewSelector.finishActionMode();
-                        break;
-                }
-
+        mInputActionHelper.setOnAddInteractionListener((actionType, text) -> {
+            switch (actionType) {
+                case InputActionHelper.INPUT_ACTION_TYPE_ADD:
+                    performAddAction(BasicNoteValueA.newEditInstance(text));
+                    break;
+                case InputActionHelper.INPUT_ACTION_TYPE_EDIT:
+                    //performEditAction();
+                    performEditAction(text);
+                    hideAddLayout();
+                    mRecyclerViewSelector.finishActionMode();
+                    break;
             }
+
         });
 
         return view;

@@ -49,12 +49,9 @@ public class DashboardItemRecyclerViewAdapter extends RecyclerView.Adapter<Dashb
         final BasicNoteGroupA item = mBasicNoteGroupList.get(position);
         viewHolder.mButton.setText(item.getGroupName());
         viewHolder.mButton.setCompoundDrawablesWithIntrinsicBounds(0, DrawableSelectionHelper.getDrawableForNoteGroup(item), 0, 0);
-        viewHolder.mButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (null != mListener) {
-                    mListener.onBasicGroupSelection(item);
-                }
+        viewHolder.mButton.setOnClickListener(v -> {
+            if (null != mListener) {
+                mListener.onBasicGroupSelection(item);
             }
         });
 
@@ -104,7 +101,7 @@ public class DashboardItemRecyclerViewAdapter extends RecyclerView.Adapter<Dashb
         return mBasicNoteGroupList.size();
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         private final Button mButton;
         private final TextView mItemCountView;
         private final TextView mItemUncheckedCountView;

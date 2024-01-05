@@ -178,28 +178,25 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
     protected void requestPassword() {
         final PasswordInputDialog passwordInputDialog = new PasswordInputDialog(this);
         passwordInputDialog.setNonEmptyErrorMessage(getString(R.string.ui_error_empty_password));
-        passwordInputDialog.setOnTextInputListener(new TextInputDialog.OnTextInputListener() {
-            @Override
-            public void onTextInput(String text) {
-                // hide input
-                View focusedView = passwordInputDialog.getAlertDialog().getCurrentFocus();
-                InputManagerHelper.hideInput(focusedView);
+        passwordInputDialog.setOnTextInputListener(text -> {
+            // hide input
+            View focusedView = passwordInputDialog.getAlertDialog().getCurrentFocus();
+            InputManagerHelper.hideInput(focusedView);
 
-                //dismiss dialog
-                if (mDialog != null) {
-                    mDialog.dismiss();
-                    mDialog = null;
-                }
+            //dismiss dialog
+            if (mDialog != null) {
+                mDialog.dismiss();
+                mDialog = null;
+            }
 
-                //process input
-                if (text != null) {
-                    mCanceled = false;
-                    processRequestPasswordInput(text);
-                } else {
-                    setResult(RESULT_CANCELED);
-                    mCanceled = true;
-                    setLoadErrorFragment(getString(R.string.error_load));
-                }
+            //process input
+            if (text != null) {
+                mCanceled = false;
+                processRequestPasswordInput(text);
+            } else {
+                setResult(RESULT_CANCELED);
+                mCanceled = true;
+                setLoadErrorFragment(getString(R.string.error_load));
             }
         });
         passwordInputDialog.show();

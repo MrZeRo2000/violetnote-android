@@ -36,14 +36,11 @@ public class CategoryRecyclerViewAdapter extends RecyclerView.Adapter<CategoryRe
         holder.mCategoryName.setText(mValues.get(position).getCategoryName());
         holder.mCategoryDescription.setText(String.valueOf(mValues.get(position).getNotesCount()));
 
-        holder.mView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
-                    mListener.onPassCategorySelection(holder.mItem);
-                }
+        holder.mView.setOnClickListener(v -> {
+            if (null != mListener) {
+                // Notify the active callbacks interface (the activity, if the
+                // fragment is attached to one) that an item has been selected.
+                mListener.onPassCategorySelection(holder.mItem);
             }
         });
     }

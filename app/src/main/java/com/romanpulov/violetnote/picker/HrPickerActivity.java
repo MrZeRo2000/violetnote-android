@@ -1,10 +1,8 @@
 package com.romanpulov.violetnote.picker;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentResultListener;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -28,16 +26,13 @@ public class HrPickerActivity extends AppCompatActivity {
         fm.setFragmentResultListener(
                 HrPickerFragment.RESULT_KEY,
                 this,
-                new FragmentResultListener() {
-                    @Override
-                    public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle bundle) {
-                        if (requestKey.equals(HrPickerFragment.RESULT_KEY)) {
-                            String result = bundle.getString(HrPickerFragment.RESULT_VALUE_KEY);
-                            Intent resultIntent = new Intent();
-                            resultIntent.putExtra(PICKER_RESULT, result);
-                            setResult(Activity.RESULT_OK, resultIntent);
-                            finish();
-                        }
+                (requestKey, bundle) -> {
+                    if (requestKey.equals(HrPickerFragment.RESULT_KEY)) {
+                        String result = bundle.getString(HrPickerFragment.RESULT_VALUE_KEY);
+                        Intent resultIntent = new Intent();
+                        resultIntent.putExtra(PICKER_RESULT, result);
+                        setResult(Activity.RESULT_OK, resultIntent);
+                        finish();
                     }
                 });
 
