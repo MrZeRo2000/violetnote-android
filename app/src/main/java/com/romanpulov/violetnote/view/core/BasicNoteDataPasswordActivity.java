@@ -66,16 +66,6 @@ public abstract class BasicNoteDataPasswordActivity extends PasswordActivity imp
     }
 
     @Override
-    public void onExecutionStarted() {
-        setProgress(true);
-    }
-
-    @Override
-    public void onExecutionCompleted() {
-        setProgress(false);
-    }
-
-    @Override
     protected boolean isDataLoaded() {
         return mBasicNoteData != null;
     }

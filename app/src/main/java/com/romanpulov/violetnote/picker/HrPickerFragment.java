@@ -31,10 +31,6 @@ public class HrPickerFragment extends Fragment implements HrPickerScreen.OnHrPic
     public static final String RESULT_KEY = HrPickerFragment.class.getSimpleName() + "_RESULT";
     public static final String RESULT_VALUE_KEY = HrPickerFragment.class.getSimpleName() + "_RESULT_VALUE";
 
-    private static final String INITIAL_PATH = "INITIAL_PATH";
-
-    private String mInitialPath;
-
     private TextView mHeaderTextView;
     private TextView mErrorTextView;
     private ProgressBar mProgressBar;
@@ -166,9 +162,6 @@ public class HrPickerFragment extends Fragment implements HrPickerScreen.OnHrPic
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mInitialPath = getArguments().getString(INITIAL_PATH);
-        }
         setRetainInstance(true);
 
         mAdapter = new HrPickerAdapter(mPickerScreen.getItems());

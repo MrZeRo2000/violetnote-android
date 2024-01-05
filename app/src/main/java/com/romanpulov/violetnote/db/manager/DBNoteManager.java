@@ -32,7 +32,6 @@ public class DBNoteManager extends AbstractDBManager {
     public final BasicNoteGroupDAO mBasicNoteGroupDAO;
 
     public DBNoteManager(Context context) {
-        super(context);
         mBasicNoteDAO = new BasicNoteDAO(context);
         mBasicNoteItemDAO = new BasicNoteItemDAO(context);
         mBasicNoteItemParamsDAO = new BasicNoteItemParamsDAO(context);

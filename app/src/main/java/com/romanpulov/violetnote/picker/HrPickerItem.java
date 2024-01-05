@@ -14,10 +14,6 @@ public class HrPickerItem {
         this.name = name;
     }
 
-    public static HrPickerItem createParentItem() {
-        return new HrPickerItem(ITEM_TYPE_PARENT, null);
-    }
-
     public static HrPickerItem createItem(int itemType, String name) {
         if (itemType == ITEM_TYPE_PARENT) {
             throw new RuntimeException("Error creating parent item, use a separate method for that");

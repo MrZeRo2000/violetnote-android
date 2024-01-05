@@ -16,7 +16,6 @@ public final class DBHManager extends AbstractDBManager {
     public final BasicHNoteCOItemParamDAO mBasicHNoteCOItemParamDAO;
 
     public DBHManager(Context context) {
-        super(context);
         mBasicHEventTypeDAO = new BasicHEventTypeDAO(context);
         mBasicHEventDAO = new BasicHEventDAO(context);
         mBasicHNoteItemDAO = new BasicHNoteItemDAO(context);

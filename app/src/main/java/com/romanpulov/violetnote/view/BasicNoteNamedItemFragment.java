@@ -301,7 +301,7 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
 
         BasicNoteNamedItemRecyclerViewAdapter recyclerViewAdapter = new BasicNoteNamedItemRecyclerViewAdapter(mBasicNoteData, new ActionBarCallBack(),
-                (item, position) -> {
+                item -> {
                     // no action currently required
                     //placeholder for future
                 }

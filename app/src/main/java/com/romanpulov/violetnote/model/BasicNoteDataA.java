@@ -24,15 +24,7 @@ public class BasicNoteDataA implements Parcelable, PasswordProvider {
 
     private BasicNoteGroupA mNoteGroup;
 
-    public BasicNoteGroupA getNoteGroup() {
-        return mNoteGroup;
-    }
-
     private ArrayList<BasicNoteA> mNoteList;
-
-    public ArrayList<BasicNoteA> getNoteList() {
-        return mNoteList;
-    }
 
     private List<BasicNoteA> mRelatedNoteList;
 
@@ -41,7 +33,7 @@ public class BasicNoteDataA implements Parcelable, PasswordProvider {
     }
 
     public BasicNoteA getNote() {
-        if ((mNoteList != null) && (mNoteList.size() > 0))
+        if ((mNoteList != null) && (!mNoteList.isEmpty()))
             return mNoteList.get(0);
         else
             return null;

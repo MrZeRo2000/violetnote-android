@@ -38,7 +38,6 @@ public class HrPickerActivity extends AppCompatActivity {
 
         Fragment fragment = fm.findFragmentById(android.R.id.content);
         if (fragment == null) {
-            String initialPath = getIntent().getStringExtra(PICKER_INITIAL_PATH);
             int sourceType = getIntent().getIntExtra(PICKER_SOURCE_TYPE, 0);
 
             HrPickerFragment hrPickerFragment = HrPickerFragment.newInstance("/");

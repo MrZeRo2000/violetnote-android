@@ -11,29 +11,13 @@ public final class BasicHEventTypeA extends BasicEntityNoteA {
     public static final String EVENT_TYPE_CODE_CHECKOUT = "CHECKOUT";
     public static final String EVENT_TYPE_NAME_CHECKOUT = "Checkout";
 
-    private final long mEventGroup;
-    private final String mEventTypeCode;
 
-    public String getEventTypeCode() {
-        return mEventTypeCode;
-    }
-
-    private final String mEventTypeName;
-
-    public String getEventTypeName() {
-        return mEventTypeName;
-    }
-
-
-    private BasicHEventTypeA(long id, long eventGroup, String eventTypeCode, String eventTypeName) {
+    private BasicHEventTypeA(long id) {
         setId(id);
-        mEventGroup = eventGroup;
-        mEventTypeCode = eventTypeCode;
-        mEventTypeName = eventTypeName;
     }
 
     @NonNull
-    public static BasicHEventTypeA newInstance(long id, long eventGroup, String eventTypeCode, String eventTypeName) {
-        return new BasicHEventTypeA(id, eventGroup, eventTypeCode, eventTypeName);
+    public static BasicHEventTypeA newInstance(long id) {
+        return new BasicHEventTypeA(id);
     }
 }

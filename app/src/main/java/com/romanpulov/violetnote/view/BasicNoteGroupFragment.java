@@ -176,7 +176,7 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
         mDialogFragment = dialog;
     }
 
-    private void performEditAction(@NonNull final ActionMode mode, @NonNull final List<BasicNoteGroupA> items) {
+    private void performEditAction(@NonNull final List<BasicNoteGroupA> items) {
         if (items.size() == 1) {
             BasicNoteGroupA item = items.get(0);
             Intent intent = new Intent(getContext(), BasicNoteGroupEditActivity.class);
@@ -234,7 +234,7 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
                 if (itemId == R.id.delete) {
                     performDeleteAction(mode, selectedNoteItems);
                 } else if (itemId == R.id.edit) {
-                    performEditAction(mode, selectedNoteItems);
+                    performEditAction(selectedNoteItems);
                 }
             }
             return false;

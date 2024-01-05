@@ -27,11 +27,6 @@ public final class BasicHNoteCOItemA extends BasicEntityNoteA implements Display
         return mValue;
     }
 
-    private final BasicNoteItemParams mNoteItemParams = BasicNoteItemParams.createEmpty();
-    public BasicNoteItemParams getNoteItemParams() {
-        return mNoteItemParams;
-    }
-
     private BasicHNoteCOItemA(long id, long eventId, long noteId, String value) {
         setId(id);
         mEventId = eventId;

@@ -45,10 +45,6 @@ public abstract class PassDataBaseFragment extends Fragment {
 
     private int mDataState;
 
-    protected int getDataState() {
-        return mDataState;
-    }
-
     protected void setDataState(int value) {
         mDataState = value;
         updateStateUI(value);

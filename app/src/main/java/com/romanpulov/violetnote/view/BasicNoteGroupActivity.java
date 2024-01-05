@@ -5,7 +5,6 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
 import androidx.appcompat.widget.ActionMenuView;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,15 +15,9 @@ import com.romanpulov.violetnote.db.manager.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicNoteGroupA;
 import com.romanpulov.violetnote.view.core.ActionBarCompatActivity;
 
-import java.util.List;
-
 public class BasicNoteGroupActivity extends ActionBarCompatActivity implements BottomToolbarProvider {
 
     private ActionMenuView mBottomToolbar;
-
-    private List<BasicNoteGroupA> mBasicNoteGroupList;
-    private DBNoteManager mNoteManager;
-    private RecyclerView mRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

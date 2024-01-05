@@ -169,16 +169,6 @@ public final class StmtGenerator {
     }
 
     /**
-     * Drop table
-     * @param tableName Table name to drop
-     * @return Drop table statement
-     */
-    @NonNull
-    public static String dropTableStatement(@NonNull String tableName) {
-        return "DROP TABLE IF EXISTS " + tableName;
-    }
-
-    /**
      * Alter table add new column
      * @param tableName Table name
      * @param columnName Column name

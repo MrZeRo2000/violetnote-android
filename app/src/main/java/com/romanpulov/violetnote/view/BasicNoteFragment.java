@@ -59,7 +59,7 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
 
     private final List<BasicNoteA> mNoteList = new ArrayList<>();
 
-    public static BasicNoteFragment newInstance(DBNoteManager noteManager, BasicNoteGroupA noteGroup) {
+    public static BasicNoteFragment newInstance(BasicNoteGroupA noteGroup) {
         BasicNoteFragment fragment = new BasicNoteFragment();
         Bundle args = new Bundle();
         args.putParcelable(BasicNoteGroupA.BASIC_NOTE_GROUP_DATA, noteGroup);

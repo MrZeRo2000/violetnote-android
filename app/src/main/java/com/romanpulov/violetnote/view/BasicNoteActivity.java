@@ -56,7 +56,7 @@ public class BasicNoteActivity extends ActionBarCompatActivity implements BasicN
 
             mFragment = getFragment();
             if (mFragment == null) {
-                mFragment = BasicNoteFragment.newInstance(noteManager, mBasicNoteGroup);
+                mFragment = BasicNoteFragment.newInstance(mBasicNoteGroup);
                 fm.beginTransaction().replace(R.id.fragment_id, mFragment).commit();
             } else {
                 mFragment.refreshList(noteManager);

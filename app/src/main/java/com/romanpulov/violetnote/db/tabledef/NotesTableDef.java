@@ -56,8 +56,6 @@ public final class NotesTableDef implements DBCommonDef.TableDefSQLProvider {
 
     public static final String FK_INDEX_GROUP_ID_CREATE = StmtGenerator.createForeignKeyIndexStatement(TABLE_NAME, GROUP_ID_COLUMN_NAME);
 
-    public static final String TABLE_ADD_GROUP_ID = StmtGenerator.createAlterTableAddStatement(TABLE_NAME, GROUP_ID_COLUMN_NAME, "INTEGER NOT NULL");
-
     @Override
     public List<String> getSQLCreate() {
         return Arrays.asList(

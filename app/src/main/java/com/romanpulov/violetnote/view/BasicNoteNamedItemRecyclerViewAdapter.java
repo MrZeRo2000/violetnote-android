@@ -82,7 +82,7 @@ public class BasicNoteNamedItemRecyclerViewAdapter extends RecyclerView.Adapter<
         public void onClick(View v) {
             super.onClick(v);
             if ((!mRecyclerViewSelector.isSelected()) && (mListener != null) && (getBindingAdapterPosition() != -1))
-                mListener.onBasicNoteItemFragmentInteraction(mBasicNoteData.getNote().getItems().get(getBindingAdapterPosition()), getBindingAdapterPosition());
+                mListener.onBasicNoteItemFragmentInteraction(mBasicNoteData.getNote().getItems().get(getBindingAdapterPosition()));
         }
 
         @Override

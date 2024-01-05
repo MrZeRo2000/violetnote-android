@@ -104,10 +104,6 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
 
     private final List<BasicNoteHistoryItemA> mHistoryItems = new ArrayList<>();
 
-    public List<BasicNoteHistoryItemA> getHistoryItems() {
-        return mHistoryItems;
-    }
-
     /**
      * Returns last note item position with given priority
      * @param priority Priority

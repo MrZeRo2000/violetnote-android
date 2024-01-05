@@ -102,17 +102,9 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
         return android.R.id.content;
     }
 
-    private boolean fragmentExists() {
-        return ((getFragment() != null) && (!(getFragment() instanceof LoadErrorFragment)));
-    }
-
     protected Fragment getFragment() {
         FragmentManager fm = getSupportFragmentManager();
         return fm.findFragmentById(getFragmentContainerId());
-    }
-
-    protected void updateResult() {
-        setResult(fragmentExists() ? RESULT_OK : RESULT_CANCELED);
     }
 
     /**
@@ -146,7 +138,7 @@ public abstract class PasswordActivity extends ActionBarCompatActivity {
 
     protected void setLoadErrorFragment(String errorText) {
         LoadErrorFragment fragment = LoadErrorFragment.createWithText(errorText);
-        int result = removeFragment().beginTransaction().add(getFragmentContainerId(), fragment).commit();
+        removeFragment().beginTransaction().add(getFragmentContainerId(), fragment).commit();
         mPasswordRequired = false;
     }
 

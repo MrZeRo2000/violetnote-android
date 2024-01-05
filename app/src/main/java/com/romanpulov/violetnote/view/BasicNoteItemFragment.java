@@ -55,8 +55,6 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
         mExecutorHost = value;
     }
 
-    protected OnBasicNoteItemFragmentInteractionListener mListener;
-
     @Override
     public void refreshList(DBNoteManager noteManager) {
         noteManager.mBasicNoteItemDAO.fillNoteDataItemsWithSummary(mBasicNoteData.getNote());
@@ -317,6 +315,6 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
     }
 
     public interface OnBasicNoteItemFragmentInteractionListener {
-        void onBasicNoteItemFragmentInteraction(BasicNoteItemA item, int position);
+        void onBasicNoteItemFragmentInteraction(BasicNoteItemA item);
     }
 }

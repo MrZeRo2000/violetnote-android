@@ -18,11 +18,9 @@ import java.util.List;
 public class NoteDetailsRecyclerViewAdapter extends RecyclerView.Adapter<NoteDetailsRecyclerViewAdapter.ViewHolder> {
 
     private final List<PassNoteA.AttrItem> mValues;
-    private final OnNoteDetailsInteractionListener mListener;
 
-    public NoteDetailsRecyclerViewAdapter(List<PassNoteA.AttrItem> items, com.romanpulov.violetnote.view.OnNoteDetailsInteractionListener listener) {
+    public NoteDetailsRecyclerViewAdapter(List<PassNoteA.AttrItem> items) {
         mValues = items;
-        mListener = listener;
     }
 
     @NonNull
@@ -38,14 +36,6 @@ public class NoteDetailsRecyclerViewAdapter extends RecyclerView.Adapter<NoteDet
         holder.mItem = mValues.get(position);
         holder.mNameView.setText(holder.mItem.mName);
         holder.mValueView.setText(holder.mItem.mValue);
-
-        holder.mView.setOnClickListener(v -> {
-            if (null != mListener) {
-                // Notify the active callbacks interface (the activity, if the
-                // fragment is attached to one) that an item has been selected.
-                mListener.onAttrItemSelection(holder.mItem);
-            }
-        });
 
         holder.mView.setOnLongClickListener(v -> {
             Context context = v.getContext();

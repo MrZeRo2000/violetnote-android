@@ -151,7 +151,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         }
     }
 
-    private void performEditAction(String text, NoteItemDataUpdater noteItemDataUpdater) {
+    private void performEditAction(NoteItemDataUpdater noteItemDataUpdater) {
         List<BasicNoteItemA> selectedNoteItems = getSelectedNoteItems();
         if (selectedNoteItems.size() == 1) {
             BasicNoteItemA item = selectedNoteItems.get(0);
@@ -277,7 +277,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         BasicNoteCheckedItemRecyclerViewAdapter recyclerViewAdapter = new BasicNoteCheckedItemRecyclerViewAdapter(mBasicNoteData, mPriceNoteParamTypeId, new ActionBarCallBack(),
                 new OnBasicNoteCheckedItemFragmentInteractionListener() {
                     @Override
-                    public void onBasicNoteItemFragmentInteraction(BasicNoteItemA item, int position) {
+                    public void onBasicNoteItemFragmentInteraction(BasicNoteItemA item) {
                         hideAddLayout();
 
                         DBNoteManager manager = new DBNoteManager(getActivity());
@@ -330,14 +330,14 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                             text));
                     break;
                 case InputActionHelper.INPUT_ACTION_TYPE_EDIT:
-                    performEditAction(text, item -> item.setValueWithParams(
+                    performEditAction(item -> item.setValueWithParams(
                             mPriceNoteParamTypeId,
                             text));
                     hideAddLayout();
                     mRecyclerViewSelector.finishActionMode();
                     break;
                 case InputActionHelper.INPUT_ACTION_TYPE_NUMBER:
-                    performEditAction(text, item -> item.setParamLong(mPriceNoteParamTypeId, InputParser.getLongValueFromString(text)));
+                    performEditAction(item -> item.setParamLong(mPriceNoteParamTypeId, InputParser.getLongValueFromString(text)));
                     hideAddLayout();
                     mRecyclerViewSelector.finishActionMode();
                     break;

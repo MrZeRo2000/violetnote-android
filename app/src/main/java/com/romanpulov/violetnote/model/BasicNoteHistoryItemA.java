@@ -11,21 +11,6 @@ import android.os.Parcelable;
 public class BasicNoteHistoryItemA extends BasicModifiableEntityNoteA implements Parcelable {
     protected String mValue;
 
-    private BasicNoteHistoryItemA() {
-
-    }
-
-    public static BasicNoteHistoryItemA newInstance(long id, long lastModified, String lastModifiedString, String value) {
-        BasicNoteHistoryItemA instance = new BasicNoteHistoryItemA();
-
-        instance.setId(id);
-        instance.setLastModified(lastModified);
-        instance.setLastModifiedString(lastModifiedString);
-        instance.mValue = value;
-
-        return instance;
-    }
-
     @Override
     public int describeContents() {
         return 0;

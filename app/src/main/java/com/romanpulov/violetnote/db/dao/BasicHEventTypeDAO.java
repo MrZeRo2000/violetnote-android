@@ -41,10 +41,7 @@ public final class BasicHEventTypeDAO extends AbstractDAO<BasicHEventTypeA> {
             @Override
             public void readFromCursor(Cursor c) {
                 result.add(BasicHEventTypeA.newInstance(
-                        c.getLong(0),
-                        c.getLong(1),
-                        c.getString(2),
-                        c.getString(3)
+                        c.getLong(0)
                 ));
             }
         });
