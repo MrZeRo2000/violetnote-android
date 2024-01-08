@@ -16,13 +16,12 @@ import com.romanpulov.violetnote.R;
 public class PassDataHostActivity extends AppCompatActivity {
 
     private AppBarConfiguration appBarConfiguration;
-    private ActivityPassDataHostBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = ActivityPassDataHostBinding.inflate(getLayoutInflater());
+        ActivityPassDataHostBinding binding = ActivityPassDataHostBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.toolbar);

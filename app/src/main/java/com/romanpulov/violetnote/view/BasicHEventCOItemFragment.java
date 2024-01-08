@@ -40,9 +40,6 @@ public class BasicHEventCOItemFragment extends Fragment {
     private final LongSparseArray<BasicHEventA> mHEvents = new LongSparseArray<>();
     private final LongSparseArray<List<BasicHNoteCOItemA>> mHEventCOItems = new LongSparseArray<>();
 
-    //controls
-    private ExpandableListView mExListView;
-    private BasicHEventCOItemExpandableListViewAdapter mExListViewAdapter;
     private ViewSelectorHelper.AbstractViewSelector<BasicHNoteCOItemA> mViewSelector;
 
     public static BasicHEventCOItemFragment newInstance(BasicNoteA note) {
@@ -89,16 +86,17 @@ public class BasicHEventCOItemFragment extends Fragment {
 
         refreshList(new DBHManager(view.getContext()));
 
-        mExListView = view.findViewById(R.id.ex_list);
-        mExListViewAdapter = new BasicHEventCOItemExpandableListViewAdapter(
+        //controls
+        ExpandableListView exListView = view.findViewById(R.id.ex_list);
+        BasicHEventCOItemExpandableListViewAdapter exListViewAdapter = new BasicHEventCOItemExpandableListViewAdapter(
                 getContext(),
                 mHEvents,
                 mHEventCOItems,
                 BasicNoteItemA.getBasicNoteItemValues(mNote.getItems()),
                 new ActionBarCallBack()
         );
-        mExListView.setAdapter(mExListViewAdapter);
-        mViewSelector = mExListViewAdapter.getViewSelector();
+        exListView.setAdapter(exListViewAdapter);
+        mViewSelector = exListViewAdapter.getViewSelector();
 
         mViewSelector.restoreSelectedItems(savedInstanceState, view);
 

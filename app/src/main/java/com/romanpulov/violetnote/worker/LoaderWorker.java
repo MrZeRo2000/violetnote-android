@@ -62,18 +62,6 @@ public class LoaderWorker extends Worker {
         }
         LoggerHelper.logContext(getApplicationContext(), TAG, "Successful:" + isSuccessful);
 
-        /*
-
-        WorkManager.getInstance(getApplicationContext())
-                .getWorkInfoById(getId())
-                .addListener(() -> {
-                    LoggerHelper.logContext(getApplicationContext(), TAG, "Scheduling next execution");
-                    internalScheduleWorker(getApplicationContext(), loaderClassName);
-                    LoggerHelper.logContext(getApplicationContext(), TAG, "Scheduled next execution");
-                }, Executors.newFixedThreadPool(1));
-
-         */
-
         return isSuccessful ? Result.success() : Result.failure();
     }
 
@@ -88,25 +76,6 @@ public class LoaderWorker extends Worker {
             Constraints constraints = (new Constraints.Builder())
                     .setRequiredNetworkType(NetworkType.NOT_ROAMING)
                     .build();
-
-            /*
-
-
-            PeriodicWorkRequest request = new PeriodicWorkRequest.Builder(LoaderWorker.class, 1, TimeUnit.HOURS)
-                    .addTag(WORKER_TAG)
-                    .setInputData(inputData)
-                    .setConstraints(constraints)
-                    .setInitialDelay(1, TimeUnit.HOURS)
-                    .build();
-
-            WorkManager.getInstance(context)
-                    .enqueueUniquePeriodicWork(
-                            WORKER_NAME,
-                            ExistingPeriodicWorkPolicy.REPLACE,
-                            request
-                    );
-
-             */
 
             OneTimeWorkRequest oneTimeWorkRequest = new OneTimeWorkRequest.Builder(LoaderWorker.class)
                     .addTag(WORKER_TAG)
