@@ -84,6 +84,6 @@ public class SettingsActivity extends ActionBarCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        GDHelper.handleActivityResult(this, requestCode, resultCode, data);
+        GDHelper.handleActivityResult(this, requestCode, data);
     }
 }

@@ -22,6 +22,7 @@ import java.util.List;
  * Created by romanpulov on 18.08.2016.
  */
 public class BasicNoteRecycleViewAdapter extends RecyclerView.Adapter<BasicNoteRecycleViewAdapter.ViewHolder> implements ViewSelectorHelper.ChangeNotificationListener {
+    /** @noinspection unused*/
     private static void log(String message) {
         Log.d("RecycleViewAdapter", message);
     }

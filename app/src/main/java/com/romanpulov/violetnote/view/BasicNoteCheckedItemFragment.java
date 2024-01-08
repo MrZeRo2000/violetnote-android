@@ -97,13 +97,6 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         }
     }
 
-    @Override
-    public void refreshList(DBNoteManager noteManager) {
-        super.refreshList(noteManager);
-        updateCheckedItems();
-        PassDataPasswordActivity.getPasswordValidityChecker().startPeriod();
-    }
-
     private void setupBottomToolbarHelper() {
         FragmentActivity activity = getActivity();
         if (activity != null) {

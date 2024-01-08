@@ -8,7 +8,6 @@ import androidx.appcompat.view.ActionMode;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 
-import com.romanpulov.violetnote.db.manager.DBNoteManager;
 import com.romanpulov.violetnote.view.helper.BottomToolbarHelper;
 
 import java.util.Collection;
@@ -26,13 +25,11 @@ public abstract class BasicCommonNoteFragment extends Fragment {
     protected RecyclerView mRecyclerView;
     protected ViewSelectorHelper.AbstractViewSelector<Integer> mRecyclerViewSelector;
 
-    public abstract void refreshList(DBNoteManager noteManager);
-
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         if (mRecyclerViewSelector != null) {
             Collection<Integer> selectedItems = mRecyclerViewSelector.getSelectedItems();
-            if (selectedItems.size() > 0) {
+            if (!selectedItems.isEmpty()) {
                 int[] selectedItemsArray = new int[selectedItems.size()];
                 int i = 0;
                 for (Integer value : selectedItems) {

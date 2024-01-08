@@ -71,7 +71,6 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
     public BasicNoteFragment() {
     }
 
-    @Override
     public void refreshList(DBNoteManager noteManager) {
         noteManager.mBasicNoteDAO.fillNotesByGroup(mNoteGroup, mNoteList);
         if (mRecyclerView != null)

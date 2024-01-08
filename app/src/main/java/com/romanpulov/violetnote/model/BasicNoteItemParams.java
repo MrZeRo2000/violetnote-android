@@ -95,10 +95,6 @@ public final class BasicNoteItemParams implements Parcelable, Iterable<BasicPara
         paramValues.append(key, value);
     }
 
-    public void put(long key, BasicParamValueA value) {
-        paramValues.put(key, value);
-    }
-
     public void putLong(long key, long value) {
         paramValues.put(key, BasicParamValueA.fromLong(value));
     }

@@ -16,8 +16,6 @@ public final class DBStorageManager {
     private static final String LOCAL_BACKUP_FOLDER_NAME = "VioletNoteBackup";
     private static final String LOCAL_BACKUP_FILE_NAME = "violetnotedb_" + DBBasicNoteOpenHelper.DATABASE_VERSION;
 
-    private final Context mContext;
-
     public static DBStorageManager getInstance(Context context) {
         if (null == mInstance) {
             mInstance = new DBStorageManager(context);
@@ -28,7 +26,6 @@ public final class DBStorageManager {
     private final DBBackupManager mDBBackupManager;
 
     private DBStorageManager(Context context) {
-        mContext = context;
         mDBBackupManager = new DBBackupManager(
                 context,
                 LOCAL_BACKUP_FOLDER_NAME,

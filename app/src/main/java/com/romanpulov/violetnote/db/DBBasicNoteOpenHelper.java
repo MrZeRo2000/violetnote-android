@@ -14,11 +14,8 @@ public class DBBasicNoteOpenHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "basic_note.db";
     public static final int DATABASE_VERSION = 5;
 
-    private final Context mContext;
-
     public DBBasicNoteOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        mContext = context;
     }
 
     @Override

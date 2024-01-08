@@ -72,7 +72,7 @@ public final class BasicHNoteCOItemParamDAO extends AbstractDAO<BasicHNoteCOItem
         return internalDeleteById(HNoteCOItemParamsTableDef.TABLE_NAME, object.getId());
     }
 
-    public long deleteByNoteCOItemId(long id) {
-        return internalDeleteById(HNoteCOItemParamsTableDef.TABLE_NAME, HNoteCOItemParamsTableDef.H_NOTE_CO_ITEM_ID_COLUMN_NAME, id);
+    public void deleteByNoteCOItemId(long id) {
+        internalDeleteById(HNoteCOItemParamsTableDef.TABLE_NAME, HNoteCOItemParamsTableDef.H_NOTE_CO_ITEM_ID_COLUMN_NAME, id);
     }
 }

@@ -90,7 +90,7 @@ public class DBBasicNoteHelper implements DBController {
         }
     }
 
-    private static String getNoteIdPrioritySelection(long noteId, long priority) {
+    private static String getNoteIdPrioritySelection() {
         return DBCommonDef.NOTE_ID_SELECTION_STRING + DBCommonDef.AND_STRING + DBCommonDef.PRIORITY_SELECTION_STRING;
     }
 
@@ -153,12 +153,7 @@ public class DBBasicNoteHelper implements DBController {
      */
     public long getNoteMaxOrderId(long noteId, long priority) {
         return getAggregateColumn(NoteItemsTableDef.TABLE_NAME, DBCommonDef.ORDER_COLUMN_NAME, MAX_AGGREGATE_FUNCTION_NAME,
-                getNoteIdPrioritySelection(noteId, priority), getNoteIdPrioritySelectionArgs(noteId, priority));
-    }
-
-    public long getMinOrderId(String tableName, long noteId) {
-        return getAggregateColumn(tableName, DBCommonDef.ORDER_COLUMN_NAME, MIN_AGGREGATE_FUNCTION_NAME,
-                getNoteIdSelection(noteId), getIdSelectionArgs(noteId));
+                getNoteIdPrioritySelection(), getNoteIdPrioritySelectionArgs(noteId, priority));
     }
 
     public long getMinOrderId(String tableName, String selection, String[] selectionArgs) {

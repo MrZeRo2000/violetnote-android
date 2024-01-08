@@ -13,18 +13,14 @@ import com.romanpulov.library.common.service.ServiceUtils;
 
 public class LoaderServiceManager {
 
-    public static boolean startLoader(Context context, String loaderClassName, Bundle bundle) {
-        if (isLoaderServiceRunning(context)) {
-            return false;
-        }
-        else {
+    public static void startLoader(Context context, String loaderClassName, Bundle bundle) {
+        if (!isLoaderServiceRunning(context)) {
             Intent serviceIntent = new Intent(context, LoaderService.class);
             serviceIntent.putExtra(LoaderService.SERVICE_PARAM_LOADER_NAME, loaderClassName);
             if (bundle != null) {
                 serviceIntent.putExtra(LoaderService.SERVICE_PARAM_BUNDLE, bundle);
             }
             context.startService(serviceIntent);
-            return true;
         }
     }
 

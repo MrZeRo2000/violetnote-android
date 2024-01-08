@@ -32,17 +32,6 @@ public class DBRawQueryRepository {
         "g.note_group_display_options " +
         "ORDER BY g.note_group_type, g.order_id";
 
-    public static final String NOTE_GROUPS_WITH_TOTALS =
-        "SELECT " +
-        "g._id, " +
-        "g.note_group_type, " +
-        "g.note_group_name, " +
-        "g.note_group_icon, " +
-        "g.order_id, " +
-        "(SELECT COUNT(n._id) FROM notes n WHERE n.group_id = g._id) AS count_notes " +
-        "FROM note_groups g " +
-        "ORDER BY g.order_id";
-
     public static final String NOTES_WITH_TOTALS =
         "SELECT " +
         "n._id, " +
@@ -68,18 +57,6 @@ public class DBRawQueryRepository {
         "FROM note_items ni " +
         "INNER JOIN note_item_params nip ON ni._id = nip.note_item_id " +
         "WHERE ni.note_id = ? " ;
-
-    public static final String NOTE_ITEMS_EVENTS =
-            "SELECT " +
-            "hni.note_item_id, " +
-            "he._id AS event_id, " +
-            "he.event_time, " +
-            "hni.name, " +
-            "hni.value " +
-            "FROM h_note_items hni " +
-            "INNER JOIN h_events he ON hni.event_id = he._id " +
-            "ORDER BY he.event_time DESC"
-            ;
 
     public static final String H_EVENTS_BY_CO_ITEMS_NOTE_ID =
             "SELECT " +

@@ -26,11 +26,6 @@ public final class BasicParamValueA implements Parcelable {
         return newInstance(vInt, null);
     }
 
-    @NonNull
-    public static BasicParamValueA fromString(String vText) {
-        return newInstance(0, vText);
-    }
-
     private BasicParamValueA(@NonNull Parcel in) {
         vInt = in.readLong();
         vText = in.readString();

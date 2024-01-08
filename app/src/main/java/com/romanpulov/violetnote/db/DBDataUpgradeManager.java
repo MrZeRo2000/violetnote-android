@@ -21,6 +21,7 @@ public class DBDataUpgradeManager {
         this.mDB = db;
     }
 
+    /** @noinspection SameParameterValue*/
     private void collapseEvents(long retentionPeriod) {
 
         class EventItemTime {

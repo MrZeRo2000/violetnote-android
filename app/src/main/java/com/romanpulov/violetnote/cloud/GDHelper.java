@@ -40,7 +40,7 @@ public class GDHelper extends GDBaseHelper {
         return instance;
     }
 
-    public static void handleActivityResult(Activity activity, int requestCode, int resultCode, @Nullable Intent data) {
+    public static void handleActivityResult(Activity activity, int requestCode, @Nullable Intent data) {
         if (requestCode == REQUEST_CODE_SIGN_IN) {
             GoogleSignIn.getSignedInAccountFromIntent(data)
                     .addOnSuccessListener(account -> {

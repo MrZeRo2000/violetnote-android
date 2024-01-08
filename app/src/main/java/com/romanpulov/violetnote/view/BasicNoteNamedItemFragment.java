@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.view.ActionMode;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
@@ -34,9 +33,7 @@ import com.romanpulov.violetnote.view.action.BasicItemsMoveUpAction;
 import com.romanpulov.violetnote.view.core.NameValueInputDialog;
 import com.romanpulov.violetnote.view.core.PasswordActivity;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
-import com.romanpulov.violetnote.view.core.TextEditDialogBuilder;
 import com.romanpulov.violetnote.view.helper.InputActionHelper;
-import com.romanpulov.violetnote.view.helper.InputManagerHelper;
 
 import java.util.List;
 
@@ -118,44 +115,6 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
         }
     }
 
-    private void performEditValueAction(final ActionMode mode, final BasicNoteItemA item) {
-        TextEditDialogBuilder textEditDialogBuilder = (new TextEditDialogBuilder(getActivity(), getString(R.string.ui_note_value), item.getValue()))
-                .setNonEmptyErrorMessage(getString(R.string.error_field_not_empty));
-
-        final AlertDialog alertDialog = textEditDialogBuilder.execute();
-
-        textEditDialogBuilder.setOnTextInputListener(text -> {
-            if (!text.equals(item.getValue())) {
-                //hide editor
-                View focusedView = alertDialog.getCurrentFocus();
-                InputManagerHelper.hideInput(focusedView);
-
-                //change
-                item.setValue(text);
-
-                // finish anyway
-                mode.finish();
-
-                BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity(), mBasicNoteData);
-                executor.addAction(getString(R.string.caption_processing), new BasicNoteDataItemEditNameValueAction(mBasicNoteData, item));
-                executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData));
-                executor.setOnExecutionCompletedListener((BasicNoteDataActionExecutor.OnExecutionCompletedListener) (basicNoteData, result) -> {
-                    mBasicNoteData = basicNoteData;
-
-                    //clear editor reference
-                    if (mEditorDialog != null) {
-                        mEditorDialog.dismiss();
-                        mEditorDialog = null;
-                    }
-                });
-                executeActions(executor);
-            }
-        });
-
-        mEditorDialog = alertDialog;
-    }
-
-
     private void performEditAction(final ActionMode mode, final BasicNoteItemA item) {
         NameValueInputDialog dialog = new NameValueInputDialog(getActivity(), getString(R.string.ui_name_value_title));
         dialog.setNameValue(item.getName(), item.getValue());
@@ -214,7 +173,6 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
                     if (itemId == R.id.delete) {
                         performDeleteAction(mode, selectedNoteItems);
                     } else if (itemId == R.id.edit_value) {
-                        //performEditValueAction(mode, selectedNoteItems.get(0));
                         mInputActionHelper.showEditLayout(selectedNoteItems.get(0).getValue());
                     } else if (itemId == R.id.edit) {
                         performEditAction(mode, selectedNoteItems.get(0));

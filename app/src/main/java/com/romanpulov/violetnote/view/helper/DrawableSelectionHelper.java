@@ -53,10 +53,6 @@ public class DrawableSelectionHelper {
 
     }
 
-    public static long getGroupIconByDrawable(int drawableId) {
-        return getDrawablePosition(drawableId);
-    }
-
     public static long getGroupIconByPosition(int position) {
         return position;
     }

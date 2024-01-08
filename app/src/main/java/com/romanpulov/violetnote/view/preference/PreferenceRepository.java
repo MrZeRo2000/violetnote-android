@@ -133,6 +133,7 @@ public class PreferenceRepository {
      * @param context Context
      * @param preferenceKey preference key
      * @param defaultValue  default value
+     * @noinspection SameParameterValue
      */
     private static long getPreferenceLong(Context context, String preferenceKey, long defaultValue) {
         return PreferenceManager.getDefaultSharedPreferences(context).getLong(preferenceKey, defaultValue);

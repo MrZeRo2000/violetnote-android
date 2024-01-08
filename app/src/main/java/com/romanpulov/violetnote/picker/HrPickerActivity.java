@@ -11,8 +11,6 @@ import android.os.Bundle;
 import com.romanpulov.violetnote.cloud.CloudAccountFacadeFactory;
 
 public class HrPickerActivity extends AppCompatActivity {
-    public static final String TAG = HrPickerActivity.class.getSimpleName();
-
     public static final String PICKER_SOURCE_TYPE = "PickerSourceType";
     public static final String PICKER_INITIAL_PATH = "PickerInitialPath";
     public static final String PICKER_RESULT = "PickerResult";

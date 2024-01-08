@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.romanpulov.violetnote.R;
-import com.romanpulov.violetnote.model.BasicNoteValueA;
 import com.romanpulov.violetnote.model.BasicNoteValueDataA;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 import com.romanpulov.violetnote.view.core.ViewSelectorHelper;
@@ -44,7 +43,6 @@ public class BasicNoteValueRecyclerViewAdapter extends RecyclerView.Adapter<Basi
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        holder.mItem = mBasicNoteValueDataA.getValues().get(position);
         holder.mValueView.setText(mBasicNoteValueDataA.getValues().get(position).getValue());
 
         // background
@@ -58,7 +56,6 @@ public class BasicNoteValueRecyclerViewAdapter extends RecyclerView.Adapter<Basi
 
     public class ViewHolder extends RecyclerViewHelper.SelectableViewHolder {
         public final TextView mValueView;
-        public BasicNoteValueA mItem;
 
         public ViewHolder(View view, ViewSelectorHelper.AbstractViewSelector<Integer> viewSelector) {
             super(view, viewSelector);

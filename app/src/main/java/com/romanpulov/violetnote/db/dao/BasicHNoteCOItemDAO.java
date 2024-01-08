@@ -109,46 +109,35 @@ public final class BasicHNoteCOItemDAO extends AbstractBasicHEventItemParamDAO<B
 
     }
 
-    private long insertHNoteCOItemParams(long hNoteCOItemId, @NonNull BasicNoteItemParams params) {
-        long result = 0;
-
+    private void insertHNoteCOItemParams(long hNoteCOItemId, @NonNull BasicNoteItemParams params) {
         List<BasicNoteItemParamValueA> paramList = BasicNoteItemParams.paramValuesToList(params.paramValues);
         for (BasicNoteItemParamValueA param : paramList) {
-            result = getBasicHNoteCOItemParamDAO().insert(BasicHNoteCOItemParam.newInstance(
+            getBasicHNoteCOItemParamDAO().insert(BasicHNoteCOItemParam.newInstance(
                     0,
                     hNoteCOItemId,
                     param.noteItemParamTypeId,
                     param.paramValue.vInt,
                     param.paramValue.vText
             ));
-            if (result == -1)
-                return result;
         }
-
-        return result;
     }
 
-    public long saveEvent(@NonNull BasicNoteA note, @NonNull List<BasicNoteItemA> noteItems) {
-        if (noteItems.size() > 0) {
+    public void saveEvent(@NonNull BasicNoteA note, @NonNull List<BasicNoteItemA> noteItems) {
+        if (!noteItems.isEmpty()) {
             long eventId = getBasicHEventDAO().insert(BasicHEventA.fromEventType(mDBHelper.getDBDictionaryCache().getCheckoutHEventParamId()));
             if (eventId != -1) {
-                long result = -1;
                 for (BasicNoteItemA noteItem : noteItems) {
                     long hNoteCOItemId = insert(BasicHNoteCOItemA.fromEventData(eventId, note, noteItem));
                     BasicNoteItemParams params = noteItem.getNoteItemParams();
                     if ((hNoteCOItemId != -1) && (params.size() > 0)) {
-                        result = insertHNoteCOItemParams(hNoteCOItemId, noteItem.getNoteItemParams());
+                        insertHNoteCOItemParams(hNoteCOItemId, noteItem.getNoteItemParams());
                     }
                 }
-                return result;
-            } else
-                return eventId;
-        } else {
-            return 0;
+            }
         }
     }
 
-    public long deleteEvent(@NonNull BasicNoteA note) {
+    public void deleteEvent(@NonNull BasicNoteA note) {
         long result = 0;
 
         Set<Long> events = new HashSet<>();
@@ -166,8 +155,6 @@ public final class BasicHNoteCOItemDAO extends AbstractBasicHEventItemParamDAO<B
         if (result != 0) {
             getBasicHEventDAO().deleteByIds(events);
         }
-
-        return result;
     }
 
 }

@@ -9,7 +9,7 @@ import android.os.Parcelable;
  */
 
 public class BasicNoteHistoryItemA extends BasicModifiableEntityNoteA implements Parcelable {
-    protected String mValue;
+    protected final String mValue;
 
     @Override
     public int describeContents() {

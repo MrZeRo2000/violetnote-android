@@ -52,20 +52,16 @@ public final class BasicNoteItemParamsDAO extends AbstractDAO<BasicNoteItemParam
         return result;
     }
 
-    public long insertWithId(long noteItemId, @NonNull BasicNoteItemParams object) {
-        long result = 0;
-
+    public void insertWithId(long noteItemId, @NonNull BasicNoteItemParams object) {
         for (int i = 0; i < object.size(); i++) {
             long noteItemParamTypeId = object.keyAt(i);
-            result += insertNoteItemParam(noteItemId, noteItemParamTypeId, object.get(noteItemParamTypeId));
+            insertNoteItemParam(noteItemId, noteItemParamTypeId, object.get(noteItemParamTypeId));
         }
-
-        return result;
     }
 
-    private long insertNoteItemParam(long noteItemId, long paramTypeId, @NonNull BasicParamValueA paramValue) {
+    private void insertNoteItemParam(long noteItemId, long paramTypeId, @NonNull BasicParamValueA paramValue) {
         if ((paramValue.vInt == 0) && ((paramValue.vText == null) || (paramValue.vText.isEmpty())))
-            return 0;
+            return;
 
         ContentValues cv = new ContentValues();
 
@@ -76,10 +72,10 @@ public final class BasicNoteItemParamsDAO extends AbstractDAO<BasicNoteItemParam
         if ((paramValue.vText != null) && (!paramValue.vText.isEmpty()))
             cv.put(NoteItemParamsTableDef.V_TEXT_COLUMN_NAME, paramValue.vText);
 
-        return mDB.insert(NoteItemParamsTableDef.TABLE_NAME, null, cv);
+        mDB.insert(NoteItemParamsTableDef.TABLE_NAME, null, cv);
     }
 
-    public long deleteByNoteItem(@NonNull BasicNoteItemA noteItem) {
-        return internalDeleteById(NoteItemParamsTableDef.TABLE_NAME, DBCommonDef.NOTE_ITEM_ID_COLUMN_NAME, noteItem.getId());
+    public void deleteByNoteItem(@NonNull BasicNoteItemA noteItem) {
+        internalDeleteById(NoteItemParamsTableDef.TABLE_NAME, DBCommonDef.NOTE_ITEM_ID_COLUMN_NAME, noteItem.getId());
     }
 }

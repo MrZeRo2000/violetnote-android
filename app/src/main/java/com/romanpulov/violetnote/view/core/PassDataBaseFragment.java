@@ -43,10 +43,7 @@ public abstract class PassDataBaseFragment extends Fragment {
     protected PassDataViewModel model;
     protected PassDataExpireViewModel expireModel;
 
-    private int mDataState;
-
     protected void setDataState(int value) {
-        mDataState = value;
         updateStateUI(value);
     }
 

@@ -106,17 +106,13 @@ public final class BasicHEventDAO extends AbstractDAO<BasicHEventA> {
         return internalDeleteById(HEventsTableDef.TABLE_NAME, object.getId());
     }
 
-    public long deleteById(long id) {
-        return internalDeleteById(HEventsTableDef.TABLE_NAME, id);
+    public void deleteById(long id) {
+        internalDeleteById(HEventsTableDef.TABLE_NAME, id);
     }
 
-    public long deleteByIds(Collection<Long> ids) {
-        long result = 0;
-
+    public void deleteByIds(Collection<Long> ids) {
         for (long id : ids) {
-            result = deleteById(id);
+            deleteById(id);
         }
-
-        return result;
     }
 }

@@ -22,7 +22,6 @@ public class CheckedUpdateIntervalPreferenceSetup extends PreferenceSetup {
     @Override
     public void execute() {
         final String[] entries = mContext.getResources().getStringArray(R.array.pref_checked_update_interval_entries);
-        final String[] entryValues = mContext.getResources().getStringArray(R.array.pref_checked_update_interval_entry_values);
 
         mPreference.setSummary(entries[getPreferenceValue(mPreference)]);
 

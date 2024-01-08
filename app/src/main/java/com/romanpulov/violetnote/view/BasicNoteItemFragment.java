@@ -55,11 +55,6 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
         mExecutorHost = value;
     }
 
-    @Override
-    public void refreshList(DBNoteManager noteManager) {
-        noteManager.mBasicNoteItemDAO.fillNoteDataItemsWithSummary(mBasicNoteData.getNote());
-    }
-
     protected void afterExecutionCompleted() {
         //some action after execution
     }

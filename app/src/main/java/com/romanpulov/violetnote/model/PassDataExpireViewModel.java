@@ -15,24 +15,11 @@ public class PassDataExpireViewModel extends ViewModel {
 
     private boolean mDataExpired = false;
 
-    public boolean isDataExpired() {
-        return mDataExpired;
-    }
-
-    public void setDataExpired(boolean mDataExpired) {
-        this.mDataExpired = mDataExpired;
-    }
-
     private ScheduledExecutorService mTimerExecutorService;
 
     private MutableLiveData<?> mLiveData;
 
-    public MutableLiveData<?> getLiveData() {
-        return mLiveData;
-    }
-
     public void setLiveData(MutableLiveData<?> mLiveData) {
-        // this.shutdownDataExpiration();
         this.mLiveData = mLiveData;
         checkDataExpired();
     }
@@ -43,20 +30,6 @@ public class PassDataExpireViewModel extends ViewModel {
             Log.d(TAG, "Data expired");
             mDataExpired = true;
         }, EXPIRATION_DELAY, TimeUnit.SECONDS);
-    }
-
-    public void shutdownDataExpiration() {
-        Log.d(TAG, "Shutting down data expiration");
-        if ((mTimerExecutorService != null) && (!mTimerExecutorService.isShutdown())) {
-            mTimerExecutorService.shutdownNow();
-            try {
-                if (!mTimerExecutorService.awaitTermination(1, TimeUnit.SECONDS)) {
-                    Log.d(TAG, "Timer did not shut down");
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     public void initDataExpiration() {

@@ -37,12 +37,9 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
     protected BasicNoteValueDataA mBasicNoteValueData;
     private InputActionHelper mInputActionHelper;
 
-    @Override
     public void refreshList(DBNoteManager noteManager) {
         mBasicNoteValueData.setValues(noteManager.mBasicNoteValueDAO.getByNoteId(mBasicNoteValueData.getNote().getId()));
     }
-
-    private OnNoteValueFragmentInteractionListener mListener;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -262,12 +259,6 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
         });
 
         return view;
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
     }
 
     /**

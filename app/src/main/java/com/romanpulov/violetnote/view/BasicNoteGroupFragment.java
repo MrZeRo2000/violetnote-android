@@ -56,7 +56,6 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
 
     }
 
-    @Override
     public void refreshList(DBNoteManager noteManager) {
         (new BasicNoteGroupRefreshAction(mBasicNoteGroupList)).execute(noteManager);
 

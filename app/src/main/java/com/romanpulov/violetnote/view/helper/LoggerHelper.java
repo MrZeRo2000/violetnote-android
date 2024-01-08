@@ -41,6 +41,7 @@ public class LoggerHelper extends BaseLoggerHelper {
         }
     }
 
+    /** @noinspection unused*/
     public static void unconditionalLogContext(Context context, String tag, String message) {
         if (context != null) {
             getInstance(context).unconditionalLog(tag, message);

@@ -138,15 +138,14 @@ public final class BasicHNoteItemDAO extends AbstractBasicHEventItemDAO<BasicHNo
         return mDB.insert(HNoteItemsTableDef.TABLE_NAME, null, cv);
     }
 
-    public long saveEvent(@NonNull BasicNoteItemA noteItem) {
+    public void saveEvent(@NonNull BasicNoteItemA noteItem) {
         long eventId = getBasicHEventDAO().insert(BasicHEventA.fromEventType(mDBHelper.getDBDictionaryCache().getNoteItemsHEventParamId()));
         if (eventId != -1) {
-            return insert(BasicHNoteItemA.fromEventData(eventId, noteItem));
-        } else
-            return eventId;
+            insert(BasicHNoteItemA.fromEventData(eventId, noteItem));
+        }
     }
 
-    public long deleteEvent(@NonNull BasicNoteItemA noteItem) {
+    public void deleteEvent(@NonNull BasicNoteItemA noteItem) {
         long result = 0;
 
         Set<Long> events = new HashSet<>();
@@ -161,7 +160,5 @@ public final class BasicHNoteItemDAO extends AbstractBasicHEventItemDAO<BasicHNo
         if (result != 0) {
             getBasicHEventDAO().deleteByIds(events);
         }
-
-        return result;
     }
 }

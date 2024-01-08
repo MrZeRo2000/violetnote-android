@@ -20,7 +20,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by rpulov on 03.04.2016.
@@ -47,10 +46,6 @@ public class DocumentPassDataLoader {
     public static File getDocumentFile(Context context) {
         File file = new File(getDocumentFileName(context));
         return file.exists() ? file : null;
-    }
-
-    public static DocumentPassDataLoader newInstance(Context context) {
-        return new DocumentPassDataLoader(context.getApplicationContext());
     }
 
     public static class DocumentPassDataLoadResult {
@@ -114,52 +109,6 @@ public class DocumentPassDataLoader {
         }
     }
 
-    private final Context mContext;
-
-    private final List<String> mLoadErrorList = new ArrayList<>();
-
-    public List<String> getLoadErrorList() {
-        return mLoadErrorList;
-    }
-
-    public PassDataA loadPassDataA(String fileName, String masterPass) {
-        mLoadErrorList.clear();
-
-        if (masterPass == null) {
-            return null;
-        }
-
-        try {
-            File f = new File(fileName);
-            if (f.exists()) {
-                try (InputStream inputStream = new FileInputStream(f)) {
-                    PassData2 pd = PassData2ReaderServiceV2.fromStream(inputStream, masterPass);
-                    if (pd != null)
-                        return PassDataA.newInstance(masterPass, pd);
-                    else
-                        return null;
-                }
-            } else
-                throw new FileNotFoundException();
-        }
-        catch(FileNotFoundException e) {
-            mLoadErrorList.add(mContext.getResources().getString(R.string.error_file_not_found));
-            return null;
-        }
-        catch (IOException e) {
-            mLoadErrorList.add(mContext.getResources().getString(R.string.error_io));
-            return null;
-        }
-        catch (AESCryptException e) {
-            mLoadErrorList.add(mContext.getResources().getString(R.string.error_crypt));
-            return null;
-        }
-        catch(DataReadWriteException e) {
-            mLoadErrorList.add(mContext.getResources().getString(R.string.error_read));
-            return null;
-        }
-    }
-
     public static PassDataA loadSamplePassData() {
         PassData2 pd = new PassData2();
         pd.setCategoryList(new ArrayList<>());
@@ -193,7 +142,5 @@ public class DocumentPassDataLoader {
         return PassDataA.newInstance(null, pd);
     }
 
-    private DocumentPassDataLoader(Context context) {
-        mContext = context;
-    }
+    private DocumentPassDataLoader() {}
 }

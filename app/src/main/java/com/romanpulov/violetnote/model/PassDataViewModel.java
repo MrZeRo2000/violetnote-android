@@ -14,8 +14,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class PassDataViewModel extends AndroidViewModel {
-    private static final String TAG = PassDataViewModel.class.getSimpleName();
-
     public static class PassDataResult {
         private final PassDataA mPassData;
         private final String mLoadErrorText;
@@ -135,11 +133,10 @@ public class PassDataViewModel extends AndroidViewModel {
         return mPassDataSearchResult;
     }
 
-    public boolean searchPassData(String searchString, boolean isSearchSystem, boolean isSearchUser) {
+    public void searchPassData(String searchString, boolean isSearchSystem, boolean isSearchUser) {
         mPassDataSearch = new PassDataSearch(PassDataA.newSearchInstance(mPassDataLoaded.getPassData(), searchString, isSearchSystem, isSearchUser), searchString);
         SearchPassDataResult searchPassDataResult = new SearchPassDataResult(mPassDataSearch.getPassData(), null, mPassDataSearch.getSearchText());
         mPassDataSearchResult.setValue(searchPassDataResult);
-        return (searchPassDataResult.getPassData() != null) && (searchPassDataResult.getPassData().getPassNoteData().size() > 0);
     }
 
     public void loadSearchPassData() {

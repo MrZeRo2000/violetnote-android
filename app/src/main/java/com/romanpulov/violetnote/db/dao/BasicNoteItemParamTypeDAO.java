@@ -43,8 +43,7 @@ public final class BasicNoteItemParamTypeDAO extends AbstractDAO<BasicNoteItemPa
             @Override
             public void readFromCursor(Cursor c) {
                 result.add(BasicNoteItemParamTypeA.newInstance(
-                        c.getLong(0),
-                        c.getString(1)
+                        c.getLong(0)
                 ));
             }
         });
