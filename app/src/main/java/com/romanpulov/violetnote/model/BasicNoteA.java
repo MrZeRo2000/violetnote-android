@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 
 import com.romanpulov.violetnote.db.provider.BasicNoteDBManagementProvider;
 import com.romanpulov.violetnote.model.vo.BasicNoteSummary;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -163,7 +164,16 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
      * @param encryptedString not used
      * @return new instance
      */
-    public static BasicNoteA newInstance(long id, long lastModified, String lastModifiedString, long orderId, int groupId, int noteType, String title, boolean encrypted, String encryptedString) {
+    public static BasicNoteA newInstance(
+            long id,
+            long lastModified,
+            String lastModifiedString,
+            long orderId,
+            int groupId,
+            int noteType,
+            String title,
+            boolean encrypted,
+            String encryptedString) {
         BasicNoteA instance = new BasicNoteA();
 
         instance.setId(id);
@@ -194,18 +204,29 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
      * @param checkedItemCount number of checked items
      * @return new instance
      */
-    public static BasicNoteA newInstanceWithTotals(long id, long lastModified, String lastModifiedString, long orderId, int groupId, int noteType, String title, boolean encrypted, String encryptedString, int itemCount, int checkedItemCount) {
-        BasicNoteA instance = new BasicNoteA();
-
-        instance.setId(id);
-        instance.setLastModified(lastModified);
-        instance.setLastModifiedString(lastModifiedString);
-        instance.setOrderId(orderId);
-        instance.mGroupId = groupId;
-        instance.mNoteType = noteType;
-        instance.mTitle = title;
-        instance.mEncrypted = encrypted;
-        instance.mEncryptedString = encryptedString;
+    public static BasicNoteA newInstanceWithTotals(
+            long id,
+            long lastModified,
+            String lastModifiedString,
+            long orderId,
+            int groupId,
+            int noteType,
+            String title,
+            boolean encrypted,
+            String encryptedString,
+            int itemCount,
+            int checkedItemCount) {
+        BasicNoteA instance = newInstance(
+                id,
+                lastModified,
+                lastModifiedString,
+                orderId,
+                groupId,
+                noteType,
+                title,
+                encrypted,
+                encryptedString
+        );
         instance.mSummary = BasicNoteSummary.fromItemCounts(itemCount, checkedItemCount);
         instance.summaryChanged();
 
@@ -235,7 +256,7 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
     }
 
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return "{" +
                 "[id=" + getId() + "]," +
                 "[groupId=" + mGroupId + "]," +
