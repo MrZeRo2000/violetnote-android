@@ -4,6 +4,7 @@ import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+import com.romanpulov.violetnote.view.helper.LoggerHelper;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -55,7 +56,7 @@ public class PassDataExpireViewModel extends ViewModel {
                     Log.d(TAG, "Timer did not shut down");
                 }
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                LoggerHelper.logDebug(TAG, "Timer interrupted exception:" + e);
             }
         }
     }

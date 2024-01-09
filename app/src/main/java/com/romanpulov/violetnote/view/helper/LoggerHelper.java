@@ -3,6 +3,7 @@ package com.romanpulov.violetnote.view.helper;
 import android.annotation.SuppressLint;
 import android.content.Context;
 
+import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 
@@ -26,7 +27,6 @@ public class LoggerHelper extends BaseLoggerHelper {
         return INSTANCE;
     }
 
-
     public LoggerHelper(@NonNull Context context) {
         super(context.getApplicationContext());
         setEnableLogging(PreferenceManager
@@ -48,4 +48,7 @@ public class LoggerHelper extends BaseLoggerHelper {
         }
     }
 
+    public static void logDebug(String tag, String message) {
+        Log.d(tag, message);
+    }
 }

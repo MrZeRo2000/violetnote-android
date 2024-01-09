@@ -2,15 +2,16 @@ package com.romanpulov.violetnote.model.vo;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import com.romanpulov.violetnote.view.helper.LoggerHelper;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.romanpulov.violetnote.model.BooleanUtils;
 
 public class BasicNoteGroupDisplayOptions implements Parcelable {
+    private final static String TAG = BasicNoteGroupDisplayOptions.class.getSimpleName();
 
     private final static String INDICATORS = "indicators";
-
     private final static String TOTAL_FLAG = "total";
     private final static String UNCHECKED_FLAG = "unchecked";
     private final static String CHECKED_FLAG = "checked";
@@ -65,7 +66,7 @@ public class BasicNoteGroupDisplayOptions implements Parcelable {
                 instance.mUncheckedFlag = jo_indicators.optBoolean(UNCHECKED_FLAG);
                 instance.mCheckedFlag = jo_indicators.optBoolean(CHECKED_FLAG);
             } catch (JSONException e) {
-                e.printStackTrace();
+                LoggerHelper.logDebug(TAG, "Error parsing JSON string " + jsonString + ":" + e);
             }
         }
 
@@ -93,7 +94,7 @@ public class BasicNoteGroupDisplayOptions implements Parcelable {
             }
 
         } catch (JSONException e) {
-            e.printStackTrace();
+            LoggerHelper.logDebug(TAG, "Error building JSON:" + e);
         }
 
         return jo.length() > 0 ? jo.toString() : null;

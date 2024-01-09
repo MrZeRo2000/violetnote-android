@@ -54,8 +54,7 @@ public class LoaderWorker extends Worker {
                     loader.load();
                     LoggerHelper.logContext(getApplicationContext(), TAG, "Loaded successfully");
                 } catch (Exception e) {
-                    LoggerHelper.logContext(getApplicationContext(), TAG, "Error loading:" + e.getMessage());
-                    e.printStackTrace();
+                    LoggerHelper.logContext(getApplicationContext(), TAG, "Error loading:" + e);
                 }
                 isSuccessful = true;
             }
@@ -103,8 +102,7 @@ public class LoaderWorker extends Worker {
             WorkManager.getInstance(context).pruneWork().getResult().get();
             LoggerHelper.logContext(context, TAG, "Works cancelled successfully");
         } catch (InterruptedException | ExecutionException e) {
-            LoggerHelper.logContext(context, TAG, "Error cancelling old works:" + e.getMessage());
-            e.printStackTrace();
+            LoggerHelper.logContext(context, TAG, "Error cancelling old works:" + e);
         }
     }
 

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
@@ -29,8 +30,7 @@ import com.romanpulov.violetnote.model.InputParser;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutorHost;
 import com.romanpulov.violetnote.view.action.BasicNoteDataItemAddUniqueValuesAction;
 import com.romanpulov.violetnote.view.core.PassDataPasswordActivity;
-import com.romanpulov.violetnote.view.helper.BottomToolbarHelper;
-import com.romanpulov.violetnote.view.helper.DisplayTitleBuilder;
+import com.romanpulov.violetnote.view.helper.*;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutor;
 import com.romanpulov.violetnote.view.action.BasicNoteDataItemCheckOutAction;
 import com.romanpulov.violetnote.view.action.BasicNoteDataItemEditNameValueAction;
@@ -39,9 +39,6 @@ import com.romanpulov.violetnote.view.action.BasicNoteDataRefreshAction;
 import com.romanpulov.violetnote.view.core.AlertOkCancelSupportDialogFragment;
 import com.romanpulov.violetnote.view.core.PasswordActivity;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
-import com.romanpulov.violetnote.view.helper.InputActionHelper;
-import com.romanpulov.violetnote.view.helper.CheckoutProgressHelper;
-import com.romanpulov.violetnote.view.helper.InputManagerHelper;
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 
 import java.util.List;
@@ -49,6 +46,8 @@ import java.util.List;
 import static com.romanpulov.violetnote.view.core.ViewSelectorHelper.KEY_SELECTED_ITEMS_RETURN_DATA;
 
 public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
+    private final static String TAG = BasicNoteCheckedItemFragment.class.getSimpleName();
+
     public static final int RESULT_CODE_VALUES = 0;
     public static final int RESULT_CODE_HISTORY = 1;
 
@@ -59,7 +58,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
     private long mPriceNoteParamTypeId;
     private int mCheckedUpdateInterval;
 
-    public static final Handler mRefreshHandler = new Handler();
+    public static final Handler mRefreshHandler = new Handler(Looper.getMainLooper());
 
     private final Runnable mRefreshRunnable = () -> {
         Context context = getContext();
@@ -67,7 +66,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
             try {
                 refreshListWithView();
             } catch (Exception e) {
-                e.printStackTrace();
+                LoggerHelper.logContext(getContext(), TAG, "Error refreshing list:" + e);
             }
         }
     };

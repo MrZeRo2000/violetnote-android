@@ -12,6 +12,7 @@ import android.widget.EditText;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.view.helper.InputManagerHelper;
 
+import com.romanpulov.violetnote.view.helper.LoggerHelper;
 import org.xmlpull.v1.XmlPullParser;
 
 /**
@@ -20,6 +21,7 @@ import org.xmlpull.v1.XmlPullParser;
  */
 
 public class TextInputDialog extends AlertInputDialog {
+    private final static String TAG = TextInputDialog.class.getSimpleName();
 
     public interface OnTextInputListener {
         void onTextInput(String text);
@@ -74,7 +76,7 @@ public class TextInputDialog extends AlertInputDialog {
             try {
                 state = parser.next();
             } catch (Exception e1) {
-                e1.printStackTrace();
+                LoggerHelper.logContext(mContext, TAG, "Error parsing resource:" + e1);
             }
             if (state == XmlPullParser.START_TAG) {
                 if (parser.getName().equals("EditText")) {

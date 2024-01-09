@@ -24,6 +24,7 @@ import com.romanpulov.violetnote.view.core.AlertOkCancelSupportDialogFragment;
 import com.romanpulov.violetnote.view.core.BasicCommonNoteFragment;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 import com.romanpulov.violetnote.view.helper.InputActionHelper;
+import com.romanpulov.violetnote.view.helper.LoggerHelper;
 
 import java.util.List;
 
@@ -34,6 +35,8 @@ import java.util.List;
  * interface.
  */
 public class BasicNoteValueFragment extends BasicCommonNoteFragment {
+    private final static String TAG = BasicNoteValueFragment.class.getSimpleName();
+
     protected BasicNoteValueDataA mBasicNoteValueData;
     private InputActionHelper mInputActionHelper;
 
@@ -215,7 +218,7 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
         } catch (Exception e) {
             //catch possible unique index violation
             refreshList(mNoteManager);
-            e.printStackTrace();
+            LoggerHelper.logContext(getContext(), TAG, "Error performing add action:" + e);
         }
     }
 

@@ -8,6 +8,7 @@ import androidx.preference.PreferenceManager;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.view.core.ProgressPreference;
+import com.romanpulov.violetnote.view.helper.LoggerHelper;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -20,6 +21,8 @@ import java.util.Map;
  */
 
 public class PreferenceRepository {
+    private final static String TAG = PreferenceRepository.class.getSimpleName();
+
     public static final int SOURCE_TYPE_FILE = 0;
     public static final int SOURCE_TYPE_MSGRAPH = 1;
 
@@ -207,7 +210,7 @@ public class PreferenceRepository {
         try {
             intervalResourceValue = context.getResources().getStringArray(R.array.pref_checked_update_interval_entry_values)[prefUpdateInterval];
         } catch (Resources.NotFoundException e) {
-            e.printStackTrace();
+            LoggerHelper.logDebug(TAG, "Resource not found:" + e);
         }
 
         if (intervalResourceValue != null) {

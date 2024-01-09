@@ -2,18 +2,21 @@ package com.romanpulov.violetnote.db.tabledef;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import com.romanpulov.violetnote.view.helper.LoggerHelper;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class DBDefFactory {
+    private final static String TAG = DBDefFactory.class.getSimpleName();
 
     @Nullable
     private static DBCommonDef.TableDefSQLProvider createInstance(@NonNull Class<? extends DBCommonDef.TableDefSQLProvider> clazzProvider) {
         try {
-            return clazzProvider.newInstance();
-        } catch (IllegalAccessException | InstantiationException e) {
-            e.printStackTrace();
+            return clazzProvider.getDeclaredConstructor().newInstance();
+        } catch (IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
+            LoggerHelper.logDebug(TAG, "Error creating instance:" + e);
             return null;
         }
     }
