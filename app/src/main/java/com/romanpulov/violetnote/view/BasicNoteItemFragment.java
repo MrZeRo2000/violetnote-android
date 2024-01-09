@@ -172,7 +172,8 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
     }
 
     protected void performMoveToOtherNoteAction(final ActionMode mode, final List<BasicNoteItemA> items, final BasicNoteA otherNote) {
-        String confirmationQuestion = getString(R.string.ui_question_selected_note_items_move_to_other_note, items.size(), otherNote.getTitle());
+        String confirmationQuestion = getResources()
+                .getQuantityString(R.plurals.ui_question_selected_note_items_move_to_other_note, items.size(), items.size(), otherNote.getTitle());
         AlertOkCancelSupportDialogFragment dialog = AlertOkCancelSupportDialogFragment.newAlertOkCancelDialog(confirmationQuestion);
         dialog.setOkButtonClickListener(dialog1 -> {
             BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity(), mBasicNoteData);
@@ -207,7 +208,8 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
      * @param items items to delete
      */
     protected void performDeleteAction(final ActionMode mode, final List<BasicNoteItemA> items) {
-        AlertOkCancelSupportDialogFragment dialog = AlertOkCancelSupportDialogFragment.newAlertOkCancelDialog(getString(R.string.ui_question_delete_items_are_you_sure, items.size()));
+        AlertOkCancelSupportDialogFragment dialog = AlertOkCancelSupportDialogFragment
+                .newAlertOkCancelDialog(getResources().getQuantityString(R.plurals.ui_question_delete_items_are_you_sure, items.size(), items.size()));
         dialog.setOkButtonClickListener(dialog1 -> {
             BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity(), mBasicNoteData);
             executor.addAction(getString(R.string.caption_processing), new BasicNoteItemDeleteAction(mBasicNoteData, items));

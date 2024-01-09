@@ -133,10 +133,9 @@ public class BasicHEventCOItemFragment extends Fragment {
             return false;
         }
 
-
-
         private void performRestoreAction(final Collection<BasicHNoteCOItemA> selectedNoteItems) {
-            String queryString = getString(R.string.ui_question_are_you_sure_restore_items, selectedNoteItems.size());
+            String queryString = getResources().getQuantityString(
+                    R.plurals.ui_question_are_you_sure_restore_items, selectedNoteItems.size(), selectedNoteItems.size());
             AlertOkCancelSupportDialogFragment dialog = AlertOkCancelSupportDialogFragment.newAlertOkCancelDialog(queryString);
             dialog.setOkButtonClickListener(dialog1 -> {
                 Set<String> selectedList = new HashSet<>();

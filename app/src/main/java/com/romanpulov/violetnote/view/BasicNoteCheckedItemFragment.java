@@ -480,7 +480,8 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
     public void checkOut() {
         int checkedCount = mBasicNoteData.getCheckedCount();
         if (checkedCount > 0) {
-            String queryString = getString(R.string.ui_question_are_you_sure_checkout_items, checkedCount);
+            String queryString = getResources().getQuantityString(
+                    R.plurals.ui_question_are_you_sure_checkout_items, checkedCount, checkedCount);
             AlertOkCancelSupportDialogFragment dialog = AlertOkCancelSupportDialogFragment.newAlertOkCancelDialog(queryString);
             dialog.setOkButtonClickListener(dialog1 -> performCheckOutAction());
 

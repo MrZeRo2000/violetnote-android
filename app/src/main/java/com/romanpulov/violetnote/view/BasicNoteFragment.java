@@ -217,7 +217,8 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
     }
 
     private void performMoveToOtherNoteGroupAction(final ActionMode mode, @NonNull final List<BasicNoteA> items, @NonNull final BasicNoteGroupA otherNoteGroup) {
-        String confirmationQuestion = getString(R.string.ui_question_selected_note_move_to_other_note_group, items.size(), otherNoteGroup.getDisplayTitle());
+        String confirmationQuestion = getResources()
+                .getQuantityString(R.plurals.ui_question_selected_note_move_to_other_note_group, items.size(), items.size(), otherNoteGroup.getDisplayTitle());
         AlertOkCancelSupportDialogFragment dialog = AlertOkCancelSupportDialogFragment.newAlertOkCancelDialog(confirmationQuestion);
         dialog.setOkButtonClickListener(dialog1 -> {
             //executor

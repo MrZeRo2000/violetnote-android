@@ -31,7 +31,7 @@ public class DisplayTitleBuilder {
                 if (title.isEmpty())
                     title = item.getDisplayTitle();
                 else {
-                    title = context.getString(R.string.title_multiple_items_selected, selectedItems.size());
+                    title = context.getResources().getQuantityString(R.plurals.title_multiple_items_selected, selectedItems.size(), selectedItems.size());
                     break;
                 }
             }
@@ -45,7 +45,7 @@ public class DisplayTitleBuilder {
         if ((context != null) && (selectedItems != null)) {
             title = selectedItems.size() == 1 ?
                     selectedItems.iterator().next().getDisplayTitle() :
-                    context.getString(R.string.title_multiple_items_selected, selectedItems.size());
+                    context.getResources().getQuantityString(R.plurals.title_multiple_items_selected, selectedItems.size(), selectedItems.size());
         }
 
         return title;

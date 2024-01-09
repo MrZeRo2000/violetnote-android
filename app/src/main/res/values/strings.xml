@@ -184,7 +184,10 @@
     <string name="title_activity_password_note_search">Note search</string>
     <string name="title_activity_settings">Settings</string>
     <string name="title_activity_file_chooser">File chooser</string>
-    <string name="title_multiple_items_selected" formatted="true">%1$d items selected</string>
+    <plurals name="title_multiple_items_selected">
+        <item quantity="one">One item selected</item>
+        <item quantity="other">%d items selected</item>
+    </plurals>
 
     <string name="ui_note_type_checked">Checked</string>
     <string name="ui_note_type_named">Named</string>
@@ -198,11 +201,26 @@
     <string name="ui_dialog_button_logout">Logout</string>
     <string name="ui_question_are_you_sure">Are you sure?</string>
     <string name="ui_question_delete_item_are_you_sure">%s will be deleted!\nAre you sure?</string>
-    <string name="ui_question_delete_items_are_you_sure">%1$d items will be deleted!\nAre you sure?</string>
-    <string name="ui_question_selected_note_items_move_to_other_note" formatted="true">Are you sure to move %1$d note items to other note: %2$s ?</string>
-    <string name="ui_question_selected_note_move_to_other_note_group" formatted="true">Are you sure to move %1$d notes to other note group: %2$s ?</string>
-    <string name="ui_question_are_you_sure_checkout_items" formatted="true">Are you sure to checkout %1$d items?</string>
-    <string name="ui_question_are_you_sure_restore_items" formatted="true">Are you sure to restore %1$d items?</string>
+    <plurals name="ui_question_delete_items_are_you_sure">
+        <item quantity="one">One item will be deleted!\nAre you sure?</item>
+        <item quantity="other">%d items will be deleted!\nAre you sure?</item>
+    </plurals>
+    <plurals name="ui_question_selected_note_items_move_to_other_note">
+        <item quantity="one">Are you sure to move one note item to other note: %s ?</item>
+        <item quantity="other">Are you sure to move %1$d note items to other note: %2$s ?</item>
+    </plurals>
+    <plurals name="ui_question_selected_note_move_to_other_note_group">
+        <item quantity="one">Are you sure to move one note to other note group: %s ?</item>
+        <item quantity="other">Are you sure to move %1$d notes to other note group: %2$s ?</item>
+    </plurals>
+    <plurals name="ui_question_are_you_sure_checkout_items">
+        <item quantity="one">Are you sure to check out one item?</item>
+        <item quantity="other">Are you sure to checkout %d items?</item>
+    </plurals>
+    <plurals name="ui_question_are_you_sure_restore_items">
+        <item quantity="one">Are you sure to restore one item?</item>
+        <item quantity="other">Are you sure to restore %d items?</item>
+    </plurals>
     <string name="ui_error_wrong_password">Wrong password</string>
     <string name="ui_error_empty_password">Password should not be empty</string>
     <string name="ui_error_note_already_exists">Note %s already exists</string>
