@@ -43,6 +43,7 @@ public final class BasicNoteItemParams implements Parcelable, Iterable<BasicPara
     }
 
     @Override
+    @NonNull
     public Iterator<BasicParamValueA> iterator() {
         return new BasicParamValueIterator();
     }

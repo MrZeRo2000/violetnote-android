@@ -7,11 +7,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class InputParser {
+    public static final int NUMBER_DISPLAY_STYLE_INT = 1;
+    public static final int NUMBER_DISPLAY_STYLE_FLOAT = 2;
 
     private static final String FLOAT_PARAMS_REGEXP = "(.+)\\s(([0-9]+[.|,]?[0-9]*)|([0-9]*[.|,]?[0-9]+))";
     private static final Pattern FLOAT_PARAMS_PATTERN = Pattern.compile(FLOAT_PARAMS_REGEXP);
     private static final String FLOAT_PARAMS_FORMAT = "%s %.2f";
+    private static final String INT_PARAMS_FORMAT = "%s %d";
     private static final String FLOAT_VALUE_FORMAT = "%.2f";
+    private static final String INT_VALUE_FORMAT = "%d";
 
     public static class FloatParamsResult {
         private String mText;
@@ -50,7 +54,6 @@ public class InputParser {
         public String toString() {
             return String.format(Locale.ENGLISH, "{Text=%s, FloatValue=%d}", mText, mLongValue );
         }
-
     }
 
     public static FloatParamsResult parseFloatParams(String inputString) {
@@ -58,16 +61,28 @@ public class InputParser {
 
         Matcher matcher = FLOAT_PARAMS_PATTERN.matcher(inputString);
         if (matcher.matches() && (matcher.groupCount() > 2)) {
-            result.mText = matcher.group(1);
-            String floatString = matcher.group(2).replace(',', '.');
+            String mg1 = matcher.group(1);
+            String mg2 = matcher.group(2);
+            if (mg1 != null && mg2 != null) {
+                result.mText = mg1;
+                String floatString = mg2.replace(',', '.');
 
-            long longValue = getLongValueFromString(floatString);
-            if (longValue > 0) {
-                result.mLongValue = longValue;
+                long longValue = getLongValueFromString(floatString);
+                if (longValue > 0) {
+                    result.mLongValue = longValue;
+                }
             }
         }
 
         return result;
+    }
+
+    public static int getNumberDisplayStyle(boolean isInt) {
+        return isInt ? NUMBER_DISPLAY_STYLE_INT : NUMBER_DISPLAY_STYLE_FLOAT;
+    }
+
+    public static boolean isIntValue(long value) {
+        return value % 100 == 0;
     }
 
     public static long getLongValueFromString(String floatString) {
@@ -75,15 +90,31 @@ public class InputParser {
         return Math.round(floatValue * 100d);
     }
 
-    public static String getFloatDisplayValue(long value) {
-        return String.format(Locale.ENGLISH, FLOAT_VALUE_FORMAT, (double)value / 100d);
+    public static String getDisplayValue(long value, int numberDisplayStyle) {
+        switch (numberDisplayStyle) {
+            case NUMBER_DISPLAY_STYLE_INT:
+                return String.format(Locale.ENGLISH, INT_VALUE_FORMAT, value > 0 ? value / 100 : 1);
+            case NUMBER_DISPLAY_STYLE_FLOAT:
+                return String.format(Locale.ENGLISH, FLOAT_VALUE_FORMAT, (double)value / 100d) ;
+            default:
+                return String.valueOf(value);
+        }
     }
 
-    public static String composeFloatParams(String text, long value) {
+    public static String composeFloatParams(String text, long value, int numberDisplayStyle) {
         FloatParamsResult floatParamsResult = FloatParamsResult.fromTextAndValue(text, (int) value);
         String result;
         if (floatParamsResult.hasValue()) {
-            result = String.format(Locale.ENGLISH, FLOAT_PARAMS_FORMAT, floatParamsResult.mText, (double)floatParamsResult.mLongValue / 100d);
+            switch (numberDisplayStyle) {
+                case NUMBER_DISPLAY_STYLE_INT:
+                    result = String.format(Locale.ENGLISH, INT_PARAMS_FORMAT, floatParamsResult.mText, floatParamsResult.mLongValue / 100);
+                    break;
+                case NUMBER_DISPLAY_STYLE_FLOAT:
+                    result = String.format(Locale.ENGLISH, FLOAT_PARAMS_FORMAT, floatParamsResult.mText, (double)floatParamsResult.mLongValue / 100d);
+                    break;
+                default:
+                    result = floatParamsResult.mText;
+            }
         } else {
             result = floatParamsResult.mText;
         }

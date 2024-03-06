@@ -28,7 +28,7 @@ public class CheckoutProgressHelper {
         mPriceTextView = hostView.findViewById(R.id.price_view);
     }
 
-    public void setProgressData(int checkedItemCount, int itemCount, long checkedPrice, long totalPrice) {
+    public void setProgressData(int checkedItemCount, int itemCount, long checkedPrice, long totalPrice, boolean isInt) {
         mPriceTextView.setVisibility(totalPrice > 0 ? View.VISIBLE : View.GONE);
         mHostView.setVisibility(itemCount > 0 ? View.VISIBLE : View.GONE);
 
@@ -38,12 +38,17 @@ public class CheckoutProgressHelper {
 
             String progressText;
             String priceText;
+            int numberDisplayStyle = InputParser.getNumberDisplayStyle(isInt);
             if (checkedItemCount > 0) {
                 progressText = String.format(Locale.getDefault(), "%d/%d", checkedItemCount, itemCount);
-                priceText = String.format(Locale.getDefault(), "%s/%s", InputParser.getFloatDisplayValue(checkedPrice), InputParser.getFloatDisplayValue(totalPrice));
+                priceText = String.format(
+                        Locale.getDefault(),
+                        "%s/%s",
+                        InputParser.getDisplayValue(checkedPrice, numberDisplayStyle),
+                        InputParser.getDisplayValue(totalPrice, numberDisplayStyle));
             } else {
                 progressText = String.format(Locale.getDefault(), "%d", itemCount);
-                priceText = InputParser.getFloatDisplayValue(totalPrice);
+                priceText = InputParser.getDisplayValue(totalPrice, numberDisplayStyle);
             }
             mProgressTextView.setText(progressText);
 

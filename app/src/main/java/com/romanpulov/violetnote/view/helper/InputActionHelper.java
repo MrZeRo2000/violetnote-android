@@ -115,8 +115,8 @@ public class InputActionHelper implements AutoCompleteArrayAdapter.OnAutoComplet
         showLayout(text, INPUT_ACTION_TYPE_EDIT);
     }
 
-    public void showEditNumberLayout(long number) {
-        showLayout(number == 0 ? null : InputParser.getFloatDisplayValue(number), INPUT_ACTION_TYPE_NUMBER);
+    public void showEditNumberLayout(long number, int numberDisplayStyle) {
+        showLayout(number == 0 ? null : InputParser.getDisplayValue(number, numberDisplayStyle), INPUT_ACTION_TYPE_NUMBER);
     }
 
     private void showLayout(String text, int actionType) {

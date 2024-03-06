@@ -58,6 +58,8 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
     private long mPriceNoteParamTypeId;
     private int mCheckedUpdateInterval;
 
+    private BasicNoteDataA.ParamsSummary mParamsSummary;
+
     public static final Handler mRefreshHandler = new Handler(Looper.getMainLooper());
 
     private final Runnable mRefreshRunnable = () -> {
@@ -124,14 +126,19 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         return fragment;
     }
 
+    private void updateParamsSummary() {
+        mParamsSummary = mBasicNoteData.getParamsSummary(mPriceNoteParamTypeId);
+    }
+
     private void updateCheckedItems() {
         //update checkout progress
-        if (mCheckoutProgressHelper != null) {
+        if ((mCheckoutProgressHelper != null) && (mParamsSummary != null)) {
             mCheckoutProgressHelper.setProgressData(
                     mBasicNoteData.getNote().getSummary().getCheckedItemCount(),
                     mBasicNoteData.getNote().getSummary().getItemCount(),
-                    mBasicNoteData.getCheckedLongParamTotal(mPriceNoteParamTypeId),
-                    mBasicNoteData.getLongParamTotal(mPriceNoteParamTypeId)
+                    mParamsSummary.getCheckedCount(),
+                    mParamsSummary.getTotalCount(),
+                    mParamsSummary.getIsInt()
             );
         }
     }
@@ -157,6 +164,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
             executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData));
             executor.setOnExecutionCompletedListener((BasicNoteDataActionExecutor.OnExecutionCompletedListener) (basicNoteData, result) -> {
                 mBasicNoteData = basicNoteData;
+                updateParamsSummary();
                 updateCheckedItems();
 
                 //clear editor reference
@@ -193,8 +201,12 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                     if (itemId == R.id.delete) {
                         performDeleteAction(mode, selectedNoteItems);
                     } else if (itemId == R.id.edit_value) {
+                        BasicNoteItemA selectedNote = selectedNoteItems.get(0);
                         mInputActionHelper.showEditLayout(
-                            selectedNoteItems.get(0).getValueWithFloatParams(mPriceNoteParamTypeId));
+                            InputParser.composeFloatParams(
+                                selectedNote.getValue(),
+                                selectedNote.getNoteItemParams().getLong(mPriceNoteParamTypeId),
+                                InputParser.getNumberDisplayStyle(mParamsSummary.getIsInt())));
                     } else if (itemId == R.id.select_all) {
                         performSelectAll();
                     }
@@ -279,6 +291,9 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                         BasicNoteItemA updatedItem = manager.mBasicNoteItemDAO.getById(item.getId());
                         item.updateChecked(updatedItem);
 
+                        //update summary
+                        updateParamsSummary();
+
                         //update checked
                         mBasicNoteData.getNote().getSummary().addCheckedItemCount(item.isChecked() ? 1 : - 1);
                         updateCheckedItems();
@@ -293,7 +308,9 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                     public void onBasicNoteItemPriceClick(BasicNoteItemA item, int position) {
                         if (mRecyclerViewSelector.getActionMode() == null) {
                             mRecyclerViewSelector.startActionMode(requireView(), position);
-                            mInputActionHelper.showEditNumberLayout(item.getParamLong(mPriceNoteParamTypeId));
+                            mInputActionHelper.showEditNumberLayout(
+                                    item.getParamLong(mPriceNoteParamTypeId),
+                                    InputParser.getNumberDisplayStyle(mParamsSummary.getIsInt()));
                         }
                     }
                 }
@@ -335,6 +352,8 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                     break;
             }
         });
+
+        updateParamsSummary();
 
         //add checkout progress
         mCheckoutProgressHelper = new CheckoutProgressHelper(view.findViewById(R.id.checkout_progress_panel_include));

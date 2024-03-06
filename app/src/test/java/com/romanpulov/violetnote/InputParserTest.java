@@ -76,13 +76,13 @@ public class InputParserTest {
 
     @Test
     public void testInputComposer() {
-        String test1 = InputParser.composeFloatParams("Some text", 1255);
+        String test1 = InputParser.composeFloatParams("Some text", 1255, InputParser.NUMBER_DISPLAY_STYLE_FLOAT);
         Assert.assertEquals("Some text 12.55", test1);
 
-        String test2 = InputParser.composeFloatParams("Some text", 1500);
+        String test2 = InputParser.composeFloatParams("Some text", 1500, InputParser.NUMBER_DISPLAY_STYLE_FLOAT);
         Assert.assertEquals("Some text 15.00", test2);
 
-        String test3 = InputParser.composeFloatParams("Some text", 0);
+        String test3 = InputParser.composeFloatParams("Some text", 0, InputParser.NUMBER_DISPLAY_STYLE_FLOAT);
         Assert.assertEquals("Some text", test3);
 
     }

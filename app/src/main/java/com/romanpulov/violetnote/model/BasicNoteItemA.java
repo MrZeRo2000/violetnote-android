@@ -42,14 +42,6 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
         return mValue;
     }
 
-    public String getValueWithFloatParams(long noteItemParamTypeId) {
-        return InputParser.composeFloatParams(mValue, mNoteItemParams.getLong(noteItemParamTypeId));
-    }
-
-    public String getFloatParamDisplayValue(long noteItemParamTypeId) {
-        return InputParser.getFloatDisplayValue(mNoteItemParams.getLong(noteItemParamTypeId));
-    }
-
     public void setValue(String value) {
         mValue = value;
     }
