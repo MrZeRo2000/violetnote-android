@@ -62,7 +62,7 @@ public class BasicNoteCheckedItemRecyclerViewAdapter extends RecyclerView.Adapte
             holder.mValueView.setPaintFlags(holder.mValueView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
 
         BasicNoteDataA.ParamsSummary paramsSummary = mBasicNoteData.getParamsSummary(mPriceNoteParamTypeId);
-        if (paramsSummary.getTotalCount() > 0) {
+        if (paramsSummary.getTotalValue() > 0) {
             holder.mPriceView.setVisibility(View.VISIBLE);
             holder.mPriceView.setText(
                     InputParser.getDisplayValue(
@@ -85,7 +85,7 @@ public class BasicNoteCheckedItemRecyclerViewAdapter extends RecyclerView.Adapte
         return mBasicNoteData.getNote().getItems().size();
     }
 
-    class ViewHolder extends RecyclerViewHelper.SelectableViewHolder {
+    public class ViewHolder extends RecyclerViewHelper.SelectableViewHolder {
         private final CheckBox mCheckedView;
         private final TextView mValueView;
         private final TextView mPriceView;
