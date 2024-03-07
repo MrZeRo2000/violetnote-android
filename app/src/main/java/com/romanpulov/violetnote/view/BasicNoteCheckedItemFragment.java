@@ -107,6 +107,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
 
     @Override
     protected void afterExecutionCompleted() {
+        updateParamsSummary();
         updateCheckedItems();
     }
 
