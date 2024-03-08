@@ -13,7 +13,7 @@
         android:padding="@dimen/text_margin_half"
         android:id="@+id/progress_text_view"
         android:layout_weight="0"
-        android:textAppearance="@style/Header1Text"
+        android:textAppearance="@style/Highlight2Text"
         />
 
     <ProgressBar
@@ -31,7 +31,7 @@
         android:gravity="center_vertical"
         android:id="@+id/price_view"
         android:layout_weight="0"
-        android:textAppearance="@style/Header2Text"
+        android:textAppearance="@style/Highlight2Text"
         />
 
 </LinearLayout>
