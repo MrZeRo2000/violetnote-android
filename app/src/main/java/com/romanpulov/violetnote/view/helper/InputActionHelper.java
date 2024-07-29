@@ -101,7 +101,7 @@ public class InputActionHelper implements AutoCompleteArrayAdapter.OnAutoComplet
     }
 
     private void acceptText(String text) {
-        if ((mAddListener != null) && (text != null) && (text.trim().length() > 0))
+        if ((mAddListener != null) && (text != null) && (!text.trim().isEmpty()))
             mAddListener.onInputFragmentInteraction(mActionType, text.trim());
         //clear search text for future
         mInputEditText.setText(null);
@@ -148,7 +148,8 @@ public class InputActionHelper implements AutoCompleteArrayAdapter.OnAutoComplet
 
         mActionView.setVisibility(View.VISIBLE);
         if (mInputEditText.requestFocus()) {
-            InputManagerHelper.toggleInputForced(mInputEditText.getContext());
+            //InputManagerHelper.toggleInputForced(mInputEditText.getContext());
+            InputManagerHelper.showInput(mInputEditText);
         }
     }
 

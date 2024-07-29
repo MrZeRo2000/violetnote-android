@@ -2,11 +2,14 @@ package com.romanpulov.violetnote.view.helper;
 
 import android.content.Context;
 
+import android.os.Build;
+import android.view.WindowInsetsController;
 import androidx.annotation.Nullable;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import androidx.core.view.WindowInsetsCompat;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
@@ -16,6 +19,9 @@ import static android.content.Context.INPUT_METHOD_SERVICE;
  */
 
 public class InputManagerHelper {
+    private static InputMethodManager getInputMethodManager(Context context) {
+        return (InputMethodManager) context.getSystemService(INPUT_METHOD_SERVICE);
+    }
 
     /**
      * Hide input from view
@@ -23,9 +29,16 @@ public class InputManagerHelper {
      */
     public static void hideInput(View v) {
         if (v != null) {
-            InputMethodManager inputMethodManager = (InputMethodManager) v.getContext().getSystemService(INPUT_METHOD_SERVICE);
-            if ((inputMethodManager != null) && (inputMethodManager.isAcceptingText()))
-                inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                WindowInsetsController windowInsetsController = v.getWindowInsetsController();
+                if (windowInsetsController != null) {
+                    windowInsetsController.hide(WindowInsetsCompat.Type.ime());
+                }
+            } else {
+                InputMethodManager inputMethodManager = getInputMethodManager(v.getContext());
+                if ((inputMethodManager != null) && (inputMethodManager.isAcceptingText()))
+                    inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
+            }
         }
     }
 
@@ -35,9 +48,16 @@ public class InputManagerHelper {
      */
     public static void showInput(View v) {
         if (v != null) {
-            InputMethodManager inputMethodManager = (InputMethodManager) v.getContext().getSystemService(INPUT_METHOD_SERVICE);
-            if (inputMethodManager != null)
-                inputMethodManager.showSoftInput(v, InputMethodManager.SHOW_FORCED);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                WindowInsetsController windowInsetsController = v.getWindowInsetsController();
+                if (windowInsetsController != null) {
+                    windowInsetsController.show(WindowInsetsCompat.Type.ime());
+                }
+            } else {
+                InputMethodManager inputMethodManager = getInputMethodManager(v.getContext());
+                if (inputMethodManager != null)
+                    inputMethodManager.showSoftInput(v, InputMethodManager.SHOW_IMPLICIT);
+            }
         }
     }
 
@@ -58,7 +78,7 @@ public class InputManagerHelper {
     public static void showInputDelayed(View v) {
         if (v != null) {
             v.postDelayed(() -> {
-                InputMethodManager inputMethodManager = (InputMethodManager) v.getContext().getSystemService(INPUT_METHOD_SERVICE);
+                InputMethodManager inputMethodManager = getInputMethodManager(v.getContext());
                 if (inputMethodManager != null)
                     inputMethodManager.showSoftInput(v, InputMethodManager.SHOW_IMPLICIT);
             }, 500);
@@ -73,17 +93,6 @@ public class InputManagerHelper {
         if ((v != null) && v.requestFocus()) {
             showInputDelayed(v);
         }
-    }
-
-
-    /**
-     * Toggle force input
-     * @param context Context
-     */
-    public static void toggleInputForced(Context context) {
-        InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(INPUT_METHOD_SERVICE);
-        if (inputMethodManager != null)
-            inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
     }
 
     /**

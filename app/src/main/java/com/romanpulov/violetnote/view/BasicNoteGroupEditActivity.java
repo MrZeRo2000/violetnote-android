@@ -72,7 +72,7 @@ public class BasicNoteGroupEditActivity extends ActionBarCompatActivity {
         super.onResume();
 
         if (mNoteGroup == null) {
-            InputManagerHelper.toggleInputForced(this);
+            InputManagerHelper.showInputDelayed(this.mTitle);
         }
     }
 

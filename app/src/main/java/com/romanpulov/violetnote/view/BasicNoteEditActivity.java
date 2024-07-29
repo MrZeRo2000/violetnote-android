@@ -32,7 +32,7 @@ public class BasicNoteEditActivity extends ActionBarCompatActivity {
         super.onResume();
 
         mViewHolder.mTitle.requestFocus();
-        InputManagerHelper.toggleInputForced(this);
+        InputManagerHelper.showInputDelayed(mViewHolder.mTitle);
     }
 
     @Override
