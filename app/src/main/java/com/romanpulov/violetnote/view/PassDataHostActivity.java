@@ -43,8 +43,13 @@ public class PassDataHostActivity extends AppCompatActivity {
 
     @Override
     public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_pass_data_host);
-        return NavigationUI.navigateUp(navController, appBarConfiguration)
-                || super.onSupportNavigateUp();
+        if (getOnBackPressedDispatcher().hasEnabledCallbacks()) {
+            getOnBackPressedDispatcher().onBackPressed();
+            return true;
+        } else {
+            NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_pass_data_host);
+            return NavigationUI.navigateUp(navController, appBarConfiguration)
+                    || super.onSupportNavigateUp();
+        }
     }
 }

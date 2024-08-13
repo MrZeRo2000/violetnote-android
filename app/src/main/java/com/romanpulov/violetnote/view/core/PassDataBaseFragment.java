@@ -2,14 +2,13 @@ package com.romanpulov.violetnote.view.core;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -43,6 +42,13 @@ public abstract class PassDataBaseFragment extends Fragment {
     protected PassDataViewModel model;
     protected PassDataExpireViewModel expireModel;
 
+    private final OnBackPressedCallback mBackPressedFinishCallback = new OnBackPressedCallback(true /* enabled by default */) {
+        @Override
+        public void handleOnBackPressed() {
+            requireActivity().finish();
+        }
+    };
+
     protected void setDataState(int value) {
         updateStateUI(value);
     }
@@ -58,6 +64,7 @@ public abstract class PassDataBaseFragment extends Fragment {
             Log.d(TAG, "Show keyboard on updateStateUI");
             InputManagerHelper.focusAndShowDelayed(mEditTextPassword);
         }
+        this.mBackPressedFinishCallback.setEnabled(dataState == DATA_STATE_PASSWORD_REQUIRED);
     }
 
     protected void createViewBindings(View view) {
@@ -89,6 +96,18 @@ public abstract class PassDataBaseFragment extends Fragment {
 
         }
     };
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, mBackPressedFinishCallback);
+    }
+
+    @Override
+    public void onDestroy() {
+        mBackPressedFinishCallback.remove();
+        super.onDestroy();
+    }
 
     @Override
     public View onCreateView(
