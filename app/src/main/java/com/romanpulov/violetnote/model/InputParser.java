@@ -2,13 +2,19 @@ package com.romanpulov.violetnote.model;
 
 import androidx.annotation.NonNull;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class InputParser {
     public static final int NUMBER_DISPLAY_STYLE_INT = 1;
     public static final int NUMBER_DISPLAY_STYLE_FLOAT = 2;
+
+    private static final SimpleDateFormat PARSE_DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy", Locale.ENGLISH);
 
     private static final String FLOAT_PARAMS_REGEXP = "(.+)\\s(([0-9]+[.|,]?[0-9]*)|([0-9]*[.|,]?[0-9]+))";
     private static final Pattern FLOAT_PARAMS_PATTERN = Pattern.compile(FLOAT_PARAMS_REGEXP);
@@ -81,10 +87,6 @@ public class InputParser {
         return isInt ? NUMBER_DISPLAY_STYLE_INT : NUMBER_DISPLAY_STYLE_FLOAT;
     }
 
-    public static boolean isIntValue(long value) {
-        return value % 100 == 0;
-    }
-
     public static long getLongValueFromString(String floatString) {
         double floatValue = Double.parseDouble(floatString);
         return Math.round(floatValue * 100d);
@@ -120,5 +122,26 @@ public class InputParser {
         }
 
         return result;
+    }
+
+    public static int getDisplayValueDifference(String value, String previousValue) {
+        try {
+            int intValue = Integer.parseInt(value);
+            int intPreviousValue = Integer.parseInt(previousValue);
+            return intValue - intPreviousValue;
+        } catch (NumberFormatException ne) {
+            try {
+                Date dateValue = PARSE_DATE_FORMAT.parse(value);
+                Date datePreviousValue = PARSE_DATE_FORMAT.parse(previousValue);
+                if (dateValue != null && datePreviousValue != null) {
+                    long diff = dateValue.getTime() - datePreviousValue.getTime();
+                    return (int) TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+                } else {
+                    return 0;
+                }
+            } catch (ParseException pe) {
+                return 0;
+            }
+        }
     }
 }

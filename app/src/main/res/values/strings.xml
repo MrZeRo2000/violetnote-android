@@ -234,6 +234,8 @@
     <string name="ui_display_options_show_total">Show total</string>
     <string name="ui_display_options_show_unchecked">Show unchecked</string>
     <string name="ui_display_options_show_checked">Show checked</string>
+    <string name="ui_display_value_trend_up">%1$s (\u25b2%2$s)</string>
+    <string name="ui_display_value_trend_down">%1$s (\u25bc%2$s)</string>
 
     <!-- Content description for images -->
     <string name="content_description_priority">Priority</string>
