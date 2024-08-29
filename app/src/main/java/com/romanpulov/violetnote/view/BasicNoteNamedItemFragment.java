@@ -258,11 +258,10 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
         mRecyclerView = view.findViewById(R.id.list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
 
+        // no action currently required
+        //placeholder for future
         BasicNoteNamedItemRecyclerViewAdapter recyclerViewAdapter = new BasicNoteNamedItemRecyclerViewAdapter(mBasicNoteData, new ActionBarCallBack(),
-                item -> {
-                    // no action currently required
-                    //placeholder for future
-                }
+                BasicNoteNamedItemFragment.this::startHEventHistoryActivity
         );
         mRecyclerViewSelector = recyclerViewAdapter.getRecyclerViewSelector();
         mRecyclerView.setAdapter(recyclerViewAdapter);
