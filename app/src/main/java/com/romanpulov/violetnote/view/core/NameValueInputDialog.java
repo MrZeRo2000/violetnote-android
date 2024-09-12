@@ -79,8 +79,9 @@ public class NameValueInputDialog extends AlertInputDialog {
                         //hide editor
                         InputManagerHelper.hideInput(valueEditText);
 
-                        if (mOnNameValueInputListener != null)
-                            mOnNameValueInputListener.onNameValueInput(name, value);
+                        if (mOnNameValueInputListener != null) {
+                            mOnNameValueInputListener.onNameValueInput(name.trim(), value.trim());
+                        }
                         mAlertDialog.dismiss();
                     }
             });
