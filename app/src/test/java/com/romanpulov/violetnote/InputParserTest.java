@@ -5,7 +5,8 @@ import com.romanpulov.violetnote.model.InputParser;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.Arrays;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -85,5 +86,17 @@ public class InputParserTest {
         String test3 = InputParser.composeFloatParams("Some text", 0, InputParser.NUMBER_DISPLAY_STYLE_FLOAT);
         Assert.assertEquals("Some text", test3);
 
+    }
+
+    @Test
+    public void testIsDate() {
+        Assert.assertTrue(InputParser.isDate("27.09.2024"));
+        Assert.assertFalse(InputParser.isDate("e2.2024"));
+    }
+
+    @Test
+    public void testGetCurrentDateAsString() {
+        String currentDateAsString = LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+        Assert.assertEquals(currentDateAsString, InputParser.getCurrentDateAsString());
     }
 }

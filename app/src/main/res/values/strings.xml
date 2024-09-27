@@ -166,6 +166,7 @@
     <string name="ui_image_encrypted_description">Is encrypted</string>
     <string name="ui_image_cancel_description">Cancel</string>
     <string name="ui_image_list_description">List</string>
+    <string name="ui_image_calendar_description">Calendar</string>
 
     <string name="title_activity_basic_note_group">Basic note groups</string>
     <string name="title_activity_basic_note_group_add">Add group</string>

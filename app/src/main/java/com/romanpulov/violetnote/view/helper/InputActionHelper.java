@@ -1,6 +1,7 @@
 package com.romanpulov.violetnote.view.helper;
 
 import android.text.InputType;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -19,6 +20,8 @@ import java.util.Collection;
  * Created by romanpulov on 06.09.2016.
  */
 public class InputActionHelper implements AutoCompleteArrayAdapter.OnAutoCompleteTextListener {
+    private final static String TAG = InputActionHelper.class.getSimpleName();
+
     public static final int INPUT_ACTION_TYPE_ADD = 0;
     public static final int INPUT_ACTION_TYPE_EDIT = 1;
     public static final int INPUT_ACTION_TYPE_NUMBER = 2;
@@ -26,6 +29,7 @@ public class InputActionHelper implements AutoCompleteArrayAdapter.OnAutoComplet
     private final View mActionView;
     private final ImageButton mListButton;
     private final ImageButton mCancelButton;
+    private final ImageButton mCalendarButton;
     private final AutoCompleteTextView mInputEditText;
 
     private int mActionType;
@@ -52,10 +56,12 @@ public class InputActionHelper implements AutoCompleteArrayAdapter.OnAutoComplet
 
         mListButton = mActionView.findViewById(R.id.list_button);
         mCancelButton = mActionView.findViewById(R.id.cancel_button);
+        mCalendarButton = mActionView.findViewById(R.id.calendar_button);
         mInputEditText = mActionView.findViewById(R.id.add_edit_text);
 
         setupListButton();
         setupCancelButton();
+        setupCalendarButton();
         setupEditText();
     }
 
@@ -84,6 +90,13 @@ public class InputActionHelper implements AutoCompleteArrayAdapter.OnAutoComplet
 
     private void setupCancelButton() {
         mCancelButton.setOnClickListener(view -> hideLayout());
+    }
+
+    private void setupCalendarButton() {
+        mCalendarButton.setOnClickListener(view -> {
+            Log.d(TAG, "Setting text to" + InputParser.getCurrentDateAsString());
+            mInputEditText.setText(InputParser.getCurrentDateAsString());
+        });
     }
 
     private void setupEditText() {
@@ -123,6 +136,13 @@ public class InputActionHelper implements AutoCompleteArrayAdapter.OnAutoComplet
         mActionType = actionType;
 
         mInputEditText.setText(text);
+        mCalendarButton.setVisibility(
+                actionType == INPUT_ACTION_TYPE_EDIT &&
+                        InputParser.isDate(text) &&
+                        !(InputParser.getCurrentDateAsString().equals(text)) ?
+                            View.VISIBLE :
+                            View.GONE);
+        Log.d(TAG, "CalendarButton visibility: " + mCalendarButton.getVisibility() + ", text: " + text);
 
         switch (actionType) {
             case INPUT_ACTION_TYPE_ADD:
@@ -131,6 +151,7 @@ public class InputActionHelper implements AutoCompleteArrayAdapter.OnAutoComplet
                 break;
             case INPUT_ACTION_TYPE_EDIT:
                 mInputEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+                // mCalendarButton.setVisibility(View.VISIBLE);
                 clearAutoCompleteList();
                 break;
             case INPUT_ACTION_TYPE_NUMBER:

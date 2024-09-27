@@ -14,7 +14,12 @@ public class InputParser {
     public static final int NUMBER_DISPLAY_STYLE_INT = 1;
     public static final int NUMBER_DISPLAY_STYLE_FLOAT = 2;
 
-    private static final SimpleDateFormat PARSE_DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy", Locale.ENGLISH);
+    private static final SimpleDateFormat PARSE_DATE_FORMAT;
+
+    static {
+        PARSE_DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy", Locale.ENGLISH);
+        PARSE_DATE_FORMAT.setLenient(true);
+    }
 
     private static final String FLOAT_PARAMS_REGEXP = "(.+)\\s(([0-9]+[.|,]?[0-9]*)|([0-9]*[.|,]?[0-9]+))";
     private static final Pattern FLOAT_PARAMS_PATTERN = Pattern.compile(FLOAT_PARAMS_REGEXP);
@@ -143,5 +148,19 @@ public class InputParser {
                 return 0;
             }
         }
+    }
+
+    public static boolean isDate(String value) {
+        PARSE_DATE_FORMAT.setLenient(true);
+        try {
+            return PARSE_DATE_FORMAT.parse(value) != null;
+        } catch (ParseException e) {
+            return false;
+        }
+    }
+
+    @NonNull
+    public static String getCurrentDateAsString() {
+        return PARSE_DATE_FORMAT.format(new Date());
     }
 }

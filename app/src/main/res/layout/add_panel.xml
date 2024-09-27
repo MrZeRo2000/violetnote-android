@@ -41,13 +41,26 @@
         android:visibility="gone"
         />
 
+    <ImageButton
+        android:layout_width="@dimen/search_button_size"
+        android:layout_height="@dimen/search_button_size"
+        android:id="@+id/calendar_button"
+        android:layout_toStartOf="@+id/list_button"
+        android:layout_toLeftOf="@+id/list_button"
+        android:layout_alignTop="@+id/list_button"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_action_calendar"
+        android:background="@drawable/list_lighter_selector"
+        android:contentDescription="@string/ui_image_calendar_description"
+        android:visibility="gone"
+        />
 
     <AutoCompleteTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/add_edit_text"
-        android:layout_toStartOf="@id/list_button"
-        android:layout_toLeftOf="@id/list_button"
+        android:layout_toStartOf="@id/calendar_button"
+        android:layout_toLeftOf="@id/calendar_button"
         android:inputType="textCapSentences"
         android:layout_centerVertical="true"
         android:hint="@string/hint_add"
