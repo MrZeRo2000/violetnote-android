@@ -4,10 +4,10 @@ android {
     namespace = "com.romanpulov.violetnote"
 
     defaultConfig {
-        compileSdk 34
+        compileSdk 35
         applicationId "com.romanpulov.violetnote"
         minSdkVersion 24
-        targetSdkVersion 34
+        targetSdkVersion 35
         versionCode 11
         versionName "3.5.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -55,6 +55,10 @@ android {
     lint {
         abortOnError false
         disable 'InvalidPackage'
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 

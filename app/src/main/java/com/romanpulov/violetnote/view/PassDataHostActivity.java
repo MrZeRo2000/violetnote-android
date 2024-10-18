@@ -2,8 +2,12 @@ package com.romanpulov.violetnote.view;
 
 import android.os.Bundle;
 
+import android.view.ViewGroup;
 import androidx.appcompat.app.AppCompatActivity;
 
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
