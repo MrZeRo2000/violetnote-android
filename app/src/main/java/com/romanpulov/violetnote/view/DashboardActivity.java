@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.databinding.ActivityDashboardListBinding;
 import com.romanpulov.violetnote.db.manager.DBNoteManager;
 import com.romanpulov.violetnote.loader.document.DocumentPassDataLoader;
 import com.romanpulov.violetnote.model.BasicNoteGroupA;
@@ -18,17 +19,18 @@ import java.util.List;
 
 public class DashboardActivity extends ActionBarCompatActivity implements OnBasicGroupInteractionListener {
 
-    private RecyclerView mRecyclerView;
+    private ActivityDashboardListBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dashboard_list);
 
-        mRecyclerView = findViewById(R.id.list);
+        binding = ActivityDashboardListBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
         int orientation = getResources().getConfiguration().orientation;
         int gridSpanCount =  orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 2;
-        mRecyclerView.setLayoutManager(new GridLayoutManager(this, gridSpanCount));
+        binding.list.setLayoutManager(new GridLayoutManager(this, gridSpanCount));
     }
 
     @Override
@@ -38,7 +40,7 @@ public class DashboardActivity extends ActionBarCompatActivity implements OnBasi
         List<BasicNoteGroupA> basicNoteGroupList = noteManager.mBasicNoteGroupDAO.getAllWithTotals(
                 DocumentPassDataLoader.getDocumentFile(this) == null
         );
-        mRecyclerView.setAdapter(new DashboardItemRecyclerViewAdapter(basicNoteGroupList, this));
+        binding.list.setAdapter(new DashboardItemRecyclerViewAdapter(basicNoteGroupList, this));
     }
 
     @Override

@@ -9,7 +9,7 @@ android {
         minSdkVersion 24
         targetSdkVersion 35
         versionCode 11
-        versionName "3.5.0"
+        versionName "3.5.1-iss210"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
