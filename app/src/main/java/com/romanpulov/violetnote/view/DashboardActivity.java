@@ -27,6 +27,7 @@ public class DashboardActivity extends ActionBarCompatActivity implements OnBasi
 
         binding = ActivityDashboardListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        setSupportActionBar(binding.toolbar);
 
         int orientation = getResources().getConfiguration().orientation;
         int gridSpanCount =  orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 2;

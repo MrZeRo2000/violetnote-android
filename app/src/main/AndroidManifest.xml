@@ -46,7 +46,7 @@
         </activity>
         <activity
             android:name=".view.DashboardActivity"
-            android:theme="@style/MainAppTheme"
+            android:theme="@style/MainAppNavTheme"
             android:exported="true"
             >
             <intent-filter>
