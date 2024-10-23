@@ -65,3 +65,6 @@
 
 # this is to fix Google SilentSignIn
 -keep class org.json.** { *; }
+
+# this should not be here, a workaround
+-keep class androidx.work.impl.** { *; }
