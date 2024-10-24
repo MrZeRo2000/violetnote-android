@@ -20,9 +20,7 @@ public class BasicNoteGroupActivity extends ActionBarCompatActivity implements B
     private ActionMenuView mBottomToolbar;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
+    protected void setupLayout() {
         //for ToolBar
         setContentView(R.layout.activity_toolbar_fragment_toolbar);
 
@@ -30,7 +28,6 @@ public class BasicNoteGroupActivity extends ActionBarCompatActivity implements B
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(getTitle());
         setSupportActionBar(toolbar);
-        setupActionBar();
 
         //bottom toolbar
         mBottomToolbar = findViewById(R.id.toolbar_bottom);
@@ -38,6 +35,11 @@ public class BasicNoteGroupActivity extends ActionBarCompatActivity implements B
             getMenuInflater().inflate(R.menu.menu_listitem_bottom_move_actions, mBottomToolbar.getMenu());
             mBottomToolbar.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
         FragmentManager fm = getSupportFragmentManager();
 

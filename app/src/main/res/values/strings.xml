@@ -140,7 +140,8 @@
     <!-- Notifications -->
     <string name="notification_onedrive_backup_completed">OneDrive backup has been completed</string>
     <string name="notification_gdrive_backup_completed">Google Drive backup has been completed</string>
-    <string name="notification_password_notes_data_load_completed">Password notes data has been successfully loaded</string>
+    <string name="notification_password_notes_data_load_completed">Password notes data has been successfully loaded
+    </string>
     <string name="notification_load_operation_error">Load operation error : %s</string>
     <string name="notification_success_channel_name">Load process</string>
     <string name="notification_success_channel_description">Violet Note load process</string>
@@ -230,7 +231,7 @@
     <string name="ui_info_copy_to_clipboard">%s copied to clipboard</string>
     <string name="ui_info_file_deleted">File successfully deleted</string>
     <string name="ui_info_notification_permissions_granted">Notification permissions have been granted</string>
-    <string name="ui_search_text_display_format"> ..%s..</string>
+    <string name="ui_search_text_display_format">..%s..</string>
 
     <string name="ui_display_options_show_total">Show total</string>
     <string name="ui_display_options_show_unchecked">Show unchecked</string>
@@ -249,4 +250,19 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="title_activity_settings2">SettingsActivity2</string>
+
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails</string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
 </resources>

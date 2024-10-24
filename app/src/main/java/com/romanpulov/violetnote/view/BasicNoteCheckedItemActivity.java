@@ -11,6 +11,8 @@ import android.view.View;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.view.core.BasicNoteDataPasswordActivity;
 
+import java.util.Objects;
+
 public class BasicNoteCheckedItemActivity extends BasicNoteDataPasswordActivity implements BottomToolbarProvider {
 
     private ActionMenuView mBottomToolbar;
@@ -39,17 +41,13 @@ public class BasicNoteCheckedItemActivity extends BasicNoteDataPasswordActivity 
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
+    protected void setupLayout() {
         //for ToolBar
         setContentView(R.layout.activity_toolbar_fragment_toolbar);
 
         //setup ToolBar instead of ActionBar
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle(mBasicNoteData.getNote().getTitle());
         setSupportActionBar(toolbar);
-        setupActionBar();
 
         //bottom toolbar
         mBottomToolbar = findViewById(R.id.toolbar_bottom);
@@ -57,6 +55,12 @@ public class BasicNoteCheckedItemActivity extends BasicNoteDataPasswordActivity 
             getMenuInflater().inflate(R.menu.menu_listitem_bottom_actions, mBottomToolbar.getMenu());
             mBottomToolbar.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Objects.requireNonNull(getSupportActionBar()).setTitle(mBasicNoteData.getNote().getTitle());
 
         refreshFragment();
     }

@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.cloud.GDHelper;
+import com.romanpulov.violetnote.databinding.ActivitySettingsBinding;
 import com.romanpulov.violetnote.view.core.ActionBarCompatActivity;
 import com.romanpulov.violetnote.view.helper.DisplayMessageHelper;
 
@@ -25,8 +26,17 @@ public class SettingsActivity extends ActionBarCompatActivity {
     public final static int PERMISSION_REQUEST_CLOUD_BACKUP = 104;
     public final static int PERMISSION_REQUEST_DOCUMENT_LOAD = 105;
 
+    private ActivitySettingsBinding binding;
+
     private Fragment getSettingsFragment() {
-        return getSupportFragmentManager().findFragmentById(android.R.id.content);
+        return getSupportFragmentManager().findFragmentById(binding.settings.getId());
+    }
+
+    @Override
+    protected void setupLayout() {
+        binding = ActivitySettingsBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        setSupportActionBar(binding.toolbar);
     }
 
     @Override
@@ -34,10 +44,11 @@ public class SettingsActivity extends ActionBarCompatActivity {
         super.onCreate(savedInstanceState);
 
         // Display the fragment as the main content./
-        if (getSettingsFragment() == null)
+        if (getSettingsFragment() == null) {
             getSupportFragmentManager().beginTransaction()
-                .replace(android.R.id.content, new SettingsFragment())
-                .commit();
+                    .replace(binding.settings.getId(), new SettingsFragment())
+                    .commit();
+        }
 
         // Notification permission
         // According to https://developer.android.com/training/permissions/requesting#java

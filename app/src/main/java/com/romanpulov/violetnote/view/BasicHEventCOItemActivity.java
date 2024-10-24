@@ -15,9 +15,7 @@ import com.romanpulov.violetnote.view.core.ActionBarCompatActivity;
 public class BasicHEventCOItemActivity extends ActionBarCompatActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
+    protected void setupLayout() {
         //for ToolBar
         setContentView(R.layout.activity_toolbar_fragment_toolbar);
 
@@ -25,7 +23,11 @@ public class BasicHEventCOItemActivity extends ActionBarCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         //toolbar.setTitle(mBasicNoteData.getNote().getTitle());
         setSupportActionBar(toolbar);
-        setupActionBar();
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
         //bottom toolbar
         ActionMenuView bottomToolbar = findViewById(R.id.toolbar_bottom);

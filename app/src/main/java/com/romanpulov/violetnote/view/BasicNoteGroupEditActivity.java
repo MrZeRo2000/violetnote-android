@@ -24,10 +24,13 @@ public class BasicNoteGroupEditActivity extends ActionBarCompatActivity {
     private CheckBox mShowChecked;
 
     @Override
+    protected void setupLayout() {
+        setContentView(R.layout.activity_basic_note_group_edit);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_basic_note_group_edit);
 
         mTitle = findViewById(R.id.title_edit_text);
         mImgSelector = findViewById(R.id.img_selector);

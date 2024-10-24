@@ -12,6 +12,7 @@ import com.romanpulov.violetnote.view.DashboardActivity;
  * Abstract base class for Activity
  */
 public abstract class ActionBarCompatActivity extends AppCompatActivity {
+    protected abstract void setupLayout();
 
     /**
      * Setup for ActionBar or ToolBar
@@ -33,7 +34,7 @@ public abstract class ActionBarCompatActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setupLayout();
         setupActionBar();
     }
 }

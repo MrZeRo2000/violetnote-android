@@ -190,7 +190,7 @@
     </style>
 
     <!-- Preferences/Theme -->
-    <style name="PreferencesAppTheme" parent="@style/MainAppTheme">
+    <style name="PreferencesAppTheme" parent="@style/MainAppNavTheme">
         <item name="preferenceTheme">@style/PreferenceTheme</item>
 
         <item name="android:textColor">@color/brightTextColor</item>

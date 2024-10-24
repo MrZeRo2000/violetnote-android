@@ -10,8 +10,13 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
 
+import android.view.LayoutInflater;
+import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.preference.CheckBoxPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -44,6 +49,7 @@ import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 import com.romanpulov.violetnote.view.preference.processor.PreferenceRestoreCloudProcessor;
 import com.romanpulov.violetnote.view.preference.SourcePathPreferenceSetup;
 import com.romanpulov.violetnote.view.preference.processor.PreferenceRestoreLocalProcessor;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.HashMap;
@@ -86,6 +92,31 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @NonNull
+    @Override
+    public @NotNull View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        View view = super.onCreateView(inflater, container, savedInstanceState);
+
+        ViewCompat.setOnApplyWindowInsetsListener(view, (v, windowInsets) -> {
+            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+            // Apply the insets as a margin to the view. This solution sets only the
+            // bottom, left, and right dimensions, but you can apply whichever insets are
+            // appropriate to your layout. You can also update the view padding if that's
+            // more appropriate.
+            ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
+            mlp.leftMargin = insets.left;
+            mlp.bottomMargin = insets.bottom;
+            mlp.rightMargin = insets.right;
+            v.setLayoutParams(mlp);
+
+            // Return CONSUMED if you don't want want the window insets to keep passing
+            // down to descendant views.
+            return WindowInsetsCompat.CONSUMED;
+        });
+
+        return view;
     }
 
     @Override

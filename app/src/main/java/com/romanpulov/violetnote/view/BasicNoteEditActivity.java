@@ -20,10 +20,13 @@ public class BasicNoteEditActivity extends ActionBarCompatActivity {
     private ViewHolder mViewHolder;
 
     @Override
+    protected void setupLayout() {
+        setContentView(R.layout.activity_basic_note_edit);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_basic_note_edit);
-
         mViewHolder = new ViewHolder(this);
     }
 

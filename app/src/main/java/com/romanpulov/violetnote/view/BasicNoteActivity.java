@@ -26,6 +26,24 @@ public class BasicNoteActivity extends ActionBarCompatActivity implements BasicN
     private ActionMenuView mBottomToolbar;
 
     @Override
+    protected void setupLayout() {
+        //for ToolBar
+        setContentView(R.layout.activity_toolbar_fragment_toolbar);
+
+        //setup ToolBar instead of ActionBar
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle(getTitle());
+        setSupportActionBar(toolbar);
+
+        //bottom toolbar
+        mBottomToolbar = findViewById(R.id.toolbar_bottom);
+        if (mBottomToolbar != null) {
+            getMenuInflater().inflate(R.menu.menu_listitem_bottom_move_actions, mBottomToolbar.getMenu());
+            mBottomToolbar.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -34,21 +52,6 @@ public class BasicNoteActivity extends ActionBarCompatActivity implements BasicN
 
             setTitle(mBasicNoteGroup.getGroupName());
 
-            //for ToolBar
-            setContentView(R.layout.activity_toolbar_fragment_toolbar);
-
-            //setup ToolBar instead of ActionBar
-            Toolbar toolbar = findViewById(R.id.toolbar);
-            toolbar.setTitle(getTitle());
-            setSupportActionBar(toolbar);
-            setupActionBar();
-
-            //bottom toolbar
-            mBottomToolbar = findViewById(R.id.toolbar_bottom);
-            if (mBottomToolbar != null) {
-                getMenuInflater().inflate(R.menu.menu_listitem_bottom_move_actions, mBottomToolbar.getMenu());
-                mBottomToolbar.setVisibility(View.GONE);
-            }
 
             FragmentManager fm = getSupportFragmentManager();
 

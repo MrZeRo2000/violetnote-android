@@ -10,7 +10,7 @@ import com.romanpulov.violetnote.db.manager.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicNoteValueDataA;
 import com.romanpulov.violetnote.view.core.ActionBarCompatActivity;
 
-public class BasicNoteValueActivity extends ActionBarCompatActivity {
+public abstract class BasicNoteValueActivity extends ActionBarCompatActivity {
     private BasicNoteValueFragment mFragment;
 
     @Override
