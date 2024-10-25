@@ -9,7 +9,7 @@ android {
         minSdkVersion 24
         targetSdkVersion 35
         versionCode 11
-        versionName "3.5.2"
+        versionName "3.5.3"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -73,10 +73,10 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui:2.8.3'
     implementation 'androidx.work:work-runtime:2.9.1'
 
-    implementation 'com.romanpulov:violetnote-core:2.1.1'
-    implementation 'com.romanpulov.library.common:library:1.3.16'
-    implementation 'com.romanpulov.library.msgraph:library:0.0.13'
-    api 'com.romanpulov.library.gdrive:library:0.0.13'
+    implementation 'com.romanpulov:violetnote-core:2.1.2'
+    implementation 'com.romanpulov.library.common:library:1.3.17'
+    implementation 'com.romanpulov.library.msgraph:library:0.0.14'
+    api 'com.romanpulov.library.gdrive:library:0.0.14'
 
     // Unit testing dependencies
     androidTestImplementation 'androidx.annotation:annotation:1.9.0'
