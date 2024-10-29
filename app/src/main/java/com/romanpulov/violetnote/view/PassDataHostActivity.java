@@ -2,12 +2,8 @@ package com.romanpulov.violetnote.view;
 
 import android.os.Bundle;
 
-import android.view.ViewGroup;
 import androidx.appcompat.app.AppCompatActivity;
 
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
@@ -29,7 +25,7 @@ public class PassDataHostActivity extends AppCompatActivity {
         ActivityPassDataHostBinding binding = ActivityPassDataHostBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        setSupportActionBar(binding.toolbar);
+        setSupportActionBar(binding.appbar.toolbar);
 
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.nav_host_fragment_content_pass_data_host);
