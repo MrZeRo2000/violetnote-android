@@ -5,7 +5,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.romanpulov.violetnote.R;
-import com.romanpulov.violetnote.view.DashboardActivity;
+import com.romanpulov.violetnote.view.AppHostActivity;
 
 /**
  * Created by rpulov on 24.05.2016.
@@ -21,7 +21,7 @@ public abstract class ActionBarCompatActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             // disable arrow back for launch activity
-            if (this.getClass().getName().equals(DashboardActivity.class.getName())) {
+            if (this.getClass().getName().equals(AppHostActivity.class.getName())) {
                 actionBar.setIcon(R.mipmap.ic_launcher);
                 actionBar.setDisplayUseLogoEnabled(true);
                 actionBar.setDisplayShowHomeEnabled(true);
