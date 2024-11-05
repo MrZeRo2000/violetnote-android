@@ -8,6 +8,8 @@ import org.json.JSONObject;
 
 import com.romanpulov.violetnote.model.BooleanUtils;
 
+import java.util.Objects;
+
 public class BasicNoteGroupDisplayOptions implements Parcelable {
     private final static String TAG = BasicNoteGroupDisplayOptions.class.getSimpleName();
 
@@ -118,7 +120,7 @@ public class BasicNoteGroupDisplayOptions implements Parcelable {
         mCheckedFlag = BooleanUtils.fromInt(in.readInt());
     }
 
-    public static final Parcelable.Creator<BasicNoteGroupDisplayOptions> CREATOR = new Parcelable.Creator<BasicNoteGroupDisplayOptions>() {
+    public static final Parcelable.Creator<BasicNoteGroupDisplayOptions> CREATOR = new Parcelable.Creator<>() {
         @Override
         public BasicNoteGroupDisplayOptions createFromParcel(Parcel source) {
             return new BasicNoteGroupDisplayOptions(source);
@@ -130,4 +132,18 @@ public class BasicNoteGroupDisplayOptions implements Parcelable {
         }
     };
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BasicNoteGroupDisplayOptions that = (BasicNoteGroupDisplayOptions) o;
+        return mTotalFlag == that.mTotalFlag &&
+                mUncheckedFlag == that.mUncheckedFlag &&
+                mCheckedFlag == that.mCheckedFlag;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(mTotalFlag, mUncheckedFlag, mCheckedFlag);
+    }
 }

@@ -22,7 +22,7 @@ public class BasicNoteGroupItemRecyclerViewAdapter extends RecyclerView.Adapter<
         this.notifyDataSetChanged();
     }
 
-    private final List<BasicNoteGroupA> mBasicNoteGroupList;
+    private List<BasicNoteGroupA> mBasicNoteGroupList;
     private final ViewSelectorHelper.AbstractViewSelector<Integer> mRecyclerViewSelector;
 
     public ViewSelectorHelper.AbstractViewSelector<Integer> getRecyclerViewSelector() {
@@ -32,6 +32,10 @@ public class BasicNoteGroupItemRecyclerViewAdapter extends RecyclerView.Adapter<
     public BasicNoteGroupItemRecyclerViewAdapter(List<BasicNoteGroupA> basicNoteGroupList, ActionMode.Callback actionModeCallback) {
         this.mBasicNoteGroupList = basicNoteGroupList;
         this.mRecyclerViewSelector = new ViewSelectorHelper.ViewSelectorSingle<>(this, actionModeCallback);
+    }
+
+    public void setBasicNoteGroupList(List<BasicNoteGroupA> basicNoteGroupList) {
+        this.mBasicNoteGroupList = basicNoteGroupList;
     }
 
     @NonNull

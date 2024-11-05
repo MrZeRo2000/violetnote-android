@@ -9,6 +9,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.appcompat.view.ActionMode;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -21,13 +24,13 @@ import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.manager.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicEntityNoteSelectionPosA;
 import com.romanpulov.violetnote.model.BasicNoteGroupA;
+import com.romanpulov.violetnote.model.BasicNoteGroupViewModel;
 import com.romanpulov.violetnote.view.action.BasicActionExecutor;
 import com.romanpulov.violetnote.view.action.BasicItemsMoveAction;
 import com.romanpulov.violetnote.view.action.BasicItemsMoveBottomAction;
 import com.romanpulov.violetnote.view.action.BasicItemsMoveDownAction;
 import com.romanpulov.violetnote.view.action.BasicItemsMoveTopAction;
 import com.romanpulov.violetnote.view.action.BasicItemsMoveUpAction;
-import com.romanpulov.violetnote.view.action.BasicNoteGroupAddAction;
 import com.romanpulov.violetnote.view.action.BasicNoteGroupDeleteAction;
 import com.romanpulov.violetnote.view.action.BasicNoteGroupEditAction;
 import com.romanpulov.violetnote.view.action.BasicNoteGroupRefreshAction;
@@ -37,7 +40,6 @@ import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 import com.romanpulov.violetnote.view.helper.BottomToolbarHelper;
 import com.romanpulov.violetnote.view.helper.DisplayTitleBuilder;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -45,7 +47,9 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
     public static final int ACTIVITY_REQUEST_INSERT = 0;
     public static final int ACTIVITY_REQUEST_EDIT = 1;
 
-    private final List<BasicNoteGroupA> mBasicNoteGroupList = new ArrayList<>();
+    private BasicNoteGroupViewModel model;
+    private List<BasicNoteGroupA> mBasicNoteGroupList;
+    private BasicNoteGroupItemRecyclerViewAdapter mRecyclerViewAdapter;
     private DBNoteManager mDBNoteManager;
 
     public static BasicNoteGroupFragment newInstance() {
@@ -117,6 +121,7 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
     }
 
     public void performAddAction(@NonNull final BasicNoteGroupA item) {
+        /*
         final List<BasicNoteGroupA> items = Collections.singletonList(item);
         BasicActionExecutor<List<BasicNoteGroupA>> executor = new BasicActionExecutor<>(getContext(), items);
         executor.addAction(getString(R.string.caption_processing), new BasicNoteGroupAddAction(items));
@@ -133,6 +138,9 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
             }
         });
         executor.execute();
+
+         */
+        model.add(item);
     }
 
     private void performDeleteAction(@NonNull final ActionMode mode, @NonNull final List<BasicNoteGroupA> items) {
@@ -279,27 +287,73 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.view_recycler_view_list, container, false);
+        return inflater.inflate(R.layout.view_recycler_view_list, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         Context context = view.getContext();
 
         mRecyclerView = (RecyclerView) view;
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-
-        mDBNoteManager = new DBNoteManager(context);
-        refreshList(mDBNoteManager);
-
-        BasicNoteGroupItemRecyclerViewAdapter recyclerViewAdapter = new BasicNoteGroupItemRecyclerViewAdapter(mBasicNoteGroupList, new ActionBarCallBack());
-        mRecyclerView.setAdapter(recyclerViewAdapter);
-
-        mRecyclerViewSelector = recyclerViewAdapter.getRecyclerViewSelector();
-
-        //restore selected items
-        restoreSelectedItems(savedInstanceState, view);
-
         // add decoration
         mRecyclerView.addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(getActivity(), RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_white_black_gradient));
 
-        return view;
+        model = new ViewModelProvider(this).get(BasicNoteGroupViewModel.class);
+
+        final Observer<List<BasicNoteGroupA>> noteGroupsObserver = newBasicNoteGroups -> {
+            if (mBasicNoteGroupList == null) {
+                mBasicNoteGroupList = newBasicNoteGroups;
+
+                mRecyclerViewAdapter = new BasicNoteGroupItemRecyclerViewAdapter(mBasicNoteGroupList, new ActionBarCallBack());
+                mRecyclerView.setAdapter(mRecyclerViewAdapter);
+                mRecyclerViewSelector = mRecyclerViewAdapter.getRecyclerViewSelector();
+
+                //restore selected items
+                restoreSelectedItems(savedInstanceState, view);
+            } else {
+                DiffUtil.DiffResult result = DiffUtil.calculateDiff(new DiffUtil.Callback() {
+                    @Override
+                    public int getOldListSize() {
+                        return mBasicNoteGroupList.size();
+                    }
+
+                    @Override
+                    public int getNewListSize() {
+                        return newBasicNoteGroups.size();
+                    }
+
+                    @Override
+                    public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+                        return mBasicNoteGroupList.get(oldItemPosition).getId() ==
+                                newBasicNoteGroups.get(newItemPosition).getId();
+                    }
+
+                    @Override
+                    public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+                        return mBasicNoteGroupList.get(oldItemPosition).equals(
+                                mBasicNoteGroupList.get(newItemPosition));
+                    }
+                });
+                mBasicNoteGroupList = newBasicNoteGroups;
+                mRecyclerViewAdapter.setBasicNoteGroupList(mBasicNoteGroupList);
+                result.dispatchUpdatesTo(mRecyclerViewAdapter);
+
+                handleAction(model.getAction());
+                model.resetAction();
+            };
+        };
+        model.getGroups().observe(this, noteGroupsObserver);
+    }
+
+    private void handleAction(int action) {
+        if (action == BasicNoteGroupViewModel.ACTION_ADD) {
+            int position = mBasicNoteGroupList.size() - 1;
+            if (position > -1) {
+                mRecyclerView.scrollToPosition(position);
+            }
+        }
     }
 }

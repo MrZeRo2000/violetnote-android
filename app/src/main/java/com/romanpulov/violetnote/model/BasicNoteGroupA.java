@@ -8,6 +8,8 @@ import com.romanpulov.violetnote.db.provider.BasicNoteGroupDBManagementProvider;
 import com.romanpulov.violetnote.model.vo.BasicNoteGroupDisplayOptions;
 import com.romanpulov.violetnote.model.vo.BasicNoteGroupSummary;
 
+import java.util.Objects;
+
 public class BasicNoteGroupA extends BasicCommonNoteA implements Parcelable {
     public static final long DEFAULT_NOTE_GROUP_ID = 2;
     public static final long PASSWORD_NOTE_GROUP_TYPE = 1;
@@ -142,6 +144,22 @@ public class BasicNoteGroupA extends BasicCommonNoteA implements Parcelable {
         }
     };
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        BasicNoteGroupA that = (BasicNoteGroupA) o;
+        return mGroupType == that.mGroupType &&
+                mGroupIcon == that.mGroupIcon &&
+                Objects.equals(mGroupName, that.mGroupName) &&
+                Objects.equals(mBasicNoteGroupDisplayOptions, that.mBasicNoteGroupDisplayOptions);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), mGroupType, mGroupName, mGroupIcon, mBasicNoteGroupDisplayOptions);
+    }
 
     @Override
     @NonNull
