@@ -14,6 +14,8 @@ import com.romanpulov.violetnote.R;
  * Created by romanpulov on 26.08.2016.
  */
 public class AlertOkCancelSupportDialogFragment extends DialogFragment {
+    public static final String TAG = AlertOkCancelSupportDialogFragment.class.getSimpleName();
+
     private final static int STYLE_QUESTION_OK_CANCEL = 0;
     private final static int STYLE_INFO_OK = 1;
 
@@ -41,7 +43,7 @@ public class AlertOkCancelSupportDialogFragment extends DialogFragment {
         AlertOkCancelSupportDialogFragment newDialog = new AlertOkCancelSupportDialogFragment() ;
         newDialog.setStyle(STYLE_QUESTION_OK_CANCEL);
         newDialog.setMessage(message);
-        newDialog.setRetainInstance(true);
+        //newDialog.setRetainInstance(true);
         return newDialog;
     }
 
@@ -49,7 +51,7 @@ public class AlertOkCancelSupportDialogFragment extends DialogFragment {
         AlertOkCancelSupportDialogFragment newDialog = new AlertOkCancelSupportDialogFragment() ;
         newDialog.setStyle(STYLE_INFO_OK);
         newDialog.setMessage(message);
-        newDialog.setRetainInstance(true);
+        //newDialog.setRetainInstance(true);
         return newDialog;
     }
 

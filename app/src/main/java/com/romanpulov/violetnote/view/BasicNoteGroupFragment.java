@@ -6,8 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
 import androidx.appcompat.view.ActionMode;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -25,15 +25,7 @@ import com.romanpulov.violetnote.db.manager.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicEntityNoteSelectionPosA;
 import com.romanpulov.violetnote.model.BasicNoteGroupA;
 import com.romanpulov.violetnote.model.BasicNoteGroupViewModel;
-import com.romanpulov.violetnote.view.action.BasicActionExecutor;
-import com.romanpulov.violetnote.view.action.BasicItemsMoveAction;
-import com.romanpulov.violetnote.view.action.BasicItemsMoveBottomAction;
-import com.romanpulov.violetnote.view.action.BasicItemsMoveDownAction;
-import com.romanpulov.violetnote.view.action.BasicItemsMoveTopAction;
-import com.romanpulov.violetnote.view.action.BasicItemsMoveUpAction;
-import com.romanpulov.violetnote.view.action.BasicNoteGroupDeleteAction;
-import com.romanpulov.violetnote.view.action.BasicNoteGroupEditAction;
-import com.romanpulov.violetnote.view.action.BasicNoteGroupRefreshAction;
+import com.romanpulov.violetnote.view.action.*;
 import com.romanpulov.violetnote.view.core.AlertOkCancelSupportDialogFragment;
 import com.romanpulov.violetnote.view.core.BasicCommonNoteFragment;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
@@ -50,7 +42,6 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
     private BasicNoteGroupViewModel model;
     private List<BasicNoteGroupA> mBasicNoteGroupList;
     private BasicNoteGroupItemRecyclerViewAdapter mRecyclerViewAdapter;
-    private DBNoteManager mDBNoteManager;
 
     public static BasicNoteGroupFragment newInstance() {
         return new BasicNoteGroupFragment();
@@ -58,13 +49,6 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
 
     public BasicNoteGroupFragment() {
 
-    }
-
-    public void refreshList(DBNoteManager noteManager) {
-        (new BasicNoteGroupRefreshAction(mBasicNoteGroupList)).execute(noteManager);
-
-        if (mRecyclerView != null)
-            RecyclerViewHelper.adapterNotifyDataSetChanged(mRecyclerView);
     }
 
     private void setupBottomToolbarHelper() {
@@ -121,26 +105,7 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
     }
 
     public void performAddAction(@NonNull final BasicNoteGroupA item) {
-        /*
-        final List<BasicNoteGroupA> items = Collections.singletonList(item);
-        BasicActionExecutor<List<BasicNoteGroupA>> executor = new BasicActionExecutor<>(getContext(), items);
-        executor.addAction(getString(R.string.caption_processing), new BasicNoteGroupAddAction(items));
-        executor.addAction(getString(R.string.caption_loading), new BasicNoteGroupRefreshAction(mBasicNoteGroupList));
-        executor.setOnExecutionCompletedListener((data, result) -> {
-            if (result) {
-                RecyclerViewHelper.adapterNotifyDataSetChanged(mRecyclerView);
-
-                int position = mBasicNoteGroupList.size() - 1;
-
-                if (position > -1)
-                    mRecyclerView.scrollToPosition(position);
-
-            }
-        });
-        executor.execute();
-
-         */
-        model.add(item);
+        model.add(item, new BasicUIAddAction<>(mRecyclerView));
     }
 
     private void performDeleteAction(@NonNull final ActionMode mode, @NonNull final List<BasicNoteGroupA> items) {
@@ -154,33 +119,14 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
         AlertOkCancelSupportDialogFragment dialog;
 
         // check notes
-        if (!mDBNoteManager.mBasicNoteDAO.getByGroup(item).isEmpty()) {
+        if (!model.isGroupEmpty(item)) {
             dialog = AlertOkCancelSupportDialogFragment.newAlertOkInfoDialog(getString(R.string.ui_error_group_delete_contain_notes, item.getDisplayTitle()));
         } else {
             dialog = AlertOkCancelSupportDialogFragment.newAlertOkCancelDialog(getString(R.string.ui_question_delete_item_are_you_sure, item.getDisplayTitle()));
-            dialog.setOkButtonClickListener(dialog1 -> {
-                BasicActionExecutor<List<BasicNoteGroupA>> executor = new BasicActionExecutor<>(getContext(), items);
-                executor.addAction(getString(R.string.caption_processing), new BasicNoteGroupDeleteAction(mBasicNoteGroupList, items));
-                executor.addAction(getString(R.string.caption_loading), new BasicNoteGroupRefreshAction(mBasicNoteGroupList));
-                executor.setOnExecutionCompletedListener((data, result) -> {
-                    if (result) {
-                        mode.finish();
-                    }
-                    if (mDialogFragment != null) {
-                        mDialogFragment.dismiss();
-                        mDialogFragment = null;
-                    }
-
-                });
-                executor.execute();
-            });
+            dialog.setOkButtonClickListener(dialog1 -> model.delete(items.get(0), new BasicUIDeleteAction<>(mode)));
         }
 
-        FragmentManager fragmentManager = getFragmentManager();
-        if (fragmentManager != null)
-            dialog.show(fragmentManager, null);
-
-        mDialogFragment = dialog;
+        dialog.show(getParentFragmentManager(), AlertOkCancelSupportDialogFragment.TAG);
     }
 
     private void performEditAction(@NonNull final List<BasicNoteGroupA> items) {
@@ -341,19 +287,18 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
                 mRecyclerViewAdapter.setBasicNoteGroupList(mBasicNoteGroupList);
                 result.dispatchUpdatesTo(mRecyclerViewAdapter);
 
-                handleAction(model.getAction());
-                model.resetAction();
-            };
+                UIAction<List<BasicNoteGroupA>> action = model.getAction();
+                if (action != null) {
+                    action.execute(mBasicNoteGroupList);
+                    model.resetAction();
+
+                    DialogFragment dialogFragment = (DialogFragment)getParentFragmentManager().findFragmentByTag(AlertOkCancelSupportDialogFragment.TAG);
+                    if (dialogFragment != null) {
+                        dialogFragment.dismiss();
+                    }
+                }
+            }
         };
         model.getGroups().observe(this, noteGroupsObserver);
-    }
-
-    private void handleAction(int action) {
-        if (action == BasicNoteGroupViewModel.ACTION_ADD) {
-            int position = mBasicNoteGroupList.size() - 1;
-            if (position > -1) {
-                mRecyclerView.scrollToPosition(position);
-            }
-        }
     }
 }

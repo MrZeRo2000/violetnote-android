@@ -3,19 +3,20 @@ package com.romanpulov.violetnote.model;
 import android.app.Application;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
+import com.romanpulov.violetnote.db.dao.BasicNoteDAO;
 import com.romanpulov.violetnote.db.dao.BasicNoteGroupDAO;
 import com.romanpulov.violetnote.loader.document.DocumentPassDataLoader;
+import com.romanpulov.violetnote.view.action.UIAction;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 public class BasicNoteGroupViewModel extends AndroidViewModel {
-    public static final int ACTION_NONE = 0;
-    public static final int ACTION_ADD = 1;
 
     private BasicNoteGroupDAO mBasicNoteGroupDAO;
+    private BasicNoteDAO mBasicNoteDAO;
 
-    private int mAction = ACTION_NONE;
+    private UIAction<List<BasicNoteGroupA>> mAction;
     private MutableLiveData<List<BasicNoteGroupA>> mAllWithTotals;
     private MutableLiveData<List<BasicNoteGroupA>> mGroups;
 
@@ -26,20 +27,27 @@ public class BasicNoteGroupViewModel extends AndroidViewModel {
         return mBasicNoteGroupDAO;
     }
 
+    private BasicNoteDAO getBasicNoteDAO() {
+        if (mBasicNoteDAO == null) {
+            mBasicNoteDAO = new BasicNoteDAO(getApplication());
+        }
+        return mBasicNoteDAO;
+    }
+
     public BasicNoteGroupViewModel(@NotNull Application application) {
         super(application);
     }
 
-    public int getAction() {
+    public UIAction<List<BasicNoteGroupA>> getAction() {
         return mAction;
     }
 
-    public void setAction(int mAction) {
+    public void setAction(UIAction<List<BasicNoteGroupA>> mAction) {
         this.mAction = mAction;
     }
 
     public void resetAction() {
-        mAction = ACTION_NONE;
+        mAction = null;
     }
 
     public MutableLiveData<List<BasicNoteGroupA>> getAllWithTotals() {
@@ -70,11 +78,23 @@ public class BasicNoteGroupViewModel extends AndroidViewModel {
         mGroups.setValue(getBasicNoteGroupDAO().getByGroupType(BasicNoteGroupA.BASIC_NOTE_GROUP_TYPE));
     }
 
-    public void add(BasicNoteGroupA item) {
+    public void add(BasicNoteGroupA item, UIAction<List<BasicNoteGroupA>> action) {
         if (getBasicNoteGroupDAO().insert(item) != -1) {
-            setAction(ACTION_ADD);
+            setAction(action);
             loadGroups();
             mAllWithTotals = null;
         }
+    }
+
+    public void delete(BasicNoteGroupA item, UIAction<List<BasicNoteGroupA>> action) {
+        if (getBasicNoteGroupDAO().delete(item) != 0) {
+            setAction(action);
+            loadGroups();
+            mAllWithTotals = null;
+        }
+    }
+
+    public boolean isGroupEmpty(BasicNoteGroupA item) {
+        return getBasicNoteDAO().getByGroup(item).isEmpty();
     }
 }

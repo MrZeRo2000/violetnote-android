@@ -11,7 +11,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.romanpulov.violetnote.R;
-import com.romanpulov.violetnote.db.manager.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicNoteGroupA;
 import com.romanpulov.violetnote.view.core.ActionBarCompatActivity;
 
@@ -41,6 +40,14 @@ public class BasicNoteGroupActivity extends ActionBarCompatActivity implements B
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if (savedInstanceState == null) {
+            BasicNoteGroupFragment fragment = BasicNoteGroupFragment.newInstance();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_id, fragment)
+                    .commit();
+        }
+        /*
         FragmentManager fm = getSupportFragmentManager();
 
         DBNoteManager noteManager = new DBNoteManager(this);
@@ -52,6 +59,8 @@ public class BasicNoteGroupActivity extends ActionBarCompatActivity implements B
         } else {
             fragment.refreshList(noteManager);
         }
+
+         */
 
     }
 
