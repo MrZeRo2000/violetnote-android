@@ -3,6 +3,7 @@ package com.romanpulov.violetnote.model;
 import android.app.Application;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
+import com.romanpulov.violetnote.db.dao.BasicCommonNoteDAO;
 import com.romanpulov.violetnote.db.dao.BasicNoteDAO;
 import com.romanpulov.violetnote.db.dao.BasicNoteGroupDAO;
 import com.romanpulov.violetnote.loader.document.DocumentPassDataLoader;
@@ -13,12 +14,20 @@ import java.util.List;
 
 public class BasicNoteGroupViewModel extends AndroidViewModel {
 
+    private BasicCommonNoteDAO mBasicCommonNoteDAO;
     private BasicNoteGroupDAO mBasicNoteGroupDAO;
     private BasicNoteDAO mBasicNoteDAO;
 
     private UIAction<List<BasicNoteGroupA>> mAction;
     private MutableLiveData<List<BasicNoteGroupA>> mAllWithTotals;
     private MutableLiveData<List<BasicNoteGroupA>> mGroups;
+
+    private BasicCommonNoteDAO getBasicCommonNoteDAO() {
+        if (mBasicCommonNoteDAO == null) {
+            mBasicCommonNoteDAO = new BasicCommonNoteDAO(getApplication());
+        }
+        return mBasicCommonNoteDAO;
+    }
 
     private BasicNoteGroupDAO getBasicNoteGroupDAO() {
         if (mBasicNoteGroupDAO == null) {
@@ -96,6 +105,25 @@ public class BasicNoteGroupViewModel extends AndroidViewModel {
 
     public void edit(BasicNoteGroupA item, UIAction<List<BasicNoteGroupA>> action) {
         if (getBasicNoteGroupDAO().update(item) != -1) {
+            setAction(action);
+            loadGroups();
+            mAllWithTotals = null;
+        }
+    }
+
+    public void moveUp(List<BasicNoteGroupA> items, UIAction<List<BasicNoteGroupA>> action) {
+        BasicOrderedEntityNoteA.sortAsc(items);
+        boolean result = false;
+
+        for (BasicNoteGroupA item : items) {
+            if (getBasicCommonNoteDAO().moveUp(item)) {
+                result = true;
+            } else {
+                break;
+            }
+        }
+
+        if (result) {
             setAction(action);
             loadGroups();
             mAllWithTotals = null;

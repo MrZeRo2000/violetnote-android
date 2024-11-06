@@ -24,6 +24,7 @@ import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.model.BasicEntityNoteSelectionPosA;
 import com.romanpulov.violetnote.model.BasicNoteGroupA;
 import com.romanpulov.violetnote.model.BasicNoteGroupViewModel;
+import com.romanpulov.violetnote.model.MovementDirection;
 import com.romanpulov.violetnote.view.action.*;
 import com.romanpulov.violetnote.view.core.AlertOkCancelSupportDialogFragment;
 import com.romanpulov.violetnote.view.core.BasicCommonNoteFragment;
@@ -62,7 +63,12 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
         if (!selectedNoteItems.isEmpty()) {
             int itemId = menuItem.getItemId();
             if (itemId == R.id.move_up) {
-                performMoveAction(new BasicItemsMoveUpAction<>(mBasicNoteGroupList, selectedNoteItems), selectedNoteItems);
+                model.moveUp(selectedNoteItems,
+                        new BasicUIMoveAction<>(
+                                selectedNoteItems,
+                                MovementDirection.DIRECTION_UP,
+                                mRecyclerViewSelector,
+                                mRecyclerView));
                 return true;
             } else if (itemId == R.id.move_top) {
                 performMoveAction(new BasicItemsMoveTopAction<>(mBasicNoteGroupList, selectedNoteItems), selectedNoteItems);
