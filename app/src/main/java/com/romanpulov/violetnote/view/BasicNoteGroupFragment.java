@@ -71,41 +71,32 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
                                 mRecyclerView));
                 return true;
             } else if (itemId == R.id.move_top) {
-                performMoveAction(new BasicItemsMoveTopAction<>(mBasicNoteGroupList, selectedNoteItems), selectedNoteItems);
+                model.moveTop(selectedNoteItems,
+                        new BasicUIMoveAction<>(
+                                selectedNoteItems,
+                                MovementDirection.DIRECTION_UP,
+                                mRecyclerViewSelector,
+                                mRecyclerView));
                 return true;
             } else if (itemId == R.id.move_down) {
-                performMoveAction(new BasicItemsMoveDownAction<>(mBasicNoteGroupList, selectedNoteItems), selectedNoteItems);
+                model.moveDown(selectedNoteItems,
+                        new BasicUIMoveAction<>(
+                                selectedNoteItems,
+                                MovementDirection.DIRECTION_DOWN,
+                                mRecyclerViewSelector,
+                                mRecyclerView));
                 return true;
             } else if (itemId == R.id.move_bottom) {
-                performMoveAction(new BasicItemsMoveBottomAction<>(mBasicNoteGroupList, selectedNoteItems), selectedNoteItems);
+                model.moveBottom(selectedNoteItems,
+                        new BasicUIMoveAction<>(
+                                selectedNoteItems,
+                                MovementDirection.DIRECTION_DOWN,
+                                mRecyclerViewSelector,
+                                mRecyclerView));
                 return true;
             }
-            return false;
-        } else
-            return false;
-    }
-
-    protected void performMoveAction(final BasicItemsMoveAction<List<BasicNoteGroupA>, BasicNoteGroupA> action, final List<BasicNoteGroupA> items) {
-        //executor
-        BasicActionExecutor<List<BasicNoteGroupA>> executor = new BasicActionExecutor<>(getContext(), items);
-
-        //actions
-        executor.addAction(getString(R.string.caption_processing), action);
-        executor.addAction(getString(R.string.caption_loading), new BasicNoteGroupRefreshAction(mBasicNoteGroupList));
-
-        //on complete
-        executor.setOnExecutionCompletedListener((data, result) -> {
-            BasicEntityNoteSelectionPosA selectionPos = new BasicEntityNoteSelectionPosA(mBasicNoteGroupList, items);
-            int selectionScrollPos = selectionPos.getDirectionPos(action.getDirection());
-
-            if (selectionScrollPos != -1) {
-                mRecyclerViewSelector.setSelectedItems(selectionPos.getSelectedItemsPositions());
-                mRecyclerView.scrollToPosition(selectionScrollPos);
-            }
-        });
-
-        //execute
-        executor.execute();
+        }
+        return false;
     }
 
     public void performAddAction(@NonNull final BasicNoteGroupA item) {

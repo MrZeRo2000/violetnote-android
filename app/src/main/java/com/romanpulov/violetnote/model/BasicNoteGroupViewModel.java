@@ -111,12 +111,69 @@ public class BasicNoteGroupViewModel extends AndroidViewModel {
         }
     }
 
-    public void moveUp(List<BasicNoteGroupA> items, UIAction<List<BasicNoteGroupA>> action) {
+    public void moveUp(List<? extends BasicCommonNoteA> items, UIAction<List<BasicNoteGroupA>> action) {
         BasicOrderedEntityNoteA.sortAsc(items);
         boolean result = false;
 
-        for (BasicNoteGroupA item : items) {
+        for (BasicCommonNoteA item : items) {
             if (getBasicCommonNoteDAO().moveUp(item)) {
+                result = true;
+            } else {
+                break;
+            }
+        }
+
+        if (result) {
+            setAction(action);
+            loadGroups();
+            mAllWithTotals = null;
+        }
+    }
+
+    public void moveTop(List<? extends BasicCommonNoteA> items, UIAction<List<BasicNoteGroupA>> action) {
+        BasicOrderedEntityNoteA.sortDesc(items);
+        boolean result = false;
+
+        for (BasicCommonNoteA item : items) {
+            if (getBasicCommonNoteDAO().moveTop(item)) {
+                result = true;
+            } else {
+                break;
+            }
+        }
+
+        if (result) {
+            setAction(action);
+            loadGroups();
+            mAllWithTotals = null;
+        }
+    }
+
+    public void moveDown(List<? extends BasicCommonNoteA> items, UIAction<List<BasicNoteGroupA>> action) {
+        BasicOrderedEntityNoteA.sortDesc(items);
+        boolean result = false;
+
+        for (BasicCommonNoteA item : items) {
+            if (getBasicCommonNoteDAO().moveDown(item)) {
+                result = true;
+            } else {
+                break;
+            }
+        }
+
+        if (result) {
+            setAction(action);
+            loadGroups();
+            mAllWithTotals = null;
+        }
+    }
+
+    public void moveBottom(List<? extends BasicCommonNoteA> items, UIAction<List<BasicNoteGroupA>> action) {
+        BasicOrderedEntityNoteA.sortAsc(items);
+        boolean result = false;
+
+        for (BasicCommonNoteA item : items) {
+            if (getBasicCommonNoteDAO().moveBottom(item)) {
                 result = true;
             } else {
                 break;
