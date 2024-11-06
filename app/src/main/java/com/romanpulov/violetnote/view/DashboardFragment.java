@@ -1,5 +1,6 @@
 package com.romanpulov.violetnote.view;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -59,9 +60,14 @@ public class DashboardFragment extends Fragment implements OnBasicGroupInteracti
                 }
         );
 
-        BasicNoteGroupViewModel model = new ViewModelProvider(this).get(BasicNoteGroupViewModel.class);
+        BasicNoteGroupViewModel model = new ViewModelProvider(requireActivity()).get(BasicNoteGroupViewModel.class);
         model.getAllWithTotals().observe(this, basicNoteGroupList ->
                 binding.list.setAdapter(new DashboardItemRecyclerViewAdapter(basicNoteGroupList, this)));
+    }
+
+    @Override
+    public void onAttach(@NotNull Context context) {
+        super.onAttach(context);
     }
 
     @Override

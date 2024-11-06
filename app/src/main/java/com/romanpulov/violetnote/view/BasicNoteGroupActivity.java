@@ -14,10 +14,7 @@ import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.model.BasicNoteGroupA;
 import com.romanpulov.violetnote.view.core.ActionBarCompatActivity;
 
-public class BasicNoteGroupActivity extends ActionBarCompatActivity implements BottomToolbarProvider {
-
-    private ActionMenuView mBottomToolbar;
-
+public class BasicNoteGroupActivity extends ActionBarCompatActivity{
     @Override
     protected void setupLayout() {
         //for ToolBar
@@ -29,9 +26,8 @@ public class BasicNoteGroupActivity extends ActionBarCompatActivity implements B
         setSupportActionBar(toolbar);
 
         //bottom toolbar
-        mBottomToolbar = findViewById(R.id.toolbar_bottom);
+        ActionMenuView mBottomToolbar = findViewById(R.id.toolbar_bottom);
         if (mBottomToolbar != null) {
-            getMenuInflater().inflate(R.menu.menu_listitem_bottom_move_actions, mBottomToolbar.getMenu());
             mBottomToolbar.setVisibility(View.GONE);
         }
     }
@@ -47,21 +43,6 @@ public class BasicNoteGroupActivity extends ActionBarCompatActivity implements B
                     .replace(R.id.fragment_id, fragment)
                     .commit();
         }
-        /*
-        FragmentManager fm = getSupportFragmentManager();
-
-        DBNoteManager noteManager = new DBNoteManager(this);
-
-        BasicNoteGroupFragment fragment = (BasicNoteGroupFragment)fm.findFragmentById(R.id.fragment_id);
-        if (fragment == null) {
-            fragment = BasicNoteGroupFragment.newInstance();
-            fm.beginTransaction().replace(R.id.fragment_id, fragment).commit();
-        } else {
-            fragment.refreshList(noteManager);
-        }
-
-         */
-
     }
 
     @Override
@@ -93,10 +74,5 @@ public class BasicNoteGroupActivity extends ActionBarCompatActivity implements B
                 fragment.performAddAction(noteGroup);
             }
         }
-    }
-
-    @Override
-    public ActionMenuView getBottomToolbar() {
-        return mBottomToolbar;
     }
 }

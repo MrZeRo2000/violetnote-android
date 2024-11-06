@@ -22,12 +22,23 @@ public class BottomToolbarHelper {
         }
     }
 
+    public static BottomToolbarHelper from(
+            ActionMenuView mToolbar,
+            ActionMenuView.OnMenuItemClickListener menuItemClickListener) {
+        return new BottomToolbarHelper(mToolbar, menuItemClickListener);
+    }
+
     private BottomToolbarHelper(
             @NonNull BottomToolbarProvider toolbarProvider,
             ActionMenuView.OnMenuItemClickListener menuItemClickListener) {
-        mToolbar = toolbarProvider.getBottomToolbar();
-        mToolbar.setOnMenuItemClickListener(menuItemClickListener);
-        mToolbar.setPopupTheme(0);
+        this(toolbarProvider.getBottomToolbar(), menuItemClickListener);
+    }
+
+    private BottomToolbarHelper(ActionMenuView mToolbar,
+                                ActionMenuView.OnMenuItemClickListener menuItemClickListener) {
+        this.mToolbar = mToolbar;
+        this.mToolbar.setOnMenuItemClickListener(menuItemClickListener);
+        this.mToolbar.setPopupTheme(0);
         hideLayout();
     }
 

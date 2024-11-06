@@ -7,13 +7,11 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.appcompat.view.ActionMode;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.databinding.FragmentRecyclerViewBottomToolbarBinding;
 import com.romanpulov.violetnote.model.BasicEntityNoteSelectionPosA;
 import com.romanpulov.violetnote.model.BasicNoteGroupA;
 import com.romanpulov.violetnote.model.BasicNoteGroupViewModel;
@@ -38,6 +37,7 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
     public static final int ACTIVITY_REQUEST_INSERT = 0;
     public static final int ACTIVITY_REQUEST_EDIT = 1;
 
+    FragmentRecyclerViewBottomToolbarBinding binding;
     private BasicNoteGroupViewModel model;
     private List<BasicNoteGroupA> mBasicNoteGroupList;
     private BasicNoteGroupItemRecyclerViewAdapter mRecyclerViewAdapter;
@@ -50,11 +50,10 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
 
     }
 
-    private void setupBottomToolbarHelper() {
-        FragmentActivity activity = getActivity();
-        if (activity != null) {
-            mBottomToolbarHelper = BottomToolbarHelper.fromContext(activity, this::processMoveMenuItemClick);
-        }
+    private void setupBottomToolbar() {
+        mBottomToolbarHelper = BottomToolbarHelper.from(binding.fragmentToolbarBottom, this::processMoveMenuItemClick);
+        requireActivity().getMenuInflater().inflate(R.menu.menu_listitem_bottom_move_actions, binding.fragmentToolbarBottom.getMenu());
+        binding.fragmentToolbarBottom.setVisibility(View.GONE);
     }
 
     protected boolean processMoveMenuItemClick(MenuItem menuItem) {
@@ -193,7 +192,7 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
                 menuItem.setVisible(mRecyclerViewSelector.isSelectedSingle());
 
             if (mBottomToolbarHelper == null) {
-                setupBottomToolbarHelper();
+                setupBottomToolbar();
             }
 
             if (mBottomToolbarHelper != null) {
@@ -209,7 +208,10 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.view_recycler_view_list, container, false);
+        //return inflater.inflate(R.layout.view_recycler_view_list, container, false);
+        binding = FragmentRecyclerViewBottomToolbarBinding.inflate(getLayoutInflater());
+        setupBottomToolbar();
+        return binding.getRoot();
     }
 
     @Override
@@ -218,12 +220,12 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
 
         Context context = view.getContext();
 
-        mRecyclerView = (RecyclerView) view;
+        mRecyclerView = binding.fragmentList;
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         // add decoration
         mRecyclerView.addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(getActivity(), RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_white_black_gradient));
 
-        model = new ViewModelProvider(this).get(BasicNoteGroupViewModel.class);
+        model = new ViewModelProvider(requireActivity()).get(BasicNoteGroupViewModel.class);
 
         final Observer<List<BasicNoteGroupA>> noteGroupsObserver = newBasicNoteGroups -> {
             if (mBasicNoteGroupList == null) {

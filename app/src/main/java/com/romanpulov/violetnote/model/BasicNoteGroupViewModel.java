@@ -91,7 +91,6 @@ public class BasicNoteGroupViewModel extends AndroidViewModel {
         if (getBasicNoteGroupDAO().insert(item) != -1) {
             setAction(action);
             loadGroups();
-            mAllWithTotals = null;
         }
     }
 
@@ -99,7 +98,6 @@ public class BasicNoteGroupViewModel extends AndroidViewModel {
         if (getBasicNoteGroupDAO().delete(item) != 0) {
             setAction(action);
             loadGroups();
-            mAllWithTotals = null;
         }
     }
 
@@ -107,7 +105,6 @@ public class BasicNoteGroupViewModel extends AndroidViewModel {
         if (getBasicNoteGroupDAO().update(item) != -1) {
             setAction(action);
             loadGroups();
-            mAllWithTotals = null;
         }
     }
 
@@ -126,7 +123,6 @@ public class BasicNoteGroupViewModel extends AndroidViewModel {
         if (result) {
             setAction(action);
             loadGroups();
-            mAllWithTotals = null;
         }
     }
 
@@ -145,7 +141,6 @@ public class BasicNoteGroupViewModel extends AndroidViewModel {
         if (result) {
             setAction(action);
             loadGroups();
-            mAllWithTotals = null;
         }
     }
 
@@ -164,7 +159,6 @@ public class BasicNoteGroupViewModel extends AndroidViewModel {
         if (result) {
             setAction(action);
             loadGroups();
-            mAllWithTotals = null;
         }
     }
 
@@ -183,7 +177,6 @@ public class BasicNoteGroupViewModel extends AndroidViewModel {
         if (result) {
             setAction(action);
             loadGroups();
-            mAllWithTotals = null;
         }
     }
 
