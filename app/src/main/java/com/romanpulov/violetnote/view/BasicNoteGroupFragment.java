@@ -21,7 +21,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.romanpulov.violetnote.R;
-import com.romanpulov.violetnote.db.manager.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicEntityNoteSelectionPosA;
 import com.romanpulov.violetnote.model.BasicNoteGroupA;
 import com.romanpulov.violetnote.model.BasicNoteGroupViewModel;
@@ -32,7 +31,6 @@ import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 import com.romanpulov.violetnote.view.helper.BottomToolbarHelper;
 import com.romanpulov.violetnote.view.helper.DisplayTitleBuilder;
 
-import java.util.Collections;
 import java.util.List;
 
 public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
@@ -143,30 +141,11 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
         super.onActivityResult(requestCode, resultCode, data);
 
         final BasicNoteGroupA noteGroup;
-        if ((requestCode == BasicNoteGroupFragment.ACTIVITY_REQUEST_EDIT) && (resultCode == Activity.RESULT_OK) && (data != null) && ((noteGroup = data.getParcelableExtra(BasicNoteGroupA.BASIC_NOTE_GROUP_DATA)) != null)) {
-            List<BasicNoteGroupA> items = Collections.singletonList(noteGroup);
-
-            //executor
-            BasicActionExecutor<List<BasicNoteGroupA>> executor = new BasicActionExecutor<>(getContext(), items);
-
-            //actions
-            executor.addAction(getString(R.string.caption_processing), new BasicNoteGroupEditAction(items));
-            executor.addAction(getString(R.string.caption_loading), new BasicNoteGroupRefreshAction(mBasicNoteGroupList));
-
-            //on complete
-            executor.setOnExecutionCompletedListener((data1, result) -> {
-                if (result) {
-                    int position = mBasicNoteGroupList.indexOf(noteGroup);
-                    if (mRecyclerView != null) {
-                        RecyclerViewHelper.adapterNotifyItemChanged(mRecyclerView, position);
-                    }
-
-                    updateTitle(mRecyclerViewSelector.getActionMode());
-                }
-            });
-
-            //execute
-            executor.execute();
+        if ((requestCode == BasicNoteGroupFragment.ACTIVITY_REQUEST_EDIT)
+                && (resultCode == Activity.RESULT_OK)
+                && (data != null)
+                && ((noteGroup = data.getParcelableExtra(BasicNoteGroupA.BASIC_NOTE_GROUP_DATA)) != null)) {
+            model.edit(noteGroup, new BasicUICallbackAction<>(() -> updateTitle(mRecyclerViewSelector.getActionMode())));
         }
     }
 
@@ -280,7 +259,7 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
                     @Override
                     public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
                         return mBasicNoteGroupList.get(oldItemPosition).equals(
-                                mBasicNoteGroupList.get(newItemPosition));
+                                newBasicNoteGroups.get(newItemPosition));
                     }
                 });
                 mBasicNoteGroupList = newBasicNoteGroups;

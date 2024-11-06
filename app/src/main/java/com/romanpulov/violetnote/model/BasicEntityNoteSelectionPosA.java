@@ -38,7 +38,7 @@ public final class BasicEntityNoteSelectionPosA {
         return  itemsPos;
     }
 
-    public BasicEntityNoteSelectionPosA(List<? extends BasicEntityNoteA> items, List<? extends BasicEntityNoteA> selectedItems) {
+    public BasicEntityNoteSelectionPosA(Collection<? extends BasicEntityNoteA> items, Collection<? extends BasicEntityNoteA> selectedItems) {
         mSelectedItemsPositions = new Integer[selectedItems.size()];
         int itemPosIndex = 0;
         int calcMinPos = -1;

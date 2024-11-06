@@ -94,6 +94,14 @@ public class BasicNoteGroupViewModel extends AndroidViewModel {
         }
     }
 
+    public void edit(BasicNoteGroupA item, UIAction<List<BasicNoteGroupA>> action) {
+        if (getBasicNoteGroupDAO().update(item) != -1) {
+            setAction(action);
+            loadGroups();
+            mAllWithTotals = null;
+        }
+    }
+
     public boolean isGroupEmpty(BasicNoteGroupA item) {
         return getBasicNoteDAO().getByGroup(item).isEmpty();
     }
