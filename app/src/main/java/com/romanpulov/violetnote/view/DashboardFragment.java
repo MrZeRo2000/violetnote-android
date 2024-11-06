@@ -1,6 +1,5 @@
 package com.romanpulov.violetnote.view;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -20,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class DashboardFragment extends Fragment implements OnBasicGroupInteractionListener {
     private FragmentDashboardBinding binding;
+    private BasicNoteGroupViewModel model;
 
     public DashboardFragment() {
         // Required empty public constructor
@@ -60,14 +60,18 @@ public class DashboardFragment extends Fragment implements OnBasicGroupInteracti
                 }
         );
 
-        BasicNoteGroupViewModel model = new ViewModelProvider(requireActivity()).get(BasicNoteGroupViewModel.class);
+        model = new ViewModelProvider(requireActivity()).get(BasicNoteGroupViewModel.class);
         model.getAllWithTotals().observe(this, basicNoteGroupList ->
                 binding.list.setAdapter(new DashboardItemRecyclerViewAdapter(basicNoteGroupList, this)));
     }
 
     @Override
-    public void onAttach(@NotNull Context context) {
-        super.onAttach(context);
+    public void onResume() {
+        super.onResume();
+        if (model.isNoteGroupsChanged()) {
+            model.loadAllWithTotals();
+            model.resetNoteGroupsChanged();
+        }
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.romanpulov.violetnote.model;
 import android.app.Application;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
+import com.romanpulov.violetnote.VioletNoteApplication;
 import com.romanpulov.violetnote.db.dao.BasicCommonNoteDAO;
 import com.romanpulov.violetnote.db.dao.BasicNoteDAO;
 import com.romanpulov.violetnote.db.dao.BasicNoteGroupDAO;
@@ -13,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class BasicNoteGroupViewModel extends AndroidViewModel {
+    public static final String NOTE_GROUP_CHANGE_KEY = BasicNoteGroupViewModel.class.getSimpleName() + " change";
 
     private BasicCommonNoteDAO mBasicCommonNoteDAO;
     private BasicNoteGroupDAO mBasicNoteGroupDAO;
@@ -77,20 +79,46 @@ public class BasicNoteGroupViewModel extends AndroidViewModel {
         return mGroups;
     }
 
-    private void loadAllWithTotals() {
-        mAllWithTotals.setValue(getBasicNoteGroupDAO().getAllWithTotals(
-                DocumentPassDataLoader.getDocumentFile(getApplication()) == null)
-        );
+    public void loadAllWithTotals() {
+        if (mAllWithTotals != null) {
+            mAllWithTotals.setValue(getBasicNoteGroupDAO().getAllWithTotals(
+                    DocumentPassDataLoader.getDocumentFile(getApplication()) == null)
+            );
+        }
     }
 
     private void loadGroups() {
-        mGroups.setValue(getBasicNoteGroupDAO().getByGroupType(BasicNoteGroupA.BASIC_NOTE_GROUP_TYPE));
+        if (mGroups != null) {
+            mGroups.setValue(getBasicNoteGroupDAO().getByGroupType(BasicNoteGroupA.BASIC_NOTE_GROUP_TYPE));
+        }
+    }
+
+    private void setNoteGroupsChanged() {
+        if (getApplication() instanceof VioletNoteApplication) {
+            ((VioletNoteApplication)getApplication()).getSharedData().put(
+                    BasicNoteGroupViewModel.NOTE_GROUP_CHANGE_KEY,
+                    BasicNoteGroupViewModel.NOTE_GROUP_CHANGE_KEY);
+        }
+    }
+
+    public boolean isNoteGroupsChanged() {
+        return (getApplication() instanceof VioletNoteApplication) &&
+                ((VioletNoteApplication)getApplication())
+                        .getSharedData()
+                        .containsKey(BasicNoteGroupViewModel.NOTE_GROUP_CHANGE_KEY);
+    }
+
+    public void resetNoteGroupsChanged() {
+        if (getApplication() instanceof VioletNoteApplication) {
+            ((VioletNoteApplication)getApplication()).getSharedData().remove(BasicNoteGroupViewModel.NOTE_GROUP_CHANGE_KEY);
+        }
     }
 
     public void add(BasicNoteGroupA item, UIAction<List<BasicNoteGroupA>> action) {
         if (getBasicNoteGroupDAO().insert(item) != -1) {
             setAction(action);
             loadGroups();
+            setNoteGroupsChanged();
         }
     }
 
@@ -98,6 +126,7 @@ public class BasicNoteGroupViewModel extends AndroidViewModel {
         if (getBasicNoteGroupDAO().delete(item) != 0) {
             setAction(action);
             loadGroups();
+            setNoteGroupsChanged();
         }
     }
 
@@ -105,6 +134,7 @@ public class BasicNoteGroupViewModel extends AndroidViewModel {
         if (getBasicNoteGroupDAO().update(item) != -1) {
             setAction(action);
             loadGroups();
+            setNoteGroupsChanged();
         }
     }
 
@@ -123,6 +153,7 @@ public class BasicNoteGroupViewModel extends AndroidViewModel {
         if (result) {
             setAction(action);
             loadGroups();
+            setNoteGroupsChanged();
         }
     }
 
@@ -141,6 +172,7 @@ public class BasicNoteGroupViewModel extends AndroidViewModel {
         if (result) {
             setAction(action);
             loadGroups();
+            setNoteGroupsChanged();
         }
     }
 
@@ -159,6 +191,7 @@ public class BasicNoteGroupViewModel extends AndroidViewModel {
         if (result) {
             setAction(action);
             loadGroups();
+            setNoteGroupsChanged();
         }
     }
 
@@ -177,6 +210,7 @@ public class BasicNoteGroupViewModel extends AndroidViewModel {
         if (result) {
             setAction(action);
             loadGroups();
+            setNoteGroupsChanged();
         }
     }
 
