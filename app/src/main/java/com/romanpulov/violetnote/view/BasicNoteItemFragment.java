@@ -11,10 +11,7 @@ import android.view.SubMenu;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.manager.DBNoteManager;
-import com.romanpulov.violetnote.model.BasicEntityNoteSelectionPosA;
-import com.romanpulov.violetnote.model.BasicNoteA;
-import com.romanpulov.violetnote.model.BasicNoteDataA;
-import com.romanpulov.violetnote.model.BasicNoteItemA;
+import com.romanpulov.violetnote.model.*;
 import com.romanpulov.violetnote.view.action.BasicItemsMoveDownAction;
 import com.romanpulov.violetnote.view.action.BasicItemsMovePriorityDownAction;
 import com.romanpulov.violetnote.view.action.BasicItemsMovePriorityUpAction;
@@ -142,6 +139,10 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
         }
     }
 
+    private void notifyNoteGroupsChanged() {
+        BasicNoteGroupViewModel.setAppNoteGroupsChanged(requireActivity().getApplication());
+    }
+
     /**
      * Common logic for Add action
      * @param item item to add
@@ -165,6 +166,8 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
 
                 if (position > -1)
                     mRecyclerView.scrollToPosition(position);
+
+                notifyNoteGroupsChanged();
             }
         });
 
@@ -191,6 +194,7 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
                     mDialogFragment.dismiss();
                     mDialogFragment = null;
                 }
+                notifyNoteGroupsChanged();
             });
             executeActions(executor);
         });
@@ -226,6 +230,7 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
                     mDialogFragment.dismiss();
                     mDialogFragment = null;
                 }
+                notifyNoteGroupsChanged();
             });
             executeActions(executor);
         });

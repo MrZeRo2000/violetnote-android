@@ -93,12 +93,17 @@ public class BasicNoteGroupViewModel extends AndroidViewModel {
         }
     }
 
-    private void setNoteGroupsChanged() {
-        if (getApplication() instanceof VioletNoteApplication) {
-            ((VioletNoteApplication)getApplication()).getSharedData().put(
+    public static void setAppNoteGroupsChanged(Application application) {
+        if (application instanceof VioletNoteApplication) {
+            ((VioletNoteApplication)application).getSharedData().put(
                     BasicNoteGroupViewModel.NOTE_GROUP_CHANGE_KEY,
                     BasicNoteGroupViewModel.NOTE_GROUP_CHANGE_KEY);
         }
+
+    }
+
+    private void setNoteGroupsChanged() {
+        BasicNoteGroupViewModel.setAppNoteGroupsChanged(getApplication());
     }
 
     public boolean isNoteGroupsChanged() {

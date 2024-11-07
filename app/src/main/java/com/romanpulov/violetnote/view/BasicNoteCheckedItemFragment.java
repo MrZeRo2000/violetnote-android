@@ -21,12 +21,7 @@ import android.view.ViewGroup;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DBBasicNoteHelper;
 import com.romanpulov.violetnote.db.manager.DBNoteManager;
-import com.romanpulov.violetnote.model.BasicNoteA;
-import com.romanpulov.violetnote.model.BasicNoteDataA;
-import com.romanpulov.violetnote.model.BasicNoteItemA;
-import com.romanpulov.violetnote.model.BasicNoteValueA;
-import com.romanpulov.violetnote.model.BasicNoteValueDataA;
-import com.romanpulov.violetnote.model.InputParser;
+import com.romanpulov.violetnote.model.*;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutorHost;
 import com.romanpulov.violetnote.view.action.BasicNoteDataItemAddUniqueValuesAction;
 import com.romanpulov.violetnote.view.core.PassDataPasswordActivity;
@@ -105,10 +100,15 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         }
     }
 
+    private void notifyNoteGroupsChanged() {
+        BasicNoteGroupViewModel.setAppNoteGroupsChanged(requireActivity().getApplication());
+    }
+
     @Override
     protected void afterExecutionCompleted() {
         updateParamsSummary();
         updateCheckedItems();
+        notifyNoteGroupsChanged();
     }
 
     /**
@@ -165,8 +165,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
             executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData));
             executor.setOnExecutionCompletedListener((BasicNoteDataActionExecutor.OnExecutionCompletedListener) (basicNoteData, result) -> {
                 mBasicNoteData = basicNoteData;
-                updateParamsSummary();
-                updateCheckedItems();
+                afterExecutionCompleted();
 
                 //clear editor reference
                 if (mEditorDialog != null) {
@@ -298,6 +297,9 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                         //update checked
                         mBasicNoteData.getNote().getSummary().addCheckedItemCount(item.isChecked() ? 1 : - 1);
                         updateCheckedItems();
+
+                        // update groups totals
+                        notifyNoteGroupsChanged();
 
                         //refresh display
                         refreshCheckedItemsDisplay();
