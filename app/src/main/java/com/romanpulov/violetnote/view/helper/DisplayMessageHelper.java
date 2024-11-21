@@ -58,6 +58,10 @@ public class DisplayMessageHelper {
         displayMessage(activity, null, MessageType.MT_INFO, activity.getText(resId));
     }
 
+    public static void displayInfoMessage(@NonNull Activity activity, int resId, CharSequence text) {
+        displayMessage(activity, null, MessageType.MT_INFO, activity.getString(resId, text));
+    }
+
     public static void displayErrorMessage(@NonNull Activity activity, @NonNull CharSequence text) {
         displayMessage(activity, null, MessageType.MT_ERROR, text);
     }

@@ -63,6 +63,3 @@
 
 # loader classes created by reflection
 -keepclassmembers class com.romanpulov.violetnote.loader.** { *; }
-
-# this is to fix Google SilentSignIn
--keep class org.json.** { *; }

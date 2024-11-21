@@ -11,6 +11,7 @@ import com.romanpulov.violetnote.loader.gdrive.BackupGDriveUploader;
 import com.romanpulov.violetnote.loader.gdrive.RestoreGDriveDownloader;
 import com.romanpulov.violetnote.loader.gdrive.SilentBackupGDriveUploader;
 import com.romanpulov.violetnote.picker.HrPickerNavigator;
+import com.romanpulov.violetnote.view.helper.DisplayMessageHelper;
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 
 public class GDAccountFacade implements CloudAccountFacade{
@@ -20,28 +21,28 @@ public class GDAccountFacade implements CloudAccountFacade{
         alert
                 .setTitle(R.string.ui_dialog_title_confirmation)
                 .setPositiveButton(R.string.ui_dialog_button_login, (dialog, which) -> GDHelper.getInstance().login(
-                        activity, new OnGDActionListener<Void>() {
+                        new OnGDActionListener<>() {
                             @Override
                             public void onActionSuccess(Void unused) {
-
+                                DisplayMessageHelper.displayInfoMessage(activity, R.string.message_gdrive_successfully_logged_in);
                             }
 
                             @Override
                             public void onActionFailure(Exception e) {
-
+                                DisplayMessageHelper.displayInfoMessage(activity, R.string.error_gdrive_login, e.getMessage());
                             }
                         }
                 ))
                 .setNegativeButton(R.string.ui_dialog_button_logout, (dialog, which) -> GDHelper.getInstance().logout(
-                        activity, new OnGDActionListener<Void>() {
+                        activity, new OnGDActionListener<>() {
                             @Override
                             public void onActionSuccess(Void unused) {
-                                GDHelper.displayMessage(activity, R.string.message_gdrive_successfully_logged_out);
+                                DisplayMessageHelper.displayInfoMessage(activity, R.string.message_gdrive_successfully_logged_out);
                             }
 
                             @Override
                             public void onActionFailure(Exception e) {
-                                GDHelper.displayMessage(activity, R.string.error_gdrive_logout, e.getMessage());
+                                DisplayMessageHelper.displayInfoMessage(activity, R.string.error_gdrive_logout, e.getMessage());
                             }
                         }
                 ))
