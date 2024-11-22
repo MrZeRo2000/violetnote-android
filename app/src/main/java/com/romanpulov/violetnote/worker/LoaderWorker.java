@@ -15,15 +15,19 @@ import androidx.work.WorkerParameters;
 import com.romanpulov.library.common.loader.core.Loader;
 import com.romanpulov.library.common.loader.core.LoaderFactory;
 import com.romanpulov.library.common.network.NetworkUtils;
+import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.view.helper.LoggerHelper;
 
 import java.util.concurrent.ExecutionException;
 
 public class LoaderWorker extends Worker {
-    private static final String WORKER_TAG = LoaderWorker.class.getSimpleName() + "TAG";
-    private static final String WORKER_NAME = LoaderWorker.class.getSimpleName() + "NAME";
-    private static final String WORKER_PARAM_LOADER_NAME = LoaderWorker.class.getSimpleName() + "LoaderName";
     private final static String TAG = LoaderWorker.class.getSimpleName();
+
+    public static final String WORKER_NAME = LoaderWorker.class.getSimpleName() + "NAME";
+    public static final String WORKER_RESULT_ERROR_MESSAGE = LoaderWorker.class.getSimpleName() + "ResultErrorMessage";
+
+    private static final String WORKER_TAG = LoaderWorker.class.getSimpleName() + "TAG";
+    private static final String WORKER_PARAM_LOADER_NAME = LoaderWorker.class.getSimpleName() + "LoaderName";
 
     public LoaderWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
@@ -35,33 +39,40 @@ public class LoaderWorker extends Worker {
         LoggerHelper.logContext(getApplicationContext(), TAG, "Work started");
         final String loaderClassName = getInputData().getString(WORKER_PARAM_LOADER_NAME);
 
-        boolean isSuccessful;
+        String errorMessage = null;
 
         if (!NetworkUtils.isNetworkAvailable(getApplicationContext())) {
-            LoggerHelper.logContext(getApplicationContext(), TAG, "Internet connection not available");
-            isSuccessful = true;
+            errorMessage = getApplicationContext().getString(R.string.error_internet_not_available);
+            LoggerHelper.logContext(getApplicationContext(), TAG, errorMessage);
         } else if (loaderClassName == null) {
-            LoggerHelper.logContext(getApplicationContext(), TAG, "Loader class name not provided");
-            isSuccessful = false;
+            errorMessage = "Loader class name not provided";
+            LoggerHelper.logContext(getApplicationContext(), TAG, errorMessage);
         } else {
             Loader loader = LoaderFactory.fromClassName(getApplicationContext(), loaderClassName);
             if (loader == null) {
-                LoggerHelper.logContext(getApplicationContext(), TAG, "Failed to create loader " + loaderClassName);
-                isSuccessful = false;
+                errorMessage = "Failed to create loader " + loaderClassName;
+                LoggerHelper.logContext(getApplicationContext(), TAG, errorMessage);
             } else {
                 LoggerHelper.logContext(getApplicationContext(), TAG, "Created loader " + loaderClassName);
                 try {
                     loader.load();
                     LoggerHelper.logContext(getApplicationContext(), TAG, "Loaded successfully");
                 } catch (Exception e) {
+                    errorMessage = e.getMessage();
                     LoggerHelper.logContext(getApplicationContext(), TAG, "Error loading:" + e);
                 }
-                isSuccessful = true;
             }
         }
-        LoggerHelper.logContext(getApplicationContext(), TAG, "Successful:" + isSuccessful);
 
-        return isSuccessful ? Result.success() : Result.failure();
+        if (errorMessage == null) {
+            LoggerHelper.logContext(getApplicationContext(), TAG, "Successful");
+            return Result.success();
+        } else {
+            Data outputResult = new Data.Builder()
+                    .putString(WORKER_RESULT_ERROR_MESSAGE, errorMessage)
+                    .build();
+            return Result.failure(outputResult);
+        }
     }
 
     private static void internalScheduleWorker(Context context, String loaderClassName) {
