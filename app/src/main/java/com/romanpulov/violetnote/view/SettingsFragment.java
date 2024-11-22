@@ -96,7 +96,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     @NonNull
     @Override
-    public @NotNull View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+    public @NotNull View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
         ViewCompat.setOnApplyWindowInsetsListener(view, (v, windowInsets) -> {
@@ -218,7 +218,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     void executeDocumentLoad() {
         final Preference prefSourceType = Objects.requireNonNull(findPreference(PREF_KEY_SOURCE_TYPE));
-        final SharedPreferences sharedPref = prefSourceType.getSharedPreferences();
+        final SharedPreferences sharedPref = Objects.requireNonNull(prefSourceType.getSharedPreferences());
         int type = sharedPref.getInt(prefSourceType.getKey(), PreferenceRepository.DEFAULT_SOURCE_TYPE);
 
         if (PreferenceRepository.isCloudSourceType(type)) {
@@ -292,7 +292,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     void executeCloudBackup() {
         final Preference prefSourceType = Objects.requireNonNull(findPreference(PREF_KEY_BASIC_NOTE_CLOUD_STORAGE));
-        final SharedPreferences sharedPref = prefSourceType.getSharedPreferences();
+        final SharedPreferences sharedPref = Objects.requireNonNull(prefSourceType.getSharedPreferences());
         int type = sharedPref.getInt(prefSourceType.getKey(), DEFAULT_CLOUD_SOURCE_TYPE);
 
         final CloudAccountFacade cloudAccountFacade = CloudAccountFacadeFactory.fromCloudSourceType(type);
@@ -356,7 +356,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     void executeCloudRestore() {
         final Preference prefSourceType = Objects.requireNonNull(findPreference(PREF_KEY_BASIC_NOTE_CLOUD_STORAGE));
-        final SharedPreferences sharedPref = prefSourceType.getSharedPreferences();
+        final SharedPreferences sharedPref = Objects.requireNonNull(prefSourceType.getSharedPreferences());
         int type = sharedPref.getInt(prefSourceType.getKey(), DEFAULT_CLOUD_SOURCE_TYPE);
 
         final CloudAccountFacade cloudAccountFacade = CloudAccountFacadeFactory.fromCloudSourceType(type);
