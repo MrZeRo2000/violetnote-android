@@ -107,7 +107,6 @@ public class LoaderWorker extends Worker {
     }
 
     public static void scheduleWorker(Context context, String loaderClassName) {
-        cancelAllWorkers(context);
         internalScheduleWorker(context, loaderClassName);
     }
 }
