@@ -183,7 +183,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     private void startDocumentLoad(String className) {
         mPreferenceDocumentLoaderProcessor.loaderPreExecute();
-        LoaderServiceManager.startLoader(requireContext(), className, null);
+        LoaderServiceManager.startLoader(requireContext(), className);
     }
 
     void executeLocalDocumentLoad() {
@@ -312,9 +312,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                         mPreferenceBackupCloudProcessor.loaderPreExecute();
                         LoaderServiceManager.startLoader(
                                 requireContext(),
-                                cloudAccountFacade.getBackupLoaderClassName(),
-                                null
-                        );
+                                cloudAccountFacade.getBackupLoaderClassName());
                     }
                 }
 
@@ -371,9 +369,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     mPreferenceRestoreCloudProcessor.loaderPreExecute();
                     LoaderServiceManager.startLoader(
                             requireContext(),
-                            cloudAccountFacade.getRestoreLoaderClassName(),
-                            null
-                    );
+                            cloudAccountFacade.getRestoreLoaderClassName());
                 }
 
                 @Override
@@ -422,9 +418,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         mPreferenceBackupLocalProcessor.loaderPreExecute();
         LoaderServiceManager.startLoader(
                 requireContext(),
-                PreferenceBackupLocalProcessor.getLoaderClass().getName(),
-                null
-        );
+                PreferenceBackupLocalProcessor.getLoaderClass().getName());
     }
 
     private void setupPrefLocalBackupLoadService() {
@@ -445,8 +439,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         mPreferenceRestoreLocalProcessor.loaderPreExecute();
         LoaderServiceManager.startLoader(
                 requireContext(),
-                PreferenceRestoreLocalProcessor.getLoaderClass().getName(),
-                null
+                PreferenceRestoreLocalProcessor.getLoaderClass().getName()
         );
     }
 
