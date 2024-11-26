@@ -17,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.Observer;
 import androidx.preference.CheckBoxPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -24,6 +25,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.appcompat.app.AlertDialog;
 import android.view.View;
 
+import androidx.work.WorkInfo;
 import com.romanpulov.library.common.network.NetworkUtils;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.cloud.CloudAccountFacade;
@@ -49,6 +51,7 @@ import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 import com.romanpulov.violetnote.view.preference.processor.PreferenceRestoreCloudProcessor;
 import com.romanpulov.violetnote.view.preference.SourcePathPreferenceSetup;
 import com.romanpulov.violetnote.view.preference.processor.PreferenceRestoreLocalProcessor;
+import com.romanpulov.violetnote.worker.LoaderWorker;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -83,6 +86,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             if (preferenceLoaderProcessor != null)
                 preferenceLoaderProcessor.loaderPostExecute(errorMessage);
         }
+    };
+
+    private final Observer<WorkInfo> mLoaderWorkerObserver = workInfo -> {
+
     };
 
     public SettingsFragment() {
@@ -241,7 +248,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 DisplayMessageHelper.displayErrorMessage(requireActivity(), getText(R.string.error_load_remote_path_empty));
             }
             else {
-                if (LoaderServiceManager.isLoaderServiceRunning(requireContext()))
+                if (LoaderServiceManager.isLoaderServiceRunning(requireContext()) || LoaderWorker.isRunning(requireContext()))
                     DisplayMessageHelper.displayInfoMessage(requireActivity(), getText(R.string.error_load_process_running));
                 else {
                     executeDocumentLoad();

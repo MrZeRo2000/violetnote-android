@@ -29,31 +29,34 @@ public class LoaderWorker extends Worker {
     private static final String WORKER_TAG = LoaderWorker.class.getSimpleName() + "TAG";
     private static final String WORKER_PARAM_LOADER_NAME = LoaderWorker.class.getSimpleName() + "LoaderName";
 
+    private final String mLoaderClassName;
+
     public LoaderWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
+        this.mLoaderClassName = workerParams.getInputData().getString(WORKER_PARAM_LOADER_NAME);
+        setProgressAsync(new Data.Builder().putString(WORKER_PARAM_LOADER_NAME, this.mLoaderClassName).build());
     }
 
     @NonNull
     @Override
     public Result doWork() {
         LoggerHelper.logContext(getApplicationContext(), TAG, "Work started");
-        final String loaderClassName = getInputData().getString(WORKER_PARAM_LOADER_NAME);
 
         String errorMessage;
 
         if (!NetworkUtils.isNetworkAvailable(getApplicationContext())) {
             errorMessage = getApplicationContext().getString(R.string.error_internet_not_available);
             LoggerHelper.logContext(getApplicationContext(), TAG, errorMessage);
-        } else if (loaderClassName == null) {
+        } else if (mLoaderClassName == null) {
             errorMessage = "Loader class name not provided";
             LoggerHelper.logContext(getApplicationContext(), TAG, errorMessage);
         } else {
-            Loader loader = LoaderFactory.fromClassName(getApplicationContext(), loaderClassName);
+            Loader loader = LoaderFactory.fromClassName(getApplicationContext(), mLoaderClassName);
             if (loader == null) {
-                errorMessage = "Failed to create loader " + loaderClassName;
+                errorMessage = "Failed to create loader " + mLoaderClassName;
                 LoggerHelper.logContext(getApplicationContext(), TAG, errorMessage);
             } else {
-                LoggerHelper.logContext(getApplicationContext(), TAG, "Created loader " + loaderClassName);
+                LoggerHelper.logContext(getApplicationContext(), TAG, "Created loader " + mLoaderClassName);
                 try {
                     loader.load();
                     errorMessage = null;
@@ -68,12 +71,12 @@ public class LoaderWorker extends Worker {
         if (errorMessage == null) {
             LoggerHelper.logContext(getApplicationContext(), TAG, "Successful");
             Data outputResult = new Data.Builder()
-                    .putString(WORKER_PARAM_LOADER_NAME, loaderClassName)
+                    .putString(WORKER_PARAM_LOADER_NAME, mLoaderClassName)
                     .build();
             return Result.success(outputResult);
         } else {
             Data outputResult = new Data.Builder()
-                    .putString(WORKER_PARAM_LOADER_NAME, loaderClassName)
+                    .putString(WORKER_PARAM_LOADER_NAME, mLoaderClassName)
                     .putString(WORKER_RESULT_ERROR_MESSAGE, errorMessage)
                     .build();
             return Result.failure(outputResult);
