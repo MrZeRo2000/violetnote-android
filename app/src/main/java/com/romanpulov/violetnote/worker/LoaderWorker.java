@@ -39,7 +39,7 @@ public class LoaderWorker extends Worker {
         LoggerHelper.logContext(getApplicationContext(), TAG, "Work started");
         final String loaderClassName = getInputData().getString(WORKER_PARAM_LOADER_NAME);
 
-        String errorMessage = null;
+        String errorMessage;
 
         if (!NetworkUtils.isNetworkAvailable(getApplicationContext())) {
             errorMessage = getApplicationContext().getString(R.string.error_internet_not_available);
@@ -56,6 +56,7 @@ public class LoaderWorker extends Worker {
                 LoggerHelper.logContext(getApplicationContext(), TAG, "Created loader " + loaderClassName);
                 try {
                     loader.load();
+                    errorMessage = null;
                     LoggerHelper.logContext(getApplicationContext(), TAG, "Loaded successfully");
                 } catch (Exception e) {
                     errorMessage = e.getMessage();
@@ -66,9 +67,13 @@ public class LoaderWorker extends Worker {
 
         if (errorMessage == null) {
             LoggerHelper.logContext(getApplicationContext(), TAG, "Successful");
-            return Result.success();
+            Data outputResult = new Data.Builder()
+                    .putString(WORKER_PARAM_LOADER_NAME, loaderClassName)
+                    .build();
+            return Result.success(outputResult);
         } else {
             Data outputResult = new Data.Builder()
+                    .putString(WORKER_PARAM_LOADER_NAME, loaderClassName)
                     .putString(WORKER_RESULT_ERROR_MESSAGE, errorMessage)
                     .build();
             return Result.failure(outputResult);
@@ -119,5 +124,9 @@ public class LoaderWorker extends Worker {
 
     public static void scheduleWorker(Context context, String loaderClassName) {
         internalScheduleWorker(context, loaderClassName);
+    }
+
+    public static boolean isRunning(Context context) {
+        return !WorkManager.getInstance(context).getWorkInfosByTag(WORKER_TAG).isDone();
     }
 }
