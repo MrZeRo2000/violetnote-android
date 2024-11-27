@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
@@ -67,6 +68,7 @@ import static com.romanpulov.violetnote.view.preference.PreferenceRepository.PRE
 
 
 public class SettingsFragment extends PreferenceFragmentCompat {
+    private final static String TAG = SettingsFragment.class.getSimpleName();
 
     private PreferenceDocumentLoaderProcessor mPreferenceDocumentLoaderProcessor;
     private PreferenceBackupCloudProcessor mPreferenceBackupCloudProcessor;
@@ -88,8 +90,30 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         }
     };
 
-    private final Observer<WorkInfo> mLoaderWorkerObserver = workInfo -> {
+    private final Observer<List<WorkInfo>> mLoaderWorkerObserver = workInfos -> {
+        Log.d(TAG, "WorkerObserver: " + workInfos.size() + " items");
+        Log.d(TAG, "WorkerObserver: " + workInfos);
+        if (workInfos.size() == 1) {
+            WorkInfo workInfo = workInfos.get(0);
 
+            switch (workInfo.getState()) {
+                case RUNNING -> {
+                    String loaderClassName = LoaderWorker.getLoaderClassName(workInfo.getProgress());
+                    PreferenceLoaderProcessor preferenceLoaderProcessor = mPreferenceLoadProcessors.get(loaderClassName);
+                    if (preferenceLoaderProcessor != null) {
+                        preferenceLoaderProcessor.loaderPreExecute();
+                    }
+                }
+                case SUCCEEDED, FAILED -> {
+                    String loaderClassName = LoaderWorker.getLoaderClassName(workInfo.getOutputData());
+                    String errorMessage = LoaderWorker.getErrorMessage(workInfo.getOutputData());
+                    PreferenceLoaderProcessor preferenceLoaderProcessor = mPreferenceLoadProcessors.get(loaderClassName);
+                    if (preferenceLoaderProcessor != null) {
+                        preferenceLoaderProcessor.loaderPostExecute(errorMessage);
+                    }
+                }
+            }
+        }
     };
 
     public SettingsFragment() {
@@ -118,7 +142,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             mlp.rightMargin = insets.right;
             v.setLayoutParams(mlp);
 
-            // Return CONSUMED if you don't want want the window insets to keep passing
+            // Return CONSUMED if you don't want the window insets to keep passing
             // down to descendant views.
             return WindowInsetsCompat.CONSUMED;
         });
@@ -177,6 +201,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         new CheckedUpdateIntervalPreferenceSetup(this).execute();
 
         setupPrefLogging();
+
+        LoaderWorker.getWorkInfosLiveData(requireContext()).observe(this, mLoaderWorkerObserver);
     }
 
     private boolean checkInternetConnection() {
@@ -189,8 +215,9 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     }
 
     private void startDocumentLoad(String className) {
-        mPreferenceDocumentLoaderProcessor.loaderPreExecute();
-        LoaderServiceManager.startLoader(requireContext(), className);
+        //mPreferenceDocumentLoaderProcessor.loaderPreExecute();
+        //LoaderServiceManager.startLoader(requireContext(), className);
+        LoaderWorker.scheduleWorker(requireContext(), className);
     }
 
     void executeLocalDocumentLoad() {

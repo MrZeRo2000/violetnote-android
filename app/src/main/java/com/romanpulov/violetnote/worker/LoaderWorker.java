@@ -3,22 +3,21 @@ package com.romanpulov.violetnote.worker;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
-import androidx.work.Constraints;
-import androidx.work.Data;
-import androidx.work.ExistingWorkPolicy;
-import androidx.work.NetworkType;
-import androidx.work.OneTimeWorkRequest;
-import androidx.work.WorkManager;
-import androidx.work.Worker;
-import androidx.work.WorkerParameters;
+import androidx.lifecycle.LiveData;
+import androidx.work.*;
 
+import com.google.common.util.concurrent.ListenableFuture;
 import com.romanpulov.library.common.loader.core.Loader;
 import com.romanpulov.library.common.loader.core.LoaderFactory;
 import com.romanpulov.library.common.network.NetworkUtils;
 import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.loader.helper.LoaderNotificationHelper;
 import com.romanpulov.violetnote.view.helper.LoggerHelper;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
+
+import static com.romanpulov.violetnote.common.NotificationRepository.NOTIFICATION_ID_LOADER;
 
 public class LoaderWorker extends Worker {
     private final static String TAG = LoaderWorker.class.getSimpleName();
@@ -75,6 +74,12 @@ public class LoaderWorker extends Worker {
                     .build();
             return Result.success(outputResult);
         } else {
+            LoaderNotificationHelper.notify(
+                    getApplicationContext(),
+                    errorMessage,
+                    NOTIFICATION_ID_LOADER,
+                    LoaderNotificationHelper.NOTIFICATION_TYPE_FAILURE);
+
             Data outputResult = new Data.Builder()
                     .putString(WORKER_PARAM_LOADER_NAME, mLoaderClassName)
                     .putString(WORKER_RESULT_ERROR_MESSAGE, errorMessage)
@@ -130,6 +135,23 @@ public class LoaderWorker extends Worker {
     }
 
     public static boolean isRunning(Context context) {
-        return !WorkManager.getInstance(context).getWorkInfosByTag(WORKER_TAG).isDone();
+        ListenableFuture<List<WorkInfo>> workInfos = WorkManager.getInstance(context).getWorkInfosByTag(WORKER_TAG);
+        try {
+            return !workInfos.get().isEmpty() && !workInfos.isDone();
+        } catch (ExecutionException | InterruptedException e) {
+            return false;
+        }
+    }
+
+    public static LiveData<List<WorkInfo>> getWorkInfosLiveData(Context context) {
+        return WorkManager.getInstance(context).getWorkInfosByTagLiveData(WORKER_TAG);
+    }
+
+    public static String getLoaderClassName(Data data) {
+        return data.getString(WORKER_PARAM_LOADER_NAME);
+    }
+
+    public static String getErrorMessage(Data data) {
+        return data.getString(WORKER_RESULT_ERROR_MESSAGE);
     }
 }
