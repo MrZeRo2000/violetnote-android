@@ -137,7 +137,7 @@ public class LoaderWorker extends Worker {
     public static boolean isRunning(Context context) {
         ListenableFuture<List<WorkInfo>> workInfos = WorkManager.getInstance(context).getWorkInfosByTag(WORKER_TAG);
         try {
-            return !workInfos.get().isEmpty() && !workInfos.isDone();
+            return !workInfos.get().isEmpty() && !workInfos.get().get(0).getState().isFinished();
         } catch (ExecutionException | InterruptedException e) {
             return false;
         }

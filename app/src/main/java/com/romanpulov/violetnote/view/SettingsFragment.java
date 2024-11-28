@@ -1,14 +1,8 @@
 package com.romanpulov.violetnote.view;
 
-import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.IBinder;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,7 +16,6 @@ import androidx.lifecycle.Observer;
 import androidx.preference.CheckBoxPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.appcompat.app.AlertDialog;
 import android.view.View;
 
@@ -35,8 +28,6 @@ import com.romanpulov.violetnote.db.DBStorageManager;
 import com.romanpulov.library.common.account.AbstractCloudAccountManager;
 import com.romanpulov.violetnote.loader.document.DocumentPassDataLoader;
 import com.romanpulov.violetnote.loader.local.DocumentUriFileLoader;
-import com.romanpulov.violetnote.service.LoaderService;
-import com.romanpulov.violetnote.service.LoaderServiceManager;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 import com.romanpulov.violetnote.view.helper.DisplayMessageHelper;
 import com.romanpulov.violetnote.view.helper.LoggerHelper;
@@ -77,18 +68,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     private PreferenceRestoreLocalProcessor mPreferenceRestoreLocalProcessor;
 
     private final Map<String, PreferenceLoaderProcessor> mPreferenceLoadProcessors = new HashMap<>();
-
-    private final BroadcastReceiver mLoaderServiceBroadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String loaderClassName = intent.getStringExtra(LoaderService.SERVICE_RESULT_LOADER_NAME);
-            String errorMessage = intent.getStringExtra(LoaderService.SERVICE_RESULT_ERROR_MESSAGE);
-
-            PreferenceLoaderProcessor preferenceLoaderProcessor = mPreferenceLoadProcessors.get(loaderClassName);
-            if (preferenceLoaderProcessor != null)
-                preferenceLoaderProcessor.loaderPostExecute(errorMessage);
-        }
-    };
 
     private final Observer<List<WorkInfo>> mLoaderWorkerObserver = workInfos -> {
         Log.d(TAG, "WorkerObserver: " + workInfos.size() + " items");
@@ -147,13 +126,14 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             return WindowInsetsCompat.CONSUMED;
         });
 
+        Log.d(TAG, "View created");
+        LoaderWorker.getWorkInfosLiveData(requireContext()).observe(this, mLoaderWorkerObserver);
+
         return view;
     }
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        setRetainInstance(true);
-
         addPreferencesFromResource(R.xml.preferences);
 
         List<CloudAccountFacade> cloudAccountFacadeList = CloudAccountFacadeFactory.getCloudAccountFacadeList();
@@ -198,11 +178,12 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 CloudAccountFacadeFactory.fromCloudSourceType(PreferenceRepository.CLOUD_SOURCE_TYPE_GDRIVE)).execute();
 
         new CommonSourceTypePreferenceSetup(this, PREF_KEY_BASIC_NOTE_CLOUD_STORAGE, R.array.pref_cloud_storage_entries, DEFAULT_CLOUD_SOURCE_TYPE).execute();
+        new CommonSourceTypePreferenceSetup(this, PREF_KEY_BASIC_NOTE_CLOUD_STORAGE, R.array.pref_cloud_storage_entries, DEFAULT_CLOUD_SOURCE_TYPE).execute();
         new CheckedUpdateIntervalPreferenceSetup(this).execute();
 
         setupPrefLogging();
 
-        LoaderWorker.getWorkInfosLiveData(requireContext()).observe(this, mLoaderWorkerObserver);
+        Log.d(TAG, "Preferences initialized");
     }
 
     private boolean checkInternetConnection() {
@@ -214,14 +195,12 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         }
     }
 
-    private void startDocumentLoad(String className) {
-        //mPreferenceDocumentLoaderProcessor.loaderPreExecute();
-        //LoaderServiceManager.startLoader(requireContext(), className);
-        LoaderWorker.scheduleWorker(requireContext(), className);
+    private void startDocumentLoad(Context context, String className) {
+        LoaderWorker.scheduleWorker(context, className);
     }
 
-    void executeLocalDocumentLoad() {
-        startDocumentLoad(DocumentUriFileLoader.class.getName());
+    void executeLocalDocumentLoad(Context context) {
+        startDocumentLoad(context, DocumentUriFileLoader.class.getName());
     }
 
     void executeCloudDocumentLoad(int type) {
@@ -231,11 +210,12 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         if (accountManager != null) {
             mPreferenceDocumentLoaderProcessor.loaderPreExecute();
+            final Context context = requireContext().getApplicationContext();
 
             accountManager.setOnAccountSetupListener(new AbstractCloudAccountManager.OnAccountSetupListener() {
                 @Override
                 public void onAccountSetupSuccess() {
-                    startDocumentLoad(cloudAccountFacade.getDocumentLoaderClassName());
+                    startDocumentLoad(context, cloudAccountFacade.getDocumentLoaderClassName());
                 }
 
                 @Override
@@ -258,7 +238,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         if (PreferenceRepository.isCloudSourceType(type)) {
             executeCloudDocumentLoad(type);
         } else if (checkInternetConnection()) {
-            executeLocalDocumentLoad();
+            executeLocalDocumentLoad(requireContext().getApplicationContext());
         }
     }
 
@@ -275,7 +255,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 DisplayMessageHelper.displayErrorMessage(requireActivity(), getText(R.string.error_load_remote_path_empty));
             }
             else {
-                if (LoaderServiceManager.isLoaderServiceRunning(requireContext()) || LoaderWorker.isRunning(requireContext()))
+                if (LoaderWorker.isRunning(requireContext()))
                     DisplayMessageHelper.displayInfoMessage(requireActivity(), getText(R.string.error_load_process_running));
                 else {
                     executeDocumentLoad();
@@ -343,8 +323,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     if (backupResult == null)
                         DisplayMessageHelper.displayErrorMessage(requireActivity(), getString(R.string.error_backup));
                     else {
-                        mPreferenceBackupCloudProcessor.loaderPreExecute();
-                        LoaderServiceManager.startLoader(
+                        LoaderWorker.scheduleWorker(
                                 requireContext(),
                                 cloudAccountFacade.getBackupLoaderClassName());
                     }
@@ -352,7 +331,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
                 @Override
                 public void onAccountSetupFailure(String errorText) {
-                    DisplayMessageHelper.displayErrorMessage(requireActivity(), errorText);
+                    DisplayMessageHelper.displayErrorMessage(SettingsFragment.this.requireActivity(), errorText);
                     mPreferenceBackupCloudProcessor.loaderPostExecute(errorText);
                 }
             });
@@ -377,7 +356,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             if (!checkInternetConnection())
                 return true;
 
-            if (LoaderServiceManager.isLoaderServiceRunning(requireContext()))
+            if (LoaderWorker.isRunning(requireContext()))
                 DisplayMessageHelper.displayErrorMessage(requireActivity(), getText(R.string.error_load_process_running));
             else {
                 executeCloudBackup();
@@ -400,8 +379,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             accountManager.setOnAccountSetupListener(new AbstractCloudAccountManager.OnAccountSetupListener() {
                 @Override
                 public void onAccountSetupSuccess() {
-                    mPreferenceRestoreCloudProcessor.loaderPreExecute();
-                    LoaderServiceManager.startLoader(
+                    LoaderWorker.scheduleWorker(
                             requireContext(),
                             cloudAccountFacade.getRestoreLoaderClassName());
                 }
@@ -433,7 +411,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             if (!checkInternetConnection())
                 return true;
 
-            if (LoaderServiceManager.isLoaderServiceRunning(requireContext()))
+            if (LoaderWorker.isRunning(requireContext()))
                 DisplayMessageHelper.displayErrorMessage(requireActivity(), getText(R.string.error_load_process_running));
             else {
                 final AlertDialog.Builder alert = new AlertDialog.Builder(requireActivity(), R.style.AlertDialogTheme);
@@ -449,8 +427,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     }
 
     void executeLocalBackup() {
-        mPreferenceBackupLocalProcessor.loaderPreExecute();
-        LoaderServiceManager.startLoader(
+        LoaderWorker.scheduleWorker(
                 requireContext(),
                 PreferenceBackupLocalProcessor.getLoaderClass().getName());
     }
@@ -460,7 +437,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         Preference pref = Objects.requireNonNull(findPreference(PreferenceRepository.PREF_KEY_BASIC_NOTE_LOCAL_BACKUP));
         pref.setOnPreferenceClickListener(preference -> {
-            if (LoaderServiceManager.isLoaderServiceRunning(requireContext()))
+            if (LoaderWorker.isRunning(requireContext()))
                 DisplayMessageHelper.displayErrorMessage(requireActivity(), getText(R.string.error_load_process_running));
             else {
                 executeLocalBackup();
@@ -470,8 +447,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     }
 
     public void executeLocalRestore() {
-        mPreferenceRestoreLocalProcessor.loaderPreExecute();
-        LoaderServiceManager.startLoader(
+        LoaderWorker.scheduleWorker(
                 requireContext(),
                 PreferenceRestoreLocalProcessor.getLoaderClass().getName()
         );
@@ -482,7 +458,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         Preference pref = findPreference(PreferenceRepository.PREF_KEY_BASIC_NOTE_LOCAL_RESTORE);
         Objects.requireNonNull(pref).setOnPreferenceClickListener(preference -> {
-            if (LoaderServiceManager.isLoaderServiceRunning(requireContext()))
+            if (LoaderWorker.isRunning(requireContext()))
                 DisplayMessageHelper.displayErrorMessage(requireActivity(), getText(R.string.error_load_process_running));
             else {
 
@@ -507,63 +483,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 return true;
             });
         }
-    }
-
-    private LoaderService mBoundService;
-    private boolean mIsBound;
-
-    private final ServiceConnection mConnection = new ServiceConnection() {
-        public void onServiceConnected(ComponentName className, IBinder service) {
-            // This is called when the connection with the service has been
-            // established, giving us the service object we can use to
-            // interact with the service.  Because we have bound to a explicit
-            // service that we know is running in our own process, we can
-            // cast its IBinder to a concrete class and directly access it.
-            mBoundService = ((LoaderService.LoaderBinder)service).getService();
-
-            PreferenceLoaderProcessor preferenceLoaderProcessor = mPreferenceLoadProcessors.get(mBoundService.getLoaderClassName());
-            if (preferenceLoaderProcessor != null)
-                preferenceLoaderProcessor.loaderPreExecute();
-        }
-
-        public void onServiceDisconnected(ComponentName className) {
-            // This is called when the connection with the service has been
-            // unexpectedly disconnected -- that is, its process crashed.
-            // Because it is running in our same process, we should never
-            // see this happen.
-            mBoundService = null;
-        }
-    };
-
-    void doBindService(Context context) {
-        // Establish a connection with the service.  We use an explicit
-        // class name because we want a specific service implementation that
-        // we know will be running in our own process (and thus won't be
-        // supporting component replacement by other applications).
-        mIsBound = context.bindService(new Intent(context,
-                LoaderService.class), mConnection, 0);
-    }
-
-    void doUnbindService() {
-        if (mIsBound) {
-            // Detach our existing connection.
-            requireActivity().unbindService(mConnection);
-            mIsBound = false;
-        }
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        LocalBroadcastManager.getInstance(context).registerReceiver(mLoaderServiceBroadcastReceiver, new IntentFilter(LoaderService.SERVICE_RESULT_INTENT_NAME));
-        doBindService(context);
-    }
-
-    @Override
-    public void onDetach() {
-        LocalBroadcastManager.getInstance(requireActivity()).unregisterReceiver(mLoaderServiceBroadcastReceiver);
-        doUnbindService();
-        super.onDetach();
     }
 
     @Override

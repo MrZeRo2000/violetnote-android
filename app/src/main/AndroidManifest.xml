@@ -28,11 +28,6 @@
                 android:label="@string/title_activity_pass_data_host"
                 android:parentActivityName=".view.DashboardActivity"
                 android:theme="@style/MainAppNavTheme"/>
-
-        <service
-                android:name=".service.LoaderService"
-                android:exported="false"/>
-
         <activity
                 android:name="com.microsoft.identity.client.BrowserTabActivity"
                 android:exported="true">
