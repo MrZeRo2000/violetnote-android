@@ -10,6 +10,7 @@ import androidx.core.view.MenuHost;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.databinding.FragmentDashboardBinding;
@@ -51,7 +52,11 @@ public class DashboardFragment extends Fragment implements OnBasicGroupInteracti
                     @Override
                     public boolean onMenuItemSelected(@NotNull MenuItem menuItem) {
                         if (menuItem.getItemId() == R.id.action_settings) {
-                            startActivity(new Intent(requireActivity(), SettingsActivity.class));
+                            /*
+                            Navigation.findNavController(DashboardFragment.this.requireView()).navigate(
+                                    DashboardFragmentDirections.actionDashboardToSettings());
+
+                             */
                             return true;
                         } else {
                             return false;

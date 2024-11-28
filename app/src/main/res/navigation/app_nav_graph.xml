@@ -3,12 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/app_nav_graph"
-    app:startDestination="@id/DashboardFragment">
+    app:startDestination="@id/dashboard">
 
     <fragment
-        android:id="@+id/DashboardFragment"
+        android:id="@+id/dashboard"
         android:name="com.romanpulov.violetnote.view.DashboardFragment"
         tools:layout="@layout/fragment_dashboard">
 
+        <action
+                android:id="@+id/action_dashboard_to_settings"
+                app:destination="@id/settings"/>
     </fragment>
+
+    <fragment
+            android:id="@+id/settings"
+            android:name="com.romanpulov.violetnote.view.SettingsFragment"
+            />
 </navigation>
