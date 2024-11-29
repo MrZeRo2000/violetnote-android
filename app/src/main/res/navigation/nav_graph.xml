@@ -13,10 +13,18 @@
 
         <action
             android:id="@+id/action_PassDataCategoryFragment_to_PassDataNoteFragment"
-            app:destination="@id/PassDataNoteFragment" />
+            app:destination="@id/PassDataNoteFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right"/>
         <action
             android:id="@+id/action_PassDataCategoryFragment_to_PassDataSearchResultFragment"
-            app:destination="@id/PassDataSearchResultFragment" />
+            app:destination="@id/PassDataSearchResultFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right"/>
     </fragment>
 
     <fragment
@@ -27,10 +35,18 @@
 
         <action
             android:id="@+id/action_PassDataNoteFragment_to_PassDataSearchResultFragment"
-            app:destination="@id/PassDataSearchResultFragment" />
+            app:destination="@id/PassDataSearchResultFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right"/>
         <action
             android:id="@+id/action_PassDataNoteFragment_to_PassDataNoteDetailsFragment"
-            app:destination="@id/PassDataNoteDetailsFragment" />
+            app:destination="@id/PassDataNoteDetailsFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right"/>
     </fragment>
 
     <fragment
@@ -41,7 +57,11 @@
 
         <action
             android:id="@+id/action_PassDataSearchResultFragment_to_PassDataNoteDetailsFragment"
-            app:destination="@id/PassDataNoteDetailsFragment" />
+            app:destination="@id/PassDataNoteDetailsFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right"/>
     </fragment>
 
     <fragment

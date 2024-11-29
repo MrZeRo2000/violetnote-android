@@ -56,7 +56,7 @@
                 android:name=".view.SettingsActivity"
                 android:label="@string/title_activity_settings"
                 android:parentActivityName=".view.DashboardActivity"
-                android:theme="@style/PreferencesAppTheme"/>
+                android:theme="@style/MainAppTheme"/>
         <activity
                 android:name=".picker.HrPickerActivity"
                 android:label="@string/title_activity_file_chooser"

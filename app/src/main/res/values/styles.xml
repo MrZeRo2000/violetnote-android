@@ -9,6 +9,11 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
 
+        <!-- For preferences mostly -->
+        <item name="android:textColor">@color/brightTextColor</item>
+        <item name="android:textColorSecondary">@color/dimTextColor</item>
+        <item name="android:selectableItemBackground">@drawable/list_selector</item>
+
         <!-- For checkbox -->
         <item name="android:textColorPrimaryDisableOnly">@color/dimTextColor</item>
 
@@ -42,6 +47,8 @@
         <item name="android:windowAnimationStyle">@style/AnimationStyle</item>
         <!-- Hardware Options menu -->
         <item name="actionBarPopupTheme">@style/ActionBarPopupTheme</item>
+        <!-- Preference -->
+        <item name="preferenceTheme">@style/PreferenceTheme</item>
     </style>
 
     <style name="ToolBarTheme" parent="AppTheme">
@@ -187,15 +194,6 @@
         <item name="android:fullDark">@color/windowBackground</item>
         <item name="android:topBright">@color/windowBackground</item>
         <item name="android:topDark">@color/windowBackground</item>
-    </style>
-
-    <!-- Preferences/Theme -->
-    <style name="PreferencesAppTheme" parent="@style/MainAppNavTheme">
-        <item name="preferenceTheme">@style/PreferenceTheme</item>
-
-        <item name="android:textColor">@color/brightTextColor</item>
-        <item name="android:textColorSecondary">@color/dimTextColor</item>
-        <item name="android:selectableItemBackground">@drawable/list_selector</item>
     </style>
 
     <!-- For list in Preferences -->

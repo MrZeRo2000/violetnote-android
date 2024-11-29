@@ -9,8 +9,9 @@ import androidx.annotation.Nullable;
 import androidx.core.view.MenuHost;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.databinding.FragmentDashboardBinding;
@@ -57,12 +58,14 @@ public class DashboardFragment extends Fragment implements OnBasicGroupInteracti
                                     DashboardFragmentDirections.actionDashboardToSettings());
 
                              */
+                            NavHostFragment.findNavController(DashboardFragment.this).navigate(
+                                    DashboardFragmentDirections.actionDashboardToSettings());
                             return true;
                         } else {
                             return false;
                         }
                     }
-                }
+                }, getViewLifecycleOwner(), Lifecycle.State.RESUMED
         );
 
         model = new ViewModelProvider(requireActivity()).get(BasicNoteGroupViewModel.class);
@@ -89,5 +92,4 @@ public class DashboardFragment extends Fragment implements OnBasicGroupInteracti
             startActivity(intent);
         }
     }
-
 }
