@@ -1,11 +1,11 @@
 package com.romanpulov.violetnote.picker;
 
-import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,39 +13,35 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import java.util.List;
-
 import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.databinding.FragmentHrPickerBinding;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link HrPickerFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class HrPickerFragment extends Fragment implements HrPickerScreen.OnHrPickerScreenUpdateListener {
+public class HrPickerFragment extends Fragment {
     private static final String TAG = HrPickerFragment.class.getSimpleName();
 
     public static final String RESULT_KEY = HrPickerFragment.class.getSimpleName() + "_RESULT";
     public static final String RESULT_VALUE_KEY = HrPickerFragment.class.getSimpleName() + "_RESULT_VALUE";
 
-    private TextView mHeaderTextView;
-    private TextView mErrorTextView;
-    private ProgressBar mProgressBar;
-    private RecyclerView mPickerListView;
-    private RecyclerView.Adapter<?> mAdapter;
+    private FragmentHrPickerBinding binding;
 
+    private String mInitialPath;
 
-    private HrPickerScreen mPickerScreen;
-
-    public HrPickerScreen getPickerScreen() {
-        return mPickerScreen;
+    public void setInitialPath(String mInitialPath) {
+        this.mInitialPath = mInitialPath;
     }
 
-    public void setPickerScreen(HrPickerScreen mPickerScreen) {
-        this.mPickerScreen = mPickerScreen;
+    private HrPickerNavigator mHrPickerNavigator;
+
+    public void setHrPickerNavigator(HrPickerNavigator hrPickerNavigator) {
+        this.mHrPickerNavigator = hrPickerNavigator;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -60,10 +56,10 @@ public class HrPickerFragment extends Fragment implements HrPickerScreen.OnHrPic
     }
 
     public class HrPickerAdapter extends RecyclerView.Adapter<HrPickerFragment.ViewHolder> {
-        private final List<HrPickerItem> mItems;
+        private final HrPickerScreen mHrPickerScreen;
 
-        HrPickerAdapter(List<HrPickerItem> items) {
-            mItems = items;
+        HrPickerAdapter(HrPickerScreen hrPickerScreen) {
+            mHrPickerScreen = hrPickerScreen;
         }
 
         @Override
@@ -75,44 +71,44 @@ public class HrPickerFragment extends Fragment implements HrPickerScreen.OnHrPic
 
         @Override
         public void onBindViewHolder(final @NonNull ViewHolder holder, final int position) {
-            switch (mItems.get(position).itemType) {
+            switch (mHrPickerScreen.getItems().get(position).itemType) {
                 case HrPickerItem.ITEM_TYPE_PARENT:
                     holder.mTextView.setText(null);
                     holder.mTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_more_horiz, 0, 0, 0);
                     break;
                 case HrPickerItem.ITEM_TYPE_FOLDER:
-                    holder.mTextView.setText(mItems.get(position).name);
+                    holder.mTextView.setText(mHrPickerScreen.getItems().get(position).name);
                     holder.mTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_folder_closed, 0, 0, 0);
                     break;
                 case HrPickerItem.ITEM_TYPE_FILE:
-                    holder.mTextView.setText(mItems.get(position).name);
+                    holder.mTextView.setText(mHrPickerScreen.getItems().get(position).name);
                     holder.mTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_document, 0, 0, 0);
                     break;
                 default:
-                    holder.mTextView.setText(mItems.get(position).name);
+                    holder.mTextView.setText(mHrPickerScreen.getItems().get(position).name);
                     break;
             }
 
             holder.mView.setOnClickListener(view -> {
-                HrPickerItem selectedItem = mItems.get(holder.getBindingAdapterPosition());
+                HrPickerItem selectedItem = mHrPickerScreen.getItems().get(holder.getBindingAdapterPosition());
 
                 switch (selectedItem.itemType) {
                     case HrPickerItem.ITEM_TYPE_FILE:
                         Bundle result = new Bundle();
-                        result.putString(RESULT_VALUE_KEY, HrPickerScreen.combinePath(mPickerScreen.getCurrentPath(), selectedItem));
+                        result.putString(RESULT_VALUE_KEY, HrPickerScreen.combinePath(mHrPickerScreen.getCurrentPath(), selectedItem));
                         HrPickerFragment.this.getParentFragmentManager().setFragmentResult(RESULT_KEY, result);
                         break;
                     case HrPickerItem.ITEM_TYPE_PARENT:
-                        HrPickerFragment.this.mPickerScreen.navigate(
+                        mHrPickerScreen.navigate(
                                 getContext(),
-                                HrPickerFragment.this.mPickerScreen.getParentPath(),
+                                mHrPickerScreen.getParentPath(),
                                 selectedItem
                                 );
                         break;
                     case HrPickerItem.ITEM_TYPE_FOLDER:
-                        HrPickerFragment.this.mPickerScreen.navigate(
+                        mHrPickerScreen.navigate(
                                 getContext(),
-                                HrPickerFragment.this.mPickerScreen.getCurrentPath(),
+                                mHrPickerScreen.getCurrentPath(),
                                 selectedItem
                         );
                         break;
@@ -122,40 +118,22 @@ public class HrPickerFragment extends Fragment implements HrPickerScreen.OnHrPic
 
         @Override
         public int getItemCount() {
-            return mItems.size();
+            return mHrPickerScreen.getItems().size();
         }
     }
 
-
-    @Override
-    public void onUpdate(HrPickerScreen hrPickerScreen) {
-        Log.d(TAG, "onUpdate, screen info:" + hrPickerScreen);
-
-        mProgressBar.setVisibility(hrPickerScreen.getStatus() ==
-                HrPickerScreen.PICKER_SCREEN_STATUS_LOADING ? View.VISIBLE : View.GONE);
-
-        mErrorTextView.setText(hrPickerScreen.getErrorMessage());
-        mErrorTextView.setVisibility(hrPickerScreen.getStatus() ==
-                HrPickerScreen.PICKER_SCREEN_STATUS_ERROR ? View.VISIBLE : View.GONE);
-
-        mHeaderTextView.setText(hrPickerScreen.getCurrentPath());
-
-        mAdapter.notifyDataSetChanged();
-
-        mPickerListView.setVisibility(hrPickerScreen.getStatus() ==
-                HrPickerScreen.PICKER_SCREEN_STATUS_LOADING ? View.GONE : View.VISIBLE);
-    }
 
     public HrPickerFragment() {
         // Required empty public constructor
     }
 
-    public static HrPickerFragment newInstance(String initialPath) {
+    public static HrPickerFragment newInstance(String initialPath, HrPickerNavigator navigator) {
         HrPickerFragment fragment = new HrPickerFragment();
         Bundle args = new Bundle();
         args.putString("InitialPath", initialPath);
         fragment.setArguments(args);
-        fragment.setPickerScreen(new HrPickerScreen(initialPath));
+        fragment.setInitialPath(initialPath);
+        fragment.setHrPickerNavigator(navigator);
         return fragment;
     }
 
@@ -163,26 +141,49 @@ public class HrPickerFragment extends Fragment implements HrPickerScreen.OnHrPic
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-
-        mAdapter = new HrPickerAdapter(mPickerScreen.getItems());
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v =  inflater.inflate(R.layout.fragment_hr_picker, container, false);
+        binding = FragmentHrPickerBinding.inflate(getLayoutInflater());
+        View v =  binding.getRoot();
 
-        mHeaderTextView = v.findViewById(R.id.picker_header);
-        mProgressBar = v.findViewById(R.id.indeterminateBar);
-        mErrorTextView = v.findViewById(R.id.picker_error_text);
-
-        mPickerListView = v.findViewById(R.id.picker_list);
         if (getActivity() != null) {
-            mPickerListView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            binding.pickerList.setLayoutManager(new LinearLayoutManager(getActivity()));
         }
 
-        mPickerListView.setAdapter(mAdapter);
+        HrPickerViewModel model = new ViewModelProvider(this).get(HrPickerViewModel.class);
+
+        if (model.getNavigator() == null) {
+            model.setNavigator(mHrPickerNavigator);
+        }
+
+        if (!model.getHrPickerScreen().isInitialized()) {
+            model.getHrPickerScreen().setValue(new HrPickerScreen(mInitialPath, mHrPickerNavigator));
+            model.navigate(requireContext(), mInitialPath, null);
+        }
+
+        model.getHrPickerScreen().observe(getViewLifecycleOwner(), hrPickerScreen -> {
+            RecyclerView.Adapter<?> adapter = new HrPickerAdapter(hrPickerScreen);
+            binding.pickerList.setAdapter(adapter);
+
+            Log.d(TAG, "getHrPickerScreen observe:" + hrPickerScreen);
+
+            binding.indeterminateBar.setVisibility(hrPickerScreen.getStatus() ==
+                    HrPickerScreen.PICKER_SCREEN_STATUS_LOADING ? View.VISIBLE : View.GONE);
+
+            binding.pickerErrorText.setText(hrPickerScreen.getErrorMessage());
+            binding.pickerErrorText.setVisibility(hrPickerScreen.getStatus() ==
+                    HrPickerScreen.PICKER_SCREEN_STATUS_ERROR ? View.VISIBLE : View.GONE);
+
+            binding.pickerHeader.setText(hrPickerScreen.getCurrentPath());
+
+            binding.pickerList.setVisibility(hrPickerScreen.getStatus() ==
+                    HrPickerScreen.PICKER_SCREEN_STATUS_LOADING ? View.GONE : View.VISIBLE);
+
+        });
 
         return v;
     }
@@ -190,24 +191,19 @@ public class HrPickerFragment extends Fragment implements HrPickerScreen.OnHrPic
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        mPickerScreen.setPickerScreenUpdateListener(this);
-
-        mErrorTextView.setVisibility(View.GONE);
+/*
+        binding.pickerErrorText.setVisibility(View.GONE);
 
         if ((savedInstanceState == null) && getContext() != null) {
             Log.d(TAG, "The fragment is empty, navigating");
-            mPickerListView.setVisibility(View.GONE);
-            mProgressBar.setVisibility(View.VISIBLE);
+            binding.pickerList.setVisibility(View.GONE);
+            binding.indeterminateBar.setVisibility(View.VISIBLE);
             mPickerScreen.navigate(getContext(), mPickerScreen.getCurrentPath(), null);
         } else {
-            mProgressBar.setVisibility(View.GONE);
+            binding.indeterminateBar.setVisibility(View.GONE);
         }
 
-    }
+ */
 
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
     }
 }

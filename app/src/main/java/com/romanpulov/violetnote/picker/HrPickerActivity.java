@@ -38,10 +38,8 @@ public class HrPickerActivity extends AppCompatActivity {
         if (fragment == null) {
             int sourceType = getIntent().getIntExtra(PICKER_SOURCE_TYPE, 0);
 
-            HrPickerFragment hrPickerFragment = HrPickerFragment.newInstance("/");
-
             HrPickerNavigator hrPickerNavigator = CloudAccountFacadeFactory.fromDocumentSourceType(sourceType).getHrPickerNavigator();
-            hrPickerFragment.getPickerScreen().setNavigator(hrPickerNavigator);
+            HrPickerFragment hrPickerFragment = HrPickerFragment.newInstance("/", hrPickerNavigator);
 
             fm.beginTransaction().add(android.R.id.content, hrPickerFragment).commit();
         }

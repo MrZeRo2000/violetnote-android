@@ -2,6 +2,7 @@ package com.romanpulov.violetnote.picker;
 
 import android.content.Context;
 import android.util.Log;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,14 +60,41 @@ public class HrPickerScreen implements HrPickerNavigationProcessor {
         this.mPickerScreenUpdateListener = mPickerScreenUpdateListener;
     }
 
-    public HrPickerScreen(String mCurrentPath) {
-        this.mCurrentPath = mCurrentPath;
+    public void startNavigation() {
+        mErrorMessage = null;
+        mStatus = HrPickerScreen.PICKER_SCREEN_STATUS_LOADING;
+    }
+
+    public void finishNavigationSuccess(String path, List<HrPickerItem> items) {
+        mStatus = HrPickerScreen.PICKER_SCREEN_STATUS_READY;
+        mErrorMessage = null;
+        mCurrentPath = path;
+        mParentPath = getParentFromPath(mCurrentPath);
+
+        Log.d(TAG, "currentPath=" + mCurrentPath + ", parentPath=" + mParentPath);
+
+        mItems.clear();
+        if (!mParentPath.isEmpty()) {
+            mItems.add(new HrPickerItem(HrPickerItem.ITEM_TYPE_PARENT, null));
+        }
+        mItems.addAll(items);
+        mItems.sort(new HrPickerItemComparator());
+    }
+
+    public void finishNavigationFailure(String errorMessage) {
+        mStatus = HrPickerScreen.PICKER_SCREEN_STATUS_ERROR;
+        mErrorMessage = errorMessage;
+    }
+
+    public HrPickerScreen(String currentPath, HrPickerNavigator navigator) {
+        this.mCurrentPath = currentPath;
+        this.mNavigator = navigator;
     }
 
     public void navigate(Context context, String path, HrPickerItem item) {
         if (mNavigator != null) {
-            mErrorMessage = null;
-            mStatus = HrPickerScreen.PICKER_SCREEN_STATUS_LOADING;
+            startNavigation();
+
             mNavigator.onNavigate(context, combinePath(path, item), this);
 
             if (mPickerScreenUpdateListener != null) {
@@ -124,7 +152,7 @@ public class HrPickerScreen implements HrPickerNavigationProcessor {
     }
 
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return "HrPickerScreen{" +
                 "mStatus=" + mStatus + "(" +
                 (mStatus == 0 ? "Ready" : mStatus == 1 ? "Loading" : mStatus == 2 ? "Error" : "Unknown" )
