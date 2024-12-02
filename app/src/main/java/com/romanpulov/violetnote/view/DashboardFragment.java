@@ -53,11 +53,6 @@ public class DashboardFragment extends Fragment implements OnBasicGroupInteracti
                     @Override
                     public boolean onMenuItemSelected(@NotNull MenuItem menuItem) {
                         if (menuItem.getItemId() == R.id.action_settings) {
-                            /*
-                            Navigation.findNavController(DashboardFragment.this.requireView()).navigate(
-                                    DashboardFragmentDirections.actionDashboardToSettings());
-
-                             */
                             NavHostFragment.findNavController(DashboardFragment.this).navigate(
                                     DashboardFragmentDirections.actionDashboardToSettings());
                             return true;

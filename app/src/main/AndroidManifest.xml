@@ -26,7 +26,7 @@
                 android:name=".view.PassDataHostActivity"
                 android:exported="true"
                 android:label="@string/title_activity_pass_data_host"
-                android:parentActivityName=".view.DashboardActivity"
+                android:parentActivityName=".view.AppHostActivity"
                 android:theme="@style/MainAppNavTheme"/>
         <activity
                 android:name="com.microsoft.identity.client.BrowserTabActivity"
@@ -48,14 +48,9 @@
             </intent-filter>
         </activity>
         <activity
-                android:name=".view.DashboardActivity"
-                android:exported="true"
-                android:theme="@style/MainAppNavTheme">
-        </activity>
-        <activity
                 android:name=".view.SettingsActivity"
                 android:label="@string/title_activity_settings"
-                android:parentActivityName=".view.DashboardActivity"
+                android:parentActivityName=".view.AppHostActivity"
                 android:theme="@style/MainAppTheme"/>
         <activity
                 android:name=".picker.HrPickerActivity"
@@ -75,7 +70,7 @@
         <activity
                 android:name=".view.BasicNoteActivity"
                 android:label="@string/title_activity_basic_note"
-                android:parentActivityName=".view.DashboardActivity"
+                android:parentActivityName=".view.AppHostActivity"
                 android:theme="@style/ToolBarTheme"/>
         <activity
                 android:name=".view.BasicNoteEditActivity"
