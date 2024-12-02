@@ -48,19 +48,14 @@
             </intent-filter>
         </activity>
         <activity
-                android:name=".view.SettingsActivity"
-                android:label="@string/title_activity_settings"
-                android:parentActivityName=".view.AppHostActivity"
-                android:theme="@style/MainAppTheme"/>
-        <activity
                 android:name=".picker.HrPickerActivity"
                 android:label="@string/title_activity_file_chooser"
-                android:parentActivityName=".view.SettingsActivity"
+                android:parentActivityName=".view.AppHostActivity"
                 android:theme="@style/MainAppTheme"/>
         <activity
                 android:name=".view.BasicNoteGroupActivity"
                 android:label="@string/title_activity_basic_note_group"
-                android:parentActivityName=".view.SettingsActivity"
+                android:parentActivityName=".view.AppHostActivity"
                 android:theme="@style/ToolBarTheme"/>
         <activity
                 android:name=".view.BasicNoteGroupEditActivity"

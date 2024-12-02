@@ -1,6 +1,5 @@
 package com.romanpulov.violetnote.loader.helper;
 
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import androidx.core.app.NotificationCompat;
@@ -12,7 +11,7 @@ import android.util.SparseArray;
 import android.util.SparseIntArray;
 
 import com.romanpulov.violetnote.R;
-import com.romanpulov.violetnote.view.SettingsActivity;
+import com.romanpulov.violetnote.view.AppHostActivity;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -77,7 +76,7 @@ public final class LoaderNotificationHelper {
     public static void notify(Context context, String message, int notificationId, int notificationType) {
         setupNotificationChannels(context);
 
-        Intent intent = new Intent(context, SettingsActivity.class);
+        Intent intent = new Intent(context, AppHostActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE);
 
@@ -88,7 +87,6 @@ public final class LoaderNotificationHelper {
                         .setContentText(message)
                         .setSubText(DateFormat.getDateTimeInstance().format(new Date()))
                         .setContentIntent(pendingIntent)
-                        .setPriority(Notification.PRIORITY_DEFAULT)
                         .setAutoCancel(true)
                         ;
 
