@@ -23,7 +23,8 @@
     <fragment
             android:id="@+id/nav_settings"
             android:name="com.romanpulov.violetnote.view.SettingsFragment"
-            android:label="@string/title_activity_settings">
+            android:label="@string/title_activity_settings"
+            tools:layout="@layout/preferences_category">
 
         <action
                 android:id="@+id/action_settings_to_hr_picker"
@@ -45,7 +46,8 @@
     <fragment
             android:id="@+id/nav_hr_picker"
             android:name="com.romanpulov.violetnote.picker.HrPickerFragment"
-            android:label="@string/title_activity_file_chooser">
+            android:label="@string/title_activity_file_chooser"
+            tools:layout="@layout/fragment_hr_picker">
 
         <argument
                 android:name="sourceType"
@@ -60,6 +62,22 @@
     <fragment
             android:id="@+id/nav_basic_note_group"
             android:name="com.romanpulov.violetnote.view.BasicNoteGroupFragment"
-            android:label="@string/title_activity_basic_note_group" />
+            android:label="@string/title_activity_basic_note_group"
+            tools:layout="@layout/fragment_recycler_view_bottom_toolbar">
+
+        <action
+                android:id="@+id/action_basic_note_group_to_basic_note_group_edit"
+                app:destination="@id/nav_basic_note_group_edit"
+                app:enterAnim="@android:anim/slide_in_left"
+                app:exitAnim="@android:anim/slide_out_right"
+                app:popEnterAnim="@android:anim/slide_in_left"
+                app:popExitAnim="@android:anim/slide_out_right"/>
+    </fragment>
+
+    <fragment
+            android:id="@+id/nav_basic_note_group_edit"
+            android:name="com.romanpulov.violetnote.view.BasicNoteGroupEditFragment"
+            android:label="@string/title_activity_basic_note_group_add"
+            tools:layout="@layout/activity_basic_note_group_edit"/>
 
 </navigation>

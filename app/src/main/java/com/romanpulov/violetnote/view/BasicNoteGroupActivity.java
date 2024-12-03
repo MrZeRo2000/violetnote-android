@@ -33,19 +33,6 @@ public class BasicNoteGroupActivity extends ActionBarCompatActivity{
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        if (savedInstanceState == null) {
-            BasicNoteGroupFragment fragment = BasicNoteGroupFragment.newInstance();
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragment_id, fragment)
-                    .commit();
-        }
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_add_action, menu);
         return super.onCreateOptionsMenu(menu);

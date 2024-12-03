@@ -14,6 +14,7 @@ import androidx.appcompat.view.ActionMode;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -40,14 +41,6 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
     private BasicNoteGroupViewModel model;
     private List<BasicNoteGroupA> mBasicNoteGroupList;
     private BasicNoteGroupItemRecyclerViewAdapter mRecyclerViewAdapter;
-
-    public static BasicNoteGroupFragment newInstance() {
-        return new BasicNoteGroupFragment();
-    }
-
-    public BasicNoteGroupFragment() {
-
-    }
 
     private void setupBottomToolbar() {
         mBottomToolbarHelper = BottomToolbarHelper.from(binding.fragmentToolbarBottom, this::processMoveMenuItemClick);
@@ -222,11 +215,12 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
         super.onViewCreated(view, savedInstanceState);
 
         Context context = view.getContext();
-
         mRecyclerView = binding.fragmentList;
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         // add decoration
         mRecyclerView.addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(getActivity(), RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_white_black_gradient));
+
+        mRecyclerView.setAdapter(mRecyclerViewAdapter);
 
         MenuHost menuHost = requireActivity();
         menuHost.addMenuProvider(new MenuProvider() {
@@ -237,11 +231,17 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
 
             @Override
             public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
-                return false;
+                if (menuItem.getItemId() == R.id.action_add) {
+                    NavHostFragment.findNavController(BasicNoteGroupFragment.this).navigate(
+                            BasicNoteGroupFragmentDirections.actionBasicNoteGroupToBasicNoteGroupEdit());
+                    return true;
+                } else {
+                    return false;
+                }
             }
         }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
 
-        model = new ViewModelProvider(requireActivity()).get(BasicNoteGroupViewModel.class);
+        model = new ViewModelProvider(this).get(BasicNoteGroupViewModel.class);
 
         final Observer<List<BasicNoteGroupA>> noteGroupsObserver = newBasicNoteGroups -> {
             if (mBasicNoteGroupList == null) {
@@ -294,5 +294,6 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
             }
         };
         model.getGroups().observe(this, noteGroupsObserver);
+
     }
 }
