@@ -1,9 +1,12 @@
 package com.romanpulov.violetnote.view.preference;
 
-import android.content.Intent;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 import androidx.preference.PreferenceFragmentCompat;
 
-import com.romanpulov.violetnote.view.BasicNoteGroupActivity;
+import com.romanpulov.violetnote.view.SettingsFragmentDirections;
+
+import java.util.Objects;
 
 public class BasicNoteGroupsPreferenceSetup extends PreferenceSetup {
 
@@ -14,7 +17,9 @@ public class BasicNoteGroupsPreferenceSetup extends PreferenceSetup {
     @Override
     public void execute() {
         mPreference.setOnPreferenceClickListener(preference -> {
-            mActivity.startActivity(new Intent(mActivity, BasicNoteGroupActivity.class));
+            //mActivity.startActivity(new Intent(mActivity, BasicNoteGroupActivity.class));
+            NavDirections action = SettingsFragmentDirections.actionSettingsToBasicNoteGroup();
+            Navigation.findNavController(Objects.requireNonNull(mPreferenceFragment.getView())).navigate(action);
             return true;
         });
     }

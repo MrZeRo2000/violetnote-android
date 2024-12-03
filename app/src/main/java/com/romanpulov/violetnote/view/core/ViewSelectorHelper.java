@@ -57,7 +57,7 @@ public class ViewSelectorHelper {
         }
 
         public boolean isSelected() {
-            return mSelectedItems.size() > 0;
+            return !mSelectedItems.isEmpty();
         }
 
         private final ChangeNotificationListener mChangeNotificationListener;
@@ -97,8 +97,9 @@ public class ViewSelectorHelper {
                 mSelectedItems.add(item);
                 selectionChanged();
                 startActionModeForView(v);
-            } else
+            } else {
                 setSelectedView(item);
+            }
         }
 
         public abstract void setSelectedView(T item);
@@ -118,7 +119,7 @@ public class ViewSelectorHelper {
 
         public void saveInstanceState(Bundle outState, Class<T> clazz) {
             Collection<T> selectedItems = getSelectedItems();
-            if (selectedItems.size() > 0) {
+            if (!selectedItems.isEmpty()) {
                 @SuppressWarnings("unchecked")
                 T[] selectedItemsArray = selectedItems.toArray((T[]) Array.newInstance(clazz, 0));
 

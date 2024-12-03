@@ -32,6 +32,14 @@
                 app:exitAnim="@android:anim/slide_out_right"
                 app:popEnterAnim="@android:anim/slide_in_left"
                 app:popExitAnim="@android:anim/slide_out_right"/>
+
+        <action
+                android:id="@+id/action_settings_to_basic_note_group"
+                app:destination="@id/nav_basic_note_group"
+                app:enterAnim="@android:anim/slide_in_left"
+                app:exitAnim="@android:anim/slide_out_right"
+                app:popEnterAnim="@android:anim/slide_in_left"
+                app:popExitAnim="@android:anim/slide_out_right"/>
     </fragment>
 
     <fragment
@@ -48,5 +56,10 @@
                 app:argType="string"
                 android:defaultValue="/" />
     </fragment>
+
+    <fragment
+            android:id="@+id/nav_basic_note_group"
+            android:name="com.romanpulov.violetnote.view.BasicNoteGroupFragment"
+            android:label="@string/title_activity_basic_note_group" />
 
 </navigation>
