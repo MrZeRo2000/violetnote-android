@@ -19,8 +19,8 @@ public abstract class PreferenceSetup {
     public PreferenceSetup(PreferenceFragmentCompat preferenceFragment, String preferenceKey) {
         mPreferenceFragment = preferenceFragment;
         mPreference = preferenceFragment.findPreference(preferenceKey);
-        mActivity = preferenceFragment.getActivity();
-        mContext = mPreference.getContext().getApplicationContext();
+        mActivity = preferenceFragment.requireActivity();
+        mContext = preferenceFragment.requireContext().getApplicationContext();
     }
 
     public abstract void execute();

@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,14 +17,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.cloud.CloudAccountFacadeFactory;
 import com.romanpulov.violetnote.databinding.FragmentHrPickerBinding;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link HrPickerFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class HrPickerFragment extends Fragment {
     private static final String TAG = HrPickerFragment.class.getSimpleName();
 
@@ -32,18 +29,6 @@ public class HrPickerFragment extends Fragment {
 
     private FragmentHrPickerBinding binding;
     private HrPickerViewModel model;
-
-    private String mInitialPath;
-
-    public void setInitialPath(String mInitialPath) {
-        this.mInitialPath = mInitialPath;
-    }
-
-    private HrPickerNavigator mHrPickerNavigator;
-
-    public void setHrPickerNavigator(HrPickerNavigator hrPickerNavigator) {
-        this.mHrPickerNavigator = hrPickerNavigator;
-    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         final TextView mTextView;
@@ -96,8 +81,12 @@ public class HrPickerFragment extends Fragment {
                 switch (selectedItem.itemType) {
                     case HrPickerItem.ITEM_TYPE_FILE:
                         Bundle result = new Bundle();
-                        result.putString(RESULT_VALUE_KEY, HrPickerScreen.combinePath(mHrPickerScreen.getCurrentPath(), selectedItem));
+                        result.putString(RESULT_VALUE_KEY,
+                                HrPickerScreen.combinePath(mHrPickerScreen.getCurrentPath(), selectedItem));
                         HrPickerFragment.this.getParentFragmentManager().setFragmentResult(RESULT_KEY, result);
+
+                        Navigation.findNavController(HrPickerFragment.this.requireView()).navigateUp();
+
                         break;
                     case HrPickerItem.ITEM_TYPE_PARENT:
                         HrPickerFragment.this.model.navigate(
@@ -128,22 +117,6 @@ public class HrPickerFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static HrPickerFragment newInstance(String initialPath, HrPickerNavigator navigator) {
-        HrPickerFragment fragment = new HrPickerFragment();
-        Bundle args = new Bundle();
-        args.putString("InitialPath", initialPath);
-        fragment.setArguments(args);
-        fragment.setInitialPath(initialPath);
-        fragment.setHrPickerNavigator(navigator);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setRetainInstance(true);
-    }
-
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -156,15 +129,6 @@ public class HrPickerFragment extends Fragment {
         }
 
         model = new ViewModelProvider(this).get(HrPickerViewModel.class);
-
-        if (model.getNavigator() == null) {
-            model.setNavigator(mHrPickerNavigator);
-        }
-
-        if (!model.getHrPickerScreen().isInitialized()) {
-            model.getHrPickerScreen().setValue(new HrPickerScreen(mInitialPath, mHrPickerNavigator));
-            model.navigate(requireContext(), mInitialPath, null);
-        }
 
         model.getHrPickerScreen().observe(getViewLifecycleOwner(), hrPickerScreen -> {
             RecyclerView.Adapter<?> adapter = new HrPickerAdapter(hrPickerScreen);
@@ -192,19 +156,18 @@ public class HrPickerFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-/*
-        binding.pickerErrorText.setVisibility(View.GONE);
 
-        if ((savedInstanceState == null) && getContext() != null) {
-            Log.d(TAG, "The fragment is empty, navigating");
-            binding.pickerList.setVisibility(View.GONE);
-            binding.indeterminateBar.setVisibility(View.VISIBLE);
-            mPickerScreen.navigate(getContext(), mPickerScreen.getCurrentPath(), null);
-        } else {
-            binding.indeterminateBar.setVisibility(View.GONE);
+        int sourceType = HrPickerFragmentArgs.fromBundle(getArguments()).getSourceType();
+        HrPickerNavigator navigator = CloudAccountFacadeFactory
+                .fromDocumentSourceType(sourceType)
+                .getHrPickerNavigator();
+        model.setNavigator(navigator);
+
+        String initialPath = HrPickerFragmentArgs.fromBundle(getArguments()).getInitialPath();
+
+        if (!model.getHrPickerScreen().isInitialized()) {
+            model.getHrPickerScreen().setValue(new HrPickerScreen(initialPath));
+            model.navigate(requireContext(), initialPath, null);
         }
-
- */
-
     }
 }

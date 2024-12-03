@@ -2,10 +2,12 @@ package com.romanpulov.violetnote.view.preference;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.navigation.Navigation;
 import androidx.preference.PreferenceFragmentCompat;
 
 import com.romanpulov.library.common.network.NetworkUtils;
@@ -13,8 +15,11 @@ import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.cloud.CloudAccountFacade;
 import com.romanpulov.violetnote.cloud.CloudAccountFacadeFactory;
 import com.romanpulov.library.common.account.AbstractCloudAccountManager;
-import com.romanpulov.violetnote.picker.HrPickerActivity;
+import com.romanpulov.violetnote.picker.HrPickerFragment;
+import com.romanpulov.violetnote.view.SettingsFragmentDirections;
 import com.romanpulov.violetnote.view.helper.DisplayMessageHelper;
+
+import java.util.Objects;
 
 import static com.romanpulov.violetnote.view.preference.PreferenceRepository.DEFAULT_SOURCE_TYPE;
 import static com.romanpulov.violetnote.view.preference.PreferenceRepository.PREF_KEY_SOURCE_PATH;
@@ -27,20 +32,9 @@ import static com.romanpulov.violetnote.view.preference.PreferenceRepository.PRE
 public class SourcePathPreferenceSetup extends PreferenceSetup {
 
     private final ActivityResultLauncher<Intent> mOpenDocumentResult;
-    private final ActivityResultLauncher<Intent> mPickerResult;
 
     public SourcePathPreferenceSetup (PreferenceFragmentCompat preferenceFragment) {
         super(preferenceFragment, PREF_KEY_SOURCE_PATH);
-
-        mPickerResult = mPreferenceFragment.registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                result -> {
-                    if ((result.getResultCode() == Activity.RESULT_OK) && (result.getData() != null)) {
-                        String pickerResult = result.getData().getStringExtra(HrPickerActivity.PICKER_RESULT);
-                        PreferenceRepository.setSourcePathPreferenceValue(mPreferenceFragment, pickerResult);
-                    }
-                }
-        );
 
         mOpenDocumentResult = mPreferenceFragment.registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -54,15 +48,22 @@ public class SourcePathPreferenceSetup extends PreferenceSetup {
                 }
         );
 
+        preferenceFragment.getParentFragmentManager().setFragmentResultListener(
+                HrPickerFragment.RESULT_KEY, preferenceFragment, (requestKey, bundle) -> {
+            String result = bundle.getString(HrPickerFragment.RESULT_VALUE_KEY);
+            PreferenceRepository.setSourcePathPreferenceValue(mPreferenceFragment, result);
+        });
     }
 
     @Override
     public void execute() {
-        final String sourcePath = mPreference.getPreferenceManager().getSharedPreferences().getString(mPreference.getKey(), null);
+        final SharedPreferences sharedPreferences = Objects.requireNonNull(
+                mPreference.getPreferenceManager().getSharedPreferences());
+        final String sourcePath = sharedPreferences.getString(mPreference.getKey(), null);
         mPreference.setSummary(sourcePath);
 
         mPreference.setOnPreferenceClickListener(preference -> {
-            final int sourceType = preference.getPreferenceManager().getSharedPreferences().getInt(PREF_KEY_SOURCE_TYPE, DEFAULT_SOURCE_TYPE);
+            final int sourceType = sharedPreferences.getInt(PREF_KEY_SOURCE_TYPE, DEFAULT_SOURCE_TYPE);
 
             if (PreferenceRepository.isCloudSourceType(sourceType)) {
                 if (!NetworkUtils.isNetworkAvailable(mContext))
@@ -74,16 +75,9 @@ public class SourcePathPreferenceSetup extends PreferenceSetup {
                         accountManager.setOnAccountSetupListener(new AbstractCloudAccountManager.OnAccountSetupListener() {
                             @Override
                             public void onAccountSetupSuccess() {
-                                Intent intent = new Intent(mActivity, HrPickerActivity.class);
-                                intent.putExtra(
-                                        HrPickerActivity.PICKER_INITIAL_PATH,
-                                        mPreferenceFragment.getPreferenceManager().getSharedPreferences().getString(PREF_KEY_SOURCE_PATH, "/")
-                                );
-                                intent.putExtra(
-                                        HrPickerActivity.PICKER_SOURCE_TYPE,
-                                        sourceType
-                                );
-                                mPickerResult.launch(intent);
+                                SettingsFragmentDirections.ActionSettingsToHrPicker action = SettingsFragmentDirections.actionSettingsToHrPicker();
+                                action.setSourceType(sourceType);
+                                Navigation.findNavController(Objects.requireNonNull(mPreferenceFragment.getView())).navigate(action);
                             }
 
                             @Override

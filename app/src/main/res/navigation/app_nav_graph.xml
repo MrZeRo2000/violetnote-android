@@ -23,5 +23,30 @@
     <fragment
             android:id="@+id/nav_settings"
             android:name="com.romanpulov.violetnote.view.SettingsFragment"
-            android:label="@string/title_activity_settings" />
+            android:label="@string/title_activity_settings">
+
+        <action
+                android:id="@+id/action_settings_to_hr_picker"
+                app:destination="@id/nav_hr_picker"
+                app:enterAnim="@android:anim/slide_in_left"
+                app:exitAnim="@android:anim/slide_out_right"
+                app:popEnterAnim="@android:anim/slide_in_left"
+                app:popExitAnim="@android:anim/slide_out_right"/>
+    </fragment>
+
+    <fragment
+            android:id="@+id/nav_hr_picker"
+            android:name="com.romanpulov.violetnote.picker.HrPickerFragment"
+            android:label="@string/title_activity_file_chooser">
+
+        <argument
+                android:name="sourceType"
+                app:argType="integer"
+                android:defaultValue="0" />
+        <argument
+                android:name="initialPath"
+                app:argType="string"
+                android:defaultValue="/" />
+    </fragment>
+
 </navigation>
