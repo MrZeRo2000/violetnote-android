@@ -31,6 +31,7 @@ public class HrPickerFragment extends Fragment {
     public static final String RESULT_VALUE_KEY = HrPickerFragment.class.getSimpleName() + "_RESULT_VALUE";
 
     private FragmentHrPickerBinding binding;
+    private HrPickerViewModel model;
 
     private String mInitialPath;
 
@@ -99,14 +100,14 @@ public class HrPickerFragment extends Fragment {
                         HrPickerFragment.this.getParentFragmentManager().setFragmentResult(RESULT_KEY, result);
                         break;
                     case HrPickerItem.ITEM_TYPE_PARENT:
-                        mHrPickerScreen.navigate(
+                        HrPickerFragment.this.model.navigate(
                                 getContext(),
                                 mHrPickerScreen.getParentPath(),
                                 selectedItem
                                 );
                         break;
                     case HrPickerItem.ITEM_TYPE_FOLDER:
-                        mHrPickerScreen.navigate(
+                        HrPickerFragment.this.model.navigate(
                                 getContext(),
                                 mHrPickerScreen.getCurrentPath(),
                                 selectedItem
@@ -154,7 +155,7 @@ public class HrPickerFragment extends Fragment {
             binding.pickerList.setLayoutManager(new LinearLayoutManager(getActivity()));
         }
 
-        HrPickerViewModel model = new ViewModelProvider(this).get(HrPickerViewModel.class);
+        model = new ViewModelProvider(this).get(HrPickerViewModel.class);
 
         if (model.getNavigator() == null) {
             model.setNavigator(mHrPickerNavigator);

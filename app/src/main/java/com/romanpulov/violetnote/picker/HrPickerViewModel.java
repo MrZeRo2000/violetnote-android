@@ -48,7 +48,8 @@ public class HrPickerViewModel extends ViewModel {
         HrPickerScreen currentScreen = hrPickerScreen.getValue();
         if (currentScreen != null) {
             currentScreen.startNavigation();
-            this.mNavigator.onNavigate(context, path, navigationProcessor);
+            getHrPickerScreen().postValue(currentScreen);
+            this.mNavigator.onNavigate(context, HrPickerScreen.combinePath(path, item), navigationProcessor);
         }
     }
 }
