@@ -115,12 +115,20 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
         dialog.show(getParentFragmentManager(), AlertOkCancelSupportDialogFragment.TAG);
     }
 
-    private void performEditAction(@NonNull final List<BasicNoteGroupA> items) {
+    private void performEditAction(@NonNull ActionMode mode, @NonNull final List<BasicNoteGroupA> items) {
         if (items.size() == 1) {
+            mode.finish();
             BasicNoteGroupA item = items.get(0);
+            /*
             Intent intent = new Intent(getContext(), BasicNoteGroupEditActivity.class);
             intent.putExtra(BasicNoteGroupA.BASIC_NOTE_GROUP_DATA, item);
             startActivityForResult(intent, ACTIVITY_REQUEST_EDIT);
+
+             */
+            BasicNoteGroupFragmentDirections.ActionBasicNoteGroupToBasicNoteGroupEdit action =
+                    BasicNoteGroupFragmentDirections.actionBasicNoteGroupToBasicNoteGroupEdit();
+            action.setEditItem(item);
+            NavHostFragment.findNavController(BasicNoteGroupFragment.this).navigate(action);
         }
     }
 
@@ -154,7 +162,7 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
                 if (itemId == R.id.delete) {
                     performDeleteAction(mode, selectedNoteItems);
                 } else if (itemId == R.id.edit) {
-                    performEditAction(selectedNoteItems);
+                    performEditAction(mode, selectedNoteItems);
                 }
             }
             return false;

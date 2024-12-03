@@ -78,6 +78,13 @@
             android:id="@+id/nav_basic_note_group_edit"
             android:name="com.romanpulov.violetnote.view.BasicNoteGroupEditFragment"
             android:label="@string/title_activity_basic_note_group_add"
-            tools:layout="@layout/activity_basic_note_group_edit"/>
+            tools:layout="@layout/activity_basic_note_group_edit">
+
+        <argument
+                android:name="editItem"
+                app:argType="com.romanpulov.violetnote.model.BasicNoteGroupA"
+                app:nullable="true"
+                android:defaultValue="@null" />
+    </fragment>
 
 </navigation>
