@@ -63,3 +63,6 @@
 
 # loader classes created by reflection
 -keepclassmembers class com.romanpulov.violetnote.loader.** { *; }
+
+# model classes after implementing cloneInstance
+-keep class com.romanpulov.violetnote.model.** { *; }
