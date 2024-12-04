@@ -1,8 +1,6 @@
 package com.romanpulov.violetnote.view;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.*;
 import androidx.annotation.NonNull;
@@ -34,8 +32,6 @@ import com.romanpulov.violetnote.view.helper.DisplayTitleBuilder;
 import java.util.List;
 
 public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
-    public static final int ACTIVITY_REQUEST_INSERT = 0;
-    public static final int ACTIVITY_REQUEST_EDIT = 1;
 
     FragmentRecyclerViewBottomToolbarBinding binding;
     private BasicNoteGroupViewModel model;
@@ -90,10 +86,6 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
         return false;
     }
 
-    public void performAddAction(@NonNull final BasicNoteGroupA item) {
-        model.add(item, new BasicUIAddAction<>(mRecyclerView));
-    }
-
     private void performDeleteAction(@NonNull final ActionMode mode, @NonNull final List<BasicNoteGroupA> items) {
         // initial check
         if (items.size() != 1) {
@@ -119,29 +111,10 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
         if (items.size() == 1) {
             mode.finish();
             BasicNoteGroupA item = items.get(0);
-            /*
-            Intent intent = new Intent(getContext(), BasicNoteGroupEditActivity.class);
-            intent.putExtra(BasicNoteGroupA.BASIC_NOTE_GROUP_DATA, item);
-            startActivityForResult(intent, ACTIVITY_REQUEST_EDIT);
-
-             */
             BasicNoteGroupFragmentDirections.ActionBasicNoteGroupToBasicNoteGroupEdit action =
                     BasicNoteGroupFragmentDirections.actionBasicNoteGroupToBasicNoteGroupEdit();
             action.setEditItem(item);
             NavHostFragment.findNavController(BasicNoteGroupFragment.this).navigate(action);
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        final BasicNoteGroupA noteGroup;
-        if ((requestCode == BasicNoteGroupFragment.ACTIVITY_REQUEST_EDIT)
-                && (resultCode == Activity.RESULT_OK)
-                && (data != null)
-                && ((noteGroup = data.getParcelableExtra(BasicNoteGroupA.BASIC_NOTE_GROUP_DATA)) != null)) {
-            model.edit(noteGroup, new BasicUICallbackAction<>(() -> updateTitle(mRecyclerViewSelector.getActionMode())));
         }
     }
 
@@ -186,7 +159,6 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
 
         @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            //menu.getItem(R.menu.)
             MenuItem menuItem = menu.findItem(R.id.edit);
             if (menuItem != null)
                 menuItem.setVisible(mRecyclerViewSelector.isSelectedSingle());
@@ -208,11 +180,14 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
         }
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        //return inflater.inflate(R.layout.view_recycler_view_list, container, false);
         binding = FragmentRecyclerViewBottomToolbarBinding.inflate(getLayoutInflater());
         setupBottomToolbar();
         return binding.getRoot();
@@ -226,7 +201,10 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
         mRecyclerView = binding.fragmentList;
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         // add decoration
-        mRecyclerView.addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(getActivity(), RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_white_black_gradient));
+        mRecyclerView.addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(
+                getActivity(),
+                RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST,
+                R.drawable.divider_white_black_gradient));
 
         mRecyclerView.setAdapter(mRecyclerViewAdapter);
 
@@ -303,5 +281,17 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
         };
         model.getGroups().observe(this, noteGroupsObserver);
 
+        getParentFragmentManager().setFragmentResultListener(
+                BasicNoteGroupEditFragment.RESULT_KEY, this, (requestKey, bundle) -> {
+                    BasicNoteGroupA item = bundle.getParcelable(BasicNoteGroupEditFragment.RESULT_VALUE_KEY);
+                    if (item != null) {
+                        if (item.getId() == 0) {
+                            model.add(item, new BasicUIAddAction<>(mRecyclerView));
+                        } else {
+                            model.edit(item, new BasicUICallbackAction<>(
+                                    () -> updateTitle(mRecyclerViewSelector.getActionMode())));
+                        }
+                    }
+                });
     }
 }

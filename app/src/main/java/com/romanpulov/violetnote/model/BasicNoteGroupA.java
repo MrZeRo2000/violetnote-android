@@ -132,7 +132,7 @@ public class BasicNoteGroupA extends BasicCommonNoteA implements Parcelable {
         dest.writeParcelable(mBasicNoteGroupDisplayOptions, 0);
     }
 
-    public static final Parcelable.Creator<BasicNoteGroupA> CREATOR = new Parcelable.Creator<BasicNoteGroupA>() {
+    public static final Parcelable.Creator<BasicNoteGroupA> CREATOR = new Parcelable.Creator<>() {
         @Override
         public BasicNoteGroupA createFromParcel(Parcel source) {
             return new BasicNoteGroupA(source);
@@ -143,6 +143,19 @@ public class BasicNoteGroupA extends BasicCommonNoteA implements Parcelable {
             return new BasicNoteGroupA[size];
         }
     };
+
+    @NonNull
+    public BasicNoteGroupA cloneInstance() {
+        Parcel parcel = Parcel.obtain();
+        try {
+            parcel.writeValue(this);
+            parcel.setDataPosition(0);
+
+            return (BasicNoteGroupA)parcel.readValue(BasicNoteGroupA.class.getClassLoader());
+        } finally {
+            parcel.recycle();
+        }
+    }
 
     @Override
     public boolean equals(Object o) {
