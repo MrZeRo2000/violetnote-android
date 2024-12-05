@@ -1,39 +1,28 @@
 package com.romanpulov.violetnote.model;
 
 import android.app.Application;
-import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 import com.romanpulov.violetnote.VioletNoteApplication;
-import com.romanpulov.violetnote.db.dao.BasicCommonNoteDAO;
 import com.romanpulov.violetnote.db.dao.BasicNoteDAO;
 import com.romanpulov.violetnote.db.dao.BasicNoteGroupDAO;
 import com.romanpulov.violetnote.loader.document.DocumentPassDataLoader;
-import com.romanpulov.violetnote.view.action.UIAction;
+import com.romanpulov.violetnote.view.core.BasicCommonNoteViewModel;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class BasicNoteGroupViewModel extends AndroidViewModel {
+public class BasicNoteGroupViewModel extends BasicCommonNoteViewModel<BasicNoteGroupA> {
     public static final String NOTE_GROUP_CHANGE_KEY = BasicNoteGroupViewModel.class.getSimpleName() + " change";
 
-    private BasicCommonNoteDAO mBasicCommonNoteDAO;
     private BasicNoteGroupDAO mBasicNoteGroupDAO;
     private BasicNoteDAO mBasicNoteDAO;
 
-    private UIAction<List<? extends BasicCommonNoteA>> mAction;
     private MutableLiveData<List<BasicNoteGroupA>> mAllWithTotals;
 
     private MutableLiveData<List<BasicNoteGroupA>> mGroups;
     private MutableLiveData<List<BasicNoteGroupA>> mCurrentGroups;
 
-    private BasicCommonNoteDAO getBasicCommonNoteDAO() {
-        if (mBasicCommonNoteDAO == null) {
-            mBasicCommonNoteDAO = new BasicCommonNoteDAO(getApplication());
-        }
-        return mBasicCommonNoteDAO;
-    }
-
-    private BasicNoteGroupDAO getBasicNoteGroupDAO() {
+    protected BasicNoteGroupDAO getDAO() {
         if (mBasicNoteGroupDAO == null) {
             mBasicNoteGroupDAO = new BasicNoteGroupDAO(getApplication());
         }
@@ -51,16 +40,10 @@ public class BasicNoteGroupViewModel extends AndroidViewModel {
         super(application);
     }
 
-    public UIAction<List<? extends BasicCommonNoteA>> getAction() {
-        return mAction;
-    }
-
-    public void setAction(UIAction<List<? extends BasicCommonNoteA>> mAction) {
-        this.mAction = mAction;
-    }
-
-    public void resetAction() {
-        mAction = null;
+    @Override
+    protected void onDataChangeActionCompleted() {
+        loadGroups();
+        setNoteGroupsChanged();
     }
 
     public MutableLiveData<List<BasicNoteGroupA>> getAllWithTotals() {
@@ -90,7 +73,7 @@ public class BasicNoteGroupViewModel extends AndroidViewModel {
 
     public void loadAllWithTotals() {
         if (mAllWithTotals != null) {
-            mAllWithTotals.setValue(getBasicNoteGroupDAO().getAllWithTotals(
+            mAllWithTotals.setValue(getDAO().getAllWithTotals(
                     DocumentPassDataLoader.getDocumentFile(getApplication()) == null)
             );
         }
@@ -98,7 +81,7 @@ public class BasicNoteGroupViewModel extends AndroidViewModel {
 
     private void loadGroups() {
         if (mGroups != null) {
-            mGroups.setValue(getBasicNoteGroupDAO().getByGroupType(BasicNoteGroupA.BASIC_NOTE_GROUP_TYPE));
+            mGroups.setValue(getDAO().getByGroupType(BasicNoteGroupA.BASIC_NOTE_GROUP_TYPE));
         }
     }
 
@@ -108,7 +91,6 @@ public class BasicNoteGroupViewModel extends AndroidViewModel {
                     BasicNoteGroupViewModel.NOTE_GROUP_CHANGE_KEY,
                     BasicNoteGroupViewModel.NOTE_GROUP_CHANGE_KEY);
         }
-
     }
 
     private void setNoteGroupsChanged() {
@@ -125,106 +107,6 @@ public class BasicNoteGroupViewModel extends AndroidViewModel {
     public void resetNoteGroupsChanged() {
         if (getApplication() instanceof VioletNoteApplication) {
             ((VioletNoteApplication)getApplication()).getSharedData().remove(BasicNoteGroupViewModel.NOTE_GROUP_CHANGE_KEY);
-        }
-    }
-
-    public void add(BasicNoteGroupA item, UIAction<List<? extends BasicCommonNoteA>> action) {
-        if (getBasicNoteGroupDAO().insert(item) != -1) {
-            setAction(action);
-            loadGroups();
-            setNoteGroupsChanged();
-        }
-    }
-
-    public void delete(BasicNoteGroupA item, UIAction<List<? extends BasicCommonNoteA>> action) {
-        if (getBasicNoteGroupDAO().delete(item) != 0) {
-            setAction(action);
-            loadGroups();
-            setNoteGroupsChanged();
-        }
-    }
-
-    public void edit(BasicNoteGroupA item, UIAction<List<? extends BasicCommonNoteA>> action) {
-        if (getBasicNoteGroupDAO().update(item) != -1) {
-            setAction(action);
-            loadGroups();
-            setNoteGroupsChanged();
-        }
-    }
-
-    public void moveUp(List<? extends BasicCommonNoteA> items, UIAction<List<? extends BasicCommonNoteA>> action) {
-        BasicOrderedEntityNoteA.sortAsc(items);
-        boolean result = false;
-
-        for (BasicCommonNoteA item : items) {
-            if (getBasicCommonNoteDAO().moveUp(item)) {
-                result = true;
-            } else {
-                break;
-            }
-        }
-
-        if (result) {
-            setAction(action);
-            loadGroups();
-            setNoteGroupsChanged();
-        }
-    }
-
-    public void moveTop(List<? extends BasicCommonNoteA> items, UIAction<List<? extends BasicCommonNoteA>> action) {
-        BasicOrderedEntityNoteA.sortDesc(items);
-        boolean result = false;
-
-        for (BasicCommonNoteA item : items) {
-            if (getBasicCommonNoteDAO().moveTop(item)) {
-                result = true;
-            } else {
-                break;
-            }
-        }
-
-        if (result) {
-            setAction(action);
-            loadGroups();
-            setNoteGroupsChanged();
-        }
-    }
-
-    public void moveDown(List<? extends BasicCommonNoteA> items, UIAction<List<? extends BasicCommonNoteA>> action) {
-        BasicOrderedEntityNoteA.sortDesc(items);
-        boolean result = false;
-
-        for (BasicCommonNoteA item : items) {
-            if (getBasicCommonNoteDAO().moveDown(item)) {
-                result = true;
-            } else {
-                break;
-            }
-        }
-
-        if (result) {
-            setAction(action);
-            loadGroups();
-            setNoteGroupsChanged();
-        }
-    }
-
-    public void moveBottom(List<? extends BasicCommonNoteA> items, UIAction<List<? extends BasicCommonNoteA>> action) {
-        BasicOrderedEntityNoteA.sortAsc(items);
-        boolean result = false;
-
-        for (BasicCommonNoteA item : items) {
-            if (getBasicCommonNoteDAO().moveBottom(item)) {
-                result = true;
-            } else {
-                break;
-            }
-        }
-
-        if (result) {
-            setAction(action);
-            loadGroups();
-            setNoteGroupsChanged();
         }
     }
 
