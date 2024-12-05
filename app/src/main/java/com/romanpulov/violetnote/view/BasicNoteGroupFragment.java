@@ -18,10 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.databinding.FragmentRecyclerViewBottomToolbarBinding;
-import com.romanpulov.violetnote.model.BasicEntityNoteSelectionPosA;
-import com.romanpulov.violetnote.model.BasicNoteGroupA;
-import com.romanpulov.violetnote.model.BasicNoteGroupViewModel;
-import com.romanpulov.violetnote.model.MovementDirection;
+import com.romanpulov.violetnote.model.*;
 import com.romanpulov.violetnote.view.action.*;
 import com.romanpulov.violetnote.view.core.AlertOkCancelSupportDialogFragment;
 import com.romanpulov.violetnote.view.core.BasicCommonNoteFragment;
@@ -275,7 +272,7 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
                 mRecyclerViewAdapter.setBasicNoteGroupList(newBasicNoteGroups);
                 result.dispatchUpdatesTo(mRecyclerViewAdapter);
 
-                UIAction<List<BasicNoteGroupA>> action = model.getAction();
+                UIAction<List<? extends BasicCommonNoteA>> action = model.getAction();
                 if (action != null) {
                     action.execute(newBasicNoteGroups);
                     model.resetAction();

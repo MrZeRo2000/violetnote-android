@@ -20,7 +20,7 @@ public class BasicNoteGroupViewModel extends AndroidViewModel {
     private BasicNoteGroupDAO mBasicNoteGroupDAO;
     private BasicNoteDAO mBasicNoteDAO;
 
-    private UIAction<List<BasicNoteGroupA>> mAction;
+    private UIAction<List<? extends BasicCommonNoteA>> mAction;
     private MutableLiveData<List<BasicNoteGroupA>> mAllWithTotals;
 
     private MutableLiveData<List<BasicNoteGroupA>> mGroups;
@@ -51,11 +51,11 @@ public class BasicNoteGroupViewModel extends AndroidViewModel {
         super(application);
     }
 
-    public UIAction<List<BasicNoteGroupA>> getAction() {
+    public UIAction<List<? extends BasicCommonNoteA>> getAction() {
         return mAction;
     }
 
-    public void setAction(UIAction<List<BasicNoteGroupA>> mAction) {
+    public void setAction(UIAction<List<? extends BasicCommonNoteA>> mAction) {
         this.mAction = mAction;
     }
 
@@ -128,7 +128,7 @@ public class BasicNoteGroupViewModel extends AndroidViewModel {
         }
     }
 
-    public void add(BasicNoteGroupA item, UIAction<List<BasicNoteGroupA>> action) {
+    public void add(BasicNoteGroupA item, UIAction<List<? extends BasicCommonNoteA>> action) {
         if (getBasicNoteGroupDAO().insert(item) != -1) {
             setAction(action);
             loadGroups();
@@ -136,7 +136,7 @@ public class BasicNoteGroupViewModel extends AndroidViewModel {
         }
     }
 
-    public void delete(BasicNoteGroupA item, UIAction<List<BasicNoteGroupA>> action) {
+    public void delete(BasicNoteGroupA item, UIAction<List<? extends BasicCommonNoteA>> action) {
         if (getBasicNoteGroupDAO().delete(item) != 0) {
             setAction(action);
             loadGroups();
@@ -144,7 +144,7 @@ public class BasicNoteGroupViewModel extends AndroidViewModel {
         }
     }
 
-    public void edit(BasicNoteGroupA item, UIAction<List<BasicNoteGroupA>> action) {
+    public void edit(BasicNoteGroupA item, UIAction<List<? extends BasicCommonNoteA>> action) {
         if (getBasicNoteGroupDAO().update(item) != -1) {
             setAction(action);
             loadGroups();
@@ -152,7 +152,7 @@ public class BasicNoteGroupViewModel extends AndroidViewModel {
         }
     }
 
-    public void moveUp(List<? extends BasicCommonNoteA> items, UIAction<List<BasicNoteGroupA>> action) {
+    public void moveUp(List<? extends BasicCommonNoteA> items, UIAction<List<? extends BasicCommonNoteA>> action) {
         BasicOrderedEntityNoteA.sortAsc(items);
         boolean result = false;
 
@@ -171,7 +171,7 @@ public class BasicNoteGroupViewModel extends AndroidViewModel {
         }
     }
 
-    public void moveTop(List<? extends BasicCommonNoteA> items, UIAction<List<BasicNoteGroupA>> action) {
+    public void moveTop(List<? extends BasicCommonNoteA> items, UIAction<List<? extends BasicCommonNoteA>> action) {
         BasicOrderedEntityNoteA.sortDesc(items);
         boolean result = false;
 
@@ -190,7 +190,7 @@ public class BasicNoteGroupViewModel extends AndroidViewModel {
         }
     }
 
-    public void moveDown(List<? extends BasicCommonNoteA> items, UIAction<List<BasicNoteGroupA>> action) {
+    public void moveDown(List<? extends BasicCommonNoteA> items, UIAction<List<? extends BasicCommonNoteA>> action) {
         BasicOrderedEntityNoteA.sortDesc(items);
         boolean result = false;
 
@@ -209,7 +209,7 @@ public class BasicNoteGroupViewModel extends AndroidViewModel {
         }
     }
 
-    public void moveBottom(List<? extends BasicCommonNoteA> items, UIAction<List<BasicNoteGroupA>> action) {
+    public void moveBottom(List<? extends BasicCommonNoteA> items, UIAction<List<? extends BasicCommonNoteA>> action) {
         BasicOrderedEntityNoteA.sortAsc(items);
         boolean result = false;
 
