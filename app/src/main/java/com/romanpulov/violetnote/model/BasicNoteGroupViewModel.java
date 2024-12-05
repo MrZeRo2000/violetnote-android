@@ -22,7 +22,9 @@ public class BasicNoteGroupViewModel extends AndroidViewModel {
 
     private UIAction<List<BasicNoteGroupA>> mAction;
     private MutableLiveData<List<BasicNoteGroupA>> mAllWithTotals;
+
     private MutableLiveData<List<BasicNoteGroupA>> mGroups;
+    private MutableLiveData<List<BasicNoteGroupA>> mCurrentGroups;
 
     private BasicCommonNoteDAO getBasicCommonNoteDAO() {
         if (mBasicCommonNoteDAO == null) {
@@ -77,6 +79,13 @@ public class BasicNoteGroupViewModel extends AndroidViewModel {
         }
 
         return mGroups;
+    }
+
+    public MutableLiveData<List<BasicNoteGroupA>> getCurrentGroups() {
+        if (mCurrentGroups == null) {
+            mCurrentGroups = new MutableLiveData<>();
+        }
+        return mCurrentGroups;
     }
 
     public void loadAllWithTotals() {

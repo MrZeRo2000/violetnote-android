@@ -30,13 +30,17 @@ import com.romanpulov.violetnote.view.helper.BottomToolbarHelper;
 import com.romanpulov.violetnote.view.helper.DisplayTitleBuilder;
 
 import java.util.List;
+import java.util.Objects;
 
 public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
 
     FragmentRecyclerViewBottomToolbarBinding binding;
     private BasicNoteGroupViewModel model;
-    private List<BasicNoteGroupA> mBasicNoteGroupList;
     private BasicNoteGroupItemRecyclerViewAdapter mRecyclerViewAdapter;
+
+    private @NonNull List<BasicNoteGroupA> getBasicNoteGroupList() {
+        return Objects.requireNonNull(model.getCurrentGroups().getValue());
+    }
 
     private void setupBottomToolbar() {
         mBottomToolbarHelper = BottomToolbarHelper.from(binding.fragmentToolbarBottom, this::processMoveMenuItemClick);
@@ -45,7 +49,8 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
     }
 
     protected boolean processMoveMenuItemClick(MenuItem menuItem) {
-        List<BasicNoteGroupA> selectedNoteItems = BasicEntityNoteSelectionPosA.getItemsByPositions(mBasicNoteGroupList, mRecyclerViewSelector.getSelectedItems());
+        List<BasicNoteGroupA> selectedNoteItems = BasicEntityNoteSelectionPosA.getItemsByPositions(
+                getBasicNoteGroupList(), mRecyclerViewSelector.getSelectedItems());
 
         if (!selectedNoteItems.isEmpty()) {
             int itemId = menuItem.getItemId();
@@ -120,14 +125,16 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
 
     private void updateTitle(ActionMode mode) {
         if ((mRecyclerViewSelector != null) && (mRecyclerViewSelector.isSelected())) {
-            mode.setTitle(DisplayTitleBuilder.buildItemsDisplayTitle(getContext(), mBasicNoteGroupList, mRecyclerViewSelector.getSelectedItems()));
+            mode.setTitle(DisplayTitleBuilder.buildItemsDisplayTitle(
+                    getContext(), getBasicNoteGroupList(), mRecyclerViewSelector.getSelectedItems()));
         }
     }
 
     public class ActionBarCallBack implements ActionMode.Callback {
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            List<BasicNoteGroupA> selectedNoteItems = BasicEntityNoteSelectionPosA.getItemsByPositions(mBasicNoteGroupList, mRecyclerViewSelector.getSelectedItems());
+            List<BasicNoteGroupA> selectedNoteItems = BasicEntityNoteSelectionPosA.getItemsByPositions(
+                    getBasicNoteGroupList(), mRecyclerViewSelector.getSelectedItems());
 
             //int selectedItemPos = mRecyclerViewSelector.getSelectedItemPos();
             if (selectedNoteItems.size() == 1) {
@@ -168,7 +175,8 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
             }
 
             if (mBottomToolbarHelper != null) {
-                mBottomToolbarHelper.showLayout(mRecyclerViewSelector.getSelectedItems().size(), mBasicNoteGroupList.size());
+                mBottomToolbarHelper.showLayout(
+                        mRecyclerViewSelector.getSelectedItems().size(), getBasicNoteGroupList().size());
             }
 
             if (mRecyclerViewSelector.isSelectedSingle()) {
@@ -230,10 +238,10 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
         model = new ViewModelProvider(this).get(BasicNoteGroupViewModel.class);
 
         final Observer<List<BasicNoteGroupA>> noteGroupsObserver = newBasicNoteGroups -> {
-            if (mBasicNoteGroupList == null) {
-                mBasicNoteGroupList = newBasicNoteGroups;
+            if (model.getCurrentGroups().getValue() == null) {
+                model.getCurrentGroups().setValue(newBasicNoteGroups);
 
-                mRecyclerViewAdapter = new BasicNoteGroupItemRecyclerViewAdapter(mBasicNoteGroupList, new ActionBarCallBack());
+                mRecyclerViewAdapter = new BasicNoteGroupItemRecyclerViewAdapter(newBasicNoteGroups, new ActionBarCallBack());
                 mRecyclerView.setAdapter(mRecyclerViewAdapter);
                 mRecyclerViewSelector = mRecyclerViewAdapter.getRecyclerViewSelector();
 
@@ -243,7 +251,7 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
                 DiffUtil.DiffResult result = DiffUtil.calculateDiff(new DiffUtil.Callback() {
                     @Override
                     public int getOldListSize() {
-                        return mBasicNoteGroupList.size();
+                        return getBasicNoteGroupList().size();
                     }
 
                     @Override
@@ -253,23 +261,23 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
 
                     @Override
                     public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-                        return mBasicNoteGroupList.get(oldItemPosition).getId() ==
+                        return getBasicNoteGroupList().get(oldItemPosition).getId() ==
                                 newBasicNoteGroups.get(newItemPosition).getId();
                     }
 
                     @Override
                     public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-                        return mBasicNoteGroupList.get(oldItemPosition).equals(
+                        return getBasicNoteGroupList().get(oldItemPosition).equals(
                                 newBasicNoteGroups.get(newItemPosition));
                     }
                 });
-                mBasicNoteGroupList = newBasicNoteGroups;
-                mRecyclerViewAdapter.setBasicNoteGroupList(mBasicNoteGroupList);
+                model.getCurrentGroups().setValue(newBasicNoteGroups);
+                mRecyclerViewAdapter.setBasicNoteGroupList(newBasicNoteGroups);
                 result.dispatchUpdatesTo(mRecyclerViewAdapter);
 
                 UIAction<List<BasicNoteGroupA>> action = model.getAction();
                 if (action != null) {
-                    action.execute(mBasicNoteGroupList);
+                    action.execute(newBasicNoteGroups);
                     model.resetAction();
 
                     DialogFragment dialogFragment = (DialogFragment)getParentFragmentManager().findFragmentByTag(AlertOkCancelSupportDialogFragment.TAG);
