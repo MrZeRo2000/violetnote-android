@@ -22,6 +22,7 @@ public class BasicNoteGroupViewModel extends BasicCommonNoteViewModel<BasicNoteG
     private MutableLiveData<List<BasicNoteGroupA>> mGroups;
     private MutableLiveData<List<BasicNoteGroupA>> mCurrentGroups;
 
+    @Override
     protected BasicNoteGroupDAO getDAO() {
         if (mBasicNoteGroupDAO == null) {
             mBasicNoteGroupDAO = new BasicNoteGroupDAO(getApplication());
