@@ -13,8 +13,8 @@ public class BasicNoteViewModel extends BasicCommonNoteViewModel<BasicNoteA> {
 
     private BasicNoteDAO mBasicNoteDAO;
 
-    private MutableLiveData<BasicNoteGroupA> mBasicNoteGroup = new MutableLiveData<>();
-    private MutableLiveData<List<BasicNoteA>> mBasicNotes = new MutableLiveData<>();
+    private final MutableLiveData<BasicNoteGroupA> mBasicNoteGroup = new MutableLiveData<>();
+    private final MutableLiveData<List<BasicNoteA>> mBasicNotes = new MutableLiveData<>();
 
     public MutableLiveData<BasicNoteGroupA> getBasicNoteGroup() {
         return mBasicNoteGroup;
