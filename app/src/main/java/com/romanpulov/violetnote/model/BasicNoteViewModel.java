@@ -13,14 +13,25 @@ public class BasicNoteViewModel extends BasicCommonNoteViewModel<BasicNoteA> {
 
     private BasicNoteDAO mBasicNoteDAO;
 
-    private final MutableLiveData<BasicNoteGroupA> mBasicNoteGroup = new MutableLiveData<>();
-    private final MutableLiveData<List<BasicNoteA>> mBasicNotes = new MutableLiveData<>();
+    private BasicNoteGroupA mBasicNoteGroup;
+    private MutableLiveData<List<BasicNoteA>> mBasicNotes;
 
-    public MutableLiveData<BasicNoteGroupA> getBasicNoteGroup() {
+    public BasicNoteGroupA getBasicNoteGroup() {
         return mBasicNoteGroup;
     }
 
+    public void setBasicNoteGroup(BasicNoteGroupA mBasicNoteGroup) {
+        if (!this.mBasicNoteGroup.equals(mBasicNoteGroup)) {
+            this.mBasicNoteGroup = mBasicNoteGroup;
+            loadTotals();
+        }
+    }
+
     public MutableLiveData<List<BasicNoteA>> getBasicNotes() {
+        if (mBasicNotes == null) {
+            mBasicNotes = new MutableLiveData<>();
+            loadTotals();
+        }
         return mBasicNotes;
     }
 
@@ -30,7 +41,7 @@ public class BasicNoteViewModel extends BasicCommonNoteViewModel<BasicNoteA> {
 
     @Override
     protected void onDataChangeActionCompleted() {
-
+        loadTotals();
     }
 
     @Override
@@ -42,8 +53,8 @@ public class BasicNoteViewModel extends BasicCommonNoteViewModel<BasicNoteA> {
     }
 
     private void loadTotals() {
-        if (mBasicNoteGroup.getValue() != null) {
-            mBasicNotes.setValue(getDAO().getTotalsByGroup(mBasicNoteGroup.getValue()));
+        if (mBasicNoteGroup != null) {
+            mBasicNotes.setValue(getDAO().getTotalsByGroup(mBasicNoteGroup));
         }
     }
 }
