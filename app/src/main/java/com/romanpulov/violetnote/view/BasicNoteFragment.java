@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.databinding.FragmentBasicNoteListBinding;
 import com.romanpulov.violetnote.db.manager.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicEntityNoteSelectionPosA;
 import com.romanpulov.violetnote.model.BasicNoteA;
@@ -50,6 +51,10 @@ import java.util.List;
  */
 public class BasicNoteFragment extends BasicCommonNoteFragment {
     protected final static int MENU_GROUP_OTHER_ITEMS = Menu.FIRST + 1;
+
+    private FragmentBasicNoteListBinding binding;
+
+    private BasicNoteRecycleViewAdapter mRecyclerViewAdapter;
 
     private InputActionHelper mInputActionHelper;
 
@@ -400,24 +405,35 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_basic_note_list, container, false);
-        mRecyclerView = view.findViewById(R.id.list);
+        binding = FragmentBasicNoteListBinding.inflate(getLayoutInflater());
+        setupBottomToolbarHelper();
+        return binding.getRoot();
+    }
 
-        refreshList(new DBNoteManager(view.getContext()));
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        Context context = view.getContext();
+        mRecyclerView = binding.list;
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+        // add decoration
+        mRecyclerView.addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(
+                getActivity(),
+                RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST,
+                R.drawable.divider_white_black_gradient));
+
+        mRecyclerView.setAdapter(mRecyclerViewAdapter);
+        // refreshList(new DBNoteManager(view.getContext()));
 
         // Set the adapter
-        Context context = view.getContext();
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-        BasicNoteRecycleViewAdapter recyclerViewAdapter = new BasicNoteRecycleViewAdapter(mNoteList, new ActionBarCallBack(), mListener);
-        mRecyclerViewSelector = recyclerViewAdapter.getRecyclerViewSelector();
-        mRecyclerView.setAdapter(recyclerViewAdapter);
+        mRecyclerViewAdapter = new BasicNoteRecycleViewAdapter(mNoteList, new ActionBarCallBack(), mListener);
+        mRecyclerViewSelector = mRecyclerViewAdapter.getRecyclerViewSelector();
 
         //restore selected items
         restoreSelectedItems(savedInstanceState, view);
 
-        // add decoration
-        mRecyclerView.addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(getActivity(), RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_white_black_gradient));
 
         //add action panel
         mInputActionHelper = new InputActionHelper(view.findViewById(R.id.add_panel_include));
@@ -429,7 +445,6 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
             mRecyclerViewSelector.finishActionMode();
         });
 
-        return view;
     }
 
     public void hideAddLayout() {
