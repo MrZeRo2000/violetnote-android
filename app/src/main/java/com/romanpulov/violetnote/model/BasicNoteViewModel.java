@@ -8,6 +8,7 @@ import com.romanpulov.violetnote.view.core.BasicCommonNoteViewModel;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Objects;
 
 public class BasicNoteViewModel extends BasicCommonNoteViewModel<BasicNoteA> {
 
@@ -21,16 +22,16 @@ public class BasicNoteViewModel extends BasicCommonNoteViewModel<BasicNoteA> {
     }
 
     public void setBasicNoteGroup(BasicNoteGroupA mBasicNoteGroup) {
-        if (!this.mBasicNoteGroup.equals(mBasicNoteGroup)) {
+        if (!Objects.equals(this.mBasicNoteGroup, mBasicNoteGroup)) {
             this.mBasicNoteGroup = mBasicNoteGroup;
-            loadTotals();
+            loadNotes();
         }
     }
 
     public MutableLiveData<List<BasicNoteA>> getBasicNotes() {
         if (mBasicNotes == null) {
             mBasicNotes = new MutableLiveData<>();
-            loadTotals();
+            loadNotes();
         }
         return mBasicNotes;
     }
@@ -41,7 +42,7 @@ public class BasicNoteViewModel extends BasicCommonNoteViewModel<BasicNoteA> {
 
     @Override
     protected void onDataChangeActionCompleted() {
-        loadTotals();
+        loadNotes();
     }
 
     @Override
@@ -52,8 +53,8 @@ public class BasicNoteViewModel extends BasicCommonNoteViewModel<BasicNoteA> {
         return mBasicNoteDAO;
     }
 
-    private void loadTotals() {
-        if (mBasicNoteGroup != null) {
+    private void loadNotes() {
+        if (mBasicNotes != null) {
             mBasicNotes.setValue(getDAO().getTotalsByGroup(mBasicNoteGroup));
         }
     }

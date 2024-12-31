@@ -9,6 +9,9 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.view.ActionMode;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,18 +23,12 @@ import android.view.ViewGroup;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.databinding.FragmentBasicNoteListBinding;
 import com.romanpulov.violetnote.db.manager.DBNoteManager;
-import com.romanpulov.violetnote.model.BasicEntityNoteSelectionPosA;
-import com.romanpulov.violetnote.model.BasicNoteA;
-import com.romanpulov.violetnote.model.BasicNoteGroupA;
-import com.romanpulov.violetnote.model.BasicNoteItemA;
-import com.romanpulov.violetnote.model.ParcelableUtils;
+import com.romanpulov.violetnote.model.*;
 import com.romanpulov.violetnote.view.action.BasicActionExecutor;
 import com.romanpulov.violetnote.view.action.BasicNoteMoveToOtherNoteGroupAction;
 import com.romanpulov.violetnote.view.action.BasicNoteRefreshAction;
 import com.romanpulov.violetnote.view.core.TextEditDialogBuilder;
-import com.romanpulov.violetnote.view.helper.BottomToolbarHelper;
-import com.romanpulov.violetnote.view.helper.DisplayMessageHelper;
-import com.romanpulov.violetnote.view.helper.DisplayTitleBuilder;
+import com.romanpulov.violetnote.view.helper.*;
 import com.romanpulov.violetnote.view.action.BasicItemsMoveAction;
 import com.romanpulov.violetnote.view.action.BasicItemsMoveBottomAction;
 import com.romanpulov.violetnote.view.action.BasicItemsMoveDownAction;
@@ -40,11 +37,10 @@ import com.romanpulov.violetnote.view.action.BasicItemsMoveUpAction;
 import com.romanpulov.violetnote.view.core.AlertOkCancelSupportDialogFragment;
 import com.romanpulov.violetnote.view.core.BasicCommonNoteFragment;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
-import com.romanpulov.violetnote.view.helper.InputActionHelper;
-import com.romanpulov.violetnote.view.helper.InputManagerHelper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -53,16 +49,22 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
     protected final static int MENU_GROUP_OTHER_ITEMS = Menu.FIRST + 1;
 
     private FragmentBasicNoteListBinding binding;
+    private BasicNoteViewModel model;
 
     private BasicNoteRecycleViewAdapter mRecyclerViewAdapter;
 
     private InputActionHelper mInputActionHelper;
 
-    private BasicNoteGroupA mNoteGroup;
     private List<BasicNoteGroupA> mRelatedNoteGroupList;
     private OnBasicNoteFragmentInteractionListener mListener;
 
-    private final List<BasicNoteA> mNoteList = new ArrayList<>();
+    private @NonNull BasicNoteGroupA getNoteGroup() {
+        return Objects.requireNonNull(model.getBasicNoteGroup());
+    }
+
+    private @NonNull List<BasicNoteA> getNoteList() {
+        return Objects.requireNonNull(model.getBasicNotes().getValue());
+    }
 
     public static BasicNoteFragment newInstance(BasicNoteGroupA noteGroup) {
         BasicNoteFragment fragment = new BasicNoteFragment();
@@ -76,12 +78,6 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
     public BasicNoteFragment() {
     }
 
-    public void refreshList(DBNoteManager noteManager) {
-        noteManager.mBasicNoteDAO.fillNotesByGroup(mNoteGroup, mNoteList);
-        if (mRecyclerView != null)
-            RecyclerViewHelper.adapterNotifyDataSetChanged(mRecyclerView);
-    }
-
     private void setupBottomToolbarHelper() {
         FragmentActivity activity = getActivity();
         if (activity != null) {
@@ -91,7 +87,7 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
 
     @NonNull
     private List<BasicNoteA> getSelectedNotes() {
-        return BasicEntityNoteSelectionPosA.getItemsByPositions(mNoteList, mRecyclerViewSelector.getSelectedItems());
+        return BasicEntityNoteSelectionPosA.getItemsByPositions(getNoteList(), mRecyclerViewSelector.getSelectedItems());
     }
 
     protected boolean processMoveMenuItemClick(MenuItem menuItem) {
@@ -101,16 +97,16 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
         if (!selectedNotes.isEmpty()) {
             int itemId = menuItem.getItemId();
             if (itemId == R.id.move_up) {
-                performMoveAction(new BasicItemsMoveUpAction<>(mNoteGroup, selectedNotes), selectedNotes);
+                performMoveAction(new BasicItemsMoveUpAction<>(getNoteGroup(), selectedNotes), selectedNotes);
                 return true;
             } else if (itemId == R.id.move_top) {
-                performMoveAction(new BasicItemsMoveTopAction<>(mNoteGroup, selectedNotes), selectedNotes);
+                performMoveAction(new BasicItemsMoveTopAction<>(getNoteGroup(), selectedNotes), selectedNotes);
                 return true;
             } else if (itemId == R.id.move_down) {
-                performMoveAction(new BasicItemsMoveDownAction<>(mNoteGroup, selectedNotes), selectedNotes);
+                performMoveAction(new BasicItemsMoveDownAction<>(getNoteGroup(), selectedNotes), selectedNotes);
                 return true;
             } else if (itemId == R.id.move_bottom) {
-                performMoveAction(new BasicItemsMoveBottomAction<>(mNoteGroup, selectedNotes), selectedNotes);
+                performMoveAction(new BasicItemsMoveBottomAction<>(getNoteGroup(), selectedNotes), selectedNotes);
                 return true;
             }
         }
@@ -118,6 +114,7 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
     }
 
     public void performAddAction(final BasicNoteA item) {
+        /*
         DBNoteManager mNoteManager = new DBNoteManager(getActivity());
         if (mNoteManager.mBasicNoteDAO.insert(item) != -1) {
             // refresh list
@@ -126,6 +123,8 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
             //scroll to bottom
             mRecyclerView.scrollToPosition(mNoteList.size() - 1);
         }
+
+         */
     }
 
     private void performDeleteAction(final ActionMode mode, final List<BasicNoteA> items) {
@@ -138,7 +137,7 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
                 mNoteManager.mBasicNoteDAO.delete(item);
 
             // refresh list
-            refreshList(mNoteManager);
+            //refreshList(mNoteManager);
 
             //finish action
             mode.finish();
@@ -163,6 +162,7 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
             View focusedView = alertDialog.getCurrentFocus();
             InputManagerHelper.hideInput(focusedView);
 
+            /*
             if (BasicNoteA.findByTitle(mNoteList, text) == null) {
                 //add
                 BasicNoteA newNote = ParcelableUtils.duplicateParcelableObject(item, BasicNoteA.CREATOR);
@@ -196,6 +196,8 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
                 Activity activity = requireActivity();
                 DisplayMessageHelper.displayInfoMessage(activity, activity.getString(R.string.ui_error_note_already_exists, text));
             }
+
+             */
         });
     }
 
@@ -211,10 +213,10 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
             noteManager.mBasicNoteDAO.update(selectedNote);
 
             //refresh list
-            BasicNoteFragment.this.refreshList(noteManager);
+            // BasicNoteFragment.this.refreshList(noteManager);
 
             //update list item
-            int position = mNoteList.indexOf(selectedNote);
+            int position = getNoteList().indexOf(selectedNote);
             if ((position != -1) && (mRecyclerView != null)) {
                 RecyclerViewHelper.adapterNotifyItemChanged(mRecyclerView, position);
             }
@@ -227,11 +229,11 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
         AlertOkCancelSupportDialogFragment dialog = AlertOkCancelSupportDialogFragment.newAlertOkCancelDialog(confirmationQuestion);
         dialog.setOkButtonClickListener(dialog1 -> {
             //executor
-            BasicActionExecutor<List<BasicNoteA>> executor = new BasicActionExecutor<>(getContext(), mNoteList);
+            BasicActionExecutor<List<BasicNoteA>> executor = new BasicActionExecutor<>(getContext(), getNoteList());
 
             //actions
             executor.addAction(getString(R.string.caption_processing), new BasicNoteMoveToOtherNoteGroupAction(items, otherNoteGroup));
-            executor.addAction(getString(R.string.caption_loading), new BasicNoteRefreshAction(mNoteList, mNoteGroup));
+            executor.addAction(getString(R.string.caption_loading), new BasicNoteRefreshAction(getNoteList(), getNoteGroup()));
 
             //on completed
             executor.setOnExecutionCompletedListener((data, result) -> {
@@ -262,9 +264,9 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
         DBNoteManager noteManager = new DBNoteManager(getActivity());
 
         if (action.execute(noteManager)) {
-            refreshList(noteManager);
+            // refreshList(noteManager);
 
-            BasicEntityNoteSelectionPosA selectionPos = new BasicEntityNoteSelectionPosA(mNoteList, items);
+            BasicEntityNoteSelectionPosA selectionPos = new BasicEntityNoteSelectionPosA(getNoteList(), items);
             int selectionScrollPos = selectionPos.getDirectionPos(action.getDirection());
 
             if (selectionScrollPos != -1) {
@@ -275,7 +277,7 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
     }
 
     private void updateTitle(ActionMode mode) {
-        mode.setTitle(DisplayTitleBuilder.buildItemsDisplayTitle(getActivity(), mNoteList, mRecyclerViewSelector.getSelectedItems()));
+        mode.setTitle(DisplayTitleBuilder.buildItemsDisplayTitle(getActivity(), getNoteList(), mRecyclerViewSelector.getSelectedItems()));
     }
 
     public class ActionBarCallBack implements ActionMode.Callback {
@@ -304,7 +306,7 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
 
         private void buildMoveToOtherGroupsSubMenu(Menu menu) {
             DBNoteManager mNoteManager = new DBNoteManager(getContext());
-            mRelatedNoteGroupList =  mNoteManager.mBasicNoteGroupDAO.getRelatedNoteGroupList(mNoteGroup);
+            mRelatedNoteGroupList =  mNoteManager.mBasicNoteGroupDAO.getRelatedNoteGroupList(getNoteGroup());
 
             SubMenu subMenu = null;
             int order = 1;
@@ -379,26 +381,16 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
             }
 
             if (mBottomToolbarHelper != null) {
-                mBottomToolbarHelper.showLayout(mRecyclerViewSelector.getSelectedItems().size(), mNoteList.size());
+                mBottomToolbarHelper.showLayout(mRecyclerViewSelector.getSelectedItems().size(), getNoteList().size());
             }
 
             List<BasicNoteA> selectedNotes = getSelectedNotes();
             if (selectedNotes.size() == 1) {
-                mRecyclerView.scrollToPosition(mNoteList.indexOf(selectedNotes.get(0)));
+                mRecyclerView.scrollToPosition(getNoteList().indexOf(selectedNotes.get(0)));
             }
 
             updateTitle(mode);
             return false;
-        }
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        Bundle arguments = getArguments();
-        if (arguments != null) {
-            mNoteGroup = arguments.getParcelable(BasicNoteGroupA.BASIC_NOTE_GROUP_DATA);
         }
     }
 
@@ -424,16 +416,6 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
                 R.drawable.divider_white_black_gradient));
 
         mRecyclerView.setAdapter(mRecyclerViewAdapter);
-        // refreshList(new DBNoteManager(view.getContext()));
-
-        // Set the adapter
-
-        mRecyclerViewAdapter = new BasicNoteRecycleViewAdapter(mNoteList, new ActionBarCallBack(), mListener);
-        mRecyclerViewSelector = mRecyclerViewAdapter.getRecyclerViewSelector();
-
-        //restore selected items
-        restoreSelectedItems(savedInstanceState, view);
-
 
         //add action panel
         mInputActionHelper = new InputActionHelper(view.findViewById(R.id.add_panel_include));
@@ -445,30 +427,42 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
             mRecyclerViewSelector.finishActionMode();
         });
 
+        model = new ViewModelProvider(this).get(BasicNoteViewModel.class);
+        model.setBasicNoteGroup(BasicNoteFragmentArgs.fromBundle(getArguments()).getNoteGroup());
+
+        final Observer<List<BasicNoteA>> notesObserver = newNotes -> {
+
+            if (model.getBasicNotes().getValue() == null) {
+                model.getBasicNotes().setValue(newNotes);
+
+                mRecyclerViewAdapter = new BasicNoteRecycleViewAdapter(newNotes, new ActionBarCallBack(), mListener);
+                mRecyclerView.setAdapter(mRecyclerViewAdapter);
+                mRecyclerViewSelector = mRecyclerViewAdapter.getRecyclerViewSelector();
+
+                //restore selected items
+                restoreSelectedItems(savedInstanceState, view);
+            } else {
+                if (mRecyclerViewAdapter == null) {
+                    mRecyclerViewAdapter = new BasicNoteRecycleViewAdapter(newNotes, new ActionBarCallBack(), mListener);
+                    mRecyclerView.setAdapter(mRecyclerViewAdapter);
+                    mRecyclerViewSelector = mRecyclerViewAdapter.getRecyclerViewSelector();
+                } else {
+                    DiffUtil.DiffResult result = DiffUtilHelper.getEntityListDiffResult(this::getNoteList, newNotes);
+                    mRecyclerViewAdapter.setItems(newNotes);
+                    result.dispatchUpdatesTo(mRecyclerViewAdapter);
+                }
+            }
+        };
+
+        model.getBasicNotes().observe(this, notesObserver);
+
+
     }
 
     public void hideAddLayout() {
         if (mInputActionHelper != null) {
             mInputActionHelper.hideLayout();
         }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnBasicNoteFragmentInteractionListener) {
-            mListener = (OnBasicNoteFragmentInteractionListener) context;
-        }
-        else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnBasicNoteFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
     }
 
     public interface OnBasicNoteFragmentInteractionListener {

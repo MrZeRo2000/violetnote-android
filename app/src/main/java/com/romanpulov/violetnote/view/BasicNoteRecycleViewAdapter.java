@@ -32,7 +32,12 @@ public class BasicNoteRecycleViewAdapter extends RecyclerView.Adapter<BasicNoteR
         this.notifyDataSetChanged();
     }
 
-    private final List<BasicNoteA> mItems;
+    private List<BasicNoteA> mItems;
+
+    public void setItems(List<BasicNoteA> mItems) {
+        this.mItems = mItems;
+    }
+
     private final ViewSelectorHelper.AbstractViewSelector<Integer> mRecyclerViewSelector;
     private final BasicNoteFragment.OnBasicNoteFragmentInteractionListener mListener;
 

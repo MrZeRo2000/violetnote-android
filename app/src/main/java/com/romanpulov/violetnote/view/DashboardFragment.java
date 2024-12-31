@@ -82,9 +82,14 @@ public class DashboardFragment extends Fragment implements OnBasicGroupInteracti
         if (item.getGroupType() == BasicNoteGroupA.PASSWORD_NOTE_GROUP_TYPE) {
             startActivity(new Intent(requireActivity(), PassDataHostActivity.class));
         } else if (item.getGroupType() == BasicNoteGroupA.BASIC_NOTE_GROUP_TYPE) {
+            /*
             Intent intent = new Intent(requireActivity(), BasicNoteActivity.class);
             intent.putExtra(BasicNoteGroupA.BASIC_NOTE_GROUP_DATA, item);
             startActivity(intent);
+
+             */
+            NavHostFragment.findNavController(this).navigate(
+                    DashboardFragmentDirections.actionDashboardToBasicNote().setNoteGroup(item));
         }
     }
 }
