@@ -2,23 +2,22 @@ package com.romanpulov.violetnote.view;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.*;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.MenuHost;
+import androidx.core.view.MenuProvider;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.view.ActionMode;
+import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.SubMenu;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.databinding.FragmentBasicNoteListBinding;
@@ -66,6 +65,12 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
         return Objects.requireNonNull(model.getBasicNotes().getValue());
     }
 
+    private void setupBottomToolbar() {
+        mBottomToolbarHelper = BottomToolbarHelper.from(binding.fragmentToolbarBottom, this::processMoveMenuItemClick);
+        requireActivity().getMenuInflater().inflate(R.menu.menu_listitem_bottom_move_actions, binding.fragmentToolbarBottom.getMenu());
+        binding.fragmentToolbarBottom.setVisibility(View.GONE);
+    }
+
     public static BasicNoteFragment newInstance(BasicNoteGroupA noteGroup) {
         BasicNoteFragment fragment = new BasicNoteFragment();
         Bundle args = new Bundle();
@@ -76,13 +81,6 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
     }
 
     public BasicNoteFragment() {
-    }
-
-    private void setupBottomToolbarHelper() {
-        FragmentActivity activity = getActivity();
-        if (activity != null) {
-            mBottomToolbarHelper = BottomToolbarHelper.fromContext(activity, this::processMoveMenuItemClick);
-        }
     }
 
     @NonNull
@@ -376,10 +374,6 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
 
             setSingleSelectedMenusVisibility(singleMenuItems);
 
-            if (mBottomToolbarHelper == null) {
-                setupBottomToolbarHelper();
-            }
-
             if (mBottomToolbarHelper != null) {
                 mBottomToolbarHelper.showLayout(mRecyclerViewSelector.getSelectedItems().size(), getNoteList().size());
             }
@@ -398,7 +392,7 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentBasicNoteListBinding.inflate(getLayoutInflater());
-        setupBottomToolbarHelper();
+        setupBottomToolbar();
         return binding.getRoot();
     }
 
@@ -418,7 +412,7 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
         mRecyclerView.setAdapter(mRecyclerViewAdapter);
 
         //add action panel
-        mInputActionHelper = new InputActionHelper(view.findViewById(R.id.add_panel_include));
+        mInputActionHelper = new InputActionHelper(binding.addPanelInclude.getRoot());
         mInputActionHelper.setOnAddInteractionListener((actionType, text) -> {
             hideAddLayout();
 
@@ -426,6 +420,26 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
 
             mRecyclerViewSelector.finishActionMode();
         });
+
+        MenuHost menuHost = requireActivity();
+        menuHost.addMenuProvider(new MenuProvider() {
+            @Override
+            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+                menuInflater.inflate(R.menu.menu_add_action, menu);
+            }
+
+            @Override
+            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+                if (menuItem.getItemId() == R.id.action_add) {
+                    Intent intent = new Intent(requireActivity(), BasicNoteEditActivity.class);
+                    intent.putExtra(BasicNoteGroupA.BASIC_NOTE_GROUP_DATA, getNoteGroup());
+                    startActivityForResult(intent, 0);
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
 
         model = new ViewModelProvider(this).get(BasicNoteViewModel.class);
         model.setBasicNoteGroup(BasicNoteFragmentArgs.fromBundle(getArguments()).getNoteGroup());
