@@ -1,6 +1,5 @@
 package com.romanpulov.violetnote.view;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,7 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.MenuHost;
 import androidx.core.view.MenuProvider;
-import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.view.ActionMode;
@@ -23,19 +22,12 @@ import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.databinding.FragmentBasicNoteListBinding;
 import com.romanpulov.violetnote.db.manager.DBNoteManager;
 import com.romanpulov.violetnote.model.*;
-import com.romanpulov.violetnote.view.action.BasicActionExecutor;
-import com.romanpulov.violetnote.view.action.BasicNoteMoveToOtherNoteGroupAction;
-import com.romanpulov.violetnote.view.action.BasicNoteRefreshAction;
+import com.romanpulov.violetnote.view.action.*;
 import com.romanpulov.violetnote.view.core.TextEditDialogBuilder;
-import com.romanpulov.violetnote.view.helper.*;
-import com.romanpulov.violetnote.view.action.BasicItemsMoveAction;
-import com.romanpulov.violetnote.view.action.BasicItemsMoveBottomAction;
-import com.romanpulov.violetnote.view.action.BasicItemsMoveDownAction;
-import com.romanpulov.violetnote.view.action.BasicItemsMoveTopAction;
-import com.romanpulov.violetnote.view.action.BasicItemsMoveUpAction;
 import com.romanpulov.violetnote.view.core.AlertOkCancelSupportDialogFragment;
 import com.romanpulov.violetnote.view.core.BasicCommonNoteFragment;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
+import com.romanpulov.violetnote.view.helper.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -95,16 +87,36 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
         if (!selectedNotes.isEmpty()) {
             int itemId = menuItem.getItemId();
             if (itemId == R.id.move_up) {
-                performMoveAction(new BasicItemsMoveUpAction<>(getNoteGroup(), selectedNotes), selectedNotes);
+                model.moveUp(selectedNotes,
+                        new BasicUIMoveAction<>(
+                                selectedNotes,
+                                MovementDirection.DIRECTION_UP,
+                                mRecyclerViewSelector,
+                                mRecyclerView));
                 return true;
             } else if (itemId == R.id.move_top) {
-                performMoveAction(new BasicItemsMoveTopAction<>(getNoteGroup(), selectedNotes), selectedNotes);
+                model.moveTop(selectedNotes,
+                        new BasicUIMoveAction<>(
+                                selectedNotes,
+                                MovementDirection.DIRECTION_UP,
+                                mRecyclerViewSelector,
+                                mRecyclerView));
                 return true;
             } else if (itemId == R.id.move_down) {
-                performMoveAction(new BasicItemsMoveDownAction<>(getNoteGroup(), selectedNotes), selectedNotes);
+                model.moveDown(selectedNotes,
+                        new BasicUIMoveAction<>(
+                                selectedNotes,
+                                MovementDirection.DIRECTION_DOWN,
+                                mRecyclerViewSelector,
+                                mRecyclerView));
                 return true;
             } else if (itemId == R.id.move_bottom) {
-                performMoveAction(new BasicItemsMoveBottomAction<>(getNoteGroup(), selectedNotes), selectedNotes);
+                model.moveBottom(selectedNotes,
+                        new BasicUIMoveAction<>(
+                                selectedNotes,
+                                MovementDirection.DIRECTION_DOWN,
+                                mRecyclerViewSelector,
+                                mRecyclerView));
                 return true;
             }
         }
@@ -126,24 +138,12 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
     }
 
     private void performDeleteAction(final ActionMode mode, final List<BasicNoteA> items) {
-        AlertOkCancelSupportDialogFragment dialog = AlertOkCancelSupportDialogFragment.newAlertOkCancelDialog(getString(R.string.ui_question_are_you_sure));
-        dialog.setOkButtonClickListener(dialog1 -> {
-            // delete item
-            DBNoteManager mNoteManager = new DBNoteManager(getActivity());
+        AlertOkCancelSupportDialogFragment dialog = AlertOkCancelSupportDialogFragment.newAlertOkCancelDialog(
+                getString(R.string.ui_question_are_you_sure));
+        dialog.setOkButtonClickListener(dialog1 ->
+            model.delete(items, new BasicUIDeleteAction<>(mode)));
 
-            for (BasicNoteA item : items)
-                mNoteManager.mBasicNoteDAO.delete(item);
-
-            // refresh list
-            //refreshList(mNoteManager);
-
-            //finish action
-            mode.finish();
-        });
-
-        FragmentManager fragmentManager = getFragmentManager();
-        if (fragmentManager != null)
-            dialog.show(fragmentManager, null);
+        dialog.show(getParentFragmentManager(), AlertOkCancelSupportDialogFragment.TAG);
     }
 
     private void performDuplicateAction(final ActionMode mode, final BasicNoteA item) {
@@ -256,22 +256,6 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
             dialog.show(fragmentManager, null);
 
         mDialogFragment = dialog;
-    }
-
-    private void performMoveAction(BasicItemsMoveAction<?, BasicNoteA> action, List<BasicNoteA> items) {
-        DBNoteManager noteManager = new DBNoteManager(getActivity());
-
-        if (action.execute(noteManager)) {
-            // refreshList(noteManager);
-
-            BasicEntityNoteSelectionPosA selectionPos = new BasicEntityNoteSelectionPosA(getNoteList(), items);
-            int selectionScrollPos = selectionPos.getDirectionPos(action.getDirection());
-
-            if (selectionScrollPos != -1) {
-                mRecyclerViewSelector.setSelectedItems(selectionPos.getSelectedItemsPositions());
-                mRecyclerView.scrollToPosition(selectionScrollPos);
-            }
-        }
     }
 
     private void updateTitle(ActionMode mode) {
@@ -464,6 +448,17 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
                     DiffUtil.DiffResult result = DiffUtilHelper.getEntityListDiffResult(this::getNoteList, newNotes);
                     mRecyclerViewAdapter.setItems(newNotes);
                     result.dispatchUpdatesTo(mRecyclerViewAdapter);
+                }
+
+                UIAction<List<? extends BasicCommonNoteA>> action = model.getAction();
+                if (action != null) {
+                    action.execute(newNotes);
+                    model.resetAction();
+
+                    DialogFragment dialogFragment = (DialogFragment)getParentFragmentManager().findFragmentByTag(AlertOkCancelSupportDialogFragment.TAG);
+                    if (dialogFragment != null) {
+                        dialogFragment.dismiss();
+                    }
                 }
             }
         };

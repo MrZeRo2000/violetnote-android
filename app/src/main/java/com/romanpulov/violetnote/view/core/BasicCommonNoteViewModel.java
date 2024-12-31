@@ -9,6 +9,7 @@ import com.romanpulov.violetnote.model.BasicOrderedEntityNoteA;
 import com.romanpulov.violetnote.view.action.UIAction;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
 import java.util.List;
 
 public abstract class BasicCommonNoteViewModel<T extends BasicCommonNoteA> extends AndroidViewModel {
@@ -126,6 +127,12 @@ public abstract class BasicCommonNoteViewModel<T extends BasicCommonNoteA> exten
             setAction(action);
             onDataChangeActionCompleted();
         }
+    }
+
+    public void delete(Collection<T> items, UIAction<List<? extends BasicCommonNoteA>> action) {
+        items.forEach(item -> getDAO().delete(item));
+        setAction(action);
+        onDataChangeActionCompleted();
     }
 
     public void edit(T item, UIAction<List<? extends BasicCommonNoteA>> action) {
