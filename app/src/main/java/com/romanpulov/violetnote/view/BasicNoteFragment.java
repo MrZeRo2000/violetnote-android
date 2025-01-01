@@ -147,7 +147,7 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
     }
 
     private void performDuplicateAction(final ActionMode mode, final BasicNoteA item) {
-        TextEditDialogBuilder textEditDialogBuilder = (new TextEditDialogBuilder(getActivity(), getString(R.string.ui_note_value),
+        TextEditDialogBuilder textEditDialogBuilder = (new TextEditDialogBuilder(requireActivity(), getString(R.string.ui_note_value),
                 null))
                 .setNonEmptyErrorMessage(getString(R.string.error_field_not_empty))
                 .setShowInput(true);
@@ -160,42 +160,11 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
             View focusedView = alertDialog.getCurrentFocus();
             InputManagerHelper.hideInput(focusedView);
 
-            /*
-            if (BasicNoteA.findByTitle(mNoteList, text) == null) {
-                //add
-                BasicNoteA newNote = ParcelableUtils.duplicateParcelableObject(item, BasicNoteA.CREATOR);
-                newNote.setTitle(text);
-
-                //persist
-                DBNoteManager mNoteManager = new DBNoteManager(getActivity());
-
-                //get items
-                mNoteManager.mBasicNoteItemDAO.fillNoteDataItemsWithSummary(newNote);
-
-                //get new id
-                long newItemId = mNoteManager.mBasicNoteDAO.insert(newNote);
-                if (newItemId != -1) {
-                    //insert items ignoring any errors
-                    for (BasicNoteItemA noteItem : newNote.getItems()) {
-                        noteItem.setNoteId(newItemId);
-                        mNoteManager.mBasicNoteItemDAO.insert(noteItem);
-                    }
-
-                    // refresh list
-                    refreshList(mNoteManager);
-
-                    //scroll to bottom
-                    mRecyclerView.scrollToPosition(mNoteList.size() - 1);
-                }
-
-                // finish anyway
-                mode.finish();
+            if (BasicNoteA.findByTitle(getNoteList(), text) == null) {
+                model.duplicate(item, text, new BasicUIAddAction<>(mRecyclerView));
             } else {
-                Activity activity = requireActivity();
-                DisplayMessageHelper.displayInfoMessage(activity, activity.getString(R.string.ui_error_note_already_exists, text));
+                DisplayMessageHelper.displayInfoMessage(requireActivity(), getString(R.string.ui_error_note_already_exists, text));
             }
-
-             */
         });
     }
 
