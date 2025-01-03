@@ -15,7 +15,8 @@
         <activity
                 android:name=".view.AppHostActivity"
                 android:exported="true"
-                android:theme="@style/MainAppNavTheme">
+                android:theme="@style/MainAppNavTheme"
+        >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

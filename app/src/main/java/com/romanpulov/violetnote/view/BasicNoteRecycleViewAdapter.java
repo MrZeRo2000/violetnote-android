@@ -2,6 +2,7 @@ package com.romanpulov.violetnote.view;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.view.ActionMode;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 import com.romanpulov.violetnote.view.core.ViewSelectorHelper;
+import com.romanpulov.violetnote.view.helper.DiffUtilHelper;
 
 import java.util.List;
 
@@ -34,8 +36,8 @@ public class BasicNoteRecycleViewAdapter extends RecyclerView.Adapter<BasicNoteR
 
     private List<BasicNoteA> mItems;
 
-    public void setItems(List<BasicNoteA> mItems) {
-        this.mItems = mItems;
+    public List<BasicNoteA> getItems() {
+        return mItems;
     }
 
     private final ViewSelectorHelper.AbstractViewSelector<Integer> mRecyclerViewSelector;
@@ -100,5 +102,11 @@ public class BasicNoteRecycleViewAdapter extends RecyclerView.Adapter<BasicNoteR
                 mListener.onBasicNoteFragmentInteraction(mItems.get(getBindingAdapterPosition()));
             }
         }
+    }
+
+    public void updateItems(List<BasicNoteA> items) {
+        DiffUtil.DiffResult result = DiffUtilHelper.getEntityListDiffResult(mItems, items);
+        this.mItems = items;
+        result.dispatchUpdatesTo(this);
     }
 }

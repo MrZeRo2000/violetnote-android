@@ -9,12 +9,7 @@ import com.romanpulov.violetnote.db.provider.BasicNoteDBManagementProvider;
 import com.romanpulov.violetnote.model.vo.BasicNoteSummary;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * BasicNote data class
@@ -314,7 +309,7 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
         dest.writeTypedList(mHistoryItems);
     }
 
-    public static final Parcelable.Creator<BasicNoteA> CREATOR = new Parcelable.Creator<BasicNoteA>() {
+    public static final Parcelable.Creator<BasicNoteA> CREATOR = new Parcelable.Creator<>() {
         @Override
         public BasicNoteA createFromParcel(Parcel source) {
             return new BasicNoteA(source);
@@ -326,4 +321,16 @@ public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
         }
     };
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        BasicNoteA that = (BasicNoteA) o;
+        return mGroupId == that.mGroupId && mNoteType == that.mNoteType && mEncrypted == that.mEncrypted && Objects.equals(mTitle, that.mTitle);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), mGroupId, mNoteType, mTitle, mEncrypted);
+    }
 }

@@ -175,10 +175,12 @@ public class InputActionHelper implements AutoCompleteArrayAdapter.OnAutoComplet
     }
 
     public void hideLayout() {
-        InputManagerHelper.hideInput(mActionView);
-        mActionView.setVisibility(View.GONE);
-        //clear search text for future
-        mInputEditText.setText(null);
+        if (mActionView.getVisibility() == View.VISIBLE) {
+            InputManagerHelper.hideInput(mActionView);
+            mActionView.setVisibility(View.GONE);
+            //clear search text for future
+            mInputEditText.setText(null);
+        }
     }
 
     @Override

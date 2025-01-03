@@ -103,7 +103,7 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
             dialog = AlertOkCancelSupportDialogFragment.newAlertOkInfoDialog(getString(R.string.ui_error_group_delete_contain_notes, item.getDisplayTitle()));
         } else {
             dialog = AlertOkCancelSupportDialogFragment.newAlertOkCancelDialog(getString(R.string.ui_question_delete_item_are_you_sure, item.getDisplayTitle()));
-            dialog.setOkButtonClickListener(dialog1 -> model.delete(items.get(0), new BasicUIDeleteAction<>(mode)));
+            dialog.setOkButtonClickListener(dialog1 -> model.delete(items.get(0), new BasicUIFinishAction<>(mode)));
         }
 
         dialog.show(getParentFragmentManager(), AlertOkCancelSupportDialogFragment.TAG);

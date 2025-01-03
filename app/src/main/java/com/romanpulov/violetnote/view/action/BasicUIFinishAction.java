@@ -5,10 +5,10 @@ import androidx.appcompat.view.ActionMode;
 
 import java.util.Collection;
 
-public class BasicUIDeleteAction<T extends Collection<?>> implements UIAction<T> {
+public class BasicUIFinishAction<T extends Collection<?>> implements UIAction<T> {
     private final ActionMode mMode;
 
-    public BasicUIDeleteAction(ActionMode mode) {
+    public BasicUIFinishAction(ActionMode mode) {
         this.mMode = mode;
     }
 

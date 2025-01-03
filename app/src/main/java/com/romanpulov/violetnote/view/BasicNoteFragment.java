@@ -15,7 +15,6 @@ import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
-import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.romanpulov.violetnote.R;
@@ -127,7 +126,7 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
         AlertOkCancelSupportDialogFragment dialog = AlertOkCancelSupportDialogFragment.newAlertOkCancelDialog(
                 getString(R.string.ui_question_are_you_sure));
         dialog.setOkButtonClickListener(dialog1 ->
-            model.delete(items, new BasicUIDeleteAction<>(mode)));
+            model.delete(items, new BasicUIFinishAction<>(mode)));
 
         dialog.show(getParentFragmentManager(), AlertOkCancelSupportDialogFragment.TAG);
     }
@@ -158,21 +157,8 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
         List<BasicNoteA> selectedNotes = getSelectedNotes();
         BasicNoteA selectedNote;
         if ((selectedNotes.size() == 1) && (!text.equals((selectedNote = selectedNotes.get(0)).getTitle()))) {
-            //change
             selectedNote.setTitle(text);
-
-            //update
-            DBNoteManager noteManager = new DBNoteManager(getContext());
-            noteManager.mBasicNoteDAO.update(selectedNote);
-
-            //refresh list
-            // BasicNoteFragment.this.refreshList(noteManager);
-
-            //update list item
-            int position = getNoteList().indexOf(selectedNote);
-            if ((position != -1) && (mRecyclerView != null)) {
-                RecyclerViewHelper.adapterNotifyItemChanged(mRecyclerView, position);
-            }
+            model.edit(selectedNote, new BasicUIFinishAction<>(mRecyclerViewSelector.getActionMode()));
         }
     }
 
@@ -354,10 +340,7 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
         mInputActionHelper = new InputActionHelper(binding.addPanelInclude.getRoot());
         mInputActionHelper.setOnAddInteractionListener((actionType, text) -> {
             hideAddLayout();
-
             performEditAction(text);
-
-            mRecyclerViewSelector.finishActionMode();
         });
 
         MenuHost menuHost = requireActivity();
@@ -399,9 +382,7 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
                     mRecyclerView.setAdapter(mRecyclerViewAdapter);
                     mRecyclerViewSelector = mRecyclerViewAdapter.getRecyclerViewSelector();
                 } else {
-                    DiffUtil.DiffResult result = DiffUtilHelper.getEntityListDiffResult(this::getNoteList, newNotes);
-                    mRecyclerViewAdapter.setItems(newNotes);
-                    result.dispatchUpdatesTo(mRecyclerViewAdapter);
+                    mRecyclerViewAdapter.updateItems(newNotes);
                 }
 
                 UIAction<List<? extends BasicCommonNoteA>> action = model.getAction();
