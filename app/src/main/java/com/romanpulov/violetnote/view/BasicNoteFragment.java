@@ -1,7 +1,6 @@
 package com.romanpulov.violetnote.view;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.*;
 import androidx.annotation.NonNull;
@@ -15,6 +14,7 @@ import androidx.appcompat.view.ActionMode;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -121,20 +121,6 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
             }
         }
         return false;
-    }
-
-    public void performAddAction(final BasicNoteA item) {
-        /*
-        DBNoteManager mNoteManager = new DBNoteManager(getActivity());
-        if (mNoteManager.mBasicNoteDAO.insert(item) != -1) {
-            // refresh list
-            refreshList(mNoteManager);
-
-            //scroll to bottom
-            mRecyclerView.scrollToPosition(mNoteList.size() - 1);
-        }
-
-         */
     }
 
     private void performDeleteAction(final ActionMode mode, final List<BasicNoteA> items) {
@@ -384,9 +370,8 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
             @Override
             public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
                 if (menuItem.getItemId() == R.id.action_add) {
-                    Intent intent = new Intent(requireActivity(), BasicNoteEditActivity.class);
-                    intent.putExtra(BasicNoteGroupA.BASIC_NOTE_GROUP_DATA, getNoteGroup());
-                    startActivityForResult(intent, 0);
+                    NavHostFragment.findNavController(BasicNoteFragment.this).navigate(
+                            BasicNoteFragmentDirections.actionBasicNoteToBasicNoteEdit().setNoteGroup(getNoteGroup()));
                     return true;
                 } else {
                     return false;
@@ -434,7 +419,13 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
 
         model.getBasicNotes().observe(this, notesObserver);
 
-
+        getParentFragmentManager().setFragmentResultListener(
+                BasicNoteEditFragment.RESULT_KEY, this, (requestKey, bundle) -> {
+                   BasicNoteA item = bundle.getParcelable(BasicNoteEditFragment.RESULT_VALUE_KEY);
+                    if (item != null) {
+                        model.add(item, new BasicUIAddAction<>(mRecyclerView));
+                    }
+                });
     }
 
     public void hideAddLayout() {

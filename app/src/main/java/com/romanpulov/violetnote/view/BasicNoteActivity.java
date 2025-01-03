@@ -93,6 +93,7 @@ public class BasicNoteActivity extends ActionBarCompatActivity implements BasicN
         }
     }
 
+    /*
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_add) {
@@ -115,6 +116,8 @@ public class BasicNoteActivity extends ActionBarCompatActivity implements BasicN
             }
         }
     }
+
+     */
 
     @Override
     public void onBasicNoteFragmentInteraction(BasicNoteA item) {
