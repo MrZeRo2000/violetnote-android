@@ -19,7 +19,7 @@ import com.romanpulov.violetnote.model.BasicNoteGroupA;
 import com.romanpulov.violetnote.model.BasicNoteGroupViewModel;
 import org.jetbrains.annotations.NotNull;
 
-public class DashboardFragment extends Fragment implements OnBasicGroupInteractionListener {
+public class DashboardFragment extends Fragment {
     private FragmentDashboardBinding binding;
     private BasicNoteGroupViewModel model;
 
@@ -65,7 +65,7 @@ public class DashboardFragment extends Fragment implements OnBasicGroupInteracti
 
         model = new ViewModelProvider(requireActivity()).get(BasicNoteGroupViewModel.class);
         model.getAllWithTotals().observe(this, basicNoteGroupList ->
-                binding.list.setAdapter(new DashboardItemRecyclerViewAdapter(basicNoteGroupList, this)));
+                binding.list.setAdapter(new DashboardItemRecyclerViewAdapter(basicNoteGroupList, this::onBasicGroupSelection)));
     }
 
     @Override
@@ -77,7 +77,6 @@ public class DashboardFragment extends Fragment implements OnBasicGroupInteracti
         }
     }
 
-    @Override
     public void onBasicGroupSelection(BasicNoteGroupA item) {
         if (item.getGroupType() == BasicNoteGroupA.PASSWORD_NOTE_GROUP_TYPE) {
             startActivity(new Intent(requireActivity(), PassDataHostActivity.class));

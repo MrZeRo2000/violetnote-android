@@ -18,6 +18,7 @@ import com.romanpulov.violetnote.view.core.ViewSelectorHelper;
 import com.romanpulov.violetnote.view.helper.DiffUtilHelper;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * BasicNoteA recycler view adapter
@@ -41,16 +42,19 @@ public class BasicNoteRecycleViewAdapter extends RecyclerView.Adapter<BasicNoteR
     }
 
     private final ViewSelectorHelper.AbstractViewSelector<Integer> mRecyclerViewSelector;
-    private final OnBasicNoteInteractionListener mListener;
+    private final Consumer<BasicNoteA> mBasicNoteConsumer;
 
     public ViewSelectorHelper.AbstractViewSelector<Integer> getRecyclerViewSelector() {
         return mRecyclerViewSelector;
     }
 
-    public BasicNoteRecycleViewAdapter(List<BasicNoteA> items, ActionMode.Callback actionModeCallback, OnBasicNoteInteractionListener listener) {
+    public BasicNoteRecycleViewAdapter(
+            List<BasicNoteA> items,
+            ActionMode.Callback actionModeCallback,
+            Consumer<BasicNoteA> basicNoteConsumer) {
         mItems = items;
         mRecyclerViewSelector = new ViewSelectorHelper.ViewSelectorMultiple<>(this, actionModeCallback);
-        mListener = listener;
+        mBasicNoteConsumer = basicNoteConsumer;
     }
 
     @NonNull
@@ -98,8 +102,8 @@ public class BasicNoteRecycleViewAdapter extends RecyclerView.Adapter<BasicNoteR
         @Override
         public void onClick(View v) {
             super.onClick(v);
-            if ((!mViewSelector.isSelected()) && (mListener != null) && (getBindingAdapterPosition() != -1)) {
-                mListener.onBasicNoteInteraction(mItems.get(getBindingAdapterPosition()));
+            if ((!mViewSelector.isSelected()) && (mBasicNoteConsumer != null) && (getBindingAdapterPosition() != -1)) {
+                mBasicNoteConsumer.accept(mItems.get(getBindingAdapterPosition()));
             }
         }
     }

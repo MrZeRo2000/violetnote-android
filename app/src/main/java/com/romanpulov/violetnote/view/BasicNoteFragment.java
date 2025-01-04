@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class BasicNoteFragment extends BasicCommonNoteFragment implements OnBasicNoteInteractionListener {
+public class BasicNoteFragment extends BasicCommonNoteFragment  {
     protected final static int MENU_GROUP_OTHER_ITEMS = Menu.FIRST + 1;
 
     private FragmentBasicNoteListBinding binding;
@@ -64,8 +64,7 @@ public class BasicNoteFragment extends BasicCommonNoteFragment implements OnBasi
     public BasicNoteFragment() {
     }
 
-    @Override
-    public void onBasicNoteInteraction(BasicNoteA item) {
+    public void onBasicNoteSelection(BasicNoteA item) {
         BasicNoteDataA noteData = model.createNoteDataFromNote(getNoteGroup(), item);
         Intent intent = switch (item.getNoteType()) {
             case BasicNoteA.NOTE_TYPE_CHECKED -> new Intent(requireActivity(), BasicNoteCheckedItemActivity.class);
@@ -352,7 +351,7 @@ public class BasicNoteFragment extends BasicCommonNoteFragment implements OnBasi
             if (model.getBasicNotes().getValue() == null) {
                 model.getBasicNotes().setValue(newNotes);
 
-                mRecyclerViewAdapter = new BasicNoteRecycleViewAdapter(newNotes, new ActionBarCallBack(), this);
+                mRecyclerViewAdapter = new BasicNoteRecycleViewAdapter(newNotes, new ActionBarCallBack(), this::onBasicNoteSelection);
                 mRecyclerView.setAdapter(mRecyclerViewAdapter);
                 mRecyclerViewSelector = mRecyclerViewAdapter.getRecyclerViewSelector();
 
@@ -360,7 +359,7 @@ public class BasicNoteFragment extends BasicCommonNoteFragment implements OnBasi
                 restoreSelectedItems(savedInstanceState, view);
             } else {
                 if (mRecyclerViewAdapter == null) {
-                    mRecyclerViewAdapter = new BasicNoteRecycleViewAdapter(newNotes, new ActionBarCallBack(), this);
+                    mRecyclerViewAdapter = new BasicNoteRecycleViewAdapter(newNotes, new ActionBarCallBack(), this::onBasicNoteSelection);
                     mRecyclerView.setAdapter(mRecyclerViewAdapter);
                     mRecyclerViewSelector = mRecyclerViewAdapter.getRecyclerViewSelector();
                 } else {

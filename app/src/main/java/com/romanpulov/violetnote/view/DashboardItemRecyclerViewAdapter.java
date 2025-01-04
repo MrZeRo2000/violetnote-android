@@ -14,11 +14,12 @@ import com.romanpulov.violetnote.model.BasicNoteGroupA;
 import com.romanpulov.violetnote.view.helper.DrawableSelectionHelper;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 public class DashboardItemRecyclerViewAdapter extends RecyclerView.Adapter<DashboardItemRecyclerViewAdapter.ViewHolder> {
 
     private final List<BasicNoteGroupA> mBasicNoteGroupList;
-    private final OnBasicGroupInteractionListener mListener;
+    private final Consumer<BasicNoteGroupA> mBasicNoteGroupConsumer;
 
     //calculated
     private long mMaxNoteCount = 0;
@@ -31,9 +32,11 @@ public class DashboardItemRecyclerViewAdapter extends RecyclerView.Adapter<Dashb
         }
     }
 
-    public DashboardItemRecyclerViewAdapter(List<BasicNoteGroupA> basicNoteGroupList, OnBasicGroupInteractionListener listener) {
+    public DashboardItemRecyclerViewAdapter(
+            List<BasicNoteGroupA> basicNoteGroupList,
+            Consumer<BasicNoteGroupA> basicNoteGroupConsumer) {
         this.mBasicNoteGroupList = basicNoteGroupList;
-        this.mListener = listener;
+        this.mBasicNoteGroupConsumer = basicNoteGroupConsumer;
         calcMaxNoteCount();
     }
 
@@ -50,8 +53,8 @@ public class DashboardItemRecyclerViewAdapter extends RecyclerView.Adapter<Dashb
         viewHolder.mButton.setText(item.getGroupName());
         viewHolder.mButton.setCompoundDrawablesWithIntrinsicBounds(0, DrawableSelectionHelper.getDrawableForNoteGroup(item), 0, 0);
         viewHolder.mButton.setOnClickListener(v -> {
-            if (null != mListener) {
-                mListener.onBasicGroupSelection(item);
+            if (null != mBasicNoteGroupConsumer) {
+                mBasicNoteGroupConsumer.accept(item);
             }
         });
 
