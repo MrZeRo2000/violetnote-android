@@ -1,6 +1,7 @@
 package com.romanpulov.violetnote.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.*;
 import androidx.annotation.NonNull;
@@ -20,17 +21,14 @@ import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.databinding.FragmentBasicNoteListBinding;
 import com.romanpulov.violetnote.model.*;
 import com.romanpulov.violetnote.view.action.*;
-import com.romanpulov.violetnote.view.core.TextEditDialogBuilder;
-import com.romanpulov.violetnote.view.core.AlertOkCancelSupportDialogFragment;
-import com.romanpulov.violetnote.view.core.BasicCommonNoteFragment;
-import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
+import com.romanpulov.violetnote.view.core.*;
 import com.romanpulov.violetnote.view.helper.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class BasicNoteFragment extends BasicCommonNoteFragment {
+public class BasicNoteFragment extends BasicCommonNoteFragment implements OnBasicNoteInteractionListener {
     protected final static int MENU_GROUP_OTHER_ITEMS = Menu.FIRST + 1;
 
     private FragmentBasicNoteListBinding binding;
@@ -39,8 +37,6 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
     private BasicNoteRecycleViewAdapter mRecyclerViewAdapter;
 
     private InputActionHelper mInputActionHelper;
-
-    private OnBasicNoteFragmentInteractionListener mListener;
 
     private @NonNull BasicNoteGroupA getNoteGroup() {
         return Objects.requireNonNull(model.getBasicNoteGroup());
@@ -66,6 +62,22 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
     }
 
     public BasicNoteFragment() {
+    }
+
+    @Override
+    public void onBasicNoteInteraction(BasicNoteA item) {
+        BasicNoteDataA noteData = model.createNoteDataFromNote(getNoteGroup(), item);
+        Intent intent = switch (item.getNoteType()) {
+            case BasicNoteA.NOTE_TYPE_CHECKED -> new Intent(requireActivity(), BasicNoteCheckedItemActivity.class);
+            case BasicNoteA.NOTE_TYPE_NAMED -> new Intent(requireActivity(), BasicNoteNamedItemActivity.class);
+            default -> null;
+        };
+
+        if (intent != null) {
+            intent.putExtra(PasswordActivity.PASS_DATA, noteData);
+            PasswordActivity.getPasswordValidityChecker().resetPeriod();
+            startActivityForResult(intent, 0);
+        }
     }
 
     @NonNull
@@ -340,7 +352,7 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
             if (model.getBasicNotes().getValue() == null) {
                 model.getBasicNotes().setValue(newNotes);
 
-                mRecyclerViewAdapter = new BasicNoteRecycleViewAdapter(newNotes, new ActionBarCallBack(), mListener);
+                mRecyclerViewAdapter = new BasicNoteRecycleViewAdapter(newNotes, new ActionBarCallBack(), this);
                 mRecyclerView.setAdapter(mRecyclerViewAdapter);
                 mRecyclerViewSelector = mRecyclerViewAdapter.getRecyclerViewSelector();
 
@@ -348,7 +360,7 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
                 restoreSelectedItems(savedInstanceState, view);
             } else {
                 if (mRecyclerViewAdapter == null) {
-                    mRecyclerViewAdapter = new BasicNoteRecycleViewAdapter(newNotes, new ActionBarCallBack(), mListener);
+                    mRecyclerViewAdapter = new BasicNoteRecycleViewAdapter(newNotes, new ActionBarCallBack(), this);
                     mRecyclerView.setAdapter(mRecyclerViewAdapter);
                     mRecyclerViewSelector = mRecyclerViewAdapter.getRecyclerViewSelector();
                 } else {
@@ -385,7 +397,4 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
         }
     }
 
-    public interface OnBasicNoteFragmentInteractionListener {
-        void onBasicNoteFragmentInteraction(BasicNoteA item);
-    }
 }

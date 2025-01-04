@@ -121,4 +121,8 @@ public class BasicNoteViewModel extends BasicCommonNoteViewModel<BasicNoteA> {
         setAction(action);
         onDataChangeActionCompleted();
     }
+
+    public BasicNoteDataA createNoteDataFromNote(BasicNoteGroupA noteGroup, BasicNoteA note) {
+        return getDAO().createNoteDataFromNote(noteGroup, note);
+    }
 }

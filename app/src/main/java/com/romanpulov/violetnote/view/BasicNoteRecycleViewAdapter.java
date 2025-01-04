@@ -41,13 +41,13 @@ public class BasicNoteRecycleViewAdapter extends RecyclerView.Adapter<BasicNoteR
     }
 
     private final ViewSelectorHelper.AbstractViewSelector<Integer> mRecyclerViewSelector;
-    private final BasicNoteFragment.OnBasicNoteFragmentInteractionListener mListener;
+    private final OnBasicNoteInteractionListener mListener;
 
     public ViewSelectorHelper.AbstractViewSelector<Integer> getRecyclerViewSelector() {
         return mRecyclerViewSelector;
     }
 
-    public BasicNoteRecycleViewAdapter(List<BasicNoteA> items, ActionMode.Callback actionModeCallback, BasicNoteFragment.OnBasicNoteFragmentInteractionListener listener) {
+    public BasicNoteRecycleViewAdapter(List<BasicNoteA> items, ActionMode.Callback actionModeCallback, OnBasicNoteInteractionListener listener) {
         mItems = items;
         mRecyclerViewSelector = new ViewSelectorHelper.ViewSelectorMultiple<>(this, actionModeCallback);
         mListener = listener;
@@ -99,7 +99,7 @@ public class BasicNoteRecycleViewAdapter extends RecyclerView.Adapter<BasicNoteR
         public void onClick(View v) {
             super.onClick(v);
             if ((!mViewSelector.isSelected()) && (mListener != null) && (getBindingAdapterPosition() != -1)) {
-                mListener.onBasicNoteFragmentInteraction(mItems.get(getBindingAdapterPosition()));
+                mListener.onBasicNoteInteraction(mItems.get(getBindingAdapterPosition()));
             }
         }
     }
