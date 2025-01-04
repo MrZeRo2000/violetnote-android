@@ -1,8 +1,8 @@
 package com.romanpulov.violetnote.view.action;
 
-import java.util.Collection;
+import java.util.List;
 
-public class BasicUICallbackAction<T extends Collection<?>> implements UIAction<T> {
+public class BasicUICallbackAction<T> implements UIAction<T> {
     private final UIActionCallback mExecuteCallback;
 
     public BasicUICallbackAction(UIActionCallback mExecuteCallback) {
@@ -10,7 +10,7 @@ public class BasicUICallbackAction<T extends Collection<?>> implements UIAction<
     }
 
     @Override
-    public void execute(T data) {
+    public void execute(List<T> data) {
         if (mExecuteCallback != null) {
             mExecuteCallback.onExecute();
         }

@@ -6,15 +6,16 @@ import com.romanpulov.violetnote.model.BasicEntityNoteSelectionPosA;
 import com.romanpulov.violetnote.view.core.ViewSelectorHelper;
 
 import java.util.Collection;
+import java.util.List;
 
-public class BasicUIMoveAction<T extends Collection<? extends BasicEntityNoteA>> implements UIAction<T> {
-    private final T mItems;
+public class BasicUIMoveAction<T extends BasicEntityNoteA> implements UIAction<T> {
+    private final Collection<T> mItems;
     private final int mDirection;
     private final ViewSelectorHelper.AbstractViewSelector<Integer> mRecyclerViewSelector;
     private final RecyclerView mRecyclerView;
 
     public BasicUIMoveAction(
-            T items,
+            Collection<T> items,
             int direction,
             ViewSelectorHelper.AbstractViewSelector<Integer> recyclerViewSelector,
             RecyclerView recyclerView) {
@@ -25,7 +26,7 @@ public class BasicUIMoveAction<T extends Collection<? extends BasicEntityNoteA>>
     }
 
     @Override
-    public void execute(T data) {
+    public void execute(List<T> data) {
         BasicEntityNoteSelectionPosA selectionPos = new BasicEntityNoteSelectionPosA(data, mItems);
         int selectionScrollPos = selectionPos.getDirectionPos(mDirection);
         if (selectionScrollPos != -1) {

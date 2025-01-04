@@ -1,6 +1,7 @@
 package com.romanpulov.violetnote.view.core;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
@@ -8,9 +9,14 @@ import androidx.appcompat.view.ActionMode;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 
+import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.model.BasicCommonNoteA;
+import com.romanpulov.violetnote.model.MovementDirection;
+import com.romanpulov.violetnote.view.action.BasicUIMoveAction;
 import com.romanpulov.violetnote.view.helper.BottomToolbarHelper;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Base class for Basic common note fragment
@@ -65,5 +71,48 @@ public abstract class BasicCommonNoteFragment extends Fragment {
                 }
             }
         }
+    }
+
+    protected <T extends BasicCommonNoteA> boolean internalProcessMoveMenuItemClick(
+            MenuItem menuItem,
+            List<T> selectedItems,
+            BasicCommonNoteViewModel<T> model) {
+        if (!selectedItems.isEmpty()) {
+            int itemId = menuItem.getItemId();
+            if (itemId == R.id.move_up) {
+                model.moveUp(selectedItems,
+                        new BasicUIMoveAction<>(
+                                selectedItems,
+                                MovementDirection.DIRECTION_UP,
+                                mRecyclerViewSelector,
+                                mRecyclerView));
+                return true;
+            } else if (itemId == R.id.move_top) {
+                model.moveTop(selectedItems,
+                        new BasicUIMoveAction<>(
+                                selectedItems,
+                                MovementDirection.DIRECTION_UP,
+                                mRecyclerViewSelector,
+                                mRecyclerView));
+                return true;
+            } else if (itemId == R.id.move_down) {
+                model.moveDown(selectedItems,
+                        new BasicUIMoveAction<>(
+                                selectedItems,
+                                MovementDirection.DIRECTION_DOWN,
+                                mRecyclerViewSelector,
+                                mRecyclerView));
+                return true;
+            } else if (itemId == R.id.move_bottom) {
+                model.moveBottom(selectedItems,
+                        new BasicUIMoveAction<>(
+                                selectedItems,
+                                MovementDirection.DIRECTION_DOWN,
+                                mRecyclerViewSelector,
+                                mRecyclerView));
+                return true;
+            }
+        }
+        return false;
     }
 }

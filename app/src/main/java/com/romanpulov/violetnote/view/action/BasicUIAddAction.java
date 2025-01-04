@@ -2,9 +2,9 @@ package com.romanpulov.violetnote.view.action;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.Collection;
+import java.util.List;
 
-public class BasicUIAddAction<T extends Collection<?>> implements UIAction<T> {
+public class BasicUIAddAction<T> implements UIAction<T> {
     private final RecyclerView mRecyclerView;
 
     public BasicUIAddAction(RecyclerView recyclerView) {
@@ -12,7 +12,7 @@ public class BasicUIAddAction<T extends Collection<?>> implements UIAction<T> {
     }
 
     @Override
-    public void execute(T data) {
+    public void execute(List<T> data) {
         int position = data.size() - 1;
         if (position > -1) {
             mRecyclerView.scrollToPosition(position);

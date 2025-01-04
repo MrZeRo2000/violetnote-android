@@ -1,7 +1,7 @@
 package com.romanpulov.violetnote.view.action;
 
-import java.util.Collection;
+import java.util.List;
 
-public interface UIAction<T extends Collection<?>> {
-    void execute(T data);
+public interface UIAction<T> {
+    void execute(List<T> data);
 }

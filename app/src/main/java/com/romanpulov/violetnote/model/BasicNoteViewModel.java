@@ -90,7 +90,7 @@ public class BasicNoteViewModel extends BasicCommonNoteViewModel<BasicNoteA> {
         }
     }
 
-    public void duplicate(BasicNoteA item, String title, UIAction<List<? extends BasicCommonNoteA>> action) {
+    public void duplicate(BasicNoteA item, String title, UIAction<BasicNoteA> action) {
         BasicNoteA newNote = ParcelableUtils.duplicateParcelableObject(item, BasicNoteA.CREATOR);
         newNote.setTitle(title);
 
@@ -114,7 +114,7 @@ public class BasicNoteViewModel extends BasicCommonNoteViewModel<BasicNoteA> {
     public void moveToOtherNoteGroup(
             List<BasicNoteA> data,
             BasicNoteGroupA otherNoteGroup,
-            UIAction<List<? extends BasicCommonNoteA>> action) {
+            UIAction<BasicNoteA> action) {
         BasicOrderedEntityNoteA.sortAsc(data);
         data.forEach(note -> getDAO().moveToOtherNoteGroup(note, otherNoteGroup));
 

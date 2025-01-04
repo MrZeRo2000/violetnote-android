@@ -48,44 +48,7 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
     protected boolean processMoveMenuItemClick(MenuItem menuItem) {
         List<BasicNoteGroupA> selectedNoteItems = BasicEntityNoteSelectionPosA.getItemsByPositions(
                 getBasicNoteGroupList(), mRecyclerViewSelector.getSelectedItems());
-
-        if (!selectedNoteItems.isEmpty()) {
-            int itemId = menuItem.getItemId();
-            if (itemId == R.id.move_up) {
-                model.moveUp(selectedNoteItems,
-                        new BasicUIMoveAction<>(
-                                selectedNoteItems,
-                                MovementDirection.DIRECTION_UP,
-                                mRecyclerViewSelector,
-                                mRecyclerView));
-                return true;
-            } else if (itemId == R.id.move_top) {
-                model.moveTop(selectedNoteItems,
-                        new BasicUIMoveAction<>(
-                                selectedNoteItems,
-                                MovementDirection.DIRECTION_UP,
-                                mRecyclerViewSelector,
-                                mRecyclerView));
-                return true;
-            } else if (itemId == R.id.move_down) {
-                model.moveDown(selectedNoteItems,
-                        new BasicUIMoveAction<>(
-                                selectedNoteItems,
-                                MovementDirection.DIRECTION_DOWN,
-                                mRecyclerViewSelector,
-                                mRecyclerView));
-                return true;
-            } else if (itemId == R.id.move_bottom) {
-                model.moveBottom(selectedNoteItems,
-                        new BasicUIMoveAction<>(
-                                selectedNoteItems,
-                                MovementDirection.DIRECTION_DOWN,
-                                mRecyclerViewSelector,
-                                mRecyclerView));
-                return true;
-            }
-        }
-        return false;
+        return internalProcessMoveMenuItemClick(menuItem, selectedNoteItems, model);
     }
 
     private void performDeleteAction(@NonNull final ActionMode mode, @NonNull final List<BasicNoteGroupA> items) {
@@ -272,7 +235,7 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
                 mRecyclerViewAdapter.setBasicNoteGroupList(newBasicNoteGroups);
                 result.dispatchUpdatesTo(mRecyclerViewAdapter);
 
-                UIAction<List<? extends BasicCommonNoteA>> action = model.getAction();
+                UIAction<BasicNoteGroupA> action = model.getAction();
                 if (action != null) {
                     action.execute(newBasicNoteGroups);
                     model.resetAction();

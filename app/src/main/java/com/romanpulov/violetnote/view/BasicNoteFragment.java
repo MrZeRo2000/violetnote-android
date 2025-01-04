@@ -86,45 +86,7 @@ public class BasicNoteFragment extends BasicCommonNoteFragment  {
 
     protected boolean processMoveMenuItemClick(MenuItem menuItem) {
         List<BasicNoteA> selectedNotes = getSelectedNotes();
-
-        //int selectedItemPos = mRecyclerViewSelector.getSelectedItemPos();
-        if (!selectedNotes.isEmpty()) {
-            int itemId = menuItem.getItemId();
-            if (itemId == R.id.move_up) {
-                model.moveUp(selectedNotes,
-                        new BasicUIMoveAction<>(
-                                selectedNotes,
-                                MovementDirection.DIRECTION_UP,
-                                mRecyclerViewSelector,
-                                mRecyclerView));
-                return true;
-            } else if (itemId == R.id.move_top) {
-                model.moveTop(selectedNotes,
-                        new BasicUIMoveAction<>(
-                                selectedNotes,
-                                MovementDirection.DIRECTION_UP,
-                                mRecyclerViewSelector,
-                                mRecyclerView));
-                return true;
-            } else if (itemId == R.id.move_down) {
-                model.moveDown(selectedNotes,
-                        new BasicUIMoveAction<>(
-                                selectedNotes,
-                                MovementDirection.DIRECTION_DOWN,
-                                mRecyclerViewSelector,
-                                mRecyclerView));
-                return true;
-            } else if (itemId == R.id.move_bottom) {
-                model.moveBottom(selectedNotes,
-                        new BasicUIMoveAction<>(
-                                selectedNotes,
-                                MovementDirection.DIRECTION_DOWN,
-                                mRecyclerViewSelector,
-                                mRecyclerView));
-                return true;
-            }
-        }
-        return false;
+        return internalProcessMoveMenuItemClick(menuItem, selectedNotes, model);
     }
 
     private void performDeleteAction(final ActionMode mode, final List<BasicNoteA> items) {
@@ -366,7 +328,7 @@ public class BasicNoteFragment extends BasicCommonNoteFragment  {
                     mRecyclerViewAdapter.updateItems(newNotes);
                 }
 
-                UIAction<List<? extends BasicCommonNoteA>> action = model.getAction();
+                UIAction<BasicNoteA> action = model.getAction();
                 if (action != null) {
                     action.execute(newNotes);
                     model.resetAction();

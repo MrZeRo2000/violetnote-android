@@ -15,7 +15,7 @@ import java.util.List;
 public abstract class BasicCommonNoteViewModel<T extends BasicCommonNoteA> extends AndroidViewModel {
 
     private BasicCommonNoteDAO mBasicCommonNoteDAO;
-    private UIAction<List<? extends BasicCommonNoteA>> mAction;
+    private UIAction<T> mAction;
 
     private BasicCommonNoteDAO getBasicCommonNoteDAO() {
         if (mBasicCommonNoteDAO == null) {
@@ -24,11 +24,11 @@ public abstract class BasicCommonNoteViewModel<T extends BasicCommonNoteA> exten
         return mBasicCommonNoteDAO;
     }
 
-    public UIAction<List<? extends BasicCommonNoteA>> getAction() {
+    public UIAction<T> getAction() {
         return mAction;
     }
 
-    protected void setAction(UIAction<List<? extends BasicCommonNoteA>> mAction) {
+    protected void setAction(UIAction<T> mAction) {
         this.mAction = mAction;
     }
 
@@ -43,7 +43,7 @@ public abstract class BasicCommonNoteViewModel<T extends BasicCommonNoteA> exten
     protected abstract void onDataChangeActionCompleted();
     protected abstract AbstractDAO<T> getDAO();
 
-    public void moveUp(List<? extends BasicCommonNoteA> items, UIAction<List<? extends BasicCommonNoteA>> action) {
+    public void moveUp(List<T> items, UIAction<T> action) {
         BasicOrderedEntityNoteA.sortAsc(items);
         boolean result = false;
 
@@ -61,7 +61,7 @@ public abstract class BasicCommonNoteViewModel<T extends BasicCommonNoteA> exten
         }
     }
 
-    public void moveTop(List<? extends BasicCommonNoteA> items, UIAction<List<? extends BasicCommonNoteA>> action) {
+    public void moveTop(List<T> items, UIAction<T> action) {
         BasicOrderedEntityNoteA.sortDesc(items);
         boolean result = false;
 
@@ -79,7 +79,7 @@ public abstract class BasicCommonNoteViewModel<T extends BasicCommonNoteA> exten
         }
     }
 
-    public void moveDown(List<? extends BasicCommonNoteA> items, UIAction<List<? extends BasicCommonNoteA>> action) {
+    public void moveDown(List<T> items, UIAction<T> action) {
         BasicOrderedEntityNoteA.sortDesc(items);
         boolean result = false;
 
@@ -97,7 +97,7 @@ public abstract class BasicCommonNoteViewModel<T extends BasicCommonNoteA> exten
         }
     }
 
-    public void moveBottom(List<? extends BasicCommonNoteA> items, UIAction<List<? extends BasicCommonNoteA>> action) {
+    public void moveBottom(List<T> items, UIAction<T> action) {
         BasicOrderedEntityNoteA.sortAsc(items);
         boolean result = false;
 
@@ -115,27 +115,27 @@ public abstract class BasicCommonNoteViewModel<T extends BasicCommonNoteA> exten
         }
     }
 
-    public void add(T item, UIAction<List<? extends BasicCommonNoteA>> action) {
+    public void add(T item, UIAction<T> action) {
         if (getDAO().insert(item) != -1) {
             setAction(action);
             onDataChangeActionCompleted();
         }
     }
 
-    public void delete(T item, UIAction<List<? extends BasicCommonNoteA>> action) {
+    public void delete(T item, UIAction<T> action) {
         if (getDAO().delete(item) != 0) {
             setAction(action);
             onDataChangeActionCompleted();
         }
     }
 
-    public void delete(Collection<T> items, UIAction<List<? extends BasicCommonNoteA>> action) {
+    public void delete(Collection<T> items, UIAction<T> action) {
         items.forEach(item -> getDAO().delete(item));
         setAction(action);
         onDataChangeActionCompleted();
     }
 
-    public void edit(T item, UIAction<List<? extends BasicCommonNoteA>> action) {
+    public void edit(T item, UIAction<T> action) {
         if (getDAO().update(item) != -1) {
             setAction(action);
             onDataChangeActionCompleted();
