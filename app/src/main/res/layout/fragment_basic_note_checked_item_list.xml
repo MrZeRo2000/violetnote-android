@@ -43,4 +43,13 @@
         android:visibility="gone"
         />
 
+    <androidx.appcompat.widget.ActionMenuView
+            android:id="@+id/fragment_toolbar_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/actionModeBackground"
+            android:theme="@style/ToolBarStyle"
+            app:popupTheme="@style/ToolBarStyle"
+    />
+
 </LinearLayout>
