@@ -4,6 +4,7 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import com.romanpulov.violetnote.db.dao.BasicNoteDAO;
+import com.romanpulov.violetnote.db.dao.BasicNoteGroupDAO;
 import com.romanpulov.violetnote.db.dao.BasicNoteItemDAO;
 import com.romanpulov.violetnote.view.action.UIAction;
 import com.romanpulov.violetnote.view.core.BasicCommonNoteViewModel;
@@ -14,11 +15,13 @@ import java.util.Objects;
 
 public class BasicNoteViewModel extends BasicCommonNoteViewModel<BasicNoteA> {
 
+    private BasicNoteGroupDAO mBasicNoteGroupDAO;
     private BasicNoteDAO mBasicNoteDAO;
     private BasicNoteItemDAO mBasicNoteItemDAO;
 
     private BasicNoteGroupA mBasicNoteGroup;
     private MutableLiveData<List<BasicNoteA>> mBasicNotes;
+    private MutableLiveData<List<BasicNoteGroupA>> mRelatedNoteGroups;
 
     public BasicNoteGroupA getBasicNoteGroup() {
         return mBasicNoteGroup;
@@ -28,6 +31,9 @@ public class BasicNoteViewModel extends BasicCommonNoteViewModel<BasicNoteA> {
         if (!Objects.equals(this.mBasicNoteGroup, mBasicNoteGroup)) {
             this.mBasicNoteGroup = mBasicNoteGroup;
             loadNotes();
+            if (mRelatedNoteGroups != null) {
+                mRelatedNoteGroups.setValue(null);
+            }
         }
     }
 
@@ -37,6 +43,14 @@ public class BasicNoteViewModel extends BasicCommonNoteViewModel<BasicNoteA> {
             loadNotes();
         }
         return mBasicNotes;
+    }
+
+    public MutableLiveData<List<BasicNoteGroupA>> getRelatedNoteGroups() {
+        if (mRelatedNoteGroups == null) {
+            mRelatedNoteGroups = new MutableLiveData<>();
+            mRelatedNoteGroups.setValue(getBasicNoteGroupDAO().getRelatedNoteGroupList(getBasicNoteGroup()));
+        }
+        return mRelatedNoteGroups;
     }
 
     public BasicNoteViewModel(@NotNull Application application) {
@@ -54,6 +68,13 @@ public class BasicNoteViewModel extends BasicCommonNoteViewModel<BasicNoteA> {
             mBasicNoteDAO = new BasicNoteDAO(getApplication());
         }
         return mBasicNoteDAO;
+    }
+
+    public BasicNoteGroupDAO getBasicNoteGroupDAO() {
+        if (mBasicNoteGroupDAO == null) {
+            mBasicNoteGroupDAO = new BasicNoteGroupDAO(getApplication());
+        }
+        return mBasicNoteGroupDAO;
     }
 
     private BasicNoteItemDAO getBasicNoteItemDAO() {
@@ -88,5 +109,16 @@ public class BasicNoteViewModel extends BasicCommonNoteViewModel<BasicNoteA> {
             setAction(action);
             onDataChangeActionCompleted();
         }
+    }
+
+    public void moveToOtherNoteGroup(
+            List<BasicNoteA> data,
+            BasicNoteGroupA otherNoteGroup,
+            UIAction<List<? extends BasicCommonNoteA>> action) {
+        BasicOrderedEntityNoteA.sortAsc(data);
+        data.forEach(note -> getDAO().moveToOtherNoteGroup(note, otherNoteGroup));
+
+        setAction(action);
+        onDataChangeActionCompleted();
     }
 }

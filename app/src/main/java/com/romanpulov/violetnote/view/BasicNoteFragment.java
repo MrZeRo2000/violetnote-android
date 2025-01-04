@@ -8,7 +8,6 @@ import androidx.annotation.Nullable;
 import androidx.core.view.MenuHost;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.view.ActionMode;
 import androidx.lifecycle.Lifecycle;
@@ -19,7 +18,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.databinding.FragmentBasicNoteListBinding;
-import com.romanpulov.violetnote.db.manager.DBNoteManager;
 import com.romanpulov.violetnote.model.*;
 import com.romanpulov.violetnote.view.action.*;
 import com.romanpulov.violetnote.view.core.TextEditDialogBuilder;
@@ -32,9 +30,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-/**
- * A placeholder fragment containing a simple view.
- */
 public class BasicNoteFragment extends BasicCommonNoteFragment {
     protected final static int MENU_GROUP_OTHER_ITEMS = Menu.FIRST + 1;
 
@@ -45,7 +40,6 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
 
     private InputActionHelper mInputActionHelper;
 
-    private List<BasicNoteGroupA> mRelatedNoteGroupList;
     private OnBasicNoteFragmentInteractionListener mListener;
 
     private @NonNull BasicNoteGroupA getNoteGroup() {
@@ -145,8 +139,8 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
             View focusedView = alertDialog.getCurrentFocus();
             InputManagerHelper.hideInput(focusedView);
 
-            if (BasicNoteA.findByTitle(getNoteList(), text) == null) {
-                model.duplicate(item, text, new BasicUIAddAction<>(mRecyclerView));
+            if (BasicNoteA.findByTitle(getNoteList(), text.trim()) == null) {
+                model.duplicate(item, text.trim(), new BasicUIAddAction<>(mRecyclerView));
             } else {
                 DisplayMessageHelper.displayInfoMessage(requireActivity(), getString(R.string.ui_error_note_already_exists, text));
             }
@@ -162,41 +156,17 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
         }
     }
 
-    private void performMoveToOtherNoteGroupAction(final ActionMode mode, @NonNull final List<BasicNoteA> items, @NonNull final BasicNoteGroupA otherNoteGroup) {
+    private void performMoveToOtherNoteGroupAction(
+            final ActionMode mode,
+            @NonNull final List<BasicNoteA> items,
+            @NonNull final BasicNoteGroupA otherNoteGroup) {
         String confirmationQuestion = getResources()
                 .getQuantityString(R.plurals.ui_question_selected_note_move_to_other_note_group, items.size(), items.size(), otherNoteGroup.getDisplayTitle());
         AlertOkCancelSupportDialogFragment dialog = AlertOkCancelSupportDialogFragment.newAlertOkCancelDialog(confirmationQuestion);
-        dialog.setOkButtonClickListener(dialog1 -> {
-            //executor
-            BasicActionExecutor<List<BasicNoteA>> executor = new BasicActionExecutor<>(getContext(), getNoteList());
+        dialog.setOkButtonClickListener(dialog1 ->
+            model.moveToOtherNoteGroup(items, otherNoteGroup, new BasicUIFinishAction<>(mode)));
 
-            //actions
-            executor.addAction(getString(R.string.caption_processing), new BasicNoteMoveToOtherNoteGroupAction(items, otherNoteGroup));
-            executor.addAction(getString(R.string.caption_loading), new BasicNoteRefreshAction(getNoteList(), getNoteGroup()));
-
-            //on completed
-            executor.setOnExecutionCompletedListener((data, result) -> {
-                mode.finish();
-
-                if (result) {
-                    RecyclerViewHelper.adapterNotifyDataSetChanged(mRecyclerView);
-                }
-
-                if (mDialogFragment != null) {
-                    mDialogFragment.dismiss();
-                    mDialogFragment = null;
-                }
-            });
-
-            //execute
-            executor.execute();
-        });
-
-        FragmentManager fragmentManager = getFragmentManager();
-        if (fragmentManager != null)
-            dialog.show(fragmentManager, null);
-
-        mDialogFragment = dialog;
+        dialog.show(getParentFragmentManager(), AlertOkCancelSupportDialogFragment.TAG);
     }
 
     private void updateTitle(ActionMode mode) {
@@ -209,9 +179,9 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
             List<BasicNoteA> selectedNotes = getSelectedNotes();
 
             if (!selectedNotes.isEmpty()) {
-                if ((item.getGroupId() == MENU_GROUP_OTHER_ITEMS) && (mRelatedNoteGroupList != null)) {
+                if ((item.getGroupId() == MENU_GROUP_OTHER_ITEMS) && (model.getRelatedNoteGroups().getValue() != null)) {
                     // move to other items
-                    BasicNoteGroupA otherNoteGroup = mRelatedNoteGroupList.get(item.getItemId());
+                    BasicNoteGroupA otherNoteGroup = model.getRelatedNoteGroups().getValue().get(item.getItemId());
                     performMoveToOtherNoteGroupAction(mode, selectedNotes, otherNoteGroup);
                 } else {
                     int itemId = item.getItemId();
@@ -227,15 +197,12 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
             return false;
         }
 
-        private void buildMoveToOtherGroupsSubMenu(Menu menu) {
-            DBNoteManager mNoteManager = new DBNoteManager(getContext());
-            mRelatedNoteGroupList =  mNoteManager.mBasicNoteGroupDAO.getRelatedNoteGroupList(getNoteGroup());
-
+        private void buildMoveToOtherGroupsSubMenu(Menu menu,  List<BasicNoteGroupA> relatedNoteGroups) {
             SubMenu subMenu = null;
             int order = 1;
             int relatedNoteGroupIndex = 0;
 
-            for (BasicNoteGroupA noteGroupA : mRelatedNoteGroupList) {
+            for (BasicNoteGroupA noteGroupA : relatedNoteGroups) {
                 if (subMenu == null) {
                     subMenu = menu.addSubMenu(Menu.NONE, Menu.NONE, order++, getString(R.string.action_move_other));
                     subMenu.getItem().setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
@@ -250,7 +217,10 @@ public class BasicNoteFragment extends BasicCommonNoteFragment {
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             mode.getMenuInflater().inflate(R.menu.menu_edit_delete_duplicate_actions, menu);
 
-            buildMoveToOtherGroupsSubMenu(menu);
+            model.getRelatedNoteGroups().observe(
+                    BasicNoteFragment.this,
+                    relatedNoteGroups ->
+                        buildMoveToOtherGroupsSubMenu(menu, relatedNoteGroups));
 
             if (mInputActionHelper != null) {
                 mInputActionHelper.hideLayout();
