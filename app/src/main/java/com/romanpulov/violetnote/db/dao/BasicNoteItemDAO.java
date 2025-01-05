@@ -30,6 +30,8 @@ public final class BasicNoteItemDAO extends AbstractBasicNoteItemDAO<BasicNoteIt
         super(context);
     }
 
+    public record BasicNoteItemsWithSummary(List<BasicNoteItemA>items, BasicNoteSummary summary) {}
+
     @NonNull
     public static BasicNoteItemA noteItemFromCursor(@NonNull Cursor c, @NonNull DateTimeFormatter dtf) {
         return BasicNoteItemA.newInstance(
@@ -97,7 +99,7 @@ public final class BasicNoteItemDAO extends AbstractBasicNoteItemDAO<BasicNoteIt
         return result[0];
     }
 
-    public void fillNoteDataItemsWithSummary(final BasicNoteA note) {
+    public BasicNoteItemsWithSummary getNoteDataItemsWithSummary(final BasicNoteA note) {
         final List<BasicNoteItemA> items = new ArrayList<>();
 
         String orderString = DBCommonDef.PRIORITY_COLUMN_NAME + " DESC, " + DBCommonDef.ORDER_COLUMN_NAME;
@@ -141,8 +143,13 @@ public final class BasicNoteItemDAO extends AbstractBasicNoteItemDAO<BasicNoteIt
             }
         });
 
-        note.setItems(items);
-        note.setSummary(calcSummary);
+        return new BasicNoteItemsWithSummary(items, calcSummary);
+    }
+
+    public void fillNoteDataItemsWithSummary(final BasicNoteA note) {
+        BasicNoteItemsWithSummary basicNoteItemsWithSummary = getNoteDataItemsWithSummary(note);
+        note.setItems(basicNoteItemsWithSummary.items);
+        note.setSummary(basicNoteItemsWithSummary.summary);
     }
 
     public long updateChecked(BasicNoteItemA item, boolean checked) {

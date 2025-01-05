@@ -65,14 +65,12 @@ public class BasicNoteFragment extends BasicCommonNoteFragment  {
     }
 
     public void onBasicNoteSelection(BasicNoteA item) {
-        BasicNoteDataA noteData = model.createNoteDataFromNote(getNoteGroup(), item);
-        Intent intent = switch (item.getNoteType()) {
-            case BasicNoteA.NOTE_TYPE_CHECKED -> new Intent(requireActivity(), BasicNoteCheckedItemActivity.class);
-            case BasicNoteA.NOTE_TYPE_NAMED -> new Intent(requireActivity(), BasicNoteNamedItemActivity.class);
-            default -> null;
-        };
-
-        if (intent != null) {
+        if (item.getNoteType() == BasicNoteA.NOTE_TYPE_CHECKED) {
+            NavHostFragment.findNavController(BasicNoteFragment.this).navigate(
+                    BasicNoteFragmentDirections.actionBasicNoteToCheckedItem().setNote(item));
+        } else if (item.getNoteType() == BasicNoteA.NOTE_TYPE_NAMED) {
+            BasicNoteDataA noteData = model.createNoteDataFromNote(getNoteGroup(), item);
+            Intent intent = new Intent(requireActivity(), BasicNoteNamedItemActivity.class);
             intent.putExtra(PasswordActivity.PASS_DATA, noteData);
             PasswordActivity.getPasswordValidityChecker().resetPeriod();
             startActivityForResult(intent, 0);
