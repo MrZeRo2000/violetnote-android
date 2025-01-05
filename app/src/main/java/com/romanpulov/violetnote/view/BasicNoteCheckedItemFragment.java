@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.appcompat.view.ActionMode;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.databinding.FragmentBasicNoteCheckedItemListBinding;
 import com.romanpulov.violetnote.db.DBBasicNoteHelper;
 import com.romanpulov.violetnote.db.manager.DBNoteManager;
 import com.romanpulov.violetnote.model.*;
@@ -30,6 +32,8 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment {
 
     public static final int RESULT_CODE_VALUES = 0;
     public static final int RESULT_CODE_HISTORY = 1;
+
+    private FragmentBasicNoteCheckedItemListBinding binding;
 
     private InputActionHelper mInputActionHelper;
     private CheckoutProgressHelper mCheckoutProgressHelper;
@@ -52,6 +56,15 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment {
             }
         }
     };
+
+    private void setupBottomToolbar() {
+        /*
+        mBottomToolbarHelper = BottomToolbarHelper.from(binding.fragmentToolbarBottom, this::processMoveMenuItemClick);
+        requireActivity().getMenuInflater().inflate(R.menu.menu_listitem_bottom_move_actions, binding.fragmentToolbarBottom.getMenu());
+        binding.fragmentToolbarBottom.setVisibility(View.GONE);
+
+         */
+    }
 
     public void refreshListWithView() {
         /*
@@ -280,7 +293,15 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_basic_note_checked_item_list, container, false);
+        binding = FragmentBasicNoteCheckedItemListBinding.inflate(getLayoutInflater());
+        setupBottomToolbar();
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
 
         Context context = view.getContext();
         mRecyclerView = view.findViewById(R.id.list);
@@ -404,8 +425,6 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment {
 
         // add decoration
         mRecyclerView.addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(getActivity(), RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_white_black_gradient));
-
-        return view;
     }
 
     public void startHEventHistoryActivity() {
