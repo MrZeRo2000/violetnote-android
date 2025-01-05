@@ -1,13 +1,11 @@
 package com.romanpulov.violetnote.view;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.appcompat.view.ActionMode;
@@ -23,24 +21,11 @@ import com.romanpulov.violetnote.db.DBBasicNoteHelper;
 import com.romanpulov.violetnote.db.manager.DBNoteManager;
 import com.romanpulov.violetnote.model.*;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutorHost;
-import com.romanpulov.violetnote.view.action.BasicNoteDataItemAddUniqueValuesAction;
-import com.romanpulov.violetnote.view.core.PassDataPasswordActivity;
+import com.romanpulov.violetnote.view.core.*;
 import com.romanpulov.violetnote.view.helper.*;
-import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutor;
-import com.romanpulov.violetnote.view.action.BasicNoteDataItemCheckOutAction;
-import com.romanpulov.violetnote.view.action.BasicNoteDataItemEditNameValueAction;
-import com.romanpulov.violetnote.view.action.BasicNoteDataItemUpdateCheckedAction;
-import com.romanpulov.violetnote.view.action.BasicNoteDataRefreshAction;
-import com.romanpulov.violetnote.view.core.AlertOkCancelSupportDialogFragment;
-import com.romanpulov.violetnote.view.core.PasswordActivity;
-import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 
-import java.util.List;
-
-import static com.romanpulov.violetnote.view.core.ViewSelectorHelper.KEY_SELECTED_ITEMS_RETURN_DATA;
-
-public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
+public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment {
     private final static String TAG = BasicNoteCheckedItemFragment.class.getSimpleName();
 
     public static final int RESULT_CODE_VALUES = 0;
@@ -69,6 +54,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
     };
 
     public void refreshListWithView() {
+        /*
         Context context = getContext();
         if (context != null) {
             BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(context, mBasicNoteData);
@@ -80,6 +66,8 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
             });
             executeActions(executor);
         }
+
+         */
     }
 
     @Override
@@ -93,19 +81,19 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         }
     }
 
-    private void setupBottomToolbarHelper() {
+    private void setupBottomToolbarHelper() {/*
         FragmentActivity activity = getActivity();
         if (activity != null) {
             mBottomToolbarHelper = BottomToolbarHelper.fromContext(activity, this::processMoveMenuItemClick);
         }
+        */
     }
 
     private void notifyNoteGroupsChanged() {
         BasicNoteGroupViewModel.setAppNoteGroupsChanged(requireActivity().getApplication());
     }
 
-    @Override
-    protected void afterExecutionCompleted() {
+    private void afterExecutionCompleted() {
         updateParamsSummary();
         updateCheckedItems();
         notifyNoteGroupsChanged();
@@ -122,16 +110,20 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         BasicNoteCheckedItemFragment fragment = new BasicNoteCheckedItemFragment();
         Bundle args = new Bundle();
         args.putParcelable(PasswordActivity.PASS_DATA, basicNoteDataA);
-        fragment.setExecutorHost(host);
+        //fragment.setExecutorHost(host);
         fragment.setArguments(args);
         return fragment;
     }
 
     private void updateParamsSummary() {
+        /*
         mParamsSummary = mBasicNoteData.getParamsSummary(mPriceNoteParamTypeId);
+
+         */
     }
 
     private void updateCheckedItems() {
+        /*
         //update checkout progress
         if ((mCheckoutProgressHelper != null) && (mParamsSummary != null)) {
             mCheckoutProgressHelper.setProgressData(
@@ -142,6 +134,8 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                     mParamsSummary.getIsInt()
             );
         }
+
+         */
     }
 
     private void refreshCheckedItemsDisplay() {
@@ -152,6 +146,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
     }
 
     private void performEditAction(NoteItemDataUpdater noteItemDataUpdater) {
+        /*
         List<BasicNoteItemA> selectedNoteItems = getSelectedNoteItems();
         if (selectedNoteItems.size() == 1) {
             BasicNoteItemA item = selectedNoteItems.get(0);
@@ -175,18 +170,24 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
             });
             executeActions(executor);
         }
+
+         */
     }
 
     private void updateTitle(ActionMode mode) {
+        /*
         mode.setTitle(DisplayTitleBuilder.buildItemsDisplayTitle(
                 getActivity(),
                 mBasicNoteData.getNote().getItems(),
                 mRecyclerViewSelector.getSelectedItems()));
+
+         */
     }
 
     public class ActionBarCallBack implements ActionMode.Callback {
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            /*
             List<BasicNoteItemA> selectedNoteItems = getSelectedNoteItems();
 
             if (!selectedNoteItems.isEmpty()) {
@@ -212,11 +213,14 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                     }
                 }
             }
+
+             */
             return false;
         }
 
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            /*
             mode.getMenuInflater().inflate(R.menu.menu_listitem_checked_actions, menu);
 
             buildMoveToOtherNotesSubMenu(menu);
@@ -226,6 +230,8 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
             }
 
             hideAddLayout();
+
+             */
 
             return true;
         }
@@ -243,6 +249,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
 
         @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            /*
             hideAddLayout();
 
             if (mBottomToolbarHelper == null) {
@@ -263,6 +270,8 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
 
             updateActionMenu(menu);
             updateTitle(mode);
+
+             */
             return true;
         }
     }
@@ -278,7 +287,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-        BasicNoteCheckedItemRecyclerViewAdapter recyclerViewAdapter = new BasicNoteCheckedItemRecyclerViewAdapter(mBasicNoteData, mPriceNoteParamTypeId, new ActionBarCallBack(),
+        BasicNoteCheckedItemRecyclerViewAdapter recyclerViewAdapter = new BasicNoteCheckedItemRecyclerViewAdapter(null/*mBasicNoteData*/, mPriceNoteParamTypeId, new ActionBarCallBack(),
                 new OnBasicNoteCheckedItemFragmentInteractionListener() {
                     @Override
                     public void onBasicNoteItemFragmentInteraction(BasicNoteItemA item) {
@@ -295,8 +304,11 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                         updateParamsSummary();
 
                         //update checked
+                        /*
                         mBasicNoteData.getNote().getSummary().addCheckedItemCount(item.isChecked() ? 1 : - 1);
                         updateCheckedItems();
+
+                         */
 
                         // update groups totals
                         notifyNoteGroupsChanged();
@@ -332,6 +344,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         //add action panel
         mInputActionHelper = new InputActionHelper(view.findViewById(R.id.add_panel_include));
         mInputActionHelper.setOnAddInteractionListener((actionType, text) -> {
+            /*
             if (mBasicNoteData.getNote().isEncrypted()) {
                 InputManagerHelper.hideInput(view);
             }
@@ -354,6 +367,8 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                     mRecyclerViewSelector.finishActionMode();
                     break;
             }
+
+             */
         });
 
         updateParamsSummary();
@@ -363,6 +378,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         updateCheckedItems();
 
         // for not encrypted set up AutoComplete and list button
+        /*
         if (!mBasicNoteData.getNote().isEncrypted()) {
             mInputActionHelper.setAutoCompleteList(mBasicNoteData.getNote().getValues());
 
@@ -381,6 +397,8 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
             });
         }
 
+         */
+
         //restore selected items
         restoreSelectedItems(savedInstanceState, view);
 
@@ -391,13 +409,17 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
     }
 
     public void startHEventHistoryActivity() {
+        /*
         Intent intent = new Intent(getActivity(), BasicHEventCOItemActivity.class);
         intent.putExtra(BasicHEventCOItemActivity.class.getName(), mBasicNoteData.getNote());
         startActivityForResult(intent, RESULT_CODE_HISTORY);
+
+         */
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        /*
         switch (requestCode) {
             case RESULT_CODE_VALUES:
                 //update values
@@ -418,6 +440,8 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                 }
                 break;
         }
+
+         */
     }
 
     public void showAddLayout() {
@@ -431,6 +455,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
     }
 
     public void performUpdateChecked(boolean checked) {
+        /*
         BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity(), mBasicNoteData);
 
         executor.addAction(getString(R.string.caption_processing), new BasicNoteDataItemUpdateCheckedAction(mBasicNoteData, checked));
@@ -442,9 +467,12 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         });
 
         executeActions(executor);
+
+         */
     }
 
     public void performCheckOutAction() {
+        /*
         BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity(), mBasicNoteData);
 
         executor.addAction(getString(R.string.caption_processing), new BasicNoteDataItemCheckOutAction(mBasicNoteData));
@@ -460,9 +488,12 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         });
 
         executeActions(executor);
+
+         */
     }
 
     public void performRefresh() {
+        /*
         if (!mBasicNoteData.getNote().isEncrypted() || PasswordActivity.getPasswordValidityChecker().isValid()) {
             refreshListWithView();
             setSwipeRefreshing(false);
@@ -473,9 +504,12 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
                 ((BasicNoteCheckedItemActivity)activity).requestInvalidateFragment();
             }
         }
+
+         */
     }
 
     public void performAddListValuesAction(String[] values) {
+        /*
         // create executor
         BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity(), mBasicNoteData);
 
@@ -491,6 +525,8 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
 
         // execute
         executeActions(executor);
+
+         */
     }
 
     public void setSwipeRefreshing(boolean value) {
@@ -514,7 +550,7 @@ public class BasicNoteCheckedItemFragment extends BasicNoteItemFragment {
         }
     }
 
-    public interface OnBasicNoteCheckedItemFragmentInteractionListener extends OnBasicNoteItemFragmentInteractionListener {
+    public interface OnBasicNoteCheckedItemFragmentInteractionListener extends BasicNoteItemFragment.OnBasicNoteItemFragmentInteractionListener {
         void onBasicNoteItemPriceClick(BasicNoteItemA item, int position);
     }
 

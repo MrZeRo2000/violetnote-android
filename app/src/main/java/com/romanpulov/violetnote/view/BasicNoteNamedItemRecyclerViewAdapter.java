@@ -16,6 +16,8 @@ import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 import com.romanpulov.violetnote.view.core.ViewSelectorHelper;
 import com.romanpulov.violetnote.view.helper.PriorityDisplayHelper;
 
+import java.util.function.Consumer;
+
 public class BasicNoteNamedItemRecyclerViewAdapter extends RecyclerView.Adapter<BasicNoteNamedItemRecyclerViewAdapter.ViewHolder> implements ViewSelectorHelper.ChangeNotificationListener {
     @Override
     public void notifySelectionChanged() {
@@ -24,16 +26,16 @@ public class BasicNoteNamedItemRecyclerViewAdapter extends RecyclerView.Adapter<
 
     private final BasicNoteDataA mBasicNoteData;
     private final ViewSelectorHelper.AbstractViewSelector<Integer> mRecyclerViewSelector;
-    private final BasicNoteCheckedItemFragment.OnBasicNoteItemFragmentInteractionListener mListener;
+    private final Consumer<BasicNoteItemA> mBasicNoteItemConsumer;
 
     public ViewSelectorHelper.AbstractViewSelector<Integer> getRecyclerViewSelector() {
         return mRecyclerViewSelector;
     }
 
-    public BasicNoteNamedItemRecyclerViewAdapter(BasicNoteDataA basicNoteData, ActionMode.Callback actionModeCallback, BasicNoteCheckedItemFragment.OnBasicNoteItemFragmentInteractionListener listener) {
+    public BasicNoteNamedItemRecyclerViewAdapter(BasicNoteDataA basicNoteData, ActionMode.Callback actionModeCallback, Consumer<BasicNoteItemA> basicNoteItemConsumer) {
         mBasicNoteData = basicNoteData;
         mRecyclerViewSelector = new ViewSelectorHelper.ViewSelectorMultiple<>(this, actionModeCallback);
-        mListener = listener;
+        mBasicNoteItemConsumer = basicNoteItemConsumer;
     }
 
     @NonNull
@@ -81,8 +83,8 @@ public class BasicNoteNamedItemRecyclerViewAdapter extends RecyclerView.Adapter<
         @Override
         public void onClick(View v) {
             super.onClick(v);
-            if ((!mRecyclerViewSelector.isSelected()) && (mListener != null) && (getBindingAdapterPosition() != -1))
-                mListener.onBasicNoteItemFragmentInteraction(mBasicNoteData.getNote().getItems().get(getBindingAdapterPosition()));
+            if ((!mRecyclerViewSelector.isSelected()) && (mBasicNoteItemConsumer != null) && (getBindingAdapterPosition() != -1))
+                mBasicNoteItemConsumer.accept(mBasicNoteData.getNote().getItems().get(getBindingAdapterPosition()));
         }
 
         @Override
