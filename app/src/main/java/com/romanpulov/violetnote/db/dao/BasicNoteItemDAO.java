@@ -99,12 +99,13 @@ public final class BasicNoteItemDAO extends AbstractBasicNoteItemDAO<BasicNoteIt
         return result[0];
     }
 
-    public BasicNoteItemsWithSummary getNoteDataItemsWithSummary(final BasicNoteA note) {
+    public BasicNoteItemsWithSummary getNoteItemsWithSummary(final BasicNoteA note) {
         final List<BasicNoteItemA> items = new ArrayList<>();
 
         String orderString = DBCommonDef.PRIORITY_COLUMN_NAME + " DESC, " + DBCommonDef.ORDER_COLUMN_NAME;
-        if (PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(PreferenceRepository.PREF_KEY_INTERFACE_CHECKED_LAST, false))
+        if (PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(PreferenceRepository.PREF_KEY_INTERFACE_CHECKED_LAST, false)) {
             orderString = DBCommonDef.CHECKED_COLUMN_NAME + " ASC, " + orderString;
+        }
 
         final String queryOrderString = orderString;
         final LongSparseArray<BasicNoteItemParams> paramsList = getBasicNoteItemParamsDAO().getByNote(note);
@@ -147,7 +148,7 @@ public final class BasicNoteItemDAO extends AbstractBasicNoteItemDAO<BasicNoteIt
     }
 
     public void fillNoteDataItemsWithSummary(final BasicNoteA note) {
-        BasicNoteItemsWithSummary basicNoteItemsWithSummary = getNoteDataItemsWithSummary(note);
+        BasicNoteItemsWithSummary basicNoteItemsWithSummary = getNoteItemsWithSummary(note);
         note.setItems(basicNoteItemsWithSummary.items);
         note.setSummary(basicNoteItemsWithSummary.summary);
     }

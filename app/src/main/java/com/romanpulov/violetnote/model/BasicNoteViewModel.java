@@ -27,9 +27,9 @@ public class BasicNoteViewModel extends BasicCommonNoteViewModel<BasicNoteA> {
         return mBasicNoteGroup;
     }
 
-    public void setBasicNoteGroup(BasicNoteGroupA mBasicNoteGroup) {
-        if (!Objects.equals(this.mBasicNoteGroup, mBasicNoteGroup)) {
-            this.mBasicNoteGroup = mBasicNoteGroup;
+    public void setBasicNoteGroup(BasicNoteGroupA basicNoteGroup) {
+        if (!Objects.equals(this.mBasicNoteGroup, basicNoteGroup)) {
+            this.mBasicNoteGroup = basicNoteGroup;
             loadNotes();
             if (mRelatedNoteGroups != null) {
                 mRelatedNoteGroups.setValue(null);

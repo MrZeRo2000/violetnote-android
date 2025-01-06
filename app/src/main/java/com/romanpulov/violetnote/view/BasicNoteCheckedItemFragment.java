@@ -34,6 +34,7 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment {
     public static final int RESULT_CODE_HISTORY = 1;
 
     private FragmentBasicNoteCheckedItemListBinding binding;
+    private BasicNoteCheckedItemRecyclerViewAdapter mRecyclerViewAdapter;
 
     private InputActionHelper mInputActionHelper;
     private CheckoutProgressHelper mCheckoutProgressHelper;
@@ -302,11 +303,14 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
         Context context = view.getContext();
-        mRecyclerView = view.findViewById(R.id.list);
-
+        mRecyclerView = binding.list;
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+        // add decoration
+        mRecyclerView.addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(getActivity(), RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_white_black_gradient));
+
+        mRecyclerView.setAdapter(mRecyclerViewAdapter);
+
 
         BasicNoteCheckedItemRecyclerViewAdapter recyclerViewAdapter = new BasicNoteCheckedItemRecyclerViewAdapter(null/*mBasicNoteData*/, mPriceNoteParamTypeId, new ActionBarCallBack(),
                 new OnBasicNoteCheckedItemFragmentInteractionListener() {
@@ -423,8 +427,6 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment {
         //restore selected items
         restoreSelectedItems(savedInstanceState, view);
 
-        // add decoration
-        mRecyclerView.addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(getActivity(), RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_white_black_gradient));
     }
 
     public void startHEventHistoryActivity() {
