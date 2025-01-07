@@ -43,7 +43,7 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment {
     private long mPriceNoteParamTypeId;
     private int mCheckedUpdateInterval;
 
-    private BasicNoteDataA.ParamsSummary mParamsSummary;
+    private BasicNoteItemParamsSummary mParamsSummary;
 
     public static final Handler mRefreshHandler = new Handler(Looper.getMainLooper());
 

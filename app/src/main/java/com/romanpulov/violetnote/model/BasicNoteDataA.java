@@ -12,49 +12,6 @@ import java.util.List;
  */
 public class BasicNoteDataA implements Parcelable, PasswordProvider {
 
-    public static class ParamsSummary {
-        private int mCheckedCount;
-        private long mCheckedDisplayValue;
-        private long mTotalDisplayValue;
-        private long mTotalValue;
-        private boolean mIsInt = true;
-
-        public int getCheckedCount() {
-            return mCheckedCount;
-        }
-
-        public long getCheckedDisplayValue() {
-            return mCheckedDisplayValue;
-        }
-
-        public long getTotalDisplayValue() {
-            return mTotalDisplayValue;
-        }
-
-        public long getTotalValue() {
-            return mTotalValue;
-        }
-
-        public boolean getIsInt() {
-            return mIsInt;
-        }
-
-        @Override
-        public String toString() {
-            return "ParamsSummary{" +
-                    "mCheckedCount=" + mCheckedCount +
-                    ", mCheckedDisplayValue=" + mCheckedDisplayValue +
-                    ", mTotalDisplayValue=" + mTotalDisplayValue +
-                    ", mTotalValue=" + mTotalValue +
-                    ", mIsInt=" + mIsInt +
-                    ", checkedDisplayValue=" + getCheckedDisplayValue() +
-                    ", totalDisplayValue=" + getTotalDisplayValue() +
-                    ", totalValue=" + getTotalValue() +
-                    ", isInt=" + getIsInt() +
-                    '}';
-        }
-    }
-
     private String mPassword;
 
     @Override
@@ -106,48 +63,6 @@ public class BasicNoteDataA implements Parcelable, PasswordProvider {
         }
 
         return result;
-    }
-
-    public ParamsSummary getParamsSummary(long noteItemParamTypeId) {
-        ParamsSummary paramsSummary = new ParamsSummary();
-        long totalDisplayValue = 0;
-        long totalIntDisplayValue = 0;
-        long checkedDisplayValue = 0;
-        long checkedIntDisplayValue = 0;
-        int checkedCount = 0;
-
-        for (BasicNoteA note : mNoteList) {
-            for (BasicNoteItemA item : note.getItems()) {
-                long value = item.getParamLong(noteItemParamTypeId);
-                long intValue = value > 0 ? value : 100;
-
-                totalDisplayValue += value;
-                totalIntDisplayValue += intValue;
-                if (item.isChecked()) {
-                    checkedDisplayValue += value;
-                    checkedIntDisplayValue += intValue;
-                    checkedCount ++;
-                }
-                if (paramsSummary.mIsInt && value % 100 != 0) {
-                    paramsSummary.mIsInt = false;
-                }
-            }
-        }
-        if (paramsSummary.mIsInt && totalDisplayValue == 0) {
-            paramsSummary.mIsInt = false;
-        }
-
-        if (paramsSummary.mIsInt) {
-            paramsSummary.mTotalDisplayValue = totalIntDisplayValue;
-            paramsSummary.mCheckedDisplayValue = checkedIntDisplayValue;
-        } else {
-            paramsSummary.mTotalDisplayValue = totalDisplayValue;
-            paramsSummary.mCheckedDisplayValue = checkedDisplayValue;
-        }
-        paramsSummary.mCheckedCount = checkedCount;
-        paramsSummary.mTotalValue = totalDisplayValue;
-
-        return paramsSummary;
     }
 
     @Override
