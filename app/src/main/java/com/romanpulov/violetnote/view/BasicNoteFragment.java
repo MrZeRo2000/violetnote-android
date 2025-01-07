@@ -79,10 +79,10 @@ public class BasicNoteFragment extends BasicCommonNoteFragment  {
 
     @NonNull
     private List<BasicNoteA> getSelectedNotes() {
-        return BasicEntityNoteSelectionPosA.getItemsByPositions(getNoteList(), mRecyclerViewSelector.getSelectedItems());
+        return getSelectedItems(this::getNoteList);
     }
 
-    protected boolean processMoveMenuItemClick(MenuItem menuItem) {
+    private boolean processMoveMenuItemClick(MenuItem menuItem) {
         List<BasicNoteA> selectedNotes = getSelectedNotes();
         return internalProcessMoveMenuItemClick(menuItem, selectedNotes, model);
     }

@@ -11,12 +11,14 @@ import android.view.View;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.model.BasicCommonNoteA;
+import com.romanpulov.violetnote.model.BasicEntityNoteSelectionPosA;
 import com.romanpulov.violetnote.model.MovementDirection;
 import com.romanpulov.violetnote.view.action.BasicUIMoveAction;
 import com.romanpulov.violetnote.view.helper.BottomToolbarHelper;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * Base class for Basic common note fragment
@@ -114,5 +116,11 @@ public abstract class BasicCommonNoteFragment extends Fragment {
             }
         }
         return false;
+    }
+
+    protected <T> List<T> getSelectedItems(Supplier<List<T>> itemsSupplier) {
+        return BasicEntityNoteSelectionPosA.getItemsByPositions(
+                itemsSupplier.get(),
+                mRecyclerViewSelector.getSelectedItems());
     }
 }

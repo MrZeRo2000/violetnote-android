@@ -23,7 +23,6 @@ import android.view.ViewGroup;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.databinding.FragmentBasicNoteCheckedItemListBinding;
 import com.romanpulov.violetnote.db.DBBasicNoteHelper;
-import com.romanpulov.violetnote.db.dao.BasicNoteItemDAO;
 import com.romanpulov.violetnote.db.manager.DBNoteManager;
 import com.romanpulov.violetnote.model.*;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutorHost;
@@ -33,6 +32,7 @@ import com.romanpulov.violetnote.view.helper.*;
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 
 import java.util.List;
+import java.util.Objects;
 
 public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implements OnBasicNoteCheckedItemInteractionListener {
     private final static String TAG = BasicNoteCheckedItemFragment.class.getSimpleName();
@@ -67,13 +67,24 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
         }
     };
 
+    private @NonNull List<BasicNoteItemA> getNoteItemList() {
+        return Objects.requireNonNull(model.getBasicNoteItems().getValue());
+    }
+
+    @NonNull
+    private List<BasicNoteItemA> getSelectedNoteItems() {
+        return getSelectedItems(this::getNoteItemList);
+    }
+
+    private boolean processMoveMenuItemClick(MenuItem menuItem) {
+        List<BasicNoteItemA> selectedNoteItems = getSelectedNoteItems();
+        return internalProcessMoveMenuItemClick(menuItem, selectedNoteItems, model);
+    }
+
     private void setupBottomToolbar() {
-        /*
         mBottomToolbarHelper = BottomToolbarHelper.from(binding.fragmentToolbarBottom, this::processMoveMenuItemClick);
         requireActivity().getMenuInflater().inflate(R.menu.menu_listitem_bottom_move_actions, binding.fragmentToolbarBottom.getMenu());
         binding.fragmentToolbarBottom.setVisibility(View.GONE);
-
-         */
     }
 
     public void refreshListWithView() {
