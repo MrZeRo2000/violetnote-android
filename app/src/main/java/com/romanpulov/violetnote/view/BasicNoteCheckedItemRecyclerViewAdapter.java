@@ -3,6 +3,7 @@ package com.romanpulov.violetnote.view;
 import android.graphics.Paint;
 import androidx.annotation.NonNull;
 import androidx.appcompat.view.ActionMode;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,13 +13,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.romanpulov.violetnote.R;
-import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.model.BasicNoteItemParamsSummary;
 import com.romanpulov.violetnote.model.InputParser;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 import com.romanpulov.violetnote.view.core.ViewSelectorHelper;
+import com.romanpulov.violetnote.view.helper.DiffUtilHelper;
 import com.romanpulov.violetnote.view.helper.PriorityDisplayHelper;
+
+import java.util.List;
 
 public class BasicNoteCheckedItemRecyclerViewAdapter extends RecyclerView.Adapter<BasicNoteCheckedItemRecyclerViewAdapter.ViewHolder> implements ViewSelectorHelper.ChangeNotificationListener {
     @Override
@@ -26,7 +29,8 @@ public class BasicNoteCheckedItemRecyclerViewAdapter extends RecyclerView.Adapte
         this.notifyDataSetChanged();
     }
 
-    private final BasicNoteDataA mBasicNoteData;
+    private List<BasicNoteItemA> mItems;
+    private BasicNoteItemParamsSummary mParamsSummary;
     private final long mPriceNoteParamTypeId;
     private final ViewSelectorHelper.AbstractViewSelector<Integer> mRecyclerViewSelector;
     private final OnBasicNoteCheckedItemInteractionListener mListener;
@@ -35,8 +39,14 @@ public class BasicNoteCheckedItemRecyclerViewAdapter extends RecyclerView.Adapte
         return mRecyclerViewSelector;
     }
 
-    public BasicNoteCheckedItemRecyclerViewAdapter(BasicNoteDataA basicNoteData, long priceNoteParamTypeId, ActionMode.Callback actionModeCallback, OnBasicNoteCheckedItemInteractionListener listener) {
-        mBasicNoteData = basicNoteData;
+    public BasicNoteCheckedItemRecyclerViewAdapter(
+            List<BasicNoteItemA> items,
+            BasicNoteItemParamsSummary paramsSummary,
+            long priceNoteParamTypeId,
+            ActionMode.Callback actionModeCallback,
+            OnBasicNoteCheckedItemInteractionListener listener) {
+        mItems = items;
+        mParamsSummary = paramsSummary;
         mPriceNoteParamTypeId = priceNoteParamTypeId;
         mRecyclerViewSelector = new ViewSelectorHelper.ViewSelectorMultiple<>(this, actionModeCallback);
         mListener = listener;
@@ -52,7 +62,7 @@ public class BasicNoteCheckedItemRecyclerViewAdapter extends RecyclerView.Adapte
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        holder.mItem = mBasicNoteData.getNote().getItems().get(position);
+        holder.mItem = mItems.get(position);
         holder.mCheckedView.setChecked(holder.mItem.isChecked());
         holder.mValueView.setText(holder.mItem.getValue());
 
@@ -62,13 +72,12 @@ public class BasicNoteCheckedItemRecyclerViewAdapter extends RecyclerView.Adapte
         else
             holder.mValueView.setPaintFlags(holder.mValueView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
 
-        BasicNoteItemParamsSummary paramsSummary = BasicNoteItemParamsSummary.fromNoteItems(mBasicNoteData.getNote().getItems(), mPriceNoteParamTypeId);
-        if (paramsSummary.getTotalValue() > 0) {
+        if (mParamsSummary.getTotalValue() > 0) {
             holder.mPriceView.setVisibility(View.VISIBLE);
             holder.mPriceView.setText(
                     InputParser.getDisplayValue(
                             holder.mItem.getParamLong(mPriceNoteParamTypeId),
-                            InputParser.getNumberDisplayStyle(paramsSummary.getIsInt()))
+                            InputParser.getNumberDisplayStyle(mParamsSummary.getIsInt()))
             );
         } else {
             holder.mPriceView.setVisibility(View.GONE);
@@ -83,7 +92,7 @@ public class BasicNoteCheckedItemRecyclerViewAdapter extends RecyclerView.Adapte
 
     @Override
     public int getItemCount() {
-        return mBasicNoteData.getNote().getItems().size();
+        return mItems.size();
     }
 
     public class ViewHolder extends RecyclerViewHelper.SelectableViewHolder {
@@ -101,7 +110,7 @@ public class BasicNoteCheckedItemRecyclerViewAdapter extends RecyclerView.Adapte
             mPriorityView = view.findViewById(R.id.priority);
             mPriceView.setOnClickListener(v -> {
                 if ((!mRecyclerViewSelector.isSelected()) && (mListener != null) && (getBindingAdapterPosition() != -1))
-                    mListener.onBasicNoteItemPriceClick(mBasicNoteData.getNote().getItems().get(getBindingAdapterPosition()), getBindingAdapterPosition());
+                    mListener.onBasicNoteItemPriceClick(mItems.get(getBindingAdapterPosition()), getBindingAdapterPosition());
             });
         }
 
@@ -109,7 +118,7 @@ public class BasicNoteCheckedItemRecyclerViewAdapter extends RecyclerView.Adapte
         public void onClick(View v) {
             super.onClick(v);
             if ((!mRecyclerViewSelector.isSelected()) && (mListener != null) && (getBindingAdapterPosition() != -1))
-                mListener.onBasicNoteItemFragmentInteraction(mBasicNoteData.getNote().getItems().get(getBindingAdapterPosition()));
+                mListener.onBasicNoteItemFragmentInteraction(mItems.get(getBindingAdapterPosition()));
         }
 
         @Override
@@ -117,5 +126,12 @@ public class BasicNoteCheckedItemRecyclerViewAdapter extends RecyclerView.Adapte
         public String toString() {
             return super.toString() + " '" + mCheckedView.isChecked() + "', " +  " '" + mValueView.getText() + "'";
         }
+    }
+
+    public void updateItemsWithSummary(List<BasicNoteItemA> items, BasicNoteItemParamsSummary paramsSummary) {
+        mParamsSummary = paramsSummary;
+        DiffUtil.DiffResult result = DiffUtilHelper.getEntityListDiffResult(mItems, items);
+        this.mItems = items;
+        result.dispatchUpdatesTo(this);
     }
 }

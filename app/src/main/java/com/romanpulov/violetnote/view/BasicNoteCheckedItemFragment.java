@@ -7,7 +7,10 @@ import android.os.Handler;
 import android.os.Looper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.appcompat.view.ActionMode;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,12 +23,16 @@ import android.view.ViewGroup;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.databinding.FragmentBasicNoteCheckedItemListBinding;
 import com.romanpulov.violetnote.db.DBBasicNoteHelper;
+import com.romanpulov.violetnote.db.dao.BasicNoteItemDAO;
 import com.romanpulov.violetnote.db.manager.DBNoteManager;
 import com.romanpulov.violetnote.model.*;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutorHost;
+import com.romanpulov.violetnote.view.action.UIAction;
 import com.romanpulov.violetnote.view.core.*;
 import com.romanpulov.violetnote.view.helper.*;
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
+
+import java.util.List;
 
 public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implements OnBasicNoteCheckedItemInteractionListener {
     private final static String TAG = BasicNoteCheckedItemFragment.class.getSimpleName();
@@ -34,6 +41,8 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
     public static final int RESULT_CODE_HISTORY = 1;
 
     private FragmentBasicNoteCheckedItemListBinding binding;
+    private BasicNoteItemViewModel model;
+
     private BasicNoteCheckedItemRecyclerViewAdapter mRecyclerViewAdapter;
 
     private InputActionHelper mInputActionHelper;
@@ -351,14 +360,6 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
 
         mRecyclerView.setAdapter(mRecyclerViewAdapter);
 
-        BasicNoteCheckedItemRecyclerViewAdapter recyclerViewAdapter = new BasicNoteCheckedItemRecyclerViewAdapter(
-                null/*mBasicNoteData*/,
-                mPriceNoteParamTypeId,
-                new ActionBarCallBack(),
-                this);
-        mRecyclerViewSelector = recyclerViewAdapter.getRecyclerViewSelector();
-        mRecyclerView.setAdapter(recyclerViewAdapter);
-
         //swipe refresh
         mSwipeRefreshLayout = binding.swiperefresh;
         mSwipeRefreshLayout.setOnRefreshListener(() -> {
@@ -427,6 +428,36 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
 
         //restore selected items
         restoreSelectedItems(savedInstanceState, view);
+
+        model = new ViewModelProvider(this).get(BasicNoteItemViewModel.class);
+        model.setBasicNote(BasicNoteCheckedItemFragmentArgs.fromBundle(getArguments()).getNote());
+
+        final Observer<List<BasicNoteItemA>> noteItemsObserver = newNoteItems -> {
+            if (mRecyclerViewAdapter == null) {
+                mRecyclerViewAdapter = new BasicNoteCheckedItemRecyclerViewAdapter(
+                        newNoteItems,
+                        model.getBasicNoteItemParamsSummary(mPriceNoteParamTypeId),
+                        mPriceNoteParamTypeId,
+                        new ActionBarCallBack(),
+                        this);
+                mRecyclerViewSelector = mRecyclerViewAdapter.getRecyclerViewSelector();
+                mRecyclerView.setAdapter(mRecyclerViewAdapter);
+            } else {
+                mRecyclerViewAdapter.updateItemsWithSummary(newNoteItems, model.getBasicNoteItemParamsSummary(mPriceNoteParamTypeId));
+            }
+
+            UIAction<BasicNoteItemA> action = model.getAction();
+            if (action != null) {
+                action.execute(newNoteItems);
+                model.resetAction();
+
+                DialogFragment dialogFragment = (DialogFragment)getParentFragmentManager().findFragmentByTag(AlertOkCancelSupportDialogFragment.TAG);
+                if (dialogFragment != null) {
+                    dialogFragment.dismiss();
+                }
+            }
+        };
+        model.getBasicNoteItems().observe(this, noteItemsObserver);
 
     }
 
