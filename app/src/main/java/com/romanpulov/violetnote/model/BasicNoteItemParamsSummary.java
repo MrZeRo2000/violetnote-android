@@ -1,5 +1,6 @@
 package com.romanpulov.violetnote.model;
 
+import androidx.annotation.Nullable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;

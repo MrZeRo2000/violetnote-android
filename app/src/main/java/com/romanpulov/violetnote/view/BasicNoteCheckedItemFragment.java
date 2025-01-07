@@ -27,7 +27,7 @@ import com.romanpulov.violetnote.view.core.*;
 import com.romanpulov.violetnote.view.helper.*;
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 
-public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment {
+public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implements OnBasicNoteCheckedItemInteractionListener {
     private final static String TAG = BasicNoteCheckedItemFragment.class.getSimpleName();
 
     public static final int RESULT_CODE_VALUES = 0;
@@ -93,6 +93,46 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment {
         } else {
             mCheckedUpdateInterval = 0;
         }
+    }
+
+    @Override
+    public void onBasicNoteItemPriceClick(BasicNoteItemA item, int position) {
+        if (mRecyclerViewSelector.getActionMode() == null) {
+            mRecyclerViewSelector.startActionMode(requireView(), position);
+            mInputActionHelper.showEditNumberLayout(
+                    item.getParamLong(mPriceNoteParamTypeId),
+                    InputParser.getNumberDisplayStyle(mParamsSummary.getIsInt()));
+        }
+    }
+
+    @Override
+    public void onBasicNoteItemFragmentInteraction(BasicNoteItemA item) {
+        hideAddLayout();
+
+        DBNoteManager manager = new DBNoteManager(getActivity());
+        //update item
+        manager.mBasicNoteItemDAO.updateChecked(item, !item.isChecked());
+        //ensure item is updated and reload
+        BasicNoteItemA updatedItem = manager.mBasicNoteItemDAO.getById(item.getId());
+        item.updateChecked(updatedItem);
+
+        //update summary
+        updateParamsSummary();
+
+        //update checked
+                        /*
+                        mBasicNoteData.getNote().getSummary().addCheckedItemCount(item.isChecked() ? 1 : - 1);
+                        updateCheckedItems();
+
+                         */
+
+        // update groups totals
+        notifyNoteGroupsChanged();
+
+        //refresh display
+        refreshCheckedItemsDisplay();
+
+        RecyclerViewHelper.adapterNotifyDataSetChanged(mRecyclerView);
     }
 
     private void setupBottomToolbarHelper() {/*
@@ -311,55 +351,16 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment {
 
         mRecyclerView.setAdapter(mRecyclerViewAdapter);
 
-
-        BasicNoteCheckedItemRecyclerViewAdapter recyclerViewAdapter = new BasicNoteCheckedItemRecyclerViewAdapter(null/*mBasicNoteData*/, mPriceNoteParamTypeId, new ActionBarCallBack(),
-                new OnBasicNoteCheckedItemFragmentInteractionListener() {
-                    @Override
-                    public void onBasicNoteItemFragmentInteraction(BasicNoteItemA item) {
-                        hideAddLayout();
-
-                        DBNoteManager manager = new DBNoteManager(getActivity());
-                        //update item
-                        manager.mBasicNoteItemDAO.updateChecked(item, !item.isChecked());
-                        //ensure item is updated and reload
-                        BasicNoteItemA updatedItem = manager.mBasicNoteItemDAO.getById(item.getId());
-                        item.updateChecked(updatedItem);
-
-                        //update summary
-                        updateParamsSummary();
-
-                        //update checked
-                        /*
-                        mBasicNoteData.getNote().getSummary().addCheckedItemCount(item.isChecked() ? 1 : - 1);
-                        updateCheckedItems();
-
-                         */
-
-                        // update groups totals
-                        notifyNoteGroupsChanged();
-
-                        //refresh display
-                        refreshCheckedItemsDisplay();
-
-                        RecyclerViewHelper.adapterNotifyDataSetChanged(mRecyclerView);
-                    }
-
-                    @Override
-                    public void onBasicNoteItemPriceClick(BasicNoteItemA item, int position) {
-                        if (mRecyclerViewSelector.getActionMode() == null) {
-                            mRecyclerViewSelector.startActionMode(requireView(), position);
-                            mInputActionHelper.showEditNumberLayout(
-                                    item.getParamLong(mPriceNoteParamTypeId),
-                                    InputParser.getNumberDisplayStyle(mParamsSummary.getIsInt()));
-                        }
-                    }
-                }
-        );
+        BasicNoteCheckedItemRecyclerViewAdapter recyclerViewAdapter = new BasicNoteCheckedItemRecyclerViewAdapter(
+                null/*mBasicNoteData*/,
+                mPriceNoteParamTypeId,
+                new ActionBarCallBack(),
+                this);
         mRecyclerViewSelector = recyclerViewAdapter.getRecyclerViewSelector();
         mRecyclerView.setAdapter(recyclerViewAdapter);
 
         //swipe refresh
-        mSwipeRefreshLayout = view.findViewById(R.id.swiperefresh);
+        mSwipeRefreshLayout = binding.swiperefresh;
         mSwipeRefreshLayout.setOnRefreshListener(() -> {
             if (mRecyclerViewSelector.getActionMode() == null) {
                 performRefresh();
@@ -367,7 +368,7 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment {
         });
 
         //add action panel
-        mInputActionHelper = new InputActionHelper(view.findViewById(R.id.add_panel_include));
+        mInputActionHelper = new InputActionHelper(binding.addPanelInclude.getRoot());
         mInputActionHelper.setOnAddInteractionListener((actionType, text) -> {
             /*
             if (mBasicNoteData.getNote().isEncrypted()) {
@@ -399,7 +400,7 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment {
         updateParamsSummary();
 
         //add checkout progress
-        mCheckoutProgressHelper = new CheckoutProgressHelper(view.findViewById(R.id.checkout_progress_panel_include));
+        mCheckoutProgressHelper = new CheckoutProgressHelper(binding.checkoutProgressPanelInclude.getRoot());
         updateCheckedItems();
 
         // for not encrypted set up AutoComplete and list button
@@ -569,10 +570,6 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment {
             if (fragmentManager != null)
                 dialog.show(fragmentManager, null);
         }
-    }
-
-    public interface OnBasicNoteCheckedItemFragmentInteractionListener extends BasicNoteItemFragment.OnBasicNoteItemFragmentInteractionListener {
-        void onBasicNoteItemPriceClick(BasicNoteItemA item, int position);
     }
 
     private interface NoteItemDataUpdater {

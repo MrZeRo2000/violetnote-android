@@ -29,13 +29,13 @@ public class BasicNoteCheckedItemRecyclerViewAdapter extends RecyclerView.Adapte
     private final BasicNoteDataA mBasicNoteData;
     private final long mPriceNoteParamTypeId;
     private final ViewSelectorHelper.AbstractViewSelector<Integer> mRecyclerViewSelector;
-    private final BasicNoteCheckedItemFragment.OnBasicNoteCheckedItemFragmentInteractionListener mListener;
+    private final OnBasicNoteCheckedItemInteractionListener mListener;
 
     public ViewSelectorHelper.AbstractViewSelector<Integer> getRecyclerViewSelector() {
         return mRecyclerViewSelector;
     }
 
-    public BasicNoteCheckedItemRecyclerViewAdapter(BasicNoteDataA basicNoteData, long priceNoteParamTypeId, ActionMode.Callback actionModeCallback, BasicNoteCheckedItemFragment.OnBasicNoteCheckedItemFragmentInteractionListener listener) {
+    public BasicNoteCheckedItemRecyclerViewAdapter(BasicNoteDataA basicNoteData, long priceNoteParamTypeId, ActionMode.Callback actionModeCallback, OnBasicNoteCheckedItemInteractionListener listener) {
         mBasicNoteData = basicNoteData;
         mPriceNoteParamTypeId = priceNoteParamTypeId;
         mRecyclerViewSelector = new ViewSelectorHelper.ViewSelectorMultiple<>(this, actionModeCallback);
