@@ -36,7 +36,7 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
     private BasicNoteGroupItemRecyclerViewAdapter mRecyclerViewAdapter;
 
     private @NonNull List<BasicNoteGroupA> getBasicNoteGroupList() {
-        return Objects.requireNonNull(model.getCurrentGroups().getValue());
+        return Objects.requireNonNull(model.getGroups().getValue());
     }
 
     private void setupBottomToolbar() {
@@ -198,9 +198,7 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
         model = new ViewModelProvider(this).get(BasicNoteGroupViewModel.class);
 
         final Observer<List<BasicNoteGroupA>> noteGroupsObserver = newBasicNoteGroups -> {
-            if (model.getCurrentGroups().getValue() == null) {
-                model.getCurrentGroups().setValue(newBasicNoteGroups);
-
+            if (mRecyclerViewAdapter == null) {
                 mRecyclerViewAdapter = new BasicNoteGroupItemRecyclerViewAdapter(newBasicNoteGroups, new ActionBarCallBack());
                 mRecyclerView.setAdapter(mRecyclerViewAdapter);
                 mRecyclerViewSelector = mRecyclerViewAdapter.getRecyclerViewSelector();
@@ -231,7 +229,6 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
                                 newBasicNoteGroups.get(newItemPosition));
                     }
                 });
-                model.getCurrentGroups().setValue(newBasicNoteGroups);
                 mRecyclerViewAdapter.setBasicNoteGroupList(newBasicNoteGroups);
                 result.dispatchUpdatesTo(mRecyclerViewAdapter);
 

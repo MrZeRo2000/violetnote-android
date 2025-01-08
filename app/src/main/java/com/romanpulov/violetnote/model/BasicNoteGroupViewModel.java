@@ -20,7 +20,6 @@ public class BasicNoteGroupViewModel extends BasicCommonNoteViewModel<BasicNoteG
     private MutableLiveData<List<BasicNoteGroupA>> mAllWithTotals;
 
     private MutableLiveData<List<BasicNoteGroupA>> mGroups;
-    private MutableLiveData<List<BasicNoteGroupA>> mCurrentGroups;
 
     @Override
     protected BasicNoteGroupDAO getDAO() {
@@ -63,13 +62,6 @@ public class BasicNoteGroupViewModel extends BasicCommonNoteViewModel<BasicNoteG
         }
 
         return mGroups;
-    }
-
-    public MutableLiveData<List<BasicNoteGroupA>> getCurrentGroups() {
-        if (mCurrentGroups == null) {
-            mCurrentGroups = new MutableLiveData<>();
-        }
-        return mCurrentGroups;
     }
 
     public void loadAllWithTotals() {
