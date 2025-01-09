@@ -3,6 +3,7 @@ package com.romanpulov.violetnote.model;
 import android.app.Application;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import com.romanpulov.violetnote.db.dao.BasicNoteDAO;
 import com.romanpulov.violetnote.db.dao.BasicNoteItemDAO;
 import com.romanpulov.violetnote.model.vo.BasicNoteSummary;
 import com.romanpulov.violetnote.view.core.BasicCommonNoteViewModel;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class BasicNoteItemViewModel extends BasicCommonNoteViewModel<BasicNoteItemA> {
+    private BasicNoteDAO mBasicNoteDAO;
     private BasicNoteItemDAO mBasicNoteItemDAO;
 
     private long mPriceNoteParamTypeId;
@@ -19,6 +21,7 @@ public class BasicNoteItemViewModel extends BasicCommonNoteViewModel<BasicNoteIt
     private MutableLiveData<List<BasicNoteItemA>> mBasicNoteItems;
     private BasicNoteSummary mBasicNoteSummary;
     private BasicNoteItemParamsSummary mBasicNoteItemParamsSummary;
+    private MutableLiveData<List<BasicNoteA>> mRelatedNotes;
 
     public void setPriceNoteParamTypeId(long mPriceNoteParamTypeId) {
         this.mPriceNoteParamTypeId = mPriceNoteParamTypeId;
@@ -26,7 +29,8 @@ public class BasicNoteItemViewModel extends BasicCommonNoteViewModel<BasicNoteIt
 
     public void setBasicNote(BasicNoteA basicNote) {
         if (!Objects.equals(this.mBasicNote, basicNote)) {
-            this.mBasicNote = basicNote;
+            mBasicNote = basicNote;
+            mRelatedNotes = null;
             loadNoteItems();
         }
     }
@@ -51,6 +55,15 @@ public class BasicNoteItemViewModel extends BasicCommonNoteViewModel<BasicNoteIt
         return mBasicNoteItemParamsSummary;
     }
 
+    public LiveData<List<BasicNoteA>> getRelatedNotes() {
+        if (mRelatedNotes == null) {
+            mRelatedNotes = new MutableLiveData<>();
+            mRelatedNotes.setValue(getBasicNoteDAO().getRelatedNotes(mBasicNote));
+        }
+
+        return mRelatedNotes;
+    }
+
     public BasicNoteItemViewModel(@NotNull Application application) {
         super(application);
     }
@@ -61,6 +74,13 @@ public class BasicNoteItemViewModel extends BasicCommonNoteViewModel<BasicNoteIt
             mBasicNoteItemDAO = new BasicNoteItemDAO(getApplication());
         }
         return mBasicNoteItemDAO;
+    }
+
+    private BasicNoteDAO getBasicNoteDAO() {
+        if (mBasicNoteDAO == null) {
+            mBasicNoteDAO = new BasicNoteDAO(getApplication());
+        }
+        return mBasicNoteDAO;
     }
 
     @Override

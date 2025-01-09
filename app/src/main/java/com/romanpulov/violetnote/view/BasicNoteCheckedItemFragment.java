@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.*;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
@@ -14,11 +15,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.appcompat.view.ActionMode;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.databinding.FragmentBasicNoteCheckedItemListBinding;
@@ -30,11 +26,13 @@ import com.romanpulov.violetnote.view.core.*;
 import com.romanpulov.violetnote.view.helper.*;
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
 public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implements OnBasicNoteCheckedItemInteractionListener {
     private final static String TAG = BasicNoteCheckedItemFragment.class.getSimpleName();
+    protected final static int MENU_GROUP_OTHER_ITEMS = Menu.FIRST + 1;
 
     public static final int RESULT_CODE_VALUES = 0;
     public static final int RESULT_CODE_HISTORY = 1;
@@ -237,14 +235,41 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
     }
 
     private void updateTitle(ActionMode mode) {
-        /*
         mode.setTitle(DisplayTitleBuilder.buildItemsDisplayTitle(
                 getActivity(),
-                mBasicNoteData.getNote().getItems(),
+                getNoteItemList(),
                 mRecyclerViewSelector.getSelectedItems()));
-
-         */
     }
+
+    /**
+     * Common logic for creation of related menu for movement to other note
+     * @param menu Menu to add sub-menu
+     */
+    protected void buildMoveToOtherNotesSubMenu(Menu menu, Collection<BasicNoteA> relatedNotes) {
+        SubMenu subMenu = null;
+        int order = 1;
+        int relatedNoteIndex = 0;
+        for (BasicNoteA relatedNote : relatedNotes) {
+            if (subMenu == null) {
+                subMenu = menu.addSubMenu(Menu.NONE, Menu.NONE, order++, getString(R.string.action_move_other));
+                subMenu.getItem().setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+                subMenu.clearHeader();
+            }
+            subMenu.add(MENU_GROUP_OTHER_ITEMS, relatedNoteIndex ++, Menu.NONE, relatedNote.getTitle());
+        }
+    }
+
+    /**
+     * Common code to update action menu
+     * @param menu Menu to update
+     */
+    protected void updateActionMenu(Menu menu) {
+        ActionHelper.updateActionMenu(
+                menu,
+                mRecyclerViewSelector.getSelectedItems().size(),
+                model.getBasicNoteSummary().getItemCount());
+    }
+
 
     public class ActionBarCallBack implements ActionMode.Callback {
         @Override
@@ -282,18 +307,16 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
 
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            /*
             mode.getMenuInflater().inflate(R.menu.menu_listitem_checked_actions, menu);
 
-            buildMoveToOtherNotesSubMenu(menu);
+            model.getRelatedNotes().observe(BasicNoteCheckedItemFragment.this, relatedNotes ->
+                    buildMoveToOtherNotesSubMenu(menu, relatedNotes));
 
             if (mRecyclerViewSelector.isSelectedSingle()) {
                 updateTitle(mode);
             }
 
             hideAddLayout();
-
-             */
 
             return true;
         }
@@ -311,29 +334,23 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
 
         @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            /*
             hideAddLayout();
-
-            if (mBottomToolbarHelper == null) {
-                setupBottomToolbarHelper();
-            }
 
             if (mBottomToolbarHelper != null) {
                 mBottomToolbarHelper.showLayout(
                         mRecyclerViewSelector.getSelectedItems().size(),
-                        mBasicNoteData.getNote().getSummary().getItemCount());
+                        model.getBasicNoteSummary().getItemCount());
             }
 
             List<BasicNoteItemA> selectedNoteItems = getSelectedNoteItems();
             if (selectedNoteItems.size() == 1) {
                 mRecyclerView.scrollToPosition(
-                        mBasicNoteData.getNote().getItems().indexOf(selectedNoteItems.get(0)));
+                        getNoteItemList().indexOf(selectedNoteItems.get(0)));
             }
 
             updateActionMenu(menu);
             updateTitle(mode);
 
-             */
             return true;
         }
     }
