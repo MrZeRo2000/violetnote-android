@@ -31,7 +31,6 @@ public class BasicNoteCheckedItemRecyclerViewAdapter extends RecyclerView.Adapte
 
     private List<BasicNoteItemA> mItems;
     private BasicNoteItemParamsSummary mParamsSummary;
-    private final long mPriceNoteParamTypeId;
     private final ViewSelectorHelper.AbstractViewSelector<Integer> mRecyclerViewSelector;
     private final OnBasicNoteCheckedItemInteractionListener mListener;
 
@@ -42,12 +41,10 @@ public class BasicNoteCheckedItemRecyclerViewAdapter extends RecyclerView.Adapte
     public BasicNoteCheckedItemRecyclerViewAdapter(
             List<BasicNoteItemA> items,
             BasicNoteItemParamsSummary paramsSummary,
-            long priceNoteParamTypeId,
             ActionMode.Callback actionModeCallback,
             OnBasicNoteCheckedItemInteractionListener listener) {
         mItems = items;
         mParamsSummary = paramsSummary;
-        mPriceNoteParamTypeId = priceNoteParamTypeId;
         mRecyclerViewSelector = new ViewSelectorHelper.ViewSelectorMultiple<>(this, actionModeCallback);
         mListener = listener;
     }
@@ -76,7 +73,7 @@ public class BasicNoteCheckedItemRecyclerViewAdapter extends RecyclerView.Adapte
             holder.mPriceView.setVisibility(View.VISIBLE);
             holder.mPriceView.setText(
                     InputParser.getDisplayValue(
-                            holder.mItem.getParamLong(mPriceNoteParamTypeId),
+                            holder.mItem.getParamLong(mParamsSummary.getNoteItemParamTypeId()),
                             InputParser.getNumberDisplayStyle(mParamsSummary.getIsInt()))
             );
         } else {

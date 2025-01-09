@@ -307,10 +307,7 @@ public class BasicNoteFragment extends BasicCommonNoteFragment  {
         model.setBasicNoteGroup(BasicNoteFragmentArgs.fromBundle(getArguments()).getNoteGroup());
 
         final Observer<List<BasicNoteA>> notesObserver = newNotes -> {
-
-            if (model.getBasicNotes().getValue() == null) {
-                model.getBasicNotes().setValue(newNotes);
-
+            if (mRecyclerViewAdapter == null) {
                 mRecyclerViewAdapter = new BasicNoteRecycleViewAdapter(newNotes, new ActionBarCallBack(), this::onBasicNoteSelection);
                 mRecyclerView.setAdapter(mRecyclerViewAdapter);
                 mRecyclerViewSelector = mRecyclerViewAdapter.getRecyclerViewSelector();
@@ -318,23 +315,17 @@ public class BasicNoteFragment extends BasicCommonNoteFragment  {
                 //restore selected items
                 restoreSelectedItems(savedInstanceState, view);
             } else {
-                if (mRecyclerViewAdapter == null) {
-                    mRecyclerViewAdapter = new BasicNoteRecycleViewAdapter(newNotes, new ActionBarCallBack(), this::onBasicNoteSelection);
-                    mRecyclerView.setAdapter(mRecyclerViewAdapter);
-                    mRecyclerViewSelector = mRecyclerViewAdapter.getRecyclerViewSelector();
-                } else {
-                    mRecyclerViewAdapter.updateItems(newNotes);
-                }
+                mRecyclerViewAdapter.updateItems(newNotes);
+            }
 
-                UIAction<BasicNoteA> action = model.getAction();
-                if (action != null) {
-                    action.execute(newNotes);
-                    model.resetAction();
+            UIAction<BasicNoteA> action = model.getAction();
+            if (action != null) {
+                action.execute(newNotes);
+                model.resetAction();
 
-                    DialogFragment dialogFragment = (DialogFragment)getParentFragmentManager().findFragmentByTag(AlertOkCancelSupportDialogFragment.TAG);
-                    if (dialogFragment != null) {
-                        dialogFragment.dismiss();
-                    }
+                DialogFragment dialogFragment = (DialogFragment)getParentFragmentManager().findFragmentByTag(AlertOkCancelSupportDialogFragment.TAG);
+                if (dialogFragment != null) {
+                    dialogFragment.dismiss();
                 }
             }
         };

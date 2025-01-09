@@ -22,7 +22,6 @@ import android.view.ViewGroup;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.databinding.FragmentBasicNoteCheckedItemListBinding;
-import com.romanpulov.violetnote.db.DBBasicNoteHelper;
 import com.romanpulov.violetnote.db.manager.DBNoteManager;
 import com.romanpulov.violetnote.model.*;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutorHost;
@@ -42,6 +41,7 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
 
     private FragmentBasicNoteCheckedItemListBinding binding;
     private BasicNoteItemViewModel model;
+    private AppViewModel appModel;
 
     private BasicNoteCheckedItemRecyclerViewAdapter mRecyclerViewAdapter;
 
@@ -49,10 +49,7 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
     private CheckoutProgressHelper mCheckoutProgressHelper;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
-    private long mPriceNoteParamTypeId;
     private int mCheckedUpdateInterval;
-
-    private BasicNoteItemParamsSummary mParamsSummary;
 
     public static final Handler mRefreshHandler = new Handler(Looper.getMainLooper());
 
@@ -107,7 +104,6 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        mPriceNoteParamTypeId = DBBasicNoteHelper.getInstance(context).getDBDictionaryCache().getPriceNoteParamTypeId();
         if (PreferenceRepository.isInterfaceCheckedLast(context)) {
             mCheckedUpdateInterval = PreferenceRepository.getInterfaceCheckedUpdateInterval(getContext());
         } else {
@@ -120,8 +116,8 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
         if (mRecyclerViewSelector.getActionMode() == null) {
             mRecyclerViewSelector.startActionMode(requireView(), position);
             mInputActionHelper.showEditNumberLayout(
-                    item.getParamLong(mPriceNoteParamTypeId),
-                    InputParser.getNumberDisplayStyle(mParamsSummary.getIsInt()));
+                    item.getParamLong(appModel.getPriceNoteParamTypeId()),
+                    InputParser.getNumberDisplayStyle(model.getBasicNoteItemParamsSummary().getIsInt()));
         }
     }
 
@@ -153,14 +149,6 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
         refreshCheckedItemsDisplay();
 
         RecyclerViewHelper.adapterNotifyDataSetChanged(mRecyclerView);
-    }
-
-    private void setupBottomToolbarHelper() {/*
-        FragmentActivity activity = getActivity();
-        if (activity != null) {
-            mBottomToolbarHelper = BottomToolbarHelper.fromContext(activity, this::processMoveMenuItemClick);
-        }
-        */
     }
 
     private void notifyNoteGroupsChanged() {
@@ -443,18 +431,22 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
         model = new ViewModelProvider(this).get(BasicNoteItemViewModel.class);
         model.setBasicNote(BasicNoteCheckedItemFragmentArgs.fromBundle(getArguments()).getNote());
 
+        appModel = new ViewModelProvider(requireActivity()).get(AppViewModel.class);
+        model.setPriceNoteParamTypeId(appModel.getPriceNoteParamTypeId());
+
         final Observer<List<BasicNoteItemA>> noteItemsObserver = newNoteItems -> {
             if (mRecyclerViewAdapter == null) {
                 mRecyclerViewAdapter = new BasicNoteCheckedItemRecyclerViewAdapter(
                         newNoteItems,
-                        model.getBasicNoteItemParamsSummary(mPriceNoteParamTypeId),
-                        mPriceNoteParamTypeId,
+                        model.getBasicNoteItemParamsSummary(),
                         new ActionBarCallBack(),
                         this);
                 mRecyclerViewSelector = mRecyclerViewAdapter.getRecyclerViewSelector();
                 mRecyclerView.setAdapter(mRecyclerViewAdapter);
             } else {
-                mRecyclerViewAdapter.updateItemsWithSummary(newNoteItems, model.getBasicNoteItemParamsSummary(mPriceNoteParamTypeId));
+                mRecyclerViewAdapter.updateItemsWithSummary(
+                        newNoteItems,
+                        model.getBasicNoteItemParamsSummary());
             }
 
             UIAction<BasicNoteItemA> action = model.getAction();
@@ -601,7 +593,7 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
 
     public void checkOut() {
         //int checkedCount = mBasicNoteData.getCheckedDisplayValue();
-        int checkedCount = mParamsSummary.getCheckedCount();
+        int checkedCount = model.getBasicNoteItemParamsSummary().getCheckedCount();
         if (checkedCount > 0) {
             String queryString = getResources().getQuantityString(
                     R.plurals.ui_question_are_you_sure_checkout_items, checkedCount, checkedCount);

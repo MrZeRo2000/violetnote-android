@@ -2,6 +2,7 @@ package com.romanpulov.violetnote.model;
 
 import android.app.Application;
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import com.romanpulov.violetnote.db.dao.BasicNoteDAO;
 import com.romanpulov.violetnote.db.dao.BasicNoteGroupDAO;
@@ -37,7 +38,7 @@ public class BasicNoteViewModel extends BasicCommonNoteViewModel<BasicNoteA> {
         }
     }
 
-    public MutableLiveData<List<BasicNoteA>> getBasicNotes() {
+    public LiveData<List<BasicNoteA>> getBasicNotes() {
         if (mBasicNotes == null) {
             mBasicNotes = new MutableLiveData<>();
             loadNotes();
@@ -45,7 +46,7 @@ public class BasicNoteViewModel extends BasicCommonNoteViewModel<BasicNoteA> {
         return mBasicNotes;
     }
 
-    public MutableLiveData<List<BasicNoteGroupA>> getRelatedNoteGroups() {
+    public LiveData<List<BasicNoteGroupA>> getRelatedNoteGroups() {
         if (mRelatedNoteGroups == null) {
             mRelatedNoteGroups = new MutableLiveData<>();
             mRelatedNoteGroups.setValue(getBasicNoteGroupDAO().getRelatedNoteGroupList(getBasicNoteGroup()));

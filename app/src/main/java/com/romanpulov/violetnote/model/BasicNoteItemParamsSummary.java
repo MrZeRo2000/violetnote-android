@@ -1,11 +1,16 @@
 package com.romanpulov.violetnote.model;
 
-import androidx.annotation.Nullable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 
 public class BasicNoteItemParamsSummary {
+    private long mNoteItemParamTypeId;
+
+    public long getNoteItemParamTypeId() {
+        return mNoteItemParamTypeId;
+    }
+
     private int mCheckedCount;
     private long mCheckedDisplayValue;
     private long mTotalDisplayValue;
@@ -51,6 +56,7 @@ public class BasicNoteItemParamsSummary {
 
     public static BasicNoteItemParamsSummary fromNoteItems(Collection<BasicNoteItemA> items, long noteItemParamTypeId) {
         BasicNoteItemParamsSummary paramsSummary = new BasicNoteItemParamsSummary();
+        paramsSummary.mNoteItemParamTypeId = noteItemParamTypeId;
 
         long totalDisplayValue = 0;
         long totalIntDisplayValue = 0;

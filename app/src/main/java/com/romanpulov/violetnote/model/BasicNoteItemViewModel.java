@@ -1,6 +1,7 @@
 package com.romanpulov.violetnote.model;
 
 import android.app.Application;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import com.romanpulov.violetnote.db.dao.BasicNoteItemDAO;
 import com.romanpulov.violetnote.model.vo.BasicNoteSummary;
@@ -13,10 +14,15 @@ import java.util.Objects;
 public class BasicNoteItemViewModel extends BasicCommonNoteViewModel<BasicNoteItemA> {
     private BasicNoteItemDAO mBasicNoteItemDAO;
 
+    private long mPriceNoteParamTypeId;
     private BasicNoteA mBasicNote;
     private MutableLiveData<List<BasicNoteItemA>> mBasicNoteItems;
     private BasicNoteSummary mBasicNoteSummary;
     private BasicNoteItemParamsSummary mBasicNoteItemParamsSummary;
+
+    public void setPriceNoteParamTypeId(long mPriceNoteParamTypeId) {
+        this.mPriceNoteParamTypeId = mPriceNoteParamTypeId;
+    }
 
     public void setBasicNote(BasicNoteA basicNote) {
         if (!Objects.equals(this.mBasicNote, basicNote)) {
@@ -25,7 +31,7 @@ public class BasicNoteItemViewModel extends BasicCommonNoteViewModel<BasicNoteIt
         }
     }
 
-    public MutableLiveData<List<BasicNoteItemA>> getBasicNoteItems() {
+    public LiveData<List<BasicNoteItemA>> getBasicNoteItems() {
         if (mBasicNoteItems == null) {
             mBasicNoteItems = new MutableLiveData<>();
             loadNoteItems();
@@ -37,10 +43,10 @@ public class BasicNoteItemViewModel extends BasicCommonNoteViewModel<BasicNoteIt
         return mBasicNoteSummary;
     }
 
-    public BasicNoteItemParamsSummary getBasicNoteItemParamsSummary(long noteItemParamTypeId) {
-        List<BasicNoteItemA> items = getBasicNoteItems().getValue();
-        if ((mBasicNoteItemParamsSummary == null) && (items != null)) {
-            mBasicNoteItemParamsSummary = BasicNoteItemParamsSummary.fromNoteItems(items, noteItemParamTypeId);
+    public BasicNoteItemParamsSummary getBasicNoteItemParamsSummary() {
+        List<BasicNoteItemA> items;
+        if ((mBasicNoteItemParamsSummary == null) && ((items = getBasicNoteItems().getValue()) != null)) {
+            mBasicNoteItemParamsSummary = BasicNoteItemParamsSummary.fromNoteItems(items, mPriceNoteParamTypeId);
         }
         return mBasicNoteItemParamsSummary;
     }
@@ -66,7 +72,10 @@ public class BasicNoteItemViewModel extends BasicCommonNoteViewModel<BasicNoteIt
         BasicNoteItemDAO.BasicNoteItemsWithSummary basicNoteItemsWithSummary = getDAO()
                 .getNoteItemsWithSummary(mBasicNote);
         mBasicNoteSummary = basicNoteItemsWithSummary.summary();
-        getBasicNoteItems().setValue(basicNoteItemsWithSummary.items());
+        if (mBasicNoteItems == null) {
+            mBasicNoteItems = new MutableLiveData<>();
+        }
+        mBasicNoteItems.setValue(basicNoteItemsWithSummary.items());
 
         mBasicNoteItemParamsSummary = null;
     }
