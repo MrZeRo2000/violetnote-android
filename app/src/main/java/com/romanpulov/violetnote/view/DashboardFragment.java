@@ -15,6 +15,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.databinding.FragmentDashboardBinding;
+import com.romanpulov.violetnote.model.AppViewModel;
 import com.romanpulov.violetnote.model.BasicNoteGroupA;
 import com.romanpulov.violetnote.model.BasicNoteGroupViewModel;
 import org.jetbrains.annotations.NotNull;
@@ -22,6 +23,7 @@ import org.jetbrains.annotations.NotNull;
 public class DashboardFragment extends Fragment {
     private FragmentDashboardBinding binding;
     private BasicNoteGroupViewModel model;
+    private AppViewModel appViewModel;
 
     public DashboardFragment() {
         // Required empty public constructor
@@ -64,6 +66,8 @@ public class DashboardFragment extends Fragment {
         );
 
         model = new ViewModelProvider(requireActivity()).get(BasicNoteGroupViewModel.class);
+        appViewModel = new ViewModelProvider(requireActivity()).get(AppViewModel.class);
+
         model.getAllWithTotals().observe(this, basicNoteGroupList ->
                 binding.list.setAdapter(new DashboardItemRecyclerViewAdapter(basicNoteGroupList, this::onBasicGroupSelection)));
     }
@@ -71,9 +75,9 @@ public class DashboardFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (model.isNoteGroupsChanged()) {
+        if (Boolean.TRUE.equals(appViewModel.getNoteGroupsChanged().getValue())) {
             model.loadAllWithTotals();
-            model.resetNoteGroupsChanged();
+            appViewModel.getNoteGroupsChanged().setValue(false);
         }
     }
 

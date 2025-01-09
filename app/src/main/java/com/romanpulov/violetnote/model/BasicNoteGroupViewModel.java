@@ -2,7 +2,6 @@ package com.romanpulov.violetnote.model;
 
 import android.app.Application;
 import androidx.lifecycle.MutableLiveData;
-import com.romanpulov.violetnote.VioletNoteApplication;
 import com.romanpulov.violetnote.db.dao.BasicNoteDAO;
 import com.romanpulov.violetnote.db.dao.BasicNoteGroupDAO;
 import com.romanpulov.violetnote.loader.document.DocumentPassDataLoader;
@@ -20,6 +19,12 @@ public class BasicNoteGroupViewModel extends BasicCommonNoteViewModel<BasicNoteG
     private MutableLiveData<List<BasicNoteGroupA>> mAllWithTotals;
 
     private MutableLiveData<List<BasicNoteGroupA>> mGroups;
+
+    private MutableLiveData<Boolean> mNoteGroupsChanged;
+
+    public void setNoteGroupsChanged(MutableLiveData<Boolean> mNoteGroupsChanged) {
+        this.mNoteGroupsChanged = mNoteGroupsChanged;
+    }
 
     @Override
     protected BasicNoteGroupDAO getDAO() {
@@ -43,7 +48,9 @@ public class BasicNoteGroupViewModel extends BasicCommonNoteViewModel<BasicNoteG
     @Override
     protected void onDataChangeActionCompleted() {
         loadGroups();
-        setNoteGroupsChanged();
+        if (mNoteGroupsChanged != null) {
+            mNoteGroupsChanged.setValue(true);
+        }
     }
 
     public MutableLiveData<List<BasicNoteGroupA>> getAllWithTotals() {
@@ -75,31 +82,6 @@ public class BasicNoteGroupViewModel extends BasicCommonNoteViewModel<BasicNoteG
     private void loadGroups() {
         if (mGroups != null) {
             mGroups.setValue(getDAO().getByGroupType(BasicNoteGroupA.BASIC_NOTE_GROUP_TYPE));
-        }
-    }
-
-    public static void setAppNoteGroupsChanged(Application application) {
-        if (application instanceof VioletNoteApplication) {
-            ((VioletNoteApplication)application).getSharedData().put(
-                    BasicNoteGroupViewModel.NOTE_GROUP_CHANGE_KEY,
-                    BasicNoteGroupViewModel.NOTE_GROUP_CHANGE_KEY);
-        }
-    }
-
-    private void setNoteGroupsChanged() {
-        BasicNoteGroupViewModel.setAppNoteGroupsChanged(getApplication());
-    }
-
-    public boolean isNoteGroupsChanged() {
-        return (getApplication() instanceof VioletNoteApplication) &&
-                ((VioletNoteApplication)getApplication())
-                        .getSharedData()
-                        .containsKey(BasicNoteGroupViewModel.NOTE_GROUP_CHANGE_KEY);
-    }
-
-    public void resetNoteGroupsChanged() {
-        if (getApplication() instanceof VioletNoteApplication) {
-            ((VioletNoteApplication)getApplication()).getSharedData().remove(BasicNoteGroupViewModel.NOTE_GROUP_CHANGE_KEY);
         }
     }
 

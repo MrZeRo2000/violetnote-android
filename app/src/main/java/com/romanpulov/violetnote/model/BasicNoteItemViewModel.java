@@ -18,6 +18,8 @@ public class BasicNoteItemViewModel extends BasicCommonNoteViewModel<BasicNoteIt
     private BasicNoteItemDAO mBasicNoteItemDAO;
 
     private long mPriceNoteParamTypeId;
+    private MutableLiveData<Boolean> mNoteGroupsChanged;
+
     private BasicNoteA mBasicNote;
     private MutableLiveData<List<BasicNoteItemA>> mBasicNoteItems;
     private BasicNoteSummary mBasicNoteSummary;
@@ -26,6 +28,10 @@ public class BasicNoteItemViewModel extends BasicCommonNoteViewModel<BasicNoteIt
 
     public void setPriceNoteParamTypeId(long mPriceNoteParamTypeId) {
         this.mPriceNoteParamTypeId = mPriceNoteParamTypeId;
+    }
+
+    public void setNoteGroupsChanged(MutableLiveData<Boolean> mNoteGroupsChanged) {
+        this.mNoteGroupsChanged = mNoteGroupsChanged;
     }
 
     public void setBasicNote(BasicNoteA basicNote) {
@@ -87,6 +93,13 @@ public class BasicNoteItemViewModel extends BasicCommonNoteViewModel<BasicNoteIt
     @Override
     protected void onDataChangeActionCompleted() {
         loadNoteItems();
+        onNoteGroupsChanged();
+    }
+
+    private void onNoteGroupsChanged() {
+        if (mNoteGroupsChanged != null) {
+            mNoteGroupsChanged.setValue(true);
+        }
     }
 
     private void loadNoteItems() {
@@ -110,6 +123,7 @@ public class BasicNoteItemViewModel extends BasicCommonNoteViewModel<BasicNoteIt
                     .map(v -> v.getId() == item.getId() ? updatedItem : v)
                     .collect(Collectors.toList());
             mBasicNoteItems.setValue(newItems);
+            onNoteGroupsChanged();
         }
     }
 

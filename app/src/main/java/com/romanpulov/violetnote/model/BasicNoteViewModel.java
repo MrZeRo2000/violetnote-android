@@ -24,6 +24,12 @@ public class BasicNoteViewModel extends BasicCommonNoteViewModel<BasicNoteA> {
     private MutableLiveData<List<BasicNoteA>> mBasicNotes;
     private MutableLiveData<List<BasicNoteGroupA>> mRelatedNoteGroups;
 
+    private MutableLiveData<Boolean> mNoteGroupsChanged;
+
+    public void setNoteGroupsChanged(MutableLiveData<Boolean> mNoteGroupsChanged) {
+        this.mNoteGroupsChanged = mNoteGroupsChanged;
+    }
+
     public BasicNoteGroupA getBasicNoteGroup() {
         return mBasicNoteGroup;
     }
@@ -61,6 +67,13 @@ public class BasicNoteViewModel extends BasicCommonNoteViewModel<BasicNoteA> {
     @Override
     protected void onDataChangeActionCompleted() {
         loadNotes();
+        onNoteGroupsChanged();
+    }
+
+    private void onNoteGroupsChanged() {
+        if (mNoteGroupsChanged != null) {
+            mNoteGroupsChanged.setValue(true);
+        }
     }
 
     @Override

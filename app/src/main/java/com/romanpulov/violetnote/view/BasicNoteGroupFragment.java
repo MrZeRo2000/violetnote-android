@@ -196,6 +196,8 @@ public class BasicNoteGroupFragment extends BasicCommonNoteFragment {
         }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
 
         model = new ViewModelProvider(this).get(BasicNoteGroupViewModel.class);
+        AppViewModel appViewModel = new ViewModelProvider(requireActivity()).get(AppViewModel.class);
+        model.setNoteGroupsChanged(appViewModel.getNoteGroupsChanged());
 
         final Observer<List<BasicNoteGroupA>> noteGroupsObserver = newBasicNoteGroups -> {
             if (mRecyclerViewAdapter == null) {

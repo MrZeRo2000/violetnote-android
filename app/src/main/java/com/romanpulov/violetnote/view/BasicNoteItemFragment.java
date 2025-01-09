@@ -140,7 +140,7 @@ public abstract class BasicNoteItemFragment extends BasicCommonNoteFragment {
     }
 
     private void notifyNoteGroupsChanged() {
-        BasicNoteGroupViewModel.setAppNoteGroupsChanged(requireActivity().getApplication());
+        //BasicNoteGroupViewModel.setAppNoteGroupsChanged(requireActivity().getApplication());
     }
 
     /**

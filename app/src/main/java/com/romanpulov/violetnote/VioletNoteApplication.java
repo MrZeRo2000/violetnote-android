@@ -10,18 +10,10 @@ import com.romanpulov.violetnote.view.helper.LoggerHelper;
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 import com.romanpulov.violetnote.worker.LoaderWorker;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class VioletNoteApplication extends Application {
     private static final String TAG = VioletNoteApplication.class.getSimpleName();
-
-    private final Map<String, String> mSharedData = new HashMap<>();
-
-    public Map<String, String> getSharedData() {
-        return mSharedData;
-    }
 
     @Override
     public void onCreate() {
