@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class BasicNoteItemViewModel extends BasicCommonNoteViewModel<BasicNoteItemA> {
     private BasicNoteDAO mBasicNoteDAO;
@@ -101,7 +102,18 @@ public class BasicNoteItemViewModel extends BasicCommonNoteViewModel<BasicNoteIt
     }
 
     public void toggleChecked(BasicNoteItemA item) {
-        getDAO().updateChecked(item, !item.isChecked());
-        onDataChangeActionCompleted();
+        if (mBasicNoteItems.getValue() != null) {
+            getDAO().updateChecked(item, !item.isChecked());
+            BasicNoteItemA updatedItem = getDAO().getById(item.getId());
+            List<BasicNoteItemA> newItems = mBasicNoteItems.getValue()
+                    .stream()
+                    .map(v -> v.getId() == item.getId() ? updatedItem : v)
+                    .collect(Collectors.toList());
+            mBasicNoteItems.setValue(newItems);
+        }
+    }
+
+    public void refresh() {
+        loadNoteItems();
     }
 }

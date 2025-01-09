@@ -452,6 +452,7 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
                         newNoteItems,
                         model.getBasicNoteItemParamsSummary());
             }
+            setSwipeRefreshing(false);
             updateCheckedItems();
 
             UIAction<BasicNoteItemA> action = model.getAction();
@@ -554,6 +555,7 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
     }
 
     public void performRefresh() {
+        model.refresh();
         /*
         if (!mBasicNoteData.getNote().isEncrypted() || PasswordActivity.getPasswordValidityChecker().isValid()) {
             refreshListWithView();
