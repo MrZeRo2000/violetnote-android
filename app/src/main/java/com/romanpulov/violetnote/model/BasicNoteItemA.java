@@ -10,6 +10,7 @@ import com.romanpulov.violetnote.model.vo.BasicParamValueA;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * BasicNote item data
@@ -211,4 +212,16 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
         }
     };
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        BasicNoteItemA that = (BasicNoteItemA) o;
+        return mNoteId == that.mNoteId && mChecked == that.mChecked && Objects.equals(mName, that.mName) && Objects.equals(mValue, that.mValue);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), mNoteId, mName, mValue, mChecked);
+    }
 }

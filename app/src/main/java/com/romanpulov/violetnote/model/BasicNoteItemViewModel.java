@@ -99,4 +99,9 @@ public class BasicNoteItemViewModel extends BasicCommonNoteViewModel<BasicNoteIt
 
         mBasicNoteItemParamsSummary = null;
     }
+
+    public void toggleChecked(BasicNoteItemA item) {
+        getDAO().updateChecked(item, !item.isChecked());
+        onDataChangeActionCompleted();
+    }
 }

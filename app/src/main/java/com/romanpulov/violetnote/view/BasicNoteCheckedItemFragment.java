@@ -122,6 +122,8 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
     @Override
     public void onBasicNoteItemFragmentInteraction(BasicNoteItemA item) {
         hideAddLayout();
+        model.toggleChecked(item);
+        /*
 
         DBNoteManager manager = new DBNoteManager(getActivity());
         //update item
@@ -134,11 +136,8 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
         updateParamsSummary();
 
         //update checked
-                        /*
-                        mBasicNoteData.getNote().getSummary().addCheckedItemCount(item.isChecked() ? 1 : - 1);
-                        updateCheckedItems();
-
-                         */
+        mBasicNoteData.getNote().getSummary().addCheckedItemCount(item.isChecked() ? 1 : - 1);
+        updateCheckedItems();
 
         // update groups totals
         notifyNoteGroupsChanged();
@@ -147,6 +146,7 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
         refreshCheckedItemsDisplay();
 
         RecyclerViewHelper.adapterNotifyDataSetChanged(mRecyclerView);
+        */
     }
 
     private void notifyNoteGroupsChanged() {
@@ -154,7 +154,6 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
     }
 
     private void afterExecutionCompleted() {
-        updateParamsSummary();
         updateCheckedItems();
         notifyNoteGroupsChanged();
     }
@@ -175,27 +174,17 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
         return fragment;
     }
 
-    private void updateParamsSummary() {
-        /*
-        mParamsSummary = mBasicNoteData.getParamsSummary(mPriceNoteParamTypeId);
-
-         */
-    }
-
     private void updateCheckedItems() {
-        /*
         //update checkout progress
-        if ((mCheckoutProgressHelper != null) && (mParamsSummary != null)) {
+        if (mCheckoutProgressHelper != null) {
             mCheckoutProgressHelper.setProgressData(
-                    mBasicNoteData.getNote().getSummary().getCheckedItemCount(),
-                    mBasicNoteData.getNote().getSummary().getItemCount(),
-                    mParamsSummary.getCheckedDisplayValue(),
-                    mParamsSummary.getTotalDisplayValue(),
-                    mParamsSummary.getIsInt()
+                    model.getBasicNoteSummary().getCheckedItemCount(),
+                    model.getBasicNoteSummary().getItemCount(),
+                    model.getBasicNoteItemParamsSummary().getCheckedDisplayValue(),
+                    model.getBasicNoteItemParamsSummary().getTotalDisplayValue(),
+                    model.getBasicNoteItemParamsSummary().getIsInt()
             );
         }
-
-         */
     }
 
     private void refreshCheckedItemsDisplay() {
@@ -414,11 +403,9 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
              */
         });
 
-        updateParamsSummary();
-
         //add checkout progress
         mCheckoutProgressHelper = new CheckoutProgressHelper(binding.checkoutProgressPanelInclude.getRoot());
-        updateCheckedItems();
+
 
         // for not encrypted set up AutoComplete and list button
         /*
@@ -465,6 +452,7 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
                         newNoteItems,
                         model.getBasicNoteItemParamsSummary());
             }
+            updateCheckedItems();
 
             UIAction<BasicNoteItemA> action = model.getAction();
             if (action != null) {
