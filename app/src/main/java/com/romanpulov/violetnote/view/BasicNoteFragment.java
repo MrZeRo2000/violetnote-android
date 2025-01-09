@@ -33,6 +33,7 @@ public class BasicNoteFragment extends BasicCommonNoteFragment  {
 
     private FragmentBasicNoteListBinding binding;
     private BasicNoteViewModel model;
+    private AppViewModel appViewModel;
 
     private BasicNoteRecycleViewAdapter mRecyclerViewAdapter;
 
@@ -304,7 +305,7 @@ public class BasicNoteFragment extends BasicCommonNoteFragment  {
         }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
 
         model = new ViewModelProvider(this).get(BasicNoteViewModel.class);
-        AppViewModel appViewModel = new ViewModelProvider(requireActivity()).get(AppViewModel.class);
+        appViewModel = new ViewModelProvider(requireActivity()).get(AppViewModel.class);
 
         model.setBasicNoteGroup(BasicNoteFragmentArgs.fromBundle(getArguments()).getNoteGroup());
         model.setNoteGroupsChanged(appViewModel.getNoteGroupsChanged());
@@ -342,6 +343,15 @@ public class BasicNoteFragment extends BasicCommonNoteFragment  {
                         model.add(item, new BasicUIAddAction<>(mRecyclerView));
                     }
                 });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (Boolean.TRUE.equals(appViewModel.getNoteCheckedItemChanged().getValue())) {
+            model.loadNotes();
+            appViewModel.getNoteCheckedItemChanged().setValue(false);
+        }
     }
 
     public void hideAddLayout() {

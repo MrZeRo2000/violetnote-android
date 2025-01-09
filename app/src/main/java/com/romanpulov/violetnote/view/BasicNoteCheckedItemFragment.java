@@ -438,6 +438,7 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
         appModel = new ViewModelProvider(requireActivity()).get(AppViewModel.class);
         model.setPriceNoteParamTypeId(appModel.getPriceNoteParamTypeId());
         model.setNoteGroupsChanged(appModel.getNoteGroupsChanged());
+        model.setNoteCheckedItemChanged(appModel.getNoteCheckedItemChanged());
 
         final Observer<List<BasicNoteItemA>> noteItemsObserver = newNoteItems -> {
             if (mRecyclerViewAdapter == null) {

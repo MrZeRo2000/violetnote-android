@@ -98,7 +98,7 @@ public class BasicNoteViewModel extends BasicCommonNoteViewModel<BasicNoteA> {
         return mBasicNoteItemDAO;
     }
 
-    private void loadNotes() {
+    public void loadNotes() {
         if (mBasicNotes != null) {
             mBasicNotes.setValue(getDAO().getTotalsByGroup(mBasicNoteGroup));
         }
