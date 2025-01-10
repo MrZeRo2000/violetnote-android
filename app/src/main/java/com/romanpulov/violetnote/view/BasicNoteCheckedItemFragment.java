@@ -8,8 +8,11 @@ import android.os.Looper;
 import android.view.*;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.MenuHost;
+import androidx.core.view.MenuProvider;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -18,7 +21,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.databinding.FragmentBasicNoteCheckedItemListBinding;
-import com.romanpulov.violetnote.db.manager.DBNoteManager;
 import com.romanpulov.violetnote.model.*;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutorHost;
 import com.romanpulov.violetnote.view.action.UIAction;
@@ -431,6 +433,41 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
 
         //restore selected items
         restoreSelectedItems(savedInstanceState, view);
+
+        MenuHost menuHost = requireActivity();
+        menuHost.addMenuProvider(new MenuProvider() {
+            @Override
+            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+                menuInflater.inflate(R.menu.menu_checked_item, menu);
+            }
+
+            @Override
+            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+                int itemId = menuItem.getItemId();
+                if (itemId == R.id.action_add) {
+                    showAddLayout();
+                    return true;
+                } else if (itemId == R.id.action_check_all) {
+                    performUpdateChecked(true);
+                    return true;
+                } else if (itemId == R.id.action_uncheck_all) {
+                    performUpdateChecked(false);
+                    return true;
+                } else if (itemId == R.id.action_checkout) {
+                    checkOut();
+                    return true;
+                } else if (itemId == R.id.action_history) {
+                    startHEventHistoryActivity();
+                    return true;
+                } else if (itemId == R.id.action_refresh) {
+                    setSwipeRefreshing(true);
+                    performRefresh();
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
 
         model = new ViewModelProvider(this).get(BasicNoteItemViewModel.class);
         model.setBasicNote(BasicNoteCheckedItemFragmentArgs.fromBundle(getArguments()).getNote());
