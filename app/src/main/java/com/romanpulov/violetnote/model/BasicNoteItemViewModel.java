@@ -140,12 +140,14 @@ public class BasicNoteItemViewModel extends BasicCommonNoteViewModel<BasicNoteIt
 
             getDAO().updateChecked(item, !item.isChecked());
             BasicNoteItemA updatedItem = getDAO().getById(item.getId());
+            updatedItem.setNoteItemParams(item.getNoteItemParams());
             List<BasicNoteItemA> newItems = mBasicNoteItems.getValue()
                     .stream()
                     .map(v -> v.getId() == item.getId() ? updatedItem : v)
                     .collect(Collectors.toList());
 
             mBasicNoteSummary.addCheckedItemCount(checkDiff);
+            mBasicNoteItemParamsSummary = null;
 
             mBasicNoteItems.setValue(newItems);
 
