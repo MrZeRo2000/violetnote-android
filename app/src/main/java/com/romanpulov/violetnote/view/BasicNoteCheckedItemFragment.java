@@ -277,34 +277,31 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
     public class ActionBarCallBack implements ActionMode.Callback {
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            /*
             List<BasicNoteItemA> selectedNoteItems = getSelectedNoteItems();
 
             if (!selectedNoteItems.isEmpty()) {
-                if ((item.getGroupId() == MENU_GROUP_OTHER_ITEMS) && (mRelatedNotes != null)) {
+                if ((item.getGroupId() == MENU_GROUP_OTHER_ITEMS) && (model.getRelatedNotes().getValue() != null)) {
                     // move to other items
-                    BasicNoteA otherNote = mRelatedNotes.get(item.getItemId());
-                    performMoveToOtherNoteAction(mode, selectedNoteItems, otherNote);
+                    BasicNoteA otherNote = model.getRelatedNotes().getValue().get(item.getItemId());
+                    //performMoveToOtherNoteAction(mode, selectedNoteItems, otherNote);
                 } else
                     // regular menu
                 {
                     int itemId = item.getItemId();
                     if (itemId == R.id.delete) {
-                        performDeleteAction(mode, selectedNoteItems);
+                        model.delete(selectedNoteItems, new BasicUIFinishAction<>(mRecyclerViewSelector.getActionMode()));
                     } else if (itemId == R.id.edit_value) {
                         BasicNoteItemA selectedNote = selectedNoteItems.get(0);
                         mInputActionHelper.showEditLayout(
                             InputParser.composeFloatParams(
                                 selectedNote.getValue(),
-                                selectedNote.getNoteItemParams().getLong(mPriceNoteParamTypeId),
-                                InputParser.getNumberDisplayStyle(mParamsSummary.getIsInt())));
+                                selectedNote.getNoteItemParams().getLong(model.getPriceNoteParamTypeId()),
+                                InputParser.getNumberDisplayStyle(model.getBasicNoteItemParamsSummary().getIsInt())));
                     } else if (itemId == R.id.select_all) {
-                        performSelectAll();
+                        //performSelectAll();
                     }
                 }
             }
-
-             */
             return false;
         }
 
