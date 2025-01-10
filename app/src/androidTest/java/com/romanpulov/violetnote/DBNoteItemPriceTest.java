@@ -44,12 +44,12 @@ public final class DBNoteItemPriceTest extends DBBaseTest {
         assertNotEquals(-1, result);
         note.setId(result);
 
-        BasicNoteItemA noPriceNoteItem = BasicNoteItemA.newCheckedEditInstance(priceNoteParamTypeId, "Value without param");
+        BasicNoteItemA noPriceNoteItem = BasicNoteItemA.newCheckedEditInstance(note.getId(), priceNoteParamTypeId, "Value without param");
         result = mDBNoteManager.mBasicNoteItemDAO.insertWithNote(note, noPriceNoteItem);
         assertNotEquals(-1, result);
         noPriceNoteItem.setId(result);
 
-        BasicNoteItemA hasPriceNoteItem = BasicNoteItemA.newCheckedEditInstance(priceNoteParamTypeId, "Value with param 12.77");
+        BasicNoteItemA hasPriceNoteItem = BasicNoteItemA.newCheckedEditInstance(note.getId(), priceNoteParamTypeId, "Value with param 12.77");
         result = mDBNoteManager.mBasicNoteItemDAO.insertWithNote(note, hasPriceNoteItem);
         assertNotEquals(-1, result);
         hasPriceNoteItem.setId(result);

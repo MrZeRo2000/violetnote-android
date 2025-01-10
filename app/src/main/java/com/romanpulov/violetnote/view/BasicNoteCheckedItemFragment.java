@@ -23,6 +23,8 @@ import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.databinding.FragmentBasicNoteCheckedItemListBinding;
 import com.romanpulov.violetnote.model.*;
 import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutorHost;
+import com.romanpulov.violetnote.view.action.BasicUIAddAction;
+import com.romanpulov.violetnote.view.action.BasicUIFinishAction;
 import com.romanpulov.violetnote.view.action.UIAction;
 import com.romanpulov.violetnote.view.core.*;
 import com.romanpulov.violetnote.view.helper.*;
@@ -31,6 +33,7 @@ import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Consumer;
 
 public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implements OnBasicNoteCheckedItemInteractionListener {
     private final static String TAG = BasicNoteCheckedItemFragment.class.getSimpleName();
@@ -196,7 +199,16 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
         }
     }
 
-    private void performEditAction(NoteItemDataUpdater noteItemDataUpdater) {
+    private void performEditAction(Consumer<BasicNoteItemA> itemConsumer) {
+        List<BasicNoteItemA> selectedNoteItems = getSelectedNoteItems();
+        if (selectedNoteItems.size() == 1) {
+            BasicNoteItemA item = selectedNoteItems.get(0);
+
+            //change
+            itemConsumer.accept(item);
+
+            model.edit(item, new BasicUIFinishAction<>(mRecyclerViewSelector.getActionMode()));
+        }
         /*
         List<BasicNoteItemA> selectedNoteItems = getSelectedNoteItems();
         if (selectedNoteItems.size() == 1) {
@@ -378,31 +390,30 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
         //add action panel
         mInputActionHelper = new InputActionHelper(binding.addPanelInclude.getRoot());
         mInputActionHelper.setOnAddInteractionListener((actionType, text) -> {
-            /*
-            if (mBasicNoteData.getNote().isEncrypted()) {
+            if (model.getBasicNote().isEncrypted()) {
                 InputManagerHelper.hideInput(view);
             }
             switch (actionType) {
                 case InputActionHelper.INPUT_ACTION_TYPE_ADD:
-                    performAddAction(BasicNoteItemA.newCheckedEditInstance(
-                            mPriceNoteParamTypeId,
-                            text));
+                    model.add(
+                            BasicNoteItemA.newCheckedEditInstance(
+                                    model.getBasicNote().getId(),
+                                    model.getPriceNoteParamTypeId(), text),
+                                    new BasicUIAddAction<>(mRecyclerView));
                     break;
                 case InputActionHelper.INPUT_ACTION_TYPE_EDIT:
                     performEditAction(item -> item.setValueWithParams(
-                            mPriceNoteParamTypeId,
+                            model.getPriceNoteParamTypeId(),
                             text));
                     hideAddLayout();
                     mRecyclerViewSelector.finishActionMode();
                     break;
                 case InputActionHelper.INPUT_ACTION_TYPE_NUMBER:
-                    performEditAction(item -> item.setParamLong(mPriceNoteParamTypeId, InputParser.getLongValueFromString(text)));
+                    performEditAction(item -> item.setParamLong(model.getPriceNoteParamTypeId(), InputParser.getLongValueFromString(text)));
                     hideAddLayout();
                     mRecyclerViewSelector.finishActionMode();
                     break;
             }
-
-             */
         });
 
         //add checkout progress
@@ -650,9 +661,5 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
             if (fragmentManager != null)
                 dialog.show(fragmentManager, null);
         }
-    }
-
-    private interface NoteItemDataUpdater {
-        void updateNoteItemData(BasicNoteItemA item);
     }
 }

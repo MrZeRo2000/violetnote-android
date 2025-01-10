@@ -107,7 +107,7 @@ public final class DBHManagementTest extends DBBaseTest {
 
         long priceNoteParamTypeId = mDBHelper.getDBDictionaryCache().getPriceNoteParamTypeId();
 
-        BasicNoteItemA noteItem1 = BasicNoteItemA.newCheckedEditInstance(priceNoteParamTypeId, "Data without value");
+        BasicNoteItemA noteItem1 = BasicNoteItemA.newCheckedEditInstance(note.getId(), priceNoteParamTypeId, "Data without value");
         result = mDBNoteManager.mBasicNoteItemDAO.insertWithNote(note, noteItem1);
         assertNotEquals(-1, result);
         noteItem1.setId(result);
@@ -117,7 +117,7 @@ public final class DBHManagementTest extends DBBaseTest {
         //should be no params
         assertEquals(0, note.getItems().get(0).getNoteItemParams().size());
 
-        BasicNoteItemA noteItem2 = BasicNoteItemA.newCheckedEditInstance(priceNoteParamTypeId, "Data with value 23.55");
+        BasicNoteItemA noteItem2 = BasicNoteItemA.newCheckedEditInstance(note.getId(), priceNoteParamTypeId, "Data with value 23.55");
         result = mDBNoteManager.mBasicNoteItemDAO.insertWithNote(note, noteItem2);
         assertNotEquals(-1, result);
         noteItem2.setId(result);
@@ -129,7 +129,7 @@ public final class DBHManagementTest extends DBBaseTest {
         //one param
         assertEquals(1, note.getItems().get(1).getNoteItemParams().size());
 
-        BasicNoteItemA noteItem3 = BasicNoteItemA.newCheckedEditInstance(priceNoteParamTypeId, "Another value 34");
+        BasicNoteItemA noteItem3 = BasicNoteItemA.newCheckedEditInstance(note.getId(), priceNoteParamTypeId, "Another value 34");
         result = mDBNoteManager.mBasicNoteItemDAO.insertWithNote(note, noteItem3);
         assertNotEquals(-1, result);
         noteItem3.setId(result);

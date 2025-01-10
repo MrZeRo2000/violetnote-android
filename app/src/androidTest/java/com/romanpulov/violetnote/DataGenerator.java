@@ -87,7 +87,7 @@ public class DataGenerator {
                         if (isPrice)
                             itemValueFormat = "Note item %2d for note %2d name with value 12.44";
 
-                        BasicNoteItemA newNoteItem = BasicNoteItemA.newCheckedEditInstance(priceNoteParamTypeId, String.format(Locale.getDefault(), itemValueFormat, j, i));
+                        BasicNoteItemA newNoteItem = BasicNoteItemA.newCheckedEditInstance(newNote.getId(), priceNoteParamTypeId, String.format(Locale.getDefault(), itemValueFormat, j, i));
                         assertNotEquals(-1, noteManager.mBasicNoteItemDAO.insertWithNote(newNote, newNoteItem));
 
                         if (isPrice)
@@ -165,10 +165,10 @@ public class DataGenerator {
         assertNotEquals(-1, newNoteId);
         newNote.setId(newNoteId);
 
-        BasicNoteItemA newNoteItem = BasicNoteItemA.newCheckedEditInstance(priceNoteParamTypeId, "Item 1");
+        BasicNoteItemA newNoteItem = BasicNoteItemA.newCheckedEditInstance(newNote.getId(), priceNoteParamTypeId, "Item 1");
         assertNotEquals(-1, noteManager.mBasicNoteItemDAO.insertWithNote(newNote, newNoteItem));
 
-        BasicNoteItemA newNoteItem2 = BasicNoteItemA.newCheckedEditInstance(priceNoteParamTypeId, "Item 2");
+        BasicNoteItemA newNoteItem2 = BasicNoteItemA.newCheckedEditInstance(newNote.getId(), priceNoteParamTypeId, "Item 2");
         assertNotEquals(-1, noteManager.mBasicNoteItemDAO.insertWithNote(newNote, newNoteItem2));
 
         noteManager.mBasicNoteItemDAO.updateChecked(newNoteItem2, true);
@@ -178,7 +178,7 @@ public class DataGenerator {
         assertNotEquals(-1, newNoteId2);
         newNote2.setId(newNoteId2);
 
-        BasicNoteItemA newNoteItem21 = BasicNoteItemA.newCheckedEditInstance(priceNoteParamTypeId, "Item 21");
+        BasicNoteItemA newNoteItem21 = BasicNoteItemA.newCheckedEditInstance(newNote2.getId(), priceNoteParamTypeId, "Item 21");
         assertNotEquals(-1, noteManager.mBasicNoteItemDAO.insertWithNote(newNote2, newNoteItem21));
 
         //new empty note group
@@ -190,7 +190,7 @@ public class DataGenerator {
 
     private BasicNoteItemA insertCheckedNoteItem(@NonNull DBNoteManager noteManager, @NonNull BasicNoteA note, String noteItemName) {
         final long priceNoteParamTypeId = DBBasicNoteHelper.getInstance(getTargetContext()).getDBDictionaryCache().getPriceNoteParamTypeId();
-        BasicNoteItemA result = BasicNoteItemA.newCheckedEditInstance(priceNoteParamTypeId, noteItemName);
+        BasicNoteItemA result = BasicNoteItemA.newCheckedEditInstance(note.getId(), priceNoteParamTypeId, noteItemName);
         long newNoteItemId = noteManager.mBasicNoteItemDAO.insertWithNote(note, result);
         assertNotEquals(-1, newNoteItemId);
 

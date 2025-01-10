@@ -156,9 +156,9 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
         return instance;
     }
 
-    public static @NonNull BasicNoteItemA newCheckedEditInstance(long noteItemParamTypeId, String value) {
+    public static @NonNull BasicNoteItemA newCheckedEditInstance(long noteId, long noteItemParamTypeId, String value) {
         InputParser.FloatParamsResult floatParamsResult = InputParser.parseFloatParams(value);
-        return fromFloatParams(noteItemParamTypeId, floatParamsResult);
+        return fromFloatParams(noteItemParamTypeId, floatParamsResult).withNoteId(noteId);
     }
 
     public static @NonNull BasicNoteItemA newNamedEditInstance(String name, String value) {
@@ -166,6 +166,11 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
         instance.mName = name;
         instance.mValue = value;
         return instance;
+    }
+
+    public @NonNull BasicNoteItemA withNoteId(long noteId) {
+        setNoteId(noteId);
+        return this;
     }
 
     @Override

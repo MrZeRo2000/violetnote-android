@@ -27,6 +27,10 @@ public class BasicNoteItemViewModel extends BasicCommonNoteViewModel<BasicNoteIt
     private BasicNoteItemParamsSummary mBasicNoteItemParamsSummary;
     private MutableLiveData<List<BasicNoteA>> mRelatedNotes;
 
+    public long getPriceNoteParamTypeId() {
+        return mPriceNoteParamTypeId;
+    }
+
     public void setPriceNoteParamTypeId(long mPriceNoteParamTypeId) {
         this.mPriceNoteParamTypeId = mPriceNoteParamTypeId;
     }
@@ -37,6 +41,10 @@ public class BasicNoteItemViewModel extends BasicCommonNoteViewModel<BasicNoteIt
 
     public void setNoteCheckedItemChanged(MutableLiveData<Boolean> mNoteCheckedItemChanged) {
         this.mNoteCheckedItemChanged = mNoteCheckedItemChanged;
+    }
+
+    public BasicNoteA getBasicNote() {
+        return mBasicNote;
     }
 
     public void setBasicNote(BasicNoteA basicNote) {
