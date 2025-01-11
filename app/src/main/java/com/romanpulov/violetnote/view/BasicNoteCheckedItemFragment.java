@@ -210,6 +210,13 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
         }
     }
 
+    private void performSelectAll() {
+        List<BasicNoteItemA> noteItems = model.getBasicNoteItems().getValue();
+        if ((noteItems != null) && (!noteItems.isEmpty())) {
+            mRecyclerViewSelector.setSelectedItems(ActionHelper.createSelectAllItems(noteItems.size()));
+        }
+    }
+
     private void updateTitle(ActionMode mode) {
         mode.setTitle(DisplayTitleBuilder.buildItemsDisplayTitle(
                 getActivity(),
@@ -271,7 +278,7 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
                                 selectedNote.getNoteItemParams().getLong(model.getPriceNoteParamTypeId()),
                                 InputParser.getNumberDisplayStyle(model.getBasicNoteItemParamsSummary().getIsInt())));
                     } else if (itemId == R.id.select_all) {
-                        //performSelectAll();
+                        performSelectAll();
                     }
                 }
             }
