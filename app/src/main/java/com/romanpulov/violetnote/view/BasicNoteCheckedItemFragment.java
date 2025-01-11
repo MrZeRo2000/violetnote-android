@@ -206,35 +206,8 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
 
             //change
             itemConsumer.accept(item);
-
-            model.edit(item, new BasicUIFinishAction<>(mRecyclerViewSelector.getActionMode()));
+            model.editNameValue(item, new BasicUIFinishAction<>(mRecyclerViewSelector.getActionMode()));
         }
-        /*
-        List<BasicNoteItemA> selectedNoteItems = getSelectedNoteItems();
-        if (selectedNoteItems.size() == 1) {
-            BasicNoteItemA item = selectedNoteItems.get(0);
-
-            //change
-            noteItemDataUpdater.updateNoteItemData(item);
-            //item.setValueWithParams(text);
-
-            BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity(), mBasicNoteData);
-            executor.addAction(getString(R.string.caption_processing), new BasicNoteDataItemEditNameValueAction(mBasicNoteData, item));
-            executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData));
-            executor.setOnExecutionCompletedListener((BasicNoteDataActionExecutor.OnExecutionCompletedListener) (basicNoteData, result) -> {
-                mBasicNoteData = basicNoteData;
-                afterExecutionCompleted();
-
-                //clear editor reference
-                if (mEditorDialog != null) {
-                    mEditorDialog.dismiss();
-                    mEditorDialog = null;
-                }
-            });
-            executeActions(executor);
-        }
-
-         */
     }
 
     private void updateTitle(ActionMode mode) {

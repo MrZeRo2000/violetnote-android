@@ -136,7 +136,7 @@ public abstract class BasicCommonNoteViewModel<T extends BasicCommonNoteA> exten
     }
 
     public void edit(T item, UIAction<T> action) {
-        if (getDAO().update(item) != -1) {
+        if (getDAO().update(item) == 1) {
             setAction(action);
             onDataChangeActionCompleted();
         }

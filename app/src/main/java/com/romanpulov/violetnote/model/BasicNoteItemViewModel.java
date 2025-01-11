@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.romanpulov.violetnote.db.dao.BasicNoteDAO;
 import com.romanpulov.violetnote.db.dao.BasicNoteItemDAO;
 import com.romanpulov.violetnote.model.vo.BasicNoteSummary;
+import com.romanpulov.violetnote.view.action.UIAction;
 import com.romanpulov.violetnote.view.core.BasicCommonNoteViewModel;
 import org.jetbrains.annotations.NotNull;
 
@@ -126,12 +127,12 @@ public class BasicNoteItemViewModel extends BasicCommonNoteViewModel<BasicNoteIt
         BasicNoteItemDAO.BasicNoteItemsWithSummary basicNoteItemsWithSummary = getDAO()
                 .getNoteItemsWithSummary(mBasicNote);
         mBasicNoteSummary = basicNoteItemsWithSummary.summary();
+        mBasicNoteItemParamsSummary = null;
+
         if (mBasicNoteItems == null) {
             mBasicNoteItems = new MutableLiveData<>();
         }
         mBasicNoteItems.setValue(basicNoteItemsWithSummary.items());
-
-        mBasicNoteItemParamsSummary = null;
     }
 
     public void toggleChecked(BasicNoteItemA item) {
@@ -139,8 +140,10 @@ public class BasicNoteItemViewModel extends BasicCommonNoteViewModel<BasicNoteIt
             int checkDiff = item.isChecked() ? -1 : 1;
 
             getDAO().updateChecked(item, !item.isChecked());
+
             BasicNoteItemA updatedItem = getDAO().getById(item.getId());
             updatedItem.setNoteItemParams(item.getNoteItemParams());
+
             List<BasicNoteItemA> newItems = mBasicNoteItems.getValue()
                     .stream()
                     .map(v -> v.getId() == item.getId() ? updatedItem : v)
@@ -158,5 +161,12 @@ public class BasicNoteItemViewModel extends BasicCommonNoteViewModel<BasicNoteIt
 
     public void refresh() {
         loadNoteItems();
+    }
+
+    public void editNameValue(BasicNoteItemA item, UIAction<BasicNoteItemA> action) {
+        if (getDAO().updateNameValue(item) != -1) {
+            setAction(action);
+            onDataChangeActionCompleted();
+        }
     }
 }
