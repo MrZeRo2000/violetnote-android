@@ -18,6 +18,7 @@ import com.romanpulov.violetnote.model.BooleanUtils;
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -162,13 +163,13 @@ public final class BasicNoteItemDAO extends AbstractBasicNoteItemDAO<BasicNoteIt
         return mDB.update(NoteItemsTableDef.TABLE_NAME, cv, DBCommonDef.ID_COLUMN_NAME + " = ?" , new String[] {String.valueOf(item.getId())});
     }
 
-    public long updateCheckedList(List<BasicNoteItemA> items, boolean checked) {
-        long result = 0;
-        for (BasicNoteItemA item : items) {
-            result += updateChecked(item, checked);
-        }
-
-        return result;
+    public long updateChecked(Collection<BasicNoteItemA> items, boolean checked) {
+        return items
+                .stream()
+                .reduce(
+                        0L,
+                        (a, v) -> a + updateChecked(v, checked),
+                        Long::sum);
     }
 
     public long updateNameValue(BasicNoteItemA item) {

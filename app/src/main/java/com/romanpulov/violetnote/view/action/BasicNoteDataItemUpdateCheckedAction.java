@@ -17,7 +17,7 @@ public class BasicNoteDataItemUpdateCheckedAction extends BasicAction<BasicNoteD
 
     @Override
     public boolean execute(DBNoteManager noteManager) {
-        noteManager.mBasicNoteItemDAO.updateCheckedList(mData.getNote().getItems(), mChecked);
+        noteManager.mBasicNoteItemDAO.updateChecked(mData.getNote().getItems(), mChecked);
         return true;
     }
 }

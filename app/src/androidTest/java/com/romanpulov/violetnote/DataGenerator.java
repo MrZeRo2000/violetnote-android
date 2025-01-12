@@ -223,7 +223,7 @@ public class DataGenerator {
 
         //update checked 1
         BasicNoteItemA[] notesToCheck = new BasicNoteItemA[] {newNoteItem1, newNoteItem2};
-        assertNotEquals(0, noteManager.mBasicNoteItemDAO.updateCheckedList(Arrays.asList(notesToCheck), true));
+        assertNotEquals(0, noteManager.mBasicNoteItemDAO.updateChecked(Arrays.asList(notesToCheck), true));
 
         //update note and checkout
         noteManager.mBasicNoteItemDAO.fillNoteDataItemsWithSummary(newNote);
@@ -239,7 +239,7 @@ public class DataGenerator {
         }
 
         //update checked 2
-        assertNotEquals(0, noteManager.mBasicNoteItemDAO.updateCheckedList(Collections.singletonList(newNoteItem3), true));
+        assertNotEquals(0, noteManager.mBasicNoteItemDAO.updateChecked(Collections.singletonList(newNoteItem3), true));
 
         //update note and checkout
         noteManager.mBasicNoteItemDAO.fillNoteDataItemsWithSummary(newNote);
@@ -255,7 +255,7 @@ public class DataGenerator {
         }
 
         //update checked 3
-        assertNotEquals(0, noteManager.mBasicNoteItemDAO.updateCheckedList(Collections.singletonList(newNoteItem5), true));
+        assertNotEquals(0, noteManager.mBasicNoteItemDAO.updateChecked(Collections.singletonList(newNoteItem5), true));
 
         //update note and checkout
         noteManager.mBasicNoteItemDAO.fillNoteDataItemsWithSummary(newNote);
