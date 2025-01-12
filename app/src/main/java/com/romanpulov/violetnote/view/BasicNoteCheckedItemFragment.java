@@ -436,10 +436,10 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
                     showAddLayout();
                     return true;
                 } else if (itemId == R.id.action_check_all) {
-                    performUpdateChecked(true);
+                    model.updateAllChecked(true);
                     return true;
                 } else if (itemId == R.id.action_uncheck_all) {
-                    performUpdateChecked(false);
+                    model.updateAllChecked(false);
                     return true;
                 } else if (itemId == R.id.action_checkout) {
                     checkOut();

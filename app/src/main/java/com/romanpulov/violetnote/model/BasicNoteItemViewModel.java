@@ -159,6 +159,13 @@ public class BasicNoteItemViewModel extends BasicCommonNoteViewModel<BasicNoteIt
         }
     }
 
+    public void updateAllChecked(boolean checked) {
+        if ((mBasicNoteItems.getValue() != null) &&
+                (getDAO().updateChecked(mBasicNoteItems.getValue(), checked) > 0)) {
+            onDataChangeActionCompleted();
+        }
+    }
+
     public void refresh() {
         loadNoteItems();
     }
