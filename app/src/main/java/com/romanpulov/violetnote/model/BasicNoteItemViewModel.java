@@ -70,7 +70,6 @@ public class BasicNoteItemViewModel extends BasicCommonNoteViewModel<BasicNoteIt
     public LiveData<Collection<String>> getValues() {
         if (mValues == null) {
             mValues = new MutableLiveData<>();
-            mValues.setValue(getBasicNoteDAO().getNoteValues(mBasicNote));
         }
         return mValues;
     }
@@ -144,6 +143,14 @@ public class BasicNoteItemViewModel extends BasicCommonNoteViewModel<BasicNoteIt
             mBasicNoteItems = new MutableLiveData<>();
         }
         mBasicNoteItems.setValue(basicNoteItemsWithSummary.items());
+
+        if (getValues().getValue() == null) {
+            loadValues();
+        }
+    }
+
+    private void loadValues() {
+        mValues.setValue(getBasicNoteDAO().getNoteValues(mBasicNote));
     }
 
     public void toggleChecked(BasicNoteItemA item) {
@@ -195,6 +202,7 @@ public class BasicNoteItemViewModel extends BasicCommonNoteViewModel<BasicNoteIt
                     getBasicNoteItems().getValue(),
                     getValues().getValue());
             onDataChangeActionCompleted();
+            loadValues();
         }
     }
 }

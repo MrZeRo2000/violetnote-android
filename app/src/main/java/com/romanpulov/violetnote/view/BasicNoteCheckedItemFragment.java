@@ -349,28 +349,6 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
         mCheckoutProgressHelper = new CheckoutProgressHelper(binding.checkoutProgressPanelInclude.getRoot());
 
 
-        // for not encrypted set up AutoComplete and list button
-        /*
-        if (!mBasicNoteData.getNote().isEncrypted()) {
-            mInputActionHelper.setAutoCompleteList(mBasicNoteData.getNote().getValues());
-
-            mInputActionHelper.setOnListClickListener(v -> {
-                // new intent for activity
-                Intent intent = new Intent(getActivity(), BasicNoteValueActivity.class);
-
-                //retrieve data
-                DBNoteManager manager = new DBNoteManager(getActivity());
-                List<BasicNoteValueA> values = manager.mBasicNoteValueDAO.getByNoteId(mBasicNoteData.getNote().getId());
-                BasicNoteValueDataA noteValueDataA = BasicNoteValueDataA.newInstance(mBasicNoteData.getNote(), values);
-
-                //pass and start activity
-                intent.putExtra(BasicNoteValueDataA.class.getName(), noteValueDataA);
-                startActivityForResult(intent, RESULT_CODE_VALUES);
-            });
-        }
-
-         */
-
         //restore selected items
         restoreSelectedItems(savedInstanceState, view);
 
@@ -447,6 +425,30 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
         };
         model.getBasicNoteItems().observe(this, noteItemsObserver);
 
+        // for not encrypted set up AutoComplete and list button
+        if (!model.getBasicNote().isEncrypted()) {
+            final Observer<Collection<String>> valuesObserver = values -> {
+                mInputActionHelper.setAutoCompleteList(values);
+
+                /*
+                mInputActionHelper.setOnListClickListener(v -> {
+                    // new intent for activity
+                    Intent intent = new Intent(getActivity(), BasicNoteValueActivity.class);
+
+                    //retrieve data
+                    DBNoteManager manager = new DBNoteManager(getActivity());
+                    List<BasicNoteValueA> values = manager.mBasicNoteValueDAO.getByNoteId(mBasicNoteData.getNote().getId());
+                    BasicNoteValueDataA noteValueDataA = BasicNoteValueDataA.newInstance(mBasicNoteData.getNote(), values);
+
+                    //pass and start activity
+                    intent.putExtra(BasicNoteValueDataA.class.getName(), noteValueDataA);
+                    startActivityForResult(intent, RESULT_CODE_VALUES);
+                });
+                 */
+
+            };
+            model.getValues().observe(this, valuesObserver);
+        }
     }
 
     public void startHEventHistoryActivity() {
