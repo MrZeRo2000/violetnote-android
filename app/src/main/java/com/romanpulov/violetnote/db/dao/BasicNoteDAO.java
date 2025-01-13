@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * BasicNoteDAO class
@@ -305,8 +306,11 @@ public final class BasicNoteDAO extends AbstractBasicNoteDAO<BasicNoteA> {
         return mDB.update(NotesTableDef.TABLE_NAME, cv, DBCommonDef.ID_COLUMN_NAME + "=" + object.getId(), null);
     }
 
-    public void checkOut(@NonNull BasicNoteA note) {
-        List<BasicNoteItemA> checkedItems = BasicNoteItemA.getCheckedBasicNoteItems(note.getItems());
+    public void checkOut(@NonNull BasicNoteA note, @NonNull Collection<BasicNoteItemA> items) {
+        List<BasicNoteItemA> checkedItems = items
+                .stream()
+                .filter(BasicNoteItemA::isChecked)
+                .collect(Collectors.toList());
 
         for (BasicNoteItemA item : checkedItems) {
             //add note values and history for not encrypted only

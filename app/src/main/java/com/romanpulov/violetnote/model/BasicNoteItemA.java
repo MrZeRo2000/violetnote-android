@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * BasicNote item data
@@ -81,18 +82,6 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
         } else {
             mNoteItemParams = params;
         }
-    }
-
-    public static <T extends BasicNoteItemA> List<T> getCheckedBasicNoteItems(List<T> items) {
-        List<T> result = new ArrayList<>();
-
-        for (T item: items) {
-            if (item.isChecked()) {
-                result.add(item);
-            }
-        }
-
-        return result;
     }
 
     public static <T extends BasicNoteItemA> List<String> getBasicNoteItemValues(Collection<T> items) {
