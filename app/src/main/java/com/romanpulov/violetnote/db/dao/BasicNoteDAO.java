@@ -306,7 +306,10 @@ public final class BasicNoteDAO extends AbstractBasicNoteDAO<BasicNoteA> {
         return mDB.update(NotesTableDef.TABLE_NAME, cv, DBCommonDef.ID_COLUMN_NAME + "=" + object.getId(), null);
     }
 
-    public void checkOut(@NonNull BasicNoteA note, @NonNull Collection<BasicNoteItemA> items) {
+    public void checkOut(
+            @NonNull BasicNoteA note,
+            @NonNull Collection<BasicNoteItemA> items,
+            @NonNull Collection<String> values) {
         List<BasicNoteItemA> checkedItems = items
                 .stream()
                 .filter(BasicNoteItemA::isChecked)
@@ -316,8 +319,9 @@ public final class BasicNoteDAO extends AbstractBasicNoteDAO<BasicNoteA> {
             //add note values and history for not encrypted only
             if (!note.isEncrypted()) {
                 //insert value
-                if (note.getValues().add(item.getValue()))
+                if (values.add(item.getValue())) {
                     getBasicNoteValueDAO().insertWithNote(note, item.getValue());
+                }
 
                 //insert history
                 getBasicNoteHistoryDAO().insertNoteValue(note, item.getValue());

@@ -228,7 +228,7 @@ public class DataGenerator {
         //update note and checkout
         noteManager.mBasicNoteItemDAO.fillNoteDataItemsWithSummary(newNote);
         noteManager.mBasicNoteDAO.fillNoteValues(newNote);
-        noteManager.mBasicNoteDAO.checkOut(newNote, newNote.getItems());
+        noteManager.mBasicNoteDAO.checkOut(newNote, newNote.getItems(), newNote.getValues());
 
         log("Performing short wait");
 
@@ -244,7 +244,7 @@ public class DataGenerator {
         //update note and checkout
         noteManager.mBasicNoteItemDAO.fillNoteDataItemsWithSummary(newNote);
         noteManager.mBasicNoteDAO.fillNoteValues(newNote);
-        noteManager.mBasicNoteDAO.checkOut(newNote, newNote.getItems());
+        noteManager.mBasicNoteDAO.checkOut(newNote, newNote.getItems(), newNote.getValues());
 
         log("Performing long wait");
 
@@ -260,7 +260,7 @@ public class DataGenerator {
         //update note and checkout
         noteManager.mBasicNoteItemDAO.fillNoteDataItemsWithSummary(newNote);
         noteManager.mBasicNoteDAO.fillNoteValues(newNote);
-        noteManager.mBasicNoteDAO.checkOut(newNote, newNote.getItems());
+        noteManager.mBasicNoteDAO.checkOut(newNote, newNote.getItems(), newNote.getValues());
 
         //new named note
         newNote = BasicNoteA.newEditInstance(newNoteGroupId, BasicNoteA.NOTE_TYPE_NAMED, "Metrics", false, null);

@@ -10,6 +10,7 @@ import com.romanpulov.violetnote.view.action.UIAction;
 import com.romanpulov.violetnote.view.core.BasicCommonNoteViewModel;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -24,6 +25,8 @@ public class BasicNoteItemViewModel extends BasicCommonNoteViewModel<BasicNoteIt
 
     private BasicNoteA mBasicNote;
     private MutableLiveData<List<BasicNoteItemA>> mBasicNoteItems;
+    private MutableLiveData<Collection<String>> mValues;
+
     private BasicNoteSummary mBasicNoteSummary;
     private BasicNoteItemParamsSummary mBasicNoteItemParamsSummary;
     private MutableLiveData<List<BasicNoteA>> mRelatedNotes;
@@ -62,6 +65,14 @@ public class BasicNoteItemViewModel extends BasicCommonNoteViewModel<BasicNoteIt
             loadNoteItems();
         }
         return mBasicNoteItems;
+    }
+
+    public LiveData<Collection<String>> getValues() {
+        if (mValues == null) {
+            mValues = new MutableLiveData<>();
+            mValues.setValue(getBasicNoteDAO().getNoteValues(mBasicNote));
+        }
+        return mValues;
     }
 
     public BasicNoteSummary getBasicNoteSummary() {
@@ -178,8 +189,11 @@ public class BasicNoteItemViewModel extends BasicCommonNoteViewModel<BasicNoteIt
     }
 
     public void checkout() {
-        if (getBasicNoteItems().getValue() != null) {
-            getBasicNoteDAO().checkOut(getBasicNote(), getBasicNoteItems().getValue());
+        if ((getBasicNoteItems().getValue() != null) && (getValues().getValue() != null)) {
+            getBasicNoteDAO().checkOut(
+                    getBasicNote(),
+                    getBasicNoteItems().getValue(),
+                    getValues().getValue());
             onDataChangeActionCompleted();
         }
     }

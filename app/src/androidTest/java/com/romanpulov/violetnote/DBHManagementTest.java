@@ -147,7 +147,7 @@ public final class DBHManagementTest extends DBBaseTest {
 
         //checkout items
         mDBNoteManager.mBasicNoteItemDAO.fillNoteDataItemsWithSummary(note);
-        mDBNoteManager.mBasicNoteDAO.checkOut(note, note.getItems());
+        mDBNoteManager.mBasicNoteDAO.checkOut(note, note.getItems(), note.getValues());
 
         //here we should have some history
         List<BasicHNoteCOItemA> hNoteCOItems =  mDBHManager.mBasicHNoteCOItemDAO.getByNoteId(note.getId());

@@ -11,7 +11,6 @@ import androidx.annotation.Nullable;
 import androidx.core.view.MenuHost;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -60,7 +59,7 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
         Context context = getContext();
         if (context != null) {
             try {
-                refreshListWithView();
+                model.refresh();
             } catch (Exception e) {
                 LoggerHelper.logContext(getContext(), TAG, "Error refreshing list:" + e);
             }
@@ -87,23 +86,6 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
         binding.fragmentToolbarBottom.setVisibility(View.GONE);
     }
 
-    public void refreshListWithView() {
-        /*
-        Context context = getContext();
-        if (context != null) {
-            BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(context, mBasicNoteData);
-            executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData));
-            executor.setOnExecutionCompletedListener((BasicNoteDataActionExecutor.OnExecutionCompletedListener) (basicNoteData, result) -> {
-                afterExecutionCompleted();
-                RecyclerViewHelper.adapterNotifyDataSetChanged(mRecyclerView);
-                PassDataPasswordActivity.getPasswordValidityChecker().startPeriod();
-            });
-            executeActions(executor);
-        }
-
-         */
-    }
-
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -128,39 +110,9 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
     public void onBasicNoteItemFragmentInteraction(BasicNoteItemA item) {
         hideAddLayout();
         model.toggleChecked(item);
-        /*
-
-        DBNoteManager manager = new DBNoteManager(getActivity());
-        //update item
-        manager.mBasicNoteItemDAO.updateChecked(item, !item.isChecked());
-        //ensure item is updated and reload
-        BasicNoteItemA updatedItem = manager.mBasicNoteItemDAO.getById(item.getId());
-        item.updateChecked(updatedItem);
-
-        //update summary
-        updateParamsSummary();
-
-        //update checked
-        mBasicNoteData.getNote().getSummary().addCheckedItemCount(item.isChecked() ? 1 : - 1);
-        updateCheckedItems();
-
-        // update groups totals
-        notifyNoteGroupsChanged();
 
         //refresh display
         refreshCheckedItemsDisplay();
-
-        RecyclerViewHelper.adapterNotifyDataSetChanged(mRecyclerView);
-        */
-    }
-
-    private void notifyNoteGroupsChanged() {
-        //BasicNoteGroupViewModel.setAppNoteGroupsChanged(requireActivity().getApplication());
-    }
-
-    private void afterExecutionCompleted() {
-        updateCheckedItems();
-        notifyNoteGroupsChanged();
     }
 
     /**
