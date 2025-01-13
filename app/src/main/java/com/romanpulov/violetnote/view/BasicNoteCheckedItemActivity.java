@@ -106,7 +106,7 @@ public class BasicNoteCheckedItemActivity extends BasicNoteDataPasswordActivity 
                     basicNoteCheckedItemFragment.performUpdateChecked(false);
                     return true;
                 } else if (itemId == R.id.action_checkout) {
-                    basicNoteCheckedItemFragment.checkOut();
+                    basicNoteCheckedItemFragment.performCheckOut();
                     return true;
                 } else if (itemId == R.id.action_history) {
                     basicNoteCheckedItemFragment.startHEventHistoryActivity();

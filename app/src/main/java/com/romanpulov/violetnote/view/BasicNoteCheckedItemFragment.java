@@ -442,7 +442,7 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
                     model.updateAllChecked(false);
                     return true;
                 } else if (itemId == R.id.action_checkout) {
-                    checkOut();
+                    performCheckOut();
                     return true;
                 } else if (itemId == R.id.action_history) {
                     startHEventHistoryActivity();
@@ -625,18 +625,17 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
         }
     }
 
-    public void checkOut() {
+    public void performCheckOut() {
         //int checkedCount = mBasicNoteData.getCheckedDisplayValue();
         int checkedCount = model.getBasicNoteItemParamsSummary().getCheckedCount();
         if (checkedCount > 0) {
             String queryString = getResources().getQuantityString(
                     R.plurals.ui_question_are_you_sure_checkout_items, checkedCount, checkedCount);
             AlertOkCancelSupportDialogFragment dialog = AlertOkCancelSupportDialogFragment.newAlertOkCancelDialog(queryString);
-            dialog.setOkButtonClickListener(dialog1 -> performCheckOutAction());
+            dialog.setOkButtonClickListener(dialog1 ->
+                    model.checkout());
 
-            FragmentManager fragmentManager = getFragmentManager();
-            if (fragmentManager != null)
-                dialog.show(fragmentManager, null);
+            dialog.show(getParentFragmentManager(), AlertOkCancelSupportDialogFragment.TAG);
         }
     }
 }

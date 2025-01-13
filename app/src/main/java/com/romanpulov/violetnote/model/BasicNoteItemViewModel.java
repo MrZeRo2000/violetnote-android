@@ -176,4 +176,11 @@ public class BasicNoteItemViewModel extends BasicCommonNoteViewModel<BasicNoteIt
             onDataChangeActionCompleted();
         }
     }
+
+    public void checkout() {
+        if (getBasicNoteItems().getValue() != null) {
+            getBasicNoteDAO().checkOut(getBasicNote(), getBasicNoteItems().getValue());
+            onDataChangeActionCompleted();
+        }
+    }
 }
