@@ -15,6 +15,8 @@ public class BasicNoteValueViewModel extends BasicEntityNoteViewModel<BasicNoteV
     private BasicNoteA mBasicNote;
     private MutableLiveData<List<BasicNoteValueA>> mBasicNoteValues;
 
+    private MutableLiveData<Boolean> mNoteValuesChanged;
+
     public BasicNoteA getBasicNote() {
         return mBasicNote;
     }
@@ -32,6 +34,10 @@ public class BasicNoteValueViewModel extends BasicEntityNoteViewModel<BasicNoteV
         return mBasicNoteValues;
     }
 
+    public void setNoteValuesChanged(MutableLiveData<Boolean> mNoteValuesChanged) {
+        this.mNoteValuesChanged = mNoteValuesChanged;
+    }
+
     public BasicNoteValueViewModel(@NotNull Application application) {
         super(application);
     }
@@ -39,6 +45,9 @@ public class BasicNoteValueViewModel extends BasicEntityNoteViewModel<BasicNoteV
     @Override
     public void onDataChangeActionCompleted() {
         loadValues();
+        if (mNoteValuesChanged != null) {
+            mNoteValuesChanged.setValue(true);
+        }
     }
 
     @Override

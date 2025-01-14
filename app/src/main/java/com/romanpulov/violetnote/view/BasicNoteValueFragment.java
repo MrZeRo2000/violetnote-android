@@ -3,23 +3,21 @@ package com.romanpulov.violetnote.view;
 import android.content.Context;
 import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
+import android.view.*;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.MenuHost;
+import androidx.core.view.MenuProvider;
 import androidx.fragment.app.FragmentManager;
 import androidx.appcompat.view.ActionMode;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.databinding.FragmentBasicNoteValueListBinding;
 import com.romanpulov.violetnote.db.manager.DBNoteManager;
-import com.romanpulov.violetnote.model.BasicEntityNoteSelectionPosA;
-import com.romanpulov.violetnote.model.BasicNoteValueA;
-import com.romanpulov.violetnote.model.BasicNoteValueDataA;
+import com.romanpulov.violetnote.model.*;
 import com.romanpulov.violetnote.view.helper.ActionHelper;
 import com.romanpulov.violetnote.view.helper.DisplayTitleBuilder;
 import com.romanpulov.violetnote.view.core.AlertOkCancelSupportDialogFragment;
@@ -35,6 +33,8 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
     private final static String TAG = BasicNoteValueFragment.class.getSimpleName();
 
     private FragmentBasicNoteValueListBinding binding;
+    private BasicNoteValueViewModel model;
+    private AppViewModel appModel;
 
     BasicNoteValueRecyclerViewAdapter mRecyclerViewAdapter;
 
@@ -261,6 +261,32 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
             }
 
         });
+
+        MenuHost menuHost = requireActivity();
+        menuHost.addMenuProvider(new MenuProvider() {
+            @Override
+            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+                menuInflater.inflate(R.menu.menu_add_action, menu);
+            }
+
+            @Override
+            public boolean onMenuItemSelected(@NonNull MenuItem item) {
+                int itemId = item.getItemId();
+                if (itemId == R.id.action_add) {
+                    showAddLayout();
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
+
+        model = new ViewModelProvider(this).get(BasicNoteValueViewModel.class);
+        model.setBasicNote(BasicNoteValueFragmentArgs.fromBundle(getArguments()).getNote());
+
+        appModel = new ViewModelProvider(requireActivity()).get(AppViewModel.class);
+        model.setNoteValuesChanged(appModel.getNoteValuesChanged());
+
         mRecyclerViewAdapter = new BasicNoteValueRecyclerViewAdapter(
                 mBasicNoteValueData, new ActionBarCallBack());
         mRecyclerViewSelector = mRecyclerViewAdapter.getRecyclerViewSelector();

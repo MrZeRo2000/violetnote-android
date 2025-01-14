@@ -348,7 +348,6 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
         //add checkout progress
         mCheckoutProgressHelper = new CheckoutProgressHelper(binding.checkoutProgressPanelInclude.getRoot());
 
-
         //restore selected items
         restoreSelectedItems(savedInstanceState, view);
 
