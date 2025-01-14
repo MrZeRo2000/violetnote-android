@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import com.romanpulov.violetnote.db.tabledef.DBCommonDef;
 import com.romanpulov.violetnote.db.tabledef.NoteValuesTableDef;
 import com.romanpulov.violetnote.model.BasicEntityNoteA;
+import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteValueA;
 
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ public final class BasicNoteValueDAO extends AbstractDAO<BasicNoteValueA> {
     }
 
     @NonNull
-    public List<BasicNoteValueA> getByNoteId(final long id) {
+    public List<BasicNoteValueA> getNoteValues(@NonNull final BasicNoteA note) {
         final List<BasicNoteValueA> result = new ArrayList<>();
 
         readCursor(new CursorReaderHandler() {
@@ -33,7 +34,7 @@ public final class BasicNoteValueDAO extends AbstractDAO<BasicNoteValueA> {
                         NoteValuesTableDef.TABLE_NAME,
                         new String[]{DBCommonDef.ID_COLUMN_NAME, NoteValuesTableDef.VALUE_COLUMN_NAME},
                         DBCommonDef.NOTE_ID_COLUMN_NAME + " = ?",
-                        new String[]{String.valueOf(id)},
+                        new String[]{String.valueOf(note.getId())},
                         null,
                         null,
                         NoteValuesTableDef.VALUE_COLUMN_NAME

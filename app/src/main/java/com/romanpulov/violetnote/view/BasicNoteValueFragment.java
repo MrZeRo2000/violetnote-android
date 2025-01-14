@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
 import androidx.appcompat.view.ActionMode;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.databinding.FragmentBasicNoteValueListBinding;
 import com.romanpulov.violetnote.db.manager.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicEntityNoteSelectionPosA;
 import com.romanpulov.violetnote.model.BasicNoteValueA;
@@ -25,23 +27,22 @@ import com.romanpulov.violetnote.view.core.BasicCommonNoteFragment;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 import com.romanpulov.violetnote.view.helper.InputActionHelper;
 import com.romanpulov.violetnote.view.helper.LoggerHelper;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-/**
- * A fragment representing a list of Items.
- * <p/>
- * Activities containing this fragment MUST implement the {@link OnNoteValueFragmentInteractionListener}
- * interface.
- */
 public class BasicNoteValueFragment extends BasicCommonNoteFragment {
     private final static String TAG = BasicNoteValueFragment.class.getSimpleName();
+
+    private FragmentBasicNoteValueListBinding binding;
+
+    BasicNoteValueRecyclerViewAdapter mRecyclerViewAdapter;
 
     protected BasicNoteValueDataA mBasicNoteValueData;
     private InputActionHelper mInputActionHelper;
 
     public void refreshList(DBNoteManager noteManager) {
-        mBasicNoteValueData.setValues(noteManager.mBasicNoteValueDAO.getByNoteId(mBasicNoteValueData.getNote().getId()));
+        mBasicNoteValueData.setValues(noteManager.mBasicNoteValueDAO.getNoteValues(mBasicNoteValueData.getNote()));
     }
 
     /**
@@ -225,27 +226,27 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_basic_note_value_list, container, false);
+        binding = FragmentBasicNoteValueListBinding.inflate(getLayoutInflater());
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         Context context = view.getContext();
-        mRecyclerView = view.findViewById(R.id.list);
 
+        mRecyclerView = binding.list;
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-
-        BasicNoteValueRecyclerViewAdapter recyclerViewAdapter = new BasicNoteValueRecyclerViewAdapter(
-                mBasicNoteValueData, new ActionBarCallBack(), null
-        );
-        mRecyclerViewSelector = recyclerViewAdapter.getRecyclerViewSelector();
-        mRecyclerView.setAdapter(recyclerViewAdapter);
-
-        //restore selected items
-        restoreSelectedItems(savedInstanceState, view);
-
         // add decoration
-        mRecyclerView.addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(getActivity(), RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_white_black_gradient));
+        mRecyclerView.addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(
+                getActivity(),
+                RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST,
+                R.drawable.divider_white_black_gradient));
+        mRecyclerView.setAdapter(mRecyclerViewAdapter);
 
         //add action panel
-        mInputActionHelper = new InputActionHelper(view.findViewById(R.id.add_panel_include));
+        mInputActionHelper = new InputActionHelper(binding.addPanelInclude.getRoot());
         mInputActionHelper.setOnAddInteractionListener((actionType, text) -> {
             switch (actionType) {
                 case InputActionHelper.INPUT_ACTION_TYPE_ADD:
@@ -260,21 +261,12 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
             }
 
         });
+        mRecyclerViewAdapter = new BasicNoteValueRecyclerViewAdapter(
+                mBasicNoteValueData, new ActionBarCallBack());
+        mRecyclerViewSelector = mRecyclerViewAdapter.getRecyclerViewSelector();
+        mRecyclerView.setAdapter(mRecyclerViewAdapter);
 
-        return view;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnNoteValueFragmentInteractionListener {
-        void onNoteValueClicked(BasicNoteValueA item, int adapterPosition);
+        //restore selected items
+        restoreSelectedItems(savedInstanceState, view);
     }
 }

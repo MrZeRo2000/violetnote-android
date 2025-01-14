@@ -437,7 +437,7 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
 
                     //retrieve data
                     DBNoteManager manager = new DBNoteManager(getActivity());
-                    List<BasicNoteValueA> values = manager.mBasicNoteValueDAO.getByNoteId(mBasicNoteData.getNote().getId());
+                    List<BasicNoteValueA> values = manager.mBasicNoteValueDAO.getNoteValues(mBasicNoteData.getNote().getId());
                     BasicNoteValueDataA noteValueDataA = BasicNoteValueDataA.newInstance(mBasicNoteData.getNote(), values);
 
                     //pass and start activity

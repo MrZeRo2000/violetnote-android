@@ -21,16 +21,14 @@ public class BasicNoteValueRecyclerViewAdapter extends RecyclerView.Adapter<Basi
 
     private final BasicNoteValueDataA mBasicNoteValueDataA;
     private final ViewSelectorHelper.AbstractViewSelector<Integer> mRecyclerViewSelector;
-    private final BasicNoteValueFragment.OnNoteValueFragmentInteractionListener mListener;
 
     public ViewSelectorHelper.AbstractViewSelector<Integer> getRecyclerViewSelector() {
         return mRecyclerViewSelector;
     }
 
-    public BasicNoteValueRecyclerViewAdapter(BasicNoteValueDataA basicNoteValueDataA, ActionMode.Callback actionModeCallback, BasicNoteValueFragment.OnNoteValueFragmentInteractionListener listener) {
+    public BasicNoteValueRecyclerViewAdapter(BasicNoteValueDataA basicNoteValueDataA, ActionMode.Callback actionModeCallback) {
         mBasicNoteValueDataA = basicNoteValueDataA;
         mRecyclerViewSelector = new ViewSelectorHelper.ViewSelectorMultiple<>(this, actionModeCallback);
-        mListener = listener;
     }
 
     @NonNull
@@ -60,13 +58,6 @@ public class BasicNoteValueRecyclerViewAdapter extends RecyclerView.Adapter<Basi
         public ViewHolder(View view, ViewSelectorHelper.AbstractViewSelector<Integer> viewSelector) {
             super(view, viewSelector);
             mValueView = view.findViewById(R.id.value);
-        }
-
-        @Override
-        public void onClick(View v) {
-            super.onClick(v);
-            if ((!mRecyclerViewSelector.isSelected()) && (mListener != null) && (getBindingAdapterPosition() != -1))
-                mListener.onNoteValueClicked(mBasicNoteValueDataA.getValues().get(getBindingAdapterPosition()), getBindingAdapterPosition());
         }
 
         @Override

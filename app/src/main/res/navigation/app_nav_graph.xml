@@ -147,6 +147,26 @@
                 app:argType="com.romanpulov.violetnote.model.BasicNoteA"
                 app:nullable="true"
                 android:defaultValue="@null" />
+
+        <action
+                android:id="@+id/action_basic_note_checked_item_to_basic_note_value"
+                app:destination="@id/nav_basic_note_value"
+                app:enterAnim="@android:anim/slide_in_left"
+                app:exitAnim="@android:anim/slide_out_right"
+                app:popEnterAnim="@android:anim/slide_in_left"
+                app:popExitAnim="@android:anim/slide_out_right"/>
     </fragment>
 
+    <fragment
+            android:id="@+id/nav_basic_note_value"
+            android:name="com.romanpulov.violetnote.view.BasicNoteValueFragment"
+            android:label="@string/title_activity_basic_note_value"
+            tools:layout="@layout/fragment_basic_note_value_list">
+
+        <argument
+                android:name="note"
+                app:argType="com.romanpulov.violetnote.model.BasicNoteA"
+                app:nullable="true"
+                android:defaultValue="@null" />
+    </fragment>
 </navigation>
