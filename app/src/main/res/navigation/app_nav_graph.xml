@@ -155,6 +155,14 @@
                 app:exitAnim="@android:anim/slide_out_right"
                 app:popEnterAnim="@android:anim/slide_in_left"
                 app:popExitAnim="@android:anim/slide_out_right"/>
+
+        <action
+                android:id="@+id/action_basic_note_checked_item_to_basic_history_event_co_item"
+                app:destination="@id/nav_basic_history_event_co_item"
+                app:enterAnim="@android:anim/slide_in_left"
+                app:exitAnim="@android:anim/slide_out_right"
+                app:popEnterAnim="@android:anim/slide_in_left"
+                app:popExitAnim="@android:anim/slide_out_right"/>
     </fragment>
 
     <fragment
@@ -162,6 +170,19 @@
             android:name="com.romanpulov.violetnote.view.BasicNoteValueFragment"
             android:label="@string/title_activity_basic_note_value"
             tools:layout="@layout/fragment_basic_note_value_list">
+
+        <argument
+                android:name="note"
+                app:argType="com.romanpulov.violetnote.model.BasicNoteA"
+                app:nullable="true"
+                android:defaultValue="@null" />
+    </fragment>
+
+    <fragment
+            android:id="@+id/nav_basic_history_event_co_item"
+            android:name="com.romanpulov.violetnote.view.BasicHEventCOItemFragment"
+            android:label="@string/title_activity_basic_history_event_co_item"
+            tools:layout="@layout/fragment_expandable_list_view">
 
         <argument
                 android:name="note"

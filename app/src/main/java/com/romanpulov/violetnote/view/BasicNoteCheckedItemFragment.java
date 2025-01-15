@@ -394,7 +394,9 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
                     performCheckOut();
                     return true;
                 } else if (itemId == R.id.action_history) {
-                    startHEventHistoryActivity();
+                    NavHostFragment.findNavController(BasicNoteCheckedItemFragment.this).navigate(
+                            BasicNoteCheckedItemFragmentDirections.actionBasicNoteCheckedItemToBasicHistoryEventCoItem()
+                                    .setNote(model.getBasicNote()));
                     return true;
                 } else if (itemId == R.id.action_refresh) {
                     setSwipeRefreshing(true);

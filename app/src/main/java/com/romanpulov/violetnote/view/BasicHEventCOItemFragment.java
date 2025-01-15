@@ -17,14 +17,17 @@ import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
 import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.databinding.FragmentExpandableListViewBinding;
 import com.romanpulov.violetnote.db.manager.DBHManager;
 import com.romanpulov.violetnote.model.BasicHEventA;
 import com.romanpulov.violetnote.model.BasicHNoteCOItemA;
 import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.view.core.AlertOkCancelSupportDialogFragment;
+import com.romanpulov.violetnote.view.core.BasicCommonNoteFragment;
 import com.romanpulov.violetnote.view.core.ViewSelectorHelper;
 import com.romanpulov.violetnote.view.helper.DisplayTitleBuilder;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -33,7 +36,9 @@ import java.util.Set;
 
 import static com.romanpulov.violetnote.view.core.ViewSelectorHelper.KEY_SELECTED_ITEMS_RETURN_DATA;
 
-public class BasicHEventCOItemFragment extends Fragment {
+public class BasicHEventCOItemFragment extends BasicCommonNoteFragment {
+
+    private FragmentExpandableListViewBinding binding;
 
     //data
     private BasicNoteA mNote;
@@ -82,12 +87,21 @@ public class BasicHEventCOItemFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_basic_h_event_expandable_list, container, false);
+        binding = FragmentExpandableListViewBinding.inflate(getLayoutInflater());
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        /*
 
         refreshList(new DBHManager(view.getContext()));
 
         //controls
-        ExpandableListView exListView = view.findViewById(R.id.ex_list);
+        ExpandableListView exListView = binding.exList;
+
         BasicHEventCOItemExpandableListViewAdapter exListViewAdapter = new BasicHEventCOItemExpandableListViewAdapter(
                 getContext(),
                 mHEvents,
@@ -100,16 +114,7 @@ public class BasicHEventCOItemFragment extends Fragment {
 
         mViewSelector.restoreSelectedItems(savedInstanceState, view);
 
-        return view;
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        if (mViewSelector != null) {
-            mViewSelector.saveInstanceState(outState, BasicHNoteCOItemA.class);
-        }
-
-        super.onSaveInstanceState(outState);
+         */
     }
 
     private void updateTitle(@NonNull ActionMode mode) {
