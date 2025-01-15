@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.core.view.MenuHost;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -22,10 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.databinding.FragmentBasicNoteCheckedItemListBinding;
 import com.romanpulov.violetnote.model.*;
-import com.romanpulov.violetnote.view.action.BasicNoteDataActionExecutorHost;
-import com.romanpulov.violetnote.view.action.BasicUIAddAction;
-import com.romanpulov.violetnote.view.action.BasicUIFinishAction;
-import com.romanpulov.violetnote.view.action.UIAction;
+import com.romanpulov.violetnote.view.action.*;
 import com.romanpulov.violetnote.view.core.*;
 import com.romanpulov.violetnote.view.helper.*;
 import com.romanpulov.violetnote.view.preference.PreferenceRepository;
@@ -170,6 +168,38 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
         }
     }
 
+    protected void performMoveToOtherNoteAction(final ActionMode mode, final List<BasicNoteItemA> items, final BasicNoteA otherNote) {
+        String confirmationQuestion = getResources()
+                .getQuantityString(R.plurals.ui_question_selected_note_items_move_to_other_note, items.size(), items.size(), otherNote.getTitle());
+        AlertOkCancelSupportDialogFragment dialog = AlertOkCancelSupportDialogFragment.newAlertOkCancelDialog(confirmationQuestion);
+        dialog.setOkButtonClickListener(dialog1 -> {
+            model.moveToOtherNote(items, otherNote, new BasicUIFinishAction<>(mRecyclerViewSelector.getActionMode()));
+            /*
+
+            BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity(), mBasicNoteData);
+            executor.addAction(getString(R.string.caption_processing), new BasicNoteMoveToOtherNoteAction<>(mBasicNoteData, items, otherNote));
+            executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData));
+            executor.setOnExecutionCompletedListener((BasicNoteDataActionExecutor.OnExecutionCompletedListener) (basicNoteData, result) -> {
+                if (result) {
+                    afterExecutionCompleted();
+                    mode.finish();
+                }
+
+                mBasicNoteData = basicNoteData;
+
+                if (mDialogFragment != null) {
+                    mDialogFragment.dismiss();
+                    mDialogFragment = null;
+                }
+                notifyNoteGroupsChanged();
+            });
+            executeActions(executor);
+
+             */
+        });
+        dialog.show(getParentFragmentManager(), AlertOkCancelSupportDialogFragment.TAG);
+    }
+
     private void updateTitle(ActionMode mode) {
         mode.setTitle(DisplayTitleBuilder.buildItemsDisplayTitle(
                 getActivity(),
@@ -216,7 +246,7 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
                 if ((item.getGroupId() == MENU_GROUP_OTHER_ITEMS) && (model.getRelatedNotes().getValue() != null)) {
                     // move to other items
                     BasicNoteA otherNote = model.getRelatedNotes().getValue().get(item.getItemId());
-                    //performMoveToOtherNoteAction(mode, selectedNoteItems, otherNote);
+                    performMoveToOtherNoteAction(mode, selectedNoteItems, otherNote);
                 } else
                     // regular menu
                 {
@@ -429,23 +459,11 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
         if (!model.getBasicNote().isEncrypted()) {
             final Observer<Collection<String>> valuesObserver = values -> {
                 mInputActionHelper.setAutoCompleteList(values);
-                mInputActionHelper.setOnListClickListener(v -> {
-                    NavHostFragment.findNavController(BasicNoteCheckedItemFragment.this).navigate(
-                            BasicNoteCheckedItemFragmentDirections.actionBasicNoteCheckedItemToBasicNoteValue().setNote(model.getBasicNote()));
-                    // new intent for activity
-                    /*
-                    Intent intent = new Intent(getActivity(), BasicNoteValueActivity.class);
-
-                    //retrieve data
-                    DBNoteManager manager = new DBNoteManager(getActivity());
-                    List<BasicNoteValueA> values = manager.mBasicNoteValueDAO.getNoteValues(mBasicNoteData.getNote().getId());
-                    BasicNoteValueDataA noteValueDataA = BasicNoteValueDataA.newInstance(mBasicNoteData.getNote(), values);
-
-                    //pass and start activity
-                    intent.putExtra(BasicNoteValueDataA.class.getName(), noteValueDataA);
-                    startActivityForResult(intent, RESULT_CODE_VALUES);
-                     */
-                });
+                mInputActionHelper.setOnListClickListener(v ->
+                        NavHostFragment.findNavController(BasicNoteCheckedItemFragment.this).navigate(
+                            BasicNoteCheckedItemFragmentDirections
+                                    .actionBasicNoteCheckedItemToBasicNoteValue()
+                                    .setNote(model.getBasicNote())));
             };
             model.getValues().observe(this, valuesObserver);
         }

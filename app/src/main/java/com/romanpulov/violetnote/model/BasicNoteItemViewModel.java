@@ -205,4 +205,20 @@ public class BasicNoteItemViewModel extends BasicCommonNoteViewModel<BasicNoteIt
             loadValues();
         }
     }
+
+    public void moveToOtherNote(
+            Collection<BasicNoteItemA> items,
+            BasicNoteA otherNote,
+            UIAction<BasicNoteItemA> action) {
+        long result = items
+                .stream()
+                .reduce(
+                        0L,
+                        (a, v) -> a + getDAO().moveToOtherNote(v, otherNote),
+                        Long::sum);
+        if (result > 0) {
+            setAction(action);
+            onDataChangeActionCompleted();
+        }
+    }
 }
