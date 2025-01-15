@@ -8,9 +8,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.MenuHost;
 import androidx.core.view.MenuProvider;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.appcompat.view.ActionMode;
 import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -18,6 +20,7 @@ import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.databinding.FragmentBasicNoteValueListBinding;
 import com.romanpulov.violetnote.db.manager.DBNoteManager;
 import com.romanpulov.violetnote.model.*;
+import com.romanpulov.violetnote.view.action.UIAction;
 import com.romanpulov.violetnote.view.helper.ActionHelper;
 import com.romanpulov.violetnote.view.helper.DisplayTitleBuilder;
 import com.romanpulov.violetnote.view.core.AlertOkCancelSupportDialogFragment;
@@ -28,6 +31,7 @@ import com.romanpulov.violetnote.view.helper.LoggerHelper;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Objects;
 
 public class BasicNoteValueFragment extends BasicCommonNoteFragment {
     private final static String TAG = BasicNoteValueFragment.class.getSimpleName();
@@ -38,11 +42,14 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
 
     BasicNoteValueRecyclerViewAdapter mRecyclerViewAdapter;
 
-    protected BasicNoteValueDataA mBasicNoteValueData;
     private InputActionHelper mInputActionHelper;
 
+    private @NonNull List<BasicNoteValueA> getBasicNoteValues() {
+        return Objects.requireNonNull(model.getBasicNoteValues().getValue());
+    }
+
     public void refreshList(DBNoteManager noteManager) {
-        mBasicNoteValueData.setValues(noteManager.mBasicNoteValueDAO.getNoteValues(mBasicNoteValueData.getNote()));
+        //mBasicNoteValueData.setValues(noteManager.mBasicNoteValueDAO.getNoteValues(mBasicNoteValueData.getNote()));
     }
 
     /**
@@ -63,15 +70,6 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        if (getArguments() != null) {
-            mBasicNoteValueData = getArguments().getParcelable(BasicNoteValueDataA.class.getName());
-        }
-    }
-
-    @Override
     public void onPause() {
         super.onPause();
         hideAddLayout();
@@ -84,8 +82,9 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
     }
 
     public void hideAddLayout() {
-        if (mInputActionHelper != null)
+        if (mInputActionHelper != null) {
             mInputActionHelper.hideLayout();
+        }
     }
 
     private void performDeleteAction(final ActionMode mode, final List<BasicNoteValueA> items) {
@@ -123,7 +122,7 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
                 if (noteManager.mBasicNoteValueDAO.update(item) == 1) {
                     refreshList(noteManager);
                     //update list item
-                    int position = mBasicNoteValueData.indexOf(item);
+                    int position = getBasicNoteValues().indexOf(item);
                     if ((position != -1) && (mRecyclerView != null)) {
                         RecyclerViewHelper.adapterNotifyDataSetChanged(mRecyclerView);
                         mRecyclerView.scrollToPosition(position);
@@ -138,12 +137,12 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
     }
 
     private void updateTitle(@NonNull ActionMode mode) {
-        mode.setTitle(DisplayTitleBuilder.buildItemsDisplayTitle(getActivity(), mBasicNoteValueData.getValues(), mRecyclerViewSelector.getSelectedItems()));
+        mode.setTitle(DisplayTitleBuilder.buildItemsDisplayTitle(getActivity(), getBasicNoteValues(), mRecyclerViewSelector.getSelectedItems()));
     }
 
     @NonNull
     private List<BasicNoteValueA> getSelectedNoteItems() {
-        return BasicEntityNoteSelectionPosA.getItemsByPositions(mBasicNoteValueData.getValues(), mRecyclerViewSelector.getSelectedItems());
+        return BasicEntityNoteSelectionPosA.getItemsByPositions(getBasicNoteValues(), mRecyclerViewSelector.getSelectedItems());
     }
 
     public class ActionBarCallBack implements ActionMode.Callback {
@@ -161,7 +160,7 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
         @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
             hideAddLayout();
-            ActionHelper.updateActionMenu(menu, mRecyclerViewSelector.getSelectedItems().size(), mBasicNoteValueData.getValues().size());
+            ActionHelper.updateActionMenu(menu, mRecyclerViewSelector.getSelectedItems().size(), getBasicNoteValues().size());
             updateTitle(mode);
             return false;
         }
@@ -193,21 +192,21 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
     }
 
     private void performSelectAll() {
-        mRecyclerViewSelector.setSelectedItems(ActionHelper.createSelectAllItems(mBasicNoteValueData.getValues().size()));
+        mRecyclerViewSelector.setSelectedItems(ActionHelper.createSelectAllItems(getBasicNoteValues().size()));
     }
 
     private void performAddAction(BasicNoteValueA value) {
         DBNoteManager mNoteManager = new DBNoteManager(getActivity());
         try {
-            if (mNoteManager.mBasicNoteValueDAO.insertWithNote(mBasicNoteValueData.getNote(), value.getValue()) != -1) {
+            if (mNoteManager.mBasicNoteValueDAO.insertWithNote(model.getBasicNote(), value.getValue()) != -1) {
                 // refresh list
                 refreshList(mNoteManager);
                 RecyclerViewHelper.adapterNotifyDataSetChanged(mRecyclerView);
 
                 //ensure added element is visible
                 int newItemPos = -1;
-                for (int i = 0; i < mBasicNoteValueData.getValues().size(); i++) {
-                    if (mBasicNoteValueData.getValues().get(i).getValue().equals(value.getValue())) {
+                for (int i = 0; i < getBasicNoteValues().size(); i++) {
+                    if (getBasicNoteValues().get(i).getValue().equals(value.getValue())) {
                         newItemPos = i;
                         break;
                     }
@@ -231,7 +230,7 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         Context context = view.getContext();
@@ -259,8 +258,10 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
                     mRecyclerViewSelector.finishActionMode();
                     break;
             }
-
         });
+
+        //restore selected items
+        restoreSelectedItems(savedInstanceState, view);
 
         MenuHost menuHost = requireActivity();
         menuHost.addMenuProvider(new MenuProvider() {
@@ -287,12 +288,27 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
         appModel = new ViewModelProvider(requireActivity()).get(AppViewModel.class);
         model.setNoteValuesChanged(appModel.getNoteValuesChanged());
 
-        mRecyclerViewAdapter = new BasicNoteValueRecyclerViewAdapter(
-                mBasicNoteValueData, new ActionBarCallBack());
-        mRecyclerViewSelector = mRecyclerViewAdapter.getRecyclerViewSelector();
-        mRecyclerView.setAdapter(mRecyclerViewAdapter);
+        final Observer<List<BasicNoteValueA>> noteValuesObserver = newNoteValues -> {
+            if (mRecyclerViewAdapter == null) {
+                mRecyclerViewAdapter = new BasicNoteValueRecyclerViewAdapter(
+                        newNoteValues, new ActionBarCallBack());
+                mRecyclerViewSelector = mRecyclerViewAdapter.getRecyclerViewSelector();
+                mRecyclerView.setAdapter(mRecyclerViewAdapter);
+            } else {
+                mRecyclerViewAdapter.updateNoteValues(newNoteValues);
+            }
 
-        //restore selected items
-        restoreSelectedItems(savedInstanceState, view);
+            UIAction<BasicNoteValueA> action = model.getAction();
+            if (action != null) {
+                action.execute(newNoteValues);
+                model.resetAction();
+
+                DialogFragment dialogFragment = (DialogFragment)getParentFragmentManager().findFragmentByTag(AlertOkCancelSupportDialogFragment.TAG);
+                if (dialogFragment != null) {
+                    dialogFragment.dismiss();
+                }
+            }
+        };
+        model.getBasicNoteValues().observe(this, noteValuesObserver);
     }
 }

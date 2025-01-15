@@ -2,6 +2,7 @@ package com.romanpulov.violetnote.view;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.view.ActionMode;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,9 +10,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.model.BasicNoteValueA;
 import com.romanpulov.violetnote.model.BasicNoteValueDataA;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 import com.romanpulov.violetnote.view.core.ViewSelectorHelper;
+import com.romanpulov.violetnote.view.helper.DiffUtilHelper;
+
+import java.util.Collection;
+import java.util.List;
 
 public class BasicNoteValueRecyclerViewAdapter extends RecyclerView.Adapter<BasicNoteValueRecyclerViewAdapter.ViewHolder> implements ViewSelectorHelper.ChangeNotificationListener {
     @Override
@@ -19,15 +25,15 @@ public class BasicNoteValueRecyclerViewAdapter extends RecyclerView.Adapter<Basi
         this.notifyDataSetChanged();
     }
 
-    private final BasicNoteValueDataA mBasicNoteValueDataA;
+    private List<BasicNoteValueA> mNoteValues;
     private final ViewSelectorHelper.AbstractViewSelector<Integer> mRecyclerViewSelector;
 
     public ViewSelectorHelper.AbstractViewSelector<Integer> getRecyclerViewSelector() {
         return mRecyclerViewSelector;
     }
 
-    public BasicNoteValueRecyclerViewAdapter(BasicNoteValueDataA basicNoteValueDataA, ActionMode.Callback actionModeCallback) {
-        mBasicNoteValueDataA = basicNoteValueDataA;
+    public BasicNoteValueRecyclerViewAdapter(List<BasicNoteValueA> noteValues, ActionMode.Callback actionModeCallback) {
+        mNoteValues = noteValues;
         mRecyclerViewSelector = new ViewSelectorHelper.ViewSelectorMultiple<>(this, actionModeCallback);
     }
 
@@ -41,7 +47,7 @@ public class BasicNoteValueRecyclerViewAdapter extends RecyclerView.Adapter<Basi
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        holder.mValueView.setText(mBasicNoteValueDataA.getValues().get(position).getValue());
+        holder.mValueView.setText(mNoteValues.get(position).getValue());
 
         // background
         holder.updateBackground();
@@ -49,7 +55,7 @@ public class BasicNoteValueRecyclerViewAdapter extends RecyclerView.Adapter<Basi
 
     @Override
     public int getItemCount() {
-        return mBasicNoteValueDataA.getValues().size();
+        return mNoteValues.size();
     }
 
     public class ViewHolder extends RecyclerViewHelper.SelectableViewHolder {
@@ -65,5 +71,11 @@ public class BasicNoteValueRecyclerViewAdapter extends RecyclerView.Adapter<Basi
         public String toString() {
             return super.toString() + " '" + mValueView.getText() + "'";
         }
+    }
+
+    public void updateNoteValues(List<BasicNoteValueA> noteValues) {
+        DiffUtil.DiffResult diffResult = DiffUtilHelper.getEntityListDiffResult(mNoteValues, noteValues);
+        this.mNoteValues = noteValues;
+        diffResult.dispatchUpdatesTo(this);
     }
 }

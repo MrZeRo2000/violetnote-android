@@ -14,6 +14,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.appcompat.view.ActionMode;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -428,10 +429,11 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
         if (!model.getBasicNote().isEncrypted()) {
             final Observer<Collection<String>> valuesObserver = values -> {
                 mInputActionHelper.setAutoCompleteList(values);
-
-                /*
                 mInputActionHelper.setOnListClickListener(v -> {
+                    NavHostFragment.findNavController(BasicNoteCheckedItemFragment.this).navigate(
+                            BasicNoteCheckedItemFragmentDirections.actionBasicNoteCheckedItemToBasicNoteValue().setNote(model.getBasicNote()));
                     // new intent for activity
+                    /*
                     Intent intent = new Intent(getActivity(), BasicNoteValueActivity.class);
 
                     //retrieve data
@@ -442,11 +444,18 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
                     //pass and start activity
                     intent.putExtra(BasicNoteValueDataA.class.getName(), noteValueDataA);
                     startActivityForResult(intent, RESULT_CODE_VALUES);
+                     */
                 });
-                 */
-
             };
             model.getValues().observe(this, valuesObserver);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (Boolean.TRUE.equals(appModel.getNoteValuesChanged().getValue())) {
+            model.loadValues();
         }
     }
 

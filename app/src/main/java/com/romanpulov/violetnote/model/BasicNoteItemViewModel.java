@@ -149,7 +149,7 @@ public class BasicNoteItemViewModel extends BasicCommonNoteViewModel<BasicNoteIt
         }
     }
 
-    private void loadValues() {
+    public void loadValues() {
         mValues.setValue(getBasicNoteDAO().getNoteValues(mBasicNote));
     }
 
