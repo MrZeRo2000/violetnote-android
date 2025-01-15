@@ -50,7 +50,11 @@ public class BasicHEventCOItemExpandableListViewAdapter extends BaseExpandableLi
         mContext = context;
         mHEventList = hEventList;
         mHEventCOItemList = hEventCOItemList;
-        mValues = new HashSet<>(values);
+        if (values instanceof HashSet<String>) {
+            mValues = (HashSet<String>) values;
+        } else {
+            mValues = new HashSet<>(values);
+        }
 
         mDimColor = ContextCompat.getColor(context, R.color.dimTextColor);
         mBrightColor = ContextCompat.getColor(context, R.color.brightTextColor);

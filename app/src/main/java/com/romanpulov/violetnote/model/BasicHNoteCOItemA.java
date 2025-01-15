@@ -49,6 +49,22 @@ public final class BasicHNoteCOItemA extends BasicEntityNoteA implements Display
         );
     }
 
+    @NonNull
+    public static LongSparseArray<List<BasicHNoteCOItemA>> getArrayFromList(@NonNull List<BasicHNoteCOItemA> hNoteCOItemList) {
+        LongSparseArray<List<BasicHNoteCOItemA>> hNoteCOItemArray = new LongSparseArray<>();
+
+        for (BasicHNoteCOItemA hNoteCOItem: hNoteCOItemList) {
+            List<BasicHNoteCOItemA> hItems = hNoteCOItemArray.get(hNoteCOItem.getEventId());
+            if (hItems == null) {
+                hItems = new ArrayList<>();
+                hNoteCOItemArray.append(hNoteCOItem.getEventId(), hItems);
+            }
+            hItems.add(hNoteCOItem);
+        }
+
+        return hNoteCOItemArray;
+    }
+
     public static void fillArrayFromList(@NonNull LongSparseArray<List<BasicHNoteCOItemA>> hNoteCOItemArray, @NonNull List<BasicHNoteCOItemA> hNoteCOItemList) {
         hNoteCOItemArray.clear();
         for (BasicHNoteCOItemA hNoteCOItem: hNoteCOItemList) {

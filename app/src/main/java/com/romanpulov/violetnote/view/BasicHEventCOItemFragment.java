@@ -5,10 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.appcompat.view.ActionMode;
-import android.util.LongSparseArray;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,22 +14,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.databinding.FragmentExpandableListViewBinding;
 import com.romanpulov.violetnote.db.manager.DBHManager;
-import com.romanpulov.violetnote.model.BasicHEventA;
-import com.romanpulov.violetnote.model.BasicHNoteCOItemA;
-import com.romanpulov.violetnote.model.BasicNoteA;
-import com.romanpulov.violetnote.model.BasicNoteItemA;
+import com.romanpulov.violetnote.model.*;
 import com.romanpulov.violetnote.view.core.AlertOkCancelSupportDialogFragment;
 import com.romanpulov.violetnote.view.core.BasicCommonNoteFragment;
 import com.romanpulov.violetnote.view.core.ViewSelectorHelper;
 import com.romanpulov.violetnote.view.helper.DisplayTitleBuilder;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import static com.romanpulov.violetnote.view.core.ViewSelectorHelper.KEY_SELECTED_ITEMS_RETURN_DATA;
@@ -39,11 +34,7 @@ import static com.romanpulov.violetnote.view.core.ViewSelectorHelper.KEY_SELECTE
 public class BasicHEventCOItemFragment extends BasicCommonNoteFragment {
 
     private FragmentExpandableListViewBinding binding;
-
-    //data
-    private BasicNoteA mNote;
-    private final LongSparseArray<BasicHEventA> mHEvents = new LongSparseArray<>();
-    private final LongSparseArray<List<BasicHNoteCOItemA>> mHEventCOItems = new LongSparseArray<>();
+    private BasicHNoteCOItemViewModel model;
 
     private ViewSelectorHelper.AbstractViewSelector<BasicHNoteCOItemA> mViewSelector;
 
@@ -58,12 +49,15 @@ public class BasicHEventCOItemFragment extends BasicCommonNoteFragment {
     }
 
     public void refreshList(DBHManager hManager) {
+        /*
         List<BasicHEventA> hEventList = hManager.mBasicHEventDAO.getByCOItemsNoteId(mNote.getId());
         List<BasicHNoteCOItemA> hCOItemList = hManager.mBasicHNoteCOItemDAO.getByNoteId(mNote.getId());
 
         BasicHEventA.fillArrayFromList(mHEvents, hEventList);
         BasicHNoteCOItemA.fillArrayFromList(mHEventCOItems, hCOItemList);
 
+
+         */
     }
 
     /**
@@ -77,11 +71,13 @@ public class BasicHEventCOItemFragment extends BasicCommonNoteFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        /*
         Bundle args = getArguments();
         if (args != null) {
             mNote = args.getParcelable(BasicNoteA.class.getName());
         }
+
+         */
     }
 
     @Nullable
@@ -94,6 +90,28 @@ public class BasicHEventCOItemFragment extends BasicCommonNoteFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        model = new ViewModelProvider(this).get(BasicHNoteCOItemViewModel.class);
+        model.setBasicNote(BasicHEventCOItemFragmentArgs.fromBundle(getArguments()).getNote());
+
+        final Observer<BasicHNoteCOItemViewModel.BasicHEventHNoteCOItems> hEventHNoteCOItemsObserver =
+                hEventHNoteCOItems -> {
+                    //controls
+                    ExpandableListView exListView = binding.exList;
+
+                    BasicHEventCOItemExpandableListViewAdapter exListViewAdapter = new BasicHEventCOItemExpandableListViewAdapter(
+                            getContext(),
+                            hEventHNoteCOItems.hEvents(),
+                            hEventHNoteCOItems.hNoteCOItems(),
+                            hEventHNoteCOItems.values(),
+                            new ActionBarCallBack()
+                    );
+                    exListView.setAdapter(exListViewAdapter);
+                    mViewSelector = exListViewAdapter.getViewSelector();
+
+                    mViewSelector.restoreSelectedItems(savedInstanceState, view);
+                };
+        model.getBasicHEventHNoteCOItems().observe(this, hEventHNoteCOItemsObserver);
 
         /*
 

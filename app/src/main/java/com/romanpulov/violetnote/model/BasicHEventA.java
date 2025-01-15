@@ -64,6 +64,15 @@ public final class BasicHEventA extends BasicEntityNoteA {
         return new BasicHEventA(0, eventTypeId, System.currentTimeMillis(), null, UNKNOWN_ITEM_COUNT);
     }
 
+    @NonNull
+    public static LongSparseArray<BasicHEventA> getArrayFromList(@NonNull List<BasicHEventA> hEventList) {
+        LongSparseArray<BasicHEventA> hEventArray = new LongSparseArray<>();
+        for (BasicHEventA hEvent: hEventList) {
+            hEventArray.append(hEvent.getId(), hEvent);
+        }
+        return hEventArray;
+    }
+
     public static void fillArrayFromList(@NonNull LongSparseArray<BasicHEventA> hEventArray, @NonNull List<BasicHEventA> hEventList) {
         hEventArray.clear();
         for (BasicHEventA hEvent: hEventList) {
