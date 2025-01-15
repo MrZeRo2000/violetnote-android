@@ -9,7 +9,16 @@ import android.os.Parcelable;
  */
 
 public class BasicNoteValueA extends BasicEntityNoteA implements Parcelable, DisplayTitleProvider  {
+    private long mNoteId;
     protected String mValue;
+
+    public long getNoteId() {
+        return mNoteId;
+    }
+
+    public void setNoteId(long mNoteId) {
+        this.mNoteId = mNoteId;
+    }
 
     public String getValue() {
         return mValue;
@@ -32,9 +41,10 @@ public class BasicNoteValueA extends BasicEntityNoteA implements Parcelable, Dis
         return instance;
     }
 
-    public static BasicNoteValueA newEditInstance(String value) {
+    public static BasicNoteValueA newEditInstance(long noteId, String value) {
         BasicNoteValueA instance = new BasicNoteValueA();
 
+        instance.mNoteId = noteId;
         instance.mValue = value;
 
         return instance;

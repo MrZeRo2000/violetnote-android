@@ -10,6 +10,7 @@ import com.romanpulov.violetnote.db.tabledef.NoteValuesTableDef;
 import com.romanpulov.violetnote.model.BasicEntityNoteA;
 import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteValueA;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,6 +70,16 @@ public final class BasicNoteValueDAO extends AbstractDAO<BasicNoteValueA> {
 
         cv.put(NoteValuesTableDef.NOTE_ID_COLUMN_NAME, note.getId());
         cv.put(NoteValuesTableDef.VALUE_COLUMN_NAME, value);
+
+        return mDB.insert(NoteValuesTableDef.TABLE_NAME, null, cv);
+    }
+
+    @Override
+    public long insert(@NonNull BasicNoteValueA object) {
+        ContentValues cv = new ContentValues();
+
+        cv.put(NoteValuesTableDef.NOTE_ID_COLUMN_NAME, object.getNoteId());
+        cv.put(NoteValuesTableDef.VALUE_COLUMN_NAME, object.getValue());
 
         return mDB.insert(NoteValuesTableDef.TABLE_NAME, null, cv);
     }
