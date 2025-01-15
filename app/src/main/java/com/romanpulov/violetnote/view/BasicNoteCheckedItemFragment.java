@@ -11,7 +11,6 @@ import androidx.annotation.Nullable;
 import androidx.core.view.MenuHost;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -83,16 +82,6 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
         mBottomToolbarHelper = BottomToolbarHelper.from(binding.fragmentToolbarBottom, this::processMoveMenuItemClick);
         requireActivity().getMenuInflater().inflate(R.menu.menu_listitem_bottom_move_actions, binding.fragmentToolbarBottom.getMenu());
         binding.fragmentToolbarBottom.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        if (PreferenceRepository.isInterfaceCheckedLast(context)) {
-            mCheckedUpdateInterval = PreferenceRepository.getInterfaceCheckedUpdateInterval(getContext());
-        } else {
-            mCheckedUpdateInterval = 0;
-        }
     }
 
     @Override
@@ -466,6 +455,12 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
                                     .setNote(model.getBasicNote())));
             };
             model.getValues().observe(this, valuesObserver);
+        }
+
+        if (PreferenceRepository.isInterfaceCheckedLast(context)) {
+            mCheckedUpdateInterval = PreferenceRepository.getInterfaceCheckedUpdateInterval(getContext());
+        } else {
+            mCheckedUpdateInterval = 0;
         }
     }
 
