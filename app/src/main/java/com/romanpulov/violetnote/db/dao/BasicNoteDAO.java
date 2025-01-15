@@ -12,11 +12,7 @@ import com.romanpulov.violetnote.db.tabledef.DBCommonDef;
 import com.romanpulov.violetnote.db.tabledef.NoteItemsHistoryTableDef;
 import com.romanpulov.violetnote.db.tabledef.NoteValuesTableDef;
 import com.romanpulov.violetnote.db.tabledef.NotesTableDef;
-import com.romanpulov.violetnote.model.BasicNoteA;
-import com.romanpulov.violetnote.model.BasicNoteDataA;
-import com.romanpulov.violetnote.model.BasicNoteGroupA;
-import com.romanpulov.violetnote.model.BasicNoteItemA;
-import com.romanpulov.violetnote.model.BooleanUtils;
+import com.romanpulov.violetnote.model.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -320,7 +316,7 @@ public final class BasicNoteDAO extends AbstractBasicNoteDAO<BasicNoteA> {
             if (!note.isEncrypted()) {
                 //insert value
                 if (values.add(item.getValue())) {
-                    getBasicNoteValueDAO().insertWithNote(note, item.getValue());
+                    getBasicNoteValueDAO().insert(BasicNoteValueA.newEditInstance(note.getId(), item.getValue()));
                 }
 
                 //insert history

@@ -19,6 +19,7 @@ import com.romanpulov.violetnote.db.manager.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.model.BasicNoteGroupA;
+import com.romanpulov.violetnote.model.BasicNoteValueA;
 
 public class DataGenerator {
     private final static String TAG = "DataGenerator";
@@ -102,7 +103,7 @@ public class DataGenerator {
                             valueFormat = "This is a very very very very very very long value %2d";
 
                         String newValue = String.format(Locale.getDefault(), valueFormat, j);
-                        assertNotEquals(-1, noteManager.mBasicNoteValueDAO.insertWithNote(newNote, newValue));
+                        assertNotEquals(-1, noteManager.mBasicNoteValueDAO.insert(BasicNoteValueA.newEditInstance(newNote.getId(), newValue)));
                     }
 
                     //history for checked items
