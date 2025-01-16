@@ -10,9 +10,7 @@ import com.romanpulov.violetnote.view.action.UIAction;
 import com.romanpulov.violetnote.view.core.BasicCommonNoteViewModel;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class BasicNoteItemViewModel extends BasicCommonNoteViewModel<BasicNoteItemA> {
@@ -219,6 +217,33 @@ public class BasicNoteItemViewModel extends BasicCommonNoteViewModel<BasicNoteIt
         if (result > 0) {
             setAction(action);
             onDataChangeActionCompleted();
+        }
+    }
+
+    public void addNewUniqueValues(Collection<String> values, UIAction<BasicNoteItemA> action) {
+        if (getBasicNoteItems().getValue() != null) {
+            Set<String> newValues = new HashSet<>(values);
+
+            Set<String> oldValues = getBasicNoteItems().getValue()
+                    .stream()
+                    .map(BasicNoteItemA::getValue)
+                    .collect(Collectors.toSet());
+
+            //remove existing
+            newValues.removeAll(oldValues);
+
+            //insert
+            long result = newValues
+                    .stream()
+                    .map(BasicNoteItemA::newCheckedEditValueInstance)
+                    .reduce(
+                            0L,
+                            (a, v) -> a + getDAO().insertWithNote(mBasicNote, v),
+                            Long::sum);
+            if (result > 0) {
+                setAction(action);
+                onDataChangeActionCompleted();
+            }
         }
     }
 }

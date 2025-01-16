@@ -16,6 +16,7 @@ import android.widget.ExpandableListView;
 
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.databinding.FragmentExpandableListViewBinding;
 import com.romanpulov.violetnote.db.manager.DBHManager;
@@ -25,6 +26,7 @@ import com.romanpulov.violetnote.view.core.BasicCommonNoteFragment;
 import com.romanpulov.violetnote.view.core.ViewSelectorHelper;
 import com.romanpulov.violetnote.view.helper.DisplayTitleBuilder;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -32,6 +34,8 @@ import java.util.Set;
 import static com.romanpulov.violetnote.view.core.ViewSelectorHelper.KEY_SELECTED_ITEMS_RETURN_DATA;
 
 public class BasicHEventCOItemFragment extends BasicCommonNoteFragment {
+    public static final String RESULT_KEY = BasicCommonNoteFragment.class.getName() + "_RESULT_KEY";
+    public static final String RESULT_VALUE_KEY = BasicCommonNoteFragment.class.getName() + "_RESULT_VALUE_KEY";
 
     private FragmentExpandableListViewBinding binding;
     private BasicHNoteCOItemViewModel model;
@@ -166,7 +170,15 @@ public class BasicHEventCOItemFragment extends BasicCommonNoteFragment {
                     selectedList.add(item.getValue());
                 }
 
-                String[] selectedListArray = selectedList.toArray(new String[]{});
+                Bundle result = new Bundle();
+                result.putStringArrayList(BasicHEventCOItemFragment.RESULT_VALUE_KEY, new ArrayList<>(selectedList));
+                BasicHEventCOItemFragment.this.getParentFragmentManager().setFragmentResult(
+                        BasicHEventCOItemFragment.RESULT_KEY, result);
+
+                mViewSelector.finishActionMode();
+
+                Navigation.findNavController(BasicHEventCOItemFragment.this.requireView()).navigateUp();
+                /*
 
                 Activity activity = getActivity();
                 if (activity != null) {
@@ -175,12 +187,10 @@ public class BasicHEventCOItemFragment extends BasicCommonNoteFragment {
                     activity.setResult(Activity.RESULT_OK, intent);
                     activity.finish();
                 }
-            });
 
-            FragmentManager fragmentManager = getFragmentManager();
-            if (fragmentManager != null) {
-                dialog.show(fragmentManager, null);
-            }
+                 */
+            });
+            dialog.show(getParentFragmentManager(), AlertOkCancelSupportDialogFragment.TAG);
         }
 
         @Override

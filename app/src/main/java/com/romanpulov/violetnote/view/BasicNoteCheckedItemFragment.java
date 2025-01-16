@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.core.view.MenuHost;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -150,6 +151,15 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
         }
     }
 
+    protected void performDeleteAction(final ActionMode mode, final List<BasicNoteItemA> items) {
+        AlertOkCancelSupportDialogFragment dialog = AlertOkCancelSupportDialogFragment
+                .newAlertOkCancelDialog(getResources().getQuantityString(R.plurals.ui_question_delete_items_are_you_sure, items.size(), items.size()));
+        dialog.setOkButtonClickListener(dialog1 ->
+            model.delete(items, new BasicUIFinishAction<>(mRecyclerViewSelector.getActionMode())));
+
+        dialog.show(getParentFragmentManager(), AlertOkCancelSupportDialogFragment.TAG);
+    }
+
     private void performSelectAll() {
         List<BasicNoteItemA> noteItems = model.getBasicNoteItems().getValue();
         if ((noteItems != null) && (!noteItems.isEmpty())) {
@@ -241,7 +251,7 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
                 {
                     int itemId = item.getItemId();
                     if (itemId == R.id.delete) {
-                        model.delete(selectedNoteItems, new BasicUIFinishAction<>(mRecyclerViewSelector.getActionMode()));
+                        performDeleteAction(mode, selectedNoteItems);
                     } else if (itemId == R.id.edit_value) {
                         BasicNoteItemA selectedNote = selectedNoteItems.get(0);
                         mInputActionHelper.showEditLayout(
@@ -458,6 +468,14 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
             };
             model.getValues().observe(this, valuesObserver);
         }
+
+        getParentFragmentManager().setFragmentResultListener(
+                BasicHEventCOItemFragment.RESULT_KEY, this, (requestKey, bundle) -> {
+                    List<String> values = bundle.getStringArrayList(BasicHEventCOItemFragment.RESULT_VALUE_KEY);
+                    if (!values.isEmpty()) {
+                        model.addNewUniqueValues(values, new BasicUIAddAction<>(mRecyclerView));
+                    }
+                });
 
         if (PreferenceRepository.isInterfaceCheckedLast(context)) {
             mCheckedUpdateInterval = PreferenceRepository.getInterfaceCheckedUpdateInterval(getContext());
