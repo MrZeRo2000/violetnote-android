@@ -1,11 +1,9 @@
 package com.romanpulov.violetnote.view;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.FragmentManager;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,19 +17,13 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.databinding.FragmentExpandableListViewBinding;
-import com.romanpulov.violetnote.db.manager.DBHManager;
 import com.romanpulov.violetnote.model.*;
 import com.romanpulov.violetnote.view.core.AlertOkCancelSupportDialogFragment;
 import com.romanpulov.violetnote.view.core.BasicCommonNoteFragment;
 import com.romanpulov.violetnote.view.core.ViewSelectorHelper;
 import com.romanpulov.violetnote.view.helper.DisplayTitleBuilder;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-
-import static com.romanpulov.violetnote.view.core.ViewSelectorHelper.KEY_SELECTED_ITEMS_RETURN_DATA;
+import java.util.*;
 
 public class BasicHEventCOItemFragment extends BasicCommonNoteFragment {
     public static final String RESULT_KEY = BasicCommonNoteFragment.class.getName() + "_RESULT_KEY";
@@ -42,46 +34,12 @@ public class BasicHEventCOItemFragment extends BasicCommonNoteFragment {
 
     private ViewSelectorHelper.AbstractViewSelector<BasicHNoteCOItemA> mViewSelector;
 
-    public static BasicHEventCOItemFragment newInstance(BasicNoteA note) {
-        BasicHEventCOItemFragment instance = new BasicHEventCOItemFragment();
-
-        Bundle args = new Bundle();
-        args.putParcelable(BasicNoteA.class.getName(), note);
-        instance.setArguments(args);
-
-        return instance;
-    }
-
-    public void refreshList(DBHManager hManager) {
-        /*
-        List<BasicHEventA> hEventList = hManager.mBasicHEventDAO.getByCOItemsNoteId(mNote.getId());
-        List<BasicHNoteCOItemA> hCOItemList = hManager.mBasicHNoteCOItemDAO.getByNoteId(mNote.getId());
-
-        BasicHEventA.fillArrayFromList(mHEvents, hEventList);
-        BasicHNoteCOItemA.fillArrayFromList(mHEventCOItems, hCOItemList);
-
-
-         */
-    }
-
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
     public BasicHEventCOItemFragment() {
 
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        /*
-        Bundle args = getArguments();
-        if (args != null) {
-            mNote = args.getParcelable(BasicNoteA.class.getName());
-        }
-
-         */
     }
 
     @Nullable
@@ -96,7 +54,12 @@ public class BasicHEventCOItemFragment extends BasicCommonNoteFragment {
         super.onViewCreated(view, savedInstanceState);
 
         model = new ViewModelProvider(this).get(BasicHNoteCOItemViewModel.class);
-        model.setBasicNote(BasicHEventCOItemFragmentArgs.fromBundle(getArguments()).getNote());
+        BasicNoteA note = BasicHEventCOItemFragmentArgs.fromBundle(getArguments()).getNote();
+        model.setBasicNote(note);
+
+        Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).
+                setTitle(getString(R.string.title_activity_basic_history_event_co_item,
+                        Objects.requireNonNull(note).getTitle()));
 
         final Observer<BasicHNoteCOItemViewModel.BasicHEventHNoteCOItems> hEventHNoteCOItemsObserver =
                 hEventHNoteCOItems -> {
@@ -116,27 +79,6 @@ public class BasicHEventCOItemFragment extends BasicCommonNoteFragment {
                     mViewSelector.restoreSelectedItems(savedInstanceState, view);
                 };
         model.getBasicHEventHNoteCOItems().observe(this, hEventHNoteCOItemsObserver);
-
-        /*
-
-        refreshList(new DBHManager(view.getContext()));
-
-        //controls
-        ExpandableListView exListView = binding.exList;
-
-        BasicHEventCOItemExpandableListViewAdapter exListViewAdapter = new BasicHEventCOItemExpandableListViewAdapter(
-                getContext(),
-                mHEvents,
-                mHEventCOItems,
-                BasicNoteItemA.getBasicNoteItemValues(mNote.getItems()),
-                new ActionBarCallBack()
-        );
-        exListView.setAdapter(exListViewAdapter);
-        mViewSelector = exListViewAdapter.getViewSelector();
-
-        mViewSelector.restoreSelectedItems(savedInstanceState, view);
-
-         */
     }
 
     private void updateTitle(@NonNull ActionMode mode) {
@@ -178,17 +120,6 @@ public class BasicHEventCOItemFragment extends BasicCommonNoteFragment {
                 mViewSelector.finishActionMode();
 
                 Navigation.findNavController(BasicHEventCOItemFragment.this.requireView()).navigateUp();
-                /*
-
-                Activity activity = getActivity();
-                if (activity != null) {
-                    Intent intent = activity.getIntent();
-                    intent.putExtra(KEY_SELECTED_ITEMS_RETURN_DATA, selectedListArray);
-                    activity.setResult(Activity.RESULT_OK, intent);
-                    activity.finish();
-                }
-
-                 */
             });
             dialog.show(getParentFragmentManager(), AlertOkCancelSupportDialogFragment.TAG);
         }
@@ -213,5 +144,4 @@ public class BasicHEventCOItemFragment extends BasicCommonNoteFragment {
                 mViewSelector.destroyActionMode();
         }
     }
-
 }

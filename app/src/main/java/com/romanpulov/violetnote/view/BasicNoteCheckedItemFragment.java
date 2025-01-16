@@ -493,39 +493,6 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
     }
 
     public void startHEventHistoryActivity() {
-        /*
-        Intent intent = new Intent(getActivity(), BasicHEventCOItemActivity.class);
-        intent.putExtra(BasicHEventCOItemActivity.class.getName(), mBasicNoteData.getNote());
-        startActivityForResult(intent, RESULT_CODE_HISTORY);
-
-         */
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        /*
-        switch (requestCode) {
-            case RESULT_CODE_VALUES:
-                //update values
-                DBNoteManager noteManager = new DBNoteManager(getActivity());
-                noteManager.mBasicNoteDAO.fillNoteValues(mBasicNoteData.getNote());
-
-                //update autocomplete
-                if (mInputActionHelper != null)
-                    mInputActionHelper.setAutoCompleteList(mBasicNoteData.getNote().getValues());
-                break;
-            case RESULT_CODE_HISTORY:
-                Bundle bundle;
-                if ((data != null) && ((bundle = data.getExtras()) != null)) {
-                    String[] selectedItemsArray = bundle.getStringArray(KEY_SELECTED_ITEMS_RETURN_DATA);
-                    if ((selectedItemsArray != null) && (selectedItemsArray.length > 0)) {
-                        performAddListValuesAction(selectedItemsArray);
-                    }
-                }
-                break;
-        }
-
-         */
     }
 
     public void showAddLayout() {
