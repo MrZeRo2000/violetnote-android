@@ -8,6 +8,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import com.romanpulov.violetnote.R;
+import com.romanpulov.violetnote.cloud.GDHelper;
 import com.romanpulov.violetnote.databinding.ActivityAppHostBinding;
 import com.romanpulov.violetnote.view.core.ActionBarCompatActivity;
 
@@ -45,6 +46,8 @@ public class AppHostActivity extends ActionBarCompatActivity {
                 }
             }
         });
+
+        GDHelper.getInstance().registerActivity(this);
     }
 
     @Override
