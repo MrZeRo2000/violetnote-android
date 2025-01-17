@@ -1,17 +1,16 @@
 package com.romanpulov.violetnote.view;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.*;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.MenuHost;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -35,10 +34,6 @@ import java.util.function.Consumer;
 
 public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implements OnBasicNoteCheckedItemInteractionListener {
     private final static String TAG = BasicNoteCheckedItemFragment.class.getSimpleName();
-    protected final static int MENU_GROUP_OTHER_ITEMS = Menu.FIRST + 1;
-
-    public static final int RESULT_CODE_VALUES = 0;
-    public static final int RESULT_CODE_HISTORY = 1;
 
     private FragmentBasicNoteCheckedItemListBinding binding;
     private BasicNoteItemViewModel model;
@@ -111,15 +106,6 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
     public BasicNoteCheckedItemFragment() {
     }
 
-    public static BasicNoteCheckedItemFragment newInstance(BasicNoteDataA basicNoteDataA, BasicNoteDataActionExecutorHost host) {
-        BasicNoteCheckedItemFragment fragment = new BasicNoteCheckedItemFragment();
-        Bundle args = new Bundle();
-        args.putParcelable(PasswordActivity.PASS_DATA, basicNoteDataA);
-        //fragment.setExecutorHost(host);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     private void updateCheckedItems() {
         //update checkout progress
         if (mCheckoutProgressHelper != null) {
@@ -173,28 +159,6 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
         AlertOkCancelSupportDialogFragment dialog = AlertOkCancelSupportDialogFragment.newAlertOkCancelDialog(confirmationQuestion);
         dialog.setOkButtonClickListener(dialog1 -> {
             model.moveToOtherNote(items, otherNote, new BasicUIFinishAction<>(mRecyclerViewSelector.getActionMode()));
-            /*
-
-            BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity(), mBasicNoteData);
-            executor.addAction(getString(R.string.caption_processing), new BasicNoteMoveToOtherNoteAction<>(mBasicNoteData, items, otherNote));
-            executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData));
-            executor.setOnExecutionCompletedListener((BasicNoteDataActionExecutor.OnExecutionCompletedListener) (basicNoteData, result) -> {
-                if (result) {
-                    afterExecutionCompleted();
-                    mode.finish();
-                }
-
-                mBasicNoteData = basicNoteData;
-
-                if (mDialogFragment != null) {
-                    mDialogFragment.dismiss();
-                    mDialogFragment = null;
-                }
-                notifyNoteGroupsChanged();
-            });
-            executeActions(executor);
-
-             */
         });
         dialog.show(getParentFragmentManager(), AlertOkCancelSupportDialogFragment.TAG);
     }
@@ -204,24 +168,6 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
                 getActivity(),
                 getNoteItemList(),
                 mRecyclerViewSelector.getSelectedItems()));
-    }
-
-    /**
-     * Common logic for creation of related menu for movement to other note
-     * @param menu Menu to add sub-menu
-     */
-    protected void buildMoveToOtherNotesSubMenu(Menu menu, Collection<BasicNoteA> relatedNotes) {
-        SubMenu subMenu = null;
-        int order = 1;
-        int relatedNoteIndex = 0;
-        for (BasicNoteA relatedNote : relatedNotes) {
-            if (subMenu == null) {
-                subMenu = menu.addSubMenu(Menu.NONE, Menu.NONE, order++, getString(R.string.action_move_other));
-                subMenu.getItem().setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-                subMenu.clearHeader();
-            }
-            subMenu.add(MENU_GROUP_OTHER_ITEMS, relatedNoteIndex ++, Menu.NONE, relatedNote.getTitle());
-        }
     }
 
     /**
@@ -242,7 +188,7 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
             List<BasicNoteItemA> selectedNoteItems = getSelectedNoteItems();
 
             if (!selectedNoteItems.isEmpty()) {
-                if ((item.getGroupId() == MENU_GROUP_OTHER_ITEMS) && (model.getRelatedNotes().getValue() != null)) {
+                if ((item.getGroupId() == MenuHelper.MENU_GROUP_OTHER_ITEMS) && (model.getRelatedNotes().getValue() != null)) {
                     // move to other items
                     BasicNoteA otherNote = model.getRelatedNotes().getValue().get(item.getItemId());
                     performMoveToOtherNoteAction(mode, selectedNoteItems, otherNote);
@@ -272,7 +218,7 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
             mode.getMenuInflater().inflate(R.menu.menu_listitem_checked_actions, menu);
 
             model.getRelatedNotes().observe(BasicNoteCheckedItemFragment.this, relatedNotes ->
-                    buildMoveToOtherNotesSubMenu(menu, relatedNotes));
+                    MenuHelper.buildMoveToOtherNotesSubMenu(requireContext(), menu, relatedNotes));
 
             if (mRecyclerViewSelector.isSelectedSingle()) {
                 updateTitle(mode);
@@ -290,8 +236,10 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
             if (mBottomToolbarHelper != null) {
                 mBottomToolbarHelper.hideLayout();
             }
-            if (mRecyclerViewSelector != null)
+
+            if (mRecyclerViewSelector != null) {
                 mRecyclerViewSelector.destroyActionMode();
+            }
         }
 
         @Override
@@ -342,7 +290,7 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
         mSwipeRefreshLayout = binding.swiperefresh;
         mSwipeRefreshLayout.setOnRefreshListener(() -> {
             if (mRecyclerViewSelector.getActionMode() == null) {
-                performRefresh();
+                model.refresh();
             }
         });
 
@@ -378,14 +326,15 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
         //add checkout progress
         mCheckoutProgressHelper = new CheckoutProgressHelper(binding.checkoutProgressPanelInclude.getRoot());
 
-        //restore selected items
-        restoreSelectedItems(savedInstanceState, view);
-
         MenuHost menuHost = requireActivity();
         menuHost.addMenuProvider(new MenuProvider() {
             @Override
             public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
                 menuInflater.inflate(R.menu.menu_checked_item, menu);
+
+                if (model.getBasicNote().isEncrypted()) {
+                    menu.removeItem(R.id.action_history);
+                }
             }
 
             @Override
@@ -410,7 +359,7 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
                     return true;
                 } else if (itemId == R.id.action_refresh) {
                     setSwipeRefreshing(true);
-                    performRefresh();
+                    model.refresh();
                     return true;
                 } else {
                     return false;
@@ -426,6 +375,9 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
         model.setNoteGroupsChanged(appModel.getNoteGroupsChanged());
         model.setNoteCheckedItemChanged(appModel.getNoteCheckedItemChanged());
 
+        Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).
+                setTitle(model.getBasicNote().getTitle());
+
         final Observer<List<BasicNoteItemA>> noteItemsObserver = newNoteItems -> {
             if (mRecyclerViewAdapter == null) {
                 mRecyclerViewAdapter = new BasicNoteCheckedItemRecyclerViewAdapter(
@@ -435,6 +387,9 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
                         this);
                 mRecyclerViewSelector = mRecyclerViewAdapter.getRecyclerViewSelector();
                 mRecyclerView.setAdapter(mRecyclerViewAdapter);
+
+                //restore selected items
+                restoreSelectedItems(savedInstanceState, view);
             } else {
                 mRecyclerViewAdapter.updateItemsWithSummary(
                         newNoteItems,
@@ -485,14 +440,17 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        hideAddLayout();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         if (Boolean.TRUE.equals(appModel.getNoteValuesChanged().getValue())) {
             model.loadValues();
         }
-    }
-
-    public void startHEventHistoryActivity() {
     }
 
     public void showAddLayout() {
@@ -503,82 +461,6 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
     public void hideAddLayout() {
         if (mInputActionHelper != null)
             mInputActionHelper.hideLayout();
-    }
-
-    public void performUpdateChecked(boolean checked) {
-        /*
-        BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity(), mBasicNoteData);
-
-        executor.addAction(getString(R.string.caption_processing), new BasicNoteDataItemUpdateCheckedAction(mBasicNoteData, checked));
-        executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData));
-
-        executor.setOnExecutionCompletedListener((BasicNoteDataActionExecutor.OnExecutionCompletedListener) (basicNoteData, result) -> {
-            afterExecutionCompleted();
-            RecyclerViewHelper.adapterNotifyDataSetChanged(mRecyclerView);
-        });
-
-        executeActions(executor);
-
-         */
-    }
-
-    public void performCheckOutAction() {
-        /*
-        BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity(), mBasicNoteData);
-
-        executor.addAction(getString(R.string.caption_processing), new BasicNoteDataItemCheckOutAction(mBasicNoteData));
-        executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData).requireValues());
-
-        executor.setOnExecutionCompletedListener((BasicNoteDataActionExecutor.OnExecutionCompletedListener) (basicNoteData, result) -> {
-            afterExecutionCompleted();
-            RecyclerViewHelper.adapterNotifyDataSetChanged(mRecyclerView);
-
-            //update autocomplete
-            if ((mInputActionHelper != null) && (!mBasicNoteData.getNote().isEncrypted()))
-                mInputActionHelper.setAutoCompleteList(mBasicNoteData.getNote().getValues());
-        });
-
-        executeActions(executor);
-
-         */
-    }
-
-    public void performRefresh() {
-        model.refresh();
-        /*
-        if (!mBasicNoteData.getNote().isEncrypted() || PasswordActivity.getPasswordValidityChecker().isValid()) {
-            refreshListWithView();
-            setSwipeRefreshing(false);
-        } else {
-            setSwipeRefreshing(false);
-            Activity activity = getActivity();
-            if (activity instanceof BasicNoteCheckedItemActivity) {
-                ((BasicNoteCheckedItemActivity)activity).requestInvalidateFragment();
-            }
-        }
-
-         */
-    }
-
-    public void performAddListValuesAction(String[] values) {
-        /*
-        // create executor
-        BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity(), mBasicNoteData);
-
-        // configure executor
-        executor.addAction(getString(R.string.caption_processing), new BasicNoteDataItemAddUniqueValuesAction(mBasicNoteData, values));
-        executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData).requireValues());
-
-        // on completion
-        executor.setOnExecutionCompletedListener((BasicNoteDataActionExecutor.OnExecutionCompletedListener) (basicNoteData, result) -> {
-            afterExecutionCompleted();
-            RecyclerViewHelper.adapterNotifyDataSetChanged(mRecyclerView);
-        });
-
-        // execute
-        executeActions(executor);
-
-         */
     }
 
     public void setSwipeRefreshing(boolean value) {
