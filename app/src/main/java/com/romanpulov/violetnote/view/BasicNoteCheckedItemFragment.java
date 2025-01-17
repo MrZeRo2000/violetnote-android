@@ -192,9 +192,8 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
                     // move to other items
                     BasicNoteA otherNote = model.getRelatedNotes().getValue().get(item.getItemId());
                     performMoveToOtherNoteAction(mode, selectedNoteItems, otherNote);
-                } else
+                } else {
                     // regular menu
-                {
                     int itemId = item.getItemId();
                     if (itemId == R.id.delete) {
                         performDeleteAction(mode, selectedNoteItems);
@@ -470,7 +469,6 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
     }
 
     public void performCheckOut() {
-        //int checkedCount = mBasicNoteData.getCheckedDisplayValue();
         int checkedCount = model.getBasicNoteItemParamsSummary().getCheckedCount();
         if (checkedCount > 0) {
             String queryString = getResources().getQuantityString(
