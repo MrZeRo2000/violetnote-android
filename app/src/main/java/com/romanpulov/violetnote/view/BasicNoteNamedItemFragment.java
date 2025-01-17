@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 import androidx.appcompat.view.ActionMode;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -14,10 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.romanpulov.violetnote.R;
-import com.romanpulov.violetnote.model.BasicEntityNoteSelectionPosA;
-import com.romanpulov.violetnote.model.BasicNoteA;
-import com.romanpulov.violetnote.model.BasicNoteDataA;
-import com.romanpulov.violetnote.model.BasicNoteItemA;
+import com.romanpulov.violetnote.databinding.FragmentBasicNoteNamedItemListBinding;
+import com.romanpulov.violetnote.model.*;
 import com.romanpulov.violetnote.view.action.BasicItemsMoveBottomAction;
 import com.romanpulov.violetnote.view.action.BasicItemsMoveDownAction;
 import com.romanpulov.violetnote.view.action.BasicItemsMovePriorityDownAction;
@@ -38,6 +37,12 @@ import com.romanpulov.violetnote.view.helper.InputActionHelper;
 import java.util.List;
 
 public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
+
+    private FragmentBasicNoteNamedItemListBinding binding;
+    private BasicNoteItemViewModel model;
+    private AppViewModel appModel;
+
+    private BasicNoteNamedItemRecyclerViewAdapter mBasicNoteNamedItemRecyclerViewAdapter;
 
     private InputActionHelper mInputActionHelper;
 
@@ -251,38 +256,40 @@ public class BasicNoteNamedItemFragment extends BasicNoteItemFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_basic_note_named_item_list, container, false);
+        binding = FragmentBasicNoteNamedItemListBinding.inflate(getLayoutInflater());
+        //setupBottomToolbar();
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         Context context = view.getContext();
-
-        mRecyclerView = view.findViewById(R.id.list);
+        mRecyclerView = binding.list;
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+        // add decoration
+        mRecyclerView.addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(getActivity(), RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_white_black_gradient));
 
-        // no action currently required
-        //placeholder for future
-        BasicNoteNamedItemRecyclerViewAdapter recyclerViewAdapter = new BasicNoteNamedItemRecyclerViewAdapter(mBasicNoteData, new ActionBarCallBack(),
-                BasicNoteNamedItemFragment.this::startHEventHistoryActivity
-        );
-        mRecyclerViewSelector = recyclerViewAdapter.getRecyclerViewSelector();
-        mRecyclerView.setAdapter(recyclerViewAdapter);
+        mRecyclerView.setAdapter(mBasicNoteNamedItemRecyclerViewAdapter);
 
         //add action panel
         mInputActionHelper = new InputActionHelper(view.findViewById(R.id.add_panel_include));
         mInputActionHelper.setOnAddInteractionListener((actionType, text) -> {
-            switch (actionType) {
-                case InputActionHelper.INPUT_ACTION_TYPE_EDIT:
-                    hideInputActionLayout();
-                    performEditValueAction(text);
-                    break;
+            if (actionType == InputActionHelper.INPUT_ACTION_TYPE_EDIT) {
+                hideInputActionLayout();
+                performEditValueAction(text);
             }
         });
 
+        mBasicNoteNamedItemRecyclerViewAdapter = new BasicNoteNamedItemRecyclerViewAdapter(mBasicNoteData, new ActionBarCallBack(),
+                BasicNoteNamedItemFragment.this::startHEventHistoryActivity
+        );
+
+        mRecyclerViewSelector = mBasicNoteNamedItemRecyclerViewAdapter.getRecyclerViewSelector();
+        mRecyclerView.setAdapter(mBasicNoteNamedItemRecyclerViewAdapter);
+
         //restore selected items
         restoreSelectedItems(savedInstanceState, view);
-
-        // add decoration
-        mRecyclerView.addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(getActivity(), RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_white_black_gradient));
-
-        return view;
     }
 }
