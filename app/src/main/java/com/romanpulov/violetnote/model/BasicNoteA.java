@@ -15,7 +15,7 @@ import java.util.*;
  * BasicNote data class
  * Created by rpulov on 11.08.2016.
  */
-public final class BasicNoteA extends BasicCommonNoteA implements Parcelable {
+public final class BasicNoteA extends BasicCommonNoteA implements Parcelable, DisplayTitleProvider {
     public static final int NOTE_TYPE_CHECKED = 0;
     public static final int NOTE_TYPE_NAMED = 1;
 

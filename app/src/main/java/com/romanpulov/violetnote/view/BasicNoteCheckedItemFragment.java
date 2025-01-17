@@ -137,7 +137,7 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
         }
     }
 
-    protected void performDeleteAction(final ActionMode mode, final List<BasicNoteItemA> items) {
+    protected void performDeleteAction(final List<BasicNoteItemA> items) {
         AlertOkCancelSupportDialogFragment dialog = AlertOkCancelSupportDialogFragment
                 .newAlertOkCancelDialog(getResources().getQuantityString(R.plurals.ui_question_delete_items_are_you_sure, items.size(), items.size()));
         dialog.setOkButtonClickListener(dialog1 ->
@@ -153,13 +153,12 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
         }
     }
 
-    protected void performMoveToOtherNoteAction(final ActionMode mode, final List<BasicNoteItemA> items, final BasicNoteA otherNote) {
+    protected void performMoveToOtherNoteAction(final List<BasicNoteItemA> items, final BasicNoteA otherNote) {
         String confirmationQuestion = getResources()
                 .getQuantityString(R.plurals.ui_question_selected_note_items_move_to_other_note, items.size(), items.size(), otherNote.getTitle());
         AlertOkCancelSupportDialogFragment dialog = AlertOkCancelSupportDialogFragment.newAlertOkCancelDialog(confirmationQuestion);
-        dialog.setOkButtonClickListener(dialog1 -> {
-            model.moveToOtherNote(items, otherNote, new BasicUIFinishAction<>(mRecyclerViewSelector.getActionMode()));
-        });
+        dialog.setOkButtonClickListener(dialog1 ->
+                model.moveToOtherNote(items, otherNote, new BasicUIFinishAction<>(mRecyclerViewSelector.getActionMode())));
         dialog.show(getParentFragmentManager(), AlertOkCancelSupportDialogFragment.TAG);
     }
 
@@ -191,12 +190,12 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
                 if ((item.getGroupId() == MenuHelper.MENU_GROUP_OTHER_ITEMS) && (model.getRelatedNotes().getValue() != null)) {
                     // move to other items
                     BasicNoteA otherNote = model.getRelatedNotes().getValue().get(item.getItemId());
-                    performMoveToOtherNoteAction(mode, selectedNoteItems, otherNote);
+                    performMoveToOtherNoteAction(selectedNoteItems, otherNote);
                 } else {
                     // regular menu
                     int itemId = item.getItemId();
                     if (itemId == R.id.delete) {
-                        performDeleteAction(mode, selectedNoteItems);
+                        performDeleteAction(selectedNoteItems);
                     } else if (itemId == R.id.edit_value) {
                         BasicNoteItemA selectedNote = selectedNoteItems.get(0);
                         mInputActionHelper.showEditLayout(
@@ -217,7 +216,7 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
             mode.getMenuInflater().inflate(R.menu.menu_listitem_checked_actions, menu);
 
             model.getRelatedNotes().observe(BasicNoteCheckedItemFragment.this, relatedNotes ->
-                    MenuHelper.buildMoveToOtherNotesSubMenu(requireContext(), menu, relatedNotes));
+                    MenuHelper.buildMoveToOtherSubMenu(requireContext(), menu, relatedNotes));
 
             if (mRecyclerViewSelector.isSelectedSingle()) {
                 updateTitle(mode);

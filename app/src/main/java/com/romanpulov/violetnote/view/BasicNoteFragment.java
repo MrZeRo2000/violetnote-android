@@ -29,8 +29,6 @@ import java.util.List;
 import java.util.Objects;
 
 public class BasicNoteFragment extends BasicCommonNoteFragment  {
-    protected final static int MENU_GROUP_OTHER_ITEMS = Menu.FIRST + 1;
-
     private FragmentBasicNoteListBinding binding;
     private BasicNoteViewModel model;
     private AppViewModel appViewModel;
@@ -97,7 +95,7 @@ public class BasicNoteFragment extends BasicCommonNoteFragment  {
         dialog.show(getParentFragmentManager(), AlertOkCancelSupportDialogFragment.TAG);
     }
 
-    private void performDuplicateAction(final ActionMode mode, final BasicNoteA item) {
+    private void performDuplicateAction(final BasicNoteA item) {
         TextEditDialogBuilder textEditDialogBuilder = (new TextEditDialogBuilder(requireActivity(), getString(R.string.ui_note_value),
                 null))
                 .setNonEmptyErrorMessage(getString(R.string.error_field_not_empty))
@@ -151,7 +149,7 @@ public class BasicNoteFragment extends BasicCommonNoteFragment  {
             List<BasicNoteA> selectedNotes = getSelectedNotes();
 
             if (!selectedNotes.isEmpty()) {
-                if ((item.getGroupId() == MENU_GROUP_OTHER_ITEMS) && (model.getRelatedNoteGroups().getValue() != null)) {
+                if ((item.getGroupId() == MenuHelper.MENU_GROUP_OTHER_ITEMS) && (model.getRelatedNoteGroups().getValue() != null)) {
                     // move to other items
                     BasicNoteGroupA otherNoteGroup = model.getRelatedNoteGroups().getValue().get(item.getItemId());
                     performMoveToOtherNoteGroupAction(mode, selectedNotes, otherNoteGroup);
@@ -162,27 +160,11 @@ public class BasicNoteFragment extends BasicCommonNoteFragment  {
                     } else if (itemId == R.id.edit) {
                         mInputActionHelper.showEditLayout(selectedNotes.get(0).getTitle());
                     } else if (itemId == R.id.duplicate) {
-                        performDuplicateAction(mode, selectedNotes.get(0));
+                        performDuplicateAction(selectedNotes.get(0));
                     }
                 }
             }
             return false;
-        }
-
-        private void buildMoveToOtherGroupsSubMenu(Menu menu,  List<BasicNoteGroupA> relatedNoteGroups) {
-            SubMenu subMenu = null;
-            int order = 1;
-            int relatedNoteGroupIndex = 0;
-
-            for (BasicNoteGroupA noteGroupA : relatedNoteGroups) {
-                if (subMenu == null) {
-                    subMenu = menu.addSubMenu(Menu.NONE, Menu.NONE, order++, getString(R.string.action_move_other));
-                    subMenu.getItem().setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-                    subMenu.clearHeader();
-                }
-
-                subMenu.add(MENU_GROUP_OTHER_ITEMS, relatedNoteGroupIndex ++, Menu.NONE, noteGroupA.getDisplayTitle());
-            }
         }
 
         @Override
@@ -192,7 +174,7 @@ public class BasicNoteFragment extends BasicCommonNoteFragment  {
             model.getRelatedNoteGroups().observe(
                     BasicNoteFragment.this,
                     relatedNoteGroups ->
-                        buildMoveToOtherGroupsSubMenu(menu, relatedNoteGroups));
+                            MenuHelper.buildMoveToOtherSubMenu(requireContext(), menu, relatedNoteGroups));
 
             if (mInputActionHelper != null) {
                 mInputActionHelper.hideLayout();
