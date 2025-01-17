@@ -316,7 +316,7 @@ public class BasicNoteFragment extends BasicCommonNoteFragment  {
 
         getParentFragmentManager().setFragmentResultListener(
                 BasicNoteEditFragment.RESULT_KEY, this, (requestKey, bundle) -> {
-                   BasicNoteA item = bundle.getParcelable(BasicNoteEditFragment.RESULT_VALUE_KEY);
+                    BasicNoteA item = bundle.getParcelable(BasicNoteEditFragment.RESULT_VALUE_KEY);
                     if (item != null) {
                         model.add(item, new BasicUIAddAction<>(mRecyclerView));
                     }
