@@ -23,6 +23,7 @@ public class BasicNoteNamedItemActivity extends BasicNoteDataPasswordActivity im
 
     @Override
     protected void refreshFragment() {
+        /*
         if (!getProgress() && !(getFragment() instanceof BasicNoteNamedItemFragment)) {
             BasicNoteNamedItemFragment basicNoteNamedItemFragment =
                     BasicNoteNamedItemFragment.newInstance(mBasicNoteData, this);
@@ -31,6 +32,8 @@ public class BasicNoteNamedItemActivity extends BasicNoteDataPasswordActivity im
                     basicNoteNamedItemFragment
             ).commit();
         }
+
+         */
     }
 
     @Override

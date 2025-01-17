@@ -36,7 +36,7 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
     private final static String TAG = BasicNoteCheckedItemFragment.class.getSimpleName();
 
     private FragmentBasicNoteCheckedItemListBinding binding;
-    private BasicNoteItemViewModel model;
+    private BasicNoteCheckedItemViewModel model;
     private AppViewModel appModel;
 
     private BasicNoteCheckedItemRecyclerViewAdapter mRecyclerViewAdapter;
@@ -60,13 +60,13 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
         }
     };
 
-    private @NonNull List<BasicNoteItemA> getNoteItemList() {
+    private @NonNull List<BasicNoteItemA> getNoteItems() {
         return Objects.requireNonNull(model.getBasicNoteItems().getValue());
     }
 
     @NonNull
     private List<BasicNoteItemA> getSelectedNoteItems() {
-        return getSelectedItems(this::getNoteItemList);
+        return getSelectedItems(this::getNoteItems);
     }
 
     private boolean processMoveMenuItemClick(MenuItem menuItem) {
@@ -165,21 +165,9 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
     private void updateTitle(ActionMode mode) {
         mode.setTitle(DisplayTitleBuilder.buildItemsDisplayTitle(
                 getActivity(),
-                getNoteItemList(),
+                getNoteItems(),
                 mRecyclerViewSelector.getSelectedItems()));
     }
-
-    /**
-     * Common code to update action menu
-     * @param menu Menu to update
-     */
-    protected void updateActionMenu(Menu menu) {
-        ActionHelper.updateActionMenu(
-                menu,
-                mRecyclerViewSelector.getSelectedItems().size(),
-                model.getBasicNoteSummary().getItemCount());
-    }
-
 
     public class ActionBarCallBack implements ActionMode.Callback {
         @Override
@@ -253,10 +241,13 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
             List<BasicNoteItemA> selectedNoteItems = getSelectedNoteItems();
             if (selectedNoteItems.size() == 1) {
                 mRecyclerView.scrollToPosition(
-                        getNoteItemList().indexOf(selectedNoteItems.get(0)));
+                        getNoteItems().indexOf(selectedNoteItems.get(0)));
             }
 
-            updateActionMenu(menu);
+            ActionHelper.updateActionMenu(
+                    menu,
+                    mRecyclerViewSelector.getSelectedItems().size(),
+                    model.getBasicNoteSummary().getItemCount());
             updateTitle(mode);
 
             return true;
@@ -365,7 +356,7 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
             }
         }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
 
-        model = new ViewModelProvider(this).get(BasicNoteItemViewModel.class);
+        model = new ViewModelProvider(this).get(BasicNoteCheckedItemViewModel.class);
         model.setBasicNote(BasicNoteCheckedItemFragmentArgs.fromBundle(getArguments()).getNote());
 
         appModel = new ViewModelProvider(requireActivity()).get(AppViewModel.class);

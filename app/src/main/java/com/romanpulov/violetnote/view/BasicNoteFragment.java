@@ -1,7 +1,6 @@
 package com.romanpulov.violetnote.view;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.*;
 import androidx.annotation.NonNull;
@@ -68,11 +67,8 @@ public class BasicNoteFragment extends BasicCommonNoteFragment  {
             NavHostFragment.findNavController(BasicNoteFragment.this).navigate(
                     BasicNoteFragmentDirections.actionBasicNoteToCheckedItem().setNote(item));
         } else if (item.getNoteType() == BasicNoteA.NOTE_TYPE_NAMED) {
-            BasicNoteDataA noteData = model.createNoteDataFromNote(getNoteGroup(), item);
-            Intent intent = new Intent(requireActivity(), BasicNoteNamedItemActivity.class);
-            intent.putExtra(PasswordActivity.PASS_DATA, noteData);
-            PasswordActivity.getPasswordValidityChecker().resetPeriod();
-            startActivityForResult(intent, 0);
+            NavHostFragment.findNavController(BasicNoteFragment.this).navigate(
+                    BasicNoteFragmentDirections.actionBasicNoteToNamedItem().setNote(item));
         }
     }
 

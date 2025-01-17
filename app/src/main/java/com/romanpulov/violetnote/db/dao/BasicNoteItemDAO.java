@@ -100,6 +100,32 @@ public final class BasicNoteItemDAO extends AbstractBasicNoteItemDAO<BasicNoteIt
         return result[0];
     }
 
+    public List<BasicNoteItemA> getNoteItems(final BasicNoteA note) {
+        final List<BasicNoteItemA> items = new ArrayList<>();
+
+        readCursor(new CursorReaderHandler() {
+            @Override
+            public Cursor createCursor() {
+                return mDB.query(
+                        NoteItemsTableDef.TABLE_NAME,
+                        NoteItemsTableDef.TABLE_COLS,
+                        DBCommonDef.NOTE_ID_COLUMN_NAME + " = ?",
+                        new String[] {String.valueOf(note.getId())},
+                        null,
+                        null,
+                        DBCommonDef.ORDER_COLUMN_NAME
+                );
+            }
+
+            @Override
+            public void readFromCursor(Cursor c) {
+                items.add(noteItemFromCursor(c, mDTF));
+            }
+        });
+
+        return items;
+    }
+
     public BasicNoteItemsWithSummary getNoteItemsWithSummary(final BasicNoteA note) {
         final List<BasicNoteItemA> items = new ArrayList<>();
 

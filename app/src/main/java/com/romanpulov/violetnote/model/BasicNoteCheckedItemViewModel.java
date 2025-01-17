@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class BasicNoteItemViewModel extends BasicCommonNoteViewModel<BasicNoteItemA> {
+public class BasicNoteCheckedItemViewModel extends BasicCommonNoteViewModel<BasicNoteItemA> {
     private BasicNoteDAO mBasicNoteDAO;
     private BasicNoteItemDAO mBasicNoteItemDAO;
 
@@ -93,7 +93,7 @@ public class BasicNoteItemViewModel extends BasicCommonNoteViewModel<BasicNoteIt
         return mRelatedNotes;
     }
 
-    public BasicNoteItemViewModel(@NotNull Application application) {
+    public BasicNoteCheckedItemViewModel(@NotNull Application application) {
         super(application);
     }
 

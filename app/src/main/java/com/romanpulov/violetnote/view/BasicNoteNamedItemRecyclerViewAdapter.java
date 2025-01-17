@@ -2,6 +2,7 @@ package com.romanpulov.violetnote.view;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.view.ActionMode;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,12 +11,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.romanpulov.violetnote.R;
-import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 import com.romanpulov.violetnote.view.core.ViewSelectorHelper;
+import com.romanpulov.violetnote.view.helper.DiffUtilHelper;
 import com.romanpulov.violetnote.view.helper.PriorityDisplayHelper;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 public class BasicNoteNamedItemRecyclerViewAdapter extends RecyclerView.Adapter<BasicNoteNamedItemRecyclerViewAdapter.ViewHolder> implements ViewSelectorHelper.ChangeNotificationListener {
@@ -24,7 +26,7 @@ public class BasicNoteNamedItemRecyclerViewAdapter extends RecyclerView.Adapter<
         this.notifyDataSetChanged();
     }
 
-    private final BasicNoteDataA mBasicNoteData;
+    private List<BasicNoteItemA> mItems;
     private final ViewSelectorHelper.AbstractViewSelector<Integer> mRecyclerViewSelector;
     private final Consumer<BasicNoteItemA> mBasicNoteItemConsumer;
 
@@ -32,8 +34,11 @@ public class BasicNoteNamedItemRecyclerViewAdapter extends RecyclerView.Adapter<
         return mRecyclerViewSelector;
     }
 
-    public BasicNoteNamedItemRecyclerViewAdapter(BasicNoteDataA basicNoteData, ActionMode.Callback actionModeCallback, Consumer<BasicNoteItemA> basicNoteItemConsumer) {
-        mBasicNoteData = basicNoteData;
+    public BasicNoteNamedItemRecyclerViewAdapter(
+            List<BasicNoteItemA> items,
+            ActionMode.Callback actionModeCallback,
+            Consumer<BasicNoteItemA> basicNoteItemConsumer) {
+        mItems = items;
         mRecyclerViewSelector = new ViewSelectorHelper.ViewSelectorMultiple<>(this, actionModeCallback);
         mBasicNoteItemConsumer = basicNoteItemConsumer;
     }
@@ -48,9 +53,9 @@ public class BasicNoteNamedItemRecyclerViewAdapter extends RecyclerView.Adapter<
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        holder.mItem = mBasicNoteData.getNote().getItems().get(position);
-        holder.mNameView.setText(mBasicNoteData.getNote().getItems().get(position).getName());
-        holder.mValueView.setText(mBasicNoteData.getNote().getItems().get(position).getValue());
+        holder.mItem = mItems.get(position);
+        holder.mNameView.setText(mItems.get(position).getName());
+        holder.mValueView.setText(mItems.get(position).getValue());
         holder.mLastModifiedView.setText(holder.mItem.getLastModifiedString());
 
         // priority display
@@ -62,10 +67,10 @@ public class BasicNoteNamedItemRecyclerViewAdapter extends RecyclerView.Adapter<
 
     @Override
     public int getItemCount() {
-        return mBasicNoteData.getNote().getItems().size();
+        return mItems.size();
     }
 
-    class ViewHolder extends RecyclerViewHelper.SelectableViewHolder {
+    public class ViewHolder extends RecyclerViewHelper.SelectableViewHolder {
         private final TextView mNameView;
         private final TextView mValueView;
         private final TextView mLastModifiedView;
@@ -84,7 +89,7 @@ public class BasicNoteNamedItemRecyclerViewAdapter extends RecyclerView.Adapter<
         public void onClick(View v) {
             super.onClick(v);
             if ((!mRecyclerViewSelector.isSelected()) && (mBasicNoteItemConsumer != null) && (getBindingAdapterPosition() != -1))
-                mBasicNoteItemConsumer.accept(mBasicNoteData.getNote().getItems().get(getBindingAdapterPosition()));
+                mBasicNoteItemConsumer.accept(mItems.get(getBindingAdapterPosition()));
         }
 
         @Override
@@ -94,5 +99,11 @@ public class BasicNoteNamedItemRecyclerViewAdapter extends RecyclerView.Adapter<
                     " name= '" + mNameView.getText() + "'" +
                     " value= '" + mValueView.getText() + "'";
         }
+    }
+
+    public void updateItems(List<BasicNoteItemA> items) {
+        DiffUtil.DiffResult result = DiffUtilHelper.getEntityListDiffResult(mItems, items);
+        this.mItems = items;
+        result.dispatchUpdatesTo(this);
     }
 }
