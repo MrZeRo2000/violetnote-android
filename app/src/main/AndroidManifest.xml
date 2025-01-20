@@ -48,11 +48,6 @@
                         android:scheme="msauth"/>
             </intent-filter>
         </activity>
-        <activity
-                android:name=".view.BasicNoteNamedItemActivity"
-                android:label="@string/title_activity_basic_note_named_item"
-                android:parentActivityName=".view.AppHostActivity"
-                android:theme="@style/ToolBarTheme"/>
         <uses-library
                 android:name="org.apache.http.legacy"
                 android:required="false"/>
