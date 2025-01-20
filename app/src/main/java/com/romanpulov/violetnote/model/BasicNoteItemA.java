@@ -7,11 +7,7 @@ import androidx.annotation.NonNull;
 import com.romanpulov.violetnote.db.provider.BasicNoteItemDBManagementProvider;
 import com.romanpulov.violetnote.model.vo.BasicParamValueA;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * BasicNote item data
@@ -77,21 +73,7 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
     }
 
     public void setNoteItemParams(BasicNoteItemParams params) {
-        if (params == null) {
-            mNoteItemParams = BasicNoteItemParams.createEmpty();
-        } else {
-            mNoteItemParams = params;
-        }
-    }
-
-    public static <T extends BasicNoteItemA> List<String> getBasicNoteItemValues(Collection<T> items) {
-        List<String> result = new ArrayList<>();
-
-        for (T item: items) {
-            result.add(item.getValue());
-        }
-
-        return result;
+        mNoteItemParams = Objects.requireNonNullElseGet(params, BasicNoteItemParams::createEmpty);
     }
 
 
@@ -105,12 +87,6 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
 
     public boolean isChecked() {
         return mChecked;
-    }
-
-    public void updateChecked(BasicNoteItemA item) {
-        this.mChecked = item.mChecked;
-        this.setLastModified(item.getLastModified());
-        this.setLastModifiedString(item.getLastModifiedString());
     }
 
     private BasicNoteItemA() {
@@ -162,6 +138,16 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
         return this;
     }
 
+    public @NonNull BasicNoteItemA withName(String name) {
+        setName(name);
+        return this;
+    }
+
+    public @NonNull BasicNoteItemA withValue(String value) {
+        setValue(value);
+        return this;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -194,7 +180,7 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
         mNoteItemParams = in.readParcelable(BasicNoteItemParams.class.getClassLoader());
     }
 
-    public static final Parcelable.Creator<BasicNoteItemA> CREATOR = new Parcelable.Creator<BasicNoteItemA>() {
+    public static final Parcelable.Creator<BasicNoteItemA> CREATOR = new Parcelable.Creator<>() {
         @Override
         public BasicNoteItemA createFromParcel(Parcel source) {
             return new BasicNoteItemA(source);

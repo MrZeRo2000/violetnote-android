@@ -10,9 +10,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.MenuHost;
 import androidx.core.view.MenuProvider;
 import androidx.appcompat.view.ActionMode;
+import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.romanpulov.violetnote.R;
@@ -55,7 +57,7 @@ public class BasicNoteNamedItemFragment extends BasicCommonNoteFragment {
         return internalProcessMoveMenuItemClick(menuItem, selectedNoteItems, model);
     }
 
-    private void setupBottomToolbarHelper() {
+    private void setupBottomToolbar() {
         mBottomToolbarHelper = BottomToolbarHelper.from(binding.fragmentToolbarBottom, this::processMoveMenuItemClick);
         requireActivity().getMenuInflater().inflate(R.menu.menu_listitem_bottom_move_actions, binding.fragmentToolbarBottom.getMenu());
         binding.fragmentToolbarBottom.setVisibility(View.GONE);
@@ -72,86 +74,17 @@ public class BasicNoteNamedItemFragment extends BasicCommonNoteFragment {
             mInputActionHelper.hideLayout();
     }
 
-    public void performAddAction() {
-        /*
-        NameValueInputDialog dialog = new NameValueInputDialog(getActivity(), getString(R.string.ui_name_value_title));
-        dialog.setOnNameValueInputListener((name, value) -> {
-            if ((name != null) && (value != null)) {
-                performAddAction(BasicNoteItemA.newNamedEditInstance(name, value));
-            }
-        });
-        dialog.show();
-        mEditorDialog = dialog.getAlertDialog();
-
-         */
-    }
-
     private void performEditValueAction(String text) {
         List<BasicNoteItemA> selectedNoteItems = getSelectedNoteItems();
         if (selectedNoteItems.size() == 1) {
             BasicNoteItemA item = selectedNoteItems.get(0);
 
-            if (!(text.equals(item.getValue()))) {
-                item.setValue(text);
+            if (!(text.trim().equals(item.getValue()))) {
+                item.setValue(text.trim());
 
-                if (mRecyclerViewSelector != null)
-                    mRecyclerViewSelector.finishActionMode();
-
-                /*
-                BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity(), mBasicNoteData);
-                executor.addAction(getString(R.string.caption_processing), new BasicNoteDataItemEditNameValueAction(mBasicNoteData, item));
-                executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData));
-                executor.setOnExecutionCompletedListener((BasicNoteDataActionExecutor.OnExecutionCompletedListener) (basicNoteData, result) -> {
-                    mBasicNoteData = basicNoteData;
-
-                    //clear editor reference
-                    if (mEditorDialog != null) {
-                        mEditorDialog.dismiss();
-                        mEditorDialog = null;
-                    }
-                });
-                executeActions(executor);
-
-                 */
+                model.editNameValue(item, new BasicUIFinishAction<>(mRecyclerViewSelector.getActionMode()));
             }
         }
-    }
-
-    private void performEditAction(final ActionMode mode, final BasicNoteItemA item) {
-        NameValueInputDialog dialog = new NameValueInputDialog(getActivity(), getString(R.string.ui_name_value_title));
-        dialog.setNameValue(item.getName(), item.getValue());
-        dialog.setOnNameValueInputListener((name, value) -> {
-            if (!name.equals(item.getName()) || !value.equals(item.getValue())) {
-                //change
-                item.setName(name);
-                item.setValue(value);
-                /*
-                BasicNoteDataActionExecutor executor = new BasicNoteDataActionExecutor(getActivity(), mBasicNoteData);
-                executor.addAction(getString(R.string.caption_processing), new BasicNoteDataItemEditNameValueAction(mBasicNoteData, item));
-                executor.addAction(getString(R.string.caption_loading), new BasicNoteDataRefreshAction(mBasicNoteData));
-                executor.setOnExecutionCompletedListener((BasicNoteDataActionExecutor.OnExecutionCompletedListener) (basicNoteData, result) -> {
-                    mBasicNoteData = basicNoteData;
-
-                    // finish anyway
-                    mode.finish();
-
-                    //clear editor reference
-                    if (mEditorDialog != null) {
-                        mEditorDialog.dismiss();
-                        mEditorDialog = null;
-                    }
-                });
-                executeActions(executor);
-
-                 */
-            }
-            // finish anyway
-            mode.finish();
-            //
-            //mEditorDialog = null;
-        });
-        dialog.show();
-        //mEditorDialog = dialog.getAlertDialog();
     }
 
     protected void performDeleteAction(final List<BasicNoteItemA> items) {
@@ -185,6 +118,13 @@ public class BasicNoteNamedItemFragment extends BasicCommonNoteFragment {
         startActivity(intent);
     }
 
+    private void updateTitle(ActionMode mode) {
+        if (mRecyclerViewSelector.isSelected()) {
+            mode.setTitle(DisplayTitleBuilder.buildItemsDisplayTitle(
+                    getActivity(), getNoteItems(), mRecyclerViewSelector.getSelectedItems()));
+        }
+    }
+
     public class ActionBarCallBack implements ActionMode.Callback {
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
@@ -204,24 +144,14 @@ public class BasicNoteNamedItemFragment extends BasicCommonNoteFragment {
                     } else if (itemId == R.id.edit_value) {
                         mInputActionHelper.showEditLayout(selectedNoteItems.get(0).getValue());
                     } else if (itemId == R.id.edit) {
-                        performEditAction(mode, selectedNoteItems.get(0));
+                        NavHostFragment.findNavController(BasicNoteNamedItemFragment.this).navigate(
+                                BasicNoteNamedItemFragmentDirections.actionBasicNoteNamedItemToBasicNoteNamedItemEdit()
+                                        .setEditItem(selectedNoteItems.get(0)));
                     } else if (itemId == R.id.history) {
                         if (selectedNoteItems.size() == 1) {
                             startHEventHistoryActivity(selectedNoteItems.get(0));
                         }
-                    }/* else if (itemId == R.id.move_up) {
-                        performMoveAction(new BasicItemsMoveUpAction<>(mBasicNoteData, selectedNoteItems), selectedNoteItems);
-                    } else if (itemId == R.id.move_top) {
-                        performMoveAction(new BasicItemsMoveTopAction<>(mBasicNoteData, selectedNoteItems), selectedNoteItems);
-                    } else if (itemId == R.id.move_down) {
-                        performMoveAction(new BasicItemsMoveDownAction<>(mBasicNoteData, selectedNoteItems), selectedNoteItems);
-                    } else if (itemId == R.id.move_bottom) {
-                        performMoveAction(new BasicItemsMoveBottomAction<>(mBasicNoteData, selectedNoteItems), selectedNoteItems);
-                    } else if (itemId == R.id.priority_up) {
-                        performMoveAction(new BasicItemsMovePriorityUpAction<>(mBasicNoteData, selectedNoteItems), selectedNoteItems);
-                    } else if (itemId == R.id.priority_down) {
-                        performMoveAction(new BasicItemsMovePriorityDownAction<>(mBasicNoteData, selectedNoteItems), selectedNoteItems);
-                    }*/ else if (itemId == R.id.select_all) {
+                    } else if (itemId == R.id.select_all) {
                         performSelectAll();
                     }
                 }
@@ -236,10 +166,7 @@ public class BasicNoteNamedItemFragment extends BasicCommonNoteFragment {
             model.getRelatedNotes().observe(BasicNoteNamedItemFragment.this, relatedNotes ->
                     MenuHelper.buildMoveToOtherSubMenu(requireContext(), menu, relatedNotes));
 
-            if (mRecyclerViewSelector.isSelected()) {
-                mode.setTitle(DisplayTitleBuilder.buildItemsDisplayTitle(
-                        getActivity(), getNoteItems(), mRecyclerViewSelector.getSelectedItems()));
-            }
+            updateTitle(mode);
 
             hideInputActionLayout();
 
@@ -263,7 +190,7 @@ public class BasicNoteNamedItemFragment extends BasicCommonNoteFragment {
             hideInputActionLayout();
 
             if (mBottomToolbarHelper == null) {
-                setupBottomToolbarHelper();
+                setupBottomToolbar();
             }
 
             if (mBottomToolbarHelper != null) {
@@ -287,7 +214,7 @@ public class BasicNoteNamedItemFragment extends BasicCommonNoteFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentBasicNoteNamedItemListBinding.inflate(getLayoutInflater());
-        //setupBottomToolbar();
+        setupBottomToolbar();
         return binding.getRoot();
     }
 
@@ -322,7 +249,8 @@ public class BasicNoteNamedItemFragment extends BasicCommonNoteFragment {
             @Override
             public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
                 if (menuItem.getItemId() == R.id.action_add) {
-                    performAddAction();
+                    NavHostFragment.findNavController(BasicNoteNamedItemFragment.this).navigate(
+                            BasicNoteNamedItemFragmentDirections.actionBasicNoteNamedItemToBasicNoteNamedItemEdit());
                     return true;
                 } else {
                     return false;
@@ -339,10 +267,10 @@ public class BasicNoteNamedItemFragment extends BasicCommonNoteFragment {
         Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).
                 setTitle(model.getBasicNote().getTitle());
 
-        Observer<List<BasicNoteItemA>> noteItemsObserver = newItems -> {
+        Observer<List<BasicNoteItemA>> noteItemsObserver = newNoteItems -> {
             if (mRecyclerViewAdapter == null) {
                 mRecyclerViewAdapter = new BasicNoteNamedItemRecyclerViewAdapter(
-                        newItems,
+                        newNoteItems,
                         new ActionBarCallBack(),
                         BasicNoteNamedItemFragment.this::startHEventHistoryActivity
                 );
@@ -353,10 +281,33 @@ public class BasicNoteNamedItemFragment extends BasicCommonNoteFragment {
                 //restore selected items
                 restoreSelectedItems(savedInstanceState, view);
             } else {
-                mRecyclerViewAdapter.updateItems(newItems);
+                mRecyclerViewAdapter.updateItems(newNoteItems);
+            }
+
+            UIAction<BasicNoteItemA> action = model.getAction();
+            if (action != null) {
+                action.execute(newNoteItems);
+                model.resetAction();
+
+                DialogFragment dialogFragment = (DialogFragment)getParentFragmentManager().findFragmentByTag(AlertOkCancelSupportDialogFragment.TAG);
+                if (dialogFragment != null) {
+                    dialogFragment.dismiss();
+                }
             }
         };
         model.getBasicNoteItems().observe(this, noteItemsObserver);
 
+        getParentFragmentManager().setFragmentResultListener(
+                BasicNoteNamedItemEditFragment.RESULT_KEY, this, (requestKey, bundle) -> {
+                    BasicNoteItemA item = bundle.getParcelable(BasicNoteNamedItemEditFragment.RESULT_VALUE_KEY);
+                    if (item != null) {
+                        if (item.getId() == 0) {
+                            model.add(item, new BasicUIAddAction<>(mRecyclerView));
+                        } else {
+                            model.editNameValue(item, new BasicUICallbackAction<>(
+                                    () -> updateTitle(mRecyclerViewSelector.getActionMode())));
+                        }
+                    }
+                });
     }
 }

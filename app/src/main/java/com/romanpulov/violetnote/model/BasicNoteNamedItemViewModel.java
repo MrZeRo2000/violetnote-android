@@ -93,8 +93,10 @@ public class BasicNoteNamedItemViewModel extends BasicCommonNoteViewModel<BasicN
         mBasicNoteItems.setValue(getDAO().getNoteItems(mBasicNote));
     }
 
-    public void refresh() {
-        loadNoteItems();
+    @Override
+    public void add(BasicNoteItemA item, UIAction<BasicNoteItemA> action) {
+        item.setNoteId(mBasicNote.getId());
+        super.add(item, action);
     }
 
     public void editNameValue(BasicNoteItemA item, UIAction<BasicNoteItemA> action) {

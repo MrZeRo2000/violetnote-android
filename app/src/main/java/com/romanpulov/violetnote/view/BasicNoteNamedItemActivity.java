@@ -1,11 +1,9 @@
 package com.romanpulov.violetnote.view;
 
-import androidx.fragment.app.Fragment;
 import android.os.Bundle;
 import androidx.appcompat.widget.ActionMenuView;
 import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 
 import com.romanpulov.violetnote.R;
@@ -65,17 +63,16 @@ public class BasicNoteNamedItemActivity extends BasicNoteDataPasswordActivity im
         getMenuInflater().inflate(R.menu.menu_add_action, menu);
         return super.onCreateOptionsMenu(menu);
     }
-
+/*
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        //workaround for issue with losing data after navigating via back button
         if (item.getItemId() == android.R.id.home) {
             finish();
             return true;
         } else {
             Fragment fragment = getFragment();
             if (fragment != null) {
-                int itemId = item.getItemId();//workaround for issue with losing data after navigating via back button
+                int itemId = item.getItemId();
                 if (itemId == android.R.id.home) {
                     finish();
                     return true;
@@ -90,6 +87,8 @@ public class BasicNoteNamedItemActivity extends BasicNoteDataPasswordActivity im
         }
     }
 
+
+ */
     @Override
     public ActionMenuView getBottomToolbar() {
         return mBottomToolbar;
