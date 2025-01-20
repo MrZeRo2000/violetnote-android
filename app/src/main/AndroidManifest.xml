@@ -53,11 +53,6 @@
                 android:label="@string/title_activity_basic_note_named_item"
                 android:parentActivityName=".view.AppHostActivity"
                 android:theme="@style/ToolBarTheme"/>
-        <activity
-                android:name=".view.BasicHEventNamedItemActivity"
-                android:label="@string/title_activity_basic_history_event_named_item"
-                android:parentActivityName=".view.BasicNoteNamedItemActivity"
-                android:theme="@style/ToolBarTheme"/> <!-- for OneDrive, check if it is still needed -->
         <uses-library
                 android:name="org.apache.http.legacy"
                 android:required="false"/>

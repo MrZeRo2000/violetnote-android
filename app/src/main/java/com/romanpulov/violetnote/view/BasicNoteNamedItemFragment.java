@@ -1,7 +1,6 @@
 package com.romanpulov.violetnote.view;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.*;
 import androidx.annotation.NonNull;
@@ -113,9 +112,16 @@ public class BasicNoteNamedItemFragment extends BasicCommonNoteFragment {
     }
 
     public void startHEventHistoryActivity(BasicNoteItemA item) {
+        NavHostFragment.findNavController(BasicNoteNamedItemFragment.this).navigate(
+                BasicNoteNamedItemFragmentDirections.actionBasicNoteNamedItemToBasicHistoryEventNamedItem()
+                        .setItem(item));
+
+        /*
         Intent intent = new Intent(getActivity(), BasicHEventNamedItemActivity.class);
         intent.putExtra(BasicHEventNamedItemActivity.class.getName(), item);
         startActivity(intent);
+
+         */
     }
 
     private void updateTitle(ActionMode mode) {
