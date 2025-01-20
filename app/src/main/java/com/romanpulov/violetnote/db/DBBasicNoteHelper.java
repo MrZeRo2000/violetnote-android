@@ -249,7 +249,7 @@ public class DBBasicNoteHelper implements DBController {
                 " END " +
                 " WHERE " + DBCommonDef.ORDER_COLUMN_NAME + " IN (" + orderId1 + ", " + orderId2 + ")";
         if (noteId > 0)
-            sql = sql + " AND " + DBCommonDef.NOTE_ID_COLUMN_NAME + " = " + String.valueOf(noteId);
+            sql = sql + " AND " + DBCommonDef.NOTE_ID_COLUMN_NAME + " = " + noteId;
         mDB.execSQL(sql);
     }
 

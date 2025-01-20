@@ -21,9 +21,9 @@ public abstract class AbstractBackupGDriveUploader  extends AbstractContextLoade
         super(context);
     }
 
-    protected void beforeLoad() throws GDActionException {};
+    protected void beforeLoad() throws GDActionException {}
 
-    protected void afterLoad() {};
+    protected void afterLoad() {}
 
     @Override
     public void load() throws Exception {

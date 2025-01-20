@@ -32,7 +32,7 @@ public class BasicNoteDBManagementProvider extends AbstractBasicOrderedEntityNot
 
     @Override
     public String getOrderIdSelectionString() {
-        return DBCommonDef.GROUP_ID_COLUMN_NAME + " = " + String.valueOf(mData.getNoteGroupId());
+        return DBCommonDef.GROUP_ID_COLUMN_NAME + " = " + mData.getNoteGroupId();
     }
 
     @Override

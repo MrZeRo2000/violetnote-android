@@ -11,12 +11,10 @@ import android.widget.TextView;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.model.BasicNoteValueA;
-import com.romanpulov.violetnote.model.BasicNoteValueDataA;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 import com.romanpulov.violetnote.view.core.ViewSelectorHelper;
 import com.romanpulov.violetnote.view.helper.DiffUtilHelper;
 
-import java.util.Collection;
 import java.util.List;
 
 public class BasicNoteValueRecyclerViewAdapter extends RecyclerView.Adapter<BasicNoteValueRecyclerViewAdapter.ViewHolder> implements ViewSelectorHelper.ChangeNotificationListener {
@@ -58,7 +56,7 @@ public class BasicNoteValueRecyclerViewAdapter extends RecyclerView.Adapter<Basi
         return mNoteValues.size();
     }
 
-    public class ViewHolder extends RecyclerViewHelper.SelectableViewHolder {
+    public static class ViewHolder extends RecyclerViewHelper.SelectableViewHolder {
         public final TextView mValueView;
 
         public ViewHolder(View view, ViewSelectorHelper.AbstractViewSelector<Integer> viewSelector) {

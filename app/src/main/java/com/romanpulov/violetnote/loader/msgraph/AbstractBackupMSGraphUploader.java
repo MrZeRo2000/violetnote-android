@@ -19,7 +19,7 @@ public class AbstractBackupMSGraphUploader extends AbstractContextLoader {
         super(context);
     }
 
-    protected void afterLoad() {};
+    protected void afterLoad() {}
 
     @Override
     public void load() throws Exception {

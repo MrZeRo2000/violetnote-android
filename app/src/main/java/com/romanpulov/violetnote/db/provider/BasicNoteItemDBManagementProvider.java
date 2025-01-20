@@ -38,7 +38,7 @@ public class BasicNoteItemDBManagementProvider implements DBManagementProvider {
 
     @Override
     public String getOrderIdSelectionString() {
-        return DBCommonDef.NOTE_ID_COLUMN_NAME + " = " + String.valueOf(mBasicNoteItem.getNoteId()) + " AND " + DBCommonDef.PRIORITY_COLUMN_NAME + " = " + String.valueOf(mBasicNoteItem.getPriority());
+        return DBCommonDef.NOTE_ID_COLUMN_NAME + " = " + mBasicNoteItem.getNoteId() + " AND " + DBCommonDef.PRIORITY_COLUMN_NAME + " = " + mBasicNoteItem.getPriority();
     }
 
     @Override

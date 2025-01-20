@@ -31,7 +31,7 @@ public class BasicOrderedEntityNoteA extends BasicModifiableEntityNoteA{
 
     public void setPriority(long priority) {
         if ((priority > PRIORITY_HIGH) || (priority < PRIORITY_LOW))
-            throw new RuntimeException("invalid priority value : " + String.valueOf(priority));
+            throw new RuntimeException("invalid priority value : " + priority);
         mPriority = priority;
     }
 
@@ -45,10 +45,9 @@ public class BasicOrderedEntityNoteA extends BasicModifiableEntityNoteA{
         if (this == o)
             return true;
 
-        if (!(o instanceof BasicOrderedEntityNoteA))
+        if (!(o instanceof BasicOrderedEntityNoteA object))
             return false;
 
-        BasicOrderedEntityNoteA object = (BasicOrderedEntityNoteA) o;
         return (this.mOrderId == object.mOrderId) && (this.mPriority == object.mPriority);
     }
 
