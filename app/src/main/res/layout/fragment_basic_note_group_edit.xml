@@ -61,6 +61,5 @@
             android:id="@+id/ok_button"
             android:background="@drawable/list_selector"
             android:text="@android:string/ok"
-            android:onClick="okButtonClick"
     />
 </LinearLayout>
