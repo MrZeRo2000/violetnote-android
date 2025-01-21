@@ -141,7 +141,6 @@ public class BasicNoteNamedItemFragment extends BasicCommonNoteFragment {
                     if (itemId == R.id.delete) {
                         performDeleteAction(selectedNoteItems);
                     } else if (itemId == R.id.edit_value) {
-                        mBottomToolbarHelper.hideLayout();
                         mInputActionHelper.showEditLayout(selectedNoteItems.get(0).getValue());
                     } else if (itemId == R.id.edit) {
                         mRecyclerViewSelector.finishActionMode();
@@ -233,7 +232,7 @@ public class BasicNoteNamedItemFragment extends BasicCommonNoteFragment {
 
         //add action panel
         mInputActionHelper = new InputActionHelper(view.findViewById(R.id.add_panel_include));
-        mInputActionHelper.setOnAddInteractionListener((actionType, text) -> {
+        mInputActionHelper.setOnInputInteractionListener((actionType, text) -> {
             if (actionType == InputActionHelper.INPUT_ACTION_TYPE_EDIT) {
                 hideInputActionLayout();
                 performEditValueAction(text);

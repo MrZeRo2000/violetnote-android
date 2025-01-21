@@ -35,11 +35,17 @@ public class InputActionHelper implements AutoCompleteArrayAdapter.OnAutoComplet
     private int mActionType;
     private Collection<String> mAutoCompleteList;
 
-    private OnInputInteractionListener mAddListener;
+    private OnInputInteractionListener mInputListener;
+    private OnCancelInteractionListener mCancelListener;
     private View.OnClickListener mListClickListener;
 
-    public void setOnAddInteractionListener(OnInputInteractionListener listener) {
-        mAddListener = listener;
+    public void setOnInputInteractionListener(OnInputInteractionListener listener) {
+        mInputListener = listener;
+    }
+
+    /** @noinspection unused*/
+    public void setOnCancelListener(OnCancelInteractionListener mCancelListener) {
+        this.mCancelListener = mCancelListener;
     }
 
     public void setOnListClickListener(View.OnClickListener listener) {
@@ -89,7 +95,12 @@ public class InputActionHelper implements AutoCompleteArrayAdapter.OnAutoComplet
     }
 
     private void setupCancelButton() {
-        mCancelButton.setOnClickListener(view -> hideLayout());
+        mCancelButton.setOnClickListener(view -> {
+            hideLayout();
+            if (mCancelListener != null) {
+                mCancelListener.onCancelInteraction();
+            }
+        });
     }
 
     private void setupCalendarButton() {
@@ -114,8 +125,8 @@ public class InputActionHelper implements AutoCompleteArrayAdapter.OnAutoComplet
     }
 
     private void acceptText(String text) {
-        if ((mAddListener != null) && (text != null) && (!text.trim().isEmpty()))
-            mAddListener.onInputFragmentInteraction(mActionType, text.trim());
+        if ((mInputListener != null) && (text != null) && (!text.trim().isEmpty()))
+            mInputListener.onInputInteraction(mActionType, text.trim());
         //clear search text for future
         mInputEditText.setText(null);
     }
@@ -199,6 +210,10 @@ public class InputActionHelper implements AutoCompleteArrayAdapter.OnAutoComplet
     }
 
     public interface OnInputInteractionListener {
-        void onInputFragmentInteraction(int actionType, String text);
+        void onInputInteraction(int actionType, String text);
+    }
+
+    public interface OnCancelInteractionListener {
+        void onCancelInteraction();
     }
 }

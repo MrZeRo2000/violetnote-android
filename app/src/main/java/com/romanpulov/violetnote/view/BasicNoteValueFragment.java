@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class BasicNoteValueFragment extends BasicCommonNoteFragment {
+    /** @noinspection unused*/
     private final static String TAG = BasicNoteValueFragment.class.getSimpleName();
 
     private FragmentBasicNoteValueListBinding binding;
@@ -69,11 +70,10 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
         }
     }
 
-    private void performDeleteAction(final ActionMode mode, final List<BasicNoteValueA> items) {
+    private void performDeleteAction(final List<BasicNoteValueA> items) {
         AlertOkCancelSupportDialogFragment dialog = AlertOkCancelSupportDialogFragment.newAlertOkCancelDialog(getString(R.string.ui_question_are_you_sure));
-        dialog.setOkButtonClickListener(dialog1 -> {
-            model.delete(items, new BasicUIFinishAction<>(mRecyclerViewSelector.getActionMode()));
-        });
+        dialog.setOkButtonClickListener(dialog1 ->
+                model.delete(items, new BasicUIFinishAction<>(mRecyclerViewSelector.getActionMode())));
 
         dialog.show(getParentFragmentManager(), AlertOkCancelSupportDialogFragment.TAG);
     }
@@ -128,7 +128,7 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
                 if (itemId == R.id.select_all) {
                     performSelectAll();
                 } else if (itemId == R.id.delete) {
-                    performDeleteAction(mode, selectedNoteItems);
+                    performDeleteAction(selectedNoteItems);
                     hideAddLayout();
                 } else if (itemId == R.id.edit) {
                     mInputActionHelper.showEditLayout(selectedNoteItems.get(0).getValue());
@@ -174,7 +174,7 @@ public class BasicNoteValueFragment extends BasicCommonNoteFragment {
 
         //add action panel
         mInputActionHelper = new InputActionHelper(binding.addPanelInclude.getRoot());
-        mInputActionHelper.setOnAddInteractionListener((actionType, text) -> {
+        mInputActionHelper.setOnInputInteractionListener((actionType, text) -> {
             switch (actionType) {
                 case InputActionHelper.INPUT_ACTION_TYPE_ADD:
                     model.add(BasicNoteValueA.newEditInstance(model.getBasicNote().getId(), text),

@@ -285,7 +285,7 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
 
         //add action panel
         mInputActionHelper = new InputActionHelper(binding.addPanelInclude.getRoot());
-        mInputActionHelper.setOnAddInteractionListener((actionType, text) -> {
+        mInputActionHelper.setOnInputInteractionListener((actionType, text) -> {
             if (model.getBasicNote().isEncrypted()) {
                 InputManagerHelper.hideInput(view);
             }

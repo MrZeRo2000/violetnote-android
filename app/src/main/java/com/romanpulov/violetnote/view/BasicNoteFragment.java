@@ -258,7 +258,7 @@ public class BasicNoteFragment extends BasicCommonNoteFragment  {
 
         //add action panel
         mInputActionHelper = new InputActionHelper(binding.addPanelInclude.getRoot());
-        mInputActionHelper.setOnAddInteractionListener((actionType, text) -> {
+        mInputActionHelper.setOnInputInteractionListener((actionType, text) -> {
             hideAddLayout();
             performEditAction(text);
         });
