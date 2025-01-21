@@ -111,17 +111,10 @@ public class BasicNoteNamedItemFragment extends BasicCommonNoteFragment {
         dialog.show(getParentFragmentManager(), AlertOkCancelSupportDialogFragment.TAG);
     }
 
-    public void startHEventHistoryActivity(BasicNoteItemA item) {
+    public void navigateToHEventHistory(BasicNoteItemA item) {
         NavHostFragment.findNavController(BasicNoteNamedItemFragment.this).navigate(
                 BasicNoteNamedItemFragmentDirections.actionBasicNoteNamedItemToBasicHistoryEventNamedItem()
                         .setItem(item));
-
-        /*
-        Intent intent = new Intent(getActivity(), BasicHEventNamedItemActivity.class);
-        intent.putExtra(BasicHEventNamedItemActivity.class.getName(), item);
-        startActivity(intent);
-
-         */
     }
 
     private void updateTitle(ActionMode mode) {
@@ -150,12 +143,13 @@ public class BasicNoteNamedItemFragment extends BasicCommonNoteFragment {
                     } else if (itemId == R.id.edit_value) {
                         mInputActionHelper.showEditLayout(selectedNoteItems.get(0).getValue());
                     } else if (itemId == R.id.edit) {
+                        mRecyclerViewSelector.finishActionMode();
                         NavHostFragment.findNavController(BasicNoteNamedItemFragment.this).navigate(
                                 BasicNoteNamedItemFragmentDirections.actionBasicNoteNamedItemToBasicNoteNamedItemEdit()
                                         .setEditItem(selectedNoteItems.get(0)));
                     } else if (itemId == R.id.history) {
                         if (selectedNoteItems.size() == 1) {
-                            startHEventHistoryActivity(selectedNoteItems.get(0));
+                            navigateToHEventHistory(selectedNoteItems.get(0));
                         }
                     } else if (itemId == R.id.select_all) {
                         performSelectAll();
@@ -278,7 +272,7 @@ public class BasicNoteNamedItemFragment extends BasicCommonNoteFragment {
                 mRecyclerViewAdapter = new BasicNoteNamedItemRecyclerViewAdapter(
                         newNoteItems,
                         new ActionBarCallBack(),
-                        BasicNoteNamedItemFragment.this::startHEventHistoryActivity
+                        BasicNoteNamedItemFragment.this::navigateToHEventHistory
                 );
 
                 mRecyclerViewSelector = mRecyclerViewAdapter.getRecyclerViewSelector();
