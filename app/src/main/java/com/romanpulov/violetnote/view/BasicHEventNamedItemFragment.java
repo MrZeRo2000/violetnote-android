@@ -33,6 +33,16 @@ public class BasicHEventNamedItemFragment extends Fragment {
 
     BasicHEventNamedItemRecyclerViewAdapter mRecyclerViewAdapter;
 
+    private final OnBackPressedCallback mBackPressedCallback = new OnBackPressedCallback(true /* enabled by default */) {
+        @Override
+        public void handleOnBackPressed() {
+            // Handle the back button event
+            model.setNoteItem(null);
+            Navigation.findNavController(requireView()).navigateUp();
+        }
+    };
+
+
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -44,17 +54,14 @@ public class BasicHEventNamedItemFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-
         // This callback is only called when MyFragment is at least started
-        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
-            @Override
-            public void handleOnBackPressed() {
-                // Handle the back button event
-                model.setNoteItem(null);
-                Navigation.findNavController(BasicHEventNamedItemFragment.this.requireView()).navigateUp();
-            }
-        };
-        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, mBackPressedCallback);
+    }
+
+    @Override
+    public void onDestroy() {
+        mBackPressedCallback.remove();
+        super.onDestroy();
     }
 
     @Nullable
