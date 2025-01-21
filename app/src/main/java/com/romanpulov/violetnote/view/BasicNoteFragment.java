@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.*;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.MenuHost;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.DialogFragment;
@@ -287,6 +288,9 @@ public class BasicNoteFragment extends BasicCommonNoteFragment  {
 
         model.setBasicNoteGroup(BasicNoteFragmentArgs.fromBundle(getArguments()).getNoteGroup());
         model.setNoteGroupsChanged(appViewModel.getNoteGroupsChanged());
+
+        Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar())
+                .setTitle(model.getBasicNoteGroup().getGroupName());
 
         final Observer<List<BasicNoteA>> notesObserver = newNotes -> {
             if (mRecyclerViewAdapter == null) {
