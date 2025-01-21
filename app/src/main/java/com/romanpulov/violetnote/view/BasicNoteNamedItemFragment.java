@@ -141,6 +141,7 @@ public class BasicNoteNamedItemFragment extends BasicCommonNoteFragment {
                     if (itemId == R.id.delete) {
                         performDeleteAction(selectedNoteItems);
                     } else if (itemId == R.id.edit_value) {
+                        mBottomToolbarHelper.hideLayout();
                         mInputActionHelper.showEditLayout(selectedNoteItems.get(0).getValue());
                     } else if (itemId == R.id.edit) {
                         mRecyclerViewSelector.finishActionMode();
