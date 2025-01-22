@@ -1,4 +1,4 @@
-package com.romanpulov.violetnote.model;
+package com.romanpulov.violetnote.model.vm;
 
 import android.app.Application;
 import android.util.LongSparseArray;
@@ -8,6 +8,10 @@ import androidx.lifecycle.MutableLiveData;
 import com.romanpulov.violetnote.db.dao.BasicHEventDAO;
 import com.romanpulov.violetnote.db.dao.BasicHNoteCOItemDAO;
 import com.romanpulov.violetnote.db.dao.BasicNoteItemDAO;
+import com.romanpulov.violetnote.model.BasicHEventA;
+import com.romanpulov.violetnote.model.BasicHNoteCOItemA;
+import com.romanpulov.violetnote.model.BasicNoteA;
+import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.view.core.BasicEntityNoteViewModel;
 
 import java.util.Collection;

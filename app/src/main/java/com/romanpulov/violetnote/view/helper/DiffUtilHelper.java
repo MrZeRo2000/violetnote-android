@@ -1,7 +1,7 @@
 package com.romanpulov.violetnote.view.helper;
 
 import androidx.recyclerview.widget.DiffUtil;
-import com.romanpulov.violetnote.model.BasicEntityNoteA;
+import com.romanpulov.violetnote.model.core.BasicEntityNoteA;
 
 import java.util.List;
 

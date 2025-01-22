@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import androidx.annotation.NonNull;
 import android.util.LongSparseArray;
+import com.romanpulov.violetnote.model.core.BasicEntityNoteA;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,18 +66,6 @@ public final class BasicHNoteCOItemA extends BasicEntityNoteA implements Display
         return hNoteCOItemArray;
     }
 
-    public static void fillArrayFromList(@NonNull LongSparseArray<List<BasicHNoteCOItemA>> hNoteCOItemArray, @NonNull List<BasicHNoteCOItemA> hNoteCOItemList) {
-        hNoteCOItemArray.clear();
-        for (BasicHNoteCOItemA hNoteCOItem: hNoteCOItemList) {
-            List<BasicHNoteCOItemA> hItems = hNoteCOItemArray.get(hNoteCOItem.getEventId());
-            if (hItems == null) {
-                hItems = new ArrayList<>();
-                hNoteCOItemArray.append(hNoteCOItem.getEventId(), hItems);
-            }
-            hItems.add(hNoteCOItem);
-        }
-    }
-
     @NonNull
     @Override
     public String toString() {
@@ -113,7 +102,7 @@ public final class BasicHNoteCOItemA extends BasicEntityNoteA implements Display
         dest.writeString(mValue);
     }
 
-    public static final Parcelable.Creator<BasicHNoteCOItemA> CREATOR = new Parcelable.Creator<BasicHNoteCOItemA>() {
+    public static final Parcelable.Creator<BasicHNoteCOItemA> CREATOR = new Parcelable.Creator<>() {
         @Override
         public BasicHNoteCOItemA createFromParcel(Parcel source) {
             return new BasicHNoteCOItemA(source);

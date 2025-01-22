@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DateTimeFormatter;
 import com.romanpulov.violetnote.model.BasicHNoteItemA;
-import com.romanpulov.violetnote.model.InputParser;
+import com.romanpulov.violetnote.model.utils.InputParserUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -42,7 +42,7 @@ public class BasicHEventNamedItemRecyclerViewAdapter extends RecyclerView.Adapte
         String value = item.getValue();
         if (i < mItemList.size() - 1) {
             String previousValue = mItemList.get(i + 1).getValue();
-            int valueDifference = InputParser.getDisplayValueDifference(value, previousValue);
+            int valueDifference = InputParserUtils.getDisplayValueDifference(value, previousValue);
             if (valueDifference != 0) {
                 int stringResourceId = valueDifference > 0 ? R.string.ui_display_value_trend_up : R.string.ui_display_value_trend_down;
                 viewHolder.mValueTextView.setText(mContext.getString(stringResourceId, value, valueDifference));

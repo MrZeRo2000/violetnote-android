@@ -1,10 +1,12 @@
-package com.romanpulov.violetnote.model;
+package com.romanpulov.violetnote.model.vm;
 
 import android.app.Application;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import com.romanpulov.violetnote.db.dao.BasicHNoteItemDAO;
+import com.romanpulov.violetnote.model.BasicHNoteItemA;
+import com.romanpulov.violetnote.model.BasicNoteItemA;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;

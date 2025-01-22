@@ -1,8 +1,8 @@
 package com.romanpulov.violetnote.view.action;
 
 import androidx.recyclerview.widget.RecyclerView;
-import com.romanpulov.violetnote.model.BasicEntityNoteA;
-import com.romanpulov.violetnote.model.BasicEntityNoteSelectionPosA;
+import com.romanpulov.violetnote.model.core.BasicEntityNoteA;
+import com.romanpulov.violetnote.model.vo.BasicEntityNoteSelectionPosA;
 import com.romanpulov.violetnote.view.core.ViewSelectorHelper;
 
 import java.util.Collection;

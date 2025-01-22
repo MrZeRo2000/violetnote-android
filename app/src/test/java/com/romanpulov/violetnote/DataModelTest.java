@@ -6,7 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import com.romanpulov.violetnote.model.PassCategoryA;
 import com.romanpulov.violetnote.model.PassDataA;
-import com.romanpulov.violetnote.model.PassDataReader;
+import com.romanpulov.violetnote.model.service.PassData2TransformerService;
 import com.romanpulov.violetnotecore.Model.PassCategory2;
 import com.romanpulov.violetnotecore.Model.PassData2;
 import com.romanpulov.violetnotecore.Model.PassNote2;
@@ -55,11 +55,10 @@ public class DataModelTest {
     @Test
     public void PassDataReaderTest() {
         PassData2 pd = createTestPassData();
-        PassDataReader pdr = new PassDataReader(pd);
-        pdr.readPassData();
+        var transformResult = PassData2TransformerService.transform(pd);
 
-        assertEquals(pd.getCategoryList().size(),  pdr.getPassCategoryDataA().size());
-        for (PassCategoryA p : pdr.getPassCategoryDataA()) {
+        assertEquals(pd.getCategoryList().size(), transformResult.categories().size());
+        for (PassCategoryA p : transformResult.categories()) {
             System.out.println(p);
         }
     }

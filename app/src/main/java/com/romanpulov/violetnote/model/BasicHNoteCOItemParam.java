@@ -2,6 +2,7 @@ package com.romanpulov.violetnote.model;
 
 import androidx.annotation.NonNull;
 
+import com.romanpulov.violetnote.model.core.BasicEntityNoteA;
 import com.romanpulov.violetnote.model.vo.BasicNoteItemParamValueA;
 import com.romanpulov.violetnote.model.vo.BasicParamValueA;
 

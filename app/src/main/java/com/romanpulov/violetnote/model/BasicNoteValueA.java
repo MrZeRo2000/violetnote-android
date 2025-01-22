@@ -2,6 +2,7 @@ package com.romanpulov.violetnote.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import com.romanpulov.violetnote.model.core.BasicEntityNoteA;
 
 /**
  * BasicNote value data
@@ -66,7 +67,7 @@ public class BasicNoteValueA extends BasicEntityNoteA implements Parcelable, Dis
         mValue = in.readString();
     }
 
-    public static final Parcelable.Creator<BasicNoteValueA> CREATOR = new Parcelable.Creator<BasicNoteValueA>() {
+    public static final Parcelable.Creator<BasicNoteValueA> CREATOR = new Parcelable.Creator<>() {
         @Override
         public BasicNoteValueA createFromParcel(Parcel source) {
             return new BasicNoteValueA(source);

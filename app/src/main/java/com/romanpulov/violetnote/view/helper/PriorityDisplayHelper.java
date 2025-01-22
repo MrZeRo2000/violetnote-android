@@ -4,7 +4,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.romanpulov.violetnote.R;
-import com.romanpulov.violetnote.model.BasicOrderedEntityNoteA;
+import com.romanpulov.violetnote.model.core.BasicOrderedEntityNoteA;
 
 /**
  * Priority display helper class

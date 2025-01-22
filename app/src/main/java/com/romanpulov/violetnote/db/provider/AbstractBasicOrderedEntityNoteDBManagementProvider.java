@@ -1,7 +1,7 @@
 package com.romanpulov.violetnote.db.provider;
 
 import com.romanpulov.violetnote.db.tabledef.DBCommonDef;
-import com.romanpulov.violetnote.model.BasicOrderedEntityNoteA;
+import com.romanpulov.violetnote.model.core.BasicOrderedEntityNoteA;
 
 /**
  * AbstractBasicOrderedEntityNoteDBManagementProvider database management operations

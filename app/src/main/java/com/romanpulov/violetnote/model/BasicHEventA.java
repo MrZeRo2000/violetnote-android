@@ -2,6 +2,7 @@ package com.romanpulov.violetnote.model;
 
 import androidx.annotation.NonNull;
 import android.util.LongSparseArray;
+import com.romanpulov.violetnote.model.core.BasicEntityNoteA;
 
 import java.util.List;
 
@@ -73,10 +74,4 @@ public final class BasicHEventA extends BasicEntityNoteA {
         return hEventArray;
     }
 
-    public static void fillArrayFromList(@NonNull LongSparseArray<BasicHEventA> hEventArray, @NonNull List<BasicHEventA> hEventList) {
-        hEventArray.clear();
-        for (BasicHEventA hEvent: hEventList) {
-            hEventArray.append(hEvent.getId(), hEvent);
-        }
-    }
 }

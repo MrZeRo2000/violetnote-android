@@ -22,6 +22,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.databinding.FragmentBasicNoteCheckedItemListBinding;
 import com.romanpulov.violetnote.model.*;
+import com.romanpulov.violetnote.model.utils.InputParserUtils;
+import com.romanpulov.violetnote.model.vm.AppViewModel;
+import com.romanpulov.violetnote.model.vm.BasicNoteCheckedItemViewModel;
 import com.romanpulov.violetnote.view.action.*;
 import com.romanpulov.violetnote.view.core.*;
 import com.romanpulov.violetnote.view.helper.*;
@@ -86,7 +89,7 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
             mRecyclerViewSelector.startActionMode(requireView(), position);
             mInputActionHelper.showEditNumberLayout(
                     item.getParamLong(appModel.getPriceNoteParamTypeId()),
-                    InputParser.getNumberDisplayStyle(model.getBasicNoteItemParamsSummary().getIsInt()));
+                    InputParserUtils.getNumberDisplayStyle(model.getBasicNoteItemParamsSummary().getIsInt()));
         }
     }
 
@@ -187,10 +190,10 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
                     } else if (itemId == R.id.edit_value) {
                         BasicNoteItemA selectedNote = selectedNoteItems.get(0);
                         mInputActionHelper.showEditLayout(
-                            InputParser.composeFloatParams(
+                            InputParserUtils.composeFloatParams(
                                 selectedNote.getValue(),
                                 selectedNote.getNoteItemParams().getLong(model.getPriceNoteParamTypeId()),
-                                InputParser.getNumberDisplayStyle(model.getBasicNoteItemParamsSummary().getIsInt())));
+                                InputParserUtils.getNumberDisplayStyle(model.getBasicNoteItemParamsSummary().getIsInt())));
                     } else if (itemId == R.id.select_all) {
                         performSelectAll();
                     }
@@ -305,7 +308,7 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
                     mRecyclerViewSelector.finishActionMode();
                     break;
                 case InputActionHelper.INPUT_ACTION_TYPE_NUMBER:
-                    performEditAction(item -> item.setParamLong(model.getPriceNoteParamTypeId(), InputParser.getLongValueFromString(text)));
+                    performEditAction(item -> item.setParamLong(model.getPriceNoteParamTypeId(), InputParserUtils.getLongValueFromString(text)));
                     hideAddLayout();
                     mRecyclerViewSelector.finishActionMode();
                     break;

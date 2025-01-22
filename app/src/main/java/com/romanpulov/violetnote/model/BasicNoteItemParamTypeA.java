@@ -1,6 +1,7 @@
 package com.romanpulov.violetnote.model;
 
 import androidx.annotation.NonNull;
+import com.romanpulov.violetnote.model.core.BasicEntityNoteA;
 
 /**
  * Note Item Param data

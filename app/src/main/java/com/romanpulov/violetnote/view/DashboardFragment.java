@@ -15,9 +15,9 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.databinding.FragmentDashboardBinding;
-import com.romanpulov.violetnote.model.AppViewModel;
+import com.romanpulov.violetnote.model.vm.AppViewModel;
 import com.romanpulov.violetnote.model.BasicNoteGroupA;
-import com.romanpulov.violetnote.model.BasicNoteGroupViewModel;
+import com.romanpulov.violetnote.model.vm.BasicNoteGroupViewModel;
 import org.jetbrains.annotations.NotNull;
 
 public class DashboardFragment extends Fragment {

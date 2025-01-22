@@ -3,6 +3,7 @@ package com.romanpulov.violetnote.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.romanpulov.violetnote.model.service.PassData2TransformerService;
 import com.romanpulov.violetnotecore.Model.PassData2;
 
 import java.util.ArrayList;
@@ -54,12 +55,12 @@ public class PassDataA implements Parcelable, PasswordProvider {
     }
 
     public static PassDataA newInstance(String password, PassData2 passData2) {
-        PassDataReader reader = new PassDataReader(passData2);
-        reader.readPassData();
+        PassData2TransformerService.CategoryNoteRecord categoryNoteRecord =
+                PassData2TransformerService.transform(passData2);
 
         PassDataA newPassDataA = new PassDataA(password);
-        newPassDataA.mPassCategoryDataA = reader.getPassCategoryDataA();
-        newPassDataA.mPassNoteDataA = reader.getPassNoteDataA();
+        newPassDataA.mPassCategoryDataA = categoryNoteRecord.categories();
+        newPassDataA.mPassNoteDataA = categoryNoteRecord.notes();
 
         return newPassDataA;
     }
@@ -191,7 +192,7 @@ public class PassDataA implements Parcelable, PasswordProvider {
         }
     }
 
-    public static final Parcelable.Creator<PassDataA> CREATOR = new Parcelable.Creator<PassDataA>() {
+    public static final Parcelable.Creator<PassDataA> CREATOR = new Parcelable.Creator<>() {
         @Override
         public PassDataA createFromParcel(Parcel source) {
             return new PassDataA(source);

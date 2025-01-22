@@ -5,6 +5,7 @@ import android.os.Parcelable;
 import androidx.annotation.NonNull;
 
 import com.romanpulov.violetnote.db.provider.BasicNoteGroupDBManagementProvider;
+import com.romanpulov.violetnote.model.core.BasicCommonNoteA;
 import com.romanpulov.violetnote.model.vo.BasicNoteGroupDisplayOptions;
 import com.romanpulov.violetnote.model.vo.BasicNoteGroupSummary;
 

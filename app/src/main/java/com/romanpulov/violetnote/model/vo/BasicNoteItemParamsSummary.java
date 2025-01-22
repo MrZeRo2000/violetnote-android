@@ -1,5 +1,6 @@
-package com.romanpulov.violetnote.model;
+package com.romanpulov.violetnote.model.vo;
 
+import com.romanpulov.violetnote.model.BasicNoteItemA;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;

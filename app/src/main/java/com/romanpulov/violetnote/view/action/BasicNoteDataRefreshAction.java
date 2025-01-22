@@ -3,7 +3,7 @@ package com.romanpulov.violetnote.view.action;
 import com.romanpulov.violetnote.db.manager.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicNoteDataA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
-import com.romanpulov.violetnote.model.PassNoteItemJSONCryptService;
+import com.romanpulov.violetnote.model.service.PassNoteItemJSONCryptService;
 
 /**
  * BasicNoteDataA refresh action
@@ -12,11 +12,6 @@ import com.romanpulov.violetnote.model.PassNoteItemJSONCryptService;
 public class BasicNoteDataRefreshAction extends BasicAction<BasicNoteDataA> {
     private final String mPassword;
     private boolean mRequireValues = false;
-
-    public BasicNoteDataRefreshAction(BasicNoteDataA basicNoteData) {
-        super(basicNoteData);
-        mPassword = basicNoteData.getPassword();
-    }
 
     public BasicNoteDataRefreshAction(BasicNoteDataA basicNoteData, String password) {
         super(basicNoteData);

@@ -3,6 +3,7 @@ package com.romanpulov.violetnote.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 import androidx.annotation.NonNull;
+import com.romanpulov.violetnote.model.core.BasicEntityNoteA;
 
 /**
  * HNoteItem data class
@@ -89,7 +90,7 @@ public final class BasicHNoteItemA extends BasicEntityNoteA implements Parcelabl
         dest.writeString(mValue);
     }
 
-    public static final Parcelable.Creator<BasicHNoteItemA> CREATOR = new Parcelable.Creator<BasicHNoteItemA>() {
+    public static final Parcelable.Creator<BasicHNoteItemA> CREATOR = new Parcelable.Creator<>() {
         @Override
         public BasicHNoteItemA createFromParcel(Parcel source) {
             return new BasicHNoteItemA(source);

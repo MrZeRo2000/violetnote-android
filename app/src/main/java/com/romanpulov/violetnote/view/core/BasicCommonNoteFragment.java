@@ -3,15 +3,14 @@ package com.romanpulov.violetnote.view.core;
 import android.os.Bundle;
 import android.view.MenuItem;
 import androidx.annotation.NonNull;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.appcompat.view.ActionMode;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 
 import com.romanpulov.violetnote.R;
-import com.romanpulov.violetnote.model.BasicCommonNoteA;
-import com.romanpulov.violetnote.model.BasicEntityNoteSelectionPosA;
+import com.romanpulov.violetnote.model.core.BasicCommonNoteA;
+import com.romanpulov.violetnote.model.vo.BasicEntityNoteSelectionPosA;
 import com.romanpulov.violetnote.model.MovementDirection;
 import com.romanpulov.violetnote.view.action.BasicUIMoveAction;
 import com.romanpulov.violetnote.view.helper.BottomToolbarHelper;
@@ -27,7 +26,6 @@ import java.util.function.Supplier;
 public abstract class BasicCommonNoteFragment extends Fragment {
     protected static final String KEY_SELECTED_ITEMS_ARRAY = "selected items array";
     protected static final String KEY_SELECTION_TITLE = "selection title";
-    protected DialogFragment mDialogFragment;
     protected BottomToolbarHelper mBottomToolbarHelper;
 
     protected RecyclerView mRecyclerView;

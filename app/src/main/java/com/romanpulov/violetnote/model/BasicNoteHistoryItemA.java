@@ -2,6 +2,7 @@ package com.romanpulov.violetnote.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import com.romanpulov.violetnote.model.core.BasicModifiableEntityNoteA;
 
 /**
  * BasicNote history item data
@@ -31,7 +32,7 @@ public class BasicNoteHistoryItemA extends BasicModifiableEntityNoteA implements
         mValue = in.readString();
     }
 
-    public static final Parcelable.Creator<BasicNoteHistoryItemA> CREATOR = new Parcelable.Creator<BasicNoteHistoryItemA>() {
+    public static final Parcelable.Creator<BasicNoteHistoryItemA> CREATOR = new Parcelable.Creator<>() {
         @Override
         public BasicNoteHistoryItemA createFromParcel(Parcel source) {
             return new BasicNoteHistoryItemA(source);

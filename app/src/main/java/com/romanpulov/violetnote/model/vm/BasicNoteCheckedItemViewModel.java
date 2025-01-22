@@ -1,10 +1,13 @@
-package com.romanpulov.violetnote.model;
+package com.romanpulov.violetnote.model.vm;
 
 import android.app.Application;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import com.romanpulov.violetnote.db.dao.BasicNoteDAO;
 import com.romanpulov.violetnote.db.dao.BasicNoteItemDAO;
+import com.romanpulov.violetnote.model.BasicNoteA;
+import com.romanpulov.violetnote.model.BasicNoteItemA;
+import com.romanpulov.violetnote.model.vo.BasicNoteItemParamsSummary;
 import com.romanpulov.violetnote.model.vo.BasicNoteSummary;
 import com.romanpulov.violetnote.view.action.UIAction;
 import com.romanpulov.violetnote.view.core.BasicCommonNoteViewModel;

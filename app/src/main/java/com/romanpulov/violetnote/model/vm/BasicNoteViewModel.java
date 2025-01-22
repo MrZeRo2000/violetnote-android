@@ -1,4 +1,4 @@
-package com.romanpulov.violetnote.model;
+package com.romanpulov.violetnote.model.vm;
 
 import android.app.Application;
 import androidx.annotation.NonNull;
@@ -7,6 +7,9 @@ import androidx.lifecycle.MutableLiveData;
 import com.romanpulov.violetnote.db.dao.BasicNoteDAO;
 import com.romanpulov.violetnote.db.dao.BasicNoteGroupDAO;
 import com.romanpulov.violetnote.db.dao.BasicNoteItemDAO;
+import com.romanpulov.violetnote.model.*;
+import com.romanpulov.violetnote.model.core.BasicOrderedEntityNoteA;
+import com.romanpulov.violetnote.model.utils.ParcelableUtils;
 import com.romanpulov.violetnote.view.action.UIAction;
 import com.romanpulov.violetnote.view.core.BasicCommonNoteViewModel;
 import org.jetbrains.annotations.NotNull;
@@ -134,9 +137,5 @@ public class BasicNoteViewModel extends BasicCommonNoteViewModel<BasicNoteA> {
 
         setAction(action);
         onDataChangeActionCompleted();
-    }
-
-    public BasicNoteDataA createNoteDataFromNote(BasicNoteGroupA noteGroup, BasicNoteA note) {
-        return getDAO().createNoteDataFromNote(noteGroup, note);
     }
 }

@@ -20,6 +20,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.databinding.FragmentBasicNoteListBinding;
 import com.romanpulov.violetnote.model.*;
+import com.romanpulov.violetnote.model.vm.AppViewModel;
+import com.romanpulov.violetnote.model.vm.BasicNoteViewModel;
 import com.romanpulov.violetnote.view.action.*;
 import com.romanpulov.violetnote.view.core.*;
 import com.romanpulov.violetnote.view.helper.*;

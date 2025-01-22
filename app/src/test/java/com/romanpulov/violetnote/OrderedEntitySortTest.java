@@ -1,8 +1,6 @@
 package com.romanpulov.violetnote;
 
-import androidx.annotation.NonNull;
-
-import com.romanpulov.violetnote.model.BasicOrderedEntityNoteA;
+import com.romanpulov.violetnote.model.core.BasicOrderedEntityNoteA;
 
 import org.junit.Assert;
 import org.junit.Test;

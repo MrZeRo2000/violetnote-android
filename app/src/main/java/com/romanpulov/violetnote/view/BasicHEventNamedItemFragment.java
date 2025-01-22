@@ -18,7 +18,7 @@ import android.view.ViewGroup;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.databinding.ViewRecyclerViewListBinding;
-import com.romanpulov.violetnote.model.BasicHEventNamedItemViewModel;
+import com.romanpulov.violetnote.model.vm.BasicHEventNamedItemViewModel;
 import com.romanpulov.violetnote.model.BasicHNoteItemA;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 import org.jetbrains.annotations.NotNull;

@@ -4,10 +4,10 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 import com.romanpulov.violetnote.db.provider.DBManagementProvider;
-import com.romanpulov.violetnote.model.BasicCommonNoteA;
+import com.romanpulov.violetnote.model.core.BasicCommonNoteA;
 
-import static com.romanpulov.violetnote.model.BasicOrderedEntityNoteA.PRIORITY_HIGH;
-import static com.romanpulov.violetnote.model.BasicOrderedEntityNoteA.PRIORITY_LOW;
+import static com.romanpulov.violetnote.model.core.BasicOrderedEntityNoteA.PRIORITY_HIGH;
+import static com.romanpulov.violetnote.model.core.BasicOrderedEntityNoteA.PRIORITY_LOW;
 
 /**
  * BasicCommonNote DAO

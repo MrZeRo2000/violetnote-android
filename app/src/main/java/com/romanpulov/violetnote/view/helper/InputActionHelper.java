@@ -10,7 +10,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
 
 import com.romanpulov.violetnote.R;
-import com.romanpulov.violetnote.model.InputParser;
+import com.romanpulov.violetnote.model.utils.InputParserUtils;
 import com.romanpulov.violetnote.view.AutoCompleteArrayAdapter;
 
 import java.util.Collection;
@@ -105,8 +105,8 @@ public class InputActionHelper implements AutoCompleteArrayAdapter.OnAutoComplet
 
     private void setupCalendarButton() {
         mCalendarButton.setOnClickListener(view -> {
-            Log.d(TAG, "Setting text to" + InputParser.getCurrentDateAsString());
-            mInputEditText.setText(InputParser.getCurrentDateAsString());
+            Log.d(TAG, "Setting text to" + InputParserUtils.getCurrentDateAsString());
+            mInputEditText.setText(InputParserUtils.getCurrentDateAsString());
         });
     }
 
@@ -140,7 +140,7 @@ public class InputActionHelper implements AutoCompleteArrayAdapter.OnAutoComplet
     }
 
     public void showEditNumberLayout(long number, int numberDisplayStyle) {
-        showLayout(number == 0 ? null : InputParser.getDisplayValue(number, numberDisplayStyle), INPUT_ACTION_TYPE_NUMBER);
+        showLayout(number == 0 ? null : InputParserUtils.getDisplayValue(number, numberDisplayStyle), INPUT_ACTION_TYPE_NUMBER);
     }
 
     private void showLayout(String text, int actionType) {
@@ -149,8 +149,8 @@ public class InputActionHelper implements AutoCompleteArrayAdapter.OnAutoComplet
         mInputEditText.setText(text);
         mCalendarButton.setVisibility(
                 actionType == INPUT_ACTION_TYPE_EDIT &&
-                        InputParser.isDate(text) &&
-                        !(InputParser.getCurrentDateAsString().equals(text)) ?
+                        InputParserUtils.isDate(text) &&
+                        !(InputParserUtils.getCurrentDateAsString().equals(text)) ?
                             View.VISIBLE :
                             View.GONE);
         Log.d(TAG, "CalendarButton visibility: " + mCalendarButton.getVisibility() + ", text: " + text);

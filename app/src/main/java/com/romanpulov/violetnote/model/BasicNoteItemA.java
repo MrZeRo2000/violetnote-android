@@ -5,6 +5,9 @@ import android.os.Parcelable;
 import androidx.annotation.NonNull;
 
 import com.romanpulov.violetnote.db.provider.BasicNoteItemDBManagementProvider;
+import com.romanpulov.violetnote.model.core.BasicCommonNoteA;
+import com.romanpulov.violetnote.model.utils.BooleanUtils;
+import com.romanpulov.violetnote.model.utils.InputParserUtils;
 import com.romanpulov.violetnote.model.vo.BasicParamValueA;
 
 import java.util.Objects;
@@ -44,7 +47,7 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
         mValue = value;
     }
 
-    private void setFloatParams(long noteItemParamTypeId, @NonNull InputParser.FloatParamsResult floatParams) {
+    private void setFloatParams(long noteItemParamTypeId, @NonNull InputParserUtils.FloatParamsResult floatParams) {
         mValue = floatParams.getText();
         if (floatParams.hasValue())
             mNoteItemParams.putLong(noteItemParamTypeId, floatParams.getLongValue());
@@ -53,7 +56,7 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
     }
 
     public void setValueWithParams(long noteItemParamTypeId, String value) {
-        setFloatParams(noteItemParamTypeId, InputParser.parseFloatParams(value));
+        setFloatParams(noteItemParamTypeId, InputParserUtils.parseFloatParams(value));
     }
 
     public long getParamLong(long noteItemParamTypeId) {
@@ -109,7 +112,7 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
         return  instance;
     }
 
-    private static @NonNull BasicNoteItemA fromFloatParams(long noteItemParamTypeId, @NonNull InputParser.FloatParamsResult floatParamsResult) {
+    private static @NonNull BasicNoteItemA fromFloatParams(long noteItemParamTypeId, @NonNull InputParserUtils.FloatParamsResult floatParamsResult) {
         BasicNoteItemA instance = new BasicNoteItemA();
         instance.setFloatParams(noteItemParamTypeId, floatParamsResult);
         return instance;
@@ -122,7 +125,7 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
     }
 
     public static @NonNull BasicNoteItemA newCheckedEditInstance(long noteId, long noteItemParamTypeId, String value) {
-        InputParser.FloatParamsResult floatParamsResult = InputParser.parseFloatParams(value);
+        InputParserUtils.FloatParamsResult floatParamsResult = InputParserUtils.parseFloatParams(value);
         return fromFloatParams(noteItemParamTypeId, floatParamsResult).withNoteId(noteId);
     }
 

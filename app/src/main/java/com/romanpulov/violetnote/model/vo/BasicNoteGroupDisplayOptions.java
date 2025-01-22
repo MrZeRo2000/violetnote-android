@@ -6,7 +6,7 @@ import com.romanpulov.violetnote.view.helper.LoggerHelper;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.romanpulov.violetnote.model.BooleanUtils;
+import com.romanpulov.violetnote.model.utils.BooleanUtils;
 
 import java.util.Objects;
 

@@ -1,4 +1,4 @@
-package com.romanpulov.violetnote.model;
+package com.romanpulov.violetnote.model.vm;
 
 import android.app.Application;
 import androidx.annotation.NonNull;

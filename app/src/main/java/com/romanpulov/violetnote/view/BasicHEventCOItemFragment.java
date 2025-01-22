@@ -18,6 +18,7 @@ import androidx.navigation.Navigation;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.databinding.FragmentExpandableListViewBinding;
 import com.romanpulov.violetnote.model.*;
+import com.romanpulov.violetnote.model.vm.BasicHNoteCOItemViewModel;
 import com.romanpulov.violetnote.view.core.AlertOkCancelSupportDialogFragment;
 import com.romanpulov.violetnote.view.core.BasicCommonNoteFragment;
 import com.romanpulov.violetnote.view.core.ViewSelectorHelper;

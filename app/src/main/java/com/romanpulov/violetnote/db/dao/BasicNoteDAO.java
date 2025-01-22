@@ -13,6 +13,7 @@ import com.romanpulov.violetnote.db.tabledef.NoteItemsHistoryTableDef;
 import com.romanpulov.violetnote.db.tabledef.NoteValuesTableDef;
 import com.romanpulov.violetnote.db.tabledef.NotesTableDef;
 import com.romanpulov.violetnote.model.*;
+import com.romanpulov.violetnote.model.utils.BooleanUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -244,12 +245,6 @@ public final class BasicNoteDAO extends AbstractBasicNoteDAO<BasicNoteA> {
 
     public void fillNoteValues(@NonNull final BasicNoteA note) {
         note.setValues(getNoteValues(note));
-    }
-
-    public void fillNotesByGroup(@NonNull BasicNoteGroupA noteGroup, @NonNull List<BasicNoteA> notes) {
-        List<BasicNoteA> newNotes = getTotalsByGroup(noteGroup);
-        notes.clear();
-        notes.addAll(newNotes);
     }
 
     @Override

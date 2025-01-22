@@ -1,9 +1,11 @@
-package com.romanpulov.violetnote.model;
+package com.romanpulov.violetnote.model.vm;
 
 import android.app.Application;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import com.romanpulov.violetnote.db.dao.BasicNoteValueDAO;
+import com.romanpulov.violetnote.model.BasicNoteA;
+import com.romanpulov.violetnote.model.BasicNoteValueA;
 import com.romanpulov.violetnote.view.core.BasicEntityNoteViewModel;
 import org.jetbrains.annotations.NotNull;
 import java.util.List;

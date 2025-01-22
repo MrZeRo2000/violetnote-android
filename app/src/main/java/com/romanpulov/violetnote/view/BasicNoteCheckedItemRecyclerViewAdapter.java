@@ -14,8 +14,8 @@ import android.widget.TextView;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
-import com.romanpulov.violetnote.model.BasicNoteItemParamsSummary;
-import com.romanpulov.violetnote.model.InputParser;
+import com.romanpulov.violetnote.model.vo.BasicNoteItemParamsSummary;
+import com.romanpulov.violetnote.model.utils.InputParserUtils;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 import com.romanpulov.violetnote.view.core.ViewSelectorHelper;
 import com.romanpulov.violetnote.view.helper.DiffUtilHelper;
@@ -72,9 +72,9 @@ public class BasicNoteCheckedItemRecyclerViewAdapter extends RecyclerView.Adapte
         if (mParamsSummary.getTotalValue() > 0) {
             holder.mPriceView.setVisibility(View.VISIBLE);
             holder.mPriceView.setText(
-                    InputParser.getDisplayValue(
+                    InputParserUtils.getDisplayValue(
                             holder.mItem.getParamLong(mParamsSummary.getNoteItemParamTypeId()),
-                            InputParser.getNumberDisplayStyle(mParamsSummary.getIsInt()))
+                            InputParserUtils.getNumberDisplayStyle(mParamsSummary.getIsInt()))
             );
         } else {
             holder.mPriceView.setVisibility(View.GONE);

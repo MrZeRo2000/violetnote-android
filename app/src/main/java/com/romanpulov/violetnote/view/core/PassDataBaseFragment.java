@@ -18,8 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.snackbar.Snackbar;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.model.PassDataA;
-import com.romanpulov.violetnote.model.PassDataExpireViewModel;
-import com.romanpulov.violetnote.model.PassDataViewModel;
+import com.romanpulov.violetnote.model.core.ExpireViewModel;
+import com.romanpulov.violetnote.model.vm.PassDataViewModel;
 import com.romanpulov.violetnote.view.OnSearchInteractionListener;
 import com.romanpulov.violetnote.view.helper.InputManagerHelper;
 import com.romanpulov.violetnote.view.helper.SearchActionHelper;
@@ -40,7 +40,7 @@ public abstract class PassDataBaseFragment extends Fragment {
     private EditText mEditTextPassword;
 
     protected PassDataViewModel model;
-    protected PassDataExpireViewModel expireModel;
+    protected ExpireViewModel expireModel;
 
     private final OnBackPressedCallback mBackPressedFinishCallback = new OnBackPressedCallback(true /* enabled by default */) {
         @Override
@@ -123,7 +123,7 @@ public abstract class PassDataBaseFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         model = new ViewModelProvider(requireActivity()).get(PassDataViewModel.class);
-        expireModel = new ViewModelProvider(requireActivity()).get(PassDataExpireViewModel.class);
+        expireModel = new ViewModelProvider(requireActivity()).get(ExpireViewModel.class);
 
         mEditTextPassword.setOnEditorActionListener((v, actionId, event) -> {
             if ((v.getText().length() > 0) && (actionId == EditorInfo.IME_ACTION_GO)) {

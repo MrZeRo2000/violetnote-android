@@ -2,8 +2,8 @@ package com.romanpulov.violetnote.view.core;
 
 import android.app.Application;
 import com.romanpulov.violetnote.db.dao.BasicCommonNoteDAO;
-import com.romanpulov.violetnote.model.BasicCommonNoteA;
-import com.romanpulov.violetnote.model.BasicOrderedEntityNoteA;
+import com.romanpulov.violetnote.model.core.BasicCommonNoteA;
+import com.romanpulov.violetnote.model.core.BasicOrderedEntityNoteA;
 import com.romanpulov.violetnote.view.action.UIAction;
 import org.jetbrains.annotations.NotNull;
 

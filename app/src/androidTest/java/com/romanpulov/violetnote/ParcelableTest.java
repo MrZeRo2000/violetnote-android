@@ -15,7 +15,7 @@ import com.romanpulov.violetnote.model.BasicNoteGroupA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.model.BasicNoteItemParams;
 import com.romanpulov.violetnote.model.vo.BasicNoteSummary;
-import com.romanpulov.violetnote.model.ParcelableUtils;
+import com.romanpulov.violetnote.model.utils.ParcelableUtils;
 import com.romanpulov.violetnote.model.vo.BasicNoteItemParamValueA;
 import com.romanpulov.violetnote.model.vo.BasicParamValueA;
 import com.romanpulov.violetnote.model.PassDataA;

@@ -5,7 +5,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.romanpulov.violetnote.R;
-import com.romanpulov.violetnote.model.InputParser;
+import com.romanpulov.violetnote.model.utils.InputParserUtils;
 
 import java.util.Locale;
 
@@ -38,17 +38,17 @@ public class CheckoutProgressHelper {
 
             String progressText;
             String priceText;
-            int numberDisplayStyle = InputParser.getNumberDisplayStyle(isInt);
+            int numberDisplayStyle = InputParserUtils.getNumberDisplayStyle(isInt);
             if (checkedItemCount > 0) {
                 progressText = String.format(Locale.getDefault(), "%d/%d", checkedItemCount, itemCount);
                 priceText = String.format(
                         Locale.getDefault(),
                         "%s/%s",
-                        InputParser.getDisplayValue(checkedPrice, numberDisplayStyle),
-                        InputParser.getDisplayValue(totalPrice, numberDisplayStyle));
+                        InputParserUtils.getDisplayValue(checkedPrice, numberDisplayStyle),
+                        InputParserUtils.getDisplayValue(totalPrice, numberDisplayStyle));
             } else {
                 progressText = String.format(Locale.getDefault(), "%d", itemCount);
-                priceText = InputParser.getDisplayValue(totalPrice, numberDisplayStyle);
+                priceText = InputParserUtils.getDisplayValue(totalPrice, numberDisplayStyle);
             }
             mProgressTextView.setText(progressText);
 
