@@ -349,6 +349,9 @@ public class BasicNoteNamedItemFragment extends BasicCommonNoteFragment {
                 BasicNoteNamedItemEditFragment.RESULT_KEY, this, (requestKey, bundle) -> {
                     BasicNoteItemA item = bundle.getParcelable(BasicNoteNamedItemEditFragment.RESULT_VALUE_KEY);
                     if (item != null) {
+                        if (model.getBasicNote().isEncrypted()) {
+                            passUIStateModel.setUIState(PassUIStateViewModel.UI_STATE_LOADING);
+                        }
                         if (item.getId() == 0) {
                             model.add(item, new BasicUIAddAction<>(mRecyclerView));
                         } else {
