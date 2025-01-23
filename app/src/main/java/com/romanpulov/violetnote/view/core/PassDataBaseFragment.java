@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.snackbar.Snackbar;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.model.PassDataA;
-import com.romanpulov.violetnote.model.core.ExpireViewModel;
+import com.romanpulov.violetnote.model.vm.ExpireViewModel;
 import com.romanpulov.violetnote.model.vm.PassDataViewModel;
 import com.romanpulov.violetnote.view.OnSearchInteractionListener;
 import com.romanpulov.violetnote.view.helper.InputManagerHelper;

@@ -1,4 +1,4 @@
-package com.romanpulov.violetnote.model.core;
+package com.romanpulov.violetnote.model.vm;
 
 import android.util.Log;
 
