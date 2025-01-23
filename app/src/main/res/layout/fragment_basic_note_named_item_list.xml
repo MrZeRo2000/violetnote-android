@@ -5,7 +5,19 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/linearLayout">
+        android:id="@+id/constraintLayout">
+
+    <include
+            android:id="@+id/include_password_input"
+            layout="@layout/content_password_input"
+            android:visibility="gone"
+    />
+
+    <include
+            android:id="@+id/include_indeterminate_progress"
+            layout="@layout/content_indeterminate_progress"
+            android:visibility="gone"
+    />
 
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/list"

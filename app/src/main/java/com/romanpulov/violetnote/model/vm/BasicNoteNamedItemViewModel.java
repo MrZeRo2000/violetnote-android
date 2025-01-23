@@ -7,11 +7,16 @@ import com.romanpulov.violetnote.db.dao.BasicNoteDAO;
 import com.romanpulov.violetnote.db.dao.BasicNoteItemDAO;
 import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
+import com.romanpulov.violetnote.model.service.PassNoteItemJSONCryptService;
 import com.romanpulov.violetnote.view.action.UIAction;
 import com.romanpulov.violetnote.view.core.BasicCommonNoteViewModel;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class BasicNoteNamedItemViewModel extends BasicCommonNoteViewModel<BasicNoteItemA> {
     private BasicNoteDAO mBasicNoteDAO;
@@ -23,6 +28,43 @@ public class BasicNoteNamedItemViewModel extends BasicCommonNoteViewModel<BasicN
     private MutableLiveData<List<BasicNoteItemA>> mBasicNoteItems;
 
     private MutableLiveData<List<BasicNoteA>> mRelatedNotes;
+
+    private LiveData<String> mPassword;
+
+    public void setPassword(LiveData<String> password) {
+        this.mPassword = password;
+    }
+
+    private ExecutorService mLoadExecutorService;
+    private final MutableLiveData<Exception> mProcessException = new MutableLiveData<>();
+
+    public LiveData<Exception> getProcessException() {
+        return mProcessException;
+    }
+
+    public <T> void startProcessForLiveData(
+            Supplier<List<T>> dataSupplier,
+            MutableLiveData<List<T>> liveData) {
+        if (mLoadExecutorService == null) {
+            mLoadExecutorService = Executors.newSingleThreadExecutor();
+        }
+
+        mLoadExecutorService.execute(() -> {
+            try {
+                liveData.postValue(dataSupplier.get());
+            } catch (Exception e) {
+                mProcessException.postValue(e);
+            }
+        });
+    }
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        if (mLoadExecutorService != null) {
+            mLoadExecutorService.shutdownNow();
+        }
+    }
 
     public void setNoteGroupsChanged(MutableLiveData<Boolean> mNoteGroupsChanged) {
         this.mNoteGroupsChanged = mNoteGroupsChanged;
@@ -36,14 +78,14 @@ public class BasicNoteNamedItemViewModel extends BasicCommonNoteViewModel<BasicN
         if (!Objects.equals(this.mBasicNote, basicNote)) {
             mBasicNote = basicNote;
             mRelatedNotes = null;
-            loadNoteItems();
+            // loadNoteItems();
         }
     }
 
     public LiveData<List<BasicNoteItemA>> getBasicNoteItems() {
         if (mBasicNoteItems == null) {
             mBasicNoteItems = new MutableLiveData<>();
-            loadNoteItems();
+            //loadNoteItems();
         }
         return mBasicNoteItems;
     }
@@ -88,11 +130,25 @@ public class BasicNoteNamedItemViewModel extends BasicCommonNoteViewModel<BasicN
         }
     }
 
-    private void loadNoteItems() {
+    public void loadNoteItems() {
         if (mBasicNoteItems == null) {
             mBasicNoteItems = new MutableLiveData<>();
         }
-        mBasicNoteItems.setValue(getDAO().getNoteItems(mBasicNote));
+        if (mBasicNote.isEncrypted()) {
+            startProcessForLiveData(() -> {
+                // get
+                List<BasicNoteItemA> basicNoteItems = getDAO().getNoteItems(mBasicNote);
+
+                // decrypt
+                for (BasicNoteItemA item : basicNoteItems) {
+                    PassNoteItemJSONCryptService.decryptBasicNoteItem(item, mPassword.getValue());
+                }
+
+                return basicNoteItems;
+            }, mBasicNoteItems);
+        } else {
+            mBasicNoteItems.setValue(getDAO().getNoteItems(mBasicNote));
+        }
     }
 
     @Override

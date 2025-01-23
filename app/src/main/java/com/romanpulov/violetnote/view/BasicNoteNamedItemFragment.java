@@ -3,6 +3,7 @@ package com.romanpulov.violetnote.view;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.*;
+import android.view.inputmethod.EditorInfo;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,6 +22,8 @@ import com.romanpulov.violetnote.databinding.FragmentBasicNoteNamedItemListBindi
 import com.romanpulov.violetnote.model.*;
 import com.romanpulov.violetnote.model.vm.AppViewModel;
 import com.romanpulov.violetnote.model.vm.BasicNoteNamedItemViewModel;
+import com.romanpulov.violetnote.model.vm.ExpireViewModel;
+import com.romanpulov.violetnote.model.vm.PassUIStateViewModel;
 import com.romanpulov.violetnote.view.action.*;
 import com.romanpulov.violetnote.view.core.*;
 import com.romanpulov.violetnote.view.helper.*;
@@ -32,6 +35,8 @@ public class BasicNoteNamedItemFragment extends BasicCommonNoteFragment {
 
     private FragmentBasicNoteNamedItemListBinding binding;
     private BasicNoteNamedItemViewModel model;
+    private PassUIStateViewModel passUIStateModel;
+    private ExpireViewModel expireModel;
 
     private BasicNoteNamedItemRecyclerViewAdapter mRecyclerViewAdapter;
 
@@ -266,10 +271,51 @@ public class BasicNoteNamedItemFragment extends BasicCommonNoteFragment {
         AppViewModel appModel = new ViewModelProvider(requireActivity()).get(AppViewModel.class);
         model.setNoteGroupsChanged(appModel.getNoteGroupsChanged());
 
+        if (model.getBasicNote().isEncrypted()) {
+            passUIStateModel = new ViewModelProvider(this).get(PassUIStateViewModel.class);
+            model.setPassword(passUIStateModel.getPassword());
+
+            binding.includePasswordInput.editTextPassword.setOnEditorActionListener((
+                    v, actionId, event) -> {
+                        String password;
+                        if (!(password = v.getText().toString()).isEmpty() && (actionId == EditorInfo.IME_ACTION_GO)) {
+                            // update UI
+                            InputManagerHelper.hideInput(v);
+                            v.setText(null);
+
+                            passUIStateModel.setPassword(password);
+                            model.loadNoteItems();
+                            return true;
+                        }
+                        return false;
+                    });
+
+            Observer<Integer> uiStateObserver = uiState -> {
+                if (uiState == PassUIStateViewModel.UI_STATE_PASSWORD_REQUIRED) {
+                    binding.includePasswordInput.getRoot().setVisibility(View.VISIBLE);
+                    binding.includeIndeterminateProgress.getRoot().setVisibility(View.GONE);
+                    binding.list.setVisibility(View.GONE);
+                } else if (uiState == PassUIStateViewModel.UI_STATE_LOADING) {
+                    binding.includePasswordInput.getRoot().setVisibility(View.GONE);
+                    binding.includeIndeterminateProgress.getRoot().setVisibility(View.VISIBLE);
+                    binding.list.setVisibility(View.GONE);
+                } else if (uiState == PassUIStateViewModel.UI_STATE_LOADED) {
+                    binding.includePasswordInput.getRoot().setVisibility(View.GONE);
+                    binding.includeIndeterminateProgress.getRoot().setVisibility(View.GONE);
+                    binding.list.setVisibility(View.VISIBLE);
+                }
+            };
+            passUIStateModel.getUIState().observe(this, uiStateObserver);
+        } else {
+            model.loadNoteItems();
+        }
+
         Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).
                 setTitle(model.getBasicNote().getTitle());
 
         Observer<List<BasicNoteItemA>> noteItemsObserver = newNoteItems -> {
+            passUIStateModel.setUIState(PassUIStateViewModel.UI_STATE_LOADED);
+
             if (mRecyclerViewAdapter == null) {
                 mRecyclerViewAdapter = new BasicNoteNamedItemRecyclerViewAdapter(
                         newNoteItems,
