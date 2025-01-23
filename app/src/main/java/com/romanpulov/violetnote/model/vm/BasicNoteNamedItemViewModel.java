@@ -4,6 +4,7 @@ import android.app.Application;
 import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.dao.BasicNoteDAO;
 import com.romanpulov.violetnote.db.dao.BasicNoteItemDAO;
 import com.romanpulov.violetnote.model.BasicNoteA;
@@ -39,10 +40,10 @@ public class BasicNoteNamedItemViewModel extends BasicCommonNoteViewModel<BasicN
     }
 
     private ExecutorService mLoadExecutorService;
-    private final MutableLiveData<Exception> mProcessException = new MutableLiveData<>();
+    private final MutableLiveData<String> mProcessError = new MutableLiveData<>();
 
-    public LiveData<Exception> getProcessException() {
-        return mProcessException;
+    public LiveData<String> getProcessError() {
+        return mProcessError;
     }
 
     public void startProcess(Runnable runnable) {
@@ -54,7 +55,7 @@ public class BasicNoteNamedItemViewModel extends BasicCommonNoteViewModel<BasicN
             try {
                 runnable.run();
             } catch (Exception e) {
-                mProcessException.postValue(e);
+                mProcessError.postValue(e.getMessage());
             }
         });
     }
@@ -70,7 +71,7 @@ public class BasicNoteNamedItemViewModel extends BasicCommonNoteViewModel<BasicN
             try {
                 liveData.postValue(dataSupplier.get());
             } catch (Exception e) {
-                mProcessException.postValue(e);
+                mProcessError.postValue(e.getMessage());
             }
         });
     }
@@ -158,12 +159,18 @@ public class BasicNoteNamedItemViewModel extends BasicCommonNoteViewModel<BasicN
                 List<BasicNoteItemA> basicNoteItems = getDAO().getNoteItems(mBasicNote);
 
                 // decrypt
-                for (BasicNoteItemA item : basicNoteItems) {
-                    PassNoteItemJSONCryptService.decryptBasicNoteItem(item, mPassword.getValue());
-                }
-                Log.d(TAG, "Items decrypted");
+                int decrypted = basicNoteItems.stream().parallel().reduce(
+                        0,
+                        (a, item) -> PassNoteItemJSONCryptService.decryptBasicNoteItem(item, mPassword.getValue()) ? 1 : 0,
+                        Integer::sum);
+                Log.d(TAG, "Items decrypted: " + decrypted);
 
-                return basicNoteItems;
+                if (decrypted == basicNoteItems.size()) {
+                    return basicNoteItems;
+                } else {
+                    mProcessError.postValue(getApplication().getString(R.string.error_crypt));
+                    return List.of();
+                }
             }, mBasicNoteItems);
         } else {
             mBasicNoteItems.setValue(getDAO().getNoteItems(mBasicNote));
@@ -179,11 +186,9 @@ public class BasicNoteNamedItemViewModel extends BasicCommonNoteViewModel<BasicN
                 Log.d(TAG, "Starting add process");
                 PassNoteItemJSONCryptService.encryptBasicNoteItem(item, mPassword.getValue());
                 Log.d(TAG, "Item encrypted");
-                getDAO().insert(item);
-                Log.d(TAG, "Item inserted");
+
+                super.add(item, action);
             });
-            setAction(action);
-            onDataChangeActionCompleted();
         } else {
             super.add(item, action);
         }
