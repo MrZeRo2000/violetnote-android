@@ -2,6 +2,7 @@ package com.romanpulov.violetnote.model.vm;
 
 import android.app.Application;
 import android.util.Log;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -53,6 +54,11 @@ public class BasicNoteNamedItemViewModel extends BasicCommonNoteViewModel<BasicN
         } else {
             return null;
         }
+    }
+
+    @NonNull
+    public LiveData<String> getProcessErrorLiveData() {
+        return getThreadProcessHelper().getProcessError();
     }
 
     @Override

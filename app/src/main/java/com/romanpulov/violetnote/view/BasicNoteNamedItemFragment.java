@@ -330,6 +330,13 @@ public class BasicNoteNamedItemFragment extends BasicCommonNoteFragment {
                 }
             };
             passUIStateModel.getUIState().observe(this, uiStateObserver);
+
+            model.getProcessErrorLiveData().observe(this, error -> {
+                if (error != null) {
+                    passUIStateModel.setUIState(PassUIStateViewModel.UI_STATE_PASSWORD_REQUIRED);
+                    DisplayMessageHelper.displayErrorMessage(requireActivity(), error);
+                }
+            });
         } else {
             model.loadNoteItems();
         }
