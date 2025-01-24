@@ -15,12 +15,12 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.model.PassDataA;
 import com.romanpulov.violetnote.model.vm.ExpireViewModel;
 import com.romanpulov.violetnote.model.vm.PassDataViewModel;
 import com.romanpulov.violetnote.view.OnSearchInteractionListener;
+import com.romanpulov.violetnote.view.helper.DisplayMessageHelper;
 import com.romanpulov.violetnote.view.helper.InputManagerHelper;
 import com.romanpulov.violetnote.view.helper.SearchActionHelper;
 
@@ -177,9 +177,7 @@ public abstract class PassDataBaseFragment extends Fragment {
             } else {
                 setDataState(DATA_STATE_LOAD_ERROR);
 
-                Snackbar.make(view, passDataResult.getLoadErrorText(), 2000)
-                        .setTextColor(getResources().getColor(R.color.colorError))
-                        .show();
+                DisplayMessageHelper.displayErrorMessage(requireActivity(), passDataResult.getLoadErrorText());
                 return false;
             }
         } else {

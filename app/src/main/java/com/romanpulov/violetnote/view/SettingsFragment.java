@@ -13,6 +13,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.CheckBoxPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -28,6 +29,7 @@ import com.romanpulov.violetnote.db.DBStorageManager;
 import com.romanpulov.library.common.account.AbstractCloudAccountManager;
 import com.romanpulov.violetnote.loader.document.DocumentPassDataLoader;
 import com.romanpulov.violetnote.loader.local.DocumentUriFileLoader;
+import com.romanpulov.violetnote.model.vm.AppViewModel;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 import com.romanpulov.violetnote.view.helper.DisplayMessageHelper;
 import com.romanpulov.violetnote.view.helper.LoggerHelper;
@@ -90,6 +92,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     if (preferenceLoaderProcessor != null) {
                         preferenceLoaderProcessor.loaderPostExecute(errorMessage);
                     }
+                    notifyNoteGroupsChanged();
                 }
             }
         }
@@ -279,6 +282,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                         .setTitle(R.string.ui_question_are_you_sure)
                         .setPositiveButton(R.string.ok, (dialog, which) -> {
                             if (documentFile.delete()) {
+                                notifyNoteGroupsChanged();
+
                                 DisplayMessageHelper.displayInfoMessage(requireActivity(), getText(R.string.ui_info_file_deleted));
                                 pref.setVisible(false);
                                 PreferenceRepository.setPreferenceKeyLastLoadedTime(
@@ -489,5 +494,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getListView().addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(getActivity(), RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_white_black_gradient));
+    }
+
+    private void notifyNoteGroupsChanged() {
+        AppViewModel appViewModel = new ViewModelProvider(requireActivity()).get(AppViewModel.class);
+        appViewModel.getNoteGroupsChanged().postValue(true);
     }
 }
