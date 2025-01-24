@@ -305,6 +305,7 @@ public class BasicNoteNamedItemFragment extends BasicCommonNoteFragment {
                     binding.includePasswordInput.getRoot().setVisibility(View.VISIBLE);
                     binding.includeIndeterminateProgress.getRoot().setVisibility(View.GONE);
                     binding.list.setVisibility(View.GONE);
+
                 } else if (uiState == PassUIStateViewModel.UI_STATE_LOADING) {
                     binding.includePasswordInput.getRoot().setVisibility(View.GONE);
                     binding.includeIndeterminateProgress.getRoot().setVisibility(View.VISIBLE);
@@ -314,10 +315,6 @@ public class BasicNoteNamedItemFragment extends BasicCommonNoteFragment {
                     binding.includePasswordInput.getRoot().setVisibility(View.GONE);
                     binding.includeIndeterminateProgress.getRoot().setVisibility(View.GONE);
                     binding.list.setVisibility(View.VISIBLE);
-                    if ((mRecyclerViewSelector != null) && (!mRecyclerViewSelector.getSelectedItems().isEmpty())) {
-                        mBottomToolbarHelper.showLayout(
-                                mRecyclerViewSelector.getSelectedItems().size(), getNoteItems().size());
-                    }
                 }
             };
             passUIStateModel.getUIState().observe(this, uiStateObserver);

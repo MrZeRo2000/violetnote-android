@@ -33,6 +33,11 @@ public abstract class BasicCommonNoteFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
+        saveSelectedItems(outState);
+        super.onSaveInstanceState(outState);
+    }
+
+    protected void saveSelectedItems(Bundle savedInstanceState) {
         if (mRecyclerViewSelector != null) {
             Collection<Integer> selectedItems = mRecyclerViewSelector.getSelectedItems();
             if (!selectedItems.isEmpty()) {
@@ -41,15 +46,14 @@ public abstract class BasicCommonNoteFragment extends Fragment {
                 for (Integer value : selectedItems) {
                     selectedItemsArray[i++] = value;
                 }
-                outState.putIntArray(KEY_SELECTED_ITEMS_ARRAY, selectedItemsArray);
+                savedInstanceState.putIntArray(KEY_SELECTED_ITEMS_ARRAY, selectedItemsArray);
                 ActionMode actionMode = mRecyclerViewSelector.getActionMode();
                 if (actionMode != null) {
                     String title = actionMode.getTitle() == null ? null : actionMode.getTitle().toString();
-                    outState.putString(KEY_SELECTION_TITLE, title);
+                    savedInstanceState.putString(KEY_SELECTION_TITLE, title);
                 }
             }
         }
-        super.onSaveInstanceState(outState);
     }
 
     protected void restoreSelectedItems(Bundle savedInstanceState, View view) {

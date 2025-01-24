@@ -1,5 +1,6 @@
 package com.romanpulov.violetnote.model.vm;
 
+import android.os.Bundle;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -14,6 +15,16 @@ public class PassUIStateViewModel extends ViewModel {
 
     private final MutableLiveData<Integer> mUIState = new MutableLiveData<>(UI_STATE_PASSWORD_REQUIRED);
     private final MutableLiveData<String> mPassword = new MutableLiveData<>();
+
+    private Bundle mSelectionState;
+
+    public Bundle getSelectionState() {
+        return mSelectionState;
+    }
+
+    public void setSelectionState(Bundle selectionState) {
+        this.mSelectionState = selectionState;
+    }
 
     public LiveData<Integer> getUIState() {
         return mUIState;

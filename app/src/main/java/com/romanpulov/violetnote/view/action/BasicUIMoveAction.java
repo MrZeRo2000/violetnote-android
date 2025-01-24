@@ -27,11 +27,13 @@ public class BasicUIMoveAction<T extends BasicEntityNoteA> implements UIAction<T
 
     @Override
     public void execute(List<T> data) {
-        BasicEntityNoteSelectionPosA selectionPos = new BasicEntityNoteSelectionPosA(data, mItems);
-        int selectionScrollPos = selectionPos.getDirectionPos(mDirection);
-        if (selectionScrollPos != -1) {
-            mRecyclerViewSelector.setSelectedItems(selectionPos.getSelectedItemsPositions());
-            mRecyclerView.scrollToPosition(selectionScrollPos);
+        if (mRecyclerViewSelector.getActionMode() != null) {
+            BasicEntityNoteSelectionPosA selectionPos = new BasicEntityNoteSelectionPosA(data, mItems);
+            int selectionScrollPos = selectionPos.getDirectionPos(mDirection);
+            if (selectionScrollPos != -1) {
+                mRecyclerViewSelector.setSelectedItems(selectionPos.getSelectedItemsPositions());
+                mRecyclerView.scrollToPosition(selectionScrollPos);
+            }
         }
     }
 }
