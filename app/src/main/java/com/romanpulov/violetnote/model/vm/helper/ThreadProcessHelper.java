@@ -1,5 +1,6 @@
 package com.romanpulov.violetnote.model.vm.helper;
 
+import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -9,6 +10,8 @@ import java.util.concurrent.Executors;
 import java.util.function.Supplier;
 
 public class ThreadProcessHelper {
+    private static final String TAG = ThreadProcessHelper.class.getSimpleName();
+
     private ExecutorService mLoadExecutorService;
     private final MutableLiveData<String> mProcessError = new MutableLiveData<>();
 
@@ -31,6 +34,7 @@ public class ThreadProcessHelper {
             try {
                 runnable.run();
             } catch (Exception e) {
+                Log.d(TAG, e.getMessage(), e);
                 mProcessError.postValue(e.getMessage());
             }
         });
@@ -49,6 +53,7 @@ public class ThreadProcessHelper {
             try {
                 liveData.postValue(dataSupplier.get());
             } catch (Exception e) {
+                Log.d(TAG, e.getMessage(), e);
                 mProcessError.postValue(e.getMessage());
             }
         });

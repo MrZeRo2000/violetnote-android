@@ -30,8 +30,8 @@ public class PassUIStateViewModel extends ViewModel {
     }
 
     public void setPassword(String password) {
-        mPassword.setValue(password);
-        if (mPassword.getValue() == null) {
+        mPassword.postValue(password);
+        if (password == null) {
             mUIState.setValue(UI_STATE_PASSWORD_REQUIRED);
         } else {
             mUIState.setValue(UI_STATE_LOADING);
@@ -40,7 +40,7 @@ public class PassUIStateViewModel extends ViewModel {
 
     public void requirePassword() {
         if (mPassword.getValue() != null) {
-            mPassword.setValue(null);
+            mPassword.postValue(null);
         }
     }
 }

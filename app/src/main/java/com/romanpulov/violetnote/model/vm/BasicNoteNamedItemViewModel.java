@@ -123,7 +123,7 @@ public class BasicNoteNamedItemViewModel extends BasicCommonNoteViewModel<BasicN
 
     private void onNoteGroupsChanged() {
         if (mNoteGroupsChanged != null) {
-            mNoteGroupsChanged.setValue(true);
+            mNoteGroupsChanged.postValue(true);
         }
     }
 

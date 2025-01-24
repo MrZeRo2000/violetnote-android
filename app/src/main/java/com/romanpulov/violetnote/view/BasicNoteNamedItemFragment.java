@@ -2,6 +2,7 @@ package com.romanpulov.violetnote.view;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.*;
 import android.view.inputmethod.EditorInfo;
 import androidx.annotation.NonNull;
@@ -32,6 +33,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class BasicNoteNamedItemFragment extends BasicCommonNoteFragment {
+    private static final String TAG = BasicNoteNamedItemFragment.class.getSimpleName();
 
     private FragmentBasicNoteNamedItemListBinding binding;
     private BasicNoteNamedItemViewModel model;
@@ -89,7 +91,7 @@ public class BasicNoteNamedItemFragment extends BasicCommonNoteFragment {
                 item.setValue(text.trim());
 
                 if (model.getBasicNote().isEncrypted()) {
-                    mBottomToolbarHelper.hideLayout();
+                    mRecyclerViewSelector.finishActionMode();
                     passUIStateModel.setUIState(PassUIStateViewModel.UI_STATE_LOADING);
                 }
                 model.editNameValue(item, new BasicUIFinishAction<>(mRecyclerViewSelector.getActionMode()));
@@ -295,6 +297,7 @@ public class BasicNoteNamedItemFragment extends BasicCommonNoteFragment {
                     });
 
             Observer<Integer> uiStateObserver = uiState -> {
+                Log.d(TAG, "uiState: " + uiState);
                 if (uiState == PassUIStateViewModel.UI_STATE_PASSWORD_REQUIRED) {
                     binding.includePasswordInput.getRoot().setVisibility(View.VISIBLE);
                     binding.includeIndeterminateProgress.getRoot().setVisibility(View.GONE);

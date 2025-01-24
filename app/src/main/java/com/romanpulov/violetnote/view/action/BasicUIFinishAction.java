@@ -14,6 +14,8 @@ public class BasicUIFinishAction<T> implements UIAction<T> {
 
     @Override
     public void execute(List<T> data) {
-        mMode.finish();
+        if (mMode != null) {
+            mMode.finish();
+        }
     }
 }
