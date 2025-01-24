@@ -88,6 +88,10 @@ public class BasicNoteNamedItemFragment extends BasicCommonNoteFragment {
             if (!(text.trim().equals(item.getValue()))) {
                 item.setValue(text.trim());
 
+                if (model.getBasicNote().isEncrypted()) {
+                    mBottomToolbarHelper.hideLayout();
+                    passUIStateModel.setUIState(PassUIStateViewModel.UI_STATE_LOADING);
+                }
                 model.editNameValue(item, new BasicUIFinishAction<>(mRecyclerViewSelector.getActionMode()));
             }
         }
@@ -314,7 +318,15 @@ public class BasicNoteNamedItemFragment extends BasicCommonNoteFragment {
                 setTitle(model.getBasicNote().getTitle());
 
         Observer<List<BasicNoteItemA>> noteItemsObserver = newNoteItems -> {
-            passUIStateModel.setUIState(PassUIStateViewModel.UI_STATE_LOADED);
+            if (passUIStateModel != null) {
+                String processError;
+                if ((processError = model.getProcessError()) == null) {
+                    passUIStateModel.setUIState(PassUIStateViewModel.UI_STATE_LOADED);
+                } else {
+                    passUIStateModel.setUIState(PassUIStateViewModel.UI_STATE_PASSWORD_REQUIRED);
+                    DisplayMessageHelper.displayErrorMessage(requireActivity(), processError);
+                }
+            }
 
             if (mRecyclerViewAdapter == null) {
                 mRecyclerViewAdapter = new BasicNoteNamedItemRecyclerViewAdapter(
