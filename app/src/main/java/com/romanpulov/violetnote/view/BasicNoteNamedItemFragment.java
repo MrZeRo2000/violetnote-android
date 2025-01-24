@@ -256,7 +256,7 @@ public class BasicNoteNamedItemFragment extends BasicCommonNoteFragment {
         });
 
         MenuHost menuHost = requireActivity();
-        menuHost.addMenuProvider(new MenuProvider() {
+        final MenuProvider defaultMenuProvider = new MenuProvider() {
             @Override
             public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
                 menuInflater.inflate(R.menu.menu_add_action, menu);
@@ -272,7 +272,7 @@ public class BasicNoteNamedItemFragment extends BasicCommonNoteFragment {
                     return false;
                 }
             }
-        }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
+        };
 
         model = new ViewModelProvider(this).get(BasicNoteNamedItemViewModel.class);
         model.setBasicNote(BasicNoteNamedItemFragmentArgs.fromBundle(getArguments()).getNote());
@@ -280,6 +280,12 @@ public class BasicNoteNamedItemFragment extends BasicCommonNoteFragment {
         AppViewModel appModel = new ViewModelProvider(requireActivity()).get(AppViewModel.class);
         model.setNoteGroupsChanged(appModel.getNoteGroupsChanged());
 
+        // menu
+        if (!model.getBasicNote().isEncrypted()) {
+            menuHost.addMenuProvider(defaultMenuProvider, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
+        }
+
+        // ui state for encrypted
         if (model.getBasicNote().isEncrypted()) {
             passUIStateModel = new ViewModelProvider(this).get(PassUIStateViewModel.class);
             model.setPassword(passUIStateModel.getPassword());
@@ -302,16 +308,22 @@ public class BasicNoteNamedItemFragment extends BasicCommonNoteFragment {
             Observer<Integer> uiStateObserver = uiState -> {
                 Log.d(TAG, "uiState: " + uiState);
                 if (uiState == PassUIStateViewModel.UI_STATE_PASSWORD_REQUIRED) {
+                    requireActivity().removeMenuProvider(defaultMenuProvider);
+
                     binding.includePasswordInput.getRoot().setVisibility(View.VISIBLE);
                     binding.includeIndeterminateProgress.getRoot().setVisibility(View.GONE);
                     binding.list.setVisibility(View.GONE);
 
                 } else if (uiState == PassUIStateViewModel.UI_STATE_LOADING) {
+                    requireActivity().removeMenuProvider(defaultMenuProvider);
+
                     binding.includePasswordInput.getRoot().setVisibility(View.GONE);
                     binding.includeIndeterminateProgress.getRoot().setVisibility(View.VISIBLE);
                     binding.list.setVisibility(View.GONE);
                     mBottomToolbarHelper.hideLayout();
                 } else if (uiState == PassUIStateViewModel.UI_STATE_LOADED) {
+                    requireActivity().addMenuProvider(defaultMenuProvider, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
+
                     binding.includePasswordInput.getRoot().setVisibility(View.GONE);
                     binding.includeIndeterminateProgress.getRoot().setVisibility(View.GONE);
                     binding.list.setVisibility(View.VISIBLE);

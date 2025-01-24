@@ -164,10 +164,14 @@ public class BasicNoteNamedItemViewModel extends BasicCommonNoteViewModel<BasicN
         if (mBasicNote.isEncrypted()) {
             getThreadProcessHelper().startProcess(() -> {
                 Log.d(TAG, "Starting add process");
-                PassNoteItemJSONCryptService.encryptBasicNoteItem(item, mPassword.getValue());
-                Log.d(TAG, "Item encrypted");
-
-                super.add(item, action);
+                if ((mPassword.getValue() != null)  &&
+                        (PassNoteItemJSONCryptService.encryptBasicNoteItem(item, mPassword.getValue()))) {
+                    Log.d(TAG, "Item encrypted");
+                    super.add(item, action);
+                } else {
+                    Log.d(TAG, "Error encrypting item");
+                    getThreadProcessHelper().setProcessError(getApplication().getString(R.string.ui_error_wrong_password));
+                }
             });
         } else {
             super.add(item, action);
@@ -185,10 +189,14 @@ public class BasicNoteNamedItemViewModel extends BasicCommonNoteViewModel<BasicN
         if (mBasicNote.isEncrypted()) {
             getThreadProcessHelper().startProcess(() -> {
                 Log.d(TAG, "Starting editNameValue process");
-                PassNoteItemJSONCryptService.encryptBasicNoteItem(item, mPassword.getValue());
-                Log.d(TAG, "Item encrypted");
-
-                internalEditNameValue(item, action);
+                if ((mPassword.getValue() != null) &&
+                        (PassNoteItemJSONCryptService.encryptBasicNoteItem(item, mPassword.getValue()))) {
+                    Log.d(TAG, "Item encrypted");
+                    internalEditNameValue(item, action);
+                } else {
+                    Log.d(TAG, "Error encrypting item");
+                    getThreadProcessHelper().setProcessError(getApplication().getString(R.string.ui_error_wrong_password));
+                }
             });
         } else {
             internalEditNameValue(item, action);
