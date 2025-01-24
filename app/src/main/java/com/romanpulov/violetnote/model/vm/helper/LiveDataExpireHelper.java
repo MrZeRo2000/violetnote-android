@@ -1,17 +1,16 @@
-package com.romanpulov.violetnote.model.vm;
+package com.romanpulov.violetnote.model.vm.helper;
 
 import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 import com.romanpulov.violetnote.view.helper.LoggerHelper;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class ExpireViewModel extends ViewModel {
-    private static final String TAG = ExpireViewModel.class.getSimpleName();
+public class LiveDataExpireHelper {
+    private static final String TAG = LiveDataExpireHelper.class.getSimpleName();
     public static final int EXPIRATION_DELAY = 10;
 
     private boolean mDataExpired = false;
@@ -76,9 +75,7 @@ public class ExpireViewModel extends ViewModel {
         return mDataExpired;
     }
 
-    @Override
-    protected void onCleared() {
-        super.onCleared();
+    public void shutDown() {
         if (mTimerExecutorService != null) {
             mTimerExecutorService.shutdownNow();
         }

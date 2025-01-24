@@ -34,14 +34,14 @@ public class PassDataNoteFragment extends PassDataBaseFragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        expireModel.setLiveData(model.getPassDataSelectedByCategory());
+        model.getExpireHelper().setLiveData(model.getPassDataSelectedByCategory());
 
         model.getPassDataSelectedByCategory().observe(getViewLifecycleOwner(), passDataResult -> {
             if (validatePassDataResult(view, passDataResult)) {
                 setDataState(DATA_STATE_LOADED);
 
                 // got the data, setting expiration
-                expireModel.initDataExpiration();
+                model.getExpireHelper().initDataExpiration();
 
                 // set title
                 setActivityTitle(passDataResult.getPassData().getPassCategoryData().get(0).getCategoryName());
@@ -56,7 +56,7 @@ public class PassDataNoteFragment extends PassDataBaseFragment {
                     model.selectPassDataNote(item);
                     NavHostFragment.findNavController(PassDataNoteFragment.this)
                             .navigate(R.id.action_PassDataNoteFragment_to_PassDataNoteDetailsFragment);
-                    expireModel.prolongDataExpiration();
+                    model.getExpireHelper().prolongDataExpiration();
                 }));
 
                 // add decoration
@@ -72,12 +72,12 @@ public class PassDataNoteFragment extends PassDataBaseFragment {
                                 model.searchPassData(searchText, isSearchSystem, isSearchUser);
                                 NavHostFragment.findNavController(PassDataNoteFragment.this)
                                         .navigate(R.id.action_PassDataNoteFragment_to_PassDataSearchResultFragment);
-                                expireModel.prolongDataExpiration();
+                                model.getExpireHelper().prolongDataExpiration();
                             }
 
                             @Override
                             public void onSearchUserActivity() {
-                                expireModel.prolongDataExpiration();
+                                model.getExpireHelper().prolongDataExpiration();
                             }
                         }
                 );

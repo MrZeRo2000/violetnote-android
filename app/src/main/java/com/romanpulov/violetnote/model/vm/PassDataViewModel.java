@@ -12,6 +12,7 @@ import com.romanpulov.violetnote.loader.document.DocumentPassDataLoader;
 import com.romanpulov.violetnote.model.PassCategoryA;
 import com.romanpulov.violetnote.model.PassDataA;
 import com.romanpulov.violetnote.model.PassNoteA;
+import com.romanpulov.violetnote.model.vm.helper.LiveDataExpireHelper;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -71,6 +72,12 @@ public class PassDataViewModel extends AndroidViewModel {
     }
 
     private ExecutorService mLoadExecutorService;
+
+    private final LiveDataExpireHelper mExpireHelper = new LiveDataExpireHelper();
+
+    public LiveDataExpireHelper getExpireHelper() {
+        return mExpireHelper;
+    }
 
     private String mPassword;
 
@@ -208,6 +215,10 @@ public class PassDataViewModel extends AndroidViewModel {
 
         if (mLoadExecutorService != null) {
             mLoadExecutorService.shutdownNow();
+        }
+
+        if (mExpireHelper != null) {
+            mExpireHelper.shutDown();
         }
     }
 }

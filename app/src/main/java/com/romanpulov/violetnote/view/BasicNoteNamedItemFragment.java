@@ -23,7 +23,7 @@ import com.romanpulov.violetnote.databinding.FragmentBasicNoteNamedItemListBindi
 import com.romanpulov.violetnote.model.*;
 import com.romanpulov.violetnote.model.vm.AppViewModel;
 import com.romanpulov.violetnote.model.vm.BasicNoteNamedItemViewModel;
-import com.romanpulov.violetnote.model.vm.ExpireViewModel;
+import com.romanpulov.violetnote.model.vm.helper.LiveDataExpireHelper;
 import com.romanpulov.violetnote.model.vm.PassUIStateViewModel;
 import com.romanpulov.violetnote.view.action.*;
 import com.romanpulov.violetnote.view.core.*;
@@ -38,7 +38,6 @@ public class BasicNoteNamedItemFragment extends BasicCommonNoteFragment {
     private FragmentBasicNoteNamedItemListBinding binding;
     private BasicNoteNamedItemViewModel model;
     private PassUIStateViewModel passUIStateModel;
-    private ExpireViewModel expireModel;
 
     private BasicNoteNamedItemRecyclerViewAdapter mRecyclerViewAdapter;
 

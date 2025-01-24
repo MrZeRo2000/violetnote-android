@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.model.PassDataA;
-import com.romanpulov.violetnote.model.vm.ExpireViewModel;
 import com.romanpulov.violetnote.model.vm.PassDataViewModel;
 import com.romanpulov.violetnote.view.OnSearchInteractionListener;
 import com.romanpulov.violetnote.view.helper.DisplayMessageHelper;
@@ -40,7 +39,6 @@ public abstract class PassDataBaseFragment extends Fragment {
     private EditText mEditTextPassword;
 
     protected PassDataViewModel model;
-    protected ExpireViewModel expireModel;
 
     private final OnBackPressedCallback mBackPressedFinishCallback = new OnBackPressedCallback(true /* enabled by default */) {
         @Override
@@ -82,7 +80,7 @@ public abstract class PassDataBaseFragment extends Fragment {
     protected final RecyclerView.OnItemTouchListener mRecyclerViewTouchListenerForDataExpiration = new RecyclerView.OnItemTouchListener() {
         @Override
         public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
-            expireModel.prolongDataExpiration();
+            model.getExpireHelper().prolongDataExpiration();
             return false;
         }
 
@@ -123,7 +121,6 @@ public abstract class PassDataBaseFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         model = new ViewModelProvider(requireActivity()).get(PassDataViewModel.class);
-        expireModel = new ViewModelProvider(requireActivity()).get(ExpireViewModel.class);
 
         mEditTextPassword.setOnEditorActionListener((v, actionId, event) -> {
             if ((v.getText().length() > 0) && (actionId == EditorInfo.IME_ACTION_GO)) {
@@ -161,8 +158,8 @@ public abstract class PassDataBaseFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (!expireModel.checkDataExpired()) {
-            expireModel.prolongDataExpiration();
+        if (!model.getExpireHelper().checkDataExpired()) {
+            model.getExpireHelper().prolongDataExpiration();
         }
     }
 

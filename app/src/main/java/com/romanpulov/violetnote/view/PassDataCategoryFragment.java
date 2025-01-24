@@ -36,14 +36,14 @@ public class PassDataCategoryFragment extends PassDataBaseFragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        expireModel.setLiveData(model.getPassDataResult());
+        model.getExpireHelper().setLiveData(model.getPassDataResult());
 
         model.getPassDataResult().observe(getViewLifecycleOwner(), passDataResult -> {
             if (validatePassDataResult(view, passDataResult)) {
                 setDataState(DATA_STATE_LOADED);
 
                 // got the data, setting expiration
-                expireModel.initDataExpiration();
+                model.getExpireHelper().initDataExpiration();
 
                 RecyclerView recyclerView = view.findViewById(R.id.list);
 
@@ -52,11 +52,11 @@ public class PassDataCategoryFragment extends PassDataBaseFragment {
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
                 recyclerView.setAdapter(new CategoryRecyclerViewAdapter(passDataResult.getPassData().getPassCategoryData(), item -> {
-                    if (!expireModel.checkDataExpired()) {
+                    if (!model.getExpireHelper().checkDataExpired()) {
                         model.selectPassDataByCategory(item);
                         NavHostFragment.findNavController(PassDataCategoryFragment.this)
                                 .navigate(R.id.action_PassDataCategoryFragment_to_PassDataNoteFragment);
-                        expireModel.prolongDataExpiration();
+                        model.getExpireHelper().prolongDataExpiration();
                     }
                 }));
 
@@ -73,12 +73,12 @@ public class PassDataCategoryFragment extends PassDataBaseFragment {
                                 model.searchPassData(searchText, isSearchSystem, isSearchUser);
                                 NavHostFragment.findNavController(PassDataCategoryFragment.this)
                                         .navigate(R.id.action_PassDataCategoryFragment_to_PassDataSearchResultFragment);
-                                expireModel.prolongDataExpiration();
+                                model.getExpireHelper().prolongDataExpiration();
                             }
 
                             @Override
                             public void onSearchUserActivity() {
-                                expireModel.prolongDataExpiration();
+                                model.getExpireHelper().prolongDataExpiration();
                             }
                         }
                 );
@@ -102,7 +102,7 @@ public class PassDataCategoryFragment extends PassDataBaseFragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.action_search) {
             Log.d(TAG, "requested search");
-            if ((mSearchActionHelper != null) && (!expireModel.checkDataExpired())) {
+            if ((mSearchActionHelper != null) && (!model.getExpireHelper().checkDataExpired())) {
                 mSearchActionHelper.showLayout();
             }
             return true;

@@ -28,14 +28,14 @@ public class PassDataSearchResultFragment extends PassDataBaseFragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        expireModel.setLiveData(model.getPassDataSearchResult());
+        model.getExpireHelper().setLiveData(model.getPassDataSearchResult());
 
         model.getPassDataSearchResult().observe(getViewLifecycleOwner(), passDataResult -> {
             if (validatePassDataResult(view, passDataResult)) {
                 setDataState(DATA_STATE_LOADED);
 
                 // got the data, setting expiration
-                expireModel.initDataExpiration();
+                model.getExpireHelper().initDataExpiration();
 
                 // search text title
                 setActivityTitle(getString(R.string.ui_search_text_display_format, passDataResult.getSearchText()));
@@ -50,7 +50,7 @@ public class PassDataSearchResultFragment extends PassDataBaseFragment {
                     model.selectPassDataNote(item);
                     NavHostFragment.findNavController(PassDataSearchResultFragment.this)
                             .navigate(R.id.action_PassDataSearchResultFragment_to_PassDataNoteDetailsFragment);
-                    expireModel.prolongDataExpiration();
+                    model.getExpireHelper().prolongDataExpiration();
                 }));
 
                 // add decoration

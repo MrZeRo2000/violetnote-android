@@ -26,14 +26,14 @@ public class PassDataNoteDetailsFragment extends PassDataBaseFragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        expireModel.setLiveData(model.getPassDataNoteResult());
+        model.getExpireHelper().setLiveData(model.getPassDataNoteResult());
 
         model.getPassDataNoteResult().observe(getViewLifecycleOwner(), passDataResult -> {
             if (validatePassDataResult(view, passDataResult)) {
                 setDataState(DATA_STATE_LOADED);
 
                 // got the data, setting expiration
-                expireModel.initDataExpiration();
+                model.getExpireHelper().initDataExpiration();
 
                 RecyclerView recyclerView = view.findViewById(R.id.list);
 
