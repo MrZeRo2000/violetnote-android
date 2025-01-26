@@ -23,7 +23,6 @@ import com.romanpulov.violetnote.databinding.FragmentBasicNoteNamedItemListBindi
 import com.romanpulov.violetnote.model.*;
 import com.romanpulov.violetnote.model.vm.AppViewModel;
 import com.romanpulov.violetnote.model.vm.BasicNoteNamedItemViewModel;
-import com.romanpulov.violetnote.model.vm.helper.LiveDataExpireHelper;
 import com.romanpulov.violetnote.model.vm.PassUIStateViewModel;
 import com.romanpulov.violetnote.view.action.*;
 import com.romanpulov.violetnote.view.core.*;
@@ -77,6 +76,11 @@ public class BasicNoteNamedItemFragment extends BasicCommonNoteFragment {
     public void onPause() {
         super.onPause();
         hideInputActionLayout();
+    }
+
+    private boolean uiLoaded() {
+        return ((passUIStateModel == null) ||
+                Objects.equals(passUIStateModel.getUIState().getValue(), PassUIStateViewModel.UI_STATE_LOADED));
     }
 
     public void hideInputActionLayout() {
@@ -142,32 +146,35 @@ public class BasicNoteNamedItemFragment extends BasicCommonNoteFragment {
     public class ActionBarCallBack implements ActionMode.Callback {
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            List<BasicNoteItemA> selectedNoteItems = getSelectedNoteItems();
+            if (uiLoaded()) {
+                List<BasicNoteItemA> selectedNoteItems = getSelectedNoteItems();
 
-            if (!selectedNoteItems.isEmpty()) {
-                if ((item.getGroupId() == MenuHelper.MENU_GROUP_OTHER_ITEMS) && (model.getRelatedNotes().getValue() != null)) {
-                    // move to other items
-                    BasicNoteA otherNote = model.getRelatedNotes().getValue().get(item.getItemId());
-                    performMoveToOtherNoteAction(selectedNoteItems, otherNote);
-                } else
+                if (!selectedNoteItems.isEmpty()) {
+                    if ((item.getGroupId() == MenuHelper.MENU_GROUP_OTHER_ITEMS) &&
+                            (model.getRelatedNotes().getValue() != null)) {
+                        // move to other items
+                        BasicNoteA otherNote = model.getRelatedNotes().getValue().get(item.getItemId());
+                        performMoveToOtherNoteAction(selectedNoteItems, otherNote);
+                    } else
                     // regular menu
-                {
-                    int itemId = item.getItemId();
-                    if (itemId == R.id.delete) {
-                        performDeleteAction(selectedNoteItems);
-                    } else if (itemId == R.id.edit_value) {
-                        mInputActionHelper.showEditLayout(selectedNoteItems.get(0).getValue());
-                    } else if (itemId == R.id.edit) {
-                        mRecyclerViewSelector.finishActionMode();
-                        NavHostFragment.findNavController(BasicNoteNamedItemFragment.this).navigate(
-                                BasicNoteNamedItemFragmentDirections.actionBasicNoteNamedItemToBasicNoteNamedItemEdit()
-                                        .setEditItem(selectedNoteItems.get(0)));
-                    } else if (itemId == R.id.history) {
-                        if (selectedNoteItems.size() == 1) {
-                            navigateToHEventHistory(selectedNoteItems.get(0));
+                    {
+                        int itemId = item.getItemId();
+                        if (itemId == R.id.delete) {
+                            performDeleteAction(selectedNoteItems);
+                        } else if (itemId == R.id.edit_value) {
+                            mInputActionHelper.showEditLayout(selectedNoteItems.get(0).getValue());
+                        } else if (itemId == R.id.edit) {
+                            mRecyclerViewSelector.finishActionMode();
+                            NavHostFragment.findNavController(BasicNoteNamedItemFragment.this).navigate(
+                                    BasicNoteNamedItemFragmentDirections.actionBasicNoteNamedItemToBasicNoteNamedItemEdit()
+                                            .setEditItem(selectedNoteItems.get(0)));
+                        } else if (itemId == R.id.history) {
+                            if (selectedNoteItems.size() == 1) {
+                                navigateToHEventHistory(selectedNoteItems.get(0));
+                            }
+                        } else if (itemId == R.id.select_all) {
+                            performSelectAll();
                         }
-                    } else if (itemId == R.id.select_all) {
-                        performSelectAll();
                     }
                 }
             }
@@ -202,26 +209,30 @@ public class BasicNoteNamedItemFragment extends BasicCommonNoteFragment {
 
         @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            hideInputActionLayout();
+            if (uiLoaded()) {
+                hideInputActionLayout();
 
-            if (mBottomToolbarHelper == null) {
-                setupBottomToolbar();
+                if (mBottomToolbarHelper == null) {
+                    setupBottomToolbar();
+                }
+
+                if (mBottomToolbarHelper != null) {
+                    mBottomToolbarHelper.showLayout(mRecyclerViewSelector.getSelectedItems().size(), getNoteItems().size());
+                }
+
+                List<BasicNoteItemA> selectedNoteItems = getSelectedNoteItems();
+                if (selectedNoteItems.size() == 1) {
+                    mRecyclerView.scrollToPosition(getNoteItems().indexOf(selectedNoteItems.get(0)));
+                }
+
+                ActionHelper.updateActionMenu(
+                        menu,
+                        mRecyclerViewSelector.getSelectedItems().size(),
+                        getNoteItems().size());
+                return true;
+            } else {
+                return false;
             }
-
-            if (mBottomToolbarHelper != null) {
-                mBottomToolbarHelper.showLayout(mRecyclerViewSelector.getSelectedItems().size(), getNoteItems().size());
-            }
-
-            List<BasicNoteItemA> selectedNoteItems = getSelectedNoteItems();
-            if (selectedNoteItems.size() == 1) {
-                mRecyclerView.scrollToPosition(getNoteItems().indexOf(selectedNoteItems.get(0)));
-            }
-
-            ActionHelper.updateActionMenu(
-                    menu,
-                    mRecyclerViewSelector.getSelectedItems().size(),
-                    getNoteItems().size());
-            return true;
         }
     }
 
