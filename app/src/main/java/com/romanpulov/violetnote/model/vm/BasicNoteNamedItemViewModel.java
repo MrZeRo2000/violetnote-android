@@ -11,7 +11,7 @@ import com.romanpulov.violetnote.db.dao.BasicNoteDAO;
 import com.romanpulov.violetnote.db.dao.BasicNoteItemDAO;
 import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
-import com.romanpulov.violetnote.model.service.PassNoteItemJSONCryptService;
+import com.romanpulov.violetnote.model.service.PassNameValueDataJSONCryptService;
 import com.romanpulov.violetnote.model.vm.helper.ThreadProcessHelper;
 import com.romanpulov.violetnote.view.action.UIAction;
 import com.romanpulov.violetnote.view.core.BasicCommonNoteViewModel;
@@ -147,7 +147,7 @@ public class BasicNoteNamedItemViewModel extends BasicCommonNoteViewModel<BasicN
                 int decrypt_errors = basicNoteItems.stream().parallel().reduce(
                         0,
                         (a, item) ->
-                                PassNoteItemJSONCryptService.decryptBasicNoteItem(item, mPassword.getValue()) ? 0 : 1,
+                                PassNameValueDataJSONCryptService.decryptNameValueData(item, mPassword.getValue()) ? 0 : 1,
                         Integer::sum);
                 Log.d(TAG, "Items decrypt errors: " + decrypt_errors);
 
@@ -171,7 +171,7 @@ public class BasicNoteNamedItemViewModel extends BasicCommonNoteViewModel<BasicN
             getThreadProcessHelper().startProcess(() -> {
                 Log.d(TAG, "Starting add process");
                 if ((mPassword.getValue() != null)  &&
-                        (PassNoteItemJSONCryptService.encryptBasicNoteItem(item, mPassword.getValue()))) {
+                        (PassNameValueDataJSONCryptService.encryptNameValueData(item, mPassword.getValue()))) {
                     Log.d(TAG, "Item encrypted");
                     super.add(item, action);
                 } else {
@@ -196,7 +196,7 @@ public class BasicNoteNamedItemViewModel extends BasicCommonNoteViewModel<BasicN
             getThreadProcessHelper().startProcess(() -> {
                 Log.d(TAG, "Starting editNameValue process");
                 if ((mPassword.getValue() != null) &&
-                        (PassNoteItemJSONCryptService.encryptBasicNoteItem(item, mPassword.getValue()))) {
+                        (PassNameValueDataJSONCryptService.encryptNameValueData(item, mPassword.getValue()))) {
                     Log.d(TAG, "Item encrypted");
                     internalEditNameValue(item, action);
                 } else {

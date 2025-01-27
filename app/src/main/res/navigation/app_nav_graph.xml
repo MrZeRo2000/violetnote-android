@@ -244,8 +244,18 @@
             android:id="@+id/nav_basic_history_event_named_item"
             android:name="com.romanpulov.violetnote.view.BasicHEventNamedItemFragment"
             android:label="@string/title_activity_basic_history_event_named_item"
-            tools:layout="@layout/view_recycler_view_list">
+            tools:layout="@layout/fragment_basic_h_event_named_item_list">
 
+        <argument
+                android:name="note"
+                app:argType="com.romanpulov.violetnote.model.BasicNoteA"
+                app:nullable="true"
+                android:defaultValue="@null" />
+        <argument
+            android:name="password"
+            app:argType="java.lang.String"
+            app:nullable="true"
+            android:defaultValue="@null" />
         <argument
                 android:name="item"
                 app:argType="com.romanpulov.violetnote.model.BasicNoteItemA"

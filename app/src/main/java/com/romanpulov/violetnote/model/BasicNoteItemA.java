@@ -16,7 +16,7 @@ import java.util.Objects;
  * BasicNote item data
  * Created by rpulov on 11.08.2016.
  */
-public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
+public class BasicNoteItemA extends BasicCommonNoteA implements NameValueData, Parcelable {
     private long mNoteId;
     private String mName;
     private String mValue;
@@ -31,18 +31,22 @@ public class BasicNoteItemA extends BasicCommonNoteA implements Parcelable {
         mNoteId = value;
     }
 
+    @Override
     public String getName() {
         return mName;
     }
 
+    @Override
     public void setName(String name) {
         mName = name;
     }
 
+    @Override
     public String getValue() {
         return mValue;
     }
 
+    @Override
     public void setValue(String value) {
         mValue = value;
     }

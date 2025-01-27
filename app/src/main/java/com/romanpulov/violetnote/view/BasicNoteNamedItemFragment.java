@@ -134,6 +134,8 @@ public class BasicNoteNamedItemFragment extends BasicCommonNoteFragment {
     public void navigateToHEventHistory(BasicNoteItemA item) {
         NavHostFragment.findNavController(BasicNoteNamedItemFragment.this).navigate(
                 BasicNoteNamedItemFragmentDirections.actionBasicNoteNamedItemToBasicHistoryEventNamedItem()
+                        .setNote(model.getBasicNote())
+                        .setPassword(passUIStateModel == null ? null : passUIStateModel.getPassword().getValue())
                         .setItem(item));
     }
 

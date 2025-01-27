@@ -8,7 +8,7 @@ import com.romanpulov.violetnote.model.core.BasicEntityNoteA;
 /**
  * HNoteItem data class
  */
-public final class BasicHNoteItemA extends BasicEntityNoteA implements Parcelable {
+public final class BasicHNoteItemA extends BasicEntityNoteA implements NameValueData, Parcelable {
     private final long mEventId;
     public long getEventId() {
         return mEventId;
@@ -19,14 +19,28 @@ public final class BasicHNoteItemA extends BasicEntityNoteA implements Parcelabl
         return mNoteItemId;
     }
 
-    private final String mName;
+    private String mName;
+
+    @Override
     public String getName() {
         return mName;
     }
 
-    private final String mValue;
+    @Override
+    public void setName(String mName) {
+        this.mName = mName;
+    }
+
+    private String mValue;
+
+    @Override
     public String getValue() {
         return mValue;
+    }
+
+    @Override
+    public void setValue(String mValue) {
+        this.mValue = mValue;
     }
 
     // from event

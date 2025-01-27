@@ -2,6 +2,7 @@ package com.romanpulov.violetnote.view;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,19 +18,24 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.romanpulov.violetnote.R;
-import com.romanpulov.violetnote.databinding.ViewRecyclerViewListBinding;
+import com.romanpulov.violetnote.databinding.FragmentBasicHEventNamedItemListBinding;
 import com.romanpulov.violetnote.model.vm.BasicHEventNamedItemViewModel;
 import com.romanpulov.violetnote.model.BasicHNoteItemA;
+import com.romanpulov.violetnote.model.vm.PassUIStateViewModel;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
+import com.romanpulov.violetnote.view.helper.DisplayMessageHelper;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Objects;
 
 public class BasicHEventNamedItemFragment extends Fragment {
+    private static final String TAG = BasicHEventNamedItemFragment.class.getSimpleName();
+    private static final int EXPIRATION_DELAY = 60;
 
-    private ViewRecyclerViewListBinding binding;
+    private FragmentBasicHEventNamedItemListBinding binding;
     BasicHEventNamedItemViewModel model;
+    private PassUIStateViewModel passUIStateModel;
 
     BasicHEventNamedItemRecyclerViewAdapter mRecyclerViewAdapter;
 
@@ -67,7 +73,7 @@ public class BasicHEventNamedItemFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = ViewRecyclerViewListBinding.inflate(getLayoutInflater());
+        binding = FragmentBasicHEventNamedItemListBinding.inflate(getLayoutInflater());
         return binding.getRoot();
     }
 
@@ -76,7 +82,7 @@ public class BasicHEventNamedItemFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         Context context = view.getContext();
-        RecyclerView recyclerView = binding.getRoot();
+        RecyclerView recyclerView = binding.list;
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         // add decoration
         recyclerView.addItemDecoration(
@@ -86,6 +92,42 @@ public class BasicHEventNamedItemFragment extends Fragment {
         recyclerView.setAdapter(mRecyclerViewAdapter);
 
         model = new ViewModelProvider(this).get(BasicHEventNamedItemViewModel.class);
+
+        model.setPassword(BasicHEventNamedItemFragmentArgs.fromBundle(getArguments()).getPassword());
+        model.setBasicNote(BasicHEventNamedItemFragmentArgs.fromBundle(getArguments()).getNote());
+
+        // ui state for encrypted
+        if (model.getBasicNote().isEncrypted()) {
+            passUIStateModel = new ViewModelProvider(this).get(PassUIStateViewModel.class);
+
+            // set up expiration delay
+            passUIStateModel.getExpireHelper().setExpirationDelay(EXPIRATION_DELAY);
+            // observe expiration
+            passUIStateModel.getExpireHelper().getDataExpired().observe(this, expired -> {
+                Log.d(TAG, "Expiration changed to " + expired);
+                if (expired) {
+                    Navigation.findNavController(BasicHEventNamedItemFragment.this.requireView()).navigateUp();
+                }
+            });
+
+            passUIStateModel.setUIState(PassUIStateViewModel.UI_STATE_LOADING);
+
+            Observer<Integer> uiStateObserver = uiState -> {
+                Log.d(TAG, "uiState: " + uiState);
+                if (uiState == PassUIStateViewModel.UI_STATE_LOADING) {
+                    binding.includeIndeterminateProgress.getRoot().setVisibility(View.VISIBLE);
+                    binding.list.setVisibility(View.GONE);
+                } else if (uiState == PassUIStateViewModel.UI_STATE_LOADED) {
+                    passUIStateModel.getExpireHelper().initDataExpiration();
+
+                    binding.includeIndeterminateProgress.getRoot().setVisibility(View.GONE);
+                    binding.list.setVisibility(View.VISIBLE);
+                }
+            };
+            passUIStateModel.getUIState().observe(this, uiStateObserver);
+        }
+
+        // start loading
         model.setNoteItem(BasicHEventNamedItemFragmentArgs.fromBundle(getArguments()).getItem());
 
         Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).
@@ -96,6 +138,20 @@ public class BasicHEventNamedItemFragment extends Fragment {
             if (mRecyclerViewAdapter == null) {
                 mRecyclerViewAdapter = new BasicHEventNamedItemRecyclerViewAdapter(context, newNoteItems);
                 recyclerView.setAdapter(mRecyclerViewAdapter);
+            }
+            if (passUIStateModel != null) {
+                String processError;
+                if ((processError = model.getProcessError()) == null) {
+                    passUIStateModel.setUIState(PassUIStateViewModel.UI_STATE_LOADED);
+                } else {
+                    Navigation.findNavController(requireView()).navigateUp();
+                    DisplayMessageHelper.displayErrorMessage(requireActivity(), processError);
+                }
+
+                if (!newNoteItems.isEmpty()) {
+                    passUIStateModel.getExpireHelper().prolongDataExpiration();
+                }
+
             }
         };
         model.getBasicHNoteItems().observe(this, noteItemsObserver);
