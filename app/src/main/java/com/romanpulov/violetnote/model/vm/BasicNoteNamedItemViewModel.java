@@ -26,6 +26,7 @@ public class BasicNoteNamedItemViewModel extends BasicCommonNoteViewModel<BasicN
     private BasicNoteItemDAO mBasicNoteItemDAO;
 
     private MutableLiveData<Boolean> mNoteGroupsChanged;
+    private MutableLiveData<Boolean> mNoteItemsChanged;
 
     private BasicNoteA mBasicNote;
     private MutableLiveData<List<BasicNoteItemA>> mBasicNoteItems;
@@ -69,8 +70,12 @@ public class BasicNoteNamedItemViewModel extends BasicCommonNoteViewModel<BasicN
         }
     }
 
-    public void setNoteGroupsChanged(MutableLiveData<Boolean> mNoteGroupsChanged) {
-        this.mNoteGroupsChanged = mNoteGroupsChanged;
+    public void setNoteGroupsChanged(MutableLiveData<Boolean> noteGroupsChanged) {
+        this.mNoteGroupsChanged = noteGroupsChanged;
+    }
+
+    public void setNoteItemsChanged(MutableLiveData<Boolean> noteItemsChanged) {
+        this.mNoteItemsChanged = noteItemsChanged;
     }
 
     public BasicNoteA getBasicNote() {
@@ -125,11 +130,18 @@ public class BasicNoteNamedItemViewModel extends BasicCommonNoteViewModel<BasicN
     protected void onDataChangeActionCompleted() {
         loadNoteItems();
         onNoteGroupsChanged();
+        onNoteItemsChanged();
     }
 
     private void onNoteGroupsChanged() {
         if (mNoteGroupsChanged != null) {
             mNoteGroupsChanged.postValue(true);
+        }
+    }
+
+    private void onNoteItemsChanged() {
+        if (mNoteItemsChanged != null) {
+            mNoteItemsChanged.postValue(true);
         }
     }
 

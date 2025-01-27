@@ -332,9 +332,9 @@ public class BasicNoteFragment extends BasicCommonNoteFragment  {
     @Override
     public void onResume() {
         super.onResume();
-        if (Boolean.TRUE.equals(appViewModel.getNoteCheckedItemChanged().getValue())) {
+        if (Boolean.TRUE.equals(appViewModel.getNoteItemsChanged().getValue())) {
             model.loadNotes();
-            appViewModel.getNoteCheckedItemChanged().setValue(false);
+            appViewModel.getNoteItemsChanged().setValue(false);
         }
     }
 

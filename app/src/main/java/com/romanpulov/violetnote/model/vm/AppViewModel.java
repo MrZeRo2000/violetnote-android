@@ -9,7 +9,7 @@ import com.romanpulov.violetnote.db.DBBasicNoteHelper;
 public class AppViewModel extends AndroidViewModel {
     private long mPriceNoteParamTypeId;
     private final MutableLiveData<Boolean> mNoteGroupsChanged = new MutableLiveData<>(false);
-    private final MutableLiveData<Boolean> mNoteCheckedItemChanged = new MutableLiveData<>(false);
+    private final MutableLiveData<Boolean> mNoteItemsChanged = new MutableLiveData<>(false);
     private final MutableLiveData<Boolean> mNoteValuesChanged = new MutableLiveData<>(false);
 
     public AppViewModel(@NonNull Application application) {
@@ -31,8 +31,8 @@ public class AppViewModel extends AndroidViewModel {
     }
 
     @NonNull
-    public MutableLiveData<Boolean> getNoteCheckedItemChanged() {
-        return mNoteCheckedItemChanged;
+    public MutableLiveData<Boolean> getNoteItemsChanged() {
+        return mNoteItemsChanged;
     }
 
     @NonNull

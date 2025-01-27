@@ -22,7 +22,7 @@ public class BasicNoteCheckedItemViewModel extends BasicCommonNoteViewModel<Basi
 
     private long mPriceNoteParamTypeId;
     private MutableLiveData<Boolean> mNoteGroupsChanged;
-    private MutableLiveData<Boolean> mNoteCheckedItemChanged;
+    private MutableLiveData<Boolean> mNoteItemsChanged;
 
     private BasicNoteA mBasicNote;
     private MutableLiveData<List<BasicNoteItemA>> mBasicNoteItems;
@@ -40,12 +40,12 @@ public class BasicNoteCheckedItemViewModel extends BasicCommonNoteViewModel<Basi
         this.mPriceNoteParamTypeId = mPriceNoteParamTypeId;
     }
 
-    public void setNoteGroupsChanged(MutableLiveData<Boolean> mNoteGroupsChanged) {
-        this.mNoteGroupsChanged = mNoteGroupsChanged;
+    public void setNoteGroupsChanged(MutableLiveData<Boolean> noteGroupsChanged) {
+        this.mNoteGroupsChanged = noteGroupsChanged;
     }
 
-    public void setNoteCheckedItemChanged(MutableLiveData<Boolean> mNoteCheckedItemChanged) {
-        this.mNoteCheckedItemChanged = mNoteCheckedItemChanged;
+    public void setNoteItemsChanged(MutableLiveData<Boolean> noteItemsChanged) {
+        this.mNoteItemsChanged = noteItemsChanged;
     }
 
     public BasicNoteA getBasicNote() {
@@ -119,7 +119,7 @@ public class BasicNoteCheckedItemViewModel extends BasicCommonNoteViewModel<Basi
     protected void onDataChangeActionCompleted() {
         loadNoteItems();
         onNoteGroupsChanged();
-        onNoteCheckedItemChanged();
+        onNoteItemsChanged();
     }
 
     private void onNoteGroupsChanged() {
@@ -128,9 +128,9 @@ public class BasicNoteCheckedItemViewModel extends BasicCommonNoteViewModel<Basi
         }
     }
 
-    private void onNoteCheckedItemChanged() {
-        if (mNoteCheckedItemChanged != null) {
-            mNoteCheckedItemChanged.setValue(true);
+    private void onNoteItemsChanged() {
+        if (mNoteItemsChanged != null) {
+            mNoteItemsChanged.setValue(true);
         }
     }
 
@@ -174,7 +174,7 @@ public class BasicNoteCheckedItemViewModel extends BasicCommonNoteViewModel<Basi
             mBasicNoteItems.setValue(newItems);
 
             onNoteGroupsChanged();
-            onNoteCheckedItemChanged();
+            onNoteItemsChanged();
         }
     }
 

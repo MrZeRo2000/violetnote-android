@@ -365,7 +365,7 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
         appModel = new ViewModelProvider(requireActivity()).get(AppViewModel.class);
         model.setPriceNoteParamTypeId(appModel.getPriceNoteParamTypeId());
         model.setNoteGroupsChanged(appModel.getNoteGroupsChanged());
-        model.setNoteCheckedItemChanged(appModel.getNoteCheckedItemChanged());
+        model.setNoteItemsChanged(appModel.getNoteItemsChanged());
 
         Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).
                 setTitle(model.getBasicNote().getTitle());

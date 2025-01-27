@@ -292,6 +292,7 @@ public class BasicNoteNamedItemFragment extends BasicCommonNoteFragment {
 
         AppViewModel appModel = new ViewModelProvider(requireActivity()).get(AppViewModel.class);
         model.setNoteGroupsChanged(appModel.getNoteGroupsChanged());
+        model.setNoteItemsChanged(appModel.getNoteItemsChanged());
 
         // menu
         if (!model.getBasicNote().isEncrypted()) {
