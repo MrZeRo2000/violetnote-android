@@ -195,6 +195,7 @@
 
     <string name="ui_note_type_checked">Checked</string>
     <string name="ui_note_type_named">Named</string>
+    <string name="ui_note_type_named_password_protected">Named (password protected)</string>
     <string name="ui_note_title">Title</string>
     <string name="ui_note_value">Value</string>
     <string name="ui_name_value_title">Name and value</string>

@@ -44,9 +44,9 @@ public class BasicNoteEditFragment extends Fragment {
             } else {
                 BasicNoteA newItem = BasicNoteA.newEditInstance(
                         noteGroup.getId(),
-                        binding.noteTypeChecked.isChecked() ? 0 : 1,
+                        binding.noteTypeChecked.isChecked() ? BasicNoteA.NOTE_TYPE_CHECKED : BasicNoteA.NOTE_TYPE_NAMED,
                         binding.titleEditText.getText().toString().trim(),
-                        binding.isEncryptedCheckBox.isChecked(),
+                        binding.noteTypeNamedPasswordProtected.isChecked(),
                         null
                 );
 

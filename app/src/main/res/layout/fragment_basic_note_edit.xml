@@ -23,7 +23,7 @@
     <RadioGroup
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_marginTop="@dimen/text_margin"
         android:layout_below="@+id/title_edit_text"
         android:id="@+id/note_type_radio_group"
@@ -47,21 +47,21 @@
             android:textColor="@color/brightTextColor"
             android:theme="@style/RadioButton"
             />
+        <RadioButton android:id="@+id/note_type_named_password_protected"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/list_selector"
+            android:text="@string/ui_note_type_named_password_protected"
+            android:textColor="@color/brightTextColor"
+            android:theme="@style/RadioButton"
+            />
     </RadioGroup>
-
-    <CheckBox
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/note_type_radio_group"
-        android:layout_marginTop="@dimen/text_margin"
-        android:id="@+id/is_encrypted_check_box"
-        android:text="@string/password_required"
-        />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/is_encrypted_check_box"
+        android:layout_alignParentBottom="true"
         android:layout_marginTop="@dimen/text_margin"
         android:id="@+id/ok_button"
         android:background="@drawable/list_selector"
