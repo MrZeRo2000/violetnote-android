@@ -33,6 +33,7 @@ import java.util.Objects;
 
 public class BasicNoteNamedItemFragment extends BasicCommonNoteFragment {
     private static final String TAG = BasicNoteNamedItemFragment.class.getSimpleName();
+    private static final int EXPIRATION_DELAY = 300;
 
     private FragmentBasicNoteNamedItemListBinding binding;
     private BasicNoteNamedItemViewModel model;
@@ -300,6 +301,16 @@ public class BasicNoteNamedItemFragment extends BasicCommonNoteFragment {
             passUIStateModel = new ViewModelProvider(this).get(PassUIStateViewModel.class);
             model.setPassword(passUIStateModel.getPassword());
 
+            // set up expiration delay
+            passUIStateModel.getExpireHelper().setExpirationDelay(EXPIRATION_DELAY);
+            // observe expiration
+            passUIStateModel.getExpireHelper().getDataExpired().observe(this, expired -> {
+                Log.d(TAG, "Expiration changed to " + expired);
+                if (expired) {
+                    passUIStateModel.setPassword(null);
+                }
+            });
+
             binding.includePasswordInput.editTextPassword.setOnEditorActionListener((
                     v, actionId, event) -> {
                         String password;
@@ -320,6 +331,8 @@ public class BasicNoteNamedItemFragment extends BasicCommonNoteFragment {
                 if (uiState == PassUIStateViewModel.UI_STATE_PASSWORD_REQUIRED) {
                     requireActivity().removeMenuProvider(defaultMenuProvider);
 
+                    passUIStateModel.getExpireHelper().shutDown();
+
                     binding.includePasswordInput.getRoot().setVisibility(View.VISIBLE);
                     binding.includeIndeterminateProgress.getRoot().setVisibility(View.GONE);
                     binding.list.setVisibility(View.GONE);
@@ -333,6 +346,8 @@ public class BasicNoteNamedItemFragment extends BasicCommonNoteFragment {
                     mBottomToolbarHelper.hideLayout();
                 } else if (uiState == PassUIStateViewModel.UI_STATE_LOADED) {
                     requireActivity().addMenuProvider(defaultMenuProvider, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
+
+                    passUIStateModel.getExpireHelper().initDataExpiration();
 
                     binding.includePasswordInput.getRoot().setVisibility(View.GONE);
                     binding.includeIndeterminateProgress.getRoot().setVisibility(View.GONE);
@@ -362,6 +377,9 @@ public class BasicNoteNamedItemFragment extends BasicCommonNoteFragment {
                 } else {
                     passUIStateModel.setUIState(PassUIStateViewModel.UI_STATE_PASSWORD_REQUIRED);
                     DisplayMessageHelper.displayErrorMessage(requireActivity(), processError);
+                }
+                if (!newNoteItems.isEmpty()) {
+                    passUIStateModel.getExpireHelper().prolongDataExpiration();
                 }
             }
 

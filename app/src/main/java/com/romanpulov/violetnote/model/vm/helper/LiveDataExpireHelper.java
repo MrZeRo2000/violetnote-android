@@ -2,6 +2,7 @@ package com.romanpulov.violetnote.model.vm.helper;
 
 import android.util.Log;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import com.romanpulov.violetnote.view.helper.LoggerHelper;
 
@@ -11,9 +12,19 @@ import java.util.concurrent.TimeUnit;
 
 public class LiveDataExpireHelper {
     private static final String TAG = LiveDataExpireHelper.class.getSimpleName();
-    public static final int EXPIRATION_DELAY = 10;
+    private static final int DEFAULT_EXPIRATION_DELAY = 10;
 
-    private boolean mDataExpired = false;
+    private int mExpirationDelay = DEFAULT_EXPIRATION_DELAY;
+
+    public void setExpirationDelay(int mExpirationDelay) {
+        this.mExpirationDelay = mExpirationDelay;
+    }
+
+    private final MutableLiveData<Boolean> mDataExpired = new MutableLiveData<>(false);
+
+    public LiveData<Boolean> getDataExpired() {
+        return mDataExpired;
+    }
 
     private ScheduledExecutorService mTimerExecutorService;
 
@@ -28,13 +39,13 @@ public class LiveDataExpireHelper {
         mTimerExecutorService.schedule(() -> {
             // mPassDataResult.postValue(new PassDataResult(null, null));
             Log.d(TAG, "Data expired");
-            mDataExpired = true;
-        }, EXPIRATION_DELAY, TimeUnit.SECONDS);
+            mDataExpired.postValue(true);
+        }, mExpirationDelay, TimeUnit.SECONDS);
     }
 
     public void initDataExpiration() {
         Log.d(TAG, "Initialize data expiration");
-        this.mDataExpired = false;
+        this.mDataExpired.postValue(false);
         initTimer();
     }
 
@@ -62,17 +73,17 @@ public class LiveDataExpireHelper {
 
     public void prolongDataExpiration() {
         Log.d(TAG, "Prolong data expiration");
-        if (!mDataExpired) {
+        if (Boolean.FALSE.equals(mDataExpired.getValue())) {
             initTimer();
         }
     }
 
     public boolean checkDataExpired() {
-        if (mDataExpired && (mLiveData != null)) {
+        if (Boolean.TRUE.equals(mDataExpired.getValue()) && (mLiveData != null)) {
             Log.d(TAG, "Clear data as expired");
             mLiveData.setValue(null);
         }
-        return mDataExpired;
+        return Boolean.TRUE.equals(mDataExpired.getValue());
     }
 
     public void shutDown() {

@@ -1,9 +1,9 @@
 package com.romanpulov.violetnote.model.vm;
 
-import android.os.Bundle;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+import com.romanpulov.violetnote.model.vm.helper.LiveDataExpireHelper;
 
 import java.util.Objects;
 
@@ -11,19 +11,16 @@ public class PassUIStateViewModel extends ViewModel {
     public final static int UI_STATE_PASSWORD_REQUIRED = 0;
     public final static int UI_STATE_LOADING = 1;
     public final static int UI_STATE_LOADED = 2;
-    public final static int UI_STATE_LOAD_ERROR = 3;
 
     private final MutableLiveData<Integer> mUIState = new MutableLiveData<>(UI_STATE_PASSWORD_REQUIRED);
     private final MutableLiveData<String> mPassword = new MutableLiveData<>();
 
-    private Bundle mSelectionState;
-
-    public Bundle getSelectionState() {
-        return mSelectionState;
-    }
-
-    public void setSelectionState(Bundle selectionState) {
-        this.mSelectionState = selectionState;
+    private LiveDataExpireHelper mExpireHelper;
+    public LiveDataExpireHelper getExpireHelper() {
+        if (mExpireHelper == null) {
+            mExpireHelper = new LiveDataExpireHelper();
+        }
+        return mExpireHelper;
     }
 
     public LiveData<Integer> getUIState() {
@@ -49,9 +46,12 @@ public class PassUIStateViewModel extends ViewModel {
         }
     }
 
-    public void requirePassword() {
-        if (mPassword.getValue() != null) {
-            mPassword.postValue(null);
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+
+        if (mExpireHelper != null) {
+            mExpireHelper.shutDown();
         }
     }
 }
