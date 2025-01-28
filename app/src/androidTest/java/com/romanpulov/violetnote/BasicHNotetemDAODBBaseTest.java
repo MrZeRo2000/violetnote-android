@@ -39,7 +39,7 @@ public class BasicHNotetemDAODBBaseTest extends DBBaseTest {
             log("Getting event groups");
 
             // get all groups
-            List<BasicNoteGroupA> noteGroups = mDBNoteManager.mBasicNoteGroupDAO.getAll();
+            List<BasicNoteGroupA> noteGroups = mBasicNoteGroupDAO.getAll();
             Assert.assertNotEquals(0, noteGroups.size());
 
             // get history events group
@@ -56,7 +56,7 @@ public class BasicHNotetemDAODBBaseTest extends DBBaseTest {
             log("Getting animal notes");
 
             // get animals note
-            List<BasicNoteA> notes = mDBNoteManager.mBasicNoteDAO.getByGroup(historyEventsGroup);
+            List<BasicNoteA> notes = mBasicNoteDAO.getByGroup(historyEventsGroup);
             Assert.assertNotEquals(0, notes.size());
 
             BasicNoteA animalsNote = null;
@@ -98,7 +98,7 @@ public class BasicHNotetemDAODBBaseTest extends DBBaseTest {
             Assert.assertNotNull(metricsNote);
 
             BasicNoteItemA colorNoteItem = null;
-            for (BasicNoteItemA item : mDBNoteManager.mBasicNoteItemDAO.getByNote(metricsNote)) {
+            for (BasicNoteItemA item : mBasicNoteItemDAO.getByNote(metricsNote)) {
                 if (item.getName().equals("Color")) {
                     colorNoteItem = item;
                     break;

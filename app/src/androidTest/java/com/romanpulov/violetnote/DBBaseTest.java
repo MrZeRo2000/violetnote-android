@@ -7,9 +7,10 @@ import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.romanpulov.violetnote.db.DBBasicNoteHelper;
 import com.romanpulov.violetnote.db.DBBasicNoteOpenHelper;
-import com.romanpulov.violetnote.db.manager.DBNoteManager;
-
-
+import com.romanpulov.violetnote.db.dao.BasicCommonNoteDAO;
+import com.romanpulov.violetnote.db.dao.BasicNoteDAO;
+import com.romanpulov.violetnote.db.dao.BasicNoteGroupDAO;
+import com.romanpulov.violetnote.db.dao.BasicNoteItemDAO;
 
 /**
  * Base class for DB tests
@@ -17,8 +18,12 @@ import com.romanpulov.violetnote.db.manager.DBNoteManager;
 abstract class DBBaseTest {
     DBBasicNoteHelper mDBHelper;
     SQLiteDatabase mDB;
-    DBNoteManager mDBNoteManager;
     Context mContext;
+
+    BasicNoteDAO mBasicNoteDAO;
+    BasicNoteItemDAO mBasicNoteItemDAO;
+    BasicNoteGroupDAO mBasicNoteGroupDAO;
+    BasicCommonNoteDAO mBasicCommonNoteDAO;
 
     private Context getTargetContext() {
         return InstrumentationRegistry.getInstrumentation().getTargetContext();
@@ -39,7 +44,11 @@ abstract class DBBaseTest {
 
         mDBHelper.openDB();
         mDB = mDBHelper.getDB();
-        mDBNoteManager = new DBNoteManager(mContext);
+
+        mBasicNoteDAO = new BasicNoteDAO(mContext);
+        mBasicNoteItemDAO  = new BasicNoteItemDAO(mContext);
+        mBasicNoteGroupDAO = new BasicNoteGroupDAO(mContext);
+        mBasicCommonNoteDAO = new BasicCommonNoteDAO(mContext);
     }
 
     void sleep(long millis) {

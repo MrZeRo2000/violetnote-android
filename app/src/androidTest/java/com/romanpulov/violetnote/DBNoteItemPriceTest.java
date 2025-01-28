@@ -40,49 +40,49 @@ public final class DBNoteItemPriceTest extends DBBaseTest {
 
         //create new note
         BasicNoteA note = BasicNoteA.newEditInstance(BasicNoteGroupA.DEFAULT_NOTE_GROUP_ID, BasicNoteA.NOTE_TYPE_NAMED, "New note", false, null);
-        long result = mDBNoteManager.mBasicNoteDAO.insert(note);
+        long result = mBasicNoteDAO.insert(note);
         assertNotEquals(-1, result);
         note.setId(result);
 
         BasicNoteItemA noPriceNoteItem = BasicNoteItemA.newCheckedEditInstance(note.getId(), priceNoteParamTypeId, "Value without param");
-        result = mDBNoteManager.mBasicNoteItemDAO.insertWithNote(note, noPriceNoteItem);
+        result = mBasicNoteItemDAO.insertWithNote(note, noPriceNoteItem);
         assertNotEquals(-1, result);
         noPriceNoteItem.setId(result);
 
         BasicNoteItemA hasPriceNoteItem = BasicNoteItemA.newCheckedEditInstance(note.getId(), priceNoteParamTypeId, "Value with param 12.77");
-        result = mDBNoteManager.mBasicNoteItemDAO.insertWithNote(note, hasPriceNoteItem);
+        result = mBasicNoteItemDAO.insertWithNote(note, hasPriceNoteItem);
         assertNotEquals(-1, result);
         hasPriceNoteItem.setId(result);
 
         //total price from value
-        mDBNoteManager.mBasicNoteItemDAO.fillNoteDataItemsWithSummary(note);
+        mBasicNoteItemDAO.fillNoteDataItemsWithSummary(note);
         assertEquals(1277L, note.getSummary().getParams().get(priceNoteParamTypeId).longValue());
 
         //added price param to first item
         noPriceNoteItem.setParamLong(priceNoteParamTypeId, 200L);
-        result = mDBNoteManager.mBasicNoteItemDAO.updateNameValue(noPriceNoteItem);
+        result = mBasicNoteItemDAO.updateNameValue(noPriceNoteItem);
         assertNotEquals(0, result);
 
         //check total increased
-        mDBNoteManager.mBasicNoteItemDAO.fillNoteDataItemsWithSummary(note);
+        mBasicNoteItemDAO.fillNoteDataItemsWithSummary(note);
         assertEquals(1477L, note.getSummary().getParams().get(priceNoteParamTypeId).longValue());
 
         //changed price param for first item
         noPriceNoteItem.setParamLong(priceNoteParamTypeId, 100L);
-        result = mDBNoteManager.mBasicNoteItemDAO.updateNameValue(noPriceNoteItem);
+        result = mBasicNoteItemDAO.updateNameValue(noPriceNoteItem);
         assertNotEquals(0, result);
 
         //check total item decreased
-        mDBNoteManager.mBasicNoteItemDAO.fillNoteDataItemsWithSummary(note);
+        mBasicNoteItemDAO.fillNoteDataItemsWithSummary(note);
         assertEquals(1377L, note.getSummary().getParams().get(priceNoteParamTypeId).longValue());
 
         //removed price param
         noPriceNoteItem.setParamLong(priceNoteParamTypeId, 0L);
-        result = mDBNoteManager.mBasicNoteItemDAO.updateNameValue(noPriceNoteItem);
+        result = mBasicNoteItemDAO.updateNameValue(noPriceNoteItem);
         assertNotEquals(0, result);
 
         //total price back to initial value
-        mDBNoteManager.mBasicNoteItemDAO.fillNoteDataItemsWithSummary(note);
+        mBasicNoteItemDAO.fillNoteDataItemsWithSummary(note);
         assertEquals(1277L, note.getSummary().getParams().get(priceNoteParamTypeId).longValue());
     }
 }

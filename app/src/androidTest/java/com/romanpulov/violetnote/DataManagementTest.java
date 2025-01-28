@@ -10,6 +10,10 @@ import java.util.List;
 
 import androidx.test.filters.SmallTest;
 
+import com.romanpulov.violetnote.db.dao.BasicCommonNoteDAO;
+import com.romanpulov.violetnote.db.dao.BasicNoteDAO;
+import com.romanpulov.violetnote.db.dao.BasicNoteGroupDAO;
+import com.romanpulov.violetnote.db.dao.BasicNoteItemDAO;
 import org.junit.*;
 
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
@@ -57,9 +61,12 @@ public class DataManagementTest extends DBBaseTest {
     public void internalTestMovePrev() {
         log("testMovePrev");
 
-        BasicNoteGroupA group = mDBNoteManager.mBasicNoteGroupDAO.getById(2);
+        BasicNoteGroupDAO basicNoteGroupDAO = new BasicNoteGroupDAO(getTargetContext());
+        BasicNoteDAO basicNoteDAO = new BasicNoteDAO(getTargetContext());
 
-        List<BasicNoteA> noteList = mDBNoteManager.mBasicNoteDAO.getTotalsByGroup(group);
+        BasicNoteGroupA group = basicNoteGroupDAO.getById(2);
+
+        List<BasicNoteA> noteList = basicNoteDAO.getTotalsByGroup(group);
 
         // generator should be ran first
         assertTrue(noteList.size() >= DataGenerator.MAX_NOTES);
@@ -86,38 +93,49 @@ public class DataManagementTest extends DBBaseTest {
         log ("Get next order id(100) = " + mDBHelper.getNextOrderId(NotesTableDef.TABLE_NAME, 0, 100));
 
         //validate exchange
-        BasicNoteA note1 = mDBNoteManager.mBasicNoteDAO.getById(5);
-        BasicNoteA note2 = mDBNoteManager.mBasicNoteDAO.getById(4);
+        BasicNoteA note1 = basicNoteDAO.getById(5);
+        BasicNoteA note2 = basicNoteDAO.getById(4);
+        assert note1 != null;
         long order1 = note1.getOrderId();
+        assert note2 != null;
         long order2 = note2.getOrderId();
 
         mDBHelper.exchangeOrderId(NotesTableDef.TABLE_NAME, 0, note1.getOrderId(), note2.getOrderId());
 
-        note1 = mDBNoteManager.mBasicNoteDAO.getById(5);
-        note2 = mDBNoteManager.mBasicNoteDAO.getById(4);
+        note1 = basicNoteDAO.getById(5);
+        note2 = basicNoteDAO.getById(4);
 
+        assert note1 != null;
         assertEquals(note1.getOrderId(), order2);
+        assert note2 != null;
         assertEquals(note2.getOrderId(), order1);
 
         mDBHelper.exchangeOrderId(NotesTableDef.TABLE_NAME, 0, note1.getOrderId(), note2.getOrderId());
 
-        note1 = mDBNoteManager.mBasicNoteDAO.getById(5);
-        note2 = mDBNoteManager.mBasicNoteDAO.getById(4);
+        note1 = basicNoteDAO.getById(5);
+        note2 = basicNoteDAO.getById(4);
 
+        assert note1 != null;
         assertEquals(note1.getOrderId(), order1);
+        assert note2 != null;
         assertEquals(note2.getOrderId(), order2);
 
-        //move top
-        note1 = mDBNoteManager.mBasicNoteDAO.getById(5);
-        mDBNoteManager.mBasicCommonNoteDAO.moveTop(note1);
+        BasicCommonNoteDAO basicCommonNoteDAO = new BasicCommonNoteDAO(getTargetContext());
 
-        note1 = mDBNoteManager.mBasicNoteDAO.getById(5);
-        assertEquals(note1.getOrderId(), 1);
+        //move top
+        note1 = basicNoteDAO.getById(5);
+        assert note1 != null;
+        basicCommonNoteDAO.moveTop(note1);
+
+        note1 = basicNoteDAO.getById(5);
+        assert note1 != null;
+        assertEquals(1, note1.getOrderId());
 
         //move bottom
-        mDBNoteManager.mBasicCommonNoteDAO.moveBottom(note1);
-        note1 = mDBNoteManager.mBasicNoteDAO.getById(5);
-        assertEquals(note1.getOrderId(), noteList.size());
+        basicCommonNoteDAO.moveBottom(note1);
+        note1 = basicNoteDAO.getById(5);
+        assert note1 != null;
+        assertEquals(noteList.size(), note1.getOrderId());
 
         //order id
         long orderId = mDBHelper.getOrderId(NotesTableDef.TABLE_NAME, note1.getId());
@@ -149,6 +167,7 @@ public class DataManagementTest extends DBBaseTest {
         log ("testCheckCountQuery time: " + (endTime - startTime));
     }
 
+    @Test
     public void testCheckCount() {
         DBBasicNoteHelper dbHelper = DBBasicNoteHelper.getInstance(getTargetContext());
         SQLiteDatabase db = dbHelper.getDB();
@@ -184,15 +203,18 @@ public class DataManagementTest extends DBBaseTest {
     public void internalTestCheckQueryTotalsRaw() {
         log("testCheckQueryTotalsRaw");
 
+        BasicNoteGroupDAO basicNoteGroupDAO = new BasicNoteGroupDAO(getTargetContext());
+        BasicNoteDAO basicNoteDAO = new BasicNoteDAO(getTargetContext());
+
         long startTime = System.nanoTime();
 
-        BasicNoteGroupA group = mDBNoteManager.mBasicNoteGroupDAO.getById(2);
+        BasicNoteGroupA group = basicNoteGroupDAO.getById(2);
 
-        List<BasicNoteA> noteList = mDBNoteManager.mBasicNoteDAO.getTotalsByGroup(group);
+        List<BasicNoteA> noteList = basicNoteDAO.getTotalsByGroup(group);
         long endTime = System.nanoTime();
 
         log ("testCheckQueryTotalsRaw time: " + (endTime - startTime) + ", size = " + noteList.size());
-        log ("testCheckQueryTotalsRaw List: " + noteList.toString());
+        log ("testCheckQueryTotalsRaw List: " + noteList);
     }
 
     public void internalTestPriceParams() {
@@ -200,9 +222,13 @@ public class DataManagementTest extends DBBaseTest {
 
         long priceNoteParamTypeId = DBBasicNoteHelper.getInstance(getTargetContext()).getDBDictionaryCache().getPriceNoteParamTypeId();
 
-        BasicNoteA note = mDBNoteManager.mBasicNoteDAO.getById(2);
-        mDBNoteManager.mBasicNoteItemDAO.fillNoteDataItemsWithSummary(note);
+        BasicNoteDAO basicNoteDAO = new BasicNoteDAO(getTargetContext());
+        BasicNoteItemDAO basicNoteItemDAO = new BasicNoteItemDAO(getTargetContext());
 
+        BasicNoteA note = basicNoteDAO.getById(2);
+        basicNoteItemDAO.fillNoteDataItemsWithSummary(note);
+
+        assert note != null;
         BasicNoteItemA noteItem = note.getItems().get(4);
         assertNotEquals(0, noteItem.getParamLong(priceNoteParamTypeId));
 

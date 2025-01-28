@@ -7,11 +7,12 @@ import java.util.List;
 import androidx.test.filters.SmallTest;
 import androidx.test.platform.app.InstrumentationRegistry;
 
+import com.romanpulov.violetnote.db.dao.BasicNoteDAO;
+import com.romanpulov.violetnote.db.dao.BasicNoteGroupDAO;
 import org.junit.*;
 import static org.junit.Assert.*;
 
 import com.romanpulov.violetnote.db.DBBasicNoteOpenHelper;
-import com.romanpulov.violetnote.db.manager.DBNoteManager;
 import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteGroupA;
 
@@ -23,15 +24,8 @@ public class ApplicationTest {
         return InstrumentationRegistry.getInstrumentation().getTargetContext();
     }
 
-
     private static void log(String message) {
         Log.d(TAG, message);
-    }
-
-    @Test
-    public void test1() {
-        log("Test message");
-        assertEquals(1, 1);
     }
 
     @Test
@@ -41,31 +35,34 @@ public class ApplicationTest {
         log("Delete database");
         getTargetContext().deleteDatabase(DBBasicNoteOpenHelper.DATABASE_NAME);
 
-        DBNoteManager noteManager = new DBNoteManager(getTargetContext());
+        BasicNoteGroupDAO basicNoteGroupDAO = new BasicNoteGroupDAO(getTargetContext());
+
         log("Get group");
-        BasicNoteGroupA group = noteManager.mBasicNoteGroupDAO.getById(2);
+        BasicNoteGroupA group = basicNoteGroupDAO.getById(2);
+
+        BasicNoteDAO basicNoteDAO = new BasicNoteDAO(getTargetContext());
 
         log("Create note");
-        noteManager.mBasicNoteDAO.insert(BasicNoteA.newEditInstance(BasicNoteGroupA.DEFAULT_NOTE_GROUP_ID, 1,"New Note", false, null));
-        List<BasicNoteA> noteList = noteManager.mBasicNoteDAO.getTotalsByGroup(group);
-        assertEquals(noteList.size(), 1);
+        basicNoteDAO.insert(BasicNoteA.newEditInstance(BasicNoteGroupA.DEFAULT_NOTE_GROUP_ID, 1,"New Note", false, null));
+        List<BasicNoteA> noteList = basicNoteDAO.getTotalsByGroup(group);
+        assertEquals(1, noteList.size());
 
         log("Check note");
         BasicNoteA newNote = noteList.get(0);
         log("New note:" + newNote);
-        assertEquals(newNote.getOrderId(), 1);
+        assertEquals(1, newNote.getOrderId());
 
         log("Edit note");
         newNote.setTitle("Changed title");
-        noteManager.mBasicNoteDAO.update(newNote);
+        basicNoteDAO.update(newNote);
         log("Edited note:" + newNote);
 
         BasicNoteA deleteNote = noteList.get(0);
         log("Delete note");
 
-        noteManager.mBasicNoteDAO.delete(deleteNote);
-        noteList = noteManager.mBasicNoteDAO.getTotalsByGroup(group);
-        assertEquals(noteList.size(), 0);
+        basicNoteDAO.delete(deleteNote);
+        noteList = basicNoteDAO.getTotalsByGroup(group);
+        assertEquals(0, noteList.size());
 
         log("****************** testDBNote finish");
     }
