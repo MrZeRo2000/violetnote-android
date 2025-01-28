@@ -3,7 +3,9 @@ package com.romanpulov.violetnote;
 import android.util.Log;
 
 import com.romanpulov.violetnote.db.DBDataUpgradeManager;
+import com.romanpulov.violetnote.db.dao.BasicHEventDAO;
 import com.romanpulov.violetnote.db.dao.BasicHNoteCOItemDAO;
+import com.romanpulov.violetnote.db.dao.BasicHNoteItemDAO;
 import com.romanpulov.violetnote.model.BasicHEventA;
 import com.romanpulov.violetnote.model.BasicHNoteCOItemA;
 import com.romanpulov.violetnote.model.BasicHNoteItemA;
@@ -17,7 +19,7 @@ import org.junit.Assert;
 import java.util.List;
 
 public class BasicHNotetemDAODBBaseTest extends DBBaseTest {
-    private final static String TAG = "BasicHNotetemDAODBBaseTest";
+    private final static String TAG = BasicHNotetemDAODBBaseTest.class.getSimpleName();
 
     private static void log(String message) {
         Log.d(TAG, message);
@@ -72,10 +74,14 @@ public class BasicHNotetemDAODBBaseTest extends DBBaseTest {
             }
             Assert.assertNotNull(animalsNote);
 
-            List<BasicHNoteCOItemA> hNoteCOItems = mDBHManager.mBasicHNoteCOItemDAO.getByNoteId(animalsNote.getId());
+            BasicHNoteCOItemDAO basicHNoteCOItemDAO = new BasicHNoteCOItemDAO(mContext);
+            BasicHEventDAO basicHEventDAO = new BasicHEventDAO(mContext);
+
+
+            List<BasicHNoteCOItemA> hNoteCOItems = basicHNoteCOItemDAO.getByNoteId(animalsNote.getId());
             Assert.assertEquals(4, hNoteCOItems.size());
 
-            List<BasicHEventA> hEvents = mDBHManager.mBasicHEventDAO.getByCOItemsNoteId(animalsNote.getId());
+            List<BasicHEventA> hEvents = basicHEventDAO.getByCOItemsNoteId(animalsNote.getId());
             Assert.assertEquals(3, hEvents.size());
 
             Assert.assertEquals(1, hEvents.get(0).getItemCount());
@@ -84,7 +90,7 @@ public class BasicHNotetemDAODBBaseTest extends DBBaseTest {
 
             (new DBDataUpgradeManager(mDB)).upgradeData(4);
 
-            hEvents = mDBHManager.mBasicHEventDAO.getByCOItemsNoteId(animalsNote.getId());
+            hEvents = basicHEventDAO.getByCOItemsNoteId(animalsNote.getId());
             Assert.assertEquals(2, hEvents.size());
 
             //HNoteItem
@@ -101,7 +107,9 @@ public class BasicHNotetemDAODBBaseTest extends DBBaseTest {
 
             Assert.assertNotNull(colorNoteItem);
 
-            List<BasicHNoteItemA> hNoteItems = mDBHManager.mBasicHNoteItemDAO.getByNoteItemIdWithEvents(colorNoteItem.getId());
+            BasicHNoteItemDAO basicHNoteItemDAO = new BasicHNoteItemDAO(mContext);
+
+            List<BasicHNoteItemA> hNoteItems = basicHNoteItemDAO.getByNoteItemIdWithEvents(colorNoteItem.getId());
             Assert.assertEquals(3, hNoteItems.size());
 
             closeDB();
