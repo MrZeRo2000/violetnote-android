@@ -171,10 +171,6 @@ public class BasicNoteNamedItemFragment extends BasicCommonNoteFragment {
                             NavHostFragment.findNavController(BasicNoteNamedItemFragment.this).navigate(
                                     BasicNoteNamedItemFragmentDirections.actionBasicNoteNamedItemToBasicNoteNamedItemEdit()
                                             .setEditItem(selectedNoteItems.get(0)));
-                        } else if (itemId == R.id.history) {
-                            if (selectedNoteItems.size() == 1) {
-                                navigateToHEventHistory(selectedNoteItems.get(0));
-                            }
                         } else if (itemId == R.id.select_all) {
                             performSelectAll();
                         }
@@ -188,8 +184,10 @@ public class BasicNoteNamedItemFragment extends BasicCommonNoteFragment {
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             mode.getMenuInflater().inflate(R.menu.menu_listitem_namevalue_actions, menu);
 
-            model.getRelatedNotes().observe(BasicNoteNamedItemFragment.this, relatedNotes ->
-                    MenuHelper.buildMoveToOtherSubMenu(requireContext(), menu, relatedNotes));
+            if (!model.getBasicNote().isEncrypted()) {
+                model.getRelatedNotes().observe(BasicNoteNamedItemFragment.this, relatedNotes ->
+                        MenuHelper.buildMoveToOtherSubMenu(requireContext(), menu, relatedNotes));
+            }
 
             updateTitle(mode);
 

@@ -30,7 +30,7 @@ public class ActionHelper {
                 int itemId = menuItem.getItemId();
                 if (itemId == R.id.select_all) {
                     isVisible = !((selectedCount == totalCount));
-                } else if (itemId == R.id.edit_value || itemId == R.id.edit || itemId == R.id.history) {
+                } else if (itemId == R.id.edit_value || itemId == R.id.edit) {
                     isVisible = selectedCount == 1;
                 } else if (itemId == R.id.move_up || itemId == R.id.move_down || itemId == R.id.move_top || itemId == R.id.move_bottom || itemId == R.id.priority_up || itemId == R.id.priority_down) {
                     isVisible = selectedCount != totalCount;

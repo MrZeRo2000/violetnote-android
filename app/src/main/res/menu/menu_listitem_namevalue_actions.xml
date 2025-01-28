@@ -25,10 +25,4 @@
         android:icon="@drawable/ic_action_edit"
         app:showAsAction="ifRoom"
         />
-    <item
-        android:id="@+id/history"
-        android:title="@string/action_history"
-        android:icon="@drawable/ic_change_history"
-        app:showAsAction="ifRoom"
-        />
 </menu>
