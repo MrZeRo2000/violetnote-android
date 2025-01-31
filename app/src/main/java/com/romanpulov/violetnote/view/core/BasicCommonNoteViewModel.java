@@ -95,4 +95,40 @@ public abstract class BasicCommonNoteViewModel<T extends BasicCommonNoteA> exten
             onDataChangeActionCompleted();
         }
     }
+
+    public void priorityUp(List<T> items, UIAction<T> action) {
+        BasicOrderedEntityNoteA.sortAsc(items);
+        boolean result = false;
+
+        for (BasicCommonNoteA item : items) {
+            if (getBasicCommonNoteDAO().priorityUp(item)) {
+                result = true;
+            } else {
+                break;
+            }
+        }
+
+        if (result) {
+            setAction(action);
+            onDataChangeActionCompleted();
+        }
+    }
+
+    public void priorityDown(List<T> items, UIAction<T> action) {
+        BasicOrderedEntityNoteA.sortDesc(items);
+        boolean result = false;
+
+        for (BasicCommonNoteA item : items) {
+            if (getBasicCommonNoteDAO().priorityDown(item)) {
+                result = true;
+            } else {
+                break;
+            }
+        }
+
+        if (result) {
+            setAction(action);
+            onDataChangeActionCompleted();
+        }
+    }
 }

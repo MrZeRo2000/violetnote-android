@@ -115,6 +115,22 @@ public abstract class BasicCommonNoteFragment extends Fragment {
                                 mRecyclerViewSelector,
                                 mRecyclerView));
                 return true;
+            }  else if (itemId == R.id.priority_up) {
+                model.priorityUp(selectedItems,
+                        new BasicUIMoveAction<>(
+                                selectedItems,
+                                MovementDirection.DIRECTION_UP,
+                                mRecyclerViewSelector,
+                                mRecyclerView));
+                return true;
+            }  else if (itemId == R.id.priority_down) {
+                model.priorityDown(selectedItems,
+                        new BasicUIMoveAction<>(
+                                selectedItems,
+                                MovementDirection.DIRECTION_DOWN,
+                                mRecyclerViewSelector,
+                                mRecyclerView));
+                return true;
             }
         }
         return false;

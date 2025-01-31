@@ -79,7 +79,7 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
 
     private void setupBottomToolbar() {
         mBottomToolbarHelper = BottomToolbarHelper.from(binding.fragmentToolbarBottom, this::processMoveMenuItemClick);
-        requireActivity().getMenuInflater().inflate(R.menu.menu_listitem_bottom_move_actions, binding.fragmentToolbarBottom.getMenu());
+        requireActivity().getMenuInflater().inflate(R.menu.menu_listitem_bottom_actions, binding.fragmentToolbarBottom.getMenu());
         binding.fragmentToolbarBottom.setVisibility(View.GONE);
     }
 
