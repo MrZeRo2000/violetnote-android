@@ -15,7 +15,6 @@ import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.appcompat.view.ActionMode;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -46,7 +45,6 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
 
     private InputActionHelper mInputActionHelper;
     private CheckoutProgressHelper mCheckoutProgressHelper;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     private int mCheckedUpdateInterval;
 
@@ -214,6 +212,7 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
             }
 
             hideAddLayout();
+            binding.swiperefresh.setEnabled(false);
 
             return true;
         }
@@ -229,6 +228,8 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
             if (mRecyclerViewSelector != null) {
                 mRecyclerViewSelector.destroyActionMode();
             }
+
+            binding.swiperefresh.setEnabled(true);
         }
 
         @Override
@@ -279,8 +280,7 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
         mRecyclerView.setAdapter(mRecyclerViewAdapter);
 
         //swipe refresh
-        mSwipeRefreshLayout = binding.swiperefresh;
-        mSwipeRefreshLayout.setOnRefreshListener(() -> {
+        binding.swiperefresh.setOnRefreshListener(() -> {
             if (mRecyclerViewSelector.getActionMode() == null) {
                 model.refresh();
             }
@@ -350,7 +350,7 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
                                     .setNote(model.getBasicNote()));
                     return true;
                 } else if (itemId == R.id.action_refresh) {
-                    setSwipeRefreshing(true);
+                    binding.swiperefresh.setRefreshing(true);
                     model.refresh();
                     return true;
                 } else {
@@ -387,7 +387,7 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
                         newNoteItems,
                         model.getBasicNoteItemParamsSummary());
             }
-            setSwipeRefreshing(false);
+            binding.swiperefresh.setRefreshing(false);
             updateCheckedItems();
 
             UIAction<BasicNoteItemA> action = model.getAction();
@@ -453,12 +453,6 @@ public class BasicNoteCheckedItemFragment extends BasicCommonNoteFragment implem
     public void hideAddLayout() {
         if (mInputActionHelper != null)
             mInputActionHelper.hideLayout();
-    }
-
-    public void setSwipeRefreshing(boolean value) {
-        if (mSwipeRefreshLayout != null) {
-            mSwipeRefreshLayout.setRefreshing(value);
-        }
     }
 
     public void performCheckOut() {
