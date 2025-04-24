@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.romanpulov.violetnote.R;
@@ -15,7 +14,6 @@ import com.romanpulov.violetnote.model.BasicNoteItemA;
 import com.romanpulov.violetnote.view.core.RecyclerViewHelper;
 import com.romanpulov.violetnote.view.core.ViewSelectorHelper;
 import com.romanpulov.violetnote.view.helper.DiffUtilHelper;
-import com.romanpulov.violetnote.view.helper.PriorityDisplayHelper;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -58,9 +56,6 @@ public class BasicNoteNamedItemRecyclerViewAdapter extends RecyclerView.Adapter<
         holder.mValueView.setText(mItems.get(position).getValue());
         holder.mLastModifiedView.setText(holder.mItem.getLastModifiedString());
 
-        // priority display
-        PriorityDisplayHelper.updateImageViewPriority(holder.mPriorityView, holder.mItem.getPriority());
-
         // background
         holder.updateBackground();
     }
@@ -74,7 +69,6 @@ public class BasicNoteNamedItemRecyclerViewAdapter extends RecyclerView.Adapter<
         private final TextView mNameView;
         private final TextView mValueView;
         private final TextView mLastModifiedView;
-        private final ImageView mPriorityView;
         private BasicNoteItemA mItem;
 
         public ViewHolder(View view, ViewSelectorHelper.AbstractViewSelector<Integer> viewSelector) {
@@ -82,7 +76,6 @@ public class BasicNoteNamedItemRecyclerViewAdapter extends RecyclerView.Adapter<
             mNameView = view.findViewById(R.id.name);
             mValueView = view.findViewById(R.id.value);
             mLastModifiedView = view.findViewById(R.id.last_modified);
-            mPriorityView = view.findViewById(R.id.priority);
         }
 
         @Override
