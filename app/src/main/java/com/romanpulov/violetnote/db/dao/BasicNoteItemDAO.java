@@ -54,7 +54,7 @@ public final class BasicNoteItemDAO extends AbstractBasicNoteItemDAO<BasicNoteIt
         readCursor(new CursorReaderHandler() {
             @Override
             public Cursor createCursor() {
-                return mDB.query(
+                return getDB().query(
                         NoteItemsTableDef.TABLE_NAME,
                         NoteItemsTableDef.TABLE_COLS,
                         DBCommonDef.NOTE_ID_COLUMN_NAME + " = ?",
@@ -80,7 +80,7 @@ public final class BasicNoteItemDAO extends AbstractBasicNoteItemDAO<BasicNoteIt
         readCursor(new CursorReaderHandler() {
             @Override
             public Cursor createCursor() {
-                return mDB.query(
+                return getDB().query(
                         NoteItemsTableDef.TABLE_NAME,
                         NoteItemsTableDef.TABLE_COLS,
                         DBCommonDef.ID_COLUMN_NAME + "=?",
@@ -106,7 +106,7 @@ public final class BasicNoteItemDAO extends AbstractBasicNoteItemDAO<BasicNoteIt
         readCursor(new CursorReaderHandler() {
             @Override
             public Cursor createCursor() {
-                return mDB.query(
+                return getDB().query(
                         NoteItemsTableDef.TABLE_NAME,
                         NoteItemsTableDef.TABLE_COLS,
                         DBCommonDef.NOTE_ID_COLUMN_NAME + " = ?",
@@ -142,7 +142,7 @@ public final class BasicNoteItemDAO extends AbstractBasicNoteItemDAO<BasicNoteIt
         readCursor(new CursorReaderHandler() {
             @Override
             public Cursor createCursor() {
-                return mDB.query(
+                return getDB().query(
                         NoteItemsTableDef.TABLE_NAME,
                         NoteItemsTableDef.TABLE_COLS,
                         DBCommonDef.NOTE_ID_COLUMN_NAME + " = ?",
@@ -186,7 +186,7 @@ public final class BasicNoteItemDAO extends AbstractBasicNoteItemDAO<BasicNoteIt
         cv.put(NoteItemsTableDef.LAST_MODIFIED_COLUMN_NAME, System.currentTimeMillis());
         cv.put(NoteItemsTableDef.CHECKED_COLUMN_NAME, BooleanUtils.toInt(checked));
 
-        return mDB.update(NoteItemsTableDef.TABLE_NAME, cv, DBCommonDef.ID_COLUMN_NAME + " = ?" , new String[] {String.valueOf(item.getId())});
+        return getDB().update(NoteItemsTableDef.TABLE_NAME, cv, DBCommonDef.ID_COLUMN_NAME + " = ?" , new String[] {String.valueOf(item.getId())});
     }
 
     public long updateChecked(Collection<BasicNoteItemA> items, boolean checked) {
@@ -206,7 +206,7 @@ public final class BasicNoteItemDAO extends AbstractBasicNoteItemDAO<BasicNoteIt
             cv.put(NoteItemsTableDef.NAME_COLUMN_NAME, item.getName());
         cv.put(NoteItemsTableDef.VALUE_COLUMN_NAME, item.getValue());
 
-        long result = mDB.update(NoteItemsTableDef.TABLE_NAME, cv, DBCommonDef.ID_COLUMN_NAME + " = ?" , new String[] {String.valueOf(item.getId())});
+        long result = getDB().update(NoteItemsTableDef.TABLE_NAME, cv, DBCommonDef.ID_COLUMN_NAME + " = ?" , new String[] {String.valueOf(item.getId())});
 
         getBasicNoteItemParamsDAO().deleteByNoteItem(item);
         getBasicNoteItemParamsDAO().insertWithId(item.getId(), item.getNoteItemParams());
@@ -229,7 +229,7 @@ public final class BasicNoteItemDAO extends AbstractBasicNoteItemDAO<BasicNoteIt
         cv.put(DBCommonDef.NOTE_ID_COLUMN_NAME, otherNoteId);
         cv.put(DBCommonDef.ORDER_COLUMN_NAME, otherOrderId);
 
-        return mDB.update(NoteItemsTableDef.TABLE_NAME, cv, DBCommonDef.ID_COLUMN_NAME + " = ?" , new String[] {String.valueOf(note.getId())});
+        return getDB().update(NoteItemsTableDef.TABLE_NAME, cv, DBCommonDef.ID_COLUMN_NAME + " = ?" , new String[] {String.valueOf(note.getId())});
     }
 
     public int moveToOtherNote(@NonNull BasicNoteItemA noteItem, @NonNull BasicNoteA otherNote) {
@@ -254,7 +254,7 @@ public final class BasicNoteItemDAO extends AbstractBasicNoteItemDAO<BasicNoteIt
         cv.put(NoteItemsTableDef.CHECKED_COLUMN_NAME, item.isChecked());
         cv.put(NoteItemsTableDef.PRIORITY_COLUMN_NAME, item.getPriority());
 
-        long newRowId = mDB.insert(NoteItemsTableDef.TABLE_NAME, null, cv);
+        long newRowId = getDB().insert(NoteItemsTableDef.TABLE_NAME, null, cv);
 
         if (newRowId > 0) {
             getBasicNoteItemParamsDAO().insertWithId(newRowId, item.getNoteItemParams());

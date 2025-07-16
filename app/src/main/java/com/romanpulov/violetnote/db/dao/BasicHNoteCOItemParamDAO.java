@@ -28,7 +28,7 @@ public final class BasicHNoteCOItemParamDAO extends AbstractDAO<BasicHNoteCOItem
         readCursor(new CursorReaderHandler() {
             @Override
             public Cursor createCursor() {
-                return mDB.query(
+                return getDB().query(
                         HNoteCOItemParamsTableDef.TABLE_NAME,
                         HNoteCOItemParamsTableDef.TABLE_COLS,
                         null,
@@ -64,7 +64,7 @@ public final class BasicHNoteCOItemParamDAO extends AbstractDAO<BasicHNoteCOItem
         cv.put(HNoteCOItemParamsTableDef.V_INT_COLUMN_NAME, object.getNoteItemParamValue().paramValue.vInt);
         cv.put(HNoteCOItemParamsTableDef.V_TEXT_COLUMN_NAME, object.getNoteItemParamValue().paramValue.vText);
 
-        return mDB.insert(HNoteCOItemParamsTableDef.TABLE_NAME, null, cv);
+        return getDB().insert(HNoteCOItemParamsTableDef.TABLE_NAME, null, cv);
     }
 
     @Override

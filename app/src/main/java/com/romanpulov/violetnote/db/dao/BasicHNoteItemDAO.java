@@ -34,7 +34,7 @@ public final class BasicHNoteItemDAO extends AbstractBasicHEventItemDAO<BasicHNo
         readCursor(new CursorReaderHandler() {
             @Override
             public Cursor createCursor() {
-                return mDB.query(
+                return getDB().query(
                         HNoteItemsTableDef.TABLE_NAME,
                         HNoteItemsTableDef.TABLE_COLS,
                         null,
@@ -67,7 +67,7 @@ public final class BasicHNoteItemDAO extends AbstractBasicHEventItemDAO<BasicHNo
         readCursor(new CursorReaderHandler() {
             @Override
             public Cursor createCursor() {
-                return mDB.query(
+                return getDB().query(
                         HNoteItemsTableDef.TABLE_NAME,
                         HNoteItemsTableDef.TABLE_COLS,
                         HNoteItemsTableDef.NOTE_ITEM_ID_COLUMN_NAME + " = ?",
@@ -99,7 +99,7 @@ public final class BasicHNoteItemDAO extends AbstractBasicHEventItemDAO<BasicHNo
         readCursor(new CursorReaderHandler() {
             @Override
             public Cursor createCursor() {
-                return mDB.rawQuery(
+                return getDB().rawQuery(
                         H_NOTE_ITEM_EVENTS_BY_NOTE_ITEM_ID,
                         new String[]{String.valueOf(noteItemId)}
                 );
@@ -135,7 +135,7 @@ public final class BasicHNoteItemDAO extends AbstractBasicHEventItemDAO<BasicHNo
         cv.put(HNoteItemsTableDef.NAME_COLUMN_NAME, object.getName());
         cv.put(HNoteItemsTableDef.VALUE_COLUMN_NAME, object.getValue());
 
-        return mDB.insert(HNoteItemsTableDef.TABLE_NAME, null, cv);
+        return getDB().insert(HNoteItemsTableDef.TABLE_NAME, null, cv);
     }
 
     public void saveEvent(@NonNull BasicNoteItemA noteItem) {

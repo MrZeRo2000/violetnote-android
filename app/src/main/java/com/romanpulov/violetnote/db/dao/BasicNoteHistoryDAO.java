@@ -24,6 +24,6 @@ public final class BasicNoteHistoryDAO extends AbstractDAO<BasicNoteHistoryItemA
         cv.put(NoteItemsHistoryTableDef.NOTE_ID_COLUMN_NAME, note.getId());
         cv.put(NoteItemsHistoryTableDef.VALUE_COLUMN_NAME, value);
 
-        return mDB.insert(NoteItemsHistoryTableDef.TABLE_NAME, null, cv);
+        return getDB().insert(NoteItemsHistoryTableDef.TABLE_NAME, null, cv);
     }
 }

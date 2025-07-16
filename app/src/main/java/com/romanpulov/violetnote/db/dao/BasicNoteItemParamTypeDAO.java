@@ -29,7 +29,7 @@ public final class BasicNoteItemParamTypeDAO extends AbstractDAO<BasicNoteItemPa
         readCursor(new CursorReaderHandler() {
             @Override
             public Cursor createCursor() {
-                return mDB.query(
+                return getDB().query(
                         NoteItemParamTypesTableDef.TABLE_NAME,
                         NoteItemParamTypesTableDef.TABLE_COLS,
                         null,
@@ -57,7 +57,7 @@ public final class BasicNoteItemParamTypeDAO extends AbstractDAO<BasicNoteItemPa
         readCursor(new CursorReaderHandler() {
             @Override
             public Cursor createCursor() {
-                return mDB.query(
+                return getDB().query(
                         NoteItemParamTypesTableDef.TABLE_NAME,
                         NoteItemParamTypesTableDef.TABLE_COLS,
                         null,

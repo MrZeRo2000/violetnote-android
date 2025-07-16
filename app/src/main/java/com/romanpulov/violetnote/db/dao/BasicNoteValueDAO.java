@@ -29,7 +29,7 @@ public final class BasicNoteValueDAO extends AbstractDAO<BasicNoteValueA> {
         readCursor(new CursorReaderHandler() {
             @Override
             public Cursor createCursor() {
-                return mDB.query(
+                return getDB().query(
                         NoteValuesTableDef.TABLE_NAME,
                         new String[]{DBCommonDef.ID_COLUMN_NAME, NoteValuesTableDef.VALUE_COLUMN_NAME},
                         DBCommonDef.NOTE_ID_COLUMN_NAME + " = ?",
@@ -60,7 +60,7 @@ public final class BasicNoteValueDAO extends AbstractDAO<BasicNoteValueA> {
 
         cv.put(NoteValuesTableDef.VALUE_COLUMN_NAME, object.getValue());
 
-        return mDB.update(NoteValuesTableDef.TABLE_NAME, cv, DBCommonDef.ID_COLUMN_NAME + " = ?", new String[] {String.valueOf(object.getId())});
+        return getDB().update(NoteValuesTableDef.TABLE_NAME, cv, DBCommonDef.ID_COLUMN_NAME + " = ?", new String[] {String.valueOf(object.getId())});
     }
 
     @Override
@@ -70,7 +70,7 @@ public final class BasicNoteValueDAO extends AbstractDAO<BasicNoteValueA> {
         cv.put(NoteValuesTableDef.NOTE_ID_COLUMN_NAME, object.getNoteId());
         cv.put(NoteValuesTableDef.VALUE_COLUMN_NAME, object.getValue());
 
-        return mDB.insert(NoteValuesTableDef.TABLE_NAME, null, cv);
+        return getDB().insert(NoteValuesTableDef.TABLE_NAME, null, cv);
     }
 
     @Override

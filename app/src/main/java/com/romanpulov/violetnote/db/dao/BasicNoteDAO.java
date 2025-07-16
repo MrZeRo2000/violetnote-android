@@ -80,7 +80,7 @@ public final class BasicNoteDAO extends AbstractBasicNoteDAO<BasicNoteA> {
         readCursor(new CursorReaderHandler() {
             @Override
             public Cursor createCursor() {
-                return mDB.query(
+                return getDB().query(
                         NotesTableDef.TABLE_NAME,
                         NotesTableDef.TABLE_COLS,
                         null,
@@ -107,7 +107,7 @@ public final class BasicNoteDAO extends AbstractBasicNoteDAO<BasicNoteA> {
         readCursor(new CursorReaderHandler() {
             @Override
             public Cursor createCursor() {
-                return mDB.query(
+                return getDB().query(
                         NotesTableDef.TABLE_NAME,
                         NotesTableDef.TABLE_COLS,
                         NotesTableDef.GROUP_ID_COLUMN_NAME + " = ?",
@@ -139,7 +139,7 @@ public final class BasicNoteDAO extends AbstractBasicNoteDAO<BasicNoteA> {
         readCursor(new CursorReaderHandler() {
             @Override
             public Cursor createCursor() {
-                return mDB.rawQuery(
+                return getDB().rawQuery(
                         DBRawQueryRepository.NOTES_WITH_TOTALS,
                         new String[] {String.valueOf(noteGroup.getId())}
                 );
@@ -160,7 +160,7 @@ public final class BasicNoteDAO extends AbstractBasicNoteDAO<BasicNoteA> {
         readCursor(new CursorReaderHandler() {
             @Override
             public Cursor createCursor() {
-                return mDB.query(
+                return getDB().query(
                         NotesTableDef.TABLE_NAME,
                         NotesTableDef.TABLE_COLS,
                         DBCommonDef.ID_COLUMN_NAME + " != ? AND " +
@@ -190,7 +190,7 @@ public final class BasicNoteDAO extends AbstractBasicNoteDAO<BasicNoteA> {
         readCursor(new CursorReaderHandler() {
             @Override
             public Cursor createCursor() {
-                return mDB.query(
+                return getDB().query(
                         NotesTableDef.TABLE_NAME,
                         NotesTableDef.TABLE_COLS,
                         DBCommonDef.ID_COLUMN_NAME + "=?",
@@ -217,7 +217,7 @@ public final class BasicNoteDAO extends AbstractBasicNoteDAO<BasicNoteA> {
             readCursor(new CursorReaderHandler() {
                 @Override
                 public Cursor createCursor() {
-                    return mDB.query(
+                    return getDB().query(
                             NoteValuesTableDef.TABLE_NAME,
                             new String[]{NoteValuesTableDef.VALUE_COLUMN_NAME},
                             DBCommonDef.NOTE_ID_COLUMN_NAME + " = ?",
@@ -259,7 +259,7 @@ public final class BasicNoteDAO extends AbstractBasicNoteDAO<BasicNoteA> {
         cv.put(NotesTableDef.IS_ENCRYPTED_COLUMN_NAME, BooleanUtils.toInt(object.isEncrypted()));
         cv.put(NotesTableDef.ENCRYPTED_STRING_COLUMN_NAME, object.getEncryptedString());
 
-        return mDB.insert(NotesTableDef.TABLE_NAME, null, cv);
+        return getDB().insert(NotesTableDef.TABLE_NAME, null, cv);
     }
 
     @Override
@@ -267,7 +267,7 @@ public final class BasicNoteDAO extends AbstractBasicNoteDAO<BasicNoteA> {
         String[] noteIdArgs = new String[] {String.valueOf(object.getId())};
 
         //history
-        mDB.delete(NoteItemsHistoryTableDef.TABLE_NAME, DBCommonDef.NOTE_ID_SELECTION_STRING, noteIdArgs);
+        getDB().delete(NoteItemsHistoryTableDef.TABLE_NAME, DBCommonDef.NOTE_ID_SELECTION_STRING, noteIdArgs);
         //values
         internalDeleteById(NoteValuesTableDef.TABLE_NAME, DBCommonDef.NOTE_ID_COLUMN_NAME, object.getId());
         //items
@@ -294,7 +294,7 @@ public final class BasicNoteDAO extends AbstractBasicNoteDAO<BasicNoteA> {
         cv.put(NotesTableDef.IS_ENCRYPTED_COLUMN_NAME, BooleanUtils.toInt(object.isEncrypted()));
         cv.put(NotesTableDef.ENCRYPTED_STRING_COLUMN_NAME, object.getEncryptedString());
 
-        return mDB.update(NotesTableDef.TABLE_NAME, cv, DBCommonDef.ID_COLUMN_NAME + "=" + object.getId(), null);
+        return getDB().update(NotesTableDef.TABLE_NAME, cv, DBCommonDef.ID_COLUMN_NAME + "=" + object.getId(), null);
     }
 
     public void checkOut(
@@ -336,7 +336,7 @@ public final class BasicNoteDAO extends AbstractBasicNoteDAO<BasicNoteA> {
         cv.put(NotesTableDef.GROUP_ID_COLUMN_NAME, otherNoteGroup.getId());
         cv.put(DBCommonDef.ORDER_COLUMN_NAME, otherOrderId);
 
-        return mDB.update(NotesTableDef.TABLE_NAME, cv, DBCommonDef.ID_COLUMN_NAME + " = ?", new String[]{String.valueOf(note.getId())});
+        return getDB().update(NotesTableDef.TABLE_NAME, cv, DBCommonDef.ID_COLUMN_NAME + " = ?", new String[]{String.valueOf(note.getId())});
     }
 
     public int moveToOtherNoteGroup(@NonNull BasicNoteA note, @NonNull BasicNoteGroupA otherNoteGroup) {

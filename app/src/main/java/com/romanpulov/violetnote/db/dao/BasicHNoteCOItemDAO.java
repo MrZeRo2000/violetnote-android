@@ -36,7 +36,7 @@ public final class BasicHNoteCOItemDAO extends AbstractBasicHEventItemParamDAO<B
         readCursor(new CursorReaderHandler() {
             @Override
             public Cursor createCursor() {
-                return mDB.query(
+                return getDB().query(
                         HNoteCOItemsTableDef.TABLE_NAME,
                         HNoteCOItemsTableDef.TABLE_COLS,
                         null,
@@ -67,7 +67,7 @@ public final class BasicHNoteCOItemDAO extends AbstractBasicHEventItemParamDAO<B
         readCursor(new CursorReaderHandler() {
             @Override
             public Cursor createCursor() {
-                return mDB.query(
+                return getDB().query(
                         HNoteCOItemsTableDef.TABLE_NAME,
                         HNoteCOItemsTableDef.TABLE_COLS,
                         HNoteCOItemsTableDef.NOTE_ID_COLUMN_NAME + " = ?",
@@ -105,7 +105,7 @@ public final class BasicHNoteCOItemDAO extends AbstractBasicHEventItemParamDAO<B
         cv.put(HNoteCOItemsTableDef.NOTE_ID_COLUMN_NAME, object.getNoteId());
         cv.put(HNoteCOItemsTableDef.VALUE_COLUMN_NAME, object.getValue());
 
-        return mDB.insert(HNoteCOItemsTableDef.TABLE_NAME, null, cv);
+        return getDB().insert(HNoteCOItemsTableDef.TABLE_NAME, null, cv);
 
     }
 

@@ -29,7 +29,7 @@ public final class BasicNoteItemParamsDAO extends AbstractDAO<BasicNoteItemParam
         readCursor(new CursorReaderHandler() {
             @Override
             public Cursor createCursor() {
-                return mDB.rawQuery(DBRawQueryRepository.NOTE_ITEMS_PARAMS, new String[]{String.valueOf(note.getId())});
+                return getDB().rawQuery(DBRawQueryRepository.NOTE_ITEMS_PARAMS, new String[]{String.valueOf(note.getId())});
             }
 
             @Override
@@ -72,7 +72,7 @@ public final class BasicNoteItemParamsDAO extends AbstractDAO<BasicNoteItemParam
         if ((paramValue.vText != null) && (!paramValue.vText.isEmpty()))
             cv.put(NoteItemParamsTableDef.V_TEXT_COLUMN_NAME, paramValue.vText);
 
-        mDB.insert(NoteItemParamsTableDef.TABLE_NAME, null, cv);
+        getDB().insert(NoteItemParamsTableDef.TABLE_NAME, null, cv);
     }
 
     public void deleteByNoteItem(@NonNull BasicNoteItemA noteItem) {

@@ -37,7 +37,7 @@ public final class BasicHEventDAO extends AbstractDAO<BasicHEventA> {
         readCursor(new CursorReaderHandler() {
             @Override
             public Cursor createCursor() {
-                return mDB.query(
+                return getDB().query(
                         HEventsTableDef.TABLE_NAME,
                         HEventsTableDef.TABLE_COLS,
                         eventTypeId == 0 ? null : HEventsTableDef.EVENT_TYPE_ID_COLUMN_NAME + " = ?",
@@ -68,7 +68,7 @@ public final class BasicHEventDAO extends AbstractDAO<BasicHEventA> {
         readCursor(new CursorReaderHandler() {
             @Override
             public Cursor createCursor() {
-                return mDB.rawQuery(
+                return getDB().rawQuery(
                         DBRawQueryRepository.H_EVENTS_BY_CO_ITEMS_NOTE_ID,
                         new String[] {String.valueOf(noteId)}
                 );
@@ -97,7 +97,7 @@ public final class BasicHEventDAO extends AbstractDAO<BasicHEventA> {
         cv.put(HEventsTableDef.EVENT_TIME_COLUMN_NAME, System.currentTimeMillis());
         cv.put(HEventsTableDef.EVENT_SUMMARY_COLUMN_NAME, object.getEventSummary());
 
-        return mDB.insert(HEventsTableDef.TABLE_NAME, null, cv);
+        return getDB().insert(HEventsTableDef.TABLE_NAME, null, cv);
     }
 
     @Override

@@ -17,7 +17,6 @@ import java.util.List;
 public abstract class AbstractDAO<T> {
     final Context mContext;
     final DBBasicNoteHelper mDBHelper;
-    final SQLiteDatabase mDB;
     final DateTimeFormatter mDTF;
 
     @NonNull
@@ -40,8 +39,11 @@ public abstract class AbstractDAO<T> {
     AbstractDAO(Context context) {
         mContext = context;
         mDBHelper = DBBasicNoteHelper.getInstance(mContext);
-        mDB = mDBHelper.getDB();
         mDTF = new DateTimeFormatter(context);
+    }
+
+    protected SQLiteDatabase getDB() {
+        return mDBHelper.getDB();
     }
 
     interface CursorReaderHandler {
@@ -67,6 +69,6 @@ public abstract class AbstractDAO<T> {
     }
 
     final long internalDeleteById(String tableName, String columnName, long id) {
-        return mDB.delete(tableName, columnName + " = ?", new String[] {String.valueOf(id)});
+        return getDB().delete(tableName, columnName + " = ?", new String[] {String.valueOf(id)});
     }
 }

@@ -28,7 +28,7 @@ public final class BasicHEventTypeDAO extends AbstractDAO<BasicHEventTypeA> {
         readCursor(new CursorReaderHandler() {
             @Override
             public Cursor createCursor() {
-                return mDB.query(
+                return getDB().query(
                         HEventTypesTableDef.TABLE_NAME,
                         HEventTypesTableDef.TABLE_COLS,
                         null,
@@ -54,7 +54,7 @@ public final class BasicHEventTypeDAO extends AbstractDAO<BasicHEventTypeA> {
         readCursor(new CursorReaderHandler() {
             @Override
             public Cursor createCursor() {
-                return mDB.query(HEventTypesTableDef.TABLE_NAME, HEventTypesTableDef.TABLE_COLS,
+                return getDB().query(HEventTypesTableDef.TABLE_NAME, HEventTypesTableDef.TABLE_COLS,
                         null, null, null, null, null);
             }
 

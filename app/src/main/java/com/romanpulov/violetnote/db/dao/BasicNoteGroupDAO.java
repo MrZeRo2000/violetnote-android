@@ -53,7 +53,7 @@ public class BasicNoteGroupDAO extends AbstractDAO<BasicNoteGroupA> {
         readCursor(new CursorReaderHandler() {
             @Override
             public Cursor createCursor() {
-                return mDB.query(
+                return getDB().query(
                         NoteGroupsTableDef.TABLE_NAME,
                         NoteGroupsTableDef.TABLE_COLS,
                         null,
@@ -81,7 +81,7 @@ public class BasicNoteGroupDAO extends AbstractDAO<BasicNoteGroupA> {
         readCursor(new CursorReaderHandler() {
             @Override
             public Cursor createCursor() {
-                return mDB.rawQuery(
+                return getDB().rawQuery(
                         DBRawQueryRepository.NOTE_GROUPS_WITH_TOTALS_WITH_CHECKED.replace(
                                 DBRawQueryRepository.PREDICATE_PLACEHOLDER,
                                 predicate
@@ -106,7 +106,7 @@ public class BasicNoteGroupDAO extends AbstractDAO<BasicNoteGroupA> {
         readCursor(new CursorReaderHandler() {
             @Override
             public Cursor createCursor() {
-                return mDB.query(
+                return getDB().query(
                         NoteGroupsTableDef.TABLE_NAME,
                         NoteGroupsTableDef.TABLE_COLS,
                         NoteGroupsTableDef.NOTE_GROUP_TYPE_COLUMN_NAME + " = ?",
@@ -133,7 +133,7 @@ public class BasicNoteGroupDAO extends AbstractDAO<BasicNoteGroupA> {
         readCursor(new CursorReaderHandler() {
             @Override
             public Cursor createCursor() {
-                return mDB.query(
+                return getDB().query(
                         NoteGroupsTableDef.TABLE_NAME,
                         NoteGroupsTableDef.TABLE_COLS,
                         NoteGroupsTableDef.NOTE_GROUP_TYPE_COLUMN_NAME + " = ? AND " + DBCommonDef.ID_COLUMN_NAME + " != ?",
@@ -166,7 +166,7 @@ public class BasicNoteGroupDAO extends AbstractDAO<BasicNoteGroupA> {
         readCursor(new CursorReaderHandler() {
             @Override
             public Cursor createCursor() {
-                return mDB.query(
+                return getDB().query(
                         NoteGroupsTableDef.TABLE_NAME,
                         NoteGroupsTableDef.TABLE_COLS,
                         DBCommonDef.ID_COLUMN_NAME + "=?",
@@ -200,7 +200,7 @@ public class BasicNoteGroupDAO extends AbstractDAO<BasicNoteGroupA> {
         );
         cv.put(NoteGroupsTableDef.NOTE_GROUP_DISPLAY_OPTIONS, noteGroup.getDisplayOptions().toJSONString());
 
-        return mDB.insert(NoteGroupsTableDef.TABLE_NAME, null, cv);
+        return getDB().insert(NoteGroupsTableDef.TABLE_NAME, null, cv);
     }
 
     @Override
@@ -218,6 +218,6 @@ public class BasicNoteGroupDAO extends AbstractDAO<BasicNoteGroupA> {
         cv.put(DBCommonDef.ORDER_COLUMN_NAME, noteGroup.getOrderId());
         cv.put(NoteGroupsTableDef.NOTE_GROUP_DISPLAY_OPTIONS, noteGroup.getDisplayOptions().toJSONString());
 
-        return mDB.update(NoteGroupsTableDef.TABLE_NAME, cv, DBCommonDef.ID_COLUMN_NAME + " = ?" , new String[]{String.valueOf(noteGroup.getId())});
+        return getDB().update(NoteGroupsTableDef.TABLE_NAME, cv, DBCommonDef.ID_COLUMN_NAME + " = ?" , new String[]{String.valueOf(noteGroup.getId())});
     }
 }
