@@ -1,6 +1,9 @@
 package com.romanpulov.violetnote.view;
 
+import android.Manifest;
+import android.os.Build;
 import android.os.Bundle;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -11,9 +14,12 @@ import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.cloud.GDHelper;
 import com.romanpulov.violetnote.databinding.ActivityAppHostBinding;
 import com.romanpulov.violetnote.view.core.ActionBarCompatActivity;
+import com.romanpulov.violetnote.view.helper.DisplayMessageHelper;
+import com.romanpulov.violetnote.view.helper.PermissionRequestHelper;
 
 public class AppHostActivity extends ActionBarCompatActivity {
-    private static final String TAG = AppHostActivity.class.getSimpleName();
+
+    public final static int PERMISSION_REQUEST_NOTIFICATIONS = 101;
 
     private ActivityAppHostBinding binding;
     private AppBarConfiguration mAppBarConfiguration;
@@ -47,6 +53,16 @@ public class AppHostActivity extends ActionBarCompatActivity {
             }
         });
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            PermissionRequestHelper notificationRequestHelper =
+                    new PermissionRequestHelper(
+                            this,
+                            Manifest.permission.POST_NOTIFICATIONS);
+            if (!notificationRequestHelper.isPermissionGranted()) {
+                notificationRequestHelper.requestPermission(PERMISSION_REQUEST_NOTIFICATIONS);
+            }
+        }
+
         GDHelper.getInstance().registerActivity(this);
     }
 
@@ -59,6 +75,15 @@ public class AppHostActivity extends ActionBarCompatActivity {
             NavController navController = Navigation.findNavController(this, binding.mainNavContent.getId());
             return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                     || super.onSupportNavigateUp();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if ((PermissionRequestHelper.isGrantResultSuccessful(grantResults)) &&
+                (requestCode == PERMISSION_REQUEST_NOTIFICATIONS)) {
+            DisplayMessageHelper.displayInfoMessage(this, R.string.ui_info_notification_permissions_granted);
         }
     }
 }

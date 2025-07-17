@@ -1,6 +1,6 @@
 {
   "client_id" : "8ed347b1-d21c-4f8d-bdc4-6e53e17f120d",
-  "authorization_user_agent" : "DEFAULT",
+  "authorization_user_agent" : "WEBVIEW",
   "redirect_uri" : "msauth://com.romanpulov.violetnote/pkFHBjmk5yNkPHiCqIVwIffqv54%3D",
   "account_mode" : "SINGLE",
   "broker_redirect_uri_registered": false,
