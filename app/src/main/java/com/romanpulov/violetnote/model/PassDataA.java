@@ -74,11 +74,12 @@ public class PassDataA implements Parcelable, PasswordProvider {
         for (PassNoteA note : source.getPassNoteData()) {
             int attrCount = 0;
             String searchRegExpString = "(?i:.*" + searchString + ".*)";
-            for (String a : note.getNoteAttr().keySet()) {
+
+            for (PassNoteA.AttrItem a : note.getNoteAttrs()) {
                 //check for allowed search criteria
                 if (((attrCount == 0) && isSearchSystem) || ((attrCount == 1) && isSearchUser)) {
                     //check if matches expression
-                    String av = note.getNoteAttr().get(a);
+                    String av = a.mValue;
                     if ((av != null) && (av.matches(searchRegExpString))) {
                         noteList.add(note);
                         categorySet.add(note.getCategory());
@@ -92,15 +93,8 @@ public class PassDataA implements Parcelable, PasswordProvider {
             }
         }
 
-        List<PassCategoryA> categoryList;
-        if (noteList.size() > 0) {
-            categoryList = new ArrayList<>(categorySet);
-        } else {
-            categoryList = new ArrayList<>();
-        }
-
         PassDataA searchInstance = new PassDataA(source.mPassword);
-        searchInstance.mPassCategoryDataA = categoryList;
+        searchInstance.mPassCategoryDataA = new ArrayList<>(categorySet);
         searchInstance.mPassNoteDataA = noteList;
 
         return searchInstance;
@@ -115,9 +109,9 @@ public class PassDataA implements Parcelable, PasswordProvider {
             for (PassNoteA note : getPassNoteData()) {
                 int attrCount = 0;
 
-                for (String a : note.getNoteAttr().keySet()) {
+                for (PassNoteA.AttrItem a : note.getNoteAttrs()) {
                     if (((attrCount == 0) && isSearchSystem) || ((attrCount == 1) && isSearchUser)) {
-                        values.add(note.getNoteAttr().get(a));
+                        values.add(a.mValue);
                     }
 
                     if (++attrCount > max_attr_count)

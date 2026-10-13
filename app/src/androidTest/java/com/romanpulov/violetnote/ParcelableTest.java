@@ -35,7 +35,6 @@ public class ParcelableTest {
     @Test
     public void test1() {
         log("Test message");
-        assertEquals(1, 1);
     }
 
     @Test
@@ -56,7 +55,7 @@ public class ParcelableTest {
         assertEquals(data.getPassCategoryData().get(0).getCategoryName(), readData.getPassCategoryData().get(0).getCategoryName());
 
         //selective check attributes
-        assertEquals(data.getPassNoteData().get(0).getNoteAttr().size(), readData.getPassNoteData().get(0).getNoteAttr().size());
+        assertEquals(data.getPassNoteData().get(0).getNoteAttrs().size(), readData.getPassNoteData().get(0).getNoteAttrs().size());
 
         //selective check category for note
         assertEquals(data.getPassNoteData().get(0).getCategory().getCategoryName(), readData.getPassNoteData().get(0).getCategory().getCategoryName());
@@ -74,7 +73,7 @@ public class ParcelableTest {
         assertEquals(data.getPassCategoryData().get(0).getCategoryName(), readData.getPassCategoryData().get(0).getCategoryName());
 
         //selective check attributes
-        assertEquals(data.getPassNoteData().get(0).getNoteAttr().size(), readData.getPassNoteData().get(0).getNoteAttr().size());
+        assertEquals(data.getPassNoteData().get(0).getNoteAttrs().size(), readData.getPassNoteData().get(0).getNoteAttrs().size());
 
         //selective check category for note
         assertEquals(data.getPassNoteData().get(0).getCategory().getCategoryName(), readData.getPassNoteData().get(0).getCategory().getCategoryName());
@@ -153,7 +152,6 @@ public class ParcelableTest {
         BasicNoteSummary newSummary = newNote.getSummary();
 
         assertEquals(note.getNoteType(), newNote.getNoteType());
-        assertEquals(note.getId(), note.getId());
 
         assertEquals(summary.getItemCount(), newSummary.getItemCount());
         assertEquals(summary.getCheckedItemCount(), newSummary.getCheckedItemCount());

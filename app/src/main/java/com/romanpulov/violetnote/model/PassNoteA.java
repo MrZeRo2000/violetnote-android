@@ -2,11 +2,9 @@ package com.romanpulov.violetnote.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import androidx.annotation.NonNull;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * PassNote data class
@@ -29,7 +27,7 @@ public class PassNoteA implements Parcelable {
         return mCategoryName;
     }
 
-    public static class AttrItem {
+    public static class AttrItem implements Parcelable {
         public final String mName;
         public final String mValue;
 
@@ -37,27 +35,50 @@ public class PassNoteA implements Parcelable {
             mName = name;
             mValue = value;
         }
+
+        // Read constructor
+        protected AttrItem(Parcel in) {
+            mName = in.readString();
+            mValue = in.readString();
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(@NonNull Parcel parcel, int flags) {
+            parcel.writeString(mName);
+            parcel.writeString(mValue);
+        }
+
+        public static final Creator<AttrItem> CREATOR = new Creator<>() {
+            @Override
+            public AttrItem createFromParcel(Parcel in) {
+                return new AttrItem(in);
+            }
+
+            @Override
+            public AttrItem[] newArray(int size) {
+                return new AttrItem[size];
+            }
+        };
     }
 
     public PassCategoryA getCategory() {
         return mCategory;
     }
 
-    public String getAttrId(int id) {
-        int i = 1;
-        for (String s : mNoteAttr.keySet()) {
-            if (i++ == id) {
-                return mNoteAttr.get(s);
-            }
-        }
-        return null;
+    private final List<AttrItem> mNoteAttrs;
+
+    public List<AttrItem> getNoteAttrs() {
+        return mNoteAttrs;
     }
 
-    private final Map<String, String> mNoteAttr;
-
-    public PassNoteA(PassCategoryA category, Map<String, String> noteAttr) {
+    public PassNoteA(PassCategoryA category, List<AttrItem> noteAttrs) {
         setCategory(category);
-        mNoteAttr = noteAttr;
+        mNoteAttrs = noteAttrs;
     }
 
     @Override
@@ -68,15 +89,10 @@ public class PassNoteA implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(mCategoryName);
-        dest.writeInt(mNoteAttr.size());
-        for (String s : mNoteAttr.keySet()) {
-            dest.writeString(s);
-            dest.writeString(mNoteAttr.get(s));
-        }
+        dest.writeTypedList(mNoteAttrs);
     }
 
-    public static final Parcelable.Creator<PassNoteA> CREATOR
-            = new Parcelable.Creator<PassNoteA>() {
+    public static final Parcelable.Creator<PassNoteA> CREATOR = new Parcelable.Creator<>() {
         public PassNoteA createFromParcel(Parcel in) {
             return new PassNoteA(in);
         }
@@ -88,26 +104,6 @@ public class PassNoteA implements Parcelable {
 
     private PassNoteA(Parcel in) {
         mCategoryName = in.readString();
-        final int attrCount = in.readInt();
-        mNoteAttr = new LinkedHashMap<>();
-        for (int i = 0; i < attrCount; i ++) {
-            String name = in.readString();
-            String value = in.readString();
-            mNoteAttr.put(name, value);
-        }
-    }
-
-    public Map<String, String> getNoteAttr() {
-        return mNoteAttr;
-    }
-
-    public List<AttrItem> getNoteAttrList() {
-        List<AttrItem> result = new ArrayList<>(mNoteAttr.size());
-        for (String s : mNoteAttr.keySet()) {
-            String v = mNoteAttr.get(s);
-            if ((v != null) && (!v.isEmpty()))
-                result.add(new AttrItem(s, v));
-        }
-        return result;
+        mNoteAttrs = in.createTypedArrayList(AttrItem.CREATOR);
     }
 }

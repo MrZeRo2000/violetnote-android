@@ -17,7 +17,7 @@ public class NoteRecyclerViewAdapter extends RecyclerView.Adapter<NoteRecyclerVi
     private final List<PassNoteA> mValues;
     private final OnPassNoteItemInteractionListener mListener;
 
-    public NoteRecyclerViewAdapter(List<PassNoteA> items, OnPassNoteItemInteractionListener listener) {
+    NoteRecyclerViewAdapter(List<PassNoteA> items, OnPassNoteItemInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -33,8 +33,8 @@ public class NoteRecyclerViewAdapter extends RecyclerView.Adapter<NoteRecyclerVi
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mSystemView.setText(mValues.get(position).getAttrId(1));
-        holder.mUserView.setText(mValues.get(position).getAttrId(2));
+        holder.mSystemView.setText(mValues.get(position).getNoteAttrs().get(0).mValue);
+        holder.mUserView.setText(mValues.get(position).getNoteAttrs().get(1).mValue);
 
         holder.mView.setOnClickListener(v -> {
             if (null != mListener) {

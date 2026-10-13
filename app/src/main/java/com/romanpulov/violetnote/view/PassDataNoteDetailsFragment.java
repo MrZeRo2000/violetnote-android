@@ -41,7 +41,7 @@ public class PassDataNoteDetailsFragment extends PassDataBaseFragment {
                 Context context = view.getContext();
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-                recyclerView.setAdapter(new NoteDetailsRecyclerViewAdapter(passDataResult.getPassData().getPassNoteData().get(0).getNoteAttrList()));
+                recyclerView.setAdapter(new NoteDetailsRecyclerViewAdapter(passDataResult.getPassData().getPassNoteData().get(0).getNoteAttrs()));
 
                 // add decoration
                 recyclerView.addItemDecoration(new RecyclerViewHelper.DividerItemDecoration(getActivity(), RecyclerViewHelper.DividerItemDecoration.VERTICAL_LIST, R.drawable.divider_white_black_gradient));

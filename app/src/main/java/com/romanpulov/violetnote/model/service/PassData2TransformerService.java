@@ -7,9 +7,8 @@ import com.romanpulov.violetnotecore.Model.PassData2;
 import com.romanpulov.violetnotecore.Model.PassNote2;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.romanpulov.violetnotecore.Model.PassNote2.ATTR_INFO;
 import static com.romanpulov.violetnotecore.Model.PassNote2.ATTR_PASSWORD;
@@ -35,14 +34,21 @@ public class PassData2TransformerService {
             categories.add(passCategoryA);
 
             for (PassNote2 passNote2 : passCategory2.getNoteList()) {
-                Map<String, String> passNoteAttr = new LinkedHashMap<>();
-                passNoteAttr.put(ATTR_SYSTEM, passNote2.getSystem());
-                passNoteAttr.put(ATTR_USER, passNote2.getUser());
-                passNoteAttr.put(ATTR_PASSWORD, passNote2.getPassword());
-                passNoteAttr.put(ATTR_URL, passNote2.getUrl());
-                passNoteAttr.put(ATTR_INFO, passNote2.getInfo());
+                ArrayList<PassNoteA.AttrItem> passNoteAttrs = new ArrayList<>();
+                passNoteAttrs.add(new PassNoteA.AttrItem(ATTR_SYSTEM, passNote2.getSystem()));
+                passNoteAttrs.add(new PassNoteA.AttrItem(ATTR_USER, passNote2.getUser()));
+                passNoteAttrs.add(new PassNoteA.AttrItem(ATTR_PASSWORD, passNote2.getPassword()));
+                passNoteAttrs.add(new PassNoteA.AttrItem(ATTR_URL, passNote2.getUrl()));
+                passNoteAttrs.add(new PassNoteA.AttrItem(ATTR_INFO, passNote2.getInfo()));
 
-                notes.add(new PassNoteA(passCategoryA, passNoteAttr));
+                if (passNote2.getAttributes() != null) {
+                    passNoteAttrs.addAll(passNote2.getAttributes()
+                            .stream()
+                            .map(v -> new PassNoteA.AttrItem(v.name(), v.value()))
+                            .collect(Collectors.toList()));
+                }
+
+                notes.add(new PassNoteA(passCategoryA, passNoteAttrs));
             }
         }
 
