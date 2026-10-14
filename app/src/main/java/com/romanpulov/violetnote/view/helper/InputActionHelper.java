@@ -10,7 +10,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
 
 import com.romanpulov.violetnote.R;
-import com.romanpulov.violetnote.model.utils.InputParserUtils;
+import com.romanpulov.violetnote.utils.InputParserUtils;
 import com.romanpulov.violetnote.view.AutoCompleteArrayAdapter;
 
 import java.util.Collection;

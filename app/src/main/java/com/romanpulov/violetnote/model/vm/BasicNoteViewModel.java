@@ -9,7 +9,7 @@ import com.romanpulov.violetnote.db.dao.BasicNoteGroupDAO;
 import com.romanpulov.violetnote.db.dao.BasicNoteItemDAO;
 import com.romanpulov.violetnote.model.*;
 import com.romanpulov.violetnote.model.core.BasicOrderedEntityNoteA;
-import com.romanpulov.violetnote.model.utils.ParcelableUtils;
+import com.romanpulov.violetnote.utils.ParcelableUtils;
 import com.romanpulov.violetnote.view.action.UIAction;
 import com.romanpulov.violetnote.view.core.BasicCommonNoteViewModel;
 import org.jetbrains.annotations.NotNull;

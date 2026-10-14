@@ -5,7 +5,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.romanpulov.violetnote.R;
-import com.romanpulov.violetnote.model.utils.InputParserUtils;
+import com.romanpulov.violetnote.utils.InputParserUtils;
 
 import java.util.Locale;
 

@@ -21,7 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.databinding.FragmentBasicNoteCheckedItemListBinding;
 import com.romanpulov.violetnote.model.*;
-import com.romanpulov.violetnote.model.utils.InputParserUtils;
+import com.romanpulov.violetnote.utils.InputParserUtils;
 import com.romanpulov.violetnote.model.vm.AppViewModel;
 import com.romanpulov.violetnote.model.vm.BasicNoteCheckedItemViewModel;
 import com.romanpulov.violetnote.view.action.*;

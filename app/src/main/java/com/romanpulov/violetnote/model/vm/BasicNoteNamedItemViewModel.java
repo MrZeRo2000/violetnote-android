@@ -11,7 +11,7 @@ import com.romanpulov.violetnote.db.dao.BasicNoteDAO;
 import com.romanpulov.violetnote.db.dao.BasicNoteItemDAO;
 import com.romanpulov.violetnote.model.BasicNoteA;
 import com.romanpulov.violetnote.model.BasicNoteItemA;
-import com.romanpulov.violetnote.model.service.PassNameValueDataJSONCryptService;
+import com.romanpulov.violetnote.service.PassNameValueDataJSONCryptService;
 import com.romanpulov.violetnote.model.vm.helper.ThreadProcessHelper;
 import com.romanpulov.violetnote.view.action.UIAction;
 import com.romanpulov.violetnote.view.core.BasicCommonNoteViewModel;

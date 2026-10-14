@@ -7,7 +7,7 @@ import androidx.annotation.Nullable;
 
 import com.romanpulov.violetnote.db.provider.BasicNoteDBManagementProvider;
 import com.romanpulov.violetnote.model.core.BasicCommonNoteA;
-import com.romanpulov.violetnote.model.utils.BooleanUtils;
+import com.romanpulov.violetnote.utils.BooleanUtils;
 import com.romanpulov.violetnote.model.vo.BasicNoteSummary;
 import org.jetbrains.annotations.NotNull;
 

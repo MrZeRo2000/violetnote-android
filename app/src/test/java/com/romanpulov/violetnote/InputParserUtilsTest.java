@@ -1,6 +1,6 @@
 package com.romanpulov.violetnote;
 
-import com.romanpulov.violetnote.model.utils.InputParserUtils;
+import com.romanpulov.violetnote.utils.InputParserUtils;
 
 import org.junit.Assert;
 import org.junit.Test;

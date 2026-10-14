@@ -6,7 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import com.romanpulov.violetnote.model.PassCategoryA;
 import com.romanpulov.violetnote.model.PassDataA;
-import com.romanpulov.violetnote.model.service.PassData2TransformerService;
+import com.romanpulov.violetnote.service.PassData2TransformerService;
 import com.romanpulov.violetnotecore.Model.PassCategory2;
 import com.romanpulov.violetnotecore.Model.PassData2;
 import com.romanpulov.violetnotecore.Model.PassNote2;
@@ -80,18 +80,18 @@ public class DataModelTest {
         PassDataA pda = createTestPassDataA();
 
         PassDataA sda = PassDataA.newSearchInstance(pda, "eOr", true, true);
-        assertEquals(sda.getPassCategoryData().size(), 1);
-        assertEquals(sda.getPassNoteData().size(), 1);
+        assertEquals(1, sda.getPassCategoryData().size());
+        assertEquals(1, sda.getPassNoteData().size());
 
         sda = PassDataA.newSearchInstance(pda, "yste", true, true);
-        assertEquals(sda.getPassCategoryData().size(), 2);
+        assertEquals(2, sda.getPassCategoryData().size());
 
         sda = PassDataA.newSearchInstance(pda, "stem 12", true, true);
-        assertEquals(sda.getPassCategoryData().size(), 1);
+        assertEquals(1, sda.getPassCategoryData().size());
 
         sda = PassDataA.newSearchInstance(pda, "xxx", true, true);
-        assertEquals(sda.getPassCategoryData().size(), 0);
-        assertEquals(sda.getPassNoteData().size(), 0);
+        assertEquals(0, sda.getPassCategoryData().size());
+        assertEquals(0, sda.getPassNoteData().size());
     }
 
 }

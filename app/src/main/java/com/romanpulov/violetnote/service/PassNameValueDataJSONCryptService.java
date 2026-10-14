@@ -1,4 +1,4 @@
-package com.romanpulov.violetnote.model.service;
+package com.romanpulov.violetnote.service;
 
 import com.romanpulov.violetnote.model.NameValueData;
 import com.romanpulov.violetnotecore.Service.StringCryptService;

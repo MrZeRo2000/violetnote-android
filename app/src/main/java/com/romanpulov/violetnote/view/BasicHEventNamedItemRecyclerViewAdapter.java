@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.romanpulov.violetnote.R;
 import com.romanpulov.violetnote.db.DateTimeFormatter;
 import com.romanpulov.violetnote.model.BasicHNoteItemA;
-import com.romanpulov.violetnote.model.utils.InputParserUtils;
+import com.romanpulov.violetnote.utils.InputParserUtils;
 
 import java.util.Date;
 import java.util.List;

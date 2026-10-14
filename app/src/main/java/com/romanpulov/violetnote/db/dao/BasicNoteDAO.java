@@ -13,7 +13,7 @@ import com.romanpulov.violetnote.db.tabledef.NoteItemsHistoryTableDef;
 import com.romanpulov.violetnote.db.tabledef.NoteValuesTableDef;
 import com.romanpulov.violetnote.db.tabledef.NotesTableDef;
 import com.romanpulov.violetnote.model.*;
-import com.romanpulov.violetnote.model.utils.BooleanUtils;
+import com.romanpulov.violetnote.utils.BooleanUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;

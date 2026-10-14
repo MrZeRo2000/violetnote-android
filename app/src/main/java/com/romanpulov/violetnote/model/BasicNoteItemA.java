@@ -6,8 +6,8 @@ import androidx.annotation.NonNull;
 
 import com.romanpulov.violetnote.db.provider.BasicNoteItemDBManagementProvider;
 import com.romanpulov.violetnote.model.core.BasicCommonNoteA;
-import com.romanpulov.violetnote.model.utils.BooleanUtils;
-import com.romanpulov.violetnote.model.utils.InputParserUtils;
+import com.romanpulov.violetnote.utils.BooleanUtils;
+import com.romanpulov.violetnote.utils.InputParserUtils;
 import com.romanpulov.violetnote.model.vo.BasicParamValueA;
 
 import java.util.Objects;
